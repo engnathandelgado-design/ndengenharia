@@ -6,6 +6,7 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- `pilar_metodo_geral` aceita cordoalhas pré-tracionadas; Letsara: folgas de montagem, apoios sobre consolos e pilares protendidos (DEC-012).
 - Módulo `bim`: perfis, peças e modelo com quantitativos; gravação IFC4 (pset ND_Peca), leitura de malha de IFC e visualizador 3D (three.js) com camadas, pendências e marca "projeto da ND Engenharia"; extra `bim` no pyproject (2026-10-12).
 - Letsara: `exemplos/letsara/modelo_bim.py` gera o IFC e a página 3D do pavilhão (2026-10-12).
 - `metalica_fria.py` (NBR 14762 MRD com faixas finitas, parafusos, barras), `ancoragem.py` (ACI 318-19 cap. 17), `dente_consolo.py` (NBR 9062 + PCI) e `mef_dente.py` (MEF não linear 2D do dente), com testes conferidos à mão.

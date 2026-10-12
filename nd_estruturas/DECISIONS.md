@@ -26,6 +26,20 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-012 — Pilares pré-tracionados na cabeceira
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+Pilares laterais e de fachada da Letsara: 40×60, 10 m em balanço, vento nos dois sentidos. Armados pediam 5 Ø20 por face (transversal) e 4 Ø25 por face (longitudinal). Nathan confirmou que as cabeceiras têm altura regulável, então cordoalhas a 250 mm do eixo nas duas faces são viáveis.
+
+### Decisão
+Pilares 40×60 pré-tracionados com 10 cordoalhas Ø12,7 (5 por face, a 250 mm do eixo no lado de 60), σp∞ ≈ 1000 MPa (4,1 MPa de compressão média), mais 4 Ø20 por face de 60 (8 Ø20 no total). Verificação pelo método geral com as cordoalhas como fibras com deformação inicial (`pilar_metodo_geral(cord=..., sig_pinf=...)`): λu = 1,22 na direção forte e 1,38 na fraca (lateral), 1,30 na fachada. Momento de fissuração sobe de 125 para ≈ 220 kN·m, contra 76 kN·m frequente de vento.
+
+### Consequências
+Pilar sem fissura em serviço e no içamento, menos aço passivo. A fábrica precisa regular a cabeceira a 525 mm (pilar deitado com 60 de altura). O detalhamento da armação do pilar sai na prancha própria.
+
 ## DEC-011 — Dentes Gerber verificados por MEF não linear 2D
 
 **Data:** 2026-10-12
