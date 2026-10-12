@@ -124,7 +124,7 @@ def montar() -> ModeloBIM:
         for y in (Y_LIN[0], Y_LIN[1]):
             for xa, xb in itertools.pairwise(X_FACH):
                 m.linear("viga", f"VM {nivel:+.2f}", I70, (xa + 0.325, y, zv), (xb - 0.325, y, zv),
-                         "Vigas de mezanino", obs="I70 protendida, dente 425 + 2º estágio")
+                         "Vigas de mezanino", obs="I70 protendida sem dente (apoio direto), capa como 2º estágio")
         for k in range(int((LARG - 0.60) // 1.25)):
             x = 0.925 + k * 1.25
             m.linear("laje", f"LA {nivel:+.2f}", LAJE, (x, Y_LIN[0] + 0.20, nivel - H_LAJE / 2),
@@ -184,7 +184,7 @@ def montar() -> ModeloBIM:
                 m.bloco("consolo", "CP-VB 30×40×35/20", (xc, y, zf(x) - 0.01), 0.30, 0.40, 0.35, "Consolos")
                 m.bloco("inserto", "PN-1 pino Ø20 (VB-01)", (xc, y, zf(x) + 0.39), 0.02, 0.02, 0.70, PIN)
     for nivel in NIVEIS_MEZ:
-        z_as = nivel - H_LAJE - 0.425
+        z_as = nivel - H_LAJE - 0.70                                        # VM sem dente: assento = nível − laje − capa − viga
         for y in (Y_LIN[0], Y_LIN[1]):
             for x in X_FACH:
                 for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
@@ -198,7 +198,7 @@ def montar() -> ModeloBIM:
                f"junto ao P1 em +{pl['telha_P1']:.3f}.")
     m.pendente("! Laje alveolar h20 + 5 com 500 kgf/m² em 9,75 m NÃO passa com 7 Ø12,7 (seção genérica): ELU 209 > 192 kN·m "
                "por painel; descompressão só até 9,05 m. Confirmar com a tabela do fabricante ou manter h26,5 + 5.")
-    m.pendente("Vigas do mezanino I70 (10 cord. Ø12,7) passam na flexão; dente de 425 em verificação no MEF.")
+    m.pendente("Vigas do mezanino I70 (10 cord. Ø12,7) passam na flexão; dente de 425 reprovado no MEF → apoio direto nos consolos CP-MEZ (assentos +2,20 / +5,60).")
     m.pendente("Comprimento entre fachadas adotado nos cálculos: 76,81 m (eixos 1–9). Conferir com o R01 (havia 79,75 em outro registro).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento e correntes não modelados no 3D.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
@@ -220,9 +220,11 @@ if __name__ == "__main__":
     if pasta_pr.exists():
         import base64, io
         import pymupdf
-        LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
-                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"),
-                 ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia e cobertura metálica"), ("ND-LET-CT01", "cortes da estrutura")]
+        LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
+                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais PC-01/02 50×50"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia e cobertura metálica"),
+                 ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
+                 ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento CM-01 a CM-08")]
         for nome, desc in LISTA:
             arq = pasta_pr / f"{nome}.pdf"
             if not arq.exists():

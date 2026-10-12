@@ -8,8 +8,8 @@ f = lambda v, d=3: f"{v:.{d}f}".replace(".", ",")
 X_FACH = [("A", 0.0), ("B", 9.87), ("C", 20.05), ("D", 29.63), ("E", 40.10)]
 Y1, Y2 = 0.0, 10.05
 NIVEIS = [3.15, 6.55]
-H_LAJE, H_CAPA, H_VIGA, H_DENTE = 0.20, 0.05, 0.70, 0.425
-ASSENTO = [round(n - H_LAJE - H_CAPA - H_DENTE, 3) for n in NIVEIS]      # topo da viga = nível − laje − capa; dente 425 do topo
+H_LAJE, H_CAPA, H_VIGA, H_DENTE = 0.20, 0.05, 0.70, 0.70          # VM sem dente: assento = nível − laje − capa − viga
+ASSENTO = [round(n - H_LAJE - H_CAPA - H_DENTE, 3) for n in NIVEIS]      # topo da viga = nível − laje − capa; apoio direto (sem dente)
 M = lambda v: v * 1000
 A_I70 = 0.40 * 0.15 * 2 + 0.15 * 0.40 + 2 * 0.5 * 0.125 * 0.08 * 2
 VM = []                                                                    # (marca, xa, xb, L)
@@ -64,7 +64,7 @@ v1.marcador_corte((M(15.0), -3000), (M(15.0), M(Y2) + 3000), "2", lado=1)
 v2 = planta("PLANTA +6,55", (Q[0] + 40, Q[3] - 357), NIVEIS[1], ASSENTO[1])
 
 # ------------------------------------------------------------------ CORTE 2-2 (1:50) — linhas 1–2, dois níveis
-c = pr.vista("CORTE 2-2", (Q[0] + 515, Q[3] - 370), 50, titulo="CORTE 2-2 — MEZANINO (ENTRE OS EIXOS B E C)", subtitulo="vigas VM nos consolos CP-MEZ; laje alveolar h20 + capa 5", unidade="cm")
+c = pr.vista("CORTE 2-2", (Q[0] + 515, Q[3] - 370), 50, titulo="CORTE 2-2 — MEZANINO (ENTRE OS EIXOS B E C)", subtitulo="vigas VM (sem dente) nos consolos CP-MEZ; laje alveolar h20 + capa 5", unidade="cm")
 c.linha((-1500, 0), (M(Y2) + 1500, 0), "TERRENO")
 for x, marca in ((0, "PF-02 (linha 1)"), (M(Y2), "PC-01 (linha 2)")):
     c.ret(x - 300, -1000, 600, 1000 + M(7.6), "VISTA")
@@ -77,14 +77,12 @@ for n, a in zip(NIVEIS, ASSENTO):
         c.ret(x + sg * 300 if sg > 0 else x - 600, M(a), 300, 10, "METALICA")                                              # neoprene
     # viga VM em corte longitudinal (I70) com dentes 425 nas pontas
     zt = M(n - H_LAJE - H_CAPA)
-    c.poli([(325, zt - 700 + 425 - 0 - 425 + 425), (325, zt), (M(Y2) - 325, zt), (M(Y2) - 325, zt - 425 + 0), (M(Y2) - 325 - 300, zt - 425), (M(Y2) - 325 - 300, zt - 700),
-            (325 + 300, zt - 700), (325 + 300, zt - 425), (325, zt - 425)], "VISTA", fechada=True)
-    c.ret(325 + 300, zt - 700 + 0, M(Y2) - 650 - 600, 0, "VISTA")
+    c.ret(325, zt - 700, M(Y2) - 650, 700, "VISTA")
     c.ret(725, zt, M(Y2) - 1450, 200, "VISTA")                                                                           # laje alveolar
     c.hachura([(725, zt + 200), (M(Y2) - 725, zt + 200), (M(Y2) - 725, zt + 250), (725, zt + 250)], "AR-CONC", 0.02)   # capa
     c.linha((725, zt + 250), (M(Y2) - 725, zt + 250), "VISTA")
     c.chamada((M(5.0), zt + 250), (10, 10), f"nível +{f(n, 2)}: laje h20 + capa 5 (armada c/ tela Q138)")
-    c.chamada((M(Y2) - 475, zt - 212), (12, -14), f"dente 42,5 × 30 + pino; assento +{f(a)}")
+    c.chamada((M(Y2) - 475, zt - 600), (12, -14), f"apoio direto 25 cm + pino PN-1; assento +{f(a)}")
 c.chamada((M(2.0), M(NIVEIS[0] - 0.6)), (10, -12), "VM-02 I70 protendida, 4,0 t, içar pelas 2 alças")
 c.cota_h([0, M(Y2)], -1000, -10)
 c.cota_v([-1000, 0, M(ASSENTO[0]), M(NIVEIS[0]), M(ASSENTO[1]), M(NIVEIS[1])], -500, -10, total=False)
@@ -99,7 +97,7 @@ for n, a in zip(NIVEIS, ASSENTO):
 # ------------------------------------------------------------------ coluna direita
 XC = Q[2] - 200
 y = Q[3] - 6
-pecas = [[m, f"Viga I70 protendida c/ dentes 42,5×30, L {f(L, 2)} m", "4", f(A_I70 * 25 * L / 10, 1), f"CP-MEZ +{f(ASSENTO[0])} / +{f(ASSENTO[1])}"] for m, _, _, L in VM]
+pecas = [[m, f"Viga I70 protendida sem dente, L {f(L, 2)} m", "4", f(A_I70 * 25 * L / 10, 1), f"CP-MEZ +{f(ASSENTO[0])} / +{f(ASSENTO[1])}"] for m, _, _, L in VM]
 pecas += [["LA-01", "Laje alveolar h20, 125×965 (confirmar c/ fabricante)", f"{2 * N_LAJE}", "3,2", "sobre as VM, apoio 10 cm + neoprene"],
           ["CP-MEZ", "Consolo 40×30×35/20 nos pilares das linhas 1–2 (2 níveis)", "20", "—", "ver pranchas dos pilares"],
           ["PM-01", "Pilar 40×60 do mezanino (B2, D2), topo +6,55 + capa", "2", "4,6", "cálice −1,00"]]
@@ -112,7 +110,7 @@ seq = ["Pilares das linhas 1 e 2 já grauteados e com 24 h (ND-LET-MON01, etapa 
        "Laje alveolar h20 sem escoramento; vigas VM sem escoramento (protendidas, 2º estágio na capa)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 notas = ["Laje alveolar h20 + 5 em 9,65 m com 500 kgf/m²: a seção genérica (7 Ø12,7) NÃO passou no ELU; o fabricante deve apresentar tabela de carga ou subir para h26,5 + 5.",
-         "Vigas VM: dente de 42,5 cm verificado por MEF (I70: FS insuficiente — ver memória; alternativa I90 com dente ou I80 com chapa) — fabricar só após a decisão.",
+         "Vigas VM I70 sem dente (o dente de 42,5 cm foi reprovado no MEF): apoio direto de 25 cm nos consolos CP-MEZ, assentos +2,200 e +5,600 (ND-LET-VM01 e ND-LET-PM01).",
          "Tolerâncias NBR 9062:2017: pilar ±10 mm; consolo ±10 mm; folga de ponta 25 mm; apoio da laje ≥ 10 cm medido após a montagem.",
          "Níveis em m, cotas em cm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(XC, y - 4, notas, 200)

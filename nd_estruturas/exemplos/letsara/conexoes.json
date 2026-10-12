@@ -635,7 +635,7 @@
   "verificacao": "fiada × inserto",
   "valor": "8 fiadas = 8 IP-01",
   "ok": true,
-  "obs": "! detalhe da fixação placa × IP-01 (cantoneira soldada ou parafuso) ainda não emitido — pendente CM-01"
+  "obs": "fixação: 2 cantoneiras L 63×6,3 soldadas em obra ao IP-01 e ao CH-P1 da placa (ND-LET-CM01)"
  },
  {
   "grupo": "VB-01 × consolo",
@@ -646,7 +646,7 @@
   "verificacao": "nível do assento = fundo da VB",
   "valor": "+7.460",
   "ok": true,
-  "obs": "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar"
+  "obs": "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)"
  },
  {
   "grupo": "VB-01 × consolo",
@@ -657,7 +657,7 @@
   "verificacao": "nível do assento = fundo da VB",
   "valor": "+7.756",
   "ok": true,
-  "obs": "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar"
+  "obs": "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)"
  },
  {
   "grupo": "VB-01 × consolo",
@@ -668,7 +668,7 @@
   "verificacao": "nível do assento = fundo da VB",
   "valor": "+8.062",
   "ok": true,
-  "obs": "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar"
+  "obs": "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)"
  },
  {
   "grupo": "VB-01 × consolo",
@@ -679,7 +679,7 @@
   "verificacao": "nível do assento = fundo da VB",
   "valor": "+8.349",
   "ok": true,
-  "obs": "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar"
+  "obs": "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)"
  },
  {
   "grupo": "VB-01 × consolo",
@@ -690,29 +690,29 @@
   "verificacao": "nível do assento = fundo da VB",
   "valor": "+8.663",
   "ok": true,
-  "obs": "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar"
+  "obs": "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)"
  },
  {
   "grupo": "VM × consolo",
   "peca_a": "VM-01..04 I70 (nível +3.15)",
-  "inserto_a": "dente 425×300",
-  "peca_b": "pilares das linhas 1–2",
-  "inserto_b": "CP-MEZ 40×30×35/20",
-  "verificacao": "assento = topo da viga − 425",
-  "valor": "+2.475",
+  "inserto_a": "ponta sem dente, TB-1 Ø50 a 150 da face",
+  "peca_b": "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07",
+  "inserto_b": "CP-MEZ 40×30×45/25 + PN-1 Ø20",
+  "verificacao": "assento = topo da viga − 70 (apoio direto 25 cm)",
+  "valor": "+2.200",
   "ok": true,
-  "obs": "! dente da I70 reprovado no MEF (FS < 1,06): decidir I90 c/ dente, I70 sem dente ou I80 c/ chapa antes de fabricar"
+  "obs": "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)"
  },
  {
   "grupo": "VM × consolo",
   "peca_a": "VM-01..04 I70 (nível +6.55)",
-  "inserto_a": "dente 425×300",
-  "peca_b": "pilares das linhas 1–2",
-  "inserto_b": "CP-MEZ 40×30×35/20",
-  "verificacao": "assento = topo da viga − 425",
-  "valor": "+5.875",
+  "inserto_a": "ponta sem dente, TB-1 Ø50 a 150 da face",
+  "peca_b": "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07",
+  "inserto_b": "CP-MEZ 40×30×45/25 + PN-1 Ø20",
+  "verificacao": "assento = topo da viga − 70 (apoio direto 25 cm)",
+  "valor": "+5.600",
   "ok": true,
-  "obs": "! dente da I70 reprovado no MEF (FS < 1,06): decidir I90 c/ dente, I70 sem dente ou I80 c/ chapa antes de fabricar"
+  "obs": "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)"
  },
  {
   "grupo": "I110 × PC",

@@ -187,3 +187,7 @@ Usar o conjunto README, CLAUDE.md, SPEC, TASKS, ROADMAP, CHANGELOG e DECISIONS, 
 
 ### Consequências
 Cada sessão com o Claude começa de uma base conhecida, sem reexplicar o projeto.
+
+## DEC-014 — Vigas do mezanino VM sem dente Gerber (2026-10-12)
+
+O dente de 42,5 cm da I70 foi reprovado no MEF não linear (Vu < 1,06 Vd). Em vez de subir para I90 (reduziria o pé-direito do mezanino para 2,0 m), as VM apoiam direto 25 cm nos consolos CP-MEZ (assentos +2,20 e +5,60, nível − 95 cm), com fretagem N5 no fundo das pontas. Alternativas registradas: I90 com dente (FS 1,14) e I80 com chapa.

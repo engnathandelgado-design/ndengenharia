@@ -57,14 +57,14 @@ for ch, d in CM["chumbadores"].items():
 
 # ------------------------------------------------------------------ 4. pilares × placas (IP-01 × CM-01) e × VB-01 / VM (consolos)
 reg("pilar × placa", "pilar PL/PF", "IP-01 chapa 150×150×9,5 + 2 pinos Ø12,5 (c/125 a partir do piso)", "placa CM-01 (h 125)", "fixação da placa",
-    "fiada × inserto", "8 fiadas = 8 IP-01", True, "! detalhe da fixação placa × IP-01 (cantoneira soldada ou parafuso) ainda não emitido — pendente CM-01")
+    "fiada × inserto", "8 fiadas = 8 IP-01", True, "fixação: 2 cantoneiras L 63×6,3 soldadas em obra ao IP-01 e ao CH-P1 da placa (ND-LET-CM01)")
 zf = lambda x: LG["Z0_TS"] + 0.03 * x
 for pil, x in (("PL-03/04 (P1 L1/L9)", 0.0), ("PF-01 (P3/P14)", 9.87), ("PF-02 (P4/P15)", 20.05), ("PF-03 (P5/P16)", 29.63), ("PL-07/08 (P2 L1/L9)", 39.625 + 0.475)):
-    reg("VB-01 × consolo", "VB-01 15×70", "fundo da viga", pil, "CP-VB", "nível do assento = fundo da VB", f"+{zf(x):.3f}", True, "VB-01 ainda sem prancha de fôrma/armação: pino e neoprene a detalhar")
+    reg("VB-01 × consolo", "VB-01 15×70", "fundo da viga", pil, "CP-VB", "nível do assento = fundo da VB", f"+{zf(x):.3f}", True, "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)")
 for nivel in (3.15, 6.55):
-    ass = nivel - 0.25 - 0.425
-    reg("VM × consolo", f"VM-01..04 I70 (nível +{nivel:.2f})", "dente 425×300", "pilares das linhas 1–2", "CP-MEZ 40×30×35/20", "assento = topo da viga − 425", f"+{ass:.3f}", True,
-        "! dente da I70 reprovado no MEF (FS < 1,06): decidir I90 c/ dente, I70 sem dente ou I80 c/ chapa antes de fabricar")
+    ass = nivel - 0.25 - 0.70
+    reg("VM × consolo", f"VM-01..04 I70 (nível +{nivel:.2f})", "ponta sem dente, TB-1 Ø50 a 150 da face", "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07", "CP-MEZ 40×30×45/25 + PN-1 Ø20",
+        "assento = topo da viga − 70 (apoio direto 25 cm)", f"+{ass:.3f}", True, "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)")
 
 # ------------------------------------------------------------------ 5. I110 × pilares centrais (PN-2) e apoio da V405
 reg("I110 × PC", "V405/406/407 I110", "dente 660×350 + TB-2 tubo Ø60,3×3,6 (furo 53)", "PC-01/02 50×50", "consolo CP-I110 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
