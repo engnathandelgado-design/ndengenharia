@@ -39,3 +39,12 @@ As vigas de travamento V401–V404 não mudam o comprimento de flambagem (le = 2
 - **Ato da protensão nos apoios:** isolar cordoalhas nas pontas das vigas I, centrais e de mezanino. A viga de mezanino precisa de 2 cordoalhas superiores.
 - **Torção na viga central:** sai baixa com e = 0,25 m (interação de 0,15 a 0,45). Ela é governada pela montagem com as vigas I de um lado só.
 - **Deslocamento de serviço do pilar lateral** (vento frequente): 15 mm no 40×60. Atende H/500, mas não atende H/1700 da NBR 6118 13.3. Decidir o critério adotado para pavilhão com placas fixadas por pino e furo oblongo.
+
+## Rodada 1b (12/10/2026) — decisões de Nathan
+- **Vão central mantido**, com vigas centrais em **seção I**. As vigas I de cobertura apoiam em **consolos na viga central**, com **enrijecedor de concreto** (diafragma maciço) em cada linha. Todas as vigas são protendidas com cordoalhas Ø12,7 nuas, aderentes (pré-tração).
+- **V0 = 45 m/s** confirmado.
+- **Telha:** aço 0,5 mm com PIR de 30 mm (≈ 0,07 kN/m²; o cálculo usou 0,10). Terças a 1,60 m com Ue 300×85×25×3,00.
+- **Vigas centrais, forma única I110** (mesa superior 50, mesa inferior 60, alma 20):
+  - V406 e V405 (23 m): 24 cordoalhas, 22,2 t, flecha final de 35 mm (limite de 92 mm).
+  - V407 (19 m): 16 cordoalhas, 18,1 t.
+- **Pilar lateral para H/1700:** 40×80, com 4,5 mm em estádio I. Sob vento frequente, o momento (≈ 195 kN·m) fica abaixo do momento de fissuração (≈ 210 kN·m). Com 40×60, o deslocamento é de 10,7 mm, o que atende só H/500.
