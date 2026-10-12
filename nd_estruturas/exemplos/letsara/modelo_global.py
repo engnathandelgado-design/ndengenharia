@@ -28,6 +28,7 @@ qv = pressao_vento(45.0, S3=0.95)
 YL = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]  # linhas de pórtico
 XF = [0.0, 9.87, 20.05, 29.63, 40.10]                                    # eixos da fachada
 X_CEN = 20.05
+VAOS_CONTRAV = [(1, 2), (3, 4), (4, 5), (6, 7)]   # além dos vãos de fachada (0-1 e 7-8)
 Z_P1, Z_P2, Z_CEN, Z_TOP = 8.08, 9.28, 8.68, 10.0   # apoio da I90 no P1 (baixo), P2 (alto), centro; topo da platibanda
 Z_MEZ = [3.15, 6.55]
 TRIB_Y = [(YL[min(i + 1, 8)] - YL[max(i - 1, 0)]) / 2 for i in range(9)]
@@ -136,7 +137,13 @@ def montar(pdelta=True):
             x = fac[k][0]
             for j, (xb, _) in enumerate(apoios):
                 if 0 < abs(xb - x) <= 20.1:
-                    barra(n, nb[j], 4.9e-4, "contravento")
+                    barra(n, nb[j], 2.01e-4, "contravento")
+    # X nos vãos internos contraventados (lateral ↔ centro), barras redondas A36 Ø16
+    for (ia, ib) in VAOS_CONTRAV:
+        for (xa, za), (xb, zb) in (((0.0, Z_P1), (X_CEN, Z_CEN)), ((X_CEN, Z_CEN), (40.1, Z_P2))):
+            n1, n2 = nos[(xa, round(YL[ia], 3), za)], nos[(xb, round(YL[ib], 3), zb)]
+            n3, n4 = nos[(xb, round(YL[ia], 3), zb)], nos[(xa, round(YL[ib], 3), za)]
+            barra(n1, n2, 2.01e-4, "contravento"); barra(n3, n4, 2.01e-4, "contravento")
     # mezanino: vigas I90 + laje como diafragma (treliças em X) entre L0 e L1
     for z in Z_MEZ:
         l0 = [nos[(round(x, 3), 0.0, z)] for x in XF]
@@ -144,11 +151,10 @@ def montar(pdelta=True):
         for row in (l0, l1):
             for a, b in zip(row[:-1], row[1:]):
                 barra(a, b, I90_A, "I90 mezanino")
-        for k in range(5):
-            barra(l0[k], l1[k], 0.10, "laje (diafragma)")
-            if k < 4:
-                barra(l0[k], l1[k + 1], 0.10, "laje (diafragma)")
-                barra(l1[k], l0[k + 1], 0.10, "laje (diafragma)")
+        escravos = l0 + l1
+        mestre = no(20.05, YL[1] / 2, z)
+        ops.fix(mestre, 0, 0, 1, 1, 1, 0)
+        ops.rigidDiaphragm(3, mestre, *escravos)   # laje alveolar + capa = diafragma rígido
     return pil, trelicas
 
 
@@ -191,7 +197,7 @@ def cargas(pil, wx=0.0, wy=0.0, grav=1.0):
 def rodar(wx, wy, pdelta):
     pil, tre = montar(pdelta)
     cargas(pil, wx, wy)
-    ops.system("UmfPack"); ops.numberer("RCM"); ops.constraints("Plain")
+    ops.system("UmfPack"); ops.numberer("RCM"); ops.constraints("Transformation")
     ops.test("NormDispIncr", 1e-8, 30); ops.algorithm("Newton")
     ops.integrator("LoadControl", 0.1); ops.analysis("Static")
     ok = ops.analyze(10)

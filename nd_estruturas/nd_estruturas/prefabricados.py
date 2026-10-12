@@ -601,3 +601,68 @@ def menor_protensao_grade(sec, L, carga, conc, nmax=35, sup_permitidas=(0, 2), *
                 r.linhas["y_cg_mm"] = round(y_cg * 1000)
                 return r
     return None
+
+
+# --------------------------------------------------------------------------- situações transitórias (NBR 9062)
+
+
+def iy_secao(sec: "Secao"):
+    """Momento de inércia em torno do eixo vertical (flexão lateral), por faixas."""
+    n, h = 400, sec.h
+    Iy = 0.0
+    for k in range(n):
+        y = (k + 0.5) * h / n
+        b = sec.largura_em(y)
+        Iy += b ** 3 / 12 * h / n
+    return Iy
+
+
+def icamento_viga(sec: "Secao", L: float, a: float, P: float, ep: float, conc: "Concreto",
+                  fckj: float, coef_din=1.3, y_alca=0.10, e_tol=0.006, sweep=None):
+    """Viga suspensa por 2 alças a 'a' das pontas (içamento, estocagem e transporte em 2 apoios).
+
+    Tensões (MPa, σ<0 compressão) nas fibras sup./inf. no meio e na alça com protensão P (kN) e
+    excentricidade ep (m); peso × coef. dinâmico (NBR 9062: 1,3 — conferir).
+    Estabilidade lateral (Mast 1989/1993, PCI): FS à fissuração ≥ 1,0 e FS à ruptura ≥ 1,5.
+    """
+    w = sec.A * 25.0
+    wd = w * coef_din
+    Mm = wd * L ** 2 / 8 - wd * a * L / 2          # meio do vão (com balanços)
+    Ma = -wd * a ** 2 / 2                           # no ponto da alça
+    A, I, yc, h = sec.A, sec.I, sec.yc, sec.h
+
+    def sig(M):
+        si = (-P / A - P * ep * yc / I + M * yc / I) / 1000
+        ss = (-P / A + P * ep * (h - yc) / I - M * (h - yc) / I) / 1000
+        return round(ss, 2), round(si, 2)
+
+    fctm_j = 0.3 * fckj ** (2 / 3)
+    lim_c, lim_t = -0.7 * fckj, 1.2 * fctm_j
+    s_meio, s_alca = sig(Mm), sig(Ma)
+    ok_tens = all(lim_c <= v <= lim_t for v in s_meio + s_alca)
+    # Mast: deslocamento lateral do CG com rotação unitária (z0), roll axis acima do CG
+    Ecj = conc.Ecs * math.sqrt(fckj / conc.fck)
+    Iy = iy_secao(sec)
+    L1 = L - 2 * a
+    z0 = w / (12 * Ecj * Iy * L) * (L1 ** 5 / 10 - a ** 2 * L1 ** 3 + 3 * a ** 4 * L1 + 6 / 5 * a ** 5)
+    yr = (h - yc) + y_alca
+    sweep = sweep if sweep is not None else L / 1000
+    ei = e_tol + sweep * (L1 / L) ** 2 / 1.0
+    theta_i = ei / yr
+    M_g = w * L ** 2 / 8 - w * a * L / 2           # momento vertical sem impacto (meio)
+    b_top = sec.largura_em(h - 0.01)
+    fr = 0.7 * fctm_j * 1000                       # kPa
+    sig_top = (-P / A + P * ep * (h - yc) / I - M_g * (h - yc) / I)   # kPa (compressão < 0)
+    M_lat = (fr - sig_top) * Iy / (b_top / 2)      # momento lateral que fissura o canto da mesa sup.
+    theta_max = M_lat / M_g if M_g > 0 else 1.0
+    FS_c = 1 / (z0 / yr + theta_i / theta_max)
+    theta_u = 0.4                                  # rad, valor usual PCI para a rotação última (conferir)
+    z0u = z0 * 2.5                                 # rigidez lateral reduzida na ruptura (Mast, aprox.)
+    zmax = z0u * theta_u + ei
+    FS_u = yr * theta_u / zmax
+    return dict(a_m=a, Mmeio_d=round(Mm, 1), Malca_d=round(Ma, 1),
+                tens_meio_sup_inf=s_meio, tens_alca_sup_inf=s_alca, lim_c=round(lim_c, 1), lim_t=round(lim_t, 2),
+                ok_tensoes=ok_tens, z0_mm=round(z0 * 1000, 1), ei_mm=round(ei * 1000, 1),
+                FS_fissuracao=round(FS_c, 2), FS_ruptura=round(FS_u, 2),
+                ok_estabilidade=FS_c >= 1.0 and FS_u >= 1.5,
+                peso_kN=round(w * L, 1), carga_alca_d_kN=round(wd * L / 2, 1))
