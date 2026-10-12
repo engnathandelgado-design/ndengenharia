@@ -132,17 +132,46 @@ def montar() -> ModeloBIM:
             m.linear("laje", f"LA {nivel:+.2f}", LAJE, (x, Y_LIN[0] + 0.20, nivel - H_LAJE / 2),
                      (x, Y_LIN[1] - 0.20, nivel - H_LAJE / 2), "Laje alveolar")
 
-    # 6. placas de fechamento por fora das faces dos pilares (8 fiadas de 1,25 m = +10,00)
-    for k in range(N_FIADAS):
-        z = k * H_PLACA + H_PLACA / 2
-        for x, nome in ((-0.30 - E_PLACA / 2 - 0.05, "PL-A"), (LARG + 0.30 + E_PLACA / 2 + 0.05, "PL-E")):
-            for i in range(len(Y_LIN) - 1):
+    # 6. placas de fechamento conforme a locação do R01 (vistas A–J): perímetro (eixos A/E nas linhas 4–9 inteiros,
+    #    linhas 1–4 só as 2 fiadas de cima = docas), fachada 9 inteira, fachada 1 só nas extremidades (A–B e D–E),
+    #    parede da linha 2 inteira e parede da linha 3 com 4 portões (placas só acima de +6,10)
+    E_PL, Z_VERGA = 0.15, 6.10
+    def fiadas(z0=0.0):
+        z = z0
+        while z + 1.0 < TOPO_PLAT:
+            yield z + H_PLACA / 2
+            z += H_PLACA
+    X_L3 = [0.0, 9.87, 14.96, 20.05, 25.14, 29.63, LARG]                   # P1, P9, P10, P11, P10, P12, P2
+    X_L2 = [0.0, 9.87, 20.05, 29.63, 36.30, LARG]                          # P1, P8, P8A, P8B, P6, P2
+    for x, nome in ((-0.30 - E_PL / 2 - 0.05, "CM eixo A"), (LARG + 0.30 + E_PL / 2 + 0.05, "CM eixo E")):
+        for i in range(len(Y_LIN) - 1):
+            z0 = 0.0 if i >= 3 else 7.50                                   # linhas 1–4: docas, só as 2 fiadas de cima
+            for z in fiadas(z0):
                 m.linear("placa", nome, PLACA, (x, Y_LIN[i], z), (x, Y_LIN[i + 1], z), "Placas de fechamento")
-        for y, nome in ((-0.30 - E_PLACA / 2, "PL-1"), (COMP + 0.30 + E_PLACA / 2, "PL-9")):
-            for xa, xb in itertools.pairwise(X_FACH):
-                a = xa - 0.40 if xa == 0 else xa
-                b = xb + 0.40 if xb == LARG else xb
-                m.linear("placa", nome, PLACA, (a, y, z), (b, y, z), "Placas de fechamento")
+    for z in fiadas():
+        for xa, xb in itertools.pairwise(X_FACH):                            # fachada linha 9 inteira
+            m.linear("placa", "CM linha 9", PLACA, (xa - 0.40 if xa == 0 else xa, COMP + 0.30 + E_PL / 2, z), (xb + 0.40 if xb == LARG else xb, COMP + 0.30 + E_PL / 2, z), "Placas de fechamento")
+        for xa, xb in ((-0.40, 9.87), (29.63, LARG + 0.40)):                 # fachada linha 1: só A–B e D–E (vistas H e J)
+            m.linear("placa", "CM linha 1", PLACA, (xa, -0.30 - E_PL / 2, z), (xb, -0.30 - E_PL / 2, z), "Placas de fechamento")
+        for xa, xb in itertools.pairwise(X_L2):                              # parede da linha 2 (vistas G/I)
+            m.linear("placa", "CM linha 2", PLACA, (xa, Y_LIN[1] + 0.20 + E_PL / 2, z), (xb, Y_LIN[1] + 0.20 + E_PL / 2, z), "Placas de fechamento")
+    for k, (xa, xb) in enumerate(itertools.pairwise(X_L3)):                 # parede da linha 3 (vista C): portões nas 4 bays centrais
+        gate = 1 <= k <= 4
+        for z in fiadas(Z_VERGA if gate else 0.0):
+            m.linear("placa", "CM linha 3" + (" (sobre o portão)" if gate else ""), PLACA, (xa, Y_LIN[2] + 0.20 + E_PL / 2, z), (xb, Y_LIN[2] + 0.20 + E_PL / 2, z), "Placas de fechamento")
+    # pilares dos portões (linha 3) e do anexo (linha 2), indicativos
+    for x, b in ((9.87, 0.40), (14.96, 0.25), (20.05, 0.40), (25.14, 0.25), (29.63, 0.40)):
+        m.pilar(f"P-portão {x:.2f}", x, Y_LIN[2], b, b, Z_CALICE, 7.0, obs="pilar dos portões (R01: P9/P10/P11/P12), topo a confirmar")
+    m.pilar("P6", 36.30, Y_LIN[1], 0.25, 0.40, Z_CALICE, 7.0, obs="anexo (R01), a confirmar")
+    # vigas de travamento VT e vergas VV 25×60 (+5,50 a +6,10), atrás das placas
+    VT = PerfilRetangular(0.25, 0.60, "VT 25x60")
+    for i in range(1, 8):
+        for x in (0.0, LARG):
+            m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, Y_LIN[i] + 0.20, Z_VERGA - 0.30), (x, Y_LIN[i + 1] - 0.20, Z_VERGA - 0.30), "Vigas de travamento VT/VV")
+    for xs, y in ((X_L2, Y_LIN[1]), (X_L3, Y_LIN[2])):
+        for k, (xa, xb) in enumerate(itertools.pairwise(xs)):
+            nome = "VV (verga do portão)" if (y == Y_LIN[2] and 1 <= k <= 4) else "VT"
+            m.linear("viga", nome, VT, (xa + 0.20, y, Z_VERGA - 0.30), (xb - 0.20, y, Z_VERGA - 0.30), "Vigas de travamento VT/VV")
 
     # 7. insertos metálicos e conexões (para conferir no 3D o que está nas pranchas)
     INS = "Insertos metálicos"
@@ -211,6 +240,7 @@ def montar() -> ModeloBIM:
     m.pendente("Vigas do mezanino em I90 com dentes 45×30 (dente da I70 reprovado no MEF): assentos CP-MEZ +2,45 / +5,85; pé-direito livre sob a viga = nível − 1,15 m.")
     m.pendente("Comprimento entre fachadas adotado nos cálculos: 76,81 m (eixos 1–9). Conferir com o R01 (havia 79,75 em outro registro).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento e correntes não modelados no 3D.")
+    m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; altura dos portões adotada 5,50 m livres.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
