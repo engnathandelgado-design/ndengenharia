@@ -28,7 +28,7 @@ def prancha_viga(P):
     n_cord = sum(len(xs) for _, xs, _ in P["cord"])
     F_cord = P["sig_pi"] * 98.7 / 1000
     A1 = P.get("fmt", "A0") == "A1"
-    pr = Prancha(P.get("fmt", "A0"), dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+    pr = Prancha(P.get("fmt", "A0"), dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=P["titulo"] + " — FÔRMA, ARMAÇÃO E INSERTOS", desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
                             marca=P["marca"], qtd=P["qtd"], peso=f(peso, 1), volume=f(V, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")

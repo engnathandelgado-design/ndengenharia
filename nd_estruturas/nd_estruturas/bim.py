@@ -274,12 +274,19 @@ def ler_malha_ifc(caminho) -> OrderedDict[str, list]:
 # --------------------------------------------------------------------------- visualizador 3D
 
 
+def _data_url(caminho):
+    import base64, mimetypes
+    tipo = mimetypes.guess_type(str(caminho))[0] or "image/png"
+    return f"data:{tipo};base64," + base64.b64encode(Path(caminho).read_bytes()).decode()
+
+
 def gravar_visualizador(malha, caminho, titulo: str, subtitulo: str = "", pendencias=(), cores=None,
-                        ocultas=("Placas de fechamento",), quant=None, pranchas=(), conexoes=()) -> Path:
+                        ocultas=("Placas de fechamento",), quant=None, pranchas=(), conexoes=(), logo_cliente=None, cliente="") -> Path:
     """Página HTML única (three.js) com camadas, toque na peça, pendências e marca d'água ND.
 
     pranchas: lista de dict(nome, desc, img) — img é data-URL (jpeg/png) da prancha, para ver no celular;
-    conexoes: lista de dict(grupo, peca_a, inserto_a, peca_b, inserto_b, verificacao, valor, ok, obs).
+    conexoes: lista de dict(grupo, peca_a, inserto_a, peca_b, inserto_b, verificacao, valor, ok, obs);
+    logo_cliente: caminho da imagem da logo do cliente (fica no canto superior direito da tela 3D).
     """
     from .visualizador_3d import MODELO_HTML
 
@@ -287,7 +294,8 @@ def gravar_visualizador(malha, caminho, titulo: str, subtitulo: str = "", penden
     cfg = {
         "titulo": titulo, "subtitulo": subtitulo, "pendencias": list(pendencias),
         "cores": cores or {}, "ocultas": list(ocultas), "autoria": AUTORIA, "quant": quant or {},
-        "pranchas": list(pranchas), "conexoes": list(conexoes),
+        "pranchas": list(pranchas), "conexoes": list(conexoes), "cliente": cliente,
+        "logo_cliente": _data_url(logo_cliente) if logo_cliente else None,
     }
     html = (MODELO_HTML
             .replace("__TITULO__", _esc(titulo))

@@ -7,7 +7,7 @@ from ts01_dados import P, L, H, DX, HD, LN, PASSO_T, sec, R, TR, V, peso, ALCA_F
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))
 CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
-pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS E TRANSITÓRIAS",
                         desenho="ND-LET-TS01-1", folha="01/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "DENTES GERBER, MÃO-FRANCESA NO FUNDO, CHUMBADORES CALCULADOS, TERÇAS c/1579")

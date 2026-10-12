@@ -18,7 +18,7 @@ def notas_padrao(pr, XC, y, extra):
 def lajes():
     L_P, B_P, H_P = 9850, 1250, 200                                     # painel: 985 × 125 × 20 (apoio 10 cm nas mesas das VM)
     N = 31
-    pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+    pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo="LAJES ALVEOLARES LA-01 / LA-02 (h20 + capa 5) DO MEZANINO — PLANTA DE LAJES, SEÇÃO, APOIO E CHAVETAS",
                             desenho="ND-LET-LA01", folha="01/01", fase="PARA APROVAÇÃO", marca="LA-01", qtd=2 * N, peso=f(1.25 * 9.85 * 2.65, 1), volume=f(0.125 * 9.85, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
@@ -115,7 +115,7 @@ def placas():
     MK = {Lp: f"CM-0{k+1}" for k, (Lp, _) in enumerate(lista)}
     L0 = lista[0][0]
     peso = lambda Lp: 1.25 * 0.15 * Lp / 1000 * 25
-    pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+    pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo="PLACAS DE FECHAMENTO PROTENDIDAS CM-01 A CM-08 (125 × 15) — ELEVAÇÃO DE MONTAGEM, SEÇÃO, INSERTOS E LIGAÇÃO COM OS PILARES",
                             desenho="ND-LET-CM01", folha="01/01", fase="PARA APROVAÇÃO", marca="CM-01", qtd=16, peso=f(peso(L0), 1), volume=f(1.25 * 0.15 * L0 / 1000, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
@@ -187,4 +187,4 @@ def placas():
 
 if __name__ == "__main__":
     lajes()
-    placas()
+    # placas() — substituída por fechamento.py (CM01 rev 02 + PP00 + pranchas por vista)

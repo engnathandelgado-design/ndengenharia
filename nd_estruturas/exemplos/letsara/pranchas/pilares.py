@@ -100,7 +100,7 @@ assert max(abs(y) for _, y in LONG["xy"]) + 10 + 8 + COB <= H / 2 + 0.01, "cobri
 # ------------------------------------------------------------------ isométricos
 subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_pilar.py"], check=True, capture_output=True)
 
-pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo=f"PILAR PRÉ-MOLDADO PL-01 (FAMÍLIA PL-01 A PF-03) 40×60 — {'PRÉ-TRACIONADO NA CABECEIRA' if PROT else 'CONCRETO ARMADO'} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                         desenho=f"ND-LET-PIL-{'P' if PROT else 'A'}01", folha="01/01", fase="PARA APROVAÇÃO — OPÇÃO " + ("B (PROTENDIDO)" if PROT else "A (ARMADO)"),
                         marca="PL-01", qtd=6, peso=f(PESO, 1), volume=f(0.24 * L_TOT / 1000, 2)))

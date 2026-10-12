@@ -149,7 +149,7 @@ def nivel(v, x, z, txt, lado=1):
     v.texto((x + lado * 650, z + 80), txt, "nota", alinh="BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT")
 
 
-pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="CORTES TRANSVERSAIS DA ESTRUTURA (EIXOS 2 E 3) E APOIOS DA COBERTURA",
                         desenho="ND-LET-CT01", folha="01/01", fase="PARA ANÁLISE"))
 z_tel = lambda x: zf(x) + (H + 12.5 + 330) * c

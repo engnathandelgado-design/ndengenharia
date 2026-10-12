@@ -26,7 +26,7 @@ Md_neg = max(0.0, (1.4 * car.w - car.g1 - car.g2) * L_calc ** 2 / 8)
 assert R.ok and ICA["ok_tensoes"] and ICA["ok_estabilidade"], (R.avisos, ICA)
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo=f"{P['marca']} — VIGA I90 DE COBERTURA (PROTENDIDA) — FÔRMA, ARMAÇÃO E INSERTOS",
                         desenho="ND-LET-TS01", folha="01/01", fase="PARA APROVAÇÃO"))
 L, H = P["L"], P["h"]

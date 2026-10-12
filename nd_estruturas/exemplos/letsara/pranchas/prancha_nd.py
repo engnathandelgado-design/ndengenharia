@@ -2,7 +2,8 @@
 Modelo em mm reais; papel em mm. Cada Vista: P_papel = origem + P_modelo / escala. Cotas com dimlfac = escala.
 """
 from __future__ import annotations
-import math, datetime
+import math
+import os, datetime
 import ezdxf
 from ezdxf import bbox
 from ezdxf.enums import TextEntityAlignment
@@ -30,6 +31,8 @@ EMPRESA = dict(nome="ND ENGENHARIA E ASSESSORIA LTDA", cnpj="46.745.157/0001-47"
                contato="WhatsApp (46) 92000-4685 · Saudade do Iguaçu/PR")
 AREA_CORD = {9.5: 55.5, 12.7: 98.7, 15.2: 140.0}   # mm², cordoalhas de 7 fios CP-190 RB (NBR 7483 — conferir)
 FONTE = "DejaVuSansCondensed.ttf"
+# logos dos clientes no selo (campo à direita de CLIENTE/OBRA/LOCAL); chave = nome do cliente em maiúsculas
+LOGOS_CLIENTES = {"MARQUES ENGENHARIA E CONSTRUÇÕES": os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos", "marques.jpg")}
 MEMORIA_NA_PRANCHA = False   # tabelas "MEMÓRIA..." / "VERIFICAÇÕES..." não entram nas pranchas de detalhamento (pedido do cliente)
 _FONT_CACHE = {}
 
@@ -118,7 +121,7 @@ class Prancha:
     def carimbo_bbox(self):
         x0, y0, x1, y1 = self.quadro
         extra = 8 if self.dados.get("marca") else 0
-        return (x1 - 180, y0, x1, y0 + 72 + extra + 5 * max(len(self.revisoes), 1) + 6)
+        return (x1 - 180, y0, x1, y0 + 78 + extra + 5 * max(len(self.revisoes), 1) + 6)
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
@@ -372,12 +375,20 @@ class Prancha:
                 self.texto(cx0 + a + 1.5, y + h35 - 2.5, lab, "min")
                 self.texto(cx0 + (a + b) / 2, y + 2.2, val, "nota", "TITULO", "MIDDLE_CENTER")
             y += h35
-        h4 = 16
+        h4 = 22                                             # cliente / obra / local + campo da logo do cliente
         self.ret(cx0, y, cx1, y + h4)
+        lx0 = cx1 - 26
+        self.linha((lx0, y), (lx0, y + h4))
         for k, (lab, val) in enumerate([("CLIENTE", d["cliente"]), ("OBRA", d["obra"]), ("LOCAL", d["local"])]):
-            yy = y + h4 - 4.5 - k * 5
+            yy = y + h4 - 6 - k * 6
             self.texto(cx0 + 1.5, yy, lab + ":", "min")
-            self.texto(cx0 + 18, yy, val, "nota")
+            for kk, p in enumerate(quebrar(val, lx0 - cx0 - 20, ALTURAS["nota"])[:1]):
+                self.texto(cx0 + 18, yy, p, "nota")
+        logo = d.get("logo_cliente") or LOGOS_CLIENTES.get(str(d["cliente"]).upper())
+        if logo and os.path.exists(logo):
+            self.imagens.append((lx0 + 2, y + 1, cx1 - 2, y + h4 - 1, logo))
+        else:
+            self.texto((lx0 + cx1) / 2, y + h4 / 2, "LOGO DO CLIENTE", "min", alinh="MIDDLE_CENTER")
         y += h4
         h5 = 20
         self.ret(cx0, y, cx1, y + h5)

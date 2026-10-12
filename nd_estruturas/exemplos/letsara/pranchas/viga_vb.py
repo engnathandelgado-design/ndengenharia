@@ -17,7 +17,7 @@ TERCAS = [round(255 + PASSO_T * k) for k in range(7) if 255 + PASSO_T * k < L - 
 PESO = 0.15 * 0.90 * 25 * L / 1000
 V = 0.15 * 0.90 * L / 1000
 # cargas: peso próprio 3,4 + telha/terças/vento (5 m de tributária) ≈ 1,6 kN/m → M ≈ 59 kN·m; vento de sucção simétrico
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="VIGAS DE BORDA VB-01 A VB-04 (15×90, C40) — FACHADAS 1 E 9 — FÔRMA, ARMAÇÃO E INSERTOS",
                         desenho="ND-LET-VB01", folha="01/01", fase="PARA APROVAÇÃO", marca="VB-02", qtd=2, peso=f(PESO, 1), volume=f(V, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")

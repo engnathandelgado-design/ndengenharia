@@ -33,7 +33,7 @@ IM1 = dict(t=12.5, lx=150, ly=360)        # inserto no fundo da viga: idem, 2 pi
 CHMF = dict(t=8, l=300, h=100)           # chapa furada (2 Ø14) soldada no CH-MF, para a mão-francesa
 Y_MF = 1070                              # ponto da terça onde a mão-francesa pega (mm do eixo da viga)
 N_LIN, N_T = 9, 26
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO, SUPORTE DE TERÇA ST-1 E MÃO-FRANCESA",
                         desenho="ND-LET-COB01", folha="04/05", fase="PARA APROVAÇÃO", rev="01"))
 pr.revisao("01", pr.dados["data"], "furos centrados na alma; suporte ST-1 + CH-T1; mão-francesa na OR-1; planta completa")

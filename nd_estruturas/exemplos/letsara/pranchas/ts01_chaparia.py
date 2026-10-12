@@ -5,7 +5,7 @@ from ts01_dados import P, L, H, HD, LN, PASSO_T, f, peso, V
 
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — CHAPARIA, CHUMBADORES E PEÇAS DE LIGAÇÃO DA MONTAGEM",
                         desenho="ND-LET-TS01-3", folha="03/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1 DETALHADA, TB-1 NO DENTE")

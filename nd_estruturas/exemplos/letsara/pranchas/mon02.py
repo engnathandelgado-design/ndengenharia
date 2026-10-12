@@ -19,7 +19,7 @@ N_LAJE = int((40.10 - 0.60) // 1.25)
 PIL1 = [("PL-03", 0.0, 400, 600), ("PF-01", 9.87, 600, 400), ("PF-02", 20.05, 600, 400), ("PF-03", 29.63, 600, 400), ("PL-07", 40.10, 400, 600)]
 PIL2 = [("PL-02", 0.0, 400, 600), ("PM-01", 9.87, 600, 400), ("PC-01", 20.05, 500, 500), ("PM-01", 29.63, 600, 400), ("PL-06", 40.10, 400, 600)]
 
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE MONTAGEM DO MEZANINO (+3,15 E +6,55) — VIGAS VM, LAJES ALVEOLARES, CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
                         desenho="ND-LET-MON02", folha="02/02", fase="PARA APROVAÇÃO"))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")

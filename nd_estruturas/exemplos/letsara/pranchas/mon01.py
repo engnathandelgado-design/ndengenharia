@@ -24,7 +24,7 @@ A_I110 = 0.40 * 0.25 * 2 + 0.15 * 0.60 + 2 * 0.5 * 0.125 * 0.08 * 2
 PESO = dict(TS01=round(A_I90 * 25 * LG["L_TS"] / 10, 1), I110=lambda L: round(A_I110 * 25 * L / 10, 1), VB=lambda L: round(0.15 * 0.70 * 25 * L / 10, 1),
             PL=round(0.24 * 11 * 25 / 10, 1), PC=round(0.25 * 9.88 * 25 / 10, 1))
 
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I110 E VB-01 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
                         desenho="ND-LET-MON01", folha="01/02", fase="PARA APROVAÇÃO"))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")

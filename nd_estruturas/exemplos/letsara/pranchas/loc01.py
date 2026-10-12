@@ -6,7 +6,7 @@ from prancha_nd import Prancha
 YL = [0, 10050, 19705, 29360, 38865, 48445, 58025, 67605, 76810]       # eixos 1..9 (mm)
 XA = {"A": 0, "B": 9870, "C": 20050, "D": 29630, "E": 40100}           # eixos A..E
 f = lambda v: f"{v:.2f}".replace(".", ",")
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="LOCAÇÃO DE PILARES, VIGAS DE COBERTURA E DETALHES DE APOIO",
                         desenho="ND-LET-LOC01", folha="01/01", fase="PARA APROVAÇÃO"))
 

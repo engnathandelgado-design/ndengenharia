@@ -31,7 +31,7 @@ def prancha_pilar(P):
     z_est = sorted(set(list(range(50, EST["zona"] + L_CAL, EST["s_dens"])) + list(range(EST["zona"] + L_CAL, L_TOT - EST["zona"], EST["s_corr"])) +
                        list(range(L_TOT - EST["zona"], L_TOT - 40, EST["s_dens"]))))
     n_est = len(z_est)
-    pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+    pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=P["conteudo"], desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
                             marca=P["marca"], qtd=P["qtd"], peso=f(PESO, 1), volume=f(V, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")

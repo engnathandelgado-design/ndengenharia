@@ -5,7 +5,7 @@ from ts01_dados import P, L, H, DX, HD, LN, sec, F_cord, Ap, f, peso, V
 
 DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["TS-01"]
 AD = DT["calculo"]["adotado"]
-pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO, DENTES E PROTENSÃO",
                         desenho="ND-LET-TS01-2", folha="02/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "ARMADURA DOS DENTES GERBER (NBR 9062 + PCI, VERIFICADA POR MEF)")

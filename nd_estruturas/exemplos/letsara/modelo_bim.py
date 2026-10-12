@@ -55,7 +55,7 @@ PLACA = PerfilRetangular(E_PLACA, H_PLACA, "Placa e=10 h=125")
 
 
 def montar() -> ModeloBIM:
-    m = ModeloBIM("Letsara — Pavilhão pré-moldado", obra="Obra Letsara (Marque Engenharia)")
+    m = ModeloBIM("Letsara — Pavilhão pré-moldado", obra="Obra Letsara (Marques Engenharia e Construções)")
 
     # 1. pilares laterais (60 na direção X) com consolos CP-TS para os dentes da TS-01
     for i, y in enumerate(Y_LIN, start=1):
@@ -264,7 +264,11 @@ if __name__ == "__main__":
                  ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais PC-01/02 50×50"),
                  ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento, ST-1, mão-francesa) e COB02 (correntes, diagonais)"),
                  ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
-                 ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento (vistas A–J, portões)"), ("ND-LET-VT01", "vigas de travamento e vergas 25×60 (+5,50/+6,10)")]
+                 ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
+                 ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
+                 ("ND-LET-PP-HJ", "placas das vistas H e J"), ("ND-LET-PP-G", "placas da vista G"), ("ND-LET-PP-EF", "placas das vistas E e F"),
+                 ("ND-LET-PP-C", "placas da vista C (portões)"), ("ND-LET-PP-B", "placas da vista B"), ("ND-LET-PP-D", "placas da vista D"),
+                 ("ND-LET-PP-A", "placas da vista A"), ("ND-LET-VT01", "vigas de travamento 25×60 (+7,50/+8,10)")]
         for nome, desc in LISTA:
             arq = pasta_pr / f"{nome}.pdf"
             if not arq.exists():
@@ -277,8 +281,9 @@ if __name__ == "__main__":
                                      img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
-                        "Pavilhão pré-moldado 40,10 × 76,81 m · Marque Engenharia · cobertura escondida na platibanda · pranchas e conferência de insertos",
-                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Piso e fundações"), pranchas=pranchas, conexoes=cx)
+                        "Pavilhão pré-moldado 40,10 × 76,81 m · Marques Engenharia e Construções · cobertura escondida na platibanda · pranchas e conferência de insertos",
+                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Piso e fundações"), pranchas=pranchas, conexoes=cx,
+                        logo_cliente=AQ / "pranchas" / "logos" / "marques.jpg", cliente="Marques Engenharia e Construções")
     for g, d in q.items():
         print(f"{g:26s} {d['pecas']:4d} peças  {d['volume_m3']:8.1f} m³")
     print("pendências:", len(modelo.pendencias), "->", saida)

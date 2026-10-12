@@ -27,6 +27,7 @@ h1{font-weight:800;font-size:1.45rem;letter-spacing:-.01em;margin:0;text-wrap:ba
 .sub{color:var(--muted);font-size:.85rem;margin:0}
 .stage{position:relative;height:62vh;min-height:340px;border-radius:10px;overflow:hidden;background:var(--scene);border:1px solid var(--line)}
 canvas{display:block;width:100%;height:100%;touch-action:none}
+.logo-cli{position:absolute;right:10px;top:10px;width:64px;height:64px;border-radius:6px;object-fit:contain;background:#0b2532;box-shadow:0 1px 4px rgba(0,0,0,.25);pointer-events:none}
 .mark{position:absolute;right:10px;bottom:8px;font:600 .72rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);pointer-events:none}
 .pick{position:absolute;left:10px;top:10px;right:10px;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:.82rem var(--f-mono);color:var(--fg)}
 .views{position:absolute;left:10px;bottom:8px;display:flex;gap:6px;flex-wrap:wrap}
@@ -72,6 +73,7 @@ button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
       <button id="v-top" type="button">Planta</button>
       <button id="v-front" type="button">Frontal</button>
     </div>
+    <img class="logo-cli" id="logoCli" alt="" hidden>
     <div class="mark" id="mark"></div>
   </div>
   <div class="grid">
@@ -95,6 +97,7 @@ const PALETA = [0x8b9096,0xb84a2e,0xd98b3a,0x3b78c9,0x8a5fa8,0xbdb7a8,0x5c6168,0
 document.getElementById('titulo').textContent = CFG.titulo;
 document.getElementById('subtitulo').textContent = CFG.subtitulo;
 document.getElementById('mark').textContent = CFG.autoria;
+if (CFG.logo_cliente) { const lg = document.getElementById('logoCli'); lg.src = CFG.logo_cliente; lg.alt = CFG.cliente || 'cliente'; lg.hidden = false; }
 const ul = document.getElementById('pend');
 if (!CFG.pendencias.length) document.getElementById('sec-pend').hidden = true;
 CFG.pendencias.forEach((t, i) => { const li = document.createElement('li'); li.textContent = t; if (t.startsWith('!')) { li.className = 'alert'; li.textContent = t.slice(1).trim(); } ul.appendChild(li); });
