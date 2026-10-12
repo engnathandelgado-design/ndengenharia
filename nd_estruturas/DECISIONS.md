@@ -26,6 +26,20 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-006 — JAX FDM para form-finding, OpenSees para análise
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+Cascas, arcos atirantados, gridshells e redes de cabos precisam de forma antes do dimensionamento. Alternativas: escrever um FDM próprio, usar relaxação dinâmica ou usar o JAX FDM (Princeton, MIT), que já traz form-finding inverso com gradiente exato. Testado em 12 exemplos oficiais e numa casca 20 × 20 m conferida contra a rede (empuxo +1,4 %).
+
+### Decisão
+Usar o JAX FDM só para achar a forma (módulo `formfinding`). Toda verificação continua no OpenSeesPy e no dimensionamento pela NBR 6118:2023. Resultado do FDM sempre conferido com conta de mão (H = M0/f no arco) ou com o modelo de cascas.
+
+### Consequências
+Dependência extra (jax, jax-fdm, compas). A solução inversa não é única e metas incompatíveis não dão erro: conferir perda final e cada meta. O módulo ainda chama o OpenSees direto; falta passar pelo Protocol do motor (DEC-004).
+
 ## DEC-005 — Cuidados ao reaproveitar o HyperFrame
 
 **Data:** 2026-10
