@@ -497,6 +497,12 @@ def ex_ferreira(npav=5, aR=1.0, bp=.5, hp=.5, red_p=.8, aR_base=1.0, Ec=35e6):
 9. Incêndio (11): TRRF (NBR 14432) → tabelas/isoterma; ligações e juntas.
 10. Pranchas (montagem + produção), lista de peças, quantitativos e orçamento (12).
 
+**Padrão ND de concepção para galpões e pavilhões (Nathan, 12/10/2026)** — cada item vira componente do modelo de peças:
+- **Cobertura em viga I pré-moldada** (tesoura de altura variável). Detalhar o apoio no pilar: neoprene, chumbador grauteado, folga e tolerância de montagem. Detalhar também os insertos da peça: alças no CG, chapas e esperas.
+- **Vigas com dente Gerber** nos apoios (ferramenta ND de consolos/dentes). Quando houver laje, incluir a **concretagem de 2º estágio**: capa, solidarização das juntas e do nicho do Gerber, e armadura de continuidade/espera saindo da viga. Verificar a seção composta e a interface.
+- **Fechamento lateral em placas com insertos na placa e consoles metálicos (CM) nos pilares.** Exemplo é o padrão Letsara: nicho na placa e console aparafusado com pino, furo redondo numa ponta e oblongo na outra. Os insertos do pilar entram na prancha do pilar.
+- **Terças metálicas sobre as vigas I.** A **espera de terça** (chapa embutida com chumbadores na mesa superior da tesoura, posição cotada pela modulação das terças) entra como inserto na prancha da tesoura e na tabela de insertos.
+
 **Modelo único de peças (desde 12/10/2026):** do passo 2 em diante, toda peça entra no modelo de peças do `nd_estruturas.prefabricados` (marca por identidade, armadura, insertos, CG, peso). O modelo analítico (passo 5) é gerado dele — eixo de cada peça, link rígido até o apoio, liberações por grau de liberdade (rótula, engaste ou grau de conexão 0–1 do consolo/chumbador, seção 4.5), grupos de carga e combinações NBR 8681 — e os esforços voltam gravados em cada peça. Pranchas, listas e orçamento (passo 10) saem do mesmo modelo — ver `pranchas-tecnicas-nd` 6B.
 
 ## 15. Armadilhas
