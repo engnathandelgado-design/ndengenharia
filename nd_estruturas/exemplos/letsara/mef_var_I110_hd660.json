@@ -1,0 +1,114 @@
+{
+ "over": {
+  "hd": 660,
+  "du": 0.01,
+  "passos": 2500,
+  "l_apoio": 250
+ },
+ "calculo": {
+  "NBR": {
+   "tipo": "muito curto (atrito-cisalhamento)",
+   "a_d": 0.289,
+   "As_tir": 754,
+   "As_sus": 1030,
+   "As_cost": 377,
+   "tau_wd": 1.85,
+   "tau_lim": 6.0,
+   "ok_biela": true
+  },
+  "PCI": {
+   "a_mm": 235,
+   "As_flex": 725,
+   "As_cis": 473,
+   "As_min": 968,
+   "As": 968,
+   "Ah": 365,
+   "Ash": 1195,
+   "Av": 365,
+   "Vmax_kN": 998.2,
+   "ok_Vmax": true,
+   "mu_e": 3.4
+  },
+  "adotado": {
+   "As_tir": 968,
+   "tirante": "4 Ø20 (1257 mm²)",
+   "As_sus": 1195,
+   "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 330 mm da face reentrante",
+   "As_cost": 377,
+   "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+   "Av": 365,
+   "vertical_dente": "3 estribos verticais Ø10 no dente",
+   "ancoragem_tirante_mm": 1468,
+   "ok": true,
+   "n_tir": 4,
+   "d_tir": 20.0,
+   "n_sus": 3,
+   "d_sus": 16.0,
+   "n_cost": 3,
+   "d_cost": 10.0,
+   "n_v": 3
+  }
+ },
+ "mef": {
+  "Vu_kN": 224.6,
+  "V_pico_kN": 224.6,
+  "limite": null,
+  "Vd_kN": 448.0,
+  "FS": 0.5,
+  "ok": false,
+  "protensao_ok": true,
+  "n_elem": 5028,
+  "curva": [
+   [
+    -0.574,
+    224.6
+   ],
+   [
+    -0.564,
+    167.4
+   ],
+   [
+    -0.554,
+    167.4
+   ],
+   [
+    -0.544,
+    167.4
+   ],
+   [
+    -0.534,
+    167.4
+   ],
+   [
+    -0.524,
+    152.1
+   ],
+   [
+    -0.514,
+    153.7
+   ],
+   [
+    -0.504,
+    153.9
+   ],
+   [
+    -0.494,
+    153.0
+   ],
+   [
+    -0.484,
+    145.9
+   ],
+   [
+    -0.474,
+    146.6
+   ],
+   [
+    -0.464,
+    150.4
+   ]
+  ],
+  "aco_suspensao_em_Vd_MPa": null,
+  "aco_tirante_em_Vd_MPa": null
+ }
+}

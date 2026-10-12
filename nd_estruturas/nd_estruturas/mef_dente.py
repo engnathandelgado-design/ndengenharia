@@ -159,11 +159,13 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
     ops.constraints("Transformation")
     ops.numberer("RCM")
     ops.system("UmfPack")
-    ops.test("NormDispIncr", 1e-6, 100)
+    ops.test("NormUnbalance", 1.0, 200)                     # equilíbrio de verdade (resíduo < 1 N)
     ops.algorithm("Newton")
     ops.integrator("LoadControl", 0.0)
     ops.analysis("Static")
-    ok0 = ops.analyze(1)
+    ok0 = ops.analyze(5)
+    ops.reactions()
+    R0 = ops.nodeReaction(no_ap, 2)                          # reação residual da protensão (deveria ser ~0)
     ops.loadConst("-time", 0.0)
     # etapa 2: carga P no topo (placa de 200 mm) + Hd proporcional no apoio do dente
     ops.timeSeries("Linear", 2)
@@ -200,7 +202,7 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
             if r != 0:
                 break
         ops.reactions()
-        V = ops.nodeReaction(no_ap, 2) / 1e3
+        V = (ops.nodeReaction(no_ap, 2) - R0) / 1e3
         hist.append((-ops.nodeDisp(ctrl, 2), V))
         if lim is None:
             es = max(ops.basicDeformation(e_)[0] / malha for e_ in mon_s) if mon_s else 0.0
@@ -221,7 +223,7 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
     Vu = min(Vpico, lim["V"]) if lim else Vpico
     snap_u = _estado(ops, elem_c, barras)
     res = dict(Vu_kN=round(Vu, 1), V_pico_kN=round(Vpico, 1), limite=lim, Vd_kN=Vd, FS=round(Vu / Vd, 2), ok=Vu >= Vd,
-               protensao_ok=ok0 == 0,
+               protensao_ok=ok0 == 0, reacao_residual_protensao_kN=round(R0 / 1e3, 2),
                n_elem=len(elem_c), curva=[(round(a, 3), round(b, 1)) for a, b in hist[::max(1, len(hist) // 60)]],
                aco_suspensao_em_Vd_MPa=None if snap_d is None else snap_d["max_tensao"].get("suspensao"),
                aco_tirante_em_Vd_MPa=None if snap_d is None else snap_d["max_tensao"].get("tirante"))
