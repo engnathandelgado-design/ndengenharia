@@ -116,7 +116,7 @@ class Prancha:
     def carimbo_bbox(self):
         x0, y0, x1, y1 = self.quadro
         extra = 8 if self.dados.get("marca") else 0
-        return (x1 - 180, y0, x1, y0 + 70 + extra + 5 * max(len(self.revisoes), 1) + 6)
+        return (x1 - 180, y0, x1, y0 + 72 + extra + 5 * max(len(self.revisoes), 1) + 6)
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
@@ -131,8 +131,9 @@ class Prancha:
         return self.msp.add_lwpolyline([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], close=True,
                                        dxfattribs={"layer": camada})
 
-    def vista(self, nome, origem, escala, titulo=None, subtitulo=None):
-        v = Vista(self, nome, origem, escala, titulo, subtitulo)
+    def vista(self, nome, origem, escala, titulo=None, subtitulo=None, unidade="mm"):
+        """unidade: "mm" (metálica) ou "cm" (concreto pré-moldado — NBR 7191/prática de fábrica)."""
+        v = Vista(self, nome, origem, escala, titulo, subtitulo, unidade)
         self.vistas.append(v)
         return v
 
@@ -351,13 +352,13 @@ class Prancha:
             self.texto(cx0 + 1.5, yy, lab + ":", "min")
             self.texto(cx0 + 18, yy, val, "nota")
         y += h4
-        h5 = 18
+        h5 = 20
         self.ret(cx0, y, cx1, y + h5)
-        self.texto(cx0 + 3, y + 5, "ND", 7.0, "TITULO")
-        self.texto(cx0 + 19, y + h5 - 6, EMPRESA["nome"], "sub", "TITULO")
-        self.texto(cx0 + 19, y + h5 - 10.0, f"CNPJ {EMPRESA['cnpj']} · {EMPRESA['site']} · {EMPRESA['contato']}", "min")
-        self.texto(cx0 + 19, y + 6.2, f"RESP. TÉCNICO: {EMPRESA['rt']} — {EMPRESA['crea']}", "min")
-        self.texto(cx0 + 19, y + 2.3, f"ART Nº: {d.get('art') or '________________'}", "min")
+        self.texto(cx0 + 3, y + 6, "ND", 7.0, "TITULO")
+        self.texto(cx0 + 19, y + h5 - 5.5, EMPRESA["nome"], "sub", "TITULO")
+        self.texto(cx0 + 19, y + h5 - 9.5, f"CNPJ {EMPRESA['cnpj']} · {EMPRESA['site']} · {EMPRESA['contato']}", "min")
+        self.texto(cx0 + 19, y + 5.8, f"RESP. TÉCNICO: {EMPRESA['rt']} — {EMPRESA['crea']}", "min")
+        self.texto(cx0 + 19, y + 2.0, f"ART Nº: {d.get('art') or '________________'}", "min")
         self.texto(cx1 - 2, y + h5 - 6, d.get("fase", ""), "nota", "TITULO", "BOTTOM_RIGHT")
         y += h5
         nrev = max(len(self.revisoes), 1)
@@ -507,9 +508,13 @@ def _exportar_pdf(doc, caminho, W, H, cor=True):
 
 
 class Vista:
-    def __init__(self, pr, nome, origem, esc, titulo=None, subtitulo=None):
+    def __init__(self, pr, nome, origem, esc, titulo=None, subtitulo=None, unidade="mm"):
         self.pr, self.nome, self.o, self.esc = pr, nome, origem, esc
         self.titulo, self.subtitulo = titulo or nome, subtitulo
+        if unidade not in ("mm", "cm"):
+            raise ValueError("unidade deve ser 'mm' ou 'cm'")
+        self.unidade = unidade
+        self.fator = 1.0 if unidade == "mm" else 0.1          # modelo sempre em mm; o texto da cota sai na unidade pedida
         self.ents, self._cotas = [], []
 
     def P(self, x, y=None):
@@ -559,10 +564,17 @@ class Vista:
         x, y = self.P(p)
         return self._add(self.pr.texto(x, y, s, h, camada, alinh, rot))
 
+    def fmt(self, v_mm):
+        """Número na unidade da vista: mm inteiro ou cm com uma decimal só quando precisa (25 mm -> '2,5')."""
+        if self.fator == 1:
+            return f"{v_mm:.0f}"
+        return f"{v_mm / 10:.1f}".rstrip("0").rstrip(".").replace(".", ",")
+
     def _dim(self, base, p1, p2, ang, texto="<>"):
         self._cotas.append((ang % 180, tuple(sorted([tuple(round(c, 1) for c in p1), tuple(round(c, 1) for c in p2)]))))
         d = self.pr.msp.add_linear_dim(base=self.P(base), p1=self.P(p1), p2=self.P(p2), angle=ang, text=texto,
-                                       dimstyle="ND", override={"dimlfac": self.esc}, dxfattribs={"layer": "COTA"})
+                                       dimstyle="ND", override={"dimlfac": self.esc * self.fator, "dimdec": 0 if self.fator == 1 else 1,
+                                                                "dimzin": 8}, dxfattribs={"layer": "COTA"})
         d.render()
         return self._add(d.dimension)
 
@@ -607,7 +619,7 @@ class Vista:
             self.linha((x, y_ref + sg * 1.5 * self.esc), (x, yb + sg * 1.0 * self.esc), "COTA")
             xp, yp = self.P(x, yb)
             self._add(self.pr.msp.add_line((xp - 0.8, yp - 0.8), (xp + 0.8, yp + 0.8), dxfattribs={"layer": "COTA"}))
-            t = rotulos[k] if rotulos else f"{x - x0:.0f}"
+            t = rotulos[k] if rotulos else self.fmt(x - x0)
             self._add(self.pr.texto(xp - 0.6, yp + sg * 1.6, t, "cota", "COTA", "MIDDLE_LEFT" if sg > 0 else "MIDDLE_RIGHT", rot=90))
 
     def cota_diam(self, c, r, ang=45, prefixo="Ø"):
@@ -687,5 +699,5 @@ class Vista:
         self.pr.texto(cx, y, t1, "titulo", "TITULO", "BOTTOM_CENTER")
         self._add(self.pr.msp.add_line((cx - w1 / 2, y - 1.2), (cx + w1 / 2, y - 1.2), dxfattribs={"layer": "TITULO"}))
         self._add(self.pr.msp.add_line((cx - w1 / 2, y - 2.0), (cx + w1 / 2, y - 2.0), dxfattribs={"layer": "CHAMADA"}))
-        self.pr.texto(cx, y - 6.5, f"ESC. 1:{self.esc:g}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")
+        self.pr.texto(cx, y - 6.5, f"ESC. 1:{self.esc:g} — COTAS EM {self.unidade.upper()}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")
         self._bbox_titulo = (cx - w1 / 2, y - 7, cx + w1 / 2, y + 5)
