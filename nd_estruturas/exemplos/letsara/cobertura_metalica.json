@@ -154,8 +154,8 @@
   "M12_alma": {
    "Fd": 19.64,
    "corte_Rd": 26.8,
-   "contato_alma_Rd": 24.0,
-   "uso": 0.82,
+   "contato_alma_Rd": 20.8,
+   "uso": 0.946,
    "furo": "Ø14 (padrão)",
    "parafuso": "M12 8.8, arruela lisa e porca"
   },
@@ -172,7 +172,13 @@
    "MRd_kNm": 1.026,
    "uso": 0.347
   },
-  "contato_aba": 87.8
+  "contato_aba": 87.8,
+  "rasgamento_alma": {
+   "e_mm": 45,
+   "Fd": 19.25,
+   "Rd": 40.0,
+   "nota": "NBR 14762:2010 10.3.1 — t·e·fu/1,45, furo a 45 mm da ponta da terça"
+  }
  },
  "MF1": {
   "perfil": "L 50×5 (A36)",
@@ -186,7 +192,7 @@
   "esbeltez": 131,
   "uso": 0.065,
   "parafusos": "M12 8.8 na mesa inferior da terça (furo Ø14) e M12 na orelha OR-1",
-  "contato_mesa_terca_Rd": 24.0
+  "contato_mesa_terca_Rd": 20.8
  },
  "chumbadores": {
   "CH-T1": {

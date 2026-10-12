@@ -210,8 +210,10 @@ def parafuso_tracao_Rd(d, classe="8.8"):
 
 
 def pressao_contato_fino_Rd(d, t, fu):
-    """Pressão de contato em chapa fina (t < 4,75 mm), NBR 14762:2010 item 10.3.2 — Fc,Rd = 2,4 d t fu / γ, γ = 1,55 (kN)."""
-    return 2.4 * d * t * fu / 1.55 / 1e3
+    """Pressão de contato em chapa fina, NBR 14762:2010 item 10.3.2 — Fc,Rd = αe d t fu / γ, γ = 1,55,
+    αe = 0,183 t + 1,53 para t < 4,75 mm e 2,4 para 4,75 ≤ t ≤ 6,35 mm (kN)."""
+    ae = 0.183 * t + 1.53 if t < 4.75 else 2.4
+    return ae * d * t * fu / 1.55 / 1e3
 
 
 def pressao_contato_Rd(d, t, fu, lf):

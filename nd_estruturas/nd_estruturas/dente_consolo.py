@@ -55,13 +55,13 @@ class Dente:
             tipo = "longo (viga em balanço)"
             As_nbr = Vd * a_face / (0.85 * d * fyd) + Hd / fyd
         Asus_nbr = Vd / fyd                              # 7.4 — armadura de suspensão ≥ Vd/fyd junto à face reentrante
-        Acost_nbr = 0.4 * As_nbr                         # costura horizontal no dente (≥ 0,4 As,tir)
+        Acost_nbr = (0.5 if ad <= 0.5 else 0.4) * As_nbr  # costura: 0,5 As,tir (muito curto) / 0,4 (curto)
         tau = Vd / (b * d)
         tau_u = min(0.18 * fck / 1.4 * 1.0, 6.0 * 1.0)   # limite de compressão da biela (≈ 0,2 fcd, conservador)
         r["NBR"] = dict(tipo=tipo, a_d=round(ad, 3), As_tir=round(As_nbr), As_sus=round(Asus_nbr), As_cost=round(Acost_nbr),
                         tau_wd=round(tau, 2), tau_lim=round(tau_u, 2), ok_biela=tau <= tau_u)
         # ---------- PCI (φ do ACI; cargas de cálculo da NBR 8681)
-        fy, phi_f, phi_v = FYK, 0.90, 0.75
+        fy, phi_f, phi_v = FYK, 0.75, 0.75            # PCI: φ = 0,75 em todas as verificações do dente
         Nu = max(Hd, 0.2 * Vd)
         As_flex = (Vd * a / d + Nu * h / d) / (phi_f * fy)                                   # 5.6.2.1
         mu_e = min(6.9 * 1.0 * b * h * 1.4 / Vd, 3.4)
@@ -75,7 +75,7 @@ class Dente:
         Vmax = phi_v * min(0.2 * fck, 5.5) * b * d
         Vc = 0.166 * math.sqrt(fck) * b * d
         Av = max(0.0, (Vd / phi_v - Vc) / fy - Ah) if Vd / phi_v > Vc else 0.0                 # 5.6.2.4 (Av + Ah) fy + Vc
-        Av = max(Av, 0.5 * Ah)
+        Av = max(Av, 0.5 * Ah, Ah)                                                            # Av ≥ ½(Av + Ah) → Av ≥ Ah
         r["PCI"] = dict(a_mm=round(a), As_flex=round(As_flex), As_cis=round(As_cis), As_min=round(As_min), As=round(As_pci),
                         Ah=round(Ah), Ash=round(Ash), Av=round(Av), Vmax_kN=round(Vmax / 1e3, 1), ok_Vmax=Vd <= Vmax, mu_e=round(mu_e, 2))
         # ---------- adotado
@@ -91,7 +91,8 @@ class Dente:
         A_c = n_c * 2 * AREA[diam_cost]
         n_v, A_v = barras(Av, 10.0, minimo=2)
         n_v = math.ceil(n_v / 2)
-        lb = 44 * diam_tir                                # ancoragem reta CA-50, boa aderência, C50 (NBR 6118 9.4.2.4 ≈ 44φ c/ fbd C50 — conferir)
+        fbd = 2.25 * 0.21 * self.fck ** (2 / 3) / 1.4     # NBR 6118:2023 9.3.2.1, η1 = 2,25 (nervurada), boa aderência
+        lb = diam_tir / 4 * fyd / fbd                     # 9.4.2.4
         r["adotado"] = dict(As_tir=round(As), tirante=f"{n_t} Ø{diam_tir:g} ({A_t:.0f} mm²)",
                             As_sus=round(Asus), suspensao=f"{n_s} estribos Ø{diam_sus:g} fechados ({A_s:.0f} mm²) a até {0.5*self.h_dente:.0f} mm da face reentrante",
                             As_cost=round(Acost), costura=f"{n_c} estribos horizontais Ø{diam_cost:g} ({A_c:.0f} mm²) nos 2/3 superiores do dente".replace("superiores", "inferiores"),
@@ -118,7 +119,9 @@ def consolo(nome, Vd, Hd, b, h, a, fck=50.0, c=55.0, diam=16.0):
         raise ValueError("consolo longo: a/d > 1")
     tau = Vd * 1e3 / (b * d)
     tau_u = 0.18 * fck / 1.4
+    As_min = 0.04 * (0.85 * fck / 1.4) / fyd * b * d     # NBR 9062 7.3: ρ ≥ 0,04 fcd/fyd
+    As = max(As, As_min)
     n, A = barras(As, diam)
-    Ast = 0.4 * As                                      # estribos horizontais (costura) nos 2/3 superiores
+    Ast = (0.5 if ad <= 0.5 else 0.4) * As              # estribos horizontais (costura) nos 2/3 superiores
     return dict(nome=nome, tipo=tipo, a_d=round(ad, 3), As_tir=round(As), tirante=f"{n} Ø{diam:g} ({A:.0f} mm²)",
                 As_cost=round(Ast), tau_wd=round(tau, 2), tau_lim=round(tau_u, 2), ok=tau <= tau_u)

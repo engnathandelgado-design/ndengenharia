@@ -115,7 +115,9 @@ R["CT1"] = dict(perfil="L 102×102×9,5 (A36) L=200", reacao_suc_kN=round(Vsuc_e
                                interacao=round((T_M16 / t_M16) ** 2 + (V_M16 / v_M16) ** 2, 3),
                                parafuso="M16 8.8 na luva soldada da CH-T, furo Ø18 na aba"),
                 aba=dict(Md_kNm=round(M_aba, 3), MRd_kNm=round(MRd_aba, 3), uso=round(M_aba / MRd_aba, 3)),
-                contato_aba=round(pressao_contato_Rd(16, 9.5, 400, 35 - 9), 1))
+                contato_aba=round(pressao_contato_Rd(16, 9.5, 400, 35 - 9), 1),
+                rasgamento_alma=dict(e_mm=45, Fd=round(Nd / 2, 2), Rd=round(3.0 * 45 * fu_terca / 1.45 / 1e3, 1),
+                                     nota="NBR 14762:2010 10.3.1 — t·e·fu/1,45, furo a 45 mm da ponta da terça"))
 
 # ------------------------------------------------------------------ mão-francesa MF-1 (fundo da viga → mesa inferior da terça)
 e_carga = u.bf / 2 + u.m_ct            # carga na mesa superior (meio da mesa) × centro de torção

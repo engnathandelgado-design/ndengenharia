@@ -116,7 +116,7 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
                 barras.append((e, b_.get("nome", ""), b_["tipo"]))
     for c in cord:
         j = int(round(c["y"] / malha))
-        x0 = ln if c["y"] < y_dente else 0.0                   # cortada na face reentrante se passa no recorte
+        x0 = (ln if c["y"] < y_dente else 0.0) + c.get("isol", 0.0)   # cortada na face do dente; isolada (bainha) no trecho "isol"
         for i in range(int(round(x0 / malha)), nx):
             a, b2 = (i, j), (i + 1, j)
             if a in tag and b2 in tag:
@@ -280,6 +280,7 @@ def _figura(caminho, g, elem_c, snap_d, snap_u, hist, res, titulo, malha, Ls):
         ax.set_xlim(-50, Ls + 50)
         ax.set_ylim(-50, g["H"] + 50)
         ax.set_aspect("equal")
+        ax.set_anchor("W")
         ax.set_title(f"{titulo} — deformação principal de tração (‰) {nome}", fontsize=10)
         ax.set_xticks([])
         ax.set_yticks([])
