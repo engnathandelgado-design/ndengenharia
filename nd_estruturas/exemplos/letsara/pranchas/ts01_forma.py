@@ -1,15 +1,24 @@
-"""ND-LET-TS01-1 — TS-01: fôrma, insertos e transitórias (A0). Padrão de prancha de peça pré-moldada (cast unit)."""
+"""ND-LET-TS01-1 — TS-01: fôrma, insertos e transitórias (A0). Padrão de prancha de peça pré-moldada (cast unit).
+Revisão 01: dentes Gerber nas duas pontas, mão-francesa presa no fundo da viga (CH-MF), chumbadores calculados."""
 import json
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, DX, sec, R, TR, V, peso, ALCA_Fd, ALCA_cap, tipo_terca, f
+from ts01_dados import P, L, H, DX, HD, LN, PASSO_T, sec, R, TR, V, peso, ALCA_Fd, ALCA_cap, tipo_terca, f
 
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
+DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))
+CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
 pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS E TRANSITÓRIAS",
-                        desenho="ND-LET-TS01-1", folha="01/03", fase="PARA APROVAÇÃO"))
-mac, yfi, yci, ycs, yfs = P["mac"], 150, 230, 700, 780
+                        desenho="ND-LET-TS01-1", folha="01/04", fase="PARA APROVAÇÃO"))
+pr.revisao("01", "12/10/2026", "DENTES GERBER, MÃO-FRANCESA NO FUNDO, CHUMBADORES CALCULADOS, TERÇAS c/1579")
+mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
 TER, NOS, ALC, EST = P["tercas"], P["nos"], P["alcas"], P["estoque"]
-sk = lambda h: h * DX / H                  # deslocamento da ponta a prumo na altura h
+t3 = DX / H
+sk = lambda h: h * t3                      # ponta a prumo: deslocamento ao longo da peça na altura h
+S_PINO = [P["pino_x"] + sk(HD), L - P["pino_x"] + sk(HD)]
+MF_FUNDO = [s - DX for s in TER[1:-1]]     # CH-MF no fundo, no plano da terça (topo − 27 mm)
+MF_LAT = [TER[0] - sk(H - HD - 75), TER[-1] - sk(H - HD - 75)]
+CONTORNO = [(LN, 0), (L - LN, 0), (L - LN + sk(HD), HD), (L + sk(HD), HD), (L + DX, H), (DX, H), (sk(HD), HD), (LN + sk(HD), HD)]
 
 
 def chapa_topo(v, s, plano=False):
@@ -31,78 +40,88 @@ def chapa_topo(v, s, plano=False):
 
 
 # ------------------------------------------------------------------ PLANTA SUPERIOR 1:25
-vp = pr.vista("PLANTA SUPERIOR", (80, 742), 25, titulo="PLANTA SUPERIOR — TS-01", subtitulo="face superior (topo da mesa)")
+vp = pr.vista("PLANTA SUPERIOR", (80, 752), 25, titulo="PLANTA SUPERIOR — TS-01", subtitulo="face superior (topo da mesa)")
 vp.ret(DX, -200, L, 400, "VISTA")
 for s in TER:
-    chapa_topo(vp, s + DX, plano=True)
+    chapa_topo(vp, s, plano=True)
 for s in ALC:
-    vp.ret(s + DX - 50, -8, 100, 16, "METALICA")
-vp.cota_ord([0] + [s + DX for s in TER] + [L + DX], 200, 6, x0=0,
-            rotulos=["0"] + [f"{s + DX:.0f}" for s in TER] + [f"{L + DX:.0f}"])
-vp.cota_ord([s + DX for s in ALC], -200, -6, x0=0, rotulos=[f"{s + DX:.0f}" for s in ALC])
-vp.chamada((TER[0] + DX, 100), (10, 30), "CH-T2 (nós de contraventamento, 7x)")
-vp.chamada((TER[1] + DX, 100), (14, 26), "CH-T1 (terças, 6x)")
-vp.chamada((ALC[0] + DX, 0), (8, -26), "AL-1 (4 alças de cordoalha)")
+    vp.ret(s - 50, -8, 100, 16, "METALICA")
+vp.cota_ord([0] + TER + [L + DX], 200, 6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in TER] + [f"{L + DX:.0f}"])
+vp.cota_ord(ALC, -200, -6, x0=0, rotulos=[f"{s:.0f}" for s in ALC])
+vp.chamada((TER[0], 100), (10, 30), "CH-T2 (nós de contraventamento, 7x)")
+vp.chamada((TER[1], 100), (14, 26), "CH-T1 (terças, 6x)")
+vp.chamada((ALC[0], 0), (8, -26), "AL-1 (4 alças de cordoalha)")
 vp.cota_v([-200, 200], L + DX, 8)
 
 # ------------------------------------------------------------------ ELEVAÇÃO 1:25
-ve = pr.vista("ELEVAÇÃO", (80, 612), 25, titulo="ELEVAÇÃO — TS-01",
-              subtitulo="peça fabricada reta; pontas a prumo na posição montada (caimento 3%)")
-ve.poli([(0, 0), (L, 0), (L + DX, H), (DX, H)], "VISTA", fechada=True)
+ve = pr.vista("ELEVAÇÃO", (80, 622), 25, titulo="ELEVAÇÃO — TS-01",
+              subtitulo="peça fabricada reta; pontas e faces dos dentes a prumo na posição montada (caimento 3%)")
+ve.poli(CONTORNO, "VISTA", fechada=True)
 for y in (yfi, yci, ycs, yfs):
     ve.linha((mac + sk(y), y), (L - mac + sk(y), y), "VISTA")
 for x in (mac, L - mac):
     ve.linha((x + sk(yfi), yfi), (x + sk(yci), yci), "VISTA"); ve.linha((x + sk(ycs), ycs), (x + sk(yfs), yfs), "VISTA")
-for x in (P["pino_x"], L - P["pino_x"]):
+for s0 in S_PINO:
     for d in (-25, 25):
-        ve.linha((x + d, 0), (x + d + DX, H), "OCULTA")
-    ve.ret(x - 75, 0, 150, 12.5, "METALICA")
+        ve.linha((s0 + d, HD), (s0 + d + sk(H - HD), H), "OCULTA")
+    ve.ret(s0 - 75, HD, 150, 12.5, "METALICA")
 for s in TER:
-    chapa_topo(ve, s + DX)
-    ve.circulo((s + sk(P["h_tb2"]), P["h_tb2"]), 13.5, "METALICA")
+    chapa_topo(ve, s)
+for s in MF_FUNDO:
+    ve.ret(s - 75, 0, 150, 12.5, "METALICA")
+for s in MF_LAT:
+    ve.ret(s - 60, HD + 30, 120, 90, "METALICA")
 for s in ALC:
-    ve.poli([(s + DX - 50, H), (s + DX - 50, H + 110), (s + DX, H + 150), (s + DX + 50, H + 110), (s + DX + 50, H)], "METALICA")
+    ve.poli([(s - 50, H), (s - 50, H + 110), (s, H + 150), (s + 50, H + 110), (s + 50, H)], "METALICA")
     for d in (-50, 50):
-        ve.linha((s + DX + d, H), (s + d + sk(200), 200), "OCULTA")
+        ve.linha((s + d, H), (s + d - sk(H - 200), 200), "OCULTA")
 cgx, cgy = L / 2 + sk(sec.yc * 1000), sec.yc * 1000
 ve.circulo((cgx, cgy), 100, "INDICACAO"); ve.linha((cgx - 180, cgy), (cgx + 180, cgy), "INDICACAO")
 ve.linha((cgx, cgy - 180), (cgx, cgy + 180), "INDICACAO")
 ve.chamada((cgx + 70, cgy + 70), (10, 12), f"CG (s = {f(cgx/1000,3)} m; h = {cgy:.0f} mm)")
-ve.chamada((TER[5] + sk(600), 600), (8, -22), "TB-2 Ø25 passante (13x, h = 600)")
-ve.chamada((P["pino_x"] + DX / 2, 300), (-12, -22), "TB-1 Ø50 a prumo")
-ve.chamada((L - P["pino_x"], 6), (12, -18), "CH-A1 (2x)")
-ve.cota_h([0, P["pino_x"], mac, ALC[0], ALC[1], ALC[2], ALC[3], L - mac, L - P["pino_x"], L], 0, -16)
-ve.cota_v([0, yfi, yfs, H], 0, -10)
-ve.cota((L, H), (L + DX, H), 6, 0)
+ve.chamada((MF_FUNDO[4], 6), (8, -18), f"CH-MF no fundo ({len(MF_FUNDO)}x, no plano das terças)")
+ve.chamada((S_PINO[0] + 6, 700), (-12, 16), "TB-1 Ø50 a prumo")
+ve.chamada((S_PINO[1], HD + 6), (14, -22), "CH-A1 no dente (2x)")
+ve.chamada((MF_LAT[1], HD + 75), (12, 14), "CH-MF2 lateral no dente (2+2)")
+ve.cota_h([LN, ALC[0], ALC[1], ALC[2], ALC[3], L - LN], 0, -14)
+ve.cota_h([0, LN], 0, -14, total=False)
+ve.cota_h([L - LN, L], 0, -14, total=False)
+ve.cota_v([0, HD, H], 0, -10)
+ve.cota((L + sk(HD), HD), (L + DX, H), 8, 0)
 ve.marcador_corte((TER[5] + 60, -60), (TER[5] + 60 + DX, H + 60), "A", lado=1)
-ve.marcador_corte((P["pino_x"] + 260, -60), (P["pino_x"] + 260 + DX, H + 60), "B", lado=1)
+ve.marcador_corte((S_PINO[0] + 110, HD - 60), (S_PINO[0] + 110 + sk(H - HD), H + 60), "B", lado=1)
 ve.marcador_corte((TER[4] + 60, -60), (TER[4] + 60 + DX, H + 60), "C", lado=1)
-ve.marcador_detalhe((600, 450), 650, 1, ang=150, dist=10)
-ve.marcador_detalhe((ALC[1] + DX, H), 400, 2, ang=60, dist=6)
+ve.marcador_detalhe((420, 450), 700, 1, ang=150, dist=10)
+ve.marcador_detalhe((ALC[1], H), 400, 2, ang=60, dist=6)
 
 # ------------------------------------------------------------------ VISTA INFERIOR 1:25
-vi = pr.vista("VISTA INFERIOR", (80, 532), 25, titulo="VISTA INFERIOR — TS-01", subtitulo="fundo da fôrma")
-vi.ret(0, -200, L, 400, "VISTA")
-for x in (P["pino_x"], L - P["pino_x"]):
-    vi.ret(x - 75, -150, 150, 300, "METALICA"); vi.circulo((x, 0), 26, "METALICA")
+vi = pr.vista("VISTA INFERIOR", (80, 540), 25, titulo="VISTA INFERIOR — TS-01", subtitulo="fundo da fôrma e fundo dos dentes")
+vi.ret(LN, -200, L - 2 * LN, 400, "VISTA")
+vi.ret(0, -200, LN, 400, "OCULTA")
+vi.ret(L - LN, -200, LN, 400, "OCULTA")
+for s0 in S_PINO:
+    vi.ret(s0 - 75, -150, 150, 300, "METALICA"); vi.circulo((s0, 0), 26, "METALICA")
+for s in MF_FUNDO:
+    vi.ret(s - 75, -180, 150, 360, "METALICA")
+    for yy in (-150, 150):
+        vi.circulo((s, yy), 9, "METALICA")
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
-vi.chamada((L - P["pino_x"], 150), (10, 10), "CH-A1 300×150×12,5 + furo Ø52")
+vi.chamada((MF_FUNDO[0], 150), (8, 12), "CH-MF 150×360×12,5 + 2 luvas M16")
 vi.chamada((EST[0], -260), (10, -10), "calço de estoque/transporte (2x)")
-vi.cota_h([0, P["pino_x"], EST[0], EST[1], L - P["pino_x"], L], -200, -9)
+vi.chamada((S_PINO[1], 150), (6, 14), "CH-A1 no fundo do dente")
+vi.cota_ord([0] + MF_FUNDO, -200, -6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in MF_FUNDO])
 
 # ------------------------------------------------------------------ ESQUEMAS DE IÇAMENTO E ESTOCAGEM 1:100
 vq = pr.vista("ESQUEMA DE IÇAMENTO", (60, 418), 100, titulo="IÇAMENTO — DESFORMA E MONTAGEM",
               subtitulo="4 alças AL-1, 2 balancins, cabos verticais")
-vq.ret(0, 0, L, H, "VISTA")
+vq.poli(CONTORNO, "VISTA", fechada=True)
 za, zb, zg = H + 1600, H + 3000, H + 4600
 for a, b in ((ALC[0], ALC[1]), (ALC[2], ALC[3])):
     vq.linha((a, H + 150), (a, za), "INDICACAO"); vq.linha((b, H + 150), (b, za), "INDICACAO")
     vq.ret(a, za, b - a, 250, "METALICA")
-    m = (a + b) / 2
-    vq.linha((m, za + 250), (m, zb), "INDICACAO")
+    vq.linha(((a + b) / 2, za + 250), ((a + b) / 2, zb), "INDICACAO")
 vq.ret(ALC[0] + 1500, zb, ALC[3] - ALC[0] - 3000, 300, "METALICA")
-vq.linha(((ALC[0] + ALC[1]) / 2, zb), (L / 2, zb), "INDICACAO")
 vq.linha((L / 2, zb + 300), (L / 2, zg), "INDICACAO")
 vq.chamada((L / 2, zg), (8, 3), f"gancho: {f(peso,0)} kN ({f(peso/9.81,1)} t)")
 vq.chamada(((ALC[0] + ALC[1]) / 2, za + 250), (-8, 6), "balancim")
@@ -110,8 +129,8 @@ vq.cota_h([0] + ALC + [L], 0, -7)
 vq.texto((0, -2600), f"Reação por alça (×1,3): {f(ALCA_Fd,1)} kN ≤ {f(ALCA_cap,1)} kN (laço Ø12,7)", "nota")
 
 ve2 = pr.vista("ESQUEMA DE ESTOCAGEM", (60, 348), 100, titulo="ESTOQUE E TRANSPORTE",
-               subtitulo="2 calços sob a mesa inferior, sem empilhamento")
-ve2.ret(0, 0, L, H, "VISTA")
+               subtitulo="2 calços de 150 mm sob a mesa inferior, sem empilhamento")
+ve2.poli(CONTORNO, "VISTA", fechada=True)
 for x in EST:
     ve2.poli([(x - 250, -400), (x + 250, -400), (x, 0)], "INDICACAO", fechada=True)
 ve2.cota_h([0] + EST + [L], -400, -6)
@@ -125,75 +144,89 @@ def corte_I(nome, org, sub, s_tipo):
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
     for x in P["x_cord"]:
         v.ponto_barra((x, P["y_cord"]), 12.7)
-    t = s_tipo
-    dy = 190 if t == "CH-T2" else 100
+    dy = 190 if s_tipo == "CH-T2" else 100
     v.ret(-dy, H - 12.5, 2 * dy, 12.5, "METALICA")
     for yy in (-50, 50):
         v.ret(yy - 12, H - 12.5 - 40, 24, 40, "METALICA")                       # luva M16 soldada
-    for yy in (-dy + 30, dy - 30):
-        v.poli([(yy, H - 12.5), (yy, H - 150), (yy + (20 if yy < 0 else -20), H - 170)], "METALICA")   # grapas
-    v.ret(-75, P["h_tb2"] - 12.5, 150, 25, "METALICA")
+    pinos = (-150, 0, 150) if s_tipo == "CH-T2" else (-75, 75)
+    for yy in pinos:
+        v.linha((yy, H - 12.5), (yy, H - 112.5), "METALICA"); v.ret(yy - 16, H - 120, 32, 8, "METALICA")
+    if s_tipo == "CH-T2":
+        v.poli([(-170, H - 140), (-170, H - 60), (170, H - 60), (170, H - 140)], "ARMADURA")   # grampo U Ø10
+    v.ret(-180, 0, 360, 12.5, "METALICA")                                       # CH-MF no fundo
+    for yy in (-150, 150):
+        v.ret(yy - 12, 12.5, 24, 40, "METALICA")
+    for yy in (-100, 100):
+        v.linha((yy, 12.5), (yy, 92.5), "METALICA"); v.ret(yy - 12.5, 92.5, 25, 7, "METALICA")
     v.cota_h([-200, -75, 75, 200], 0, -16)
-    v.cota_v([0, P["y_cord"], P["h_tb2"], H], 200, 12)
+    v.cota_v([0, P["y_cord"], H], 200, 12)
     v.cota_h([-dy, -50, 50, dy], H, 10)
     return v
 
 
-va = corte_I("CORTE A-A", (110, 170), "seção corrente na CH-T1", "CH-T1")
+va = corte_I("CORTE A-A", (110, 170), "terça comum: CH-T1 no topo e CH-MF no fundo", "CH-T1")
 va.chamada((60, H - 6), (14, 30), "CH-T1 200×200×12,5")
 va.chamada((50, H - 40), (24, 18), "luva M16 soldada (2x)")
-va.chamada((-80, H - 120), (-16, 10), "grapa Ø10")
-va.chamada((60, P["h_tb2"]), (24, 0), "TB-2 tubo Ø25×2,0 L=150")
-va.chamada((100, P["y_cord"]), (20, 10), "6 cord. Ø12,7")
+va.chamada((-75, H - 80), (-16, 12), "4 pinos Ø16 c/ cabeça, L = 112")
+va.chamada((150, 30), (20, 14), "CH-MF + 2 luvas M16 (orelha OR-1)")
+va.chamada((-100, 60), (-18, 8), "2 pinos Ø12,5 c/ cabeça")
+va.chamada((100, P["y_cord"]), (22, 26), "6 cord. Ø12,7")
 
-vc = corte_I("CORTE C-C", (300, 170), "nó de contraventamento na CH-T2", "CH-T2")
+vc = corte_I("CORTE C-C", (300, 170), "nó de contraventamento: CH-T2 e CH-MF", "CH-T2")
 for yo in (-140, 140):
     vc.ret(yo - 45, H, 90, 80, "METALICA")
     vc.circulo((yo, H + 35 if yo > 0 else H + 70), 8, "METALICA")
 vc.chamada((140, H + 80), (14, 18), "orelha 90×80×9,5 furo Ø16 (4x)")
 vc.chamada((-120, H - 6), (-16, 26), "CH-T2 300×380×12,5")
+vc.chamada((170, H - 100), (18, -8), "2 grampos U Ø10 (ancoragem da cortante)")
+vc.chamada((0, H - 80), (-6, -30), "6 pinos Ø16 c/ cabeça")
 vc.cota_v([H, H + 35, H + 70], 205, 22, total=False)
 
-vb = pr.vista("CORTE B-B", (455, 170), 10, titulo="CORTE B-B", subtitulo="maciço da ponta, junto ao TB-1")
-rb = [(-200, 0), (200, 0), (200, H), (-200, H)]
+vb = pr.vista("CORTE B-B", (455, 215), 10, titulo="CORTE B-B", subtitulo="dente, junto ao TB-1")
+rb = [(-200, 0), (200, 0), (200, H - HD), (-200, H - HD)]
 vb.poli(rb, "CORTADO", fechada=True); vb.hachura(rb, "AR-CONC", 0.03)
-vb.ret(-25, 0, 50, H, "VISTA")
+vb.ret(-25, 0, 50, H - HD, "VISTA")
 vb.ret(-150, 0, 300, 12.5, "METALICA")
 for yy in (-120, 120):
-    vb.poli([(yy, 12.5), (yy, 280), (yy + (25 if yy < 0 else -25), 300)], "METALICA")
-for x in P["x_cord"]:
-    vb.ponto_barra((x, P["y_cord"]), 12.7)
-vb.chamada((25, 650), (20, 6), "TB-1 tubo Ø50 (pino Ø25 grauteado)")
+    vb.poli([(yy, 12.5), (yy, 200), (yy + (25 if yy < 0 else -25), 220)], "METALICA")
+for x in (-150, -60, 60, 150):
+    vb.ponto_barra((x, 55), 16)
+vb.chamada((25, 300), (20, 6), "TB-1 tubo Ø50, L = 450")
 vb.chamada((140, 6), (18, -12), "CH-A1 300×150×12,5")
-vb.chamada((-120, 200), (-18, 10), "grapa Ø10 (4x)")
+vb.chamada((-150, 55), (-18, 14), "tirante do dente 4 Ø16 (folha 02)")
 vb.cota_h([-200, -150, -25, 25, 150, 200], 0, -16)
-vb.cota_v([0, H], 200, 12)
+vb.cota_v([0, H - HD], 200, 12)
 
-# ------------------------------------------------------------------ DETALHE 1 — ponta (1:10)
-d1 = pr.vista("DETALHE 1", (630, 160), 10, titulo="DETALHE 1 — PONTA E APOIO", subtitulo="posição montada: caimento 3%")
-d1.poli([(1300, 0), (0, 0), (DX, H), (1300 + DX, H)], "VISTA")
-d1.interrupcao((1300, 0), (1300 + DX, H))
+# ------------------------------------------------------------------ DETALHE 1 — ponta com dente (1:10)
+d1 = pr.vista("DETALHE 1", (610, 160), 10, titulo="DETALHE 1 — DENTE GERBER E APOIO NO CONSOLO",
+              subtitulo="posição montada: caimento 3%; consolo do pilar com topo a 3%")
+d1.poli([(1500, 0), (LN, 0), (LN + sk(HD), HD), (sk(HD), HD), (DX, H), (1500 + DX, H)], "VISTA")
+d1.interrupcao((1500, 0), (1500 + DX, H))
 for y in (yfi, yci, ycs, yfs):
-    d1.linha((mac + sk(y), y), (1300 + sk(y), y), "VISTA")
+    d1.linha((mac + sk(y), y), (1500 + sk(y), y), "VISTA")
 d1.linha((mac + sk(yfi), yfi), (mac + sk(yci), yci), "VISTA"); d1.linha((mac + sk(ycs), ycs), (mac + sk(yfs), yfs), "VISTA")
+s0 = S_PINO[0]
 for d in (-25, 25):
-    d1.linha((P["pino_x"] + d, 0), (P["pino_x"] + d + DX, H), "OCULTA")
-d1.ret(P["pino_x"] - 75, 0, 150, 12.5, "METALICA")
-d1.ret(P["pino_x"] - 75, -10, 150, 10, "VISTA")                                  # neoprene
-d1.linha((P["pino_x"], -300), (P["pino_x"] + sk(400), 400), "EIXO")
-d1.ret(P["pino_x"] - 12.5, -300, 25, 700, "OCULTA")                              # pino PN-1 (no consolo)
-d1.poli([(-150, -10), (700, -10), (700, -400)], "OCULTA")                        # consolo do pilar
-d1.cota_h([0, P["pino_x"] - 75, P["pino_x"], P["pino_x"] + 75, mac], 0, -14)
-d1.cota((0, H), (DX, H), 8, 0)
-d1.cota_v([-10, 0, H], 1300 + DX, 10, total=False)
-d1.chamada((DX / 2, H / 2), (-12, 10), "ponta a prumo na montagem")
-d1.chamada((P["pino_x"], 300), (14, 26), "TB-1 Ø50 inclinado 3% na fôrma")
-d1.chamada((P["pino_x"] + 60, -5), (22, -6), "neoprene 300×150×10 c/ furo Ø40")
-d1.chamada((P["pino_x"], -250), (-10, -8), "pino PN-1 Ø25 (consolo)")
-d1.chamada((600, -200), (8, -12), "consolo do pilar (topo a 3%)")
+    d1.linha((s0 + d, HD), (s0 + d + sk(H - HD), H), "OCULTA")
+d1.ret(s0 - 75, HD, 150, 12.5, "METALICA")
+d1.ret(s0 - 75, HD - 10, 150, 10, "VISTA")                                  # neoprene
+d1.ret(s0 - 12.5, HD - 310, 25, 700, "OCULTA")                              # pino PN-1
+d1.poli([(-25, HD - 10), (LN - 25 + sk(HD - 10), HD - 10 - 0), (LN - 25, -200), (-25, -200)], "OCULTA")   # consolo
+d1.linha((-25, -300), (-25, H + 100), "EIXO")
+d1.cota_h([sk(HD), s0 - 75, s0, s0 + 75, LN + sk(HD)], HD, 14, total=False)
+d1.cota_h([LN, mac], 0, -14, total=False)
+d1.cota((sk(HD), HD), (DX, H), 8, 0)
+d1.cota_v([0, HD - 10, HD, H], 1500 + DX, 10, total=False)
+d1.cota((LN - 25, -200), (LN, -200), -8, 0)
+d1.chamada((DX / 2 + sk(HD) / 2, (H + HD) / 2), (-12, 12), "ponta a prumo")
+d1.chamada((s0, 700), (14, 30), "TB-1 Ø50 inclinado 3% na fôrma")
+d1.chamada((s0 + 60, HD - 5), (26, -10), "neoprene 300×150×10 c/ furo Ø40")
+d1.chamada((s0, HD - 250), (-10, -8), "pino PN-1 Ø25 (consolo)")
+d1.chamada((LN - 25, -120), (8, -14), "consolo CP-TS, folga 25 até a face do dente")
+d1.chamada((-25, 200), (-8, 10), "face do pilar")
 
 # ------------------------------------------------------------------ DETALHE 2 — alça AL-1 (1:10)
-d2 = pr.vista("DETALHE 2", (850, 150), 10, titulo="DETALHE 2 — ALÇA AL-1", subtitulo="laço de cordoalha Ø12,7 CP-190 RB")
+d2 = pr.vista("DETALHE 2", (865, 150), 10, titulo="DETALHE 2 — ALÇA AL-1", subtitulo="laço de cordoalha Ø12,7 CP-190 RB")
 d2.poli([(-300, 0), (300, 0), (300, H), (-300, H)], "VISTA")
 for y in (yfi, yci, ycs, yfs):
     d2.linha((-300, y), (300, y), "VISTA")
@@ -213,19 +246,20 @@ pr.imagem(400, 312, 980, 488, "/home/claude/letsara/pranchas/ISO-TS01-geral-crop
 # ------------------------------------------------------------------ coluna da direita
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 n2 = sum(tipo_terca(s) == "CH-T2" for s in TER)
-ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "1,3", "ver planta"],
-       ["CH-T1", "Chapa 200×200×12,5 + 2 luvas M16 + 2 grapas", len(TER) - n2, "4,6", "terças pares"],
-       ["CH-T2", "Chapa 300×380×12,5 + 2 luvas M16 + 4 orelhas", n2, "13,2", "nós c/ 3,20 m"],
-       ["TB-2", "Tubo Ø25×2,0 L=150 passante na alma", len(TER), "0,2", "h = 600"],
-       ["TB-1", "Tubo Ø50×3,0 L=900 a prumo (pino Ø25)", 2, "3,2", f"s = {P['pino_x']}"],
-       ["CH-A1", "Chapa 300×150×12,5 furo Ø52 + 4 grapas Ø10", 2, "5,2", "fundo"]]
+ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "1,5", "ver planta"],
+       ["CH-T1", "Chapa 200×200×12,5 + 2 luvas M16 + 4 pinos Ø16", len(TER) - n2, "5,0", "terças pares"],
+       ["CH-T2", "Chapa 300×380×12,5 + 2 luvas + 4 orelhas + 6 pinos", n2, "14,5", f"nós c/ {2*PASSO_T}"],
+       ["CH-MF", "Chapa 150×360×12,5 + 2 luvas M16 + 2 pinos Ø12,5", len(MF_FUNDO), "6,1", "fundo, terça − 27"],
+       ["CH-MF2", "Chapa 120×90×9,5 + luva M16 + 2 pinos (lateral)", 4, "1,3", "dente, 2 faces"],
+       ["TB-1", "Tubo Ø50×3,0 L=450 a prumo (pino Ø25)", 2, "1,6", "no dente"],
+       ["CH-A1", "Chapa 300×150×12,5 furo Ø52 + 4 grapas Ø10", 2, "5,2", "fundo do dente"]]
 y = pr.tabela(x0, y, "INSERTOS (CHAPARIA NA FOLHA 03)", ["MARCA", "DESCRIÇÃO", "QT", "kg/un", "POSIÇÃO"], ins,
               [16, 92, 10, 16, 46])
 qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
-      ["COMPR. FÔRMA", f"{L} mm", "VÃO HORIZ.", "19.710 mm"],
+      ["COMPR. FÔRMA", f"{L - 2 * LN} mm (fundo)", "ENTRE PONTAS", f"{L} mm (ponto 0)"],
       ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/9.81,2)} t)"],
       ["CONCRETO", f"C{P['fck']} / fckj {P['fckj']}", "PROTENSÃO", f"{P['n_cord']} cord. Ø12,7"],
-      ["CAIMENTO", "3% (sobe p/ eixo C)", "PONTA", f"a prumo (desl. {DX} mm)"]]
+      ["DENTE", f"{HD} × {LN} (2 pontas)", "PONTA", f"a prumo (desl. {DX} mm)"]]
 y = pr.tabela(x0, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 60])
 dm, es = TR["desforma_montagem"], TR["estoque_transporte"]
 tr = [["Desforma / montagem", "4 alças", f"{f(dm['Mpos'],0)} / {f(dm['Mneg'],0)}",
@@ -234,26 +268,31 @@ tr = [["Desforma / montagem", "4 alças", f"{f(dm['Mpos'],0)} / {f(dm['Mneg'],0)
        f"{f(max(es['tens_sup_inf_Mpos'][0], es['tens_sup_inf_Mneg'][0]),2)} / {f(min(es['tens_sup_inf_Mpos'][1], es['tens_sup_inf_Mneg'][1]),2)}", "OK"]]
 y = pr.tabela(x0, y - 4, f"TRANSITÓRIAS (×1,3; limites {f(TR['limites_MPa'][0],1)} / {f(TR['limites_MPa'][1],2)} MPa)",
               ["FASE", "APOIO", "M+ / M- (kN·m)", "σ sup. / inf. (MPa)", "OK"], tr, [42, 22, 38, 60, 18])
+dts = DT["TS-01"]
+mef = dts.get("mef", {})
 ct = LG["contraventamento"]
-lg = [["TB-1 × pino PN-1/PN-2", "28 apoios", f"{max(a['dist_mm'] for a in LG['apoios']):.1f} mm", "OK"],
+lg = [["TB-1 × pino nos consolos", "28 apoios", f"{max(a['dist_mm'] for a in LG['apoios']):.1f} mm", "OK"],
+      ["Ponta × face / consolo × dente", "28 apoios", f"folgas ≥ {min(min(a['folga_ponta_mm'], a['folga_consolo_mm']) for a in LG['apoios'])} mm", "OK"],
       ["CH-T1/T2 × linha de terças", "14 vigas", f"{max(t['dist_mm'] for t in LG['tercas']):.1f} mm", "OK"],
-      ["Berço BR-1 na I110", "5 linhas", f"desnível {f(LG['berco_I110'][0]['desnivel_mm'],1)} mm", "OK"],
-      ["Tirante × terça do nó", f"{ct['n_tirantes']} tirantes", f"folga {ct['folga_min_terca_mm']} mm", "OK"],
-      ["Tirante × tirante (X)", "cruzamento", f"folga {f(ct['folga_cruzamento_mm'],1)} mm", "OK"]]
-y = pr.tabela(x0, y - 4, f"CHECAGEM DE LIGAÇÕES NO MODELO (tol. {LG['tol_mm']:.0f} mm)", ["LIGAÇÃO", "INSTÂNCIAS", "DESVIO", "OK"],
+      ["Tirante × terça / tirante (X)", f"{ct['n_tirantes']} tirantes", f"{ct['folga_min_terca_mm']} / {f(ct['folga_cruzamento_mm'],1)} mm", "OK"]]
+y = pr.tabela(x0, y - 4, f"CHECAGEM DE LIGAÇÕES NO MODELO (tol. {LG['tol_mm']:.0f} mm)", ["LIGAÇÃO", "INSTÂNCIAS", "DESVIO / FOLGA", "OK"],
               lg, [62, 38, 62, 18])
+ch = CB["chumbadores"]
 mem = [["ELU flexão", f"Md {f(R.linhas['Md_kNm'],0)} ≤ MRd {f(R.linhas['MRd_kNm'],0)} kN·m"],
        ["ELS-F / ELS-D (fundo)", f"{f(R.linhas['elsf_inf_MPa'],2)} / {f(R.linhas['elsd_inf_MPa'],2)} MPa"],
-       ["Flecha final", f"{f(R.linhas['flecha_final_mm'],0)} mm ≤ {f(R.linhas['flecha_lim_mm'],0)} mm"]]
-y = pr.tabela(x0, y - 4, "MEMÓRIA RESUMIDA", ["VERIFICAÇÃO", "RESULTADO"], mem, [62, 118])
-notas = [f"Fabricar a peça reta com {L} mm no fundo da fôrma; as cabeceiras de ponta ficam inclinadas 3% (topo deslocado {DX} mm) para que as pontas fiquem a prumo na montagem.",
-         "Cotas ordenadas a partir do ponto 0 = aresta inferior da ponta esquerda (lado do pilar P1, parte baixa do caimento).",
-         "TB-1 montado a prumo na posição final: na fôrma fica inclinado 3% (gabarito). Folga do pino Ø25 no tubo Ø50 grauteada após o alinhamento.",
+       ["Flecha final", f"{f(R.linhas['flecha_final_mm'],0)} mm ≤ {f(R.linhas['flecha_lim_mm'],0)} mm"],
+       ["Dente (NBR 9062 + PCI)", f"Vd {dts['Vd']:.0f} kN, Hd {dts['Hd']:.0f} kN — {dts['calculo']['adotado']['tirante']}"],
+       ["Dente — MEF não linear", f"Vu = {mef.get('Vu_kN', '-')} kN ≥ Vd (Vu/Vd = {mef.get('FS', '-')})".replace(".", ",")],
+       ["Chumbadores CH-T1 / CH-T2", f"interação {f(ch['CH-T1']['interacao'],2)} / {f(ch['CH-T2']['interacao'],2)} (ACI 318-19 cap. 17)"]]
+y = pr.tabela(x0, y - 4, "MEMÓRIA RESUMIDA", ["VERIFICAÇÃO", "RESULTADO"], mem, [52, 128])
+notas = [f"Fabricar a peça reta; fundo da fôrma com {L - 2 * LN} mm entre as faces dos dentes. Cabeceiras e faces dos dentes inclinadas 3% (topo deslocado {DX} mm) para ficarem a prumo na montagem.",
+         "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo) com o plano do fundo da viga.",
+         "TB-1 a prumo na posição final (inclinado 3% na fôrma, gabarito). Cordoalhas cortadas rente à face do dente.",
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
-         "Estoque e transporte sobre 2 calços de madeira sob a mesa inferior nas posições indicadas, sem empilhamento.",
-         "Chapas CH-T1/CH-T2 faceando o topo, niveladas no plano da mesa; luvas e furos tamponados na concretagem; tolerância ±5 mm.",
-         "Contraventamento Ø12,5 A36 nas orelhas da CH-T2 (uma diagonal a 35 mm e a outra a 70 mm da chapa), com esticador; furos Ø16 na alma da terça intermediária.",
-         "Chaparia ASTM A36, galvanizada a fogo ou com pintura de fundo após a desforma. Medidas em mm.",
+         "Estoque e transporte sobre 2 calços de madeira de 150 mm sob a mesa inferior, sem empilhamento. As orelhas OR-1 da mão-francesa são parafusadas na obra (nada sobressai do fundo na fábrica).",
+         "Chapas de topo e de fundo faceando o concreto, niveladas; luvas tamponadas na concretagem; tolerância ±5 mm.",
+         f"Terças a cada {PASSO_T} mm; CH-MF no fundo deslocada 27 mm em relação à CH-T do topo (plano vertical da terça). Primeira e última terça: mão-francesa na CH-MF2, na face lateral do dente.",
+         "Chaparia ASTM A36, galvanizada a fogo ou fundo epóxi após a desforma. Medidas em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()

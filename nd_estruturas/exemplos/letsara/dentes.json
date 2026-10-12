@@ -1,0 +1,219 @@
+{
+ "TS-01": {
+  "geometria": {
+   "H": 900,
+   "hd": 450,
+   "ln": 300,
+   "a_apoio": 150,
+   "x_mac": 1200,
+   "l_apoio": 150
+  },
+  "Vd": 138.0,
+  "Hd": 40.0,
+  "calculo": {
+   "NBR": {
+    "tipo": "muito curto (atrito-cisalhamento)",
+    "a_d": 0.38,
+    "As_tir": 273,
+    "As_sus": 317,
+    "As_cost": 109,
+    "tau_wd": 0.87,
+    "tau_lim": 6.0,
+    "ok_biela": true
+   },
+   "PCI": {
+    "a_mm": 210,
+    "As_flex": 264,
+    "As_cis": 179,
+    "As_min": 632,
+    "As": 632,
+    "Ah": 263,
+    "Ash": 368,
+    "Av": 131,
+    "Vmax_kN": 651.8,
+    "ok_Vmax": true,
+    "mu_e": 3.4
+   },
+   "adotado": {
+    "As_tir": 632,
+    "tirante": "4 Ø16 (804 mm²)",
+    "As_sus": 368,
+    "suspensao": "2 estribos Ø12.5 fechados (491 mm²) a até 225 mm da face reentrante",
+    "As_cost": 263,
+    "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+    "Av": 131,
+    "vertical_dente": "1 estribos verticais Ø10 no dente",
+    "ancoragem_tirante_mm": 1122,
+    "ok": true,
+    "n_tir": 4,
+    "d_tir": 16.0,
+    "n_sus": 2,
+    "d_sus": 12.5,
+    "n_cost": 2,
+    "d_cost": 10.0,
+    "n_v": 1
+   },
+   "nota_Hd": "Hd = 1,4 × 28 kN (tirante do pórtico no modelo global) ≥ 0,16 Vd"
+  }
+ },
+ "I110": {
+  "geometria": {
+   "H": 1100,
+   "hd": 550,
+   "ln": 350,
+   "a_apoio": 175,
+   "x_mac": 1400,
+   "l_apoio": 200
+  },
+  "Vd": 448.0,
+  "Hd": 72.0,
+  "calculo": {
+   "NBR": {
+    "tipo": "muito curto (atrito-cisalhamento)",
+    "a_d": 0.354,
+    "As_tir": 754,
+    "As_sus": 1030,
+    "As_cost": 302,
+    "tau_wd": 2.26,
+    "tau_lim": 6.0,
+    "ok_biela": true
+   },
+   "PCI": {
+    "a_mm": 235,
+    "As_flex": 694,
+    "As_cis": 473,
+    "As_min": 792,
+    "As": 792,
+    "Ah": 277,
+    "Ash": 1195,
+    "Av": 453,
+    "Vmax_kN": 816.8,
+    "ok_Vmax": true,
+    "mu_e": 3.4
+   },
+   "adotado": {
+    "As_tir": 792,
+    "tirante": "3 Ø20 (943 mm²)",
+    "As_sus": 1195,
+    "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 275 mm da face reentrante",
+    "As_cost": 302,
+    "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+    "Av": 453,
+    "vertical_dente": "3 estribos verticais Ø10 no dente",
+    "ancoragem_tirante_mm": 1392,
+    "ok": true,
+    "n_tir": 3,
+    "d_tir": 20.0,
+    "n_sus": 3,
+    "d_sus": 16.0,
+    "n_cost": 2,
+    "d_cost": 10.0,
+    "n_v": 3
+   },
+   "nota_Hd": "Hd = 0,16 Vd (neoprene) ≥ 1,4 × 36,6 kN do modelo global"
+  }
+ },
+ "MEZ-I90": {
+  "geometria": {
+   "H": 900,
+   "hd": 450,
+   "ln": 300,
+   "a_apoio": 150,
+   "x_mac": 1200,
+   "l_apoio": 200
+  },
+  "Vd": 383.0,
+  "Hd": 65.0,
+  "calculo": {
+   "NBR": {
+    "tipo": "muito curto (atrito-cisalhamento)",
+    "a_d": 0.38,
+    "As_tir": 653,
+    "As_sus": 881,
+    "As_cost": 261,
+    "tau_wd": 2.42,
+    "tau_lim": 6.0,
+    "ok_biela": true
+   },
+   "PCI": {
+    "a_mm": 210,
+    "As_flex": 646,
+    "As_cis": 405,
+    "As_min": 632,
+    "As": 646,
+    "Ah": 221,
+    "Ash": 1021,
+    "Av": 429,
+    "Vmax_kN": 651.8,
+    "ok_Vmax": true,
+    "mu_e": 3.4
+   },
+   "adotado": {
+    "As_tir": 653,
+    "tirante": "3 Ø20 (943 mm²)",
+    "As_sus": 1021,
+    "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 225 mm da face reentrante",
+    "As_cost": 261,
+    "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+    "Av": 429,
+    "vertical_dente": "3 estribos verticais Ø10 no dente",
+    "ancoragem_tirante_mm": 1122,
+    "ok": true,
+    "n_tir": 3,
+    "d_tir": 20.0,
+    "n_sus": 3,
+    "d_sus": 16.0,
+    "n_cost": 2,
+    "d_cost": 10.0,
+    "n_v": 3
+   },
+   "nota_Hd": "Hd = 0,16 Vd + diafragma"
+  }
+ },
+ "consolos": [
+  {
+   "nome": "CP-TS pilar lateral (recebe TS-01)",
+   "tipo": "curto",
+   "a_d": 0.506,
+   "As_tir": 284,
+   "tirante": "2 Ø16 (402 mm²)",
+   "As_cost": 114,
+   "tau_wd": 0.87,
+   "tau_lim": 6.43,
+   "ok": true
+  },
+  {
+   "nome": "CV-TS na I110 (recebe TS-01, cada lado)",
+   "tipo": "curto",
+   "a_d": 0.57,
+   "As_tir": 305,
+   "tirante": "2 Ø16 (402 mm²)",
+   "As_cost": 122,
+   "tau_wd": 0.87,
+   "tau_lim": 6.43,
+   "ok": true
+  },
+  {
+   "nome": "CP-I110 pilar central (recebe I110)",
+   "tipo": "muito curto",
+   "a_d": 0.413,
+   "As_tir": 754,
+   "tirante": "3 Ø20 (943 mm²)",
+   "As_cost": 302,
+   "tau_wd": 1.64,
+   "tau_lim": 6.43,
+   "ok": true
+  },
+  {
+   "nome": "CP-MEZ pilar (recebe viga do mezanino)",
+   "tipo": "muito curto",
+   "a_d": 0.404,
+   "As_tir": 653,
+   "tirante": "3 Ø20 (943 mm²)",
+   "As_cost": 261,
+   "tau_wd": 1.93,
+   "tau_lim": 6.43,
+   "ok": true
+  }
+ ]
+}

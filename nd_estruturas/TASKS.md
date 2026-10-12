@@ -39,6 +39,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 ## Feito
 
 - Módulo `bim`: modelo de peças -> IFC4 + página 3D para celular; Letsara em `exemplos/letsara/modelo_bim.py`; skill `modelo-ifc-3d-nd` (2026-10-12).
+- Letsara: cobertura metálica calculada (MRD), ligações e chumbadores, dentes Gerber com MEF, TS-01 rev. 01, COB-01.
+
 - Letsara TS-01 detalhada (3 folhas) + checagem de ligações no modelo.
 
 - [x] 2026-10-12 — `prefabricados`: seção poligonal (I, retangular), viga pré-tracionada (ato, ELS-F/D, ELU, cortante, flecha, cordoalhas superiores, isolamento), torção NBR 6118 17.5, pilar em balanço pelo método geral (OpenSeesPy, fibras, corrotacional, fluência, critério εcu/10‰); 6 testes conferidos à mão. Rodada 1 da Letsara em `exemplos/letsara/`.

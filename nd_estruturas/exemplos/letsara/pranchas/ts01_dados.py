@@ -5,23 +5,26 @@ from nd_estruturas.prefabricados import (Concreto, Carregamento, secao_I, verifi
                                          icamento_viga, pressao_vento, transitorias_viga, CORD)
 
 I_CAI = 0.03
-L_H = 19710                                           # vão horizontal entre pontas (mm)
-L = round(L_H / math.cos(math.atan(I_CAI)))           # comprimento de fabricação ao longo do eixo
+L_H = 19450                                           # entre as faces das pontas (a prumo): 0,325 → 19,775 m
+L = round(L_H / math.cos(math.atan(I_CAI)))           # comprimento de fabricação ao longo do eixo (ponto 0 a ponto 0)
 H = 900
 DX = round(H * I_CAI)                                 # ponta a prumo: topo deslocado 27 mm
+HD, LN = 450, 300                                     # dente Gerber: altura e comprimento (nas duas pontas)
+PASSO_T = round((L - 510) / 12)
 P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,
          fck=50, fckj=35, n_cord=6, y_cord=75, x_cord=[-150, -100, -50, 50, 100, 150],
          alcas=[2100, 7400, L - 7400, L - 2100], estoque=[2100, L - 2100],
-         tercas=[255 + 1600 * k for k in range(13)], nos=[255 + 3200 * k for k in range(7)],
-         pino_x=150, h_tb2=600, L_pista=60, sig_pi=1453)
+         tercas=[255 + PASSO_T * k for k in range(13)], nos=[255 + 2 * PASSO_T * k for k in range(7)],
+         pino_x=150, L_pista=60, sig_pi=1453, x_mac=1200)
 C = Concreto(P["fck"])
 sec = secao_I(H / 1000, bs=0.40, ts=0.12, ms=0.08, bw=0.15, bi=0.40, ti=0.15, mi=0.08)
-L_calc = (L - 2 * P["pino_x"]) / 1000
+L_calc = (L - 2 * P["pino_x"]) / 1000          # entre pinos (apoios nos dentes)
 TRIB, qv = 9.655, pressao_vento(45.0, S3=0.95)
 car = Carregamento(sec.A * 25, 0.25 * TRIB, 0.25 * TRIB, w=qv * TRIB, psi1=0.4, psi2=0.0)
 R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"])
 Ap = P["n_cord"] * CORD["12.7"]
-V = sec.A * L / 1000 + (P["b"] * H / 1e6 - sec.A) * P["mac"] / 1000 * 2
+V = (sec.A * L / 1000 + (P["b"] * H / 1e6 - sec.A) * P["x_mac"] / 1000 * 2
+     - 2 * P["b"] * (H - HD) * LN / 1e9)              # maciços de 1,20 m nas pontas, menos o recorte dos dentes
 peso = V * 25
 F_cord = P["sig_pi"] * 98.7 / 1000
 Md_neg = max(0.0, (1.4 * car.w - car.g1 - car.g2) * L_calc ** 2 / 8)

@@ -1,0 +1,223 @@
+{
+ "perfil": {
+  "nome": "Ue 300×85×25×3,00",
+  "aco": "ZAR345",
+  "A_mm2": 1524,
+  "Ix_cm4": 2004.2,
+  "W_cm3": 133.6,
+  "peso_kNm": 0.117,
+  "m_ct_mm": 34.8,
+  "assinatura_M": {
+   "local": 1.647,
+   "L_local": 169.0,
+   "dist": 1.42,
+   "L_dist": 679.0
+  },
+  "assinatura_N": {
+   "local": 0.305,
+   "L_local": 220.0,
+   "dist": 0.472,
+   "obs": "sem mínimo distinto: curva em L = 679 mm"
+  }
+ },
+ "terca": {
+  "L_m": 10.05,
+  "s_m": 1.6,
+  "Lb_suc_mm": 2512,
+  "MRd_grav": {
+   "MRd": 36.850171664240094,
+   "modo": "distorcional",
+   "My": 46.09773505,
+   "Me": Infinity,
+   "lam0": 0.0,
+   "chi": 1.0,
+   "lam_l": 0.7792457546258477,
+   "lam_dist": 0.839042301704153,
+   "MRe": 46.09773505,
+   "MRl": 45.97214047253453,
+   "MRdist": 40.535188830664104
+  },
+  "MRd_suc": {
+   "MRd": 36.40040241897902,
+   "modo": "global (FLT)",
+   "My": 46.09773505,
+   "Me": 58.92616057502023,
+   "lam0": 0.8844753245169641,
+   "chi": 0.8685989152709342,
+   "lam_l": 0.7262465565571288,
+   "lam_dist": 0.839042301704153,
+   "MRe": 40.04044266087692,
+   "MRl": 40.04044266087692,
+   "MRdist": 40.535188830664104
+  },
+  "casos": {
+   "geral": {
+    "w_grav_kNm": 1.14,
+    "w_suc_kNm": 1.558,
+    "grav": {
+     "Msd": 14.39,
+     "MRd": 36.85,
+     "modo": "distorcional",
+     "uso": 0.391
+    },
+    "suc": {
+     "Msd": 19.67,
+     "MRd": 36.4,
+     "modo": "global (FLT)",
+     "uso": 0.54
+    },
+    "V": {
+     "Vsd": 7.83,
+     "VRd": 75.6,
+     "uso": 0.104
+    }
+   },
+   "borda": {
+    "w_grav_kNm": 1.14,
+    "w_suc_kNm": 2.732,
+    "grav": {
+     "Msd": 14.39,
+     "MRd": 36.85,
+     "modo": "distorcional",
+     "uso": 0.391
+    },
+    "suc": {
+     "Msd": 34.5,
+     "MRd": 36.4,
+     "modo": "global (FLT)",
+     "uso": 0.948
+    },
+    "V": {
+     "Vsd": 13.73,
+     "VRd": 75.6,
+     "uso": 0.182
+    }
+   }
+  },
+  "flecha_gq_mm": 26.5,
+  "flecha_vento_mm": 33.1,
+  "flecha_lim_mm": 55.8
+ },
+ "terca_escora": {
+  "Nd": 38.5,
+  "NcRd": 152.8,
+  "modo_N": "local-global",
+  "Md": 19.67,
+  "amplificacao": 1.109,
+  "MRd": 36.4,
+  "interacao": 0.851,
+  "ok": 1.0,
+  "nota": "vento como ação principal; NBR 14762:2010 item 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0"
+ },
+ "correntes": {
+  "linhas_por_vao": 3,
+  "posicao": "a L/4, L/2 e 3L/4, furos Ø14 na alma a 75 mm da face inferior",
+  "casos": {
+   "sucção": {
+    "W_kN": 3.91,
+    "PL_por_terca_kN": 0.681,
+    "F_acumulada_kN": 8.86
+   },
+   "gravidade": {
+    "W_kN": 2.86,
+    "PL_por_terca_kN": 0.584,
+    "F_acumulada_kN": 7.6
+   }
+  },
+  "F_max_kN": 8.86,
+  "flexivel": {
+   "barra": "Ø12,5 A36, roscas M12 + 2 porcas e arruela em cada terça",
+   "NtRd": 25.1,
+   "uso": 0.353
+  },
+  "rigida": {
+   "perfil": "tubo Ø42,2×2,65 (A36) com Ø12,5 passante",
+   "L_mm": 1600.0,
+   "NcRd": 37.5,
+   "esbeltez": 114,
+   "uso": 0.236,
+   "onde": "1º vão de terças junto a cada ancoragem"
+  },
+  "diagonal": {
+   "barra": "Ø16 A36, rosca M16",
+   "comp_m": 5.27,
+   "Td": 29.2,
+   "NtRd": 44.7,
+   "uso": 0.654,
+   "liga": "do ponto de corrente da 2ª terça à cantoneira CT-1 da 1ª terça"
+  }
+ },
+ "CT1": {
+  "perfil": "L 102×102×9,5 (A36) L=200",
+  "reacao_suc_kN": 7.83,
+  "reacao_grav_kN": 5.73,
+  "M12_alma": {
+   "Fd": 19.64,
+   "corte_Rd": 26.8,
+   "contato_alma_Rd": 24.0,
+   "uso": 0.82,
+   "furo": "Ø14 (padrão)",
+   "parafuso": "M12 8.8, arruela lisa e porca"
+  },
+  "M16_chapa": {
+   "Td": 9.79,
+   "Vd": 19.25,
+   "Ft_Rd": 89.4,
+   "Fv_Rd": 47.7,
+   "interacao": 0.175,
+   "parafuso": "M16 8.8 na luva soldada da CH-T, furo Ø18 na aba"
+  },
+  "aba": {
+   "Md_kNm": 0.356,
+   "MRd_kNm": 1.026,
+   "uso": 0.347
+  },
+  "contato_aba": 87.8
+ },
+ "MF1": {
+  "perfil": "L 50×5 (A36)",
+  "comp_m": 1.28,
+  "angulo": "45°",
+  "e_torcao_mm": 77.3,
+  "T_apoio_kNm": 0.605,
+  "H_kN": 2.02,
+  "Nd_kN": 2.87,
+  "NcRd": 44.1,
+  "esbeltez": 131,
+  "uso": 0.065,
+  "parafusos": "M12 8.8 na mesa inferior da terça (furo Ø14) e M12 na orelha OR-1",
+  "contato_mesa_terca_Rd": 24.0
+ },
+ "chumbadores": {
+  "CH-T1": {
+   "pinos": "4 Ø16 c/ cabeça, hef 100, nos cantos (grade 150×150)",
+   "Nu": 15.7,
+   "Vu": 8.9,
+   "phiNn": 94.0,
+   "modoN": "cone",
+   "phiVn": 23.4,
+   "modoV": "borda",
+   "interacao": 0.378
+  },
+  "CH-T2": {
+   "pinos": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
+   "Nu": 15.7,
+   "Vu": 39.2,
+   "phiNn": 88.0,
+   "modoN": "cone",
+   "phiVn_sem_grampo": 14.1,
+   "grampos": "2 grampos U Ø10 CA-50 envolvendo os pinos, pernas de 300 na mesa (ancoragem da cortante)",
+   "phiVn": 99.0,
+   "modoV": "borda",
+   "interacao": 0.397
+  },
+  "CH-MF": {
+   "pinos": "2 Ø12,5 c/ cabeça, hef 80",
+   "Nu": 4.09,
+   "Vu": 4.04,
+   "phiNn": 56.1,
+   "phiVn": 15.2,
+   "interacao": 0.265
+  }
+ }
+}

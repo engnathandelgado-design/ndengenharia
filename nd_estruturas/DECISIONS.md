@@ -26,6 +26,34 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-011 — Dentes Gerber verificados por MEF não linear 2D
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+Dentes Gerber são regiões D: o dimensionamento por bielas e tirantes (NBR 9062 / PCI) é a base, mas Nathan pediu a conferência por MEF para não haver risco de colapso. O material de concreto PlaneStressUserMaterial não existe no OpenSeesPy disponível e o PlasticDamageConcretePlaneStress não convergiu após a fissuração.
+
+### Decisão
+Dimensionar pelo maior entre NBR 9062:2017 (7.3/7.4) e PCI 5.6, e verificar com `mef_dente.analisar`: ASDConcrete3D em estado plano (IMPL-EX), barras aderentes, cordoalhas com deformação inicial no comprimento de transferência, apoio em placa de aço sobre um pino, resistências de cálculo, ruptura por 10‰ no aço, 3,5‰ no concreto ou pico. O amolecimento à tração foi encurtado (10 εt0) porque, com a energia de fratura distribuída, o modelo superestimava a flexão em ~20%. Validado contra viga retangular (+6%); critério Vu ≥ 1,06 Vd.
+
+### Consequências
+Verificação independente do modelo de bielas, com mapa de fissuração para a memória. Custa alguns minutos por dente; o teste de validação fica fora da suíte rápida (ND_MEF_LENTO=1).
+
+## DEC-010 — Perfis formados a frio pelo MRD com faixas finitas
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+As terças Ue tinham sido escolhidas pela seção bruta. A NBR 14762:2010 permite largura efetiva (MLE) ou resistência direta (MRD, Anexo C); o MRD precisa das forças críticas local e distorcional.
+
+### Decisão
+MRD com Mcr/Ncr local e distorcional da curva de assinatura por faixas finitas (pycufsm, com a correção para numpy 2 aplicada em tempo de execução) e global pelas expressões analíticas da norma (conferidas contra a curva: 1%). Sem mínimo distorcional distinto na compressão, usa-se o valor da curva no comprimento distorcional da flexão.
+
+### Consequências
+Qualquer Ue/U fica verificável sem tabela de fabricante. Resultado prático: Ue 300×85×25×3,00 só atende com três linhas de correntes.
+
 ## DEC-009 — IFC como saída de modelo, sem Tekla
 
 **Data:** 2026-10-12

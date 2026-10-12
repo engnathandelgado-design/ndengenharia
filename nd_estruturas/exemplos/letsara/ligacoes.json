@@ -1,6 +1,33 @@
 {
  "tol_mm": 5.0,
  "erros": 0,
+ "L_TS": 19.459,
+ "passo_tercas": 1.579,
+ "s_tercas": [
+  0.255,
+  1.834,
+  3.413,
+  4.992,
+  6.571,
+  8.15,
+  9.729,
+  11.308,
+  12.887,
+  14.466,
+  16.045,
+  17.624,
+  19.203
+ ],
+ "X_PINO": [
+  0.475,
+  19.625,
+  20.475,
+  39.625
+ ],
+ "TB1_s_fabricacao": [
+  0.1635,
+  19.3225
+ ],
  "contraventamento": {
   "chapa": {
    "y_orelha": 0.14,
@@ -16,8 +43,8 @@
     "vao": "L2-L3",
     "painel": 1,
     "diagonal": "/",
-    "comp_m": 9.819,
-    "ang_eixo_viga": 72.7,
+    "comp_m": 9.807,
+    "ang_eixo_viga": 72.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 4.83,
@@ -28,8 +55,8 @@
     "vao": "L2-L3",
     "painel": 1,
     "diagonal": "\\",
-    "comp_m": 9.819,
-    "ang_eixo_viga": 72.7,
+    "comp_m": 9.807,
+    "ang_eixo_viga": 72.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 4.83,
@@ -40,8 +67,8 @@
     "vao": "L2-L3",
     "painel": 2,
     "diagonal": "/",
-    "comp_m": 9.819,
-    "ang_eixo_viga": 72.7,
+    "comp_m": 9.807,
+    "ang_eixo_viga": 72.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 4.83,
@@ -52,8 +79,8 @@
     "vao": "L2-L3",
     "painel": 2,
     "diagonal": "\\",
-    "comp_m": 9.819,
-    "ang_eixo_viga": 72.7,
+    "comp_m": 9.807,
+    "ang_eixo_viga": 72.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 4.83,
@@ -62,7 +89,7 @@
    }
   ],
   "folga_min_terca_mm": 55,
-  "comp_max_m": 9.819,
+  "comp_max_m": 9.807,
   "folga_cruzamento_mm": 22.500000000000004,
   "ok": true
  },
@@ -72,308 +99,364 @@
    "peca": "TS-01 L2 esq",
    "inserto": "TB-1.0",
    "com": "P1 L2",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 esq",
    "inserto": "TB-1.1",
-   "com": "topo do pilar L2",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "pilar central 50×50 (consolo CP-TS) L2",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 dir",
    "inserto": "TB-1.0",
-   "com": "topo do pilar L2",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "pilar central 50×50 (consolo CP-TS) L2",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 dir",
    "inserto": "TB-1.1",
    "com": "P2 L2",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 esq",
    "inserto": "TB-1.0",
    "com": "P1 L3",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 esq",
    "inserto": "TB-1.1",
-   "com": "berço BR-1 na I110 L3",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "I110 (consolo CV-TS) L3",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 dir",
    "inserto": "TB-1.0",
-   "com": "berço BR-1 na I110 L3",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "I110 (consolo CV-TS) L3",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 dir",
    "inserto": "TB-1.1",
    "com": "P2 L3",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 esq",
    "inserto": "TB-1.0",
    "com": "P1 L4",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 esq",
    "inserto": "TB-1.1",
-   "com": "topo do pilar L4",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "pilar central 50×50 (consolo CP-TS) L4",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 dir",
    "inserto": "TB-1.0",
-   "com": "topo do pilar L4",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "pilar central 50×50 (consolo CP-TS) L4",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 dir",
    "inserto": "TB-1.1",
    "com": "P2 L4",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 esq",
    "inserto": "TB-1.0",
    "com": "P1 L5",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 esq",
    "inserto": "TB-1.1",
-   "com": "berço BR-1 na I110 L5",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "I110 (consolo CV-TS) L5",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 dir",
    "inserto": "TB-1.0",
-   "com": "berço BR-1 na I110 L5",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "I110 (consolo CV-TS) L5",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 dir",
    "inserto": "TB-1.1",
    "com": "P2 L5",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 esq",
    "inserto": "TB-1.0",
    "com": "P1 L6",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 esq",
    "inserto": "TB-1.1",
-   "com": "berço BR-1 na I110 L6",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "I110 (consolo CV-TS) L6",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 dir",
    "inserto": "TB-1.0",
-   "com": "berço BR-1 na I110 L6",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "I110 (consolo CV-TS) L6",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 dir",
    "inserto": "TB-1.1",
    "com": "P2 L6",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 esq",
    "inserto": "TB-1.0",
    "com": "P1 L7",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 esq",
    "inserto": "TB-1.1",
-   "com": "berço BR-1 na I110 L7",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "I110 (consolo CV-TS) L7",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 dir",
    "inserto": "TB-1.0",
-   "com": "berço BR-1 na I110 L7",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "I110 (consolo CV-TS) L7",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 dir",
    "inserto": "TB-1.1",
    "com": "P2 L7",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 esq",
    "inserto": "TB-1.0",
    "com": "P1 L8",
-   "tipo": "PN-1 pino Ø25 no consolo",
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.0843
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 8.534
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 esq",
    "inserto": "TB-1.1",
-   "com": "berço BR-1 na I110 L8",
-   "tipo": "PN-2 pino Ø25 no berço",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "com": "I110 (consolo CV-TS) L8",
+   "tipo": "PN-2 Ø25 no consolo",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 8.6666
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.109
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 dir",
    "inserto": "TB-1.0",
-   "com": "berço BR-1 na I110 L8",
-   "tipo": "PN-2 pino Ø25 no berço",
+   "com": "I110 (consolo CV-TS) L8",
+   "tipo": "PN-2 Ø25 no consolo",
    "dist_mm": 0.1,
-   "dz_mm": -0.0,
+   "dz_mm": 0.5,
    "ok": true,
-   "z_assento": 8.6765
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.134
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 dir",
    "inserto": "TB-1.1",
    "com": "P2 L8",
-   "tipo": "PN-1 pino Ø25 no consolo",
-   "dist_mm": 0.2,
-   "dz_mm": 0.0,
+   "tipo": "PN-1 Ø25 no consolo CP-TS",
+   "dist_mm": 0.3,
+   "dz_mm": -0.0,
    "ok": true,
-   "z_assento": 9.2588
+   "folga_ponta_mm": 25,
+   "folga_consolo_mm": 25,
+   "z_assento": 9.709
   }
  ],
  "tercas": [
@@ -521,57 +604,72 @@
  "berco_I110": [
   {
    "linha": 3,
-   "z_esq": 8.6666,
-   "z_dir": 8.6765,
-   "desnivel_mm": 9.9,
-   "topo_I110": 8.647
+   "consolo_esq": 9.109,
+   "consolo_dir": 9.134,
+   "desnivel_mm": 25.0,
+   "topo_I110": 9.5,
+   "fundo_I110": 8.4,
+   "folga_topo_I110_tercas_mm": 86,
+   "ok": true
   },
   {
    "linha": 5,
-   "z_esq": 8.6666,
-   "z_dir": 8.6765,
-   "desnivel_mm": 9.9,
-   "topo_I110": 8.647
+   "consolo_esq": 9.109,
+   "consolo_dir": 9.134,
+   "desnivel_mm": 25.0,
+   "topo_I110": 9.5,
+   "fundo_I110": 8.4,
+   "folga_topo_I110_tercas_mm": 86,
+   "ok": true
   },
   {
    "linha": 6,
-   "z_esq": 8.6666,
-   "z_dir": 8.6765,
-   "desnivel_mm": 9.9,
-   "topo_I110": 8.647
+   "consolo_esq": 9.109,
+   "consolo_dir": 9.134,
+   "desnivel_mm": 25.0,
+   "topo_I110": 9.5,
+   "fundo_I110": 8.4,
+   "folga_topo_I110_tercas_mm": 86,
+   "ok": true
   },
   {
    "linha": 7,
-   "z_esq": 8.6666,
-   "z_dir": 8.6765,
-   "desnivel_mm": 9.9,
-   "topo_I110": 8.647
+   "consolo_esq": 9.109,
+   "consolo_dir": 9.134,
+   "desnivel_mm": 25.0,
+   "topo_I110": 9.5,
+   "fundo_I110": 8.4,
+   "folga_topo_I110_tercas_mm": 86,
+   "ok": true
   },
   {
    "linha": 8,
-   "z_esq": 8.6666,
-   "z_dir": 8.6765,
-   "desnivel_mm": 9.9,
-   "topo_I110": 8.647
+   "consolo_esq": 9.109,
+   "consolo_dir": 9.134,
+   "desnivel_mm": 25.0,
+   "topo_I110": 9.5,
+   "fundo_I110": 8.4,
+   "folga_topo_I110_tercas_mm": 86,
+   "ok": true
   }
  ],
  "nos_contraventamento_x_esq": [
   0.58,
-  3.78,
-  6.98,
-  10.18,
-  13.38,
-  16.58,
-  19.78
+  3.738,
+  6.896,
+  10.054,
+  13.212,
+  16.37,
+  19.528
  ],
  "alcas": [
   2.1,
   7.4,
-  12.319,
-  17.619
+  12.059,
+  17.359
  ],
  "estoque": [
   2.1,
-  17.619
+  17.359
  ]
 }
