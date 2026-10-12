@@ -5,4 +5,5 @@ Cópia mestre, versionada, das skills que o Claude usa nos trabalhos da ND. Uso 
 - Cada pasta é uma skill (`SKILL.md` + arquivos de apoio).
 - Alterou uma skill no Claude: atualizar a pasta correspondente aqui e fazer commit ("Atualiza skill orcamentista-obras").
 - Para reinstalar uma skill no Claude: compactar a pasta da skill e enviar na área de Skills das configurações do Claude.
+- `modelo-ifc-3d-nd`: IFC e 3D da obra a partir do nd_estruturas (módulo `bim`).
 - Skills prontas da Anthropic (docx, xlsx, pptx, pdf etc.) não ficam aqui.

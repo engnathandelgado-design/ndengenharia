@@ -26,6 +26,20 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-009 — IFC como saída de modelo, sem Tekla
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+Nathan não tem licença do Tekla Structures. Os servidores MCP do Tekla exigem o programa aberto no Windows. Clientes e fábricas trocam modelos em IFC.
+
+### Decisão
+Gerar e ler IFC4 com ifcopenshell (módulo `bim`, extra opcional `bim`). O modelo de peças é a fonte; IFC e página 3D (three.js, publicada como artefato) são writers nas bordas. Cada obra tem `exemplos/<obra>/modelo_bim.py`, regenerado ao fechar o projeto. Saídas fora do git.
+
+### Consequências
+Modelo abre no Tekla, Revit e visualizadores sem licença. Geometria é envelope do perfil (sem alvéolos, recortes e armadura); detalhamento de fábrica continua nas pranchas. Quando o `prefabricados` tiver o objeto peça, o ModeloBIM passa a ser gerado dele.
+
 ## DEC-008 — Modelo único de peças pré-moldadas (padrão "cast unit")
 
 **Data:** 2026-10-12

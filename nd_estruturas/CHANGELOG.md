@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Módulo `bim`: perfis, peças e modelo com quantitativos; gravação IFC4 (pset ND_Peca), leitura de malha de IFC e visualizador 3D (three.js) com camadas, pendências e marca "projeto da ND Engenharia"; extra `bim` no pyproject (2026-10-12).
+- Letsara: `exemplos/letsara/modelo_bim.py` gera o IFC e a página 3D do pavilhão (2026-10-12).
 - Letsara: TS-01 em 3 folhas no padrão de prancha de peça (fôrma/insertos/transitórias A0, armação com croquis A1, chaparia A1) com isométricos 3D; registro de chaparia e checagem de ligações (pinos, terças, berço, tirantes × terças); transitórias com 4 alças e 2 calços; contraventamento em painéis de 3,20 m.
 - Motor de pranchas: imagem no PDF, cotas ordenadas e relação do aço com croquis.
 - `pyproject.toml`: instalação com `pip install -e .[dev]`; extras `formfinding` e `web` (2026-10-12).
