@@ -195,6 +195,14 @@ def montar() -> ModeloBIM:
                     m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xc, y, z_as + 0.39), 0.02, 0.02, 0.70, PIN)
                     m.bloco("inserto", "NEO 300×150×10", (xc, y, z_as + 0.01), 0.15, 0.30, 0.01, PIN)
 
+    # 8. piso e fundações (indicativos): piso de concreto 15 cm e blocos de fundação com cálice sob cada pilar
+    m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(LARG + 1.0, 0.15), (LARG / 2, -0.5, -0.075), (LARG / 2, COMP + 0.5, -0.075), "Piso e fundações")
+    for peca in list(m.pecas):
+        if peca.tipo == "pilar":
+            x, y, _ = peca.p0
+            bx, by = peca.perfil.b + 0.9, peca.perfil.h + 0.9
+            m.bloco("fundacao", f"BLOCO/CÁLICE {peca.marca} (indicativo)", (x, y, -1.0 + 0.0), max(bx, 1.5), max(by, 1.5), 1.2, "Piso e fundações")
+
     pl = LG["platibanda"]
     m.pendente(f"Cobertura escondida: telha junto ao P2 em +{pl['telha_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00; "
                f"junto ao P1 em +{pl['telha_P1']:.3f}.")
@@ -240,7 +248,7 @@ if __name__ == "__main__":
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
                         "Pavilhão pré-moldado 40,10 × 76,81 m · Marque Engenharia · cobertura escondida na platibanda · pranchas e conferência de insertos",
-                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas"), pranchas=pranchas, conexoes=cx)
+                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Piso e fundações"), pranchas=pranchas, conexoes=cx)
     for g, d in q.items():
         print(f"{g:26s} {d['pecas']:4d} peças  {d['volume_m3']:8.1f} m³")
     print("pendências:", len(modelo.pendencias), "->", saida)
