@@ -1,0 +1,606 @@
+{
+ "q_vento_kN_m2": 0.874,
+ "viga_I_cobertura": [
+  {
+   "fck": 40,
+   "secao": "I60f",
+   "A": 0.17,
+   "peso_t": 8.5,
+   "cord": 9,
+   "sup": 0,
+   "ycg": 84,
+   "flecha_mm": 32.5,
+   "Rg": 63.8,
+   "Rq": 23.1,
+   "arranc_d": 49.4
+  },
+  {
+   "fck": 40,
+   "secao": "I70f",
+   "A": 0.182,
+   "peso_t": 9.1,
+   "cord": 7,
+   "sup": 0,
+   "ycg": 75,
+   "flecha_mm": 25.3,
+   "Rg": 66.7,
+   "Rq": 23.1,
+   "arranc_d": 46.5
+  },
+  {
+   "fck": 40,
+   "secao": "I80f",
+   "A": 0.194,
+   "peso_t": 9.7,
+   "cord": 6,
+   "sup": 0,
+   "ycg": 75,
+   "flecha_mm": 19.6,
+   "Rg": 69.6,
+   "Rq": 23.1,
+   "arranc_d": 43.6
+  },
+  {
+   "fck": 40,
+   "secao": "I80p",
+   "A": 0.29,
+   "peso_t": 14.4,
+   "cord": 9,
+   "sup": 0,
+   "ycg": 84,
+   "flecha_mm": 13.8,
+   "Rg": 92.5,
+   "Rq": 23.1,
+   "arranc_d": 20.6
+  },
+  {
+   "fck": 40,
+   "secao": "I90p",
+   "A": 0.31,
+   "peso_t": 15.4,
+   "cord": 8,
+   "sup": 0,
+   "ycg": 80,
+   "flecha_mm": 10.5,
+   "Rg": 97.3,
+   "Rq": 23.1,
+   "arranc_d": 15.9
+  },
+  {
+   "fck": 50,
+   "secao": "I60f",
+   "A": 0.17,
+   "peso_t": 8.5,
+   "cord": 8,
+   "sup": 0,
+   "ycg": 80,
+   "flecha_mm": 37.1,
+   "Rg": 63.8,
+   "Rq": 23.1,
+   "arranc_d": 49.4
+  },
+  {
+   "fck": 50,
+   "secao": "I70f",
+   "A": 0.182,
+   "peso_t": 9.1,
+   "cord": 7,
+   "sup": 0,
+   "ycg": 75,
+   "flecha_mm": 21.6,
+   "Rg": 66.7,
+   "Rq": 23.1,
+   "arranc_d": 46.5
+  },
+  {
+   "fck": 50,
+   "secao": "I80f",
+   "A": 0.194,
+   "peso_t": 9.7,
+   "cord": 6,
+   "sup": 0,
+   "ycg": 75,
+   "flecha_mm": 16.8,
+   "Rg": 69.6,
+   "Rq": 23.1,
+   "arranc_d": 43.6
+  },
+  {
+   "fck": 50,
+   "secao": "I80p",
+   "A": 0.29,
+   "peso_t": 14.4,
+   "cord": 9,
+   "sup": 0,
+   "ycg": 84,
+   "flecha_mm": 11.7,
+   "Rg": 92.5,
+   "Rq": 23.1,
+   "arranc_d": 20.6
+  },
+  {
+   "fck": 50,
+   "secao": "I90p",
+   "A": 0.31,
+   "peso_t": 15.4,
+   "cord": 8,
+   "sup": 0,
+   "ycg": 80,
+   "flecha_mm": 8.9,
+   "Rg": 97.3,
+   "Rq": 23.1,
+   "arranc_d": 15.9
+  }
+ ],
+ "viga_central": [
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I100p",
+   "peso_t": 16.2,
+   "cord": 16,
+   "sup": 0,
+   "ycg": 104,
+   "flecha_mm": 19.4
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I110p",
+   "peso_t": 17.2,
+   "cord": 14,
+   "sup": 0,
+   "ycg": 96,
+   "flecha_mm": 15.4
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I120p",
+   "peso_t": 18.2,
+   "cord": 13,
+   "sup": 0,
+   "ycg": 94,
+   "flecha_mm": 11.2
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I100p",
+   "peso_t": 19.9,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I110p",
+   "peso_t": 21.1,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I120p",
+   "peso_t": 22.3,
+   "cord": 21,
+   "sup": 0,
+   "ycg": 117,
+   "flecha_mm": 30.3
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I100p",
+   "peso_t": 20.0,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I110p",
+   "peso_t": 21.2,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I120p",
+   "peso_t": 22.4,
+   "cord": 21,
+   "sup": 0,
+   "ycg": 117,
+   "flecha_mm": 31.4
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I100p",
+   "peso_t": 16.2,
+   "cord": 16,
+   "sup": 0,
+   "ycg": 104,
+   "flecha_mm": 16.1
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I110p",
+   "peso_t": 17.2,
+   "cord": 14,
+   "sup": 0,
+   "ycg": 96,
+   "flecha_mm": 12.9
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I120p",
+   "peso_t": 18.2,
+   "cord": 13,
+   "sup": 0,
+   "ycg": 94,
+   "flecha_mm": 9.4
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I100p",
+   "peso_t": 19.9,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I110p",
+   "peso_t": 21.1,
+   "cord": 23,
+   "sup": 0,
+   "ycg": 124,
+   "flecha_mm": 34.7
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I120p",
+   "peso_t": 22.3,
+   "cord": 21,
+   "sup": 0,
+   "ycg": 117,
+   "flecha_mm": 25.0
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I100p",
+   "peso_t": 20.0,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I110p",
+   "peso_t": 21.2,
+   "cord": 24,
+   "sup": 0,
+   "ycg": 128,
+   "flecha_mm": 31.9
+  },
+  {
+   "cobertura": "I70f",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I120p",
+   "peso_t": 22.4,
+   "cord": 21,
+   "sup": 0,
+   "ycg": 117,
+   "flecha_mm": 25.9
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I100p",
+   "peso_t": 16.2,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I110p",
+   "peso_t": 17.2,
+   "cord": 19,
+   "sup": 0,
+   "ycg": 113,
+   "flecha_mm": 20.9
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V407",
+   "secao": "I120p",
+   "peso_t": 18.2,
+   "cord": 17,
+   "sup": 0,
+   "ycg": 107,
+   "flecha_mm": 16.2
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I100p",
+   "peso_t": 19.9,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I110p",
+   "peso_t": 21.1,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V406",
+   "secao": "I120p",
+   "peso_t": 22.3,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I100p",
+   "peso_t": 20.0,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I110p",
+   "peso_t": 21.2,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 40,
+   "viga": "V405",
+   "secao": "I120p",
+   "peso_t": 22.4,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I100p",
+   "peso_t": 16.2,
+   "cord": 22,
+   "sup": 0,
+   "ycg": 121,
+   "flecha_mm": 22.0
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I110p",
+   "peso_t": 17.2,
+   "cord": 19,
+   "sup": 0,
+   "ycg": 113,
+   "flecha_mm": 17.2
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V407",
+   "secao": "I120p",
+   "peso_t": 18.2,
+   "cord": 17,
+   "sup": 0,
+   "ycg": 107,
+   "flecha_mm": 13.4
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I100p",
+   "peso_t": 19.9,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I110p",
+   "peso_t": 21.1,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V406",
+   "secao": "I120p",
+   "peso_t": 22.3,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I100p",
+   "peso_t": 20.0,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I110p",
+   "peso_t": 21.2,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  },
+  {
+   "cobertura": "I90p",
+   "fck": 50,
+   "viga": "V405",
+   "secao": "I120p",
+   "peso_t": 22.4,
+   "cord": null,
+   "sup": null,
+   "ycg": null,
+   "flecha_mm": null
+  }
+ ],
+ "pilares": [
+  {
+   "pilar": "lateral P1/P2",
+   "secao": "40x50",
+   "Nk": 412.2,
+   "transversal": {
+    "lambda_u": 1.1,
+    "ok": true,
+    "topo_mm": 210.2,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.45
+   },
+   "longitudinal": {
+    "lambda_u": 1.52,
+    "ok": true,
+    "topo_mm": 222.4,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.45
+   },
+   "topo_ELS_mm": 14.3
+  },
+  {
+   "pilar": "lateral P1/P2",
+   "secao": "40x60",
+   "Nk": 412.2,
+   "transversal": {
+    "lambda_u": 1.03,
+    "ok": true,
+    "topo_mm": 160.9,
+    "barras_face": "5 Ø20",
+    "As_face_cm2": 15.71,
+    "taxa_pct": 1.31
+   },
+   "longitudinal": {
+    "lambda_u": 1.08,
+    "ok": true,
+    "topo_mm": 324.8,
+    "barras_face": "4 Ø25",
+    "As_face_cm2": 19.63,
+    "taxa_pct": 1.64
+   },
+   "topo_ELS_mm": 8.3
+  },
+  {
+   "pilar": "fachada (40 na direção do vento)",
+   "secao": "40x50",
+   "Nk": 338.7,
+   "longitudinal": {
+    "lambda_u": 1.26,
+    "ok": true,
+    "topo_mm": 186.0,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.45
+   }
+  },
+  {
+   "pilar": "fachada (40 na direção do vento)",
+   "secao": "40x60",
+   "Nk": 338.7,
+   "longitudinal": {
+    "lambda_u": 1.3,
+    "ok": true,
+    "topo_mm": 168.1,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.05
+   }
+  }
+ ],
+ "k_delta_kN": 8.1
+}

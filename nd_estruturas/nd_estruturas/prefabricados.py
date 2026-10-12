@@ -540,3 +540,64 @@ def armadura_minima_metodo_geral(b, h, L, Nd, Hd_dist, conc, Md_base=0.0, Hd_top
                          taxa_pct=round(2 * As / (b * h * 1e4) * 100, 2))
                 return r
     return None
+
+
+# --------------------------------------------------------------------------- grade da cabeceira (pista ND/Marque)
+
+# Cabeçote ativo inferior REV05: 7 colunas × 5 linhas, passo 50 (horiz.) × 42 (vert.), furos Ø17.
+# Cabeçote superior: 7 × 2. Cotas a partir do fundo da fôrma (piso acabado + 300).
+# A linha mais baixa fica a Y0_INF do fundo da fôrma (nota 11 da ASM.001: eixo inferior a 375 do piso
+# com fundo da fôrma a 300 → 75 mm; conferir com Nathan se 375 é a linha de baixo ou o eixo do grupo).
+GRADE_X = [-0.150, -0.100, -0.050, 0.0, 0.050, 0.100, 0.150]
+Y0_INF, PASSO_V, N_LIN_INF = 0.075, 0.042, 5
+Y_SUP = [1.050, 1.050 + PASSO_V]  # linhas do cabeçote superior, do fundo da fôrma
+_ORDEM = [0.0, -0.150, 0.150, -0.100, 0.100, -0.050, 0.050]  # preenchimento simétrico
+
+
+def posicoes_grade(sec: "Secao", n: int, cobrimento=0.040, diam=0.0127):
+    """Distribui n cordoalhas nos furos do cabeçote inferior, de baixo para cima, simétricas.
+    Só usa furos com cobrimento ≥ `cobrimento` às faces laterais na cota do furo.
+    Retorna lista de (x, y) ou None se não couber."""
+    pos = []
+    for k in range(N_LIN_INF):
+        y = Y0_INF + k * PASSO_V
+        if y > sec.h - 0.05:
+            break
+        meia = sec.largura_em(y) / 2 - cobrimento - diam / 2
+        livres = [x for x in _ORDEM if abs(x) <= meia + 1e-9]
+        falta = n - len(pos)
+        if falta <= 0:
+            break
+        usar = livres[:falta]
+        if len(usar) % 2 == 0 and 0.0 in usar and falta < len(livres):
+            pass
+        # mantém simetria: se sobrar número par sem o central, tira o central
+        if (falta % 2 == 0) and 0.0 in usar and len(usar) == falta:
+            usar = [x for x in livres if x != 0.0][:falta]
+        pos += [(x, y) for x in usar]
+    return pos if len(pos) == n else None
+
+
+def menor_protensao_grade(sec, L, carga, conc, nmax=35, sup_permitidas=(0, 2), **kw):
+    """Menor número de cordoalhas Ø12,7 na grade da cabeceira que passa em todas as verificações.
+    Cordoalhas superiores (se usadas) no cabeçote superior, colunas centrais, só se couberem na seção."""
+    for n_sup in sup_permitidas:
+        if n_sup:
+            y_s = max((y for y in Y_SUP if y <= sec.h - 0.045), default=None)
+            if y_s is None:
+                continue
+            y_sup = sec.h - y_s
+        else:
+            y_sup = 0.05
+        for n in range(2, nmax + 1):
+            pos = posicoes_grade(sec, n)
+            if pos is None:
+                continue
+            y_cg = sum(y for _, y in pos) / n
+            r = verificar_viga_pretracionada(sec, L, carga, conc, n, "12.7", y_cord=y_cg,
+                                             n_sup=n_sup, y_sup=y_sup, **kw)
+            if r.ok:
+                r.linhas["posicoes"] = [(round(x * 1000), round(y * 1000)) for x, y in pos]
+                r.linhas["y_cg_mm"] = round(y_cg * 1000)
+                return r
+    return None

@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 
 from nd_estruturas.prefabricados import (
-    Carregamento, Concreto, armadura_minima_metodo_geral, menor_protensao, pressao_vento, secao_I,
+    Carregamento, Concreto, armadura_minima_metodo_geral, menor_protensao_grade, pressao_vento, secao_I,
 )
 
 AQUI = Path(__file__).parent
@@ -41,9 +41,10 @@ for fck in (40, 50):
     C = Concreto(fck)
     for sec in [I_fina(h) for h in (0.60, 0.70, 0.80)] + [I_padrao(h) for h in (0.80, 0.90)]:
         car = Carregamento(sec.A * 25, 0.25 * TRIB, 0.25 * TRIB, w=w_cob, psi1=0.4, psi2=0.0)
-        r = menor_protensao(sec, L_I, car, C, y_cord=0.05)
+        r = menor_protensao_grade(sec, L_I, car, C)
         cob.append(dict(fck=fck, secao=sec.nome, A=round(sec.A, 3), peso_t=round(sec.A * 25 * 19.55 / 9.81, 1),
                         cord=None if r is None else r.n_cord, sup=None if r is None else r.linhas["n_cord_sup"],
+                        ycg=None if r is None else r.linhas["y_cg_mm"],
                         flecha_mm=None if r is None else r.linhas["flecha_final_mm"],
                         Rg=round((sec.A * 25 + 0.25 * TRIB) * L_I / 2, 1), Rq=round(0.25 * TRIB * L_I / 2, 1),
                         arranc_d=round(max(0, (1.4 * w_cob - sec.A * 25 - 0.25 * TRIB) * L_I / 2), 1)))
@@ -72,10 +73,12 @@ for base in ("I70f", "I90p"):
                 sec = I_padrao(h)
                 car = Carregamento(sec.A * 25, 8 * mmax(L, xs, 2 * ref["Rg"]) / L ** 2,
                                    8 * mmax(L, xs, 2 * ref["Rq"]) / L ** 2, psi1=0.4, psi2=0.0)
-                r = menor_protensao(sec, L, car, C, nmax=36, y_cord=0.10)
+                r = menor_protensao_grade(sec, L, car, C)
                 central.append(dict(cobertura=base, fck=fck, viga=nome, secao=sec.nome,
                                     peso_t=round(sec.A * 25 * (L + 0.6) / 9.81, 1),
                                     cord=None if r is None else r.n_cord,
+                                    sup=None if r is None else r.linhas['n_cord_sup'],
+                                    ycg=None if r is None else r.linhas['y_cg_mm'],
                                     flecha_mm=None if r is None else r.linhas["flecha_final_mm"]))
 out["viga_central"] = central
 

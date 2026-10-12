@@ -48,3 +48,26 @@ As vigas de travamento V401–V404 não mudam o comprimento de flambagem (le = 2
   - V406 e V405 (23 m): 24 cordoalhas, 22,2 t, flecha final de 35 mm (limite de 92 mm).
   - V407 (19 m): 16 cordoalhas, 18,1 t.
 - **Pilar lateral para H/1700:** 40×80, com 4,5 mm em estádio I. Sob vento frequente, o momento (≈ 195 kN·m) fica abaixo do momento de fissuração (≈ 210 kN·m). Com 40×60, o deslocamento é de 10,7 mm, o que atende só H/500.
+
+## Rodada 2 (12/10/2026) — refinada e com cordoalhas na grade da cabeceira
+
+**Cordoalhas na grade dos cabeçotes REV05.**
+- Cabeçote inferior: 7 × 5 furos Ø17, passo 50 × 42 mm. Linha de baixo adotada a 75 mm do fundo da fôrma.
+- Cabeçote superior: 2 linhas, a partir de 1.050 mm do fundo da fôrma.
+
+**Refinamentos em relação à rodada 1:**
+- vento com S3 = 0,95, o que dá q = 0,874 kN/m²;
+- ψ2 = 0 na sobrecarga de cobertura;
+- ELU por compatibilidade de deformações, com σpd de cerca de 1.570 MPa;
+- viga I funcionando como escora do pórtico e travamento + contraventamento repartindo o vento longitudinal entre 24 pilares (8,1 kN por pilar).
+
+| Peça | Seção | Cordoalhas Ø12,7 (na grade) | Peso | Obs. |
+|---|---|---|---|---|
+| Viga I de cobertura | I70 (mesas 40×12, alma 12) | **7** (1 linha completa) | 9,1 t | Flecha final de 25 mm |
+| Viga central V406/V405 (23 m) | I120 padrão (mesas 40×25, chanfro 15, alma 20) | **21** (3 linhas de 7) | 22,3 t | Com C50, a I110 passa com 23 a 24 cordoalhas |
+| Viga central V407 (19 m) | I110 padrão | **14** (2 linhas de 7) | 17,2 t | |
+| Pilar lateral 40×60, transversal | 5Ø20 por face | — | — | Deslocamento de serviço de 8,3 mm |
+| Pilar lateral 40×60, longitudinal com travamento | 4Ø25 por face | — | — | Recebe parte do vento das fachadas |
+| Pilar de fachada 40×60 (40 na direção do vento) | 5Ø25 por face | — | — | Mesma orientação dos pilares laterais |
+
+Com a viga I de cobertura no padrão de mesas 40×25 (I90), as vigas centrais de 23 m não passam nem em I120. A cobertura tem que ser a I70 de mesas finas.
