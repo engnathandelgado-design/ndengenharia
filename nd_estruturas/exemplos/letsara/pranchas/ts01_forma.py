@@ -51,7 +51,7 @@ for s in ALC:
 vp.cota_ord([0] + TER + [L + DX], 200, 6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in TER] + [f"{L + DX:.0f}"])
 vp.cota_ord(ALC, -200, -6, x0=0, rotulos=[f"{s:.0f}" for s in ALC])
 vp.chamada((TER[0], 100), (10, 30), "CH-T2 (nós de contraventamento, 7x)")
-vp.chamada((TER[1], 100), (14, 26), "CH-T1 (terças, 6x)")
+vp.chamada((TER[1], 100), (14, 26), "CH-T1 200×200×12,5 A36 embutida (terças, 6x) + ST-1 soldado depois")
 vp.chamada((ALC[0], 0), (8, -26), "AL-1 (4 alças de cordoalha)")
 vp.cota_v([-200, 200], L + DX, 8)
 
@@ -148,14 +148,14 @@ def corte_I(nome, org, sub, s_tipo):
         v.ponto_barra((x, P["y_cord"]), 12.7, "ARM_PROT_SECAO")
     dy = 190 if s_tipo == "CH-T2" else 100
     v.ret(-dy, H - 12.5, 2 * dy, 12.5, "METALICA")
-    v.ret(-110, H, 220, 290, "OCULTA")                                       # ST-1 soldado em cima (ND-LET-COB01)
+    v.chapa(-110, H, 220, 290, 0.25)                                         # ST-1 soldado em cima, após a desforma (ND-LET-COB01)
     pinos = (-150, 0, 150) if s_tipo == "CH-T2" else (-75, 75)
     for yy in pinos:
         v.linha((yy, H - 12.5), (yy, H - 112.5), "METALICA"); v.ret(yy - 16, H - 120, 32, 8, "METALICA")
     if s_tipo == "CH-T2":
         v.poli([(-170, H - 140), (-170, H - 60), (170, H - 60), (170, H - 140)], "ARM_TRANSV")   # grampo U Ø10
     v.ret(-180, 0, 360, 12.5, "METALICA")                                       # CH-MF no fundo
-    v.ret(-150, -100, 300, 100, "OCULTA")                                      # OR-1 soldada por baixo
+    v.chapa(-150, -100, 300, 100, 0.25)                                        # OR-1 soldada por baixo, após a desforma
     for yy in (-100, 100):
         v.linha((yy, 12.5), (yy, 92.5), "METALICA"); v.ret(yy - 12.5, 92.5, 25, 7, "METALICA")
     v.cota_h([-200, -75, 75, 200], 0, -16)
@@ -164,15 +164,15 @@ def corte_I(nome, org, sub, s_tipo):
     return v
 
 
-va = corte_I("CORTE A-A", (110, 170), "terça comum: CH-T1 no topo e CH-MF no fundo", "CH-T1")
-va.chamada((60, H - 6), (14, 30), "CH-T1 200×200×12,5")
-va.chamada((0, H + 150), (24, 10), "ST-1 soldado na fábrica (COB01)")
+va = corte_I("CORTE A-A", (128, 170), "terça comum: CH-T1 + ST-1; CH-MF + OR-1", "CH-T1")
+va.chamada((60, H - 6), (-18, 22), "CH-T1 200×200×12,5")
+va.chamada((0, H + 200), (24, 10), "ST-1 chapa 8×220×290 ASTM A36 + 2 enrij. 8×90×90, soldado na CH-T1 após a desforma (filete 6 mm, 2 lados) — terça parafusada na obra (2 M12 por ponta), ND-LET-COB01")
 va.chamada((-75, H - 80), (-16, 12), "4 pinos Ø16 c/ cabeça, L = 112")
-va.chamada((150, -50), (20, -14), "CH-MF + orelha OR-1 soldada")
+va.chamada((100, -50), (14, -40), "CH-MF 150×360×12,5 A36 + OR-1 8×300×100 A36 soldada após a desforma (M12)")
 va.chamada((-100, 60), (-18, 8), "2 pinos Ø12,5 c/ cabeça")
 va.chamada((100, P["y_cord"]), (22, 26), "6 cord. Ø12,7")
 
-vc = corte_I("CORTE C-C", (300, 170), "nó de contraventamento: CH-T2 e CH-MF", "CH-T2")
+vc = corte_I("CORTE C-C", (300, 170), "nó do X: CH-T2 + ST-1", "CH-T2")
 for yo in (-140, 140):
     vc.ret(yo - 45, H, 90, 80, "METALICA")
     vc.circulo((yo, H + 35 if yo > 0 else H + 70), 8, "METALICA")
