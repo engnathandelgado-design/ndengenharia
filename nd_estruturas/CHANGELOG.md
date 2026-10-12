@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Letsara: ND-LET-COB01 rev. 01 refeita no padrão das pranchas de cobertura de referência — planta de enterçamento de todo o pavilhão (1:175, marcas T-1..T-8, cadeia de espaçamentos, L = vão − 20, folgas de montagem), suporte de terça ST-1 (chapa 8×220×290 soldada na CH-T1/CH-T2, 2 M12 por ponta, furos centrados na alma a 100/200) e mão-francesa na orelha OR-1 (chapa 8×300×100 furada, soldada na CH-MF); ND-LET-COB02 (correntes, diagonais no ST-1, contraventamento, memória). TS01-1/TS01-3 rev. 02 sem luvas nem CT-1; `checar_conexoes` com 71 verificações.
+- docs/referencias_pranchas.md: convenções extraídas das pranchas de referência (metálica e pré-moldado) para o padrão de apresentação da ND.
 - prancha_nd: camadas de cor da armadura (ARMADURA azul = longitudinal, ARM_TRANSV magenta = transversal, ARM_PROT verde = cordoalhas) e `legenda_armadura`; aplicado em todas as pranchas.
 - Letsara: VM volta a ter dentes Gerber (I90, 45×30, MEF FS 1,14); CM01 rev. 01 com a locação de placas do R01 (vistas A–J, portões na linha 3); ND-LET-VT01 (vigas de travamento e vergas 25×60 a +5,50/+6,10 escondidas no fechamento); CP-VT nos pilares PL.
 - Letsara: pranchas de todas as peças — I110 (V405/406/407), VM (mezanino, I70 sem dente), VB-01 (15×90), PC-01/02 (50×50), PM-01, LA-01 (lajes) e CM-01 (placas); geradores genéricos `viga_i.py`, `pilar_generico.py`, `iso3d_pilar_gen.py`; galeria do artefato com as 17 páginas.

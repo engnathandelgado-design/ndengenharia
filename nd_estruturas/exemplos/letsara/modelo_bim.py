@@ -135,7 +135,7 @@ def montar() -> ModeloBIM:
     # 6. placas de fechamento conforme a locação do R01 (vistas A–J): perímetro (eixos A/E nas linhas 4–9 inteiros,
     #    linhas 1–4 só as 2 fiadas de cima = docas), fachada 9 inteira, fachada 1 só nas extremidades (A–B e D–E),
     #    parede da linha 2 inteira e parede da linha 3 com 4 portões (placas só acima de +6,10)
-    E_PL, Z_VERGA = 0.15, 6.10
+    E_PL, Z_VERGA = 0.15, 6.25
     def fiadas(z0=0.0):
         z = z0
         while z + 1.0 < TOPO_PLAT:
@@ -167,11 +167,11 @@ def montar() -> ModeloBIM:
     VT = PerfilRetangular(0.25, 0.60, "VT 25x60")
     for i in range(1, 8):
         for x in (0.0, LARG):
-            m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, Y_LIN[i] + 0.20, Z_VERGA - 0.30), (x, Y_LIN[i + 1] - 0.20, Z_VERGA - 0.30), "Vigas de travamento VT/VV")
+            m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, Y_LIN[i] + 0.20, Z_VERGA + 0.30), (x, Y_LIN[i + 1] - 0.20, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
     for xs, y in ((X_L2, Y_LIN[1]), (X_L3, Y_LIN[2])):
         for k, (xa, xb) in enumerate(itertools.pairwise(xs)):
             nome = "VV (verga do portão)" if (y == Y_LIN[2] and 1 <= k <= 4) else "VT"
-            m.linear("viga", nome, VT, (xa + 0.20, y, Z_VERGA - 0.30), (xb - 0.20, y, Z_VERGA - 0.30), "Vigas de travamento VT/VV")
+            m.linear("viga", nome, VT, (xa + 0.20, y, Z_VERGA + 0.30), (xb - 0.20, y, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
 
     # 7. insertos metálicos e conexões (para conferir no 3D o que está nas pranchas)
     INS = "Insertos metálicos"
@@ -240,7 +240,7 @@ def montar() -> ModeloBIM:
     m.pendente("Vigas do mezanino em I90 com dentes 45×30 (dente da I70 reprovado no MEF): assentos CP-MEZ +2,45 / +5,85; pé-direito livre sob a viga = nível − 1,15 m.")
     m.pendente("Comprimento entre fachadas adotado nos cálculos: 76,81 m (eixos 1–9). Conferir com o R01 (havia 79,75 em outro registro).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento e correntes não modelados no 3D.")
-    m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; altura dos portões adotada 5,50 m livres.")
+    m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; VT/VV 25×60 de +6,25 a +6,85 com dentes Gerber nos consolos CP-VT; altura livre dos portões 6,25 m.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
@@ -262,7 +262,7 @@ if __name__ == "__main__":
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
                  ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais PC-01/02 50×50"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia e cobertura metálica"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento, ST-1, mão-francesa) e COB02 (correntes, diagonais)"),
                  ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento (vistas A–J, portões)"), ("ND-LET-VT01", "vigas de travamento e vergas 25×60 (+5,50/+6,10)")]
         for nome, desc in LISTA:

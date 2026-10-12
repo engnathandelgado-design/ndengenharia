@@ -107,7 +107,7 @@ for s in MF_FUNDO:
         vi.circulo((s, yy), 9, "METALICA")
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
-vi.chamada((MF_FUNDO[0], 150), (8, 12), "CH-MF 150×360×12,5 + 2 luvas M16")
+vi.chamada((MF_FUNDO[0], 150), (8, 12), "CH-MF 150×360×12,5 (OR-1 soldada por baixo)")
 vi.chamada((EST[0], -260), (30, -14), "calço de estoque/transporte (2x)")
 vi.chamada((S_PINO[1], 150), (6, 14), "CH-A1 no fundo do dente")
 vi.cota_ord([0] + MF_FUNDO, -200, -6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in MF_FUNDO])
@@ -146,16 +146,14 @@ def corte_I(nome, org, sub, s_tipo):
         v.ponto_barra((x, P["y_cord"]), 12.7, "ARM_PROT_SECAO")
     dy = 190 if s_tipo == "CH-T2" else 100
     v.ret(-dy, H - 12.5, 2 * dy, 12.5, "METALICA")
-    for yy in (-50, 50):
-        v.ret(yy - 12, H - 12.5 - 40, 24, 40, "METALICA")                       # luva M16 soldada
+    v.ret(-110, H, 220, 290, "OCULTA")                                       # ST-1 soldado em cima (ND-LET-COB01)
     pinos = (-150, 0, 150) if s_tipo == "CH-T2" else (-75, 75)
     for yy in pinos:
         v.linha((yy, H - 12.5), (yy, H - 112.5), "METALICA"); v.ret(yy - 16, H - 120, 32, 8, "METALICA")
     if s_tipo == "CH-T2":
         v.poli([(-170, H - 140), (-170, H - 60), (170, H - 60), (170, H - 140)], "ARM_TRANSV")   # grampo U Ø10
     v.ret(-180, 0, 360, 12.5, "METALICA")                                       # CH-MF no fundo
-    for yy in (-150, 150):
-        v.ret(yy - 12, 12.5, 24, 40, "METALICA")
+    v.ret(-150, -100, 300, 100, "OCULTA")                                      # OR-1 soldada por baixo
     for yy in (-100, 100):
         v.linha((yy, 12.5), (yy, 92.5), "METALICA"); v.ret(yy - 12.5, 92.5, 25, 7, "METALICA")
     v.cota_h([-200, -75, 75, 200], 0, -16)
@@ -166,9 +164,9 @@ def corte_I(nome, org, sub, s_tipo):
 
 va = corte_I("CORTE A-A", (110, 170), "terça comum: CH-T1 no topo e CH-MF no fundo", "CH-T1")
 va.chamada((60, H - 6), (14, 30), "CH-T1 200×200×12,5")
-va.chamada((50, H - 40), (24, 18), "luva M16 soldada (2x)")
+va.chamada((0, H + 150), (24, 10), "ST-1 soldado na fábrica (COB01)")
 va.chamada((-75, H - 80), (-16, 12), "4 pinos Ø16 c/ cabeça, L = 112")
-va.chamada((150, 30), (20, 14), "CH-MF + 2 luvas M16 (orelha OR-1)")
+va.chamada((150, -50), (20, -14), "CH-MF + orelha OR-1 soldada")
 va.chamada((-100, 60), (-18, 8), "2 pinos Ø12,5 c/ cabeça")
 va.chamada((100, P["y_cord"]), (22, 26), "6 cord. Ø12,7")
 
@@ -247,9 +245,9 @@ pr.imagem(400, 312, 980, 488, "/home/claude/letsara/pranchas/ISO-TS01-geral-crop
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 n2 = sum(tipo_terca(s) == "CH-T2" for s in TER)
 ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "1,5", "ver planta"],
-       ["CH-T1", "Chapa 200×200×12,5 + 2 luvas M16 + 4 pinos Ø16", len(TER) - n2, "5,0", "terças pares"],
-       ["CH-T2", "Chapa 300×380×12,5 + 2 luvas + 4 orelhas + 6 pinos", n2, "14,5", f"nós c/ {2*PASSO_T}"],
-       ["CH-MF", "Chapa 150×360×12,5 + 2 luvas M16 + 2 pinos Ø12,5", len(MF_FUNDO), "6,1", "fundo, terça − 27"],
+       ["CH-T1", "Chapa 200×200×12,5 + 4 pinos Ø16 (+ ST-1 soldado)", len(TER) - n2, "4,6", "terças pares"],
+       ["CH-T2", "Chapa 300×380×12,5 + 4 orelhas + 6 pinos (+ ST-1)", n2, "14,3", f"nós c/ {2*PASSO_T}"],
+       ["CH-MF", "Chapa 150×360×12,5 + 2 pinos Ø12,5 (+ OR-1 soldada)", len(MF_FUNDO), "5,7", "fundo, terça − 27"],
        ["CH-MF2", "Chapa 120×90×9,5 + luva M16 + 2 pinos (lateral)", 4, "1,3", "dente, 2 faces"],
        ["TB-1", "Tubo Ø50×3,0 L=450 a prumo (pino PN-1 Ø20)", 2, "1,6", "no dente"],
        ["CH-A1", "Chapa 300×150×12,5 furo Ø52 + 4 grapas Ø10", 2, "5,2", "fundo do dente"]]
@@ -289,8 +287,8 @@ notas = [f"Fabricar a peça reta; fundo da fôrma com {L - 2 * LN} mm entre as f
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo) com o plano do fundo da viga.",
          "TB-1 a prumo na posição final (inclinado 3% na fôrma, gabarito). Cordoalhas cortadas rente à face do dente.",
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
-         "Estoque e transporte sobre 2 calços de madeira de 150 mm sob a mesa inferior, sem empilhamento. As orelhas OR-1 da mão-francesa são parafusadas na obra (nada sobressai do fundo na fábrica).",
-         "Chapas de topo e de fundo faceando o concreto, niveladas; luvas tamponadas na concretagem; tolerância ±5 mm.",
+         "Estoque e transporte sobre 2 calços de madeira de 150 mm sob a mesa inferior, sem empilhamento; as orelhas OR-1 sobressaem 100 mm do fundo (calços de 150 mm fora das OR-1). ST-1 e OR-1 soldados na fábrica após a desforma (ND-LET-COB01).",
+         "Chapas de topo e de fundo faceando o concreto, niveladas; tolerância ±5 mm.",
          f"Terças a cada {PASSO_T} mm; CH-MF no fundo deslocada 27 mm em relação à CH-T do topo (plano vertical da terça). Primeira e última terça: mão-francesa na CH-MF2, na face lateral do dente.",
          "Chaparia ASTM A36, galvanizada a fogo ou fundo epóxi após a desforma. Medidas em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

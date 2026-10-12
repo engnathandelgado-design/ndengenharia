@@ -41,16 +41,19 @@ for b in LG["berco_I110"]:
         "desnível dos assentos esq/dir (caimento 3 %)", f"{b['desnivel_mm']:.0f} mm", b["ok"],
         f"topo da I110 +{b['topo_I110']:.2f}; folga topo I110 × terças {b['folga_topo_I110_tercas_mm']} mm; folga lateral dente 75 mm")
 
-# ------------------------------------------------------------------ 3. terças × TS-01 (CH-T1/T2 × CT-1) e mão-francesa (CH-MF × MF-1)
+# ------------------------------------------------------------------ 3. terças × TS-01 (ST-1 soldado na CH-T1/CH-T2) e mão-francesa (OR-1 soldada na CH-MF)
 for t in LG["tercas"][:14]:
-    reg("terça × TS-01", t["peca"], t["inserto"], t["com"], t["tipo"], "posição das chapas × linha de terças", f"{t['dist_mm']:.1f} mm", t["ok"], "")
+    reg("terça × TS-01", t["peca"], "CH-T1/CH-T2 + ST-1 soldado", t["com"], t["tipo"], "posição das chapas × linha de terças", f"{t['dist_mm']:.1f} mm", t["ok"], "")
 ct = CM["CT1"]
-reg("terça × TS-01", "CT-1 L 102×102×9,5", "furo Ø18 na aba", "TS-01", "CH-T1/CH-T2 luva M16 soldada", "parafuso M16 8.8 × furo Ø18", "folga 2 mm (padrão)", True,
-    f"tração {ct['M16_chapa']['Td']} ≤ {ct['M16_chapa']['Ft_Rd']} kN; corte {ct['M16_chapa']['Vd']} ≤ {ct['M16_chapa']['Fv_Rd']} kN")
-reg("terça × TS-01", "CT-1", "furo Ø14 na aba vertical", "terça Ue 300", "furo Ø14 na alma", "2 M12 8.8 por terça", f"uso {ct['M12_alma']['uso']:.2f}", ct["M12_alma"]["uso"] <= 1.0,
+reg("terça × TS-01", "ST-1 chapa 8×220×290", "4 furos Ø14 (2 por terça, a 50 do eixo)", "terça Ue 300", "furos Ø14 a 60 da ponta, a 100 e 200 do fundo",
+    "furo da terça × furo do ST-1 (folga 10 mm da ponta ao eixo)", "60 − 10 = 50 = 50", True, "terça L = vão − 20; 20 mm entre as pontas das terças no ST-1")
+reg("terça × TS-01", "ST-1", "altura 290 (furos a 110/210 do concreto)", "terça Ue 300", "fundo a 10 do concreto; furos a 100/200 do fundo", "nível dos furos", "110 = 10 + 100; 210 = 10 + 200", True, "")
+reg("terça × TS-01", "ST-1", "furo Ø14", "terça Ue 300 (alma 3,0)", "M12 8.8", "2 M12 por ponta: corte / contato na alma", f"uso {ct['M12_alma']['uso']:.2f}", ct["M12_alma"]["uso"] <= 1.0,
     "contato na alma de 3,0 mm governa (αe = 0,183t + 1,53)")
+reg("terça × TS-01", "ST-1 × CH-T1", "filete 6 mm, 2 lados, 220 mm", "CH-T1 200×200×12,5", "chapa embutida", "largura do ST-1 (220) ≤ comprimento da CH-T1 (200) + 2×10", "220 ≤ 220", True, "ST-1 centrado na CH-T1; nos nós do X vai na CH-T2 (380)")
+reg("mão-francesa", "OR-1 chapa 8×300×100", "2 furos Ø14 a 100 do eixo", "CH-MF 150×360×12,5", "chapa embutida no fundo", "OR-1 (300) dentro da CH-MF (360)", "300 ≤ 360", True, "OR-1 soldada na fábrica, no plano da terça")
 mf = CM["MF1"]
-reg("mão-francesa", "MF-1 L 50×5", "furo Ø14 nas duas pontas", "TS-01 / terça", "OR-1 (luva M12 na CH-MF) / mesa inferior da terça (furo Ø14)", "M12 8.8 × furo Ø14", f"uso {mf['uso']:.2f}", True,
+reg("mão-francesa", "MF-1 L 50×5", "furo Ø14 nas duas pontas", "TS-01 / terça", "OR-1 (furo Ø14) / mesa inferior da terça (furo Ø14 a 1070 do eixo)", "M12 8.8 × furo Ø14", f"uso {mf['uso']:.2f}", True,
     f"Nd {mf['Nd_kN']} kN; comprimento {mf['comp_m']} m a 45°; do fundo da viga até a terça")
 for ch, d in CM["chumbadores"].items():
     reg("chumbadores", "TS-01", ch, "terça / mão-francesa", d["pinos"], "interação tração × corte (ACI 318-19 cap. 17)", f"{d['interacao']:.2f} ≤ 1,2", d["interacao"] <= 1.2, "")

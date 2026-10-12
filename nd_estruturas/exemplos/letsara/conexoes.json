@@ -409,7 +409,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L2 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -420,7 +420,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L3 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -431,7 +431,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L4 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -442,7 +442,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L5 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -453,7 +453,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L6 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -464,7 +464,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L7 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -475,7 +475,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L8 esq",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (esq)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -486,7 +486,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L2 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -497,7 +497,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L3 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -508,7 +508,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L4 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -519,7 +519,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L5 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -530,7 +530,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L6 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -541,7 +541,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L7 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -552,7 +552,7 @@
  {
   "grupo": "terça × TS-01",
   "peca_a": "TS-01 L8 dir",
-  "inserto_a": "CH-T1/T2",
+  "inserto_a": "CH-T1/CH-T2 + ST-1 soldado",
   "peca_b": "linha de terças (dir)",
   "inserto_b": "Ue 300×85×25×3,00",
   "verificacao": "posição das chapas × linha de terças",
@@ -562,32 +562,65 @@
  },
  {
   "grupo": "terça × TS-01",
-  "peca_a": "CT-1 L 102×102×9,5",
-  "inserto_a": "furo Ø18 na aba",
-  "peca_b": "TS-01",
-  "inserto_b": "CH-T1/CH-T2 luva M16 soldada",
-  "verificacao": "parafuso M16 8.8 × furo Ø18",
-  "valor": "folga 2 mm (padrão)",
+  "peca_a": "ST-1 chapa 8×220×290",
+  "inserto_a": "4 furos Ø14 (2 por terça, a 50 do eixo)",
+  "peca_b": "terça Ue 300",
+  "inserto_b": "furos Ø14 a 60 da ponta, a 100 e 200 do fundo",
+  "verificacao": "furo da terça × furo do ST-1 (folga 10 mm da ponta ao eixo)",
+  "valor": "60 − 10 = 50 = 50",
   "ok": true,
-  "obs": "tração 9.79 ≤ 89.4 kN; corte 19.25 ≤ 47.7 kN"
+  "obs": "terça L = vão − 20; 20 mm entre as pontas das terças no ST-1"
  },
  {
   "grupo": "terça × TS-01",
-  "peca_a": "CT-1",
-  "inserto_a": "furo Ø14 na aba vertical",
+  "peca_a": "ST-1",
+  "inserto_a": "altura 290 (furos a 110/210 do concreto)",
   "peca_b": "terça Ue 300",
-  "inserto_b": "furo Ø14 na alma",
-  "verificacao": "2 M12 8.8 por terça",
+  "inserto_b": "fundo a 10 do concreto; furos a 100/200 do fundo",
+  "verificacao": "nível dos furos",
+  "valor": "110 = 10 + 100; 210 = 10 + 200",
+  "ok": true,
+  "obs": ""
+ },
+ {
+  "grupo": "terça × TS-01",
+  "peca_a": "ST-1",
+  "inserto_a": "furo Ø14",
+  "peca_b": "terça Ue 300 (alma 3,0)",
+  "inserto_b": "M12 8.8",
+  "verificacao": "2 M12 por ponta: corte / contato na alma",
   "valor": "uso 0.95",
   "ok": true,
   "obs": "contato na alma de 3,0 mm governa (αe = 0,183t + 1,53)"
+ },
+ {
+  "grupo": "terça × TS-01",
+  "peca_a": "ST-1 × CH-T1",
+  "inserto_a": "filete 6 mm, 2 lados, 220 mm",
+  "peca_b": "CH-T1 200×200×12,5",
+  "inserto_b": "chapa embutida",
+  "verificacao": "largura do ST-1 (220) ≤ comprimento da CH-T1 (200) + 2×10",
+  "valor": "220 ≤ 220",
+  "ok": true,
+  "obs": "ST-1 centrado na CH-T1; nos nós do X vai na CH-T2 (380)"
+ },
+ {
+  "grupo": "mão-francesa",
+  "peca_a": "OR-1 chapa 8×300×100",
+  "inserto_a": "2 furos Ø14 a 100 do eixo",
+  "peca_b": "CH-MF 150×360×12,5",
+  "inserto_b": "chapa embutida no fundo",
+  "verificacao": "OR-1 (300) dentro da CH-MF (360)",
+  "valor": "300 ≤ 360",
+  "ok": true,
+  "obs": "OR-1 soldada na fábrica, no plano da terça"
  },
  {
   "grupo": "mão-francesa",
   "peca_a": "MF-1 L 50×5",
   "inserto_a": "furo Ø14 nas duas pontas",
   "peca_b": "TS-01 / terça",
-  "inserto_b": "OR-1 (luva M12 na CH-MF) / mesa inferior da terça (furo Ø14)",
+  "inserto_b": "OR-1 (furo Ø14) / mesa inferior da terça (furo Ø14 a 1070 do eixo)",
   "verificacao": "M12 8.8 × furo Ø14",
   "valor": "uso 0.07",
   "ok": true,

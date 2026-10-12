@@ -79,7 +79,7 @@ p = pv.Plotter(off_screen=True, window_size=(2400, 900)); p.set_background("whit
 cena(p)
 rot(p, [(ALCAS[0], 0, H + 0.14), (ALCAS[1], 0, H + 0.14), (TERCAS[3], 0, H + 0.0125), (NOS[2], 0, H + 0.0125),
         (TERCAS[9] - 0.027, 0.18, -0.0125), (L - 0.15, 0.2, HD), (0.15, 0.2, 0.70)],
-    ["AL-1 (4 alças de cordoalha)", "AL-1", "CH-T1 (terça)", "CH-T2 (terça + contraventamento)",
+    ["AL-1 (4 alças de cordoalha)", "AL-1", "CH-T1 + ST-1 (terça)", "CH-T2 (terça + contraventamento)",
      "CH-MF no fundo (mão-francesa)", "dente + CH-A1 + neoprene + pino", "dente Gerber / ponta a prumo"])
 p.enable_parallel_projection()
 p.camera_position = [(L * 0.5 - 8, -14, 9), (L * 0.5, 0, 0.45), (0, 0, 1)]
@@ -103,8 +103,8 @@ for sg in (1, -1):
     p.add_mesh(pv.Line((NOS[0], sg * 0.12, H + 0.02), (NOS[1], sg * 1.6, H + 0.02)).tube(radius=0.007), color="#b03a2e")
 rot(p, [(TERCAS[1], 0.8, H + 0.32), (TERCAS[1] - 0.08, -0.03, H + 0.11), (TERCAS[1] - 0.01, 0.6, 0.45),
         (1.2, 0.85, H + 0.03), (0.15, 0.2, HD - 0.2), (TERCAS[1] - 0.027, -0.15, -0.0125), (0.3, -0.2, 0.2)],
-    ["terça Ue 300×85×25×3,00", "cantoneira CT-1 (2 M16 na CH-T1)", "mão-francesa L50×5 (do fundo da viga até a terça)",
-     "contraventamento Ø12,5 A36 (CH-T2)", "consolo + neoprene + pino PN-1", "CH-MF + orelha OR-1", "dente Gerber"])
+    ["terça Ue 300×85×25×3,00", "suporte ST-1 soldado na CH-T1 (2 M12 por terça)", "mão-francesa L50×5 (do fundo da viga até a terça)",
+     "contraventamento Ø12,5 A36 (CH-T2)", "consolo + neoprene + pino PN-1", "CH-MF + orelha OR-1 (chapa soldada)", "dente Gerber"])
 p.enable_parallel_projection()
 p.camera_position = [(-3.2, -5.4, 1.6), (1.5, 0, 0.45), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.1)

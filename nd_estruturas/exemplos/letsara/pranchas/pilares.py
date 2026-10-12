@@ -29,8 +29,8 @@ Z_PLACA = [1250 * k - 100 for k in range(1, 9)]          # insertos das placas (
 Z_PLACA_ABS = [z + L_CAL for z in Z_PLACA]
 AL = [L_TOT - 3200, L_CAL + 2300]                        # alças (a partir da base): içamento na vertical e transporte
 COB = 30                                                 # NBR 6118:2023 Tab. 7.2 — CAA II, pilar: 30 mm (sem a redução de 5 mm)
-Z_VT = 5490 + 1000                                       # assento do consolo CP-VT (viga de travamento 25×60, fundo +5,50) — faces B e D
-VT = dict(larg=250, proj=200, h=300, hp=200)
+Z_VT = 6540 + 1000                                       # assento do consolo CP-VT: viga VT 25×60 (+6,25/+6,85) com dente 30×20 — faces B e D
+VT = dict(larg=250, proj=250, h=300, hp=200)
 zc = Z_CONS["P1"] + L_CAL                                # topo do consolo (a partir da base)
 json.dump(dict(B=B, H=H, L_TOT=L_TOT, zc=zc, cons=CONS, incl=I_CAI, pino_x=PINO["x"], z_placa_abs=Z_PLACA_ABS, al=AL),
           open("/home/claude/letsara/pranchas/pilar_geom.json", "w"))
@@ -49,7 +49,7 @@ MARCAS = [
     ("PL-08", "P2 L9 canto", 1, "CP-VB +8,650 (B)", "8 IP-01 (C) + 8 (D)"),
     ("PF-01", "P3 e P15", 2, "2 CP-VB +7,750 (B e D); P3: 2 CP-MEZ", "8 IP-01 (C)"),
     ("PF-02", "P4", 1, "2 CP-VB +8,060 (B e D); 2 CP-MEZ", "8 IP-01 (C)"),
-    ("PF-04", "P14 (L9, eixo C)", 1, "2 CP-VB +8,060 (B e D); CP-I110 +8,190 (face interna, V405)", "8 IP-01 (C)"),
+    ("PF-04", "P14 (L9, C)", 1, "2 CP-VB +8,060; CP-I110 +8,190 (V405)", "8 IP-01 (C)"),
     ("PF-03", "P5 e P16", 2, "2 CP-VB +8,350 (B e D); P5: 2 CP-MEZ", "8 IP-01 (C)"),
 ]
 N_PIL = sum(m[2] for m in MARCAS)
@@ -107,7 +107,7 @@ pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO
 pr.revisao("00", "12/10/2026", "EMISSÃO PARA COMPARAÇÃO DE CUSTO (OPÇÕES A E B)")
 pr.revisao("01", "12/10/2026", "VISTAS DAS FACES A/B/C, ISOMÉTRICOS, PLANTA-CHAVE, COTAS EM CM, ESTRIBOS E COBRIMENTOS CONFORME NBR 6118")
 pr.revisao("02", "12/10/2026", "PILAR DESENHADO EM PÉ (POSIÇÃO DE MONTAGEM); CHAPARIA HACHURADA; DETALHE DE PROTENSÃO (FORÇA NO MACACO)")
-pr.revisao("03", "12/10/2026", "CONSOLOS CP-VT (VIGAS DE TRAVAMENTO +5,50/+6,10) NAS FACES B E D; CORES DAS ARMADURAS")
+pr.revisao("03", "12/10/2026", "CONSOLOS CP-VT (DENTES DAS VIGAS DE TRAVAMENTO +6,25/+6,85) NAS FACES B E D; CORES DAS ARMADURAS")
 Q = pr.quadro                     # (25, 10, 1179, 831)
 ESC = 20
 XC = Q[2] - 190                   # coluna de tabelas à direita
@@ -194,7 +194,7 @@ chaves_frente(vA, B)
 for x0, lado in ((B, 1), (0, -1)):
     vA.poli([(x0, Z_VT - VT["h"]), (x0 + lado * VT["proj"], Z_VT - VT["hp"]), (x0 + lado * VT["proj"], Z_VT), (x0, Z_VT)], "VISTA")
     vA.chapa(x0 + (25 if lado > 0 else -25 - 150), Z_VT, 150, 10)
-vA.chamada((B + VT["proj"], Z_VT), (10, 10), "CP-VT (faces B e D) +5,490")
+vA.chamada((B + VT["proj"], Z_VT), (10, 10), "CP-VT (faces B e D) +6,540")
 vA.cota_v([0, L_CAL, Z_VT, zc - CONS["h"], zc, L_TOT], 0, -9)
 vA.cota_v([L_CAL, AL[1], AL[0], L_TOT], B, 9, total=False)
 vA.cota_h([0, B], 0, -8)
@@ -223,7 +223,7 @@ for z in AL:
     vB.poli([(H, z - 50), (H + 110, z - 50), (H + 150, z), (H + 110, z + 50), (H, z + 50)], "METALICA")
 vB.ret((H - VT["larg"]) / 2, Z_VT - VT["h"], VT["larg"], VT["h"], "VISTA"); vB.linha(((H - VT["larg"]) / 2, Z_VT - VT["hp"]), ((H + VT["larg"]) / 2, Z_VT - VT["hp"]), "VISTA")
 vB.chapa(H / 2 - 10, Z_VT, 20, 300); vB.chapa(H / 2 - 75, Z_VT, 150, 10)
-vB.chamada((H / 2, Z_VT - 150), (12, -12), "CP-VT 25×20×30/20 + PN-1 (viga VT-xx)")
+vB.chamada((H / 2, Z_VT - 150), (12, -12), "CP-VT 25×25×30/20 + PN-1 (dente da VT)")
 vB.cota_ord_v(ORD, 0, -9, y0=0, rotulos=ORD_R)
 vB.cota_v([0, L_CAL, c0, zc, L_TOT], H + CONS["proj"], 9)
 vB.cota_h([0, H, H + CONS["proj"]], 0, -8, total=False)
@@ -426,7 +426,7 @@ if PROT:
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=10, y=250, forca=SIG_PI * 98.7 / 1000, isol=0)], 60)
     y = tc["y_base"]
 ins = [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo), a 175 mm da face", 3, "CP-TS (face A) e 2 CP-VT (faces B e D)"],
-       ["CP-VT", "Consolo 25×20×30/20 p/ viga VT 25×60 (+5,490)", 2, "faces B e D (canto: 1)"],
+       ["CP-VT", "Consolo 25×25×30/20 p/ dente da VT 25×60 (+6,540)", 2, "faces B e D (canto: 1)"],
        ["IP-01", "Chapa A36 150×150×9,5 + 2 pinos Ø12,5 c/ cabeça (p/ CM-01)", 8, "face C, c/1250 a partir do piso"],
        ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700), carga 40 kN", 2, "face A: 3200 do topo; 2300 da base"],
        ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30 (montagem)", 1, "sobre o consolo"]]
@@ -451,7 +451,7 @@ notas = [("Concreto C50; cordoalhas CP-190 RB Ø12,7 na grade da cabeceira (pass
          "Cobrimento nominal 3,0 cm aos estribos (NBR 6118:2023 Tab. 7.2, CAA II); espaçadores plásticos a cada 100 cm nas 4 faces.",
          f"Estribos N2 Ø8 fechados com ganchos de 135° (8 cm), c/15 no trecho corrente e c/10 nos 150 cm junto ao topo e no cálice; "
          "2 grampos N3 Ø8 por estribo nas linhas a 8,4 cm do eixo (NBR 6118:2023 18.4.3).",
-         "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela. Consolos CP-VT (2 Ø12,5 tirante + 2 estribos Ø8) nas faces B e D em +5,490 para as vigas de travamento VT 25×60 (ND-LET-VT01), escondidas no fechamento.",
+         "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela. Consolos CP-VT (2 Ø12,5 tirante + 2 estribos Ø8) nas faces B e D em +6,540 para os dentes das vigas de travamento VT 25×60 (+6,25/+6,85, ND-LET-VT01), escondidas atrás da fiada de placas +6,25/+7,50.",
          "Pino PN-1 Ø20 CA-50 (resiste 82 kN ≥ Hd 40 kN): concretado no consolo; tubo TB-1 Ø50×3,0 da viga (furo 44), grauteado numa ponta só de cada viga.",
          "Faces: A = consolo (interna), B e D = lados de 40, C = placas (externa). Pilar concretado deitado com a face A para cima e a face C no fundo da fôrma.",
          "Insertos IP-01 na face C a cada fiada de placa (125 cm a partir do piso); chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",

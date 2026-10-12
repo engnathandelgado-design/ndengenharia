@@ -4,6 +4,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Agora
 
+- [ ] Letsara MC04 — 2º estágio das vigas do mezanino VM: análise em duas fases (seção pré-moldada → seção composta com capa), cisalhamento na interface (NBR 9062:2017 item 6.3.5), estribos salientes no vão entre as lajes + capa, negativas sobre a viga; atualizar VM01 e a memória.
+- [ ] Aplicar docs/referencias_pranchas.md ao prancha_nd: escala gráfica por vista, bolhas de corte/detalhe no padrão, lista de materiais com peso em toda prancha metálica, tabela de ferros por unidade e por N unidades, resumo por bitola.
 - [ ] Módulo `prefabricados` (DEC-008) — falta: objeto peça/armadura/inserto, volume/peso/CG, marcas por identidade, listas. Coeficientes ainda soltos no código: migrar para o registro de normas.
 - [ ] Prancha de peça automática (fôrma + armação + quadro da peça + dobramento) e planta de montagem, usando `prancha_nd.py`.
 - [ ] Teste real com a obra Letsara (precisa do PDF arquitetônico R01).

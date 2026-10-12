@@ -10,7 +10,8 @@ Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
 X_FACH = [0.0, 9.87, 20.05, 29.63, 40.10]
 H_PL, E_PL, JUNTA = 1250, 150, 10
 Z_TOPO = 10000
-Z_VERGA = 6100                                   # topo das vergas / vigas de travamento (fundo +5,50 = altura livre dos portões)
+Z_VERGA = 6250                                   # fiada de placas sobre os portões começa aqui; VT/VV 25×60 ficam de +6,25 a +6,85, atrás dessa fiada
+Z_VT0, Z_VT1 = 6250, 6850                        # fundo e topo das vigas VT/VV; dente Gerber 30×20 -> assento do consolo CP-VT +6,54
 # pilares da linha 3 (parede dos portões): P1, P9 (40×40), P10 (25×25), P11 (40×40), P10, P12 (40×40), P2
 X_L3 = [(0.0, 600, "PL-01"), (9.87, 400, "P9 40×40"), (14.96, 250, "P10 25×25"), (20.05, 400, "P11 40×40"), (25.14, 250, "P10 25×25"), (29.63, 400, "P12 40×40"), (40.10, 600, "PL-05")]
 # linha 2 (parede do mezanino): P1, P8, P8A, P8B, P6 (25×40), P2
@@ -73,7 +74,7 @@ MARCA = {k: f"CM-{i+1:02d}" for i, k in enumerate(ordem)}
 
 def desenhar_vista(pr, v, origem, esc=200):
     d = VISTAS[v]
-    sub = "placas 125 × 15 (juntas 10 mm); VT/VV 25×60 a +6,10 atrás das placas" if len(d["bays"]) > 2 else "idem"
+    sub = "placas 125 × 15 (juntas 10 mm); VT/VV 25×60 de +6,25 a +6,85 atrás das placas" if len(d["bays"]) > 2 else "idem"
     vv = pr.vista(f"VISTA {v}", origem, esc, titulo=d["titulo"], subtitulo=sub, unidade="cm")
     x0 = d["pil"][0][0]
     for x, b in d["pil"]:
@@ -82,13 +83,13 @@ def desenhar_vista(pr, v, origem, esc=200):
     for k, (xa, xb, ba, bb) in enumerate(d["bays"]):
         gate = any(a <= k <= b for a, b in d["portao"])
         if gate:
-            vv.ret(xa + ba / 2 + JUNTA, Z_VERGA - 600, xb - xa - (ba + bb) / 2 - 2 * JUNTA, 600, "OCULTA")       # verga escondida
-            vv.texto(((xa + xb) / 2, Z_VERGA - 300), "VV", "min", "MIDDLE_CENTER")
-            vv.poli([(xa + ba / 2 + 150, 0), (xa + ba / 2 + 150, Z_VERGA - 600), (xb - bb / 2 - 150, Z_VERGA - 600), (xb - bb / 2 - 150, 0)], "EIXO")
+            vv.ret(xa + ba / 2 + JUNTA, Z_VT0, xb - xa - (ba + bb) / 2 - 2 * JUNTA, Z_VT1 - Z_VT0, "OCULTA")       # verga escondida
+            vv.texto(((xa + xb) / 2, Z_VT0 - 300), "VV", "min", "MIDDLE_CENTER")
+            vv.poli([(xa + ba / 2 + 150, 0), (xa + ba / 2 + 150, Z_VERGA), (xb - bb / 2 - 150, Z_VERGA), (xb - bb / 2 - 150, 0)], "EIXO")
             if k == d["portao"][0][0]:
-                vv.texto(((d["bays"][d["portao"][0][0]][0] + d["bays"][d["portao"][0][1]][1]) / 2, 2500), "PORTÕES — vão livre 5,50 m; vergas VV-xx 25×60 (+5,50/+6,10) escondidas nas placas", "nota", "MIDDLE_CENTER")
+                vv.texto(((d["bays"][d["portao"][0][0]][0] + d["bays"][d["portao"][0][1]][1]) / 2, 2500), "PORTÕES — vão livre 6,25 m; vergas VV 25×60 (+6,25/+6,85) escondidas atrás da fiada +6,25/+7,50", "nota", "MIDDLE_CENTER")
         else:
-            vv.ret(xa + JUNTA / 2, Z_VERGA - 600, xb - xa - JUNTA, 600, "OCULTA")                                       # VT escondida
+            vv.ret(xa + JUNTA / 2, Z_VT0, xb - xa - JUNTA, Z_VT1 - Z_VT0, "OCULTA")                                       # VT escondida
         for (z0, z1) in d["fiadas"]:
             if gate and z0 < Z_VERGA:
                 continue
@@ -98,7 +99,7 @@ def desenhar_vista(pr, v, origem, esc=200):
             if z0 == d["fiadas"][len(d["fiadas"]) // 2][0] or (gate and z0 == Z_VERGA):
                 vv.texto(((xa + xb) / 2, z0 + (z1 - z0) / 2), MARCA[(L, z1 - z0)], "min", "MIDDLE_CENTER")
     vv.cota_h([x for x, _ in d["pil"]], -1000, -8)
-    vv.cota_v([0, Z_VERGA - 600, Z_VERGA, Z_TOPO], d["pil"][-1][0] + 600, 8, total=False)
+    vv.cota_v([0, Z_VT0, Z_VT1, Z_TOPO], d["pil"][-1][0] + 600, 8, total=False)
     if "nomes" in d:
         for (x, _), n in zip(d["pil"], d["nomes"]):
             vv.texto((x, Z_TOPO + 400), n, "min", "BOTTOM_CENTER")
@@ -113,13 +114,13 @@ def prancha_cm():
                             conteudo="PLACAS DE FECHAMENTO PROTENDIDAS 125 × 15 — LOCAÇÃO CONFORME R01 (VISTAS A A J), PORTÕES NA LINHA 3, SEÇÃO E LIGAÇÃO COM OS PILARES",
                             desenho="ND-LET-CM01", folha="01/01", fase="PARA APROVAÇÃO", marca="CM-01", qtd=len(PLACAS[ordem[0]]), peso=f(1.25 * 0.15 * L0 / 1000 * 25, 1), volume=f(1.25 * 0.15 * L0 / 1000, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
-    pr.revisao("01", "12/10/2026", "LOCAÇÃO E VISTAS CONFORME R01 (A–J); PORTÕES NA LINHA 3 COM VERGAS A +6,10 ESCONDIDAS NO FECHAMENTO")
+    pr.revisao("01", "12/10/2026", "LOCAÇÃO E VISTAS CONFORME R01 (A–J); PORTÕES NA LINHA 3; VT/VV COM DENTES, DE +6,25 A +6,85, ATRÁS DA FIADA +6,25")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
     pr.texto(Q[0] + 10, Q[3] - 24, "CM", "grande", "TITULO")
     pr.texto(Q[0] + 50, Q[3] - 24, f"PLACAS DE FECHAMENTO PROTENDIDAS 125 × 15 — {len(ordem)} MARCAS · {n_tot} PLACAS · VISTAS A A J", "titulo", "TITULO")
-    pr.texto(Q[0] + 10, Q[3] - 14, "por fora dos pilares (juntas de 10 mm no eixo dos pilares); 4 cord. Ø9,5 CP-190; fixação nos IP-01; nas bays dos portões as placas começam em +6,10 sobre a verga VV-01", "nota", "TEXTO")
+    pr.texto(Q[0] + 10, Q[3] - 14, "por fora dos pilares (juntas de 10 mm no eixo dos pilares); 4 cord. Ø9,5 CP-190; fixação nos IP-01; nas bays dos portões as placas começam na fiada +6,25 (placas inteiras) e a verga VV fica atrás dela", "nota", "TEXTO")
     # planta de locação 1:400
     kp = pr.vista("LOCAÇÃO", (Q[0] + 345, Q[3] - 395), 400, titulo="PLANTA DE LOCAÇÃO DAS PLACAS", subtitulo="letras = vistas (como no R01); linha 3 = parede dos portões", unidade="cm")
     for y in Y_LIN:
@@ -166,13 +167,13 @@ def prancha_cm():
     s.ret(0, 0, 600, 4000, "VISTA")                                                                 # pilar (atrás)
     s.ret(0, 0, 250, 0, "VISTA")
     s.poli([(0, 0), (250, 0), (250, 4000), (0, 4000)], "OCULTA")
-    s.ret(-50, 1500 - 600, 250, 600, "CORTADO"); s.hachura([(-50, 900), (200, 900), (200, 1500), (-50, 1500)], "AR-CONC", 0.03)     # VT em corte
+    s.ret(-50, 2250, 250, 600, "CORTADO"); s.hachura([(-50, 2250), (200, 2250), (200, 2850), (-50, 2850)], "AR-CONC", 0.03)     # VT em corte (+6,25/+6,85)
     s.chapa(-50 - 9.5, 2400, 9.5, 150); s.chapa(-50 - 9.5, 1150, 9.5, 150)
     s.cota_h([-E_PL - 50, -50, 200, 600], 0, -10, total=False)
-    s.cota_v([0, 900, 1500, 2500, 3750], 600, 10, total=False)
-    s.chamada((-100, 3300), (-6, 14), "placa CM 125 × 15"); s.chamada((100, 1200), (14, 10), "VT / VV 25×60 (+5,50/+6,10) atrás da placa")
+    s.cota_v([0, 1250, 2250, 2500, 2850, 3750], 600, 10, total=False)
+    s.chamada((-100, 3300), (-6, 14), "placa CM 125 × 15"); s.chamada((100, 2550), (14, 10), "VT / VV 25×60 (+6,25/+6,85) atrás da placa")
     s.chamada((-55, 2475), (-8, 24), "IP-01 + cantoneira (rev. 00, det. 1)"); s.chamada((400, 3500), (10, 10), "pilar 40×60 (ao fundo)")
-    s.texto((275, -600), "nível indicativo: corte na altura +4,00 a +7,75", "min", "MIDDLE_CENTER")
+    s.texto((275, -600), "nível indicativo: corte de +4,00 a +8,00 (fiadas 5,00 · 6,25 · 7,50)", "min", "MIDDLE_CENTER")
     # tabela de marcas
     y = Q[3] - 6
     linhas = []
@@ -186,8 +187,8 @@ def prancha_cm():
            ["Placas sobre a verga (vão ≈ 4,9 m)", "folga ampla"], ["Fixação (4 cantoneiras)", "R = 2,6 kN por ponto"]]
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118 / NBR 6123)", ["VERIFICAÇÃO", "RESULTADO"], mem, [70, 112])
     pr.notas(XC, y - 4, ["Locação e vistas conforme o R01 do cliente (vistas A a J): perímetro, parede da linha 2 (G/I) e parede da linha 3 (C) com 4 portões entre P9, P10, P11, P10 e P12.",
-                         "Nas bays dos portões as placas começam em +6,10, sobre a verga VV-01 25×60 (ND-LET-VT01), que fica escondida atrás das placas; vão livre dos portões 5,50 m — confirmar a altura dos portões com o cliente.",
-                         "Vigas de travamento VT-01 25×60 em todos os demais vãos, no mesmo nível (+5,50 a +6,10), entre os pilares e atrás das placas: não aparecem pela face externa.",
+                         "Nas bays dos portões as placas começam na fiada +6,25 (só placas de altura inteira, 3 fiadas até +10,00); a verga VV 25×60 fica de +6,25 a +6,85, atrás dessa fiada; vão livre dos portões 6,25 m — confirmar a altura dos portões com o cliente.",
+                         "Vigas de travamento VT 25×60 em todos os demais vãos, no mesmo nível (+6,25 a +6,85), com dentes Gerber nos consolos CP-VT dos pilares, entre os pilares e atrás das placas: não aparecem pela face externa.",
                          "Vistas E e F (eixos A e E entre as linhas 1 e 4): só as 2 fiadas de cima (docas abertas) — a confirmar; vistas H e J: fachada da linha 1 nas extremidades, centro aberto — a confirmar.",
                          "Placas protendidas 125 × 15 (C40) com 4 cordoalhas Ø9,5; encaixe macho-fêmea; fixação em cada ponta por 2 cantoneiras soldadas ao IP-01 do pilar e ao CH-P1 da placa (detalhe na rev. 00).",
                          "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
@@ -217,17 +218,17 @@ def prancha_vt():
     L0 = lista[0][0]
     peso = lambda L: 0.25 * 0.60 * L * 25
     pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                            conteudo="VIGAS DE TRAVAMENTO VT E VERGAS DOS PORTÕES VV (25 × 60, +5,50 A +6,10) — PLANTA, ELEVAÇÃO, SEÇÃO, APOIO E ARMAÇÃO",
+                            conteudo="VIGAS DE TRAVAMENTO VT E VERGAS DOS PORTÕES VV (25 × 60, +6,25 A +6,85, DENTES GERBER) — PLANTA, ELEVAÇÃO, SEÇÃO, APOIO E ARMAÇÃO",
                             desenho="ND-LET-VT01", folha="01/01", fase="PARA APROVAÇÃO", marca="VT-01", qtd=len(lista[0][1]) * 2, peso=f(peso(L0), 1), volume=f(0.15 * L0, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
     pr.texto(Q[0] + 10, Q[3] - 24, "VT / VV", "grande", "TITULO")
-    pr.texto(Q[0] + 75, Q[3] - 24, "VIGAS DE TRAVAMENTO E VERGAS 25 × 60 cm — NÍVEL +5,50 / +6,10 — ESCONDIDAS NO FECHAMENTO", "titulo", "TITULO")
-    pr.texto(Q[0] + 10, Q[3] - 14, "entre os pilares, atrás das placas; nas bays dos portões (linha 3) a viga é a verga VV, no mesmo nível, deixando 5,50 m livres", "nota", "TEXTO")
+    pr.texto(Q[0] + 75, Q[3] - 24, "VIGAS DE TRAVAMENTO E VERGAS 25 × 60 cm — +6,25 / +6,85 — DENTES GERBER NOS CONSOLOS CP-VT — ESCONDIDAS NO FECHAMENTO", "titulo", "TITULO")
+    pr.texto(Q[0] + 10, Q[3] - 14, "entre os pilares, atrás da fiada de placas +6,25/+7,50; nas bays dos portões (linha 3) a viga é a verga VV, no mesmo nível, deixando 6,25 m livres", "nota", "TEXTO")
     # planta 1:400 no nível +6,10
-    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 270), 400, titulo="PLANTA — VIGAS DE TRAVAMENTO E VERGAS (NÍVEL +6,10)", subtitulo="VT nos eixos A e E (linhas 2–9) e nas linhas 2 e 3; VV nos portões", unidade="cm")
+    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 270), 400, titulo="PLANTA — VIGAS DE TRAVAMENTO E VERGAS (NÍVEL +6,25 / +6,85)", subtitulo="VT nos eixos A e E (linhas 2–9) e nas linhas 2 e 3; VV nos portões", unidade="cm")
     for y in Y_LIN:
         v.linha((M(-1.5), M(y)), (M(41.6), M(y)), "EIXO")
     for x in X_FACH:
@@ -257,22 +258,23 @@ def prancha_vt():
             v.texto((M((xa + xb) / 2), M(y) + 300), MK[round(L, 2)], "min", "BOTTOM_CENTER")
     v.cota_h([M(x) for x in X_FACH], M(-1.5), -6); v.cota_v([M(y) for y in Y_LIN], M(41.6), 6)
     # elevação da parede da linha 3 (1:200) com portões e vergas
-    e = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 365), 200, titulo="ELEVAÇÃO — LINHA 3 (PORTÕES): VERGAS VV ESCONDIDAS NAS PLACAS", subtitulo="vista do pavilhão; placas acima de +6,10", unidade="cm")
+    e = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 365), 200, titulo="ELEVAÇÃO — LINHA 3 (PORTÕES): VERGAS VV ESCONDIDAS NAS PLACAS", subtitulo="vista do pavilhão; placas acima de +6,25", unidade="cm")
     for x, b, n in X_L3:
         e.ret(M(x) - b / 2, -1000, b, 11000, "CORTADO"); e.texto((M(x), 10400), n, "min", "BOTTOM_CENTER")
     e.linha((-1500, 0), (M(41.6), 0), "TERRENO")
     for (xa, ba, _), (xb, bb, _) in zip(X_L3[:-1], X_L3[1:]):
         L = xb - xa - (ba + bb) / 2000
-        e.ret(M(xa) + ba / 2, Z_VERGA - 600, M(L), 600, "VISTA")
-        e.texto((M((xa + xb) / 2), Z_VERGA - 300), MK[round(L, 2)], "min", "MIDDLE_CENTER")
+        xi, Lm = M(xa) + ba / 2 + 25, M(L) - 50
+        e.poli([(xi, Z_VT0 + 300), (xi + 200, Z_VT0 + 300), (xi + 200, Z_VT0), (xi + Lm - 200, Z_VT0), (xi + Lm - 200, Z_VT0 + 300), (xi + Lm, Z_VT0 + 300), (xi + Lm, Z_VT1), (xi, Z_VT1)], "VISTA", fechada=True)
+        e.texto((M((xa + xb) / 2), Z_VT0 + 300), MK[round(L, 2)], "min", "MIDDLE_CENTER")
         gate = 9.87 <= xa < 29.63
         z0 = Z_VERGA if gate else 0
         for (fa, fb) in fiadas(z0):
             e.ret(M(xa) + ba / 2 + 5, fa + 5, M(L) - 10, fb - fa - 10, "OCULTA")
         if gate and abs(xa - 9.87) < 0.01:
-            e.texto((M(19.75), 2800), "PORTÕES — 4 vãos, 5,50 m livres sob as vergas", "nota", "MIDDLE_CENTER")
-    e.cota_h([M(x) for x, _, _ in X_L3], -1000, -8); e.cota_v([0, Z_VERGA - 600, Z_VERGA, 10000], M(40.1) + 600, 8, total=False)
-    e.chamada((M(14.96) + 125 + 2000, Z_VERGA), (10, 12), "placas CM a partir de +6,10 (por fora, escondem a verga)")
+            e.texto((M(19.75), 2800), "PORTÕES — 4 vãos, 6,25 m livres sob as vergas", "nota", "MIDDLE_CENTER")
+    e.cota_h([M(x) for x, _, _ in X_L3], -1000, -8); e.cota_v([0, Z_VT0, Z_VT0 + 300, Z_VT1, 10000], M(40.1) + 600, 8, total=False)
+    e.chamada((M(14.96) + 125 + 2000, Z_VT1), (10, 12), "placas CM a partir de +6,25 (por fora, escondem a verga); dentes 30 × 20 nos consolos CP-VT (+6,54)")
     # seção 1:10 e apoio (consolo CP-VT) 1:20
     s = pr.vista("SEÇÃO", (Q[0] + 60, Q[3] - 500), 10, titulo="SEÇÃO VT / VV", subtitulo="25 × 60, C40", unidade="cm")
     pts = [(0, 0), (250, 0), (250, 600), (0, 600)]
@@ -284,27 +286,31 @@ def prancha_vt():
         s.ponto_barra((40, yy), 8); s.ponto_barra((210, yy), 8)
     s.cota_h([0, 250], 0, -8); s.cota_v([0, 600], 250, 8)
     s.chamada((205, 555), (12, 8), "N1/N2 — 3 Ø12,5 em cima e embaixo"); s.chamada((210, 380), (12, 0), "N3 pele 2 Ø8/face"); s.chamada((220, 300), (12, -10), "N4 Ø6,3 c/15")
-    a = pr.vista("DETALHE 1", (Q[0] + 230, Q[3] - 500), 20, titulo="DETALHE 1 — APOIO DA VT NO PILAR", subtitulo="consolo CP-VT 25×20×30/20 + pino PN-1 Ø20; neoprene 200×150×10", unidade="cm")
+    a = pr.vista("DETALHE 1", (Q[0] + 230, Q[3] - 500), 20, titulo="DETALHE 1 — DENTE GERBER DA VT NO CONSOLO CP-VT", subtitulo="dente 30 × 20 (folga 2,5 cm); consolo CP-VT 25×25×30/20 + pino PN-1 Ø20; neoprene 200×150×10", unidade="cm")
     a.ret(-600, -500, 600, 1700, "VISTA")
-    a.poli([(0, 0), (200, 0), (200, 100), (0, 300)], "VISTA")
-    a.ret(250 - 10, 100, 20, 400, "OCULTA"); a.chapa(25, 300, 150, 10)
-    a.ret(25, 310, 1000, 600, "VISTA"); a.interrupcao((1025, 310), (1025, 910))
-    a.cota_h([-600, 0, 200, 1025], -500, -8, total=False); a.cota_v([0, 300, 910], 1025, 8, total=False)
-    a.chamada((100, 150), (14, -12), "CP-VT consolo 25 larg × 20 proj × 30/20 — nas faces B e D dos pilares laterais (a +5,20)")
-    a.chamada((250, 600), (14, 10), "PN-1 Ø20 no TB-1 Ø50 da viga (graute numa ponta)"); a.chamada((-300, 1000), (-10, 8), "pilar")
+    a.poli([(0, 0), (250, 0), (250, 100), (0, 300)], "VISTA")                                     # consolo CP-VT: assento +6,54
+    a.ret(125 - 10, 100, 20, 400, "OCULTA"); a.chapa(25, 300, 200, 10)
+    a.poli([(25, 310), (225, 310), (225, 610), (1025, 610), (1025, 910), (25, 910)], "VISTA", fechada=True)   # ponta com dente 30×20
+    a.linha((25, 310), (25, 10), "EIXO")
+    a.interrupcao((1025, 610), (1025, 910))
+    a.poli([(60, 370), (60, 340), (700, 340)], "ARMADURA"); a.poli([(260, 640), (260, 880)], "ARM_TRANSV"); a.poli([(340, 640), (340, 880)], "ARM_TRANSV")
+    a.cota_h([-600, 0, 250, 1025], -500, -8, total=False); a.cota_v([0, 300, 610, 910], 1025, 8, total=True)
+    a.chamada((100, 150), (14, -30), "CP-VT consolo 25 larg × 25 proj × 30/20 nas faces B e D dos pilares (assento +6,54)")
+    a.chamada((125, 450), (14, 10), "PN-1 Ø20 no TB-1 Ø50 da viga (graute numa ponta)"); a.chamada((-300, 1000), (-10, 8), "pilar")
+    a.chamada((500, 340), (12, -22), "N5 tirante do dente 2 Ø12,5 (NBR 9062 7.4)"); a.chamada((300, 760), (12, 10), "N6 suspensão 2 estribos Ø8")
     # tabelas
     y = Q[3] - 6
     linhas = [[MK[L], "; ".join(sorted(set(p.split(",")[0] for p in pos))), len(pos) * (2 if "eixos" in pos[0] else 1), f"{L*100:.0f}", f(peso(L) / 10, 2)] for L, pos in lista]
-    y = pr.tabela(XC, y, "MARCAS — VIGAS 25×60 (+5,50 a +6,10)", ["MARCA", "POSIÇÃO", "QT", "L (cm)", "PESO (t)"], linhas, [18, 84, 12, 22, 24], h_lin=5.5)
-    ins = [["TB-1", "Tubo Ø50×3,0 L=300 a prumo", 2, "a 12,5 das pontas"], ["CH-A3", "Chapa 200×150×9,5 + 2 grapas Ø10", 2, "fundo das pontas"], ["AL-1", "Laço de cordoalha Ø12,7", 2, "a L/5 das pontas"]]
+    y = pr.tabela(XC, y, "MARCAS — VIGAS 25×60 (+6,25 a +6,85, dentes 30×20)", ["MARCA", "POSIÇÃO", "QT", "L (cm)", "PESO (t)"], linhas, [18, 84, 12, 22, 24], h_lin=5.5)
+    ins = [["TB-1", "Tubo Ø50×3,0 L=280 a prumo (no dente)", 2, "a 10 cm das pontas"], ["CH-A3", "Chapa 200×150×9,5 + 2 grapas Ø10", 2, "fundo das pontas"], ["AL-1", "Laço de cordoalha Ø12,7", 2, "a L/5 das pontas"]]
     y = pr.tabela(XC, y - 4, "INSERTOS POR VIGA — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 100, 10, 56])
     mem = [["Função", "travamento dos pilares a meia altura (λ) e apoio das placas/portões"], ["Md (pp + placas 3 fiadas acima nas vergas)", "≈ 45 kN·m (vão 4,9 m)"],
            ["As adotada", "3 Ø12,5 + 3 Ø12,5 (simétrica) ≥ 0,15 %"], ["Cortante", "Ø6,3 c/15 ≥ mínimo"]]
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], mem, [70, 112])
     y = pr.legenda_armadura(XC, y - 4, False)
-    pr.notas(XC, y - 4, ["Todas as vigas de travamento e vergas no mesmo nível: fundo +5,50, topo +6,10, escondidas atrás das placas (face externa da viga rente à face do pilar).",
-                         "Nas bays dos portões (linha 3, entre P9 e P12) a viga é a verga VV: nada abaixo de +5,50 — vão livre dos portões; confirmar com o cliente a altura dos portões.",
-                         "Apoio em consolos CP-VT nas faces laterais dos pilares (a emitir nas pranchas dos pilares como revisão) com pino PN-1 e neoprene; graute numa ponta só.",
+    pr.notas(XC, y - 4, ["Todas as vigas de travamento e vergas no mesmo nível: fundo +6,25, topo +6,85 — exatamente atrás da fiada de placas +6,25/+7,50, com dentes Gerber 30 × 20 apoiados nos consolos CP-VT dos pilares (assento +6,54).",
+                         "Nas bays dos portões (linha 3, entre P9 e P12) a viga é a verga VV: nada abaixo de +6,25 — vão livre dos portões; as placas acima são inteiras (3 fiadas). Confirmar com o cliente a altura dos portões.",
+                         "Apoio dos dentes em consolos CP-VT nas faces laterais dos pilares (pranchas dos pilares, rev. 03) com pino PN-1 e neoprene; graute numa ponta só.",
                          "Pilares dos portões P9, P11, P12 (40×40) e P10 (25×25) e P6/P7 do anexo: pranchas a emitir após confirmação da arquitetura dos portões.",
                          "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VT01")
