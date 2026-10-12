@@ -47,8 +47,9 @@ MARCAS = [
     ("PL-06", "P2 L2", 1, "CP-TS +9,089 (A); 2 CP-MEZ", "8 IP-01 (C)"),
     ("PL-07", "P2 L1 canto", 1, "CP-VB +8,650 (D); 2 CP-MEZ", "8 IP-01 (C) + 8 (B)"),
     ("PL-08", "P2 L9 canto", 1, "CP-VB +8,650 (B)", "8 IP-01 (C) + 8 (D)"),
-    ("PF-01", "P3 e P14", 2, "2 CP-VB +7,750 (B e D); P3: 2 CP-MEZ", "8 IP-01 (C)"),
-    ("PF-02", "P4 e P15", 2, "2 CP-VB +8,060 (B e D); P4: 2 CP-MEZ", "8 IP-01 (C)"),
+    ("PF-01", "P3 e P15", 2, "2 CP-VB +7,750 (B e D); P3: 2 CP-MEZ", "8 IP-01 (C)"),
+    ("PF-02", "P4", 1, "2 CP-VB +8,060 (B e D); 2 CP-MEZ", "8 IP-01 (C)"),
+    ("PF-04", "P14 (L9, eixo C)", 1, "2 CP-VB +8,060 (B e D); CP-I110 +8,190 (face interna, V405)", "8 IP-01 (C)"),
     ("PF-03", "P5 e P16", 2, "2 CP-VB +8,350 (B e D); P5: 2 CP-MEZ", "8 IP-01 (C)"),
 ]
 N_PIL = sum(m[2] for m in MARCAS)
@@ -61,8 +62,8 @@ def marca_de(nome):
                 if nome.startswith(p + "-L") and int(a) <= int(nome.split("L")[1]) <= int(b.lstrip("L")):
                     return mk
             elif " " in tok:
-                p, l = tok.split(" ")
-                if nome == f"{p}-{l}":
+                p, l = tok.split(" ")[:2]
+                if nome == f"{p}-{l}" or nome == p:
                     return mk
             elif nome == tok:
                 return mk

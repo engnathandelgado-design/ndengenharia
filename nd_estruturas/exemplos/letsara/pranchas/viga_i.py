@@ -261,11 +261,11 @@ def dados_i110():
         n_isol=10, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[400, 600, 800],
         est=(8.0, 150, 100, 2000), Vd=448, alcas=[2500, L - 2500], tercas=[],
         consolos=consolos, anc=1468, tir="4 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
-        titulo="VIGA CENTRAL I110 PROTENDIDA — V406 (L = 2314 cm) · V405 · V407", subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8",
-        kp_sub="V405/406/407 no eixo C", kp_pecas=[(20.05, 10.05, 20.05, 29.36, "V407"), (20.05, 29.36, 20.05, 53.05, "V406"), (20.05, 53.05, 20.05, 67.6, "V405")],
+        titulo="VIGA CENTRAL I110 PROTENDIDA — V406 (L = 2314 cm) · V405 · V407", subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8; V405 vai até o P14 (linha 9)",
+        kp_sub="V405/406/407 no eixo C", kp_pecas=[(20.05, 10.05, 20.05, 29.36, "V407"), (20.05, 29.36, 20.05, 53.05, "V406"), (20.05, 53.05, 20.05, 76.81, "V405")],
         marcas=[["V407", "eixo C, L2 → L4 (PC-01 / PC-01)", 1, "1876", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 18.76 / 10, 1)],
                 ["V406", "eixo C, L4 → P13 (PC-01 / PC-02)", 1, "2314", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 23.14 / 10, 1)],
-                ["V405", "eixo C, P13 → L8 (PC-02 / a confirmar)", 1, "1401", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 14.01 / 10, 1)]],
+                ["V405", "eixo C, P13 → L9 (PC-02 / PF-04 = P14)", 1, "2321", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 23.21 / 10, 1)]],
         barras_ponta=[dict(pos="N5", diam=20.0, qtd=4, comp=165, forma=[(0, 15), (0, 0), (150, 0)], trechos=["15", "150"]),
                       dict(pos="N6", diam=16.0, qtd=3, comp=round((2 * (90 + 1040) + 160) / 10), forma=[(0, 0), (9, 0), (9, 104), (0, 104), (0, 0), (2, 2)], trechos=["9", "104", "", ""]),
                       dict(pos="N7", diam=10.0, qtd=3, comp=round((2 * (340 + 1250) + 140) / 10), forma=[(0, 0), (125, 0), (125, 34), (0, 34), (0, 0), (2, 2)], trechos=["125", "34", "", ""]),
@@ -282,7 +282,7 @@ def dados_i110():
                "Dentes Gerber 66 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6), verificados por MEF não linear; maciço de 140 cm nas pontas.",
                "Consolos CV-TS dos dois lados nas linhas 3, 5, 6, 7 e 8 (maciço de 100 cm na alma): topo a 3 %, pino PN-1 Ø20, assento +8,489 (lado A) e +8,514 (lado E).",
                "Apoio nos pilares centrais PC: neoprene NEO-2 300×250×30 fretado e pino PN-2 Ø25 no consolo CP-I110; graute só numa ponta de cada viga.",
-               "! Apoio da V405 na linha 8 a confirmar no R01 (não há pilar central na linha 8 no modelo recebido).",
+               "V405 (P13 → linha 9) apoia na ponta sobre o consolo CP-I110 do pilar de fachada P14 (PF-04), face voltada ao pavilhão, assento +8,190.",
                "Içar pelas 2 alças AL-3 (2 laços cada); estocar sobre 2 calços nas alças; não virar a peça."])
 
 

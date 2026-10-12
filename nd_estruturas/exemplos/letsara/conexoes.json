@@ -728,13 +728,13 @@
  {
   "grupo": "I110 × PC",
   "peca_a": "V405",
-  "inserto_a": "dente na linha 8",
-  "peca_b": "? (eixo C, linha 8)",
-  "inserto_b": "—",
-  "verificacao": "existe apoio na linha 8?",
-  "valor": "não consta no modelo",
-  "ok": false,
-  "obs": "! confirmar pilar central na linha 8 no R01"
+  "inserto_a": "dente na linha 9",
+  "peca_b": "PF-04 (P14, linha 9, eixo C)",
+  "inserto_b": "consolo CP-I110 + PN-2 Ø25",
+  "verificacao": "apoio da ponta da V405",
+  "valor": "+8,190 (face interna do P14)",
+  "ok": true,
+  "obs": "V405 = P13 → linha 9 (23,76 m c-c), como no R01 (viga central até o P14)"
  },
  {
   "grupo": "cobertura × platibanda",

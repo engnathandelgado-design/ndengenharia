@@ -69,7 +69,7 @@ for nivel in (3.15, 6.55):
 # ------------------------------------------------------------------ 5. I110 × pilares centrais (PN-2) e apoio da V405
 reg("I110 × PC", "V405/406/407 I110", "dente 660×350 + TB-2 tubo Ø60,3×3,6 (furo 53)", "PC-01/02 50×50", "consolo CP-I110 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
     "neoprene 300×250×30 fretado (3 camadas); pressão 4,3 ≤ 10 MPa; pino grauteado numa ponta só")
-reg("I110 × PC", "V405", "dente na linha 8", "? (eixo C, linha 8)", "—", "existe apoio na linha 8?", "não consta no modelo", False, "! confirmar pilar central na linha 8 no R01")
+reg("I110 × PC", "V405", "dente na linha 9", "PF-04 (P14, linha 9, eixo C)", "consolo CP-I110 + PN-2 Ø25", "apoio da ponta da V405", "+8,190 (face interna do P14)", True, "V405 = P13 → linha 9 (23,76 m c-c), como no R01 (viga central até o P14)")
 
 # ------------------------------------------------------------------ 6. cobertura escondida
 pl = LG["platibanda"]

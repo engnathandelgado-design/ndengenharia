@@ -274,7 +274,7 @@ def dados_pc():
                 kp=[("P8A", 20.05, 10.05, 500, 500, "PC-01"), ("P11", 20.05, 29.36, 500, 500, "PC-01"), ("P13", 20.05, 53.05, 500, 500, "PC-02")],
                 marcas=[["PC-01", "C2, C4", 2, "CP-I110 +8,190 (B e D); CP-TS +8,489 (C) e +8,514 (A)", "2 AL-2"],
                         ["PC-02", "C, P13", 1, "CP-I110 +8,190 (B e D)", "2 AL-2"],
-                        ["PC-??", "C8 ?", "?", "apoio da V405 — confirmar no R01", ""]],
+                        ["PF-04", "C9 (P14, fachada)", 1, "CP-I110 +8,190 na face interna — recebe a V405 (ND-LET-PIL)", "8 IP-01"]],
                 insertos=[["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I110", 2, "consolos B e D"], ["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo) — CP-TS", 2, "consolos A e C"],
                           ["NEO-2", "Neoprene 300×250×30 fretado (3 camadas)", 2, "CP-I110"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 2, "CP-TS"],
                           ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700)", 2, "face A: 300 do topo; 200 da base"]],
@@ -284,7 +284,7 @@ def dados_pc():
                        "Consolos CP-I110 nas faces B e D (eixo C): assento +8,190 = topo da I110 +8,880 − dente 66 − neoprene 3; pino PN-2 Ø25 no TB-2 da viga.",
                        "Consolos CP-TS nas faces A e C (só PC-01, linhas 2 e 4): assentos +8,489 (lado A, face C) e +8,514 (lado E, face A), pino PN-1 Ø20 no TB-1 da TS-01.",
                        "Topo do pilar em +8,880 (nível do topo da I110); as terças passam 86 mm acima. FACE D igual à FACE B (consolo CP-I110 +8,190).",
-                       "! Apoio da V405 na linha 8: não há pilar central no modelo recebido — confirmar no R01 antes de fabricar."])
+                       "A V405 vai do P13 até a linha 9 e apoia no pilar de fachada P14 (marca PF-04, 40×60 com CP-I110 na face interna) — ver prancha dos pilares PL/PF."])
 
 
 def dados_pm():

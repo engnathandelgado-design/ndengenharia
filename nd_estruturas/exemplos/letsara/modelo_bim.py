@@ -40,7 +40,7 @@ PONTAS = [(0.325, 0.325 + L_TS), (2 * X_C - (0.325 + L_TS), 2 * X_C - 0.325)]
 Z_I110_TOPO, H_I110 = 8.88, 1.10
 Y_P13 = Y_LIN[5] + 4.6
 CENTRAIS = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13)]
-I110_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[7])]
+I110_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])]   # V405 vai até a linha 9 (P14)
 NIVEIS_MEZ, H_LAJE = [3.15, 6.55], 0.20 + 0.05
 
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
@@ -79,6 +79,8 @@ def montar() -> ModeloBIM:
     for marca, ya, yb in I110_TRECHOS:
         m.linear("viga", marca, I110, (X_C, ya + 0.275, zc), (X_C, yb - 0.275, zc), "Vigas centrais I110",
                  obs="protendida, 24 cord. Ø12,7 (10 isoladas nas pontas); dente 660")
+    # consolo CP-I110 na face interna do P14 (linha 9, eixo C) para a ponta da V405
+    m.bloco("consolo", "CP-I110 (P14)", (X_C, COMP - 0.30 - 0.20, 8.19 - 0.01), 0.40, 0.40, 0.50, "Consolos")
     for i in range(2, 9):
         y = Y_LIN[i - 1]
         if any(abs(y - yy) < 0.01 for _, yy in CENTRAIS):

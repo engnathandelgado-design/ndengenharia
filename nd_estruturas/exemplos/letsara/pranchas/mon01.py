@@ -52,14 +52,13 @@ for i, yl in enumerate(Y_LIN, 1):
     pilar(M(yl), Ly, 400, 600, b, 1, 900)
 for j, (nome, x) in enumerate((("B", 9.87), ("C", 20.05), ("D", 29.63))):
     pilar(0, M(x), 600, 400, ["PF-01", "PF-02", "PF-03"][j], 1, 700)
-    pilar(Lx, M(x), 600, 400, ["PF-01", "PF-02", "PF-03"][j], -1, 700)
+    pilar(Lx, M(x), 600, 400, ["PF-01", "PF-04 (P14: recebe a V405)", "PF-03"][j], -1, 700)
 for marca, y in (("PC-01", Y_LIN[1]), ("PC-01", Y_LIN[3]), ("PC-02", Y_P13)):
     pilar(M(y), M(20.05), 500, 500, marca, 1, 700)
-pilar(M(Y_LIN[7]), M(20.05), 500, 500, "PC-?? (confirmar R01)", 1, 700)
 for marca, x in (("PM-01", 9.87), ("PM-01", 29.63)):
     pilar(M(Y_LIN[1]), M(x), 400, 600, marca, 1, 700)
 # I110 central (eixo C)
-for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[7])):
+for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])):
     v.ret(M(ya) + 275, M(20.05) - 200, M(yb - ya) - 550, 400, "VISTA")
     v.texto((M((ya + yb) / 2), M(20.05) + 500), f"{marca} (I110, L = {f(yb - ya - 0.55, 2)} m)", "min", "BOTTOM_CENTER")
 # TS-01 (linhas 2 a 8, dois vãos)
@@ -133,12 +132,12 @@ pecas = [["PL-01 / 05", "Pilar 40×60 lateral, L 1100", "12", f(PESO["PL"], 1), 
          ["PL-02 / 06", "Pilar 40×60 lateral c/ CP-MEZ (linha 2)", "2", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
          ["PL-03 / 04 / 07 / 08", "Pilar 40×60 de canto", "4", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
          ["PF-01 a 03", "Pilar 40×60 de fachada (1 e 9)", "6", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
-         ["PC-01 / 02", "Pilar central 50×50, L 988", "3 (+1?)", f(PESO["PC"], 1), "cálice −1,00; topo +8,88"],
+         ["PC-01 / 02", "Pilar central 50×50, L 988", "3", f(PESO["PC"], 1), "cálice −1,00; topo +8,88"],
          ["PM-01", "Pilar do mezanino 40×60 (B2, D2)", "2", "—", "ver ND-LET-MON02"],
          ["TS-01", f"Viga I90 de cobertura, L {LG['L_TS']*100:.0f}, dentes 45×30", "14", f(PESO["TS01"], 1), f"+{f(Z_AS['P1'])} / +{f(Z_AS['C_esq'])} / +{f(Z_AS['P2'])}"],
          ["V407", f"Viga I110 central, L {f(Y_LIN[3]-Y_LIN[1]-0.55, 2)} m", "1", f(PESO["I110"](Y_LIN[3] - Y_LIN[1] - 0.55), 1), "consolos PC-01 (+7,78)"],
          ["V406", f"Viga I110 central, L {f(Y_P13-Y_LIN[3]-0.55, 2)} m", "1", f(PESO["I110"](Y_P13 - Y_LIN[3] - 0.55), 1), "consolos PC-01/02 (+7,78)"],
-         ["V405", f"Viga I110 central, L {f(Y_LIN[7]-Y_P13-0.55, 2)} m", "1", f(PESO["I110"](Y_LIN[7] - Y_P13 - 0.55), 1), "PC-02 / apoio na linha 8 a confirmar"],
+         ["V405", f"Viga I110 central, L {f(Y_LIN[8]-Y_P13-0.55, 2)} m", "1", f(PESO["I110"](Y_LIN[8] - Y_P13 - 0.55), 1), "consolos PC-02 / PF-04 (P14, linha 9)"],
          ["VB-01", "Viga de borda 15×70, L ≈ 9,4–9,7 m", "8", f(PESO["VB"](9.6), 1), "consolos CP-VB (+7,46 a +8,65)"]]
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — COBERTURA", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [26, 72, 14, 18, 70], h_lin=6.0)
 seq = ["Locar os cálices (±10 mm), nivelar o fundo com calços; conferir prumo das paredes do cálice.",
@@ -153,7 +152,7 @@ notas = ["Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; pru
          "TS-01 só pode ser solta do guindaste com os dois pinos encaixados e a linha anterior travada; viga de 19,46 m: içar pelas 4 alças com balancim (ângulo ≥ 60°).",
          "Pino PN-1 Ø20 no consolo; tubo TB-1 Ø40 na viga; grautear o tubo de uma ponta só por viga (a outra recebe graute flexível) para não travar o encurtamento.",
          "Cobertura escondida: telha 104 mm abaixo da platibanda +10,00 no eixo E; nenhuma peça pode ficar acima de +9,90.",
-         "Apoio da V405 na linha 8 não consta do modelo recebido (R01): confirmar pilar central na linha 8 antes de fabricar.",
+         "V405 vai do P13 até a linha 9 e apoia no consolo CP-I110 do pilar P14 (PF-04), como na planta de vigas de cobertura do R01.",
          "Níveis em m, cotas em cm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(XC, y - 4, notas, 200)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-MON01")
