@@ -503,6 +503,21 @@ def ex_ferreira(npav=5, aR=1.0, bp=.5, hp=.5, red_p=.8, aR_base=1.0, Ec=35e6):
 - **Fechamento lateral em placas com insertos na placa e consoles metálicos (CM) nos pilares.** Exemplo é o padrão Letsara: nicho na placa e console aparafusado com pino, furo redondo numa ponta e oblongo na outra. Os insertos do pilar entram na prancha do pilar.
 - **Terças metálicas sobre as vigas I.** Terça em **perfil U enrijecido** (formado a frio) fixada por **insert rosqueado** (bucha embutida na mesa superior da viga I + cantoneira aparafusada, sem solda em obra). A **espera de terça** (posição cotada pela modulação das terças) entra como inserto na prancha da tesoura e na tabela de insertos.
 
+**Cuidados de detalhe que sempre conferir (Nathan, 12/10/2026):**
+- **Platibanda:** quando o pilar continua acima da viga de cobertura até o topo da platibanda, a viga I apoia em **consolo lateral** abaixo do topo, e não no topo do pilar.
+  - O trecho acima do consolo é uma peça em balanço. Verificar ao vento na platibanda e detalhar os insertos de fixação das placas e do rufo.
+  - Na prancha do pilar, cotar o nível do consolo e o topo da platibanda separadamente.
+- **Viga de cobertura inclinada e sentido da água:** modelar a viga com o caimento real (água única ou duas águas, com o sentido indicado em planta).
+  - O nível do consolo varia de pilar para pilar e precisa ser calculado e tabelado por pilar.
+  - A face de apoio deve ser horizontal, com berço/neoprene nivelado, ou a inclinação deve estar considerada no apoio.
+  - A componente da carga ao longo da viga gera força horizontal no apoio. Considerar o deslizamento no neoprene e o chumbador.
+  - As esperas de terça acompanham a inclinação.
+- **Torção em viga que recebe outras vigas:** isso vale para viga em L ou T invertido com consolo/aba de um lado só, viga de borda recebendo Gerber e longarina com vãos ou cargas desiguais dos dois lados.
+  - A excentricidade da reação até o eixo de cisalhamento gera **torção de equilíbrio**, que não pode ser desprezada.
+  - Dimensionar a torção (NBR 6118 17.5) junto com a força cortante: estribos fechados + armadura longitudinal de torção.
+  - Verificar a reação de torção nos apoios: chumbadores e garfo, ou ligação que restrinja o giro.
+  - Considerar a situação de montagem com um lado só carregado.
+
 **Modelo único de peças (desde 12/10/2026):** do passo 2 em diante, toda peça entra no modelo de peças do `nd_estruturas.prefabricados` (marca por identidade, armadura, insertos, CG, peso). O modelo analítico (passo 5) é gerado dele — eixo de cada peça, link rígido até o apoio, liberações por grau de liberdade (rótula, engaste ou grau de conexão 0–1 do consolo/chumbador, seção 4.5), grupos de carga e combinações NBR 8681 — e os esforços voltam gravados em cada peça. Pranchas, listas e orçamento (passo 10) saem do mesmo modelo — ver `pranchas-tecnicas-nd` 6B.
 
 ## 15. Armadilhas
