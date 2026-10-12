@@ -6,6 +6,7 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Letsara: pranchas de montagem ND-LET-MON01 (cobertura: planta, corte do pórtico, lista de peças, sequência) e ND-LET-MON02 (mezanino +3,15/+6,55: plantas, corte, lista, sequência).
 - prancha_nd: `Vista.cota_ord_v` (cotas ordenadas verticais) e `Vista.chapa` (chaparia hachurada ANSI31).
 - Letsara: pilar PL-01 desenhado em pé (posição de montagem), rev. 02, com Detalhe 4 de protensão (posição das cordoalhas e força no macaco) na opção B.
 - prancha_nd: modo `unidade="cm"` nas vistas (cotas de concreto pré-moldado em cm, chaparia em mm); subtítulo indica a unidade.

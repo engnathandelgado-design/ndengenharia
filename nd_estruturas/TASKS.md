@@ -38,6 +38,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- Pranchas de montagem MON01/MON02 do Letsara.
 - Prancha de pilar PL-01 (opções armado/protendido) com faces, isométricos, planta-chave, cotas em cm e armadura conforme NBR 6118.
 
 - Módulo `bim`: modelo de peças -> IFC4 + página 3D para celular; Letsara em `exemplos/letsara/modelo_bim.py`; skill `modelo-ifc-3d-nd` (2026-10-12).
