@@ -82,7 +82,7 @@ def montar(pdelta=True):
             pilar(f"F{x:g}@L{i}", x, YL[i], 0.40, 0.60, Z_TOP, (Z_CEN,) + (tuple(Z_MEZ) if i == 0 else ()))
     for x in (9.87, 29.63):  # pilares do mezanino na L1 (P8, P8B)
         pilar(f"M{x:g}@L1", x, YL[1], 0.60, 0.40, Z_MEZ[1], tuple(Z_MEZ))
-    pilar("P8A", X_CEN, YL[1], 0.60, 0.40, Z_CEN, tuple(Z_MEZ))
+    pilar("P8A", X_CEN, YL[1], 0.50, 0.50, Z_CEN, tuple(Z_MEZ))   # 50×50: face a 0,25 do eixo, igual ao P11 (ponta da TS-01)
     pilar("P11", X_CEN, YL[3], 0.50, 0.50, Z_CEN)
     y13 = YL[5] + 4.6
     pilar("P13", X_CEN, YL[5] + 4.6, 0.50, 0.50, Z_CEN)
