@@ -1,6 +1,6 @@
 """Prancha genérica de viga pré-moldada protendida de seção I (fôrma, armação, insertos) — padrão ND.
 Usada por I110 (V405/406/407) e VM (mezanino). Cotas de concreto em cm, chaparia em mm. Rodar: python viga_i.py i110 | vm"""
-import math, sys
+import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha, MASSA_ACO
 
@@ -89,6 +89,8 @@ def prancha_viga(P):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
     ve.marcador_corte((L / 2, -22 * ESC), (L / 2, H + 24 * ESC), "A", lado=1)
     ve.marcador_corte((P["x_mac"] / 2 + 100, -22 * ESC), (P["x_mac"] / 2 + 100, H + 24 * ESC), "B", lado=1)
+    if P.get("seg"):
+        ve.marcador_corte((L * 0.7, -22 * ESC), (L * 0.7, H + 24 * ESC), "C", lado=1)
     ve.marcador_detalhe((P["pino_x"] + 200, H / 2), max(H * 0.9, 700), 1, ang=-120, dist=8)
 
     # ------------------------------------------------------------ PLANTA SUPERIOR
@@ -172,7 +174,7 @@ def prancha_viga(P):
         for k in range(P["n_v"]):                                                            # N8 estribos verticais no dente
             x = 100 + k * 80
             d1.poli([(x, H - HD + cob), (x, H - cob)], "ARM_TRANSV")
-        d1.chamada((100, H - 60), (-8, 14), f"N8 — {P['n_v']} estribos Ø10 no dente")
+        d1.chamada((100, H - 60), (-8, 6), f"N8 — {P["n_v"]} estribos Ø10 no dente")
         d1.cota_v([0, H - HD, H], LD, 10, total=False)
         d1.cota_h([0, P["pino_x"], LN, LD], H - HD, -12, total=False)
         d1.chamada((P["pino_x"], H - HD + 60), (10, -26), f"{P['tb_nome']}; pino do consolo Ø{P['pino_d']} grauteado só numa ponta")
@@ -192,6 +194,43 @@ def prancha_viga(P):
         d1.chamada((P["pino_x"], P["tb"][1] / 2), (14, 20), f"{P['tb_nome']}; pino do consolo Ø{P['pino_d']}; apoio 25 cm no consolo CP-MEZ")
     d1.ret(-25, -30, 300, 10, "OCULTA"); d1.chamada((250, -25), (12, -22), "NEO 300×150×10 e consolo (ver prancha do pilar)")
 
+    # ------------------------------------------------------------ CORTE C-C — 2º ESTÁGIO (só VM): laje alveolar + enchimento + capa + N9 salientes
+    SEG = P.get("seg")
+    if SEG:
+        z0 = 700
+        vc = pr.vista("CORTE C-C", (Q[0] + 120, Q[1] - 42), 10, titulo="CORTE C-C — 2º ESTÁGIO (SOLIDARIZAÇÃO)",
+                      subtitulo="laje alveolar h20 apoiada 10 cm na mesa; enchimento + capa C25 moldados na obra; N9 salientes", unidade="cm")
+        top = [(-P["bw"] / 2, z0), (P["bw"] / 2, z0), (B / 2, H - P["ts"]), (B / 2, H), (-B / 2, H), (-B / 2, H - P["ts"])]
+        vc.poli(top, "CORTADO", fechada=True); vc.hachura(top, "AR-CONC", 0.03)
+        vc.interrupcao((-P["bw"] / 2, z0), (P["bw"] / 2, z0), "CORTADO")
+        xl0, xl1 = B / 2 - 100, B / 2 - 100 + 600                                            # laje alveolar (lado da laje)
+        vc.ret(xl0, H + 10, xl1 - xl0, 190, "CORTADO"); vc.interrupcao((xl1, H + 10), (xl1, H + 200), "CORTADO")
+        for xc_ in (xl0 + 160, xl0 + 400):
+            vc.circulo((xc_, H + 105), 70, "VISTA")
+        vc.ret(xl0, H, 150, 10, "METALICA")                                                   # neoprene 10 mm
+        ench = [(-B / 2, H), (xl0, H), (xl0, H + 200), (-B / 2, H + 200)]
+        vc.poli(ench, "VISTA", fechada=True); vc.hachura(ench, "AR-CONC", 0.045)
+        capa = [(-B / 2, H + 200), (xl1, H + 200), (xl1, H + 250), (-B / 2, H + 250)]
+        vc.poli(capa, "VISTA", fechada=True); vc.hachura(capa, "AR-CONC", 0.045)
+        vc.linha((-B / 2 + 20, H + 225), (xl1, H + 225), "ARMADURA")                         # tela Q138
+        vc.linha((-B / 2 + 30, H + 215), (xl1, H + 215), "ARMADURA")                         # negativa Ø10 c/25
+        xs9 = (-P["bw"] / 2 + cob, P["bw"] / 2 - cob)
+        vc.poli([(xs9[0], z0), (xs9[0], H + 170), (xs9[1], H + 170), (xs9[1], z0)], "ARM_TRANSV")   # N9 saliente
+        for x9 in xs9:
+            vc.ponto_barra((x9, H + 160), 10)                                                  # N10
+        for x in (-B / 2 + cob, B / 2 - cob):
+            vc.ponto_barra((x, H - cob - 5), 10)
+        vc.cota_v([H, H + 200, H + 250], xl1, 10, total=False)
+        vc.cota_h([-B / 2, xl0, B / 2], H, -10, total=False)
+        vc.chamada((xs9[1], H + 60), (70, -4), f"N9 estribo saliente Ø8 c/15 (2 ramos, sai 17 cm do topo) — interface 9062 6.3.5: τsd {f(SEG['interface']['tau_sd_total_MPa'],2)} ≤ {f(SEG['interface']['tau_Rd_MPa'],2)} MPa")
+        vc.chamada((xs9[0], H + 160), (-10, -12), "N10 — 2 Ø10 nos cantos do N9")
+        vc.chamada((xl0 + 300, H + 225), (36, 6), "tela Q138 na capa de 5 cm, por cima da viga")
+        vc.chamada((xl0 + 450, H + 215), (40, -10), "negativa Ø10 c/25 L=150 (alvéolo grauteado + capa sobre a viga)")
+        vc.chamada((-B / 2 + 80, H + 100), (-6, 10), "enchimento C25 (30 × 20)")
+        vc.chamada((xl0 + 75, H + 5), (12, -18), "neoprene 10 mm; apoio 10 cm")
+        vc.chamada((xl0 + 400, H + 105), (28, 14), "laje alveolar h20 (ND-LET-LA01)")
+        vc.chamada((B / 2 - cob, H - cob - 5), (14, 6), "N3")
+
     # ------------------------------------------------------------ ELEVAÇÃO DE ARMAÇÃO
     varm = pr.vista("ARMAÇÃO", (Q[0] + 40, Q[3] - (325 if A1 else 430)), ESC, titulo=f"ELEVAÇÃO DE ARMAÇÃO — {P['marca']}", subtitulo="estribos N2; cordoalhas C1; pontas conforme DETALHE 1", unidade="cm")
     if HD:
@@ -206,6 +245,12 @@ def prancha_viga(P):
         varm.linha((0, y), (L, y), "ARM_PROT")
     varm.linha((cob, H - cob - 5), (L - cob, H - cob - 5), "ARMADURA")
     varm.chamada((L / 2, H - cob - 5), (10, 12), "N3 — 2 Ø10 porta-estribos")
+    if SEG:
+        xs9e = list(range(100, L - 60, 150))
+        for x in xs9e:
+            varm.linha((x, H), (x, H + 170), "ARM_TRANSV")
+        varm.linha((100, H + 160), (L - 100, H + 160), "ARMADURA")
+        varm.chamada((L - 400, H + 120), (8, 2), f"N9 — {len(xs9e)} estribos salientes Ø8 c/15 + N10 2 Ø10 (CORTE C-C)")
     varm.chamada((zona + 300, cob + 50), (10, -16), f"N2 — {len(xs_e)} estribos Ø{d_est:g}: c/{s1//10} corrente, c/{s2//10} nos {zona/1000:g} m das pontas")
     varm.chamada((L / 2, P["cord"][0][0]), (10, -14), f"C1 — {n_cord} cord. Ø12,7" + (f"; {P['n_isol']} isoladas {P['isol_mm']/1000:g} m nas pontas" if P.get("n_isol") else ""))
     varm.cota_h([0, zona, L - zona, L], 0, -10)
@@ -219,6 +264,10 @@ def prancha_viga(P):
               dict(pos="N3", diam=10.0, qtd=2, comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"])]
     if P.get("pele"):
         barras.append(dict(pos="N4", diam=8.0, qtd=2 * len(P["pele"]), comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"]))
+    if SEG:
+        n9 = len(range(100, L - 60, 150))
+        barras.append(dict(pos="N9", diam=8.0, qtd=n9, comp=round((2 * (600 + 170) + (P["bw"] - 2 * cob)) / 10), forma=[(0, 0), (0, 77), (9, 77), (9, 0)], trechos=["77", "9", "77"]))
+        barras.append(dict(pos="N10", diam=10.0, qtd=2, comp=round((L - 200) / 10), trechos=[f"{round((L-200)/10)}"]))
     barras += P["barras_ponta"]
     ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
     y = ta["y_base"]
@@ -237,7 +286,7 @@ def prancha_viga(P):
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
-    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")):
+    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()):
         pr.posicoes_desenho.add(pos)
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
     print(P["desenho"], len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")
@@ -287,6 +336,9 @@ def dados_i110():
 
 
 # ================================================================== VM — vigas do mezanino I90 com dentes 45×30
+SEG_VM = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/segundo_estagio.json"))
+
+
 def dados_vm():
     L = 9530
     return dict(
@@ -310,13 +362,16 @@ def dados_vm():
                   ["CH-A1", "Chapa 300×150×12,5 + 2 grapas Ø12,5 (fundo)", 2, "fundo das pontas"],
                   ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 190 cm das pontas"],
                   ["NEO-1", "Neoprene 300×150×10 (furo Ø30)", 2, "sobre os consolos CP-MEZ"]],
-        memoria=[["ELU flexão (laje h20+5, 500 kgf/m²)", "atende — ver ND-LET-MC02"], ["ELS-F / ELS-D (CAA II)", "atende (protensão limitada)"],
+        seg=SEG_VM,
+        memoria=[["ELU flexão (laje h20+5, 500 kgf/m²)", "atende na seção pré-moldada (fase 1 + 2) — ND-LET-MC02"], ["ELS-F no infinito (fase 2 na seção composta)", f"σinf {f(SEG_VM['tensoes_infinito_MPa']['fibra_inf'],2)} MPa ≤ fctk,inf {f(SEG_VM['tensoes_infinito_MPa']['fctk_inf_C50'],2)} (I composta = {f(SEG_VM['secao_composta']['ganho_inercia'],2)} I)"],
+                 ["Interface 2º estágio (NBR 9062:2017 6.3.5)", f"τsd {f(SEG_VM['interface']['tau_sd_total_MPa'],2)} ≤ τRd {f(SEG_VM['interface']['tau_Rd_MPa'],2)} MPa; N9 {f(SEG_VM['interface']['As_adotada_cm2_m'],1)} ≥ {f(SEG_VM['interface']['As_req_cm2_m'],1)} cm²/m"],
                  ["Dente 45 × 30 (MEF não linear)", "Vu 436 ≥ 1,06 Vd = 406 kN (FS 1,14)"], ["Cortante no apoio (Vd 383 kN)", "Ø8 c/10 nos 150 cm: 11,2 ≥ 8,2 cm²/m"],
                  ["Içamento (2 pontos a 1,9 m)", "σt ≤ fctk,j — sem fissura"]],
         notas=["Concreto C50; 9 cordoalhas CP-190 RB Ø12,7 (7 em y = 60 e 2 em y = 110 mm), todas aderentes. σpi = 1400 MPa; liberar com fckj ≥ 35 MPa.",
                "Dentes Gerber 45 × 30 nas duas pontas (seção I90: o dente da I70 foi reprovado no MEF), armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6), verificados por MEF não linear; maciço de 120 cm nas pontas.",
                "Apoio 20 cm sobre o consolo CP-MEZ (assento = nível do piso − 70 cm: +2,45 e +5,85); pé-direito livre sob a viga = nível − 115 cm.",
-               "Laje alveolar h20 apoia 10 cm sobre a mesa superior (b = 40); capa de 5 cm (2º estágio) com tela Q138; chavetas grauteadas antes da capa.",
+               "2º ESTÁGIO (CORTE C-C, MC04): laje h20 apoia 10 cm na mesa (neoprene 10); enchimento 30 × 20 + capa 5 cm em C25 com tela Q138; N9 Ø8 c/15 salientes 17 cm (topo da viga rugoso, pente 5 mm) + N10 2 Ø10; negativas Ø10 c/25 L=150 nos alvéolos. Fase 1 (viga + laje + capa) na seção pré-moldada sem escora; fase 2 (revestimento + sobrecarga) na seção composta.",
+               "Obra: lajes → topo da viga limpo e molhado → N10 e negativas → chavetas grauteadas → tela → enchimento + capa de uma vez → cura 7 dias, carregar só com fck ≥ 20 MPa. Calços de estoque fora dos N9.",
                "Pino PN-1 Ø20 do consolo entra no TB-1: grauteado numa ponta só de cada viga; a outra com graute flexível.",
                "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças."])
 

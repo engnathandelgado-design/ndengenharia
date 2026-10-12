@@ -106,7 +106,7 @@ y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — MEZANINO", ["MARCA", "DESC
 seq = ["Pilares das linhas 1 e 2 já grauteados e com 24 h (ND-LET-MON01, etapa 2).",
        f"Nível +{f(NIVEIS[0],2)}: vigas VM-01 a VM-04 na linha 1 e depois na linha 2; neoprene no consolo, pino numa ponta grauteado, outra com graute flexível.",
        "Lajes alveolares LA-01 de A para E, apoio mínimo 10 cm sobre a viga, faixa de neoprene; chavetas grauteadas antes da capa.",
-       "Capa de 5 cm com tela Q138 após as chavetas; não carregar a laje antes de 7 dias (ou fck ≥ 20 MPa).",
+       "2º estágio: limpar e molhar o topo das VM; amarrar N10 e negativas Ø10 c/25 nos alvéolos; grautear chavetas; tela Q138; concretar enchimento 30 × 20 sobre a mesa da VM + capa de 5 cm C25 de uma vez, envolvendo os estribos salientes N9 Ø8 c/15 (ND-LET-VM01 corte C-C, MC04); não carregar antes de 7 dias (fck ≥ 20 MPa).",
        f"Repetir para o nível +{f(NIVEIS[1],2)}. A cobertura das linhas 1–2 só é montada depois da capa do +{f(NIVEIS[1],2)}.",
        "Laje alveolar h20 sem escoramento; vigas VM sem escoramento (protendidas, 2º estágio na capa)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")

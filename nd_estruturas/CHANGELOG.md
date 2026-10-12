@@ -6,6 +6,7 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Letsara MC04: `calc_segundo_estagio.py` (análise em duas fases da VM I90 + laje alveolar + capa, interface NBR 9062:2017 6.3.5, armadura de 2º estágio); VM01 com corte C-C da solidarização (N9 salientes Ø8 c/15, N10, enchimento + capa, tela, negativas) e sequência de obra; MON02 e `checar_conexoes` (77 itens).
 - Letsara: contraventamento da cobertura em X por subpainel 3158 × L/4 (diagonais Ø12,5 de ≈ 4 m, esticador) com nós CH-X nas terças e correntes rígidas como corda intermediária; cálculo em `calc_cobertura_metalica` (cortante do modelo global dividida pelas 4 subdiagonais) e 75 verificações em `checar_conexoes`.
 - Letsara: ND-LET-COB01 rev. 01 refeita no padrão das pranchas de cobertura de referência — planta de enterçamento de todo o pavilhão (1:175, marcas T-1..T-8, cadeia de espaçamentos, L = vão − 20, folgas de montagem), suporte de terça ST-1 (chapa 8×220×290 soldada na CH-T1/CH-T2, 2 M12 por ponta, furos centrados na alma a 100/200) e mão-francesa na orelha OR-1 (chapa 8×300×100 furada, soldada na CH-MF); ND-LET-COB02 (correntes, diagonais no ST-1, contraventamento, memória). TS01-1/TS01-3 rev. 02 sem luvas nem CT-1; `checar_conexoes` com 71 verificações.
 - docs/referencias_pranchas.md: convenções extraídas das pranchas de referência (metálica e pré-moldado) para o padrão de apresentação da ND.

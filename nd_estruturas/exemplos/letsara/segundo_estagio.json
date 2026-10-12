@@ -1,0 +1,70 @@
+{
+ "secao_premoldada": {
+  "A_m2": 0.2225,
+  "yc_m": 0.4407,
+  "I_m4": 0.02071,
+  "W_inf_m3": 0.04699,
+  "W_sup_m3": 0.04509
+ },
+ "secao_composta": {
+  "bf_m": 1.33,
+  "n": 0.707,
+  "A_hom_m2": 0.3118,
+  "yc_m": 0.6198,
+  "I_m4": 0.046104,
+  "ganho_inercia": 2.23,
+  "W_inf_m3": 0.07439,
+  "h_total_m": 1.1500000000000001
+ },
+ "cargas": {
+  "L_m": 9.27,
+  "g1_fase1_kNm": 25.91,
+  "g2_fase2_kNm": 5.03,
+  "q_fase2_kNm": 25.12,
+  "M1k_kNm": 278.4,
+  "M2k_kNm": 323.9,
+  "V1d_kN": 156.1,
+  "V2d_kN": 193.3,
+  "Vd_total_kN": 349.5
+ },
+ "tensoes_infinito_MPa": {
+  "P_inf_kN": 994.9,
+  "fibra_inf": -5.47,
+  "topo_premoldado": -5.14,
+  "topo_capa": 1.76,
+  "fctk_inf_C50": 2.85,
+  "ok_ELS_F": true,
+  "obs": "fase 1 na seção pré-moldada, fase 2 na composta (combinação frequente, ψ1 0,6)"
+ },
+ "interface": {
+  "norma": "NBR 9062:2017 item 6.3.5",
+  "b_m": 0.4,
+  "d_m": 1.11,
+  "tau_sd_fase2_MPa": 0.435,
+  "tau_sd_total_MPa": 0.787,
+  "beta_s": 0.9,
+  "beta_c": 0.6,
+  "fctd_capa_MPa": 1.28,
+  "tau_c_MPa": 0.769,
+  "tau_max_MPa": 4.46,
+  "As_req_cm2_m": 6.51,
+  "As_adotada_cm2_m": 6.7,
+  "tau_Rd_MPa": 1.425,
+  "uso": 0.552,
+  "ok": true
+ },
+ "armadura_2_estagio": {
+  "N9": "estribo saliente Ø8 c/15, 2 ramos (U invertido saindo 20 cm do topo da viga, pernas de 60 cm na alma)",
+  "N10": "2 Ø10 longitudinais nos cantos do N9, dentro do enchimento (porta-estribos do 2º estágio)",
+  "tela": "Q138 na capa de 5 cm (toda a laje), traspasse 1 malha; passa por cima da viga",
+  "negativa": "Ø10 c/25 (uma por alvéolo) L = 150 cm: 75 cm dentro da chaveta/alvéolo grauteado e 75 cm na capa sobre a viga (ND-LET-LA01)",
+  "enchimento": "concreto C25 entre a ponta da laje e a borda da mesa (30 × 20 cm) + capa 5 cm, lançados junto; brita 1; adensar"
+ },
+ "sequencia_obra": [
+  "montar as VM e as lajes alveolares (apoio 10 cm, faixa de neoprene)",
+  "limpar e molhar o topo da viga (superfície rugosa de fábrica, pente 5 mm)",
+  "conferir os N9 salientes e amarrar os N10 e as negativas Ø10 nos alvéolos",
+  "grautear as chavetas, estender a tela Q138",
+  "concretar enchimento + capa C25 de uma vez; curar 7 dias; não carregar antes de fck ≥ 20 MPa"
+ ]
+}

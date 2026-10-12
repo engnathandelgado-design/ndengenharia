@@ -80,6 +80,13 @@ for nivel in (3.15, 6.55):
     reg("VM × consolo", f"VM-01..04 I90 (nível +{nivel:.2f})", "dente 450×300, TB-1 Ø50 a 150 da face", "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07", "CP-MEZ 40×30×45/25 + PN-1 Ø20",
         "assento = topo da viga − 45 (dente)", f"+{ass:.3f}", True, "dente I90 45×30 verificado por MEF (FS 1,14); dente da I70 reprovado")
 
+# ------------------------------------------------------------------ 4b. VM × laje alveolar — 2º estágio (MC04)
+SE = json.loads((AQ / "segundo_estagio.json").read_text(encoding="utf-8"))
+reg("VM × laje (2º estágio)", "VM-01..04 I90", "N9 estribos salientes Ø8 c/15 + N10", "laje alveolar h20 + enchimento + capa C25", "tela Q138 + negativas Ø10 c/25",
+    "interface pré-moldado × capa (NBR 9062:2017 6.3.5)", f"τsd {SE['interface']['tau_sd_total_MPa']} ≤ τRd {SE['interface']['tau_Rd_MPa']} MPa", SE["interface"]["ok"],
+    f"As {SE['interface']['As_adotada_cm2_m']} ≥ {SE['interface']['As_req_cm2_m']} cm²/m; fase 1 na seção pré-moldada, fase 2 na composta (I × {SE['secao_composta']['ganho_inercia']})")
+reg("VM × laje (2º estágio)", "VM", "topo da mesa (40) rugoso, pente 5 mm", "laje alveolar", "apoio 10 cm em neoprene 10", "enchimento entre a ponta da laje e a borda da mesa", "30 × 20 cm", True, "capa 5 cm por cima; N9 sai 17 cm do topo (dentro do enchimento + capa)")
+
 # ------------------------------------------------------------------ 5. I110 × pilares centrais (PN-2) e apoio da V405
 reg("I110 × PC", "V405/406/407 I110", "dente 660×350 + TB-2 tubo Ø60,3×3,6 (furo 53)", "PC-01/02 50×50", "consolo CP-I110 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
     "neoprene 300×250×30 fretado (3 camadas); pressão 4,3 ≤ 10 MPa; pino grauteado numa ponta só")

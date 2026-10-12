@@ -792,6 +792,28 @@
   "obs": "dente I90 45×30 verificado por MEF (FS 1,14); dente da I70 reprovado"
  },
  {
+  "grupo": "VM × laje (2º estágio)",
+  "peca_a": "VM-01..04 I90",
+  "inserto_a": "N9 estribos salientes Ø8 c/15 + N10",
+  "peca_b": "laje alveolar h20 + enchimento + capa C25",
+  "inserto_b": "tela Q138 + negativas Ø10 c/25",
+  "verificacao": "interface pré-moldado × capa (NBR 9062:2017 6.3.5)",
+  "valor": "τsd 0.787 ≤ τRd 1.425 MPa",
+  "ok": true,
+  "obs": "As 6.7 ≥ 6.51 cm²/m; fase 1 na seção pré-moldada, fase 2 na composta (I × 2.23)"
+ },
+ {
+  "grupo": "VM × laje (2º estágio)",
+  "peca_a": "VM",
+  "inserto_a": "topo da mesa (40) rugoso, pente 5 mm",
+  "peca_b": "laje alveolar",
+  "inserto_b": "apoio 10 cm em neoprene 10",
+  "verificacao": "enchimento entre a ponta da laje e a borda da mesa",
+  "valor": "30 × 20 cm",
+  "ok": true,
+  "obs": "capa 5 cm por cima; N9 sai 17 cm do topo (dentro do enchimento + capa)"
+ },
+ {
   "grupo": "I110 × PC",
   "peca_a": "V405/406/407 I110",
   "inserto_a": "dente 660×350 + TB-2 tubo Ø60,3×3,6 (furo 53)",
