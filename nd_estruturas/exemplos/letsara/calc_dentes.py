@@ -27,8 +27,12 @@ VIGAS = {
     "MEZ-I90": dict(Vd=383.0, Hd=65.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=200,
                     cord=[dict(y=75, n=7), dict(y=117, n=1)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],
                     d_tir=20.0, d_sus=16.0),
+    # opção do mezanino com laje h20+5: I70 (mesma fôrma, mesas 12/15), dente de 425 (61%)
+    "MEZ-I70": dict(Vd=345.0, Hd=58.0, H=700, ti=150, ts=120, hd=425, ln=300, a_apoio=150, x_mac=1000, l_apoio=200,
+                    cord=[dict(y=75, n=7), dict(y=117, n=3)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],
+                    d_tir=20.0, d_sus=16.0),
 }
-NOTAS_H = {"TS-01": "Hd = 1,4 × 28 kN (tirante do pórtico no modelo global) ≥ 0,16 Vd",
+NOTAS_H = {"MEZ-I70": "Hd = 0,16 Vd + diafragma", "TS-01": "Hd = 1,4 × 28 kN (tirante do pórtico no modelo global) ≥ 0,16 Vd",
            "I110": "Hd = 0,16 Vd (neoprene) ≥ 1,4 × 36,6 kN do modelo global",
            "MEZ-I90": "Hd = 0,16 Vd + diafragma"}
 

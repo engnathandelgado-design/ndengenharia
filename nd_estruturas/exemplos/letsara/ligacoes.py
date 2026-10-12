@@ -16,8 +16,13 @@ X_CEN, X_P2 = 20.05, 40.10
 NEO = 0.010                     # neoprene
 
 
+# Cobertura escondida pela platibanda (+10,00) com 10 cm de folga no lado alto (Nathan, 12/10/2026):
+# telha junto ao P2 ≤ +9,90 → fundo da TS-01 no eixo do P1 em +7,46 (antes +8,08; desceu 0,62 m)
+Z0_TS = 7.46
+
+
 def z_fundo_viga(x):            # fundo da TS-01 montada (x a partir do eixo do P1)
-    return 8.08 + I * x
+    return Z0_TS + I * x
 
 
 # ------------------------------------------------------------------ TS-01 (coordenadas locais, m)
@@ -106,7 +111,7 @@ for lado in ("esq", "dir"):
         rel.append(dict(ligacao="terças", peca=it["nome"], inserto="CH-T1/T2", com=f"linha de terças ({lado})",
                         tipo="Ue 300×85×25×3,00", dist_mm=round(dif * 1000, 1), dz_mm=0.0, ok=ok))
 # cotas dos consolos que recebem os dentes (topo inclinado 3%) e topo da I110 abaixo das terças
-Z_TOPO_I110 = 9.50
+Z_TOPO_I110 = 8.88
 berco = []
 for i in (2, 4, 5, 6, 7):
     za, zb = zc(X_PINO[1]), zc(X_PINO[2])
@@ -140,7 +145,11 @@ for (ia, ib) in VAOS:
 gap_cruz = (CT2["z_alto"] - CT2["z_baixo"] - CT2["d_tir"]) * 1000
 ok_tir = all(t["folga_terca_no_mm"] >= 20 for t in tir) and gap_cruz >= 5
 erros += not ok_tir
-res = dict(tol_mm=TOL * 1000, erros=erros, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"], X_PINO=[round(v, 3) for v in X_PINO],
+z_telha = lambda x: z_fundo_viga(x) + (0.90 + 0.0125 + 0.30 + 0.03) * math.cos(math.atan(I))
+folga_plat = dict(platibanda=10.00, telha_P2=round(z_telha(X_P2 - 0.30), 3), telha_P1=round(z_telha(0.30), 3),
+                  folga_P2_mm=round((10.00 - z_telha(X_P2 - 0.30)) * 1000), ok=10.00 - z_telha(X_P2 - 0.30) >= 0.10)
+erros += not folga_plat["ok"]
+res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"], X_PINO=[round(v, 3) for v in X_PINO],
            TB1_s_fabricacao=[i_["s"] for i_ in TS["insertos"] if i_["tipo"] == "TB-1"], contraventamento=dict(chapa=CT2, n_tirantes=len(tir), amostra=tir[:4],
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=rel[:28], tercas=[r for r in rel if r["ligacao"] == "terças"],

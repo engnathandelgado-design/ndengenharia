@@ -9,10 +9,10 @@ I = 0.03
 c, sn = 1 / math.sqrt(1 + I * I), I / math.sqrt(1 + I * I)
 L_TS = LG["L_TS"] * 1000
 X0 = [325.0, 20325.0]                    # pontas das duas TS-01 (a prumo)
-zf = lambda x: 8080.0 + I * x            # fundo da TS-01 (mm, x global em mm)
+zf = lambda x: LG["Z0_TS"] * 1000 + I * x  # fundo da TS-01 (mm, x global em mm) — cobertura baixada 0,62 m
 HD, LN, H = 450.0, 300.0, 900.0
 t3 = 27.0 / 900.0
-Z_TOP_PIL, Z_I110 = 10000.0, 9500.0
+Z_TOP_PIL, Z_I110 = 10000.0, 8880.0
 Z_MEZ = [3150.0, 6550.0]
 TER = [s * 1000 for s in LG["s_tercas"]]
 
@@ -121,14 +121,14 @@ def estrutura(R, eixo):
             pilar(R, xm, 600, Z_MEZ[1])
         faces = [(300, 9570), (10170, 19800), (20300, 29330), (29930, 39800)]
         for zm in Z_MEZ:
-            topo = zm - 315
+            topo = zm - 250                                  # laje alveolar h20 + capa 5
             for a, b in faces:
                 xa, xb = a + 25, b - 25
-                cont = [(xa + LN, topo - 900), (xb - LN, topo - 900), (xb - LN, topo - 450), (xb, topo - 450), (xb, topo), (xa, topo),
-                        (xa, topo - 450), (xa + LN, topo - 450)]
+                cont = [(xa + LN, topo - 700), (xb - LN, topo - 700), (xb - LN, topo - 425), (xb, topo - 425), (xb, topo), (xa, topo),
+                        (xa, topo - 425), (xa + LN, topo - 425)]
                 R.poli(cont, "CORTADO", True)
-                consolo(R, a, 1, topo - 450 - 10, proj=300, alt=550); consolo(R, b, -1, topo - 450 - 10, proj=300, alt=550)
-            R.ret(300, zm - 315, 39500, 265, "VISTA")
+                consolo(R, a, 1, topo - 425 - 10, proj=300, alt=500); consolo(R, b, -1, topo - 425 - 10, proj=300, alt=500)
+            R.ret(300, zm - 250, 39500, 200, "VISTA")
             R.ret(300, zm - 50, 39500, 50, "VISTA")
     else:
         sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, 800), (200, 880), (200, 1100), (-200, 1100), (-200, 880),
@@ -179,18 +179,18 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
     v.chamada((30000, z_tel(30000)), (6, 14), "telha 0,5 + PIR 30 sobre terças Ue 300 (c/1,579)")
     v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3%, dentes Gerber nas pontas")
     v.chamada((40500, 5000), (6, 0), "placa de fechamento 10 cm")
-    v.chamada((40100, 9900), (8, 20), "ATENÇÃO: platibanda abaixo da telha no lado alto")
+    v.chamada((40100, 9950), (8, 20), f"platibanda {Z_TOP_PIL - z_tel(39800):.0f} mm acima da telha (cobertura escondida)")
     if eixo == 3:
         v.chamada((20050, Z_I110 - 550), (10, -30), "I110 (diafragma maciço na linha da TS) + consolos CV-TS")
     else:
         v.chamada((20050, 5000), (10, 10), "P8A 50×50 (alterado de 40×60)")
-        v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "vigas do mezanino I90 com dentes + laje alveolar h26,5 + capa 5")
+        v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "vigas do mezanino I70 com dentes + laje alveolar h20 + capa 5 (ver nota 5)")
 
 # detalhes ampliados 1:20
 for k, (nome, org, jan, eixo, txt) in enumerate((
-        ("DETALHE 1", (80, 50), (-900, 7700, 1700, 10400), 3, "apoio no pilar P1 — lado baixo"),
-        ("DETALHE 2", (330, 50), (18900, 8250, 21200, 10200), 3, "apoio na I110 — eixo 3"),
-        ("DETALHE 3", (640, 50), (38500, 8700, 41000, 11000), 3, "apoio no pilar P2 — lado alto"))):
+        ("DETALHE 1", (80, 50), (-900, 7100, 1700, 10300), 3, "apoio no pilar P1 — lado baixo"),
+        ("DETALHE 2", (330, 50), (18900, 7600, 21200, 9600), 3, "apoio na I110 — eixo 3"),
+        ("DETALHE 3", (640, 50), (38500, 8400, 41000, 10400), 3, "apoio no pilar P2 — lado alto"))):
     v = pr.vista(nome, (org[0] - jan[0] / 20, org[1] - jan[1] / 20), 20, titulo=f"{nome} — {txt.upper()}", subtitulo="")
     R = Recorte(v, jan)
     estrutura(R, eixo)
@@ -213,13 +213,13 @@ for k, (nome, org, jan, eixo, txt) in enumerate((
         nivel(v, 21100, Z_I110, f"{f(Z_I110 / 1000)}", -1)
         v.chamada((20050, 9300), (10, 24), "diafragma da I110 na linha da TS")
         v.chamada((19600, ze - 200), (-10, -20), "CV-TS 350")
-        v.chamada((19700, zf(19500) + 1300), (-14, 14), "terças: 86 mm acima do topo da I110")
+        v.chamada((19700, zf(19500) + 1300), (-14, 14), "terças 86 mm acima do topo da I110")
     else:
         zs = zf(39625) + HD * c - 10
         v.cota_v([zs, Z_TOP_PIL, z_tel(39775)], 41000 - 300, -6, total=False)
         nivel(v, 40900, Z_TOP_PIL, f"{f(Z_TOP_PIL / 1000)}", -1)
         nivel(v, 40900, z_tel(39775), f"telha {f(z_tel(39775) / 1000)}", -1)
-        v.chamada((40100, Z_TOP_PIL), (-10, 20), f"platibanda {(z_tel(39775) - Z_TOP_PIL):.0f} mm ABAIXO da telha")
+        v.chamada((40100, Z_TOP_PIL), (-10, 20), f"folga de {(Z_TOP_PIL - z_tel(39800)):.0f} mm acima da telha")
 
 # coluna direita: tabela de níveis e notas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
@@ -230,12 +230,12 @@ niv = [["Consolo P1 (lado baixo)", f((zf(475) + HD * c - 10) / 1000)], ["Consolo
        ["Pisos do mezanino", f"{f(Z_MEZ[0] / 1000)} / {f(Z_MEZ[1] / 1000)}"]]
 y = pr.tabela(x0, y, "NÍVEIS (m)", ["ELEMENTO", "NÍVEL"], niv, [110, 70])
 notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações (pinos, folgas e terças conferidos em 28 apoios).",
+         "Cobertura baixada 0,62 m para ficar escondida: telha junto ao P2 em " + f(z_tel(39800) / 1000) + ", " + f"{(Z_TOP_PIL - z_tel(39800)):.0f}" + " mm abaixo da platibanda +10,000 (pedido: 100 mm).",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), dentes de 450 × 300 nas duas pontas; terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
-         "Pilar central P8A passou a 50×50 (era 40×60): com 60 na direção x a face ficava 25 mm dentro da ponta da TS-01. Modelo global recalculado (deslocamentos iguais).",
-         f"PONTO ABERTO 1: no lado alto a telha fica {(z_tel(39775) - Z_TOP_PIL) / 1000:.2f} m acima da platibanda de 10,00 m. Para 0,60 m de platibanda acima da telha, o P2 precisaria ir a ≈ {f((z_tel(39775) + 600) / 1000, 2)} m — conferir com a arquitetura R01.".replace(".", ",", 1),
-         "PONTO ABERTO 2: pé-direito sob as vigas do mezanino depende do nível de piso adotado (3,15 / 6,55 do modelo); conferir com a arquitetura.",
-         "Mão-francesa aparece em projeção (tracejada), do fundo da viga à terça. Fundações e cálices em projeto próprio.",
-         "PROJETO DA ND ENGENHARIA — PARA ANÁLISE, NÃO EXECUTAR."]
+         "Pilar central P8A 50×50 (era 40×60): com 60 na direção x a face ficava 25 mm dentro da ponta da TS-01.",
+         "LAJE h20 + 5 (pedido): com 500 kgf/m² em 9,75 m e 7 Ø12,7 por painel NÃO atende na seção genérica — ELU 209 > 192 kN·m por painel, descompressão só até 9,05 m. Desenhada para análise; confirmar na tabela do fabricante ou voltar à h26,5 + 5.",
+         "Vigas do mezanino I70 (mesma fôrma, 10 Ø12,7): atendem à flexão com a laje h20; dente de 425 em verificação por MEF. Ganham 20 cm de pé-direito sobre a I90.",
+         "Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA ANÁLISE, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CT01")

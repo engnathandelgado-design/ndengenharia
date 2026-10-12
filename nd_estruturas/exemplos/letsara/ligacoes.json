@@ -1,6 +1,14 @@
 {
  "tol_mm": 5.0,
  "erros": 0,
+ "platibanda": {
+  "platibanda": 10.0,
+  "telha_P2": 9.896,
+  "telha_P1": 8.711,
+  "folga_P2_mm": 104,
+  "ok": true
+ },
+ "Z0_TS": 7.46,
  "L_TS": 19.459,
  "passo_tercas": 1.579,
  "s_tercas": [
@@ -105,7 +113,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -118,7 +126,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -131,7 +139,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -144,7 +152,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -157,7 +165,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -170,7 +178,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -183,7 +191,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -196,7 +204,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -209,7 +217,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -222,7 +230,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -235,7 +243,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -248,7 +256,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -261,7 +269,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -274,7 +282,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -287,7 +295,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -300,7 +308,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -313,7 +321,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -326,7 +334,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -339,7 +347,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -352,7 +360,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -365,7 +373,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -378,7 +386,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -391,7 +399,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -404,7 +412,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   },
   {
    "ligacao": "apoio",
@@ -417,7 +425,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 8.534
+   "z_assento": 7.914
   },
   {
    "ligacao": "apoio",
@@ -430,7 +438,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.109
+   "z_assento": 8.489
   },
   {
    "ligacao": "apoio",
@@ -443,7 +451,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 9.134
+   "z_assento": 8.514
   },
   {
    "ligacao": "apoio",
@@ -456,7 +464,7 @@
    "ok": true,
    "folga_ponta_mm": 25,
    "folga_consolo_mm": 25,
-   "z_assento": 9.709
+   "z_assento": 9.089
   }
  ],
  "tercas": [
@@ -604,51 +612,51 @@
  "berco_I110": [
   {
    "linha": 3,
-   "consolo_esq": 9.109,
-   "consolo_dir": 9.134,
+   "consolo_esq": 8.489,
+   "consolo_dir": 8.514,
    "desnivel_mm": 25.0,
-   "topo_I110": 9.5,
-   "fundo_I110": 8.4,
+   "topo_I110": 8.88,
+   "fundo_I110": 7.78,
    "folga_topo_I110_tercas_mm": 86,
    "ok": true
   },
   {
    "linha": 5,
-   "consolo_esq": 9.109,
-   "consolo_dir": 9.134,
+   "consolo_esq": 8.489,
+   "consolo_dir": 8.514,
    "desnivel_mm": 25.0,
-   "topo_I110": 9.5,
-   "fundo_I110": 8.4,
+   "topo_I110": 8.88,
+   "fundo_I110": 7.78,
    "folga_topo_I110_tercas_mm": 86,
    "ok": true
   },
   {
    "linha": 6,
-   "consolo_esq": 9.109,
-   "consolo_dir": 9.134,
+   "consolo_esq": 8.489,
+   "consolo_dir": 8.514,
    "desnivel_mm": 25.0,
-   "topo_I110": 9.5,
-   "fundo_I110": 8.4,
+   "topo_I110": 8.88,
+   "fundo_I110": 7.78,
    "folga_topo_I110_tercas_mm": 86,
    "ok": true
   },
   {
    "linha": 7,
-   "consolo_esq": 9.109,
-   "consolo_dir": 9.134,
+   "consolo_esq": 8.489,
+   "consolo_dir": 8.514,
    "desnivel_mm": 25.0,
-   "topo_I110": 9.5,
-   "fundo_I110": 8.4,
+   "topo_I110": 8.88,
+   "fundo_I110": 7.78,
    "folga_topo_I110_tercas_mm": 86,
    "ok": true
   },
   {
    "linha": 8,
-   "consolo_esq": 9.109,
-   "consolo_dir": 9.134,
+   "consolo_esq": 8.489,
+   "consolo_dir": 8.514,
    "desnivel_mm": 25.0,
-   "topo_I110": 9.5,
-   "fundo_I110": 8.4,
+   "topo_I110": 8.88,
+   "fundo_I110": 7.78,
    "folga_topo_I110_tercas_mm": 86,
    "ok": true
   }
