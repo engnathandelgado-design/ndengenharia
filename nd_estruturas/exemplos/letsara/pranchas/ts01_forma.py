@@ -108,7 +108,7 @@ for s in MF_FUNDO:
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
 vi.chamada((MF_FUNDO[0], 150), (8, 12), "CH-MF 150×360×12,5 + 2 luvas M16")
-vi.chamada((EST[0], -260), (10, -10), "calço de estoque/transporte (2x)")
+vi.chamada((EST[0], -260), (30, -14), "calço de estoque/transporte (2x)")
 vi.chamada((S_PINO[1], 150), (6, 14), "CH-A1 no fundo do dente")
 vi.cota_ord([0] + MF_FUNDO, -200, -6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in MF_FUNDO])
 

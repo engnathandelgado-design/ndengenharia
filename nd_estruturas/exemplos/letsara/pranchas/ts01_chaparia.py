@@ -55,7 +55,7 @@ v.linha((0, -230), (0, 230), "EIXO")
 v.chamada((0, 215), (-6, 8), "eixo da terça")
 v.chamada((140, 140), (10, 8), "orelha 90×80×9,5")
 v.chamada((100, 0), (16, -26), "6 pinos Ø16 c/ cabeça, L 112")
-v.chamada((-120, -170), (-6, -14), "2 grampos U Ø10 (cortante)")
+v.chamada((-120, -170), (-6, -14), "2 grampos U Ø10 c/ gancho 90°, encostados nos pinos")
 v.texto((-150, -340), "chapa 300×380×12,5 + 4 orelhas", "nota")
 
 v = pr.vista("CH-T2 — VISTA", (330, 505), 5, titulo="CH-T2 — VISTA LATERAL", subtitulo="orelhas paralelas ao tirante (≈73°)")
@@ -199,7 +199,7 @@ notas = ["Chaparia ASTM A36; luvas M16 classe 8.8 soldadas por baixo da chapa, t
          "Soldas de filete 5 mm contínuas, E70XX; grapas Ø10 CA-50 com 2 filetes de 40 mm.",
          "Parafusos: M16 8.8 (CT-1 × CH-T e OR-1 × CH-MF); M12 8.8 (terça × CT-1, mão-francesa); furos padrão d + 2 mm; arruelas lisas e de pressão.",
          "CH-T2 é uma só peça para todos os nós: simétrica por rotação de 180°.",
-         "Chumbadores pelo ACI 318-19 cap. 17 (cone, arrancamento, aço, borda, pryout), concreto fissurado C50.",
+         "Chumbadores pelo ACI 318-19 cap. 17 (cone, arrancamento, aço, borda, pryout), concreto fissurado C50. Grampos U da CH-T2 encostados nos pinos (≤ 25 mm), pernas de 300 com gancho de 90°.",
          "Proteção: galvanização a fogo ou fundo epóxi após a desforma, retocado após a montagem.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
