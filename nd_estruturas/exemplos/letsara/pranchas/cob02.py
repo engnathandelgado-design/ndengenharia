@@ -53,12 +53,12 @@ for half in (0, 20000):
 for xa_, xb_ in ((XT[0], XT[12]), (XT[13], XT[25])):
     for y in q:
         v.ret(xa_, y - 60, xb_ - xa_, 120, "METALICA")
-v.chamada((XT[5], VAO * 0.1), (0, -14), "terça Ue 300×85×25×3,00 c/1579 (ZAR 345)")
-v.chamada((XT[7], q[1]), (6, 6), "corrente flexível Ø12,5 (3 linhas)")
-v.chamada((XT[0] + 800, q[0]), (14, -16), "corrente rígida (tubo Ø42,2) em todo o vão contraventado; nos demais vãos só no 1º espaço junto às ancoragens")
-v.chamada((XT[0] + 790, q[1] / 2), (30, -6), "diagonal Ø16")
-v.chamada((nos[2] + 1000, VAO * 0.15), (10, 22), f"contraventamento em X Ø12,5 A36 em subpainéis {CB['contraventamento']['painel_x_m']*1000:.0f} × L/{NSUB} (diag. ≈ {CB['contraventamento']['L_sub_m']:.1f} m): CH-T2 na viga, CH-X nas terças")
-v.chamada((nos[3] + 125, VAO / 2 + 100), (14, 10), "CH-X (nó do X na linha de corrente) — ver DETALHE 8")
+v.chamada((XT[5], VAO * 0.1), (10, -24), "terça Ue 300×85×25×3,00 c/1579 (ZAR 345)")
+v.chamada((XT[7], q[1]), (6, 54), "corrente flexível Ø12,5 (3 linhas)")
+v.chamada((XT[0] + 800, q[0]), (6, -34), "corrente rígida (tubo Ø42,2) em todo o vão contraventado; nos demais vãos só no 1º espaço junto às ancoragens")
+v.chamada((XT[0] + 790, q[1] / 2), (60, -46), "diagonal Ø16")
+v.chamada((nos[2] + 1000, VAO * 0.15), (10, 94), f"contraventamento em X Ø12,5 A36 em subpainéis {CB['contraventamento']['painel_x_m']*1000:.0f} × L/{NSUB} (diag. ≈ {CB['contraventamento']['L_sub_m']:.1f} m): CH-T2 na viga, CH-X nas terças")
+v.chamada((nos[3] + 125, VAO / 2 + 100), (14, 66), "CH-X (nó do X na linha de corrente) — ver DETALHE 8")
 v.chamada((20050, VAO * 0.85), (12, 14), "I110 / pilar central")
 v.cota_v([0, q[0], q[1], q[2], VAO], 0, -8)
 v.cota_h([0] + XT[:3], 0, -6, total=False)
