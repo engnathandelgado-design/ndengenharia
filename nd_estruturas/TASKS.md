@@ -4,7 +4,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Agora
 
-- [ ] Módulo `prefabricados` (DEC-008): peça, armadura, inserto; volume/peso/CG; marcas por identidade; lista de peças e aço por bitola; pytest com conferência manual.
+- [ ] Módulo `prefabricados` (DEC-008) — falta: objeto peça/armadura/inserto, volume/peso/CG, marcas por identidade, listas. Coeficientes ainda soltos no código: migrar para o registro de normas.
 - [ ] Prancha de peça automática (fôrma + armação + quadro da peça + dobramento) e planta de montagem, usando `prancha_nd.py`.
 - [ ] Teste real com a obra Letsara (precisa do PDF arquitetônico R01).
 - [ ] Alinhar as skills `projetos-estruturais-concreto-armado-protendido` e `mef-opensees-opsvis` com a Parte D (especificação viva).
@@ -34,6 +34,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] 2026-10-12 — `prefabricados`: seção poligonal (I, retangular), viga pré-tracionada (ato, ELS-F/D, ELU, cortante, flecha, cordoalhas superiores, isolamento), torção NBR 6118 17.5, pilar em balanço pelo método geral (OpenSeesPy, fibras, corrotacional, fluência, critério εcu/10‰); 6 testes conferidos à mão. Rodada 1 da Letsara em `exemplos/letsara/`.
 - [x] 2026-10-12 — GitHub como fonte única (DEC-007): `pyproject.toml`, páginas Streamlit (arco funicular, casca nos cantos), atalhos .bat para Windows, pasta `skills/`.
 - [x] 2026-10-12 — Módulo `formfinding` (JAX FDM → OpenSeesPy): casca apoiada nos cantos, arco funicular 2D, estabilidade não linear; 7 testes (2 conferidos à mão). Caso do barracão Vitalle em `exemplos/`.
 - [x] 2026-10-11 — Estrutura de documentos do projeto criada.

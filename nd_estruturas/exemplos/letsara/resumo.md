@@ -1,0 +1,41 @@
+# Letsara — Rodada 1 de pré-dimensionamento (12/10/2026)
+
+Script: `calc_letsara.py`. Os números completos estão em `resultados.json`. Este é um pré-dimensionamento e precisa ser confirmado no cálculo executivo.
+
+## Premissas a confirmar
+- **Vento:** V0 = 45 m/s, local ainda não informado. Terreno categoria III, classe C. Cpe da parede: +0,7 a barlavento e −0,5 a sotavento. Cpe da cobertura −0,8 e Cpi +0,2. Resulta q = 0,97 kN/m².
+- **Cobertura:** permanente de 0,25 kN/m² (telha, terças e instalações) e sobrecarga de 0,25 kN/m².
+- **Mezanino:** sobrecarga de 5,0 kN/m² (500 kgf/m²), revestimento de 1,0 kN/m², capa de 5 cm.
+- **Concreto:** peças em C40, com fckj = 28 MPa na liberação. Cordoalhas CP-190 RB 12,7.
+  - Perdas diferidas adotadas em 17 % de σpi.
+  - Classe de agressividade II, protensão limitada (pré-tração).
+- **Placas:** 2,5 kN/m², penduradas fora do pilar. A excentricidade de 0,40 m gera um momento permanente na base do pilar lateral de 97 kN·m.
+- **Pilares:** analisados pelo método geral no OpenSeesPy, com fibras, corrotacional, fluência φef e imperfeição θ1. A ruptura é dada por εcu ou por 10‰ no aço.
+  - Pilares independentes: a viga de cobertura não foi contada como escora. Isso deixa o resultado do lado da segurança.
+
+## Resultados
+
+| Peça | R01 | Menor seção que passa | Recomendação |
+|---|---|---|---|
+| Viga I de cobertura, L ≈ 19,2 m, 3 % | 90 cm | **I70** (mesas de 40, alma de 10 a 12), 8 cordoalhas Ø12,7, 8,6 t | I70 com alma de 12, ou I80 se a fábrica quiser mais rigidez lateral no içamento |
+| Viga central V407, 19 m | 40×100 | 40×100 com 20 cordoalhas, ou I100/60 | 40×100 protendida |
+| Viga central V406 e V405, 23 m, recebendo 2 linhas de vigas I | 40×100 | **40×100 não passa.** 40×120 com 26 cordoalhas (29 t) ou I120/60 com 22 cordoalhas (24,5 t) | Ver a questão 1 abaixo |
+| Pilar lateral P1/P2, 10 m em balanço | 40×60 | 40×60: 5Ø25 por face (2,0 %) | 40×60. O 40×50 pede 2,95 % de aço e desloca 26 mm em serviço |
+| Pilar de fachada, vento longitudinal | 40×60 | 40×60 com o 60 perpendicular à fachada, 6Ø25 por face | Orientar o 60 na direção do vento longitudinal. Com o 40 nessa direção não passa |
+| Pilar central P11 (2 vigas I + V406 + V407) | 40×40 | **40×40 não passa** (λ = 173). 45×45: 6Ø20; 50×50: 6Ø12,5 | 50×50 |
+| Viga de mezanino, laje de um lado | 25×60 | 40×70 com 14 cordoalhas, ou I80 com 10 | 40×70. Torção de montagem de 41 kN·m: interação de 0,40, mais estribo de torção de 3,0 cm²/m por ramo e armadura longitudinal de 5,1 cm² |
+| Laje alveolar, 500 kgf/m², vão ≈ 9,6 m | h16/h20 | Md ≈ 170 kN·m/m | **h26,5 + 5**, com 6 cordoalhas Ø12,7 por painel de 1,25 m. Conferir na tabela do fabricante |
+| Terças metálicas Ue, vão ≈ 9,25 m | ≈ 1,20 m | a 1,20 m: Ue 250×85×25×3,00 (9,0 kg/m²); a 1,60 m: Ue 300×85×25×3,00 (7,5 kg/m²); a 2,0 m ou mais nenhum Ue passa | 1,60 m, com correntes a L/3, se a telha vencer esse vão. Seção bruta; conferir a largura efetiva (NBR 14762) |
+
+## Versão sem vigas de travamento
+Passa. No sentido longitudinal, o pilar lateral só leva a imperfeição global e fecha com armadura mínima (5Ø12,5 por face no 40×60, λ = 173, método geral).
+
+As vigas de travamento V401–V404 não mudam o comprimento de flambagem (le = 2L), porque não há ponto contraventado. Quem segura o vento longitudinal são os pilares das fachadas, cada um no seu balanço. Portanto, sem travamento é preciso:
+- pilar de fachada com o 60 na direção longitudinal;
+- terças ligadas e contraventamento metálico em X nos vãos extremos da cobertura, para a montagem e para a transferência de esforços (detalhar).
+
+## Pontos de atenção que saíram do cálculo
+- **Sucção na viga I:** a carga de vento para cima (9,4 kN/m) supera o peso. Isso dá 61 kN de arrancamento de cálculo por apoio, que precisa de chumbador ou pino verificado à tração. Também pede 11,5 cm² de armadura passiva no topo da I70 para o momento negativo de 300 kN·m.
+- **Ato da protensão nos apoios:** isolar cordoalhas nas pontas das vigas I, centrais e de mezanino. A viga de mezanino precisa de 2 cordoalhas superiores.
+- **Torção na viga central:** sai baixa com e = 0,25 m (interação de 0,15 a 0,45). Ela é governada pela montagem com as vigas I de um lado só.
+- **Deslocamento de serviço do pilar lateral** (vento frequente): 15 mm no 40×60. Atende H/500, mas não atende H/1700 da NBR 6118 13.3. Decidir o critério adotado para pavilhão com placas fixadas por pino e furo oblongo.

@@ -1,0 +1,510 @@
+"""Pré-moldados ND — seções, protensão por pré-tração, pilares em balanço e torção.
+
+Convenção do pacote: kN, m; tensões em kPa (kN/m²) internamente, MPa só na saída.
+Compressão negativa nas tensões de seção (σ < 0 = compressão).
+
+Normas: NBR 6118:2023 (concreto, ELS/ELU, torção 17.5), NBR 9062:2017 (pré-moldado),
+NBR 8681 (combinações). Itens marcados (conferir) são simplificações de pré-dimensionamento.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+import math
+
+# --------------------------------------------------------------------------- materiais
+
+
+@dataclass(frozen=True)
+class Concreto:
+    fck: float  # MPa
+    alfa_e: float = 1.0  # granito/gnaisse (basalto = 1,2)
+
+    def __post_init__(self):
+        if not 20 <= self.fck <= 90:
+            raise ValueError("fck fora de 20–90 MPa")
+
+    @property
+    def fcd(self) -> float:  # kPa
+        return self.fck / 1.4 * 1000
+
+    @property
+    def fctm(self) -> float:  # MPa
+        return 0.3 * self.fck ** (2 / 3) if self.fck <= 50 else 2.12 * math.log(1 + 0.11 * self.fck)
+
+    @property
+    def fctk_inf(self) -> float:  # MPa
+        return 0.7 * self.fctm
+
+    @property
+    def Eci(self) -> float:  # kPa
+        if self.fck <= 50:
+            return self.alfa_e * 5600 * math.sqrt(self.fck) * 1000
+        return 21.5e3 * self.alfa_e * (self.fck / 10 + 1.25) ** (1 / 3) * 1000
+
+    @property
+    def Ecs(self) -> float:  # kPa
+        ai = min(1.0, 0.8 + 0.2 * self.fck / 80)
+        return ai * self.Eci
+
+
+FYD_CA50 = 500 / 1.15 * 1000  # kPa
+ES = 200e6  # kPa
+EP = 195e6  # kPa
+CORD = {"9.5": 0.548e-4, "12.7": 0.987e-4, "15.2": 1.40e-4}  # m², CP-190 RB
+
+
+# --------------------------------------------------------------------------- seção poligonal
+
+
+@dataclass
+class Secao:
+    """Polígono (x, y) em m, y para cima a partir da face inferior."""
+
+    nome: str
+    pts: list
+
+    def _props(self):
+        A = Sx = Ixx = 0.0
+        p = self.pts + [self.pts[0]]
+        for (x0, y0), (x1, y1) in zip(p[:-1], p[1:]):
+            c = x0 * y1 - x1 * y0
+            A += c
+            Sx += (y0 + y1) * c
+            Ixx += (y0 * y0 + y0 * y1 + y1 * y1) * c
+        A /= 2
+        yc = Sx / (6 * A)
+        Ixx = Ixx / 12 - A * yc * yc
+        return abs(A), yc, abs(Ixx)
+
+    @property
+    def A(self):
+        return self._props()[0]
+
+    @property
+    def yc(self):
+        return self._props()[1]
+
+    @property
+    def I(self):
+        return self._props()[2]
+
+    @property
+    def h(self):
+        ys = [y for _, y in self.pts]
+        return max(ys) - min(ys)
+
+    @property
+    def Wi(self):  # módulo da fibra inferior
+        return self.I / self.yc
+
+    @property
+    def Ws(self):
+        return self.I / (self.h - self.yc)
+
+    def largura_em(self, y):
+        """Largura da seção na cota y (polígono simétrico e convexo por faixas)."""
+        xs = []
+        p = self.pts + [self.pts[0]]
+        for (x0, y0), (x1, y1) in zip(p[:-1], p[1:]):
+            if (y0 - y) * (y1 - y) <= 0 and y0 != y1:
+                xs.append(x0 + (y - y0) * (x1 - x0) / (y1 - y0))
+        return max(xs) - min(xs) if len(xs) >= 2 else 0.0
+
+
+def secao_retangular(b, h, nome=None):
+    return Secao(nome or f"R{b*100:.0f}x{h*100:.0f}", [(-b / 2, 0), (b / 2, 0), (b / 2, h), (-b / 2, h)])
+
+
+def secao_I(h, bs=0.40, ts=0.10, ms=0.05, bw=0.12, bi=0.40, ti=0.15, mi=0.08, nome=None):
+    """Viga I simétrica no eixo x: mesa sup. bs×ts com mísula ms, alma bw, mesa inf. bi×ti com mísula mi."""
+    pts = [
+        (-bi / 2, 0), (bi / 2, 0), (bi / 2, ti), (bw / 2, ti + mi),
+        (bw / 2, h - ts - ms), (bs / 2, h - ts), (bs / 2, h), (-bs / 2, h),
+        (-bs / 2, h - ts), (-bw / 2, h - ts - ms), (-bw / 2, ti + mi), (-bi / 2, ti),
+    ]
+    return Secao(nome or f"I{h*100:.0f}", pts)
+
+
+# --------------------------------------------------------------------------- viga pré-tracionada
+
+
+@dataclass
+class Carregamento:
+    g1: float  # peso próprio, kN/m
+    g2: float  # permanente adicional, kN/m
+    q: float  # variável principal, kN/m
+    w: float = 0.0  # vento (sucção positiva para cima), kN/m
+    psi1: float = 0.4
+    psi2: float = 0.3
+
+
+@dataclass
+class ResultadoViga:
+    ok: bool
+    n_cord: int
+    linhas: dict = field(default_factory=dict)
+    avisos: list = field(default_factory=list)
+
+
+def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc: Concreto,
+                                 n_cord: int, diam="12.7", y_cord=0.07, fckj=None,
+                                 perda_dif=0.17, caa="II", gama_g=1.3, gama_q=1.4,
+                                 isola_pontas=True, n_sup=0, y_sup=0.05) -> ResultadoViga:
+    """Viga biapoiada pré-tracionada, cordoalhas retas na mesa inferior.
+
+    Verifica: tensões no ato (meio do vão e apoio), ELS-F (freq.), ELS-D (q.perm.) para
+    protensão limitada (pré-tração, CAA II), ELU flexão no meio do vão, cortante (VRd2),
+    flecha diferida. Perdas diferidas adotadas como fração de σpi (conferir no executivo).
+    """
+    fckj = fckj or 0.7 * conc.fck
+    Ap_inf = n_cord * CORD[diam]
+    Ap = (n_cord + n_sup) * CORD[diam]
+    sigma_pi = min(0.77 * 1900, 0.85 * 1710) * 1000  # kPa
+    A, I, yc = sec.A, sec.I, sec.yc
+    y_cg = (n_cord * y_cord + n_sup * (sec.h - y_sup)) / (n_cord + n_sup)
+    ep = yc - y_cg
+    Mg1 = carga.g1 * L ** 2 / 8
+    Mg2 = carga.g2 * L ** 2 / 8
+    Mq = carga.q * L ** 2 / 8
+    Mw = carga.w * L ** 2 / 8
+
+    # perda imediata por encurtamento elástico (pré-tração)
+    Ecj = conc.Ecs * math.sqrt(fckj / conc.fck)
+    alfa_p = EP / Ecj
+    P0_try = Ap * sigma_pi * 0.97  # 3% relaxação inicial/ancoragem (conferir)
+    s_cp = -(P0_try / A + P0_try * ep * ep / I) + Mg1 * ep / I
+    perda_el = alfa_p * abs(s_cp)
+    sigma_p0 = sigma_pi * 0.97 - perda_el
+    P0 = Ap * sigma_p0
+    Pinf = Ap * (sigma_p0 - perda_dif * sigma_pi)
+
+    def tensoes(P, M):
+        si = -P / A - P * ep / I * yc + M / I * yc  # fibra inferior (σ<0 compressão)
+        ss = -P / A + P * ep / I * (sec.h - yc) - M / I * (sec.h - yc)
+        return si / 1000, ss / 1000  # MPa
+
+    out, av = {}, []
+    fctmj = 0.3 * fckj ** (2 / 3)
+    # ato da protensão — meio do vão e apoio (M=0)
+    si, ss = tensoes(P0, Mg1)
+    out["ato_meio_inf_MPa"] = round(si, 2)
+    out["ato_meio_sup_MPa"] = round(ss, 2)
+    si_a, ss_a = tensoes(P0, 0)
+    out["ato_apoio_inf_MPa"] = round(si_a, 2)
+    out["ato_apoio_sup_MPa"] = round(ss_a, 2)
+    lim_c = -0.7 * fckj
+    lim_t = 1.2 * fctmj
+    ok_ato = min(si, si_a) >= lim_c and max(ss, ss_a) <= lim_t
+    if not ok_ato and isola_pontas and si >= lim_c and ss <= lim_t:
+        # meio do vão passa; pontas resolvidas com isolamento de cordoalhas (NBR 9062 / prática de fábrica)
+        av.append("Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) "
+                  "e/ou armadura passiva no topo")
+        ok_ato = True
+    out["ato_ok"] = ok_ato
+
+    alfa = 1.3 if sec.largura_em(sec.h * 0.5) < 0.8 * sec.largura_em(0.01) else 1.5
+    fct_f = alfa * conc.fctk_inf
+    # ELS-F frequente; ELS-D quase permanente (descompressão na fibra inferior)
+    si_f, ss_f = tensoes(Pinf, Mg1 + Mg2 + carga.psi1 * Mq)
+    si_d, _ = tensoes(Pinf, Mg1 + Mg2 + carga.psi2 * Mq)
+    out["elsf_inf_MPa"] = round(si_f, 2)
+    out["elsd_inf_MPa"] = round(si_d, 2)
+    out["elsf_lim_MPa"] = round(fct_f, 2)
+    ok_els = si_f <= fct_f and si_d <= 0.0 and ss_f >= -0.6 * conc.fck
+    # vento de sucção (G + W freq.) — topo não pode fissurar
+    _, ss_w = tensoes(Pinf, Mg1 + Mg2 - 0.3 * Mw)
+    out["vento_sup_MPa"] = round(ss_w, 2)
+    ok_els = ok_els and ss_w <= fct_f
+    out["els_ok"] = ok_els
+
+    # ELU flexão — bloco retangular na mesa superior, σpd ≈ fpyd (conferir compatibilidade)
+    Md = gama_g * (Mg1 + Mg2) + gama_q * Mq
+    fpyd = 1710 / 1.15 * 1000
+    dp = sec.h - y_cord
+    bs = sec.largura_em(sec.h - 0.01)
+    x = Ap_inf * fpyd / (0.85 * conc.fcd * 0.8 * bs)  # cordoalhas superiores desprezadas no ELU
+    if 0.8 * x > 0.10:
+        av.append("Linha neutra sai da mesa: refinar ELU pela seção real")
+    MRd = Ap_inf * fpyd * (dp - 0.4 * x)
+    out["Md_kNm"] = round(Md, 1)
+    out["MRd_kNm"] = round(MRd, 1)
+    out["x_d"] = round(x / dp, 3)
+    ok_elu = MRd >= Md and x / dp <= 0.45
+    # ELU sucção: 1,0G + 1,4W com protensão — topo não pode esmagar/romper (checagem de tensão)
+    Mdw = (Mg1 + Mg2) - 1.4 * Mw
+    out["Md_succao_kNm"] = round(Mdw, 1)
+
+    # cortante — biela (VRd2, modelo I) na alma
+    Vd = (gama_g * (carga.g1 + carga.g2) + gama_q * carga.q) * L / 2
+    bw = sec.largura_em(sec.h / 2)
+    av2 = 1 - conc.fck / 250
+    VRd2 = 0.27 * av2 * conc.fcd * bw * 0.9 * dp
+    out["Vd_kN"] = round(Vd, 1)
+    out["VRd2_kN"] = round(VRd2, 1)
+    Vc = 0.6 * conc.fctk_inf / 1.4 * 1000 * bw * 0.9 * dp * 1.5  # protensão (Vc0·(1+M0/Msd)≤2Vc0), adotado 1,5
+    asw = max(0.0, (Vd - Vc) / (0.9 * dp * FYD_CA50)) * 1e4  # cm²/m
+    asw_min = 0.2 * conc.fctm / 500 * bw * 1e4
+    out["Asw_cm2_m"] = round(max(asw, asw_min), 2)
+    ok_v = Vd <= VRd2
+
+    # flecha (estádio I, Ecs): imediata + fluência (φ≈2,0 conferir), contraflecha da protensão
+    EI = conc.Ecs * I
+    fg = 5 * (carga.g1 + carga.g2) * L ** 4 / (384 * EI)
+    fq = 5 * carga.psi2 * carga.q * L ** 4 / (384 * EI)
+    fp = -Pinf * ep * L ** 2 / (8 * EI)
+    f_inf = (fg + fp) * (1 + 2.0) + fq
+    out["flecha_final_mm"] = round(f_inf * 1000, 1)
+    out["flecha_lim_mm"] = round(L / 250 * 1000, 1)
+    ok_f = abs(f_inf) <= L / 250
+
+    out["P0_kN"] = round(P0, 1)
+    out["Pinf_kN"] = round(Pinf, 1)
+    out["perda_imediata_%"] = round((1 - sigma_p0 / sigma_pi) * 100, 1)
+    out["A_m2"] = round(A, 4)
+    out["peso_kN_m"] = round(A * 25, 2)
+    ok = ok_ato and ok_els and ok_elu and ok_v and ok_f
+    for k, v in [("ato", ok_ato), ("ELS", ok_els), ("ELU flexão", ok_elu), ("cortante", ok_v), ("flecha", ok_f)]:
+        if not v:
+            av.append(f"Não passa: {k}")
+    out["n_cord_sup"] = n_sup
+    return ResultadoViga(ok, n_cord, out, av)
+
+
+def menor_protensao(sec, L, carga, conc, diam="12.7", nmax=24, **kw):
+    """Menor número de cordoalhas (par, simétrico) que passa em tudo; None se nenhum."""
+    for n_sup in (0, 2, 4):
+        for n in range(2, nmax + 1, 2):
+            r = verificar_viga_pretracionada(sec, L, carga, conc, n, diam, n_sup=n_sup, **kw)
+            if r.ok:
+                return r
+    return None
+
+
+# --------------------------------------------------------------------------- torção (NBR 6118 17.5)
+
+
+def torcao_retangular(b, h, Td, Vd, conc: Concreto, c1=0.045, theta=45.0):
+    """Modelo de treliça espacial, seção vazada equivalente. Retorna verificação de bielas e armaduras."""
+    A, u = b * h, 2 * (b + h)
+    he = max(2 * c1, min(A / u, b - 2 * c1))
+    Ae = (b - he) * (h - he)
+    ue = 2 * ((b - he) + (h - he))
+    av2 = 1 - conc.fck / 250
+    th = math.radians(theta)
+    TRd2 = 0.5 * av2 * conc.fcd * Ae * he * math.sin(2 * th)
+    d = h - c1 - 0.01
+    VRd2 = 0.27 * av2 * conc.fcd * b * d
+    inter = Vd / VRd2 + Td / TRd2
+    a90 = Td / (2 * Ae * FYD_CA50) * math.tan(th) * 1e4  # cm²/m por ramo
+    asl = Td / (2 * Ae * FYD_CA50) / math.tan(th) * ue * 1e4  # cm² total
+    return dict(TRd2_kNm=round(TRd2, 1), VRd2_kN=round(VRd2, 1), interacao=round(inter, 3),
+                ok=inter <= 1.0, Asw_torcao_cm2_m_ramo=round(a90, 2), Asl_torcao_cm2=round(asl, 2),
+                he_m=round(he, 3))
+
+
+# --------------------------------------------------------------------------- pilar em balanço
+
+
+def flexao_composta_retangular(b, h, Nd, Md, conc: Concreto, c=0.045):
+    """Armadura simétrica As=As' (cada face) para N (compressão +) e M, por equilíbrio
+    com bloco retangular. Retorna As por face em cm² (busca numérica, ε pelo domínio)."""
+    d, d2 = h - c, c
+    fc = 0.85 * conc.fcd
+    best = None
+    for i in range(1, 2000):
+        x = h * 1.2 * i / 2000
+        y = min(0.8 * x, h)
+        Fc = fc * b * y
+        # deformações (domínios 2–5 simplificado)
+        eps_cu = 0.0035
+        es = eps_cu * (d - x) / x  # tração na armadura inferior (positivo)
+        es2 = eps_cu * (x - d2) / x  # compressão na superior
+        fs = min(abs(es) * ES, FYD_CA50) * (1 if es >= 0 else -1)
+        fs2 = min(abs(es2) * ES, FYD_CA50) * (1 if es2 >= 0 else -1)
+        den = fs2 - fs
+        if abs(den) < 1:
+            continue
+        As = (Nd - Fc) / den  # equilíbrio de forças
+        if As < 0:
+            As = 0.0
+        M = Fc * (h / 2 - y / 2) + As * fs2 * (h / 2 - d2) + As * fs * (d - h / 2)
+        if M >= Md and (best is None or As < best):
+            best = As
+    return None if best is None else best * 1e4
+
+
+def pilar_balanco(b, h, L, Nk, Hk_dist, conc: Concreto, Hk_top=0.0, Mk_perm=0.0, gama=1.4,
+                  gama_g=1.3, phi=2.0, Nk_perm=None):
+    """Pilar engastado no cálice, livre no topo; esforços na direção da dimensão h.
+
+    Hk_dist: vento distribuído (kN/m); Hk_top: força no topo (kN); Mk_perm: momento permanente
+    na base (ex.: excentricidade das placas). le = 2L.
+    1ª ordem + fluência (NBR 6118:2023 15.8.4, e_cc) + 2ª ordem pelo pilar-padrão com rigidez κ
+    (15.8.3.3.3). Para λ > 90 o item pede pilar-padrão com M-N-1/r e para λ > 140 o método geral:
+    aqui o resultado é de pré-dimensionamento e deve ser confirmado por análise não linear.
+    """
+    le = 2 * L
+    i = h / math.sqrt(12)
+    lam = le / i
+    Nk_perm = Nk if Nk_perm is None else Nk_perm
+    Nd = gama_g * Nk
+    M1 = gama * (Hk_dist * L ** 2 / 2 + Hk_top * L) + gama_g * Mk_perm
+    M1min = Nd * (0.015 + 0.03 * h)  # NBR 6118 11.3.3.4.3
+    M1d = max(M1, M1min)
+    nu = Nd / (b * h * conc.fcd)
+    # fluência (15.8.4): e_cc com Msg = Mk_perm e ea = θ1·le/2 (θ1 = 1/(100√L) ≥ 1/300)
+    Ic = b * h ** 3 / 12
+    Ne = 10 * conc.Eci * Ic / le ** 2
+    theta1 = max(1 / 300, min(1 / 200, 1 / (100 * math.sqrt(L))))
+    ea = theta1 * le / 2
+    ecc = 0.0
+    if lam > 90 and Nk_perm < Ne:
+        ecc = (Mk_perm / max(Nk_perm, 1e-6) + ea) * (math.exp(phi * Nk_perm / (Ne - Nk_perm)) - 1)
+    M1d_c = M1d + Nd * ecc
+    Mtot = M1d_c
+    instavel = False
+    for _ in range(100):
+        kappa = 32 * (1 + 5 * Mtot / (h * Nd)) * nu
+        den = 1 - lam ** 2 / (120 * kappa / nu)
+        if den <= 0.05:
+            instavel = True
+            break
+        Mn = M1d_c / den
+        if abs(Mn - Mtot) < 0.01:
+            Mtot = Mn
+            break
+        Mtot = Mn
+    As = None if instavel else flexao_composta_retangular(b, h, Nd, Mtot, conc)
+    As_min = max(0.15 * Nd / FYD_CA50, 0.004 * b * h) * 1e4 / 2  # NBR 6118 17.3.5.3.1
+    As_face = None if As is None else max(As, As_min)
+    taxa = None if As_face is None else 2 * As_face / (b * h * 1e4)
+    ok = As_face is not None and lam <= 200 and taxa <= 0.04
+    av = []
+    if lam > 140:
+        av.append("λ > 140: confirmar pelo método geral (não linear física e geométrica com fluência)")
+    elif lam > 90:
+        av.append("90 < λ ≤ 140: confirmar com pilar-padrão acoplado a M-N-1/r ou análise não linear")
+    if instavel:
+        av.append("Instável pelo pilar-padrão")
+    return dict(lambda_=round(lam, 1), Nd_kN=round(Nd, 1), M1d_kNm=round(M1d, 1), ecc_m=round(ecc, 4),
+                Mtot_kNm=round(Mtot, 1), As_face_cm2=None if As_face is None else round(As_face, 1),
+                taxa_total_pct=None if taxa is None else round(taxa * 100, 2), ok=ok, avisos=av)
+
+
+# --------------------------------------------------------------------------- vento (pré-dimensionamento)
+
+
+def pressao_vento(V0, z=10.0, b=0.93, Fr=0.95, p=0.115, S1=1.0, S3=1.0):
+    """q (kN/m²) — NBR 6123 cat. III classe C por padrão (conferir parâmetros da revisão 2023)."""
+    S2 = b * Fr * (z / 10) ** p
+    Vk = V0 * S1 * S2 * S3
+    return 0.613 * Vk ** 2 / 1000
+
+
+# --------------------------------------------------------------------------- método geral (OpenSeesPy)
+
+
+def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.0, Hd_top=0.0,
+                       phi_ef=1.0, c=0.045, n_el=10, ea_rad=None):
+    """Pilar em balanço — não linearidade física (fibras, concreto 0,85fcd/γ e CA-50 de cálculo)
+    e geométrica (corrotacional), fluência pelo alongamento do diagrama do concreto (1+φef),
+    imperfeição global θ1 (NBR 6118 11.3.3.4.1). Carrega N fixo e cresce H/M até λ.
+    Retorna o fator de carga último λu (passa se ≥ 1,0) e o deslocamento do topo em λ=1.
+    """
+    import openseespy.opensees as ops
+    ops.wipe()
+    ops.logFile("/dev/null", "-noEcho")
+    ops.model("basic", "-ndm", 2, "-ndf", 3)
+    for i in range(n_el + 1):
+        ops.node(i + 1, 0.0, L * i / n_el)
+    ops.fix(1, 1, 1, 1)
+    fc = 0.85 * conc.fcd
+    e0 = -0.002 * (1 + phi_ef)
+    eu = -0.0035 * (1 + phi_ef)
+    ops.uniaxialMaterial("Concrete01", 1, -fc, e0, -fc, eu)
+    ops.uniaxialMaterial("Steel01", 2, FYD_CA50, ES, 0.001)
+    ops.section("Fiber", 1)
+    ops.patch("rect", 1, 20, 4, -h / 2, -b / 2, h / 2, b / 2)
+    As = As_face * 1e-4
+    nb = 4
+    for y in (-h / 2 + c, h / 2 - c):
+        ops.layer("straight", 2, nb, As / nb, y, -b / 2 + c, y, b / 2 - c)
+    ops.geomTransf("Corotational", 1)
+    ops.beamIntegration("Lobatto", 1, 1, 5)
+    for i in range(n_el):
+        ops.element("forceBeamColumn", i + 1, i + 1, i + 2, 1, 1)
+    theta = ea_rad if ea_rad is not None else max(1 / 300, min(1 / 200, 1 / (100 * math.sqrt(L))))
+    # N fixo (com imperfeição como força horizontal equivalente θ·N no topo)
+    ops.timeSeries("Constant", 1)
+    ops.pattern("Plain", 1, 1)
+    ops.load(n_el + 1, theta * Nd, -Nd, 0.0)
+    ops.system("BandGeneral"); ops.numberer("RCM"); ops.constraints("Plain")
+    ops.test("NormDispIncr", 1e-8, 50); ops.algorithm("Newton")
+    ops.integrator("LoadControl", 0.1); ops.analysis("Static")
+    if ops.analyze(10) != 0 or ops.nodeDisp(n_el + 1, 1) < 0:
+        ops.wipe()
+        return dict(lambda_u=0.0, ok=False, topo_mm=None, motivo="instável só com a força normal")
+    ops.loadConst("-time", 0.0)
+    ops.timeSeries("Linear", 2)
+    ops.pattern("Plain", 2, 2)
+    for i in range(1, n_el + 1):
+        w = Hd_dist * L / n_el * (0.5 if i == n_el else 1.0)
+        ops.load(i + 1, w, 0.0, 0.0)
+    ops.load(n_el + 1, Hd_top, 0.0, 0.0)
+    if Md_base:
+        # momento permanente aplicado como binário distribuído (placas): M por nível
+        for i in range(1, n_el + 1):
+            ops.load(i + 1, 0.0, 0.0, -Md_base / n_el)  # Md_base > 0 no mesmo sentido do vento +x
+    def rompeu():
+        # ELU por deformação (NBR 6118 17.2.2): concreto εcu (alongado pela fluência) ou aço 10‰
+        for e in range(1, n_el + 1):
+            for ip in range(1, 6):
+                d = ops.eleResponse(e, "section", ip, "deformation")
+                if not d:
+                    continue
+                eps, kap = d[0], d[1]
+                ec = min(eps - kap * h / 2, eps + kap * h / 2)
+                es = max(eps - kap * (h / 2 - c), eps + kap * (h / 2 - c))
+                if ec < eu or es > 0.010:
+                    return True
+        return False
+
+    lam, step, topo1 = 0.0, 0.02, None
+    ops.integrator("LoadControl", step)
+    while lam < 3.0:
+        if ops.analyze(1) != 0:
+            ok = False
+            for s_ in (step / 4, step / 16):
+                ops.integrator("LoadControl", s_)
+                if ops.analyze(1) == 0:
+                    ok = True
+                    lam += s_
+                    break
+            if not ok:
+                break
+            ops.integrator("LoadControl", step)
+        else:
+            lam += step
+        if rompeu() or ops.nodeDisp(n_el + 1, 1) < 0:  # deformação última ou perda de estabilidade
+            lam -= step
+            break
+        if topo1 is None and lam >= 1.0:
+            topo1 = ops.nodeDisp(n_el + 1, 1) * 1000
+    ops.wipe()
+    return dict(lambda_u=round(lam, 2), ok=lam >= 1.0, topo_mm=None if topo1 is None else round(topo1, 1))
+
+
+def armadura_minima_metodo_geral(b, h, L, Nd, Hd_dist, conc, Md_base=0.0, Hd_top=0.0, phi_ef=1.0,
+                                 bitolas=(10.0, 12.5, 16.0, 20.0, 25.0, 32.0)):
+    """Menor armadura por face (4 barras por face) que dá λu ≥ 1,0. Retorna dict ou None."""
+    for d in bitolas:
+        for nb in (2, 3, 4, 5, 6):
+            As = nb * math.pi * (d / 1000) ** 2 / 4 * 1e4
+            if not 0.004 <= 2 * As / (b * h * 1e4) <= 0.04:  # NBR 6118 17.3.5.3 (4% fora das emendas)
+                continue
+            r = pilar_metodo_geral(b, h, L, As, Nd, Hd_dist, conc, Md_base, Hd_top, phi_ef)
+            if r["ok"]:
+                r.update(barras_face=f"{nb} Ø{d:g}", As_face_cm2=round(As, 2),
+                         taxa_pct=round(2 * As / (b * h * 1e4) * 100, 2))
+                return r
+    return None

@@ -1,0 +1,1341 @@
+{
+ "premissas": {
+  "V0": 45.0,
+  "cpe_parede_barl": 0.7,
+  "cpe_parede_sotav": 0.5,
+  "cpe_cob": -0.8,
+  "cpi": 0.2,
+  "g_cob": 0.25,
+  "telha": 0.1,
+  "q_cob": 0.25,
+  "placa": 2.5,
+  "e_placa": 0.4,
+  "alt_placas": 10.0,
+  "trib": 9.655,
+  "L_pilar": 10.0,
+  "q_mez": 5.0,
+  "rev_mez": 1.0,
+  "capa": 1.25,
+  "pp_alveolar": {
+   "h20": 2.8,
+   "h26.5": 3.7,
+   "h32": 4.3
+  },
+  "e_tor": 0.25
+ },
+ "q_vento_kN_m2": 0.969,
+ "tercas": [
+  {
+   "espac_m": 1.2,
+   "perfil": "Ue 250x85x25x3,00",
+   "kg_m": 10.79,
+   "kg_m2": 8.99,
+   "flecha_mm": 19.3,
+   "util_flexao": 0.9,
+   "linhas_por_agua_20m": 18
+  },
+  {
+   "espac_m": 1.6,
+   "perfil": "Ue 300x85x25x3,00",
+   "kg_m": 11.96,
+   "kg_m2": 7.48,
+   "flecha_mm": 16.2,
+   "util_flexao": 0.95,
+   "linhas_por_agua_20m": 14
+  },
+  {
+   "espac_m": 2.0,
+   "perfil": "nenhum Ue da lista passa"
+  },
+  {
+   "espac_m": 2.45,
+   "perfil": "nenhum Ue da lista passa"
+  }
+ ],
+ "viga_I_cobertura": {
+  "L_calc_m": 19.15,
+  "g2_kN_m": 2.41,
+  "q_kN_m": 2.41,
+  "w_succao_kN_m": 9.36,
+  "opcoes": [
+   {
+    "secao": "I70",
+    "bw": 0.1,
+    "h": 0.7,
+    "A_m2": 0.1645,
+    "peso_t": 8.2,
+    "passa": true,
+    "n_cord_12_7": 8,
+    "detalhes": {
+     "ato_meio_inf_MPa": -9.9,
+     "ato_meio_sup_MPa": -2.44,
+     "ato_apoio_inf_MPa": -16.23,
+     "ato_apoio_sup_MPa": 4.76,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.7,
+     "elsd_inf_MPa": -2.07,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.63,
+     "els_ok": true,
+     "Md_kNm": 543.8,
+     "MRd_kNm": 692.2,
+     "x_d": 0.232,
+     "Md_succao_kNm": -301.2,
+     "Vd_kN": 113.6,
+     "VRd2_kN": 379.1,
+     "Asw_cm2_m": 1.4,
+     "flecha_final_mm": 8.9,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 1054.4,
+     "Pinf_kN": 859.3,
+     "perda_imediata_%": 8.1,
+     "A_m2": 0.1645,
+     "peso_kN_m": 4.11,
+     "n_cord_sup": 0
+    },
+    "avisos": [
+     "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+     "Linha neutra sai da mesa: refinar ELU pela seção real"
+    ],
+    "R_g_kN": 62.5,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 62.9,
+    "M_succao_d_kNm": 301.2,
+    "As_sup_succao_cm2": 11.84
+   },
+   {
+    "secao": "I70",
+    "bw": 0.12,
+    "h": 0.7,
+    "A_m2": 0.1722,
+    "peso_t": 8.58,
+    "passa": true,
+    "n_cord_12_7": 8,
+    "detalhes": {
+     "ato_meio_inf_MPa": -9.43,
+     "ato_meio_sup_MPa": -2.45,
+     "ato_apoio_inf_MPa": -16.02,
+     "ato_apoio_sup_MPa": 4.94,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.3,
+     "elsd_inf_MPa": -1.67,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.68,
+     "els_ok": true,
+     "Md_kNm": 555.3,
+     "MRd_kNm": 692.2,
+     "x_d": 0.232,
+     "Md_succao_kNm": -292.4,
+     "Vd_kN": 116.0,
+     "VRd2_kN": 454.9,
+     "Asw_cm2_m": 1.68,
+     "flecha_final_mm": 10.7,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 1057.2,
+     "Pinf_kN": 862.1,
+     "perda_imediata_%": 7.9,
+     "A_m2": 0.1722,
+     "peso_kN_m": 4.3,
+     "n_cord_sup": 0
+    },
+    "avisos": [
+     "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+     "Linha neutra sai da mesa: refinar ELU pela seção real"
+    ],
+    "R_g_kN": 64.3,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 61.1,
+    "M_succao_d_kNm": 292.4,
+    "As_sup_succao_cm2": 11.5
+   },
+   {
+    "secao": "I80",
+    "bw": 0.1,
+    "h": 0.8,
+    "A_m2": 0.1745,
+    "peso_t": 8.69,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -6.26,
+     "ato_meio_sup_MPa": -2.75,
+     "ato_apoio_inf_MPa": -11.64,
+     "ato_apoio_sup_MPa": 3.39,
+     "ato_ok": true,
+     "elsf_inf_MPa": 0.01,
+     "elsd_inf_MPa": -0.29,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.82,
+     "els_ok": true,
+     "Md_kNm": 558.7,
+     "MRd_kNm": 620.5,
+     "x_d": 0.151,
+     "Md_succao_kNm": -289.8,
+     "Vd_kN": 116.7,
+     "VRd2_kN": 437.4,
+     "Asw_cm2_m": 1.4,
+     "flecha_final_mm": 16.9,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 807.2,
+     "Pinf_kN": 660.9,
+     "perda_imediata_%": 6.2,
+     "A_m2": 0.1745,
+     "peso_kN_m": 4.36,
+     "n_cord_sup": 0
+    },
+    "avisos": [
+     "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo"
+    ],
+    "R_g_kN": 64.9,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 60.5,
+    "M_succao_d_kNm": 289.8,
+    "As_sup_succao_cm2": 9.87
+   },
+   {
+    "secao": "I80",
+    "bw": 0.12,
+    "h": 0.8,
+    "A_m2": 0.1842,
+    "peso_t": 9.18,
+    "passa": true,
+    "n_cord_12_7": 8,
+    "detalhes": {
+     "ato_meio_inf_MPa": -9.32,
+     "ato_meio_sup_MPa": -1.72,
+     "ato_apoio_inf_MPa": -14.95,
+     "ato_apoio_sup_MPa": 4.62,
+     "ato_ok": true,
+     "elsf_inf_MPa": -2.43,
+     "elsd_inf_MPa": -2.73,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.03,
+     "els_ok": true,
+     "Md_kNm": 573.2,
+     "MRd_kNm": 809.6,
+     "x_d": 0.201,
+     "Md_succao_kNm": -278.6,
+     "Vd_kN": 119.7,
+     "VRd2_kN": 524.9,
+     "Asw_cm2_m": 1.68,
+     "flecha_final_mm": -1.3,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 1058.0,
+     "Pinf_kN": 862.9,
+     "perda_imediata_%": 7.8,
+     "A_m2": 0.1842,
+     "peso_kN_m": 4.61,
+     "n_cord_sup": 0
+    },
+    "avisos": [
+     "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+     "Linha neutra sai da mesa: refinar ELU pela seção real"
+    ],
+    "R_g_kN": 67.2,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 58.2,
+    "M_succao_d_kNm": 278.6,
+    "As_sup_succao_cm2": 9.49
+   },
+   {
+    "secao": "I90",
+    "bw": 0.1,
+    "h": 0.9,
+    "A_m2": 0.1845,
+    "peso_t": 9.19,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -6.3,
+     "ato_meio_sup_MPa": -2.17,
+     "ato_apoio_inf_MPa": -11.0,
+     "ato_apoio_sup_MPa": 3.22,
+     "ato_ok": true,
+     "elsf_inf_MPa": -0.86,
+     "elsd_inf_MPa": -1.11,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.29,
+     "els_ok": true,
+     "Md_kNm": 573.6,
+     "MRd_kNm": 708.6,
+     "x_d": 0.133,
+     "Md_succao_kNm": -278.3,
+     "Vd_kN": 119.8,
+     "VRd2_kN": 495.7,
+     "Asw_cm2_m": 1.4,
+     "flecha_final_mm": 7.7,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 807.1,
+     "Pinf_kN": 660.8,
+     "perda_imediata_%": 6.2,
+     "A_m2": 0.1845,
+     "peso_kN_m": 4.61,
+     "n_cord_sup": 0
+    },
+    "avisos": [],
+    "R_g_kN": 67.3,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 58.1,
+    "M_succao_d_kNm": 278.3,
+    "As_sup_succao_cm2": 8.37
+   },
+   {
+    "secao": "I90",
+    "bw": 0.12,
+    "h": 0.9,
+    "A_m2": 0.1962,
+    "peso_t": 9.77,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -5.82,
+     "ato_meio_sup_MPa": -2.22,
+     "ato_apoio_inf_MPa": -10.76,
+     "ato_apoio_sup_MPa": 3.35,
+     "ato_ok": true,
+     "elsf_inf_MPa": -0.47,
+     "elsd_inf_MPa": -0.71,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -2.38,
+     "els_ok": true,
+     "Md_kNm": 591.0,
+     "MRd_kNm": 708.6,
+     "x_d": 0.133,
+     "Md_succao_kNm": -264.9,
+     "Vd_kN": 123.5,
+     "VRd2_kN": 594.9,
+     "Asw_cm2_m": 1.68,
+     "flecha_final_mm": 9.3,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 809.2,
+     "Pinf_kN": 662.9,
+     "perda_imediata_%": 6.0,
+     "A_m2": 0.1962,
+     "peso_kN_m": 4.9,
+     "n_cord_sup": 0
+    },
+    "avisos": [
+     "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo"
+    ],
+    "R_g_kN": 70.1,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 55.3,
+    "M_succao_d_kNm": 264.9,
+    "As_sup_succao_cm2": 7.96
+   },
+   {
+    "secao": "I100",
+    "bw": 0.1,
+    "h": 1.0,
+    "A_m2": 0.1945,
+    "peso_t": 9.69,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -6.27,
+     "ato_meio_sup_MPa": -1.72,
+     "ato_apoio_inf_MPa": -10.46,
+     "ato_apoio_sup_MPa": 3.09,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.46,
+     "elsd_inf_MPa": -1.67,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -1.89,
+     "els_ok": true,
+     "Md_kNm": 588.5,
+     "MRd_kNm": 796.6,
+     "x_d": 0.119,
+     "Md_succao_kNm": -266.8,
+     "Vd_kN": 122.9,
+     "VRd2_kN": 554.0,
+     "Asw_cm2_m": 1.4,
+     "flecha_final_mm": 2.1,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 807.3,
+     "Pinf_kN": 661.0,
+     "perda_imediata_%": 6.2,
+     "A_m2": 0.1945,
+     "peso_kN_m": 4.86,
+     "n_cord_sup": 0
+    },
+    "avisos": [],
+    "R_g_kN": 69.7,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 55.7,
+    "M_succao_d_kNm": 266.8,
+    "As_sup_succao_cm2": 7.18
+   },
+   {
+    "secao": "I100",
+    "bw": 0.12,
+    "h": 1.0,
+    "A_m2": 0.2082,
+    "peso_t": 10.37,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -5.77,
+     "ato_meio_sup_MPa": -1.77,
+     "ato_apoio_inf_MPa": -10.19,
+     "ato_apoio_sup_MPa": 3.21,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.06,
+     "elsd_inf_MPa": -1.26,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -1.97,
+     "els_ok": true,
+     "Md_kNm": 608.9,
+     "MRd_kNm": 796.6,
+     "x_d": 0.119,
+     "Md_succao_kNm": -251.1,
+     "Vd_kN": 127.2,
+     "VRd2_kN": 664.8,
+     "Asw_cm2_m": 1.68,
+     "flecha_final_mm": 3.7,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 809.5,
+     "Pinf_kN": 663.2,
+     "perda_imediata_%": 6.0,
+     "A_m2": 0.2082,
+     "peso_kN_m": 5.21,
+     "n_cord_sup": 0
+    },
+    "avisos": [],
+    "R_g_kN": 72.9,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 52.5,
+    "M_succao_d_kNm": 251.1,
+    "As_sup_succao_cm2": 6.76
+   },
+   {
+    "secao": "I110",
+    "bw": 0.1,
+    "h": 1.1,
+    "A_m2": 0.2045,
+    "peso_t": 10.19,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -6.21,
+     "ato_meio_sup_MPa": -1.36,
+     "ato_apoio_inf_MPa": -10.0,
+     "ato_apoio_sup_MPa": 2.98,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.89,
+     "elsd_inf_MPa": -2.07,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -1.57,
+     "els_ok": true,
+     "Md_kNm": 603.4,
+     "MRd_kNm": 884.7,
+     "x_d": 0.108,
+     "Md_succao_kNm": -255.4,
+     "Vd_kN": 126.0,
+     "VRd2_kN": 612.4,
+     "Asw_cm2_m": 1.4,
+     "flecha_final_mm": -1.3,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 807.6,
+     "Pinf_kN": 661.3,
+     "perda_imediata_%": 6.2,
+     "A_m2": 0.2045,
+     "peso_kN_m": 5.11,
+     "n_cord_sup": 0
+    },
+    "avisos": [],
+    "R_g_kN": 72.1,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 53.3,
+    "M_succao_d_kNm": 255.4,
+    "As_sup_succao_cm2": 6.22
+   },
+   {
+    "secao": "I110",
+    "bw": 0.12,
+    "h": 1.1,
+    "A_m2": 0.2202,
+    "peso_t": 10.97,
+    "passa": true,
+    "n_cord_12_7": 6,
+    "detalhes": {
+     "ato_meio_inf_MPa": -5.69,
+     "ato_meio_sup_MPa": -1.41,
+     "ato_apoio_inf_MPa": -9.71,
+     "ato_apoio_sup_MPa": 3.1,
+     "ato_ok": true,
+     "elsf_inf_MPa": -1.47,
+     "elsd_inf_MPa": -1.65,
+     "elsf_lim_MPa": 3.19,
+     "vento_sup_MPa": -1.65,
+     "els_ok": true,
+     "Md_kNm": 626.8,
+     "MRd_kNm": 884.7,
+     "x_d": 0.108,
+     "Md_succao_kNm": -237.4,
+     "Vd_kN": 130.9,
+     "VRd2_kN": 734.8,
+     "Asw_cm2_m": 1.68,
+     "flecha_final_mm": 0.2,
+     "flecha_lim_mm": 76.6,
+     "P0_kN": 809.9,
+     "Pinf_kN": 663.6,
+     "perda_imediata_%": 5.9,
+     "A_m2": 0.2202,
+     "peso_kN_m": 5.5,
+     "n_cord_sup": 0
+    },
+    "avisos": [],
+    "R_g_kN": 75.8,
+    "R_q_kN": 23.1,
+    "arrancamento_d_kN": 49.6,
+    "M_succao_d_kNm": 237.4,
+    "As_sup_succao_cm2": 5.78
+   }
+  ]
+ },
+ "viga_I_escolhida": {
+  "secao": "I70",
+  "bw": 0.1,
+  "h": 0.7,
+  "A_m2": 0.1645,
+  "peso_t": 8.2,
+  "passa": true,
+  "n_cord_12_7": 8,
+  "detalhes": {
+   "ato_meio_inf_MPa": -9.9,
+   "ato_meio_sup_MPa": -2.44,
+   "ato_apoio_inf_MPa": -16.23,
+   "ato_apoio_sup_MPa": 4.76,
+   "ato_ok": true,
+   "elsf_inf_MPa": -1.7,
+   "elsd_inf_MPa": -2.07,
+   "elsf_lim_MPa": 3.19,
+   "vento_sup_MPa": -2.63,
+   "els_ok": true,
+   "Md_kNm": 543.8,
+   "MRd_kNm": 692.2,
+   "x_d": 0.232,
+   "Md_succao_kNm": -301.2,
+   "Vd_kN": 113.6,
+   "VRd2_kN": 379.1,
+   "Asw_cm2_m": 1.4,
+   "flecha_final_mm": 8.9,
+   "flecha_lim_mm": 76.6,
+   "P0_kN": 1054.4,
+   "Pinf_kN": 859.3,
+   "perda_imediata_%": 8.1,
+   "A_m2": 0.1645,
+   "peso_kN_m": 4.11,
+   "n_cord_sup": 0
+  },
+  "avisos": [
+   "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+   "Linha neutra sai da mesa: refinar ELU pela seção real"
+  ],
+  "R_g_kN": 62.5,
+  "R_q_kN": 23.1,
+  "arrancamento_d_kN": 62.9,
+  "M_succao_d_kNm": 301.2,
+  "As_sup_succao_cm2": 11.84
+ },
+ "viga_central": [
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "R40x100",
+   "A_m2": 0.4,
+   "peso_t": 19.7,
+   "passa_flexao": true,
+   "n_cord_12_7": 20,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 4.8,
+   "Vd_kN": 235.2,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 377.8,
+    "VRd2_kN": 2449.4,
+    "interacao": 0.113,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.33,
+    "Asl_torcao_cm2": 0.74,
+    "he_m": 0.143
+   },
+   "reacao_apoio_k_kN": 179.1
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "R40x120",
+   "A_m2": 0.48,
+   "peso_t": 23.6,
+   "passa_flexao": true,
+   "n_cord_12_7": 16,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 5.8,
+   "Vd_kN": 259.5,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 472.5,
+    "VRd2_kN": 2967.8,
+    "interacao": 0.101,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.28,
+    "Asl_torcao_cm2": 0.73,
+    "he_m": 0.15
+   },
+   "reacao_apoio_k_kN": 197.9
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "R40x140",
+   "A_m2": 0.56,
+   "peso_t": 27.6,
+   "passa_flexao": true,
+   "n_cord_12_7": 14,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 4.3,
+   "Vd_kN": 283.9,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 567.8,
+    "VRd2_kN": 3486.2,
+    "interacao": 0.093,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.24,
+    "Asl_torcao_cm2": 0.72,
+    "he_m": 0.156
+   },
+   "reacao_apoio_k_kN": 216.6
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "R40x160",
+   "A_m2": 0.64,
+   "peso_t": 31.5,
+   "passa_flexao": true,
+   "n_cord_12_7": 14,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 0.3,
+   "Vd_kN": 308.2,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 663.6,
+    "VRd2_kN": 4004.6,
+    "interacao": 0.087,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.21,
+    "Asl_torcao_cm2": 0.72,
+    "he_m": 0.16
+   },
+   "reacao_apoio_k_kN": 235.3
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "I100/60",
+   "A_m2": 0.366,
+   "peso_t": 18.0,
+   "passa_flexao": true,
+   "n_cord_12_7": 16,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 17.9,
+   "Vd_kN": 224.9,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 108.1,
+    "VRd2_kN": 1224.7,
+    "interacao": 0.243,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.74,
+    "Asl_torcao_cm2": 1.5,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 171.2
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "I120/60",
+   "A_m2": 0.406,
+   "peso_t": 20.0,
+   "passa_flexao": true,
+   "n_cord_12_7": 14,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 8.9,
+   "Vd_kN": 237.0,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 131.9,
+    "VRd2_kN": 1483.9,
+    "interacao": 0.208,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.6,
+    "Asl_torcao_cm2": 1.47,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 180.6
+  },
+  {
+   "viga": "V407 (P8A–P11)",
+   "L": 18.71,
+   "secao": "I140/60",
+   "A_m2": 0.446,
+   "peso_t": 21.9,
+   "passa_flexao": true,
+   "n_cord_12_7": 12,
+   "avisos": [
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 6.2,
+   "Vd_kN": 249.2,
+   "Td_kNm": 6.4,
+   "torcao": {
+    "TRd2_kNm": 155.6,
+    "VRd2_kN": 1743.1,
+    "interacao": 0.184,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.51,
+    "Asl_torcao_cm2": 1.45,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 189.9
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "R40x100",
+   "A_m2": 0.4,
+   "peso_t": 24.1,
+   "passa_flexao": false,
+   "n_cord_12_7": null,
+   "avisos": null,
+   "flecha_mm": null,
+   "Vd_kN": 329.1,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 377.8,
+    "VRd2_kN": 2449.4,
+    "interacao": 0.168,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.67,
+    "Asl_torcao_cm2": 1.49,
+    "he_m": 0.143
+   },
+   "reacao_apoio_k_kN": 250.3
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "R40x120",
+   "A_m2": 0.48,
+   "peso_t": 29.0,
+   "passa_flexao": true,
+   "n_cord_12_7": 26,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 12.0,
+   "Vd_kN": 359.1,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 472.5,
+    "VRd2_kN": 2967.8,
+    "interacao": 0.148,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.56,
+    "Asl_torcao_cm2": 1.46,
+    "he_m": 0.15
+   },
+   "reacao_apoio_k_kN": 273.4
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "R40x140",
+   "A_m2": 0.56,
+   "peso_t": 33.8,
+   "passa_flexao": true,
+   "n_cord_12_7": 22,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 10.5,
+   "Vd_kN": 389.1,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 567.8,
+    "VRd2_kN": 3486.2,
+    "interacao": 0.134,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.48,
+    "Asl_torcao_cm2": 1.44,
+    "he_m": 0.156
+   },
+   "reacao_apoio_k_kN": 296.5
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "R40x160",
+   "A_m2": 0.64,
+   "peso_t": 38.6,
+   "passa_flexao": true,
+   "n_cord_12_7": 20,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 7.1,
+   "Vd_kN": 419.1,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 663.6,
+    "VRd2_kN": 4004.6,
+    "interacao": 0.124,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.43,
+    "Asl_torcao_cm2": 1.43,
+    "he_m": 0.16
+   },
+   "reacao_apoio_k_kN": 319.6
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "I100/60",
+   "A_m2": 0.366,
+   "peso_t": 22.1,
+   "passa_flexao": true,
+   "n_cord_12_7": 26,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 40.6,
+   "Vd_kN": 316.3,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 108.1,
+    "VRd2_kN": 1224.7,
+    "interacao": 0.377,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.47,
+    "Asl_torcao_cm2": 3.0,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 240.5
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "I120/60",
+   "A_m2": 0.406,
+   "peso_t": 24.5,
+   "passa_flexao": true,
+   "n_cord_12_7": 22,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 22.0,
+   "Vd_kN": 331.3,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 131.9,
+    "VRd2_kN": 1483.9,
+    "interacao": 0.32,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.21,
+    "Asl_torcao_cm2": 2.94,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 252.1
+  },
+  {
+   "viga": "V406 (P11–P13)",
+   "L": 23.09,
+   "secao": "I140/60",
+   "A_m2": 0.446,
+   "peso_t": 26.9,
+   "passa_flexao": true,
+   "n_cord_12_7": 18,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 17.5,
+   "Vd_kN": 346.3,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 155.6,
+    "VRd2_kN": 1743.1,
+    "interacao": 0.281,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.02,
+    "Asl_torcao_cm2": 2.9,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 263.6
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "R40x100",
+   "A_m2": 0.4,
+   "peso_t": 24.2,
+   "passa_flexao": false,
+   "n_cord_12_7": null,
+   "avisos": null,
+   "flecha_mm": null,
+   "Vd_kN": 419.3,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 377.8,
+    "VRd2_kN": 2449.4,
+    "interacao": 0.205,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.67,
+    "Asl_torcao_cm2": 1.49,
+    "he_m": 0.143
+   },
+   "reacao_apoio_k_kN": 318.3
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "R40x120",
+   "A_m2": 0.48,
+   "peso_t": 29.1,
+   "passa_flexao": true,
+   "n_cord_12_7": 26,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 12.9,
+   "Vd_kN": 449.4,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 472.5,
+    "VRd2_kN": 2967.8,
+    "interacao": 0.179,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.56,
+    "Asl_torcao_cm2": 1.46,
+    "he_m": 0.15
+   },
+   "reacao_apoio_k_kN": 341.5
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "R40x140",
+   "A_m2": 0.56,
+   "peso_t": 33.9,
+   "passa_flexao": true,
+   "n_cord_12_7": 22,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 11.2,
+   "Vd_kN": 479.5,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 567.8,
+    "VRd2_kN": 3486.2,
+    "interacao": 0.16,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.48,
+    "Asl_torcao_cm2": 1.44,
+    "he_m": 0.156
+   },
+   "reacao_apoio_k_kN": 364.6
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "R40x160",
+   "A_m2": 0.64,
+   "peso_t": 38.8,
+   "passa_flexao": true,
+   "n_cord_12_7": 20,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 7.6,
+   "Vd_kN": 509.6,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 663.6,
+    "VRd2_kN": 4004.6,
+    "interacao": 0.147,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 0.43,
+    "Asl_torcao_cm2": 1.43,
+    "he_m": 0.16
+   },
+   "reacao_apoio_k_kN": 387.8
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "I100/60",
+   "A_m2": 0.366,
+   "peso_t": 22.2,
+   "passa_flexao": true,
+   "n_cord_12_7": 26,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 41.9,
+   "Vd_kN": 406.5,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 108.1,
+    "VRd2_kN": 1224.7,
+    "interacao": 0.45,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.47,
+    "Asl_torcao_cm2": 3.0,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 308.5
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "I120/60",
+   "A_m2": 0.406,
+   "peso_t": 24.6,
+   "passa_flexao": true,
+   "n_cord_12_7": 22,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 22.8,
+   "Vd_kN": 421.5,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 131.9,
+    "VRd2_kN": 1483.9,
+    "interacao": 0.381,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.21,
+    "Asl_torcao_cm2": 2.94,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 320.0
+  },
+  {
+   "viga": "V405 (P13–P14)",
+   "L": 23.17,
+   "secao": "I140/60",
+   "A_m2": 0.446,
+   "peso_t": 27.0,
+   "passa_flexao": true,
+   "n_cord_12_7": 18,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ],
+   "flecha_mm": 18.1,
+   "Vd_kN": 436.6,
+   "Td_kNm": 12.8,
+   "torcao": {
+    "TRd2_kNm": 155.6,
+    "VRd2_kN": 1743.1,
+    "interacao": 0.333,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 1.02,
+    "Asl_torcao_cm2": 2.9,
+    "he_m": 0.09
+   },
+   "reacao_apoio_k_kN": 331.6
+  }
+ ],
+ "vigas_mezanino": [
+  {
+   "secao": "R40x60",
+   "L": 9.27,
+   "passa_flexao": false,
+   "n_cord_12_7": null,
+   "flecha_mm": null,
+   "Td_montagem_kNm": 41.2,
+   "torcao": {
+    "TRd2_kNm": 193.5,
+    "VRd2_kN": 1412.6,
+    "interacao": 0.481,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 3.53,
+    "Asl_torcao_cm2": 5.36,
+    "he_m": 0.12
+   },
+   "avisos": null
+  },
+  {
+   "secao": "R40x70",
+   "L": 9.27,
+   "passa_flexao": true,
+   "n_cord_12_7": 14,
+   "flecha_mm": 1.9,
+   "Td_montagem_kNm": 41.2,
+   "torcao": {
+    "TRd2_kNm": 238.6,
+    "VRd2_kN": 1671.8,
+    "interacao": 0.403,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 3.03,
+    "Asl_torcao_cm2": 5.13,
+    "he_m": 0.127
+   },
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ]
+  },
+  {
+   "secao": "R40x80",
+   "L": 9.27,
+   "passa_flexao": true,
+   "n_cord_12_7": 12,
+   "flecha_mm": 1.6,
+   "Td_montagem_kNm": 41.2,
+   "torcao": {
+    "TRd2_kNm": 284.4,
+    "VRd2_kN": 1931.0,
+    "interacao": 0.348,
+    "ok": true,
+    "Asw_torcao_cm2_m_ramo": 2.67,
+    "Asl_torcao_cm2": 4.98,
+    "he_m": 0.133
+   },
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ]
+  },
+  {
+   "secao": "I70",
+   "L": 9.27,
+   "passa_flexao": true,
+   "n_cord_12_7": 12,
+   "flecha_mm": 8.4,
+   "Td_montagem_kNm": 41.2,
+   "torcao": null,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo",
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ]
+  },
+  {
+   "secao": "I80",
+   "L": 9.27,
+   "passa_flexao": true,
+   "n_cord_12_7": 10,
+   "flecha_mm": 6.8,
+   "Td_montagem_kNm": 41.2,
+   "torcao": null,
+   "avisos": [
+    "Linha neutra sai da mesa: refinar ELU pela seção real"
+   ]
+  }
+ ],
+ "laje_alveolar": {
+  "h20": {
+   "Md_kNm_m": 156.3,
+   "Ap_cm2_m": 5.56,
+   "cord_12_7_por_painel_1_25m": 8
+  },
+  "h26.5": {
+   "Md_kNm_m": 169.7,
+   "Ap_cm2_m": 4.61,
+   "cord_12_7_por_painel_1_25m": 6
+  },
+  "h32": {
+   "Md_kNm_m": 178.7,
+   "Ap_cm2_m": 4.05,
+   "cord_12_7_por_painel_1_25m": 6
+  }
+ },
+ "pilares": [
+  {
+   "pilar": "lateral P1/P2",
+   "secao": "40x50",
+   "Nk_kN": 408.0,
+   "topo_ELS_vento_freq_mm": 26.4,
+   "lim_H1700_mm": 5.9,
+   "lim_H500_mm": 20.0,
+   "M_placas_k_kNm": 96.6,
+   "transversal_sotavento": {
+    "lambda_u": 1.03,
+    "ok": true,
+    "topo_mm": 251.7,
+    "barras_face": "6 Ø25",
+    "As_face_cm2": 29.45,
+    "taxa_pct": 2.95
+   },
+   "transversal_barlavento": {
+    "lambda_u": 1.17,
+    "ok": true,
+    "topo_mm": 168.6,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.45
+   },
+   "longitudinal_sem_travamento": {
+    "lambda_u": 3.0,
+    "ok": true,
+    "topo_mm": 70.4,
+    "barras_face": "5 Ø16",
+    "As_face_cm2": 10.05,
+    "taxa_pct": 1.01
+   }
+  },
+  {
+   "pilar": "lateral P1/P2",
+   "secao": "40x60",
+   "Nk_kN": 408.0,
+   "topo_ELS_vento_freq_mm": 15.3,
+   "lim_H1700_mm": 5.9,
+   "lim_H500_mm": 20.0,
+   "M_placas_k_kNm": 96.6,
+   "transversal_sotavento": {
+    "lambda_u": 1.21,
+    "ok": true,
+    "topo_mm": 154.6,
+    "barras_face": "5 Ø25",
+    "As_face_cm2": 24.54,
+    "taxa_pct": 2.05
+   },
+   "transversal_barlavento": {
+    "lambda_u": 1.04,
+    "ok": true,
+    "topo_mm": 137.4,
+    "barras_face": "5 Ø20",
+    "As_face_cm2": 15.71,
+    "taxa_pct": 1.31
+   },
+   "longitudinal_sem_travamento": {
+    "lambda_u": 3.0,
+    "ok": true,
+    "topo_mm": 74.8,
+    "barras_face": "5 Ø12.5",
+    "As_face_cm2": 6.14,
+    "taxa_pct": 0.51
+   }
+  },
+  {
+   "pilar": "lateral P1/P2",
+   "secao": "40x70",
+   "Nk_kN": 408.0,
+   "topo_ELS_vento_freq_mm": 9.6,
+   "lim_H1700_mm": 5.9,
+   "lim_H500_mm": 20.0,
+   "M_placas_k_kNm": 96.6,
+   "transversal_sotavento": {
+    "lambda_u": 1.04,
+    "ok": true,
+    "topo_mm": 138.4,
+    "barras_face": "5 Ø20",
+    "As_face_cm2": 15.71,
+    "taxa_pct": 1.12
+   },
+   "transversal_barlavento": {
+    "lambda_u": 1.05,
+    "ok": true,
+    "topo_mm": 102.4,
+    "barras_face": "6 Ø16",
+    "As_face_cm2": 12.06,
+    "taxa_pct": 0.86
+   },
+   "longitudinal_sem_travamento": {
+    "lambda_u": 3.0,
+    "ok": true,
+    "topo_mm": 43.2,
+    "barras_face": "5 Ø12.5",
+    "As_face_cm2": 6.14,
+    "taxa_pct": 0.44
+   }
+  },
+  {
+   "pilar": "fachada P3–P5 / P14–P16 (vento longitudinal)",
+   "secao": "40x60 (h na direção do vento)",
+   "Nk_kN": 338.7,
+   "resultado": {
+    "lambda_u": 1.08,
+    "ok": true,
+    "topo_mm": 183.3,
+    "barras_face": "6 Ø25",
+    "As_face_cm2": 29.45,
+    "taxa_pct": 2.45
+   }
+  },
+  {
+   "pilar": "fachada P3–P5 / P14–P16 (vento longitudinal)",
+   "secao": "60x40 (h na direção do vento)",
+   "Nk_kN": 338.7,
+   "resultado": null
+  },
+  {
+   "pilar": "central P11",
+   "secao": "40x40",
+   "Nk_kN": 626.9,
+   "nu": 0.19,
+   "resultado": null
+  },
+  {
+   "pilar": "central P11",
+   "secao": "45x45",
+   "Nk_kN": 626.9,
+   "nu": 0.15,
+   "resultado": {
+    "lambda_u": 1.79,
+    "ok": true,
+    "topo_mm": 91.4,
+    "barras_face": "6 Ø20",
+    "As_face_cm2": 18.85,
+    "taxa_pct": 1.86
+   }
+  },
+  {
+   "pilar": "central P11",
+   "secao": "50x50",
+   "Nk_kN": 626.9,
+   "nu": 0.12,
+   "resultado": {
+    "lambda_u": 1.12,
+    "ok": true,
+    "topo_mm": 88.2,
+    "barras_face": "6 Ø12.5",
+    "As_face_cm2": 7.36,
+    "taxa_pct": 0.59
+   }
+  }
+ ]
+}
