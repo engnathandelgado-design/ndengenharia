@@ -666,3 +666,43 @@ def icamento_viga(sec: "Secao", L: float, a: float, P: float, ep: float, conc: "
                 FS_fissuracao=round(FS_c, 2), FS_ruptura=round(FS_u, 2),
                 ok_estabilidade=FS_c >= 1.0 and FS_u >= 1.5,
                 peso_kN=round(w * L, 1), carga_alca_d_kN=round(wd * L / 2, 1))
+
+
+def momentos_apoios(L, w, xs, reacoes=None, n=801):
+    """Diagrama de momentos de viga com peso w (kN/m) em apoios/alças nas posições xs.
+    reacoes=None: reações iguais (balancim que equaliza as alças); senão, lista de reações (kN)."""
+    R = reacoes or [w * L / len(xs)] * len(xs)
+    pts = []
+    for i in range(n):
+        x = L * i / (n - 1)
+        M = -w * x * x / 2 + sum(r * (x - xa) for r, xa in zip(R, xs) if xa <= x)
+        pts.append((x, M))
+    return pts
+
+
+def transitorias_viga(sec, L, P, ep, conc, fckj, xs_icamento, xs_estoque, coef_din=1.3):
+    """Desforma/montagem (alças com balancim, reações iguais) e estoque/transporte (2 calços).
+    Retorna tensões extremas (MPa) no topo e no fundo e o atendimento aos limites no ato."""
+    A, I, yc, h = sec.A, sec.I, sec.yc, sec.h
+    lim_c, lim_t = -0.7 * fckj, 1.2 * 0.3 * fckj ** (2 / 3)
+    out = {}
+    for nome, xs, din in (("desforma_montagem", xs_icamento, coef_din), ("estoque_transporte", xs_estoque, coef_din)):
+        w = sec.A * 25 * din
+        if len(xs) == 2:
+            a, b = xs
+            Rb = w * L * (L / 2 - a) / (b - a); Ra = w * L - Rb
+            dia = momentos_apoios(L, w, xs, [Ra, Rb])
+        else:
+            dia = momentos_apoios(L, w, xs)
+        Mmax = max(m for _, m in dia); Mmin = min(m for _, m in dia)
+        res = []
+        for M in (Mmax, Mmin):
+            si = (-P / A - P * ep * yc / I + M * yc / I) / 1000
+            ss = (-P / A + P * ep * (h - yc) / I - M * (h - yc) / I) / 1000
+            res.append((round(ss, 2), round(si, 2)))
+        ok = all(lim_c <= v <= lim_t for par in res for v in par)
+        out[nome] = dict(pontos_m=[round(x, 3) for x in xs], Mpos=round(Mmax, 1), Mneg=round(Mmin, 1),
+                         tens_sup_inf_Mpos=res[0], tens_sup_inf_Mneg=res[1], ok=ok,
+                         carga_por_ponto_kN=round(w * L / len(xs), 1))
+    out["limites_MPa"] = (round(lim_c, 1), round(lim_t, 2))
+    return out

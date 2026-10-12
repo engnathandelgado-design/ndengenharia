@@ -12,6 +12,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- Letsara: pranchas I110 (berços inclinados), I90 mezanino, pilares (consolos a 3%, cálice), lajes alveolares e vigas de apoio, placas e VB; registro de chaparia de todas as peças.
+
 - [ ] Publicar o app no Streamlit Community Cloud (repositório privado, acesso só por convite).
 - [ ] Tirar a cópia de código da pasta nd_estruturas do Drive (deixar só entradas e saídas).
 - [ ] Definir o Protocol do motor de análise e implementar o stub de teste.
@@ -33,6 +35,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- Letsara TS-01 detalhada (3 folhas) + checagem de ligações no modelo.
 
 - [x] 2026-10-12 — `prefabricados`: seção poligonal (I, retangular), viga pré-tracionada (ato, ELS-F/D, ELU, cortante, flecha, cordoalhas superiores, isolamento), torção NBR 6118 17.5, pilar em balanço pelo método geral (OpenSeesPy, fibras, corrotacional, fluência, critério εcu/10‰); 6 testes conferidos à mão. Rodada 1 da Letsara em `exemplos/letsara/`.
 - [x] 2026-10-12 — GitHub como fonte única (DEC-007): `pyproject.toml`, páginas Streamlit (arco funicular, casca nos cantos), atalhos .bat para Windows, pasta `skills/`.

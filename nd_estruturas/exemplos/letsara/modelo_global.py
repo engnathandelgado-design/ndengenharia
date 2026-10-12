@@ -28,7 +28,9 @@ qv = pressao_vento(45.0, S3=0.95)
 YL = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]  # linhas de pórtico
 XF = [0.0, 9.87, 20.05, 29.63, 40.10]                                    # eixos da fachada
 X_CEN = 20.05
-VAOS_CONTRAV = [(1, 2), (3, 4), (4, 5), (6, 7)]   # além dos vãos de fachada (0-1 e 7-8)
+VAOS_CONTRAV = [(0, 1), (1, 2), (3, 4), (4, 5), (6, 7), (7, 8)]
+N_PAINEL = 5            # painéis por meia água (≈ 4,0 m)
+A_BARRA = 1.13e-4       # barra redonda A36 Ø12 (conferido abaixo)
 Z_P1, Z_P2, Z_CEN, Z_TOP = 8.08, 9.28, 8.68, 10.0   # apoio da I90 no P1 (baixo), P2 (alto), centro; topo da platibanda
 Z_MEZ = [3.15, 6.55]
 TRIB_Y = [(YL[min(i + 1, 8)] - YL[max(i - 1, 0)]) / 2 for i in range(9)]
@@ -83,7 +85,7 @@ def montar(pdelta=True):
     pilar("P8A", X_CEN, YL[1], 0.60, 0.40, Z_CEN, tuple(Z_MEZ))
     pilar("P11", X_CEN, YL[3], 0.50, 0.50, Z_CEN)
     y13 = YL[5] + 4.6
-    pilar("P13", X_CEN, y13, 0.50, 0.50, Z_CEN)
+    pilar("P13", X_CEN, YL[5] + 4.6, 0.50, 0.50, Z_CEN)
 
     # nós soltos (só treliça): travar z e rotações
     def no_trelica(x, y, z):
@@ -100,50 +102,59 @@ def montar(pdelta=True):
 
     def barra(n1, n2, A, nome):
         tr[0] += 1
-        mat = 10 if nome in ("contravento", "escora beiral") else 9
+        mat = 10 if nome in ("contravento", "escora beiral", "terça escora") else 9
         ops.element("Truss", 50000 + tr[0], n1, n2, A, mat)
         trelicas.append((50000 + tr[0], nome))
 
-    # vigas I90 de cobertura (articuladas): lateral → centro → lateral, em todas as linhas internas
-    for i in range(1, 8):
-        c = no_trelica(X_CEN, YL[i], Z_CEN)
-        barra(nos[(0.0, round(YL[i], 3), Z_P1)], c, I90_A, f"I90 L{i} esq")
-        barra(c, nos[(40.1, round(YL[i], 3), Z_P2)], I90_A, f"I90 L{i} dir")
-    # vigas de borda (fachadas) entre pilares da fachada, no nível do apoio
-    for i in (0, 8):
-        zz = [Z_P1, Z_CEN, Z_CEN, Z_CEN, Z_P2]
-        ns = [nos[(round(x, 3), round(YL[i], 3), z)] for x, z in zip(XF, zz)]
-        for a, b in zip(ns[:-1], ns[1:]):
-            barra(a, b, 0.15 * 0.70, f"VC L{i}")
+    # ---------------- cobertura: vigas (cordas), terças-escora e contraventamento em painéis curtos
+    def z_viga(x):
+        return Z_P1 + (Z_CEN - Z_P1) * x / X_CEN if x <= X_CEN else Z_CEN + (Z_P2 - Z_CEN) * (x - X_CEN) / (40.1 - X_CEN)
+    XP = sorted(set([round(X_CEN * k / N_PAINEL, 3) for k in range(N_PAINEL + 1)] +
+                    [round(X_CEN + (40.1 - X_CEN) * k / N_PAINEL, 3) for k in range(1, N_PAINEL + 1)]))
+    XFAC = [0.0, 9.87, 20.05, 29.63, 40.1]
+    def xs_vao(ia, ib):
+        return XFAC if 0 in (ia, ib) or 8 in (ia, ib) else XP
+    xs_linha = {i: set([0.0, X_CEN, 40.1]) for i in range(9)}
+    for ia, ib in VAOS_CONTRAV:
+        for i in (ia, ib):
+            xs_linha[i] |= set(xs_vao(ia, ib))
+    def no_cob(x, i):
+        if i in (0, 8) and x in XFAC:
+            return nos[(round(x, 3), round(YL[i], 3), Z_P1 if x == 0 else (Z_P2 if x == 40.1 else Z_CEN))]
+        if x == 0.0:
+            return nos[(0.0, round(YL[i], 3), Z_P1)]
+        if x == 40.1:
+            return nos[(40.1, round(YL[i], 3), Z_P2)]
+        k = (round(x, 3), round(YL[i], 3), round(z_viga(x), 3))
+        if x == X_CEN and k in nos:
+            return nos[k]
+        return nos[k] if k in nos else no_trelica(x, YL[i], z_viga(x))
+    for i in range(9):
+        xs = sorted(xs_linha[i])
+        ns = [no_cob(x, i) for x in xs]
+        nome = "VB fachada" if i in (0, 8) else "I90"
+        for x_a, x_b, a_, b_ in zip(xs[:-1], xs[1:], ns[:-1], ns[1:]):
+            if i not in (0, 8) and x_a < X_CEN < x_b:
+                continue
+            barra(a_, b_, 0.15 * 0.70 if i in (0, 8) else I90_A, f"{nome} L{i}")
+    for ia, ib in VAOS_CONTRAV:
+        xs = xs_vao(ia, ib)
+        A_ = [no_cob(x, ia) for x in xs]; B_ = [no_cob(x, ib) for x in xs]
+        for j in range(len(xs)):
+            barra(A_[j], B_[j], 15.2e-4, "terça escora")
+        for j in range(len(xs) - 1):
+            barra(A_[j], B_[j + 1], A_BARRA, "contravento")
+            barra(B_[j], A_[j + 1], A_BARRA, "contravento")
     # viga central I110 (articulada) entre apoios centrais
-    cen = [nos[(X_CEN, round(y, 3), Z_CEN)] for y in YL[1:8]]
-    cen_y = YL[1:8] + [y13]
-    pts = sorted(zip(cen_y, cen + [nos[(X_CEN, round(y13, 3), Z_CEN)]]))
-    for (ya, a), (yb, b) in zip(pts[:-1], pts[1:]):
-        barra(a, b, 0.3025, "I110 central")
-    # escoras de beiral (terça de beiral + contraventamento) nas linhas laterais
+    y13 = YL[5] + 4.6
+    pts = sorted([(y, nos[(X_CEN, round(y, 3), Z_CEN)]) for y in YL[1:8] + [y13]])
+    for (ya, a_), (yb, b_) in zip(pts[:-1], pts[1:]):
+        barra(a_, b_, 0.3025, "I110 central")
+    # escoras de beiral (terça de beiral) nas linhas laterais
     for xx, zz in ((0.0, Z_P1), (40.1, Z_P2)):
         ns = [nos[(xx, round(y, 3), zz)] for y in YL]
-        for a, b in zip(ns[:-1], ns[1:]):
-            barra(a, b, 12e-4, "escora beiral")
-    # contraventamento da cobertura nos vãos extremos (barras Ø25, A = 4,9 cm²): cada pilar de fachada
-    # é ligado por diagonais aos apoios da linha vizinha (x = 0, centro, 40,1), formando treliça plana
-    for (ia, ib) in ((0, 1), (8, 7)):
-        apoios = [(0.0, Z_P1), (X_CEN, Z_CEN), (40.1, Z_P2)]
-        nb = [nos[(round(x, 3), round(YL[ib], 3), z)] for x, z in apoios]
-        fac = [(0.0, Z_P1), (9.87, Z_CEN), (X_CEN, Z_CEN), (29.63, Z_CEN), (40.1, Z_P2)]
-        nf = [nos.get((round(x, 3), round(YL[ia], 3), z)) or no_trelica(x, YL[ia], z) for x, z in fac]
-        for k, n in enumerate(nf):
-            x = fac[k][0]
-            for j, (xb, _) in enumerate(apoios):
-                if 0 < abs(xb - x) <= 20.1:
-                    barra(n, nb[j], 2.01e-4, "contravento")
-    # X nos vãos internos contraventados (lateral ↔ centro), barras redondas A36 Ø16
-    for (ia, ib) in VAOS_CONTRAV:
-        for (xa, za), (xb, zb) in (((0.0, Z_P1), (X_CEN, Z_CEN)), ((X_CEN, Z_CEN), (40.1, Z_P2))):
-            n1, n2 = nos[(xa, round(YL[ia], 3), za)], nos[(xb, round(YL[ib], 3), zb)]
-            n3, n4 = nos[(xb, round(YL[ia], 3), zb)], nos[(xa, round(YL[ib], 3), za)]
-            barra(n1, n2, 2.01e-4, "contravento"); barra(n3, n4, 2.01e-4, "contravento")
+        for a_, b_ in zip(ns[:-1], ns[1:]):
+            barra(a_, b_, 15.2e-4, "escora beiral")
     # mezanino: vigas I90 + laje como diafragma (treliças em X) entre L0 e L1
     for z in Z_MEZ:
         l0 = [nos[(round(x, 3), 0.0, z)] for x in XF]

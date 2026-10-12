@@ -1,0 +1,577 @@
+{
+ "tol_mm": 5.0,
+ "erros": 0,
+ "contraventamento": {
+  "chapa": {
+   "y_orelha": 0.14,
+   "s_orelha": 0.14,
+   "z_baixo": 0.035,
+   "z_alto": 0.07,
+   "mesa_terca": 0.085,
+   "d_tir": 0.0125
+  },
+  "n_tirantes": 48,
+  "amostra": [
+   {
+    "vao": "L2-L3",
+    "painel": 1,
+    "diagonal": "/",
+    "comp_m": 9.819,
+    "ang_eixo_viga": 72.7,
+    "folga_terca_no_mm": 55,
+    "furo_terca_interm": {
+     "y_m": 4.83,
+     "h_mm": 35
+    }
+   },
+   {
+    "vao": "L2-L3",
+    "painel": 1,
+    "diagonal": "\\",
+    "comp_m": 9.819,
+    "ang_eixo_viga": 72.7,
+    "folga_terca_no_mm": 55,
+    "furo_terca_interm": {
+     "y_m": 4.83,
+     "h_mm": 70
+    }
+   },
+   {
+    "vao": "L2-L3",
+    "painel": 2,
+    "diagonal": "/",
+    "comp_m": 9.819,
+    "ang_eixo_viga": 72.7,
+    "folga_terca_no_mm": 55,
+    "furo_terca_interm": {
+     "y_m": 4.83,
+     "h_mm": 35
+    }
+   },
+   {
+    "vao": "L2-L3",
+    "painel": 2,
+    "diagonal": "\\",
+    "comp_m": 9.819,
+    "ang_eixo_viga": 72.7,
+    "folga_terca_no_mm": 55,
+    "furo_terca_interm": {
+     "y_m": 4.83,
+     "h_mm": 70
+    }
+   }
+  ],
+  "folga_min_terca_mm": 55,
+  "comp_max_m": 9.819,
+  "folga_cruzamento_mm": 22.500000000000004,
+  "ok": true
+ },
+ "apoios": [
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L2 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L2",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L2 esq",
+   "inserto": "TB-1.1",
+   "com": "topo do pilar L2",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L2 dir",
+   "inserto": "TB-1.0",
+   "com": "topo do pilar L2",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L2 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L2",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L3 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L3",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L3 esq",
+   "inserto": "TB-1.1",
+   "com": "berço BR-1 na I110 L3",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L3 dir",
+   "inserto": "TB-1.0",
+   "com": "berço BR-1 na I110 L3",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L3 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L3",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L4 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L4",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L4 esq",
+   "inserto": "TB-1.1",
+   "com": "topo do pilar L4",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L4 dir",
+   "inserto": "TB-1.0",
+   "com": "topo do pilar L4",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L4 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L4",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L5 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L5",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L5 esq",
+   "inserto": "TB-1.1",
+   "com": "berço BR-1 na I110 L5",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L5 dir",
+   "inserto": "TB-1.0",
+   "com": "berço BR-1 na I110 L5",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L5 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L5",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L6 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L6",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L6 esq",
+   "inserto": "TB-1.1",
+   "com": "berço BR-1 na I110 L6",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L6 dir",
+   "inserto": "TB-1.0",
+   "com": "berço BR-1 na I110 L6",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L6 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L6",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L7 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L7",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L7 esq",
+   "inserto": "TB-1.1",
+   "com": "berço BR-1 na I110 L7",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L7 dir",
+   "inserto": "TB-1.0",
+   "com": "berço BR-1 na I110 L7",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L7 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L7",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L8 esq",
+   "inserto": "TB-1.0",
+   "com": "P1 L8",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.0843
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L8 esq",
+   "inserto": "TB-1.1",
+   "com": "berço BR-1 na I110 L8",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 8.6666
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L8 dir",
+   "inserto": "TB-1.0",
+   "com": "berço BR-1 na I110 L8",
+   "tipo": "PN-2 pino Ø25 no berço",
+   "dist_mm": 0.1,
+   "dz_mm": -0.0,
+   "ok": true,
+   "z_assento": 8.6765
+  },
+  {
+   "ligacao": "apoio",
+   "peca": "TS-01 L8 dir",
+   "inserto": "TB-1.1",
+   "com": "P2 L8",
+   "tipo": "PN-1 pino Ø25 no consolo",
+   "dist_mm": 0.2,
+   "dz_mm": 0.0,
+   "ok": true,
+   "z_assento": 9.2588
+  }
+ ],
+ "tercas": [
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L2 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L3 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L4 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L5 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L6 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L7 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L8 esq",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (esq)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L2 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L3 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L4 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L5 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L6 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L7 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  },
+  {
+   "ligacao": "terças",
+   "peca": "TS-01 L8 dir",
+   "inserto": "CH-T1/T2",
+   "com": "linha de terças (dir)",
+   "tipo": "Ue 300×85×25×3,00",
+   "dist_mm": 0.0,
+   "dz_mm": 0.0,
+   "ok": true
+  }
+ ],
+ "berco_I110": [
+  {
+   "linha": 3,
+   "z_esq": 8.6666,
+   "z_dir": 8.6765,
+   "desnivel_mm": 9.9,
+   "topo_I110": 8.647
+  },
+  {
+   "linha": 5,
+   "z_esq": 8.6666,
+   "z_dir": 8.6765,
+   "desnivel_mm": 9.9,
+   "topo_I110": 8.647
+  },
+  {
+   "linha": 6,
+   "z_esq": 8.6666,
+   "z_dir": 8.6765,
+   "desnivel_mm": 9.9,
+   "topo_I110": 8.647
+  },
+  {
+   "linha": 7,
+   "z_esq": 8.6666,
+   "z_dir": 8.6765,
+   "desnivel_mm": 9.9,
+   "topo_I110": 8.647
+  },
+  {
+   "linha": 8,
+   "z_esq": 8.6666,
+   "z_dir": 8.6765,
+   "desnivel_mm": 9.9,
+   "topo_I110": 8.647
+  }
+ ],
+ "nos_contraventamento_x_esq": [
+  0.58,
+  3.78,
+  6.98,
+  10.18,
+  13.38,
+  16.58,
+  19.78
+ ],
+ "alcas": [
+  2.1,
+  7.4,
+  12.319,
+  17.619
+ ],
+ "estoque": [
+  2.1,
+  17.619
+ ]
+}
