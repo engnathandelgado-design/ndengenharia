@@ -34,7 +34,13 @@ def prisma(pts_xz, y0, y1):
 def cena(p, z0=0.0, z1=L, com_chaves=True):
     conc = dict(color="#c9c9c4", smooth_shading=False, show_edges=True, edge_color="#7a7a7a", line_width=0.6)
     aco = dict(color="#d9822b", show_edges=True, edge_color="#6b3d10", line_width=0.4)
-    p.add_mesh(box(-H / 2, -B / 2, z0, H, B, z1 - z0), **conc)
+    zr = G.get("z_rec", L * 1000) / 1000; hc = G.get("h_cab", G["H"]) / 1000
+    if z1 <= zr:
+        p.add_mesh(box(-H / 2, -B / 2, z0, H, B, z1 - z0), **conc)
+    else:
+        if z0 < zr:
+            p.add_mesh(box(-H / 2, -B / 2, z0, H, B, zr - z0), **conc)
+        p.add_mesh(box(-H / 2, -B / 2, max(z0, zr), hc, B, z1 - max(z0, zr)), **conc)    # cabeça recuada (lado das placas)
     # consolo CP-TS na face A (x+): topo a 3 % subindo para a ponta
     if z0 <= ZC <= z1:
         poly = [(H / 2, ZC - CH), (H / 2 + CP, ZC - CHP), (H / 2 + CP, ZC + CP * I), (H / 2, ZC)]

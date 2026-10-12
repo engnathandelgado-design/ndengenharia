@@ -59,9 +59,9 @@ def montar() -> ModeloBIM:
     # 1. pilares laterais (60 na direção X) com consolos CP-TS para os dentes da TS-01
     for i, y in enumerate(Y_LIN, start=1):
         m.pilar(f"P1-L{i}", 0.0, y, 0.60, 0.40, Z_CALICE, REC[0], obs="60 na direção X; cabeça 40×30 recuada acima de +8,40")
-        m.pilar(f"P1-L{i} cabeça", -0.15, y, 0.30, 0.40, REC[0], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe) — a validar")
+        m.pilar(f"P1-L{i} cabeça", -0.15, y, 0.30, 0.40, REC[0], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe)")
         m.pilar(f"P2-L{i}", LARG, y, 0.60, 0.40, Z_CALICE, REC[1], obs="60 na direção X; cabeça 40×30 recuada acima de +9,55")
-        m.pilar(f"P2-L{i} cabeça", LARG + 0.15, y, 0.30, 0.40, REC[1], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe) — a validar")
+        m.pilar(f"P2-L{i} cabeça", LARG + 0.15, y, 0.30, 0.40, REC[1], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe)")
         if 2 <= i <= 8:
             for x_ap, xc in ((0.475, 0.45), (LARG - 0.475, LARG - 0.45)):
                 m.bloco("consolo", f"CP-TS L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.30, 0.40, 0.45, "Consolos")
@@ -238,7 +238,7 @@ def montar() -> ModeloBIM:
     m.pendente("! Laje alveolar h20 + 5 com 500 kgf/m² em 9,75 m NÃO passa com 7 Ø12,7 (seção genérica): ELU 209 > 192 kN·m "
                "por painel; descompressão só até 9,05 m. Confirmar com a tabela do fabricante ou manter h26,5 + 5.")
     m.pendente("Vigas do mezanino em I90 com dentes 45×30 (dente da I70 reprovado no MEF): assentos CP-MEZ +2,45 / +5,85; pé-direito livre sob a viga = nível − 1,15 m.")
-    m.pendente("Geometria do R01: 79,35 m entre os eixos 1 e 9 e 39,50 m entre A e E; TS-01 com 19,15 m. Pilares laterais com a cabeça recuada (40×30) acima de +8,40 (A) / +9,55 (E) — a validar com a Marques.")
+    m.pendente("Geometria do R01: 79,35 m entre os eixos 1 e 9 e 39,50 m entre A e E; TS-01 com 19,15 m. Pilares laterais com a cabeça recuada (40×30) acima de +8,40 (A) / +9,55 (E) (aprovado).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento em X (nó a nó), correntes e mãos-francesas nas pranchas COB01/COB02, não modelados no 3D.")
     m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; VT/VV 25×60 de +7,50 a +8,10 com dentes Gerber nos consolos CP-VT; portões na linha 4.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
@@ -261,7 +261,7 @@ if __name__ == "__main__":
         import base64, io
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
-                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais (a revisar com o R01)"),
+                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A) — cabeça recuada 40×30"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B) — cabeça recuada 40×30"), ("ND-LET-PC01", "pilares centrais (a revisar com o R01)"),
                  ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB-rev02", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento e travamento, ST-1, mão-francesa) e COB02 (X nó a nó, correntes, tirantes, diagonais)"),
                  ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
