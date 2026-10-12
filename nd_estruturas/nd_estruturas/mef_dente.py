@@ -52,7 +52,7 @@ def _espessura(x, y, g):
     return b
 
 
-def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, passos=400, sig_pe=1150.0,
+def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, passos=400, sig_pe=1150.0, du=0.05,
              lt=760.0, saida_png=None, titulo=""):
     """g: geometria (H, b, bw, ti, mi, ts, ms, hd, ln, a_apoio, x_mac, l_apoio).
     arm: lista de barras dict(tipo='h'|'v', pos (y para 'h', x para 'v'), ini, fim, area_total mm²).
@@ -174,7 +174,7 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
     fator_V = (Ls - 100 - xP) / (Ls - 100 - g["a_apoio"])     # V no dente ≈ fator_V · P (só para a força horizontal)
     ops.load(no_ap, -Hd / Vd * fator_V, 0.0)                  # tração horizontal no apoio (para fora da peça)
     ctrl = topo[len(topo) // 2]
-    ops.integrator("DisplacementControl", ctrl, 2, -0.05)
+    ops.integrator("DisplacementControl", ctrl, 2, -du)
     ops.test("NormDispIncr", 1e-5, 60)
     ops.algorithm("KrylovNewton")
     hist = []
@@ -187,7 +187,6 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
     mon_s = [e_ for e_, nome, tipo in barras if tipo != "p"]
     eps_ini = {e_: ops.basicDeformation(e_)[0] / malha for e_, nome, tipo in barras if tipo == "p"}
     mon_p = list(eps_ini)
-    du = 0.05
     for p in range(passos):
         r = ops.analyze(1)
         if r != 0:                                             # subpassos adaptativos

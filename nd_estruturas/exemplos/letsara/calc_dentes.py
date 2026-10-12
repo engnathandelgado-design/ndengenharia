@@ -11,7 +11,9 @@ from nd_estruturas.dente_consolo import Dente, consolo, AREA
 from nd_estruturas.mef_dente import analisar
 
 AQUI = Path(__file__).parent
+import os
 SO = sys.argv[1:]            # opcional: nomes das vigas a rodar no MEF
+SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: não roda MEF nem grava
 
 # geometria (mm) — mesma fôrma I: largura 400, alma 150, chanfros 80
 VIGAS = {
@@ -65,7 +67,7 @@ for nome, v in VIGAS.items():
     r = D.dimensionar(diam_tir=v["d_tir"], diam_sus=v["d_sus"])
     r["nota_Hd"] = NOTAS_H[nome]
     res[nome] = dict(geometria={k: v[k] for k in ("H", "hd", "ln", "a_apoio", "x_mac", "l_apoio")}, Vd=v["Vd"], Hd=v["Hd"], calculo=r)
-    if not SO or nome in SO:
+    if not SO_DADOS and (not SO or nome in SO):
         g = dict(H=v["H"], b=400, bw=150, ti=v["ti"], mi=80, ts=v["ts"], ms=80, hd=v["hd"], ln=v["ln"], a_apoio=v["a_apoio"],
                  x_mac=v["x_mac"], l_apoio=v["l_apoio"])
         m = analisar(g, armaduras(v, r), v["cord"], v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=3000.0, xP=1300.0, passos=500,
@@ -87,5 +89,7 @@ if (AQUI / "dentes.json").exists():
 for k, v in prev.items():
     if k in res and "mef" in v and "mef" not in res[k]:
         res[k]["mef"] = v["mef"]
-(AQUI / "dentes.json").write_text(json.dumps(res, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
-print(json.dumps({k: (v["calculo"]["adotado"] if "calculo" in v else v) for k, v in res.items()}, ensure_ascii=False, indent=0)[:3000])
+if not SO_DADOS:
+    (AQUI / "dentes.json").write_text(json.dumps(res, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
+if not SO_DADOS:
+    print(json.dumps({k: (v["calculo"]["adotado"] if "calculo" in v else v) for k, v in res.items()}, ensure_ascii=False, indent=0)[:3000])
