@@ -58,6 +58,17 @@ reg("mão-francesa", "MF-1 L 50×5", "furo Ø14 nas duas pontas", "TS-01 / terç
 for ch, d in CM["chumbadores"].items():
     reg("chumbadores", "TS-01", ch, "terça / mão-francesa", d["pinos"], "interação tração × corte (ACI 318-19 cap. 17)", f"{d['interacao']:.2f} ≤ 1,2", d["interacao"] <= 1.2, "")
 
+# ------------------------------------------------------------------ 3b. contraventamento em X com subpainéis curtos (CH-T2 na viga, CH-X na terça)
+cx = CM["contraventamento"]
+reg("contraventamento", "diagonal Ø12,5 (rosca M12)", f"subpainel {cx['painel_x_m']*1000:.0f} × L/{cx['subpaineis']}, L ≈ {cx['L_sub_m']} m", "CH-T2 (viga) / CH-X (terça)", "orelhas 9,5 com furo Ø14",
+    "tração na diagonal (NBR 8800:2008 6.3.3)", f"{cx['T_diag_d']} ≤ {cx['NtRd_12']} kN", cx["uso_diag"] <= 1.0, f"4 subdiagonais dividem a cortante Vd {cx['V_painel_d']} kN do painel; {LG['contraventamento']['n_tirantes']*2} diagonais")
+reg("contraventamento", "corrente rígida (tubo Ø42,2×2,65)", "corda intermediária do X", "terças do vão contraventado", "furo Ø14 no meio da alma",
+    "compressão (corrente + componente x das diagonais)", f"{cx['corrente_rigida']['Nd']} ≤ {cx['corrente_rigida']['NcRd']} kN", cx["corrente_rigida"]["uso"] <= 1.0, "")
+reg("contraventamento", "CH-X 9,5×250×200 + 4 orelhas", "2 M12 na mesa inferior da terça (furos Ø14 a 42 da alma)", "terça Ue 300", "mesa inferior 85",
+    "nó na linha de corrente (L/4, L/2, 3L/4)", f"{LG['contraventamento']['n_nos_CHX']*2} nós", True, f"força no nó: x {cx['no']['Fx_kN']} kN, y {cx['no']['Fy_kN']} kN")
+reg("contraventamento", "CH-T2 300×380×12,5", "6 pinos Ø16 + 2 grampos U", "2 diagonais curtas + terça escora", "orelhas",
+    "interação tração × corte (ACI 318-19 cap. 17)", f"{CM['chumbadores']['CH-T2']['interacao']:.2f} ≤ 1,2", CM["chumbadores"]["CH-T2"]["interacao"] <= 1.2, "")
+
 # ------------------------------------------------------------------ 4. pilares × placas (IP-01 × CM-01) e × VB-01 / VM (consolos)
 reg("pilar × placa", "pilar PL/PF", "IP-01 chapa 150×150×9,5 + 2 pinos Ø12,5 (c/125 a partir do piso)", "placa CM-01 (h 125)", "fixação da placa",
     "fiada × inserto", "8 fiadas = 8 IP-01", True, "fixação: 2 cantoneiras L 63×6,3 soldadas em obra ao IP-01 e ao CH-P1 da placa (ND-LET-CM01)")

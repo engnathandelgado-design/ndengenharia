@@ -147,6 +147,27 @@
    "liga": "do ponto de corrente da 2ª terça à cantoneira CT-1 da 1ª terça"
   }
  },
+ "contraventamento": {
+  "painel_x_m": 3.158,
+  "subpaineis": 4,
+  "L_sub_m": 4.04,
+  "ang_graus": 38.5,
+  "F_modelo_global_k": 9.3,
+  "V_painel_d": 12.1,
+  "T_diag_d": 4.86,
+  "NtRd_12": 25.1,
+  "uso_diag": 0.193,
+  "no": {
+   "Fx_kN": 7.6,
+   "Fy_kN": 6.05
+  },
+  "corrente_rigida": {
+   "Nd": 16.5,
+   "NcRd": 37.5,
+   "uso": 0.439
+  },
+  "nota": "X em cada subpainel 3158 × L/4 (comprimento da diagonal ≈ 4 m) em vez de altura inteira (9,8 m)"
+ },
  "CT1": {
   "perfil": "L 102×102×9,5 (A36) L=200",
   "reacao_suc_kN": 7.83,
@@ -208,14 +229,14 @@
   "CH-T2": {
    "pinos": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
    "Nu": 15.7,
-   "Vu": 39.2,
+   "Vu": 45.2,
    "phiNn": 88.0,
    "modoN": "cone",
    "phiVn_sem_grampo": 14.1,
    "grampos": "2 grampos U Ø10 CA-50 envolvendo os pinos, pernas de 300 na mesa (ancoragem da cortante)",
    "phiVn": 99.0,
    "modoV": "borda",
-   "interacao": 0.397
+   "interacao": 0.457
   },
   "CH-MF": {
    "pinos": "2 Ø12,5 c/ cabeça, hef 80",

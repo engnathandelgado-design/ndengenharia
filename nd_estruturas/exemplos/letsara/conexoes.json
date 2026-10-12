@@ -644,7 +644,7 @@
   "peca_b": "terça / mão-francesa",
   "inserto_b": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.40 ≤ 1,2",
+  "valor": "0.46 ≤ 1,2",
   "ok": true,
   "obs": ""
  },
@@ -656,6 +656,50 @@
   "inserto_b": "2 Ø12,5 c/ cabeça, hef 80",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
   "valor": "0.27 ≤ 1,2",
+  "ok": true,
+  "obs": ""
+ },
+ {
+  "grupo": "contraventamento",
+  "peca_a": "diagonal Ø12,5 (rosca M12)",
+  "inserto_a": "subpainel 3158 × L/4, L ≈ 4.04 m",
+  "peca_b": "CH-T2 (viga) / CH-X (terça)",
+  "inserto_b": "orelhas 9,5 com furo Ø14",
+  "verificacao": "tração na diagonal (NBR 8800:2008 6.3.3)",
+  "valor": "4.86 ≤ 25.1 kN",
+  "ok": true,
+  "obs": "4 subdiagonais dividem a cortante Vd 12.1 kN do painel; 384 diagonais"
+ },
+ {
+  "grupo": "contraventamento",
+  "peca_a": "corrente rígida (tubo Ø42,2×2,65)",
+  "inserto_a": "corda intermediária do X",
+  "peca_b": "terças do vão contraventado",
+  "inserto_b": "furo Ø14 no meio da alma",
+  "verificacao": "compressão (corrente + componente x das diagonais)",
+  "valor": "16.5 ≤ 37.5 kN",
+  "ok": true,
+  "obs": ""
+ },
+ {
+  "grupo": "contraventamento",
+  "peca_a": "CH-X 9,5×250×200 + 4 orelhas",
+  "inserto_a": "2 M12 na mesa inferior da terça (furos Ø14 a 42 da alma)",
+  "peca_b": "terça Ue 300",
+  "inserto_b": "mesa inferior 85",
+  "verificacao": "nó na linha de corrente (L/4, L/2, 3L/4)",
+  "valor": "168 nós",
+  "ok": true,
+  "obs": "força no nó: x 7.6 kN, y 6.05 kN"
+ },
+ {
+  "grupo": "contraventamento",
+  "peca_a": "CH-T2 300×380×12,5",
+  "inserto_a": "6 pinos Ø16 + 2 grampos U",
+  "peca_b": "2 diagonais curtas + terça escora",
+  "inserto_b": "orelhas",
+  "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
+  "valor": "0.46 ≤ 1,2",
   "ok": true,
   "obs": ""
  },

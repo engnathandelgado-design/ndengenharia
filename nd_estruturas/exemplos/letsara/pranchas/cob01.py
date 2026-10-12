@@ -66,8 +66,10 @@ for k in range(8):
     if k in (1, 3, 4, 6):
         for half in (0, 20000):
             for a, b in zip(nos[:-1], nos[1:]):
-                v.linha(M(ya + 140, a + half + 140), M(yb - 140, b + half - 140), "ARMADURA")
-                v.linha(M(ya + 140, b + half - 140), M(yb - 140, a + half + 140), "ARMADURA")
+                for j in range(4):
+                    y1 = ya + j * (yb - ya) / 4 + 140; y2 = ya + (j + 1) * (yb - ya) / 4 - 140
+                    v.linha(M(y1, a + half + 140), M(y2, b + half - 140), "ARMADURA")
+                    v.linha(M(y1, b + half - 140), M(y2, a + half + 140), "ARMADURA")
 # eixos e marcas
 for i, yl in enumerate(YLmm):
     v.eixo(M(yl, -900), M(yl, 40900), 0)
@@ -98,7 +100,7 @@ v.cota_v([20325, 39775], YLmm[0] - 900, -24, total=False)
 v.cota_v([0, 40000], YLmm[0] - 900, -36, total=False)
 v.chamada(M(YLmm[2] + 4000, XT[9] + 60), (28, -8), "terça Ue 300×85×25×3,00 — alma na face +x do ST-1 (todas no mesmo lado)")
 v.chamada(M(YLmm[1] + 2400, (XT[0] + XT[12]) / 2 + 0), (26, 14), "correntes flexíveis Ø12,5 (L/4, L/2, 3L/4) — ver COB02")
-v.chamada(M(YLmm[4] + 4800, nos[2] + 1500), (26, 10), "contraventamento em X Ø12,5 (vãos 2-3, 4-5, 5-6, 7-8) — ver COB02")
+v.chamada(M(YLmm[4] + 4800, nos[2] + 1500), (26, 10), "contraventamento em X Ø12,5 em subpainéis 3158 × L/4 (vãos 2-3, 4-5, 5-6, 7-8) — ver COB02")
 v.chamada(M(YLmm[3] + 3000, 19950), (18, 22), "pilar central PC / viga I110")
 v.marcador_detalhe(M(YLmm[5], XT[20]), 600, 1, ang=60, dist=8)
 v.marcador_detalhe(M(YLmm[6] + Y_MF, XT[22]), 500, 2, ang=-50, dist=8)

@@ -127,21 +127,29 @@ paineis = [round(TS["x0"] if False else 0.325 + s, 3) for s in TS["no_contrav"]]
 # Uma diagonal corre a 35 mm e a outra a 70 mm acima da chapa (furos na alma da terça intermediária a 35 mm entre centros).
 CT2 = dict(y_orelha=0.140, s_orelha=0.140, z_baixo=0.035, z_alto=0.070, mesa_terca=0.085, d_tir=0.0125)
 VAOS = [(1, 2), (3, 4), (4, 5), (6, 7)]            # vãos contraventados entre linhas com TS-01 (fachadas: VB)
-tir = []
+tir, nos_x = [], []
+N_SUB = 4                                          # subpainéis por vão (nas linhas de correntes L/4, L/2, 3L/4): diagonais curtas (≈ 4 m)
 for (ia, ib) in VAOS:
-    ya, yb = YL[ia] + CT2["y_orelha"], YL[ib] - CT2["y_orelha"]
+    Lv = YL[ib] - YL[ia]
     for k in range(len(paineis) - 1):
         xa, xb = paineis[k], paineis[k + 1]
-        for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - CT2["s_orelha"]), CT2["z_baixo"]),
-                                  ("\\", (xb - CT2["s_orelha"], xa + CT2["s_orelha"]), CT2["z_alto"])):
-            fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
-            xm = (xa + xb) / 2
-            t = (xm - x1) / (x2 - x1)
-            tir.append(dict(vao=f"L{ia+1}-L{ib+1}", painel=k + 1, diagonal=nome,
-                            comp_m=round(math.dist((x1, ya), (x2, yb)), 3),
-                            ang_eixo_viga=round(math.degrees(math.atan2(yb - ya, abs(x2 - x1))), 1),
-                            folga_terca_no_mm=round(fol * 1000), furo_terca_interm=dict(y_m=round(ya + t * (yb - ya) - YL[ia], 2),
-                                                                                       h_mm=round(z * 1000))))
+        for j in range(N_SUB):
+            ya = YL[ia] + j * Lv / N_SUB + (CT2["y_orelha"] if j == 0 else 0.10)
+            yb = YL[ia] + (j + 1) * Lv / N_SUB - (CT2["y_orelha"] if j == N_SUB - 1 else 0.10)
+            for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - CT2["s_orelha"]), CT2["z_baixo"]),
+                                      ("\\", (xb - CT2["s_orelha"], xa + CT2["s_orelha"]), CT2["z_alto"])):
+                fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
+                xm = (xa + xb) / 2
+                t = (xm - x1) / (x2 - x1)
+                tir.append(dict(vao=f"L{ia+1}-L{ib+1}", painel=k + 1, subpainel=j + 1, diagonal=nome,
+                                comp_m=round(math.dist((x1, ya), (x2, yb)), 3),
+                                ang_eixo_viga=round(math.degrees(math.atan2(yb - ya, abs(x2 - x1))), 1),
+                                folga_terca_no_mm=round(fol * 1000), furo_terca_interm=dict(y_m=round(ya + t * (yb - ya) - YL[ia], 2),
+                                                                                           h_mm=round(z * 1000))))
+        for j in range(1, N_SUB):                   # nós intermediários: chapa CH-X na terça da linha de corrente
+            nos_x.append(dict(vao=f"L{ia+1}-L{ib+1}", x_m=round(xa, 3), y_m=round(YL[ia] + j * Lv / N_SUB, 3)))
+    for j in range(1, N_SUB):
+        nos_x.append(dict(vao=f"L{ia+1}-L{ib+1}", x_m=round(paineis[-1], 3), y_m=round(YL[ia] + j * Lv / N_SUB, 3)))
 gap_cruz = (CT2["z_alto"] - CT2["z_baixo"] - CT2["d_tir"]) * 1000
 ok_tir = all(t["folga_terca_no_mm"] >= 20 for t in tir) and gap_cruz >= 5
 erros += not ok_tir
@@ -150,7 +158,7 @@ folga_plat = dict(platibanda=10.00, telha_P2=round(z_telha(X_P2 - 0.30), 3), tel
                   folga_P2_mm=round((10.00 - z_telha(X_P2 - 0.30)) * 1000), ok=10.00 - z_telha(X_P2 - 0.30) >= 0.10)
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"], X_PINO=[round(v, 3) for v in X_PINO],
-           TB1_s_fabricacao=[i_["s"] for i_ in TS["insertos"] if i_["tipo"] == "TB-1"], contraventamento=dict(chapa=CT2, n_tirantes=len(tir), amostra=tir[:4],
+           TB1_s_fabricacao=[i_["s"] for i_ in TS["insertos"] if i_["tipo"] == "TB-1"], contraventamento=dict(chapa=CT2, n_tirantes=len(tir), n_nos_CHX=len(nos_x), subpaineis=N_SUB, amostra=tir[:4], nos_CHX=nos_x,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=rel[:28], tercas=[r for r in rel if r["ligacao"] == "terças"],
            berco_I110=berco, nos_contraventamento_x_esq=paineis,

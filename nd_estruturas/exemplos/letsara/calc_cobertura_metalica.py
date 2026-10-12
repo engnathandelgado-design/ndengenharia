@@ -89,6 +89,29 @@ R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furos Ø
                       diagonal=dict(barra="Ø16 A36, rosca M16", comp_m=round(diag_len, 2), Td=round(T_diag, 1), NtRd=round(td, 1),
                                     uso=round(T_diag / td, 3), liga="do ponto de corrente da 2ª terça à cantoneira CT-1 da 1ª terça"))
 
+# ------------------------------------------------------------------ contraventamento em X com painéis curtos (padrão das coberturas de referência)
+# Treliça no plano da cobertura: cordas = vigas TS-01 (linhas), diagonais Ø12,5 em X dentro de cada subpainel 3158 × L/4
+# (nós nas CH-T2 da viga e nas chapas CH-X das terças, nas linhas de correntes). Um corte x = const atravessa 4 subdiagonais,
+# que dividem a cortante V do painel; as correntes rígidas (tubo) nos painéis contraventados fazem de cordas intermediárias.
+mg = json.loads((AQUI / "modelo_global.json").read_text(encoding="utf-8"))
+F_contr_k = max(v["forca_max_kN"]["contravento"] for v in mg.values())          # diagonal de altura inteira do modelo global (4,0 × 9,65 m)
+P_X, N_SUB = 3.158, 4
+V_k = F_contr_k * math.sin(math.atan(L / 4.0))                                    # cortante do painel (componente y)
+V_d = 1.4 * V_k
+L_sub = math.hypot(P_X, L / N_SUB)
+ang_sub = math.degrees(math.atan2(L / N_SUB, P_X))
+T_sub = V_d / (N_SUB * math.sin(math.radians(ang_sub)))
+t12 = barra_redonda_tracao_Rd(12.0)
+Fx_no = 2 * T_sub * math.cos(math.radians(ang_sub))                                # componente x de 2 diagonais num nó (CH-T2 / CH-X)
+Fy_no = 2 * T_sub * math.sin(math.radians(ang_sub))
+N_corr_X = Fc + Fx_no                                                              # corrente rígida nos painéis contraventados
+R["contraventamento"] = dict(painel_x_m=P_X, subpaineis=N_SUB, L_sub_m=round(L_sub, 2), ang_graus=round(ang_sub, 1),
+                             F_modelo_global_k=round(F_contr_k, 1), V_painel_d=round(V_d, 1), T_diag_d=round(T_sub, 2),
+                             NtRd_12=round(t12, 1), uso_diag=round(T_sub / t12, 3),
+                             no=dict(Fx_kN=round(Fx_no, 2), Fy_kN=round(Fy_no, 2)),
+                             corrente_rigida=dict(Nd=round(N_corr_X, 1), NcRd=round(cr, 1), uso=round(N_corr_X / cr, 3)),
+                             nota="X em cada subpainel 3158 × L/4 (comprimento da diagonal ≈ 4 m) em vez de altura inteira (9,8 m)")
+
 # ------------------------------------------------------------------ cantoneira CT-1 e parafusos
 Vsuc_end = casos["geral"]["w_suc_kNm"] * L / 2      # reação de arrancamento por terça
 Vgrav_end = casos["geral"]["w_grav_kNm"] * L / 2
@@ -145,7 +168,7 @@ ch["CH-T1"] = dict(pinos="4 Ø16 c/ cabeça, hef 100, nos cantos (grade 150×150
                    modoN=t1["modo"], phiVn=round(v1["phiVn_kN"], 1), modoV=v1["modo"],
                    interacao=round(interacao(Nu1, t1["phiNn_kN"], Vx1, v1["phiVn_kN"])[0], 3))
 g2 = GrupoPinos(d=16, d_cabeca=32, hef=100, nx=2, ny=3, sx=200, sy=150, cx_neg=2000, cx_pos=2000, cy_neg=50, cy_pos=50, ha=200)
-Vu2 = math.hypot(Nd, 2 * 1.4 * 9.1 * math.cos(math.radians(72.6)))     # escora (direção y) + 2 tirantes (componente x)
+Vu2 = math.hypot(Nd + Fy_no, Fx_no)     # escora (direção y) + 2 diagonais curtas do subpainel junto à viga (componentes y e x)
 gr = grampo_ancoragem_kN(10, pernas=2)
 t2 = g2.tracao()
 v2_sem = g2.cortante("y+")
