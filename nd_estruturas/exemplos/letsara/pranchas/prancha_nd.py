@@ -622,6 +622,25 @@ class Vista:
             t = rotulos[k] if rotulos else self.fmt(x - x0)
             self._add(self.pr.texto(xp - 0.6, yp + sg * 1.6, t, "cota", "COTA", "MIDDLE_LEFT" if sg > 0 else "MIDDLE_RIGHT", rot=90))
 
+    def cota_ord_v(self, ys, x_ref, dist_papel=12.0, y0=None, rotulos=None):
+        """Cotas ordenadas verticais (acumuladas a partir de y0), texto horizontal — peça desenhada em pé."""
+        y0 = ys[0] if y0 is None else y0
+        xb = x_ref + dist_papel * self.esc
+        sg = 1 if dist_papel >= 0 else -1
+        self.linha((xb, min(ys)), (xb, max(ys)), "COTA")
+        for k, y in enumerate(ys):
+            self.linha((x_ref + sg * 1.5 * self.esc, y), (xb + sg * 1.0 * self.esc, y), "COTA")
+            xp, yp = self.P(xb, y)
+            self._add(self.pr.msp.add_line((xp - 0.8, yp - 0.8), (xp + 0.8, yp + 0.8), dxfattribs={"layer": "COTA"}))
+            t = rotulos[k] if rotulos else self.fmt(y - y0)
+            self._add(self.pr.texto(xp + sg * 1.4, yp + 0.6, t, "cota", "COTA", "BOTTOM_LEFT" if sg > 0 else "BOTTOM_RIGHT"))
+
+    def chapa(self, x, y, w, h, escala_papel=0.25, camada="METALICA"):
+        """Chapa/inserto metálico: contorno + hachura ANSI31 (prática de detalhamento: chaparia sempre hachurada)."""
+        pts = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+        self.poli(pts, camada, fechada=True)
+        return self.hachura(pts, "ANSI31", escala_papel, camada, 0)
+
     def cota_diam(self, c, r, ang=45, prefixo="Ø"):
         ux, uy = math.cos(math.radians(ang)), math.sin(math.radians(ang))
         return self.chamada((c[0] + r * ux, c[1] + r * uy), (8 * ux, 8 * uy), f"{prefixo}{2*r:g}".replace(".", ","))

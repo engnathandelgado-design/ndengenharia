@@ -77,19 +77,19 @@ def rot(p, pts, labs, fs=15):
                        shape_color="white", shape_opacity=0.85, margin=3, always_visible=True)
 
 
-# 1) geral — pilar deitado como na fôrma (z no eixo horizontal), face A para cima
-p = pv.Plotter(off_screen=True, window_size=(2600, 760)); p.set_background("white")
+# 1) geral — pilar em pé (posição de montagem): vê as faces C (placas) e B; consolo e alças aparecem na silhueta
+p = pv.Plotter(off_screen=True, window_size=(760, 2600)); p.set_background("white")
 cena(p)
-rot(p, [(H / 2 + CP, 0, ZC + 0.02), (H / 2 + PINO_X, 0, ZC + 0.38), (-H / 2 - 0.01, 0.0, Z_PLACA[2]), (-H / 2 - 0.01, 0.0, Z_PLACA[6]),
-        (H / 2 + 0.14, 0, AL[0]), (H / 2 + 0.14, 0, AL[1]), (H / 2 + 0.03, 0, 0.45), (H / 2, B / 2, L - 0.05),
-        (H / 2, -B / 2, 1.0), (-H / 2, B / 2, 5.5), (0, B / 2, 3.0)],
-    ["consolo CP-TS (face A)", "PN-1 pino Ø20 L=70", "IP-01 (face C, 8x)", "IP-01", "AL-2 alça (içamento)", "AL-2",
-     "chaves de cisalhamento (cálice)", "topo +10,000 (platibanda)", "base do cálice", "FACE C (externa, placas)", "FACE B (lado de 40)"])
+rot(p, [(H / 2 + CP, 0, ZC + 0.02), (H / 2 + PINO_X, 0, ZC + 0.38), (-H / 2 - 0.01, 0.0, Z_PLACA[1]), (-H / 2 - 0.01, 0.0, Z_PLACA[6]),
+        (H / 2 + 0.14, 0, AL[0]), (H / 2 + 0.14, 0, AL[1]), (-H / 2, B / 2, 0.45), (0, B / 2, L),
+        (0, B / 2, 1.0), (-H / 2, 0, 5.2), (0, B / 2, 3.6)],
+    ["consolo CP-TS (face A)", "PN-1 pino Ø20", "IP-01 (face C, 8x)", "IP-01", "AL-2 alça", "AL-2",
+     "chaves (cálice)", "topo +10,000", "piso ±0,000", "FACE C (placas)", "FACE B"], fs=13)
 p.enable_parallel_projection()
-p.camera_position = [(-4.0, 12.0, L / 2 - 3.0), (0.0, 0, L / 2), (1, 0, 0)]   # vê as faces C (placas) e B; consolo e alças aparecem acima da silhueta
-p.reset_camera(); p.camera.zoom(3.1)
-p.add_text(f"PL-01 — pilar 40×60 cm, L = {L*100:.0f} cm (cálice 100 + 1000) · 6,6 t · 6 peças (família PL/PF: 29)", font_size=16, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
+p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]
+p.reset_camera(); p.camera.zoom(3.4)
+p.add_text("PL-01 em pé", font_size=13, position="upper_left", color="#111111")
+p.add_text("projeto da ND Engenharia", font_size=9, position="lower_left", color="#888888")
 p.screenshot(SAIDA + "ISO-PIL-geral.png")
 
 # 2) consolo CP-TS em detalhe (pilar em pé)

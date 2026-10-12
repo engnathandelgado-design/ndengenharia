@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- prancha_nd: `Vista.cota_ord_v` (cotas ordenadas verticais) e `Vista.chapa` (chaparia hachurada ANSI31).
+- Letsara: pilar PL-01 desenhado em pé (posição de montagem), rev. 02, com Detalhe 4 de protensão (posição das cordoalhas e força no macaco) na opção B.
 - prancha_nd: modo `unidade="cm"` nas vistas (cotas de concreto pré-moldado em cm, chaparia em mm); subtítulo indica a unidade.
 - Letsara: prancha de pilar PL-01 (A0, opções A e B) refeita no padrão de desenho de peça: vistas das faces A/B/C, cortes, 3 detalhes, isométricos com insertos, planta-chave de locação com marcas, cabeçalho com marca/seção/comprimento, estribos e grampos conforme NBR 6118:2023 18.4.3, cobrimento 30 mm conferido.
 
