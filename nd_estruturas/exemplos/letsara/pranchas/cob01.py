@@ -126,8 +126,9 @@ for z in Z_FURO:
     e.linha((-ST1["larg"] / 2, z + Z_TERCA), (ST1["larg"] / 2, z + Z_TERCA), "EIXO")
 e.circulo((0, Z_DIAG), 9, "METALICA")
 e.chamada((0, Z_DIAG), (-30, 20), "furo Ø18 a 255 (só nos ST-1 de borda): diagonal Ø16 — ver COB02")
-e.cota_h([-ST1["larg"] / 2, -(FOLGA + E_FURO), -FOLGA, FOLGA, FOLGA + E_FURO, ST1["larg"] / 2], ST1["h"] + 10, 8, total=False)
-e.cota_v([0, Z_TERCA + Z_FURO[0], Z_TERCA + Z_FURO[1], Z_TERCA + H_TERCA], -600, -10, total=False)
+e.cota_h([-ST1["larg"] / 2, -(FOLGA + E_FURO), -FOLGA, FOLGA, FOLGA + E_FURO, ST1["larg"] / 2], Z_TERCA + H_TERCA + 30, 8, total=False)
+e.ret(-600, Z_TERCA + H_TERCA, 1200, 30, "METALICA")
+e.cota_v([0, Z_TERCA + Z_FURO[0], Z_TERCA + Z_FURO[1], Z_TERCA + H_TERCA, Z_TERCA + H_TERCA + 30], -600, -10, total=False)
 e.cota_v([0, ST1["h"]], 600, 10, total=False)
 e.chamada((-ST1["larg"] / 2 + 10, 250), (-18, 12), f"ST-1 chapa {ST1['t']:g}×{ST1['larg']}×{ST1['h']} (A36) atrás das terças")
 e.chamada((FOLGA + E_FURO, Z_TERCA + Z_FURO[1]), (40, 10), "2 M12 8.8 por terça, furo Ø14 na alma e no ST-1")
@@ -158,7 +159,10 @@ c.chamada((-ST1["t"] - 45, 40), (-16, 14), "enrijecedor chapa 8 × 90 × 90, nos
 c.chamada((-ST1["t"] / 2, 200), (-14, 6), "solda ST-1 × CH-T1: filete 6 mm nos 2 lados (fábrica)")
 c.chamada((B_TERCA - 3, zb + 150), (14, 10), "Ue 300×85×25×3,00")
 c.chamada((50, -IT1["t"] - 100), (16, -12), "4 pinos Ø16 c/ cabeça, hef 100 (CH-T1)")
-c.marcador_corte((-200, 330), (200, 330), "A", lado=-1)
+c.ret(-250, zb + H_TERCA, 500, 30, "METALICA"); c.hachura([(-250, zb + H_TERCA), (250, zb + H_TERCA), (250, zb + H_TERCA + 30), (-250, zb + H_TERCA + 30)], "ANSI37", 0.5, "METALICA")
+c.linha((60, zb + H_TERCA + 30), (60, zb + H_TERCA - 15), "METALICA")
+c.chamada((200, zb + H_TERCA + 15), (12, 3), "telha sanduíche PIR 30 mm (aço 0,5/0,5), parafuso autobrocante 12-14×2" + chr(34) + " c/ EPDM na mesa superior")
+c.marcador_corte((-200, 430), (200, 430), "A", lado=-1)
 
 # (c) PLANTA do suporte (x–y): CH-T1, ST-1, mesas das terças, folgas
 p = pr.vista("DETALHE 1C", (485, 200), E5, titulo="DETALHE 1 — PLANTA", subtitulo="topo da viga TS-01; terças chegando de cada lado")
@@ -266,6 +270,7 @@ notas = [f"Terças Ue 300×85×25×3,00 ZAR 345 galvanizadas, simplesmente apoia
          "CH-T1 (CH-T2 nos nós do contraventamento) e CH-MF são os insertos embutidos na fôrma da TS-01 (ND-LET-TS01), nivelados com o concreto, nas 26 posições de terça de cada viga; o ST-1 e a OR-1 são soldados a eles na fábrica de pré-moldados, com gabarito, antes do transporte (filete 6 mm, eletrodo E7018). Conferir posição ±5 mm.",
          "Montagem: a terça é posicionada com o fundo 10 mm acima do concreto, parafusada com 2 M12 8.8 por ponta (aperto com chave, sem protensão). A reação passa pelos parafusos (corte + pressão de contato na alma).",
          "Mão-francesa MF-1 em toda terça, dos dois lados da viga nas linhas 2 a 8 e de um lado nas linhas 1 e 9: L 50×5 a 45°, M12 na OR-1 e M12 na mesa inferior da terça.",
+         "Telha sanduíche PIR 30 mm (aço 0,5/0,5 mm) fixada na mesa superior das terças com parafuso autobrocante 12-14×2\" com arruela de vedação EPDM, 2 por apoio; costura lateral c/ 500. Topo da telha a 340 mm acima do concreto.",
          "Correntes, diagonais e contraventamento em X: ver ND-LET-COB02. Memória completa: ND-LET-MC02.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 190)

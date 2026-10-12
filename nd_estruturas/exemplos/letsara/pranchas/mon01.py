@@ -110,7 +110,8 @@ for s in LG["s_tercas"]:
         x = xa + s * C3 - 0.027
         c.ret(M(x) - 42, M(zf(x) + 0.9125), 85, 300, "METALICA")
 c.linha((300, M(zf(0.30) + 1.2275)), (Ly - 300, M(zf(Ly / 1000 - 0.30) + 1.2275)), "METALICA")
-c.texto((M(10), M(zf(10) + 1.6)), "telha + terças Ue 300 (ver ND-LET-COB01)", "min", "BOTTOM_CENTER")
+c.linha((300, M(zf(0.30) + 1.2575)), (Ly - 300, M(zf(Ly / 1000 - 0.30) + 1.2575)), "METALICA")
+c.texto((M(10), M(zf(10) + 1.6)), "telha sanduíche PIR 30 + terças Ue 300 nos ST-1 (ver ND-LET-COB01)", "min", "BOTTOM_CENTER")
 # níveis
 def niv(x, z, txt, lado=1):
     c.poli([(x, z), (x + lado * 250, z + 250), (x + lado * 250, z - 250), (x, z)], "COTA")

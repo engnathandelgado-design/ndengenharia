@@ -82,6 +82,7 @@ def ts(R, x0):
         xt, zt = glob(x0, s, H)
         R.ret(xt - 42.5, zt + 12.5, 85, 300, "METALICA")
         R.ret(xt - 50, zt, 100, 12.5, "METALICA")
+        R.ret(xt - 4, zt + 12.5, 8, 290, "METALICA")                 # ST-1
         xb_, zb_ = glob(x0, s - 27, 0)
         if s > 1000 and s < L - 1000:
             R.linha((xb_, zb_), (xt, zt + 12.5), "OCULTA")       # mão-francesa (vista de topo, no plano da terça)
@@ -176,7 +177,7 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
     else:
         for zm in Z_MEZ:
             nivel(v, 4500, zm, f"piso mezanino {f(zm / 1000)}")
-    v.chamada((30000, z_tel(30000)), (6, 14), "telha 0,5 + PIR 30 sobre terças Ue 300 (c/1,579)")
+    v.chamada((30000, z_tel(30000)), (6, 14), "telha sanduíche PIR 30 (aço 0,5/0,5) sobre terças Ue 300 c/1,579 nos suportes ST-1 — ND-LET-COB01")
     v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3%, dentes Gerber nas pontas")
     v.chamada((40500, 5000), (6, 0), "placa de fechamento 10 cm")
     v.chamada((40100, 9950), (8, 20), f"platibanda {Z_TOP_PIL - z_tel(39800):.0f} mm acima da telha (cobertura escondida)")
