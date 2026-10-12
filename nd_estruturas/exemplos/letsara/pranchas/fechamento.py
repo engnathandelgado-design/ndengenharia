@@ -228,7 +228,7 @@ def prancha_vt():
     pr.texto(Q[0] + 75, Q[3] - 24, "VIGAS DE TRAVAMENTO E VERGAS 25 × 60 cm — +6,25 / +6,85 — DENTES GERBER NOS CONSOLOS CP-VT — ESCONDIDAS NO FECHAMENTO", "titulo", "TITULO")
     pr.texto(Q[0] + 10, Q[3] - 14, "entre os pilares, atrás da fiada de placas +6,25/+7,50; nas bays dos portões (linha 3) a viga é a verga VV, no mesmo nível, deixando 6,25 m livres", "nota", "TEXTO")
     # planta 1:400 no nível +6,10
-    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 270), 400, titulo="PLANTA — VIGAS DE TRAVAMENTO E VERGAS (NÍVEL +6,25 / +6,85)", subtitulo="VT nos eixos A e E (linhas 2–9) e nas linhas 2 e 3; VV nos portões", unidade="cm")
+    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 270), 400, titulo="PLANTA — VT E VV (+6,25 / +6,85)", subtitulo="VT nos eixos A e E (linhas 2–9) e nas linhas 2 e 3; VV nos portões", unidade="cm")
     for y in Y_LIN:
         v.linha((M(-1.5), M(y)), (M(41.6), M(y)), "EIXO")
     for x in X_FACH:

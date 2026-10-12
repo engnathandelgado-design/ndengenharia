@@ -30,6 +30,7 @@ EMPRESA = dict(nome="ND ENGENHARIA E ASSESSORIA LTDA", cnpj="46.745.157/0001-47"
                contato="WhatsApp (46) 92000-4685 · Saudade do Iguaçu/PR")
 AREA_CORD = {9.5: 55.5, 12.7: 98.7, 15.2: 140.0}   # mm², cordoalhas de 7 fios CP-190 RB (NBR 7483 — conferir)
 FONTE = "DejaVuSansCondensed.ttf"
+MEMORIA_NA_PRANCHA = False   # tabelas "MEMÓRIA..." / "VERIFICAÇÕES..." não entram nas pranchas de detalhamento (pedido do cliente)
 _FONT_CACHE = {}
 
 
@@ -139,6 +140,8 @@ class Prancha:
         return v
 
     def tabela(self, x, y_topo, titulo, cab, linhas, larg, h_lin=6.0, destaque_ultima=False):
+        if not MEMORIA_NA_PRANCHA and titulo.upper().startswith(("MEMÓRIA", "VERIFICAÇ")):
+            return y_topo + 4          # prancha de detalhamento para o cliente: a memória fica no documento MC, não na prancha
         W = sum(larg)
         y = y_topo
         self.ret(x, y - 8, x + W, y, "TABELA")

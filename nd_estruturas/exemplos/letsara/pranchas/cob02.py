@@ -14,7 +14,7 @@ ST = LG["s_tercas"]
 XT = [round((X0E + s - 0.027) * 1000) for s in ST] + [round((X0D + s - 0.027) * 1000) for s in ST]
 VAO = round((YL[2] - YL[1]) * 1000)
 pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="COBERTURA METÁLICA — CORRENTES, DIAGONAIS, CONTRAVENTAMENTO E MEMÓRIA DAS TERÇAS",
+                        conteudo="COBERTURA METÁLICA — CORRENTES, DIAGONAIS, CONTRAVENTAMENTO E DIAGONAIS",
                         desenho="ND-LET-COB02", folha="05/05", fase="PARA APROVAÇÃO", rev="01"))
 pr.revisao("01", pr.dados["data"], "desdobrada da COB01; correntes no meio da alma; diagonais no ST-1")
 cr, tr, c1 = CB["correntes"], CB["terca"], CB["CT1"]
