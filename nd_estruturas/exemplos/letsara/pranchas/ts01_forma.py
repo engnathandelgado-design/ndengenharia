@@ -11,6 +11,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS E TRANSITÓRIAS",
                         desenho="ND-LET-TS01-1", folha="01/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "DENTES GERBER, MÃO-FRANCESA NO FUNDO, CHUMBADORES CALCULADOS, TERÇAS c/1579")
+pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01: L 19,15 m ENTRE FACES (TERÇAS c/1554); ORELHAS DO X NA CH-T2")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780

@@ -3,530 +3,105 @@
  "erros": 0,
  "platibanda": {
   "platibanda": 10.0,
-  "telha_P2": 9.896,
+  "telha_P2": 9.878,
   "telha_P1": 8.711,
-  "folga_P2_mm": 104,
+  "folga_P2_mm": 122,
   "ok": true
  },
  "Z0_TS": 7.46,
- "L_TS": 19.459,
- "passo_tercas": 1.579,
+ "L_TS": 19.159,
+ "passo_tercas": 1.554,
  "s_tercas": [
   0.255,
-  1.834,
-  3.413,
-  4.992,
-  6.571,
-  8.15,
-  9.729,
-  11.308,
-  12.887,
-  14.466,
-  16.045,
-  17.624,
-  19.203
+  1.809,
+  3.363,
+  4.917,
+  6.471,
+  8.025,
+  9.579,
+  11.133,
+  12.687,
+  14.241,
+  15.795,
+  17.349,
+  18.903
  ],
  "X_PINO": [
   0.475,
-  19.625,
-  20.475,
-  39.625
+  19.325,
+  20.175,
+  39.025
  ],
  "TB1_s_fabricacao": [
   0.1635,
-  19.3225
+  19.0225
  ],
  "contraventamento": {
   "chapa": {
    "y_orelha": 0.14,
    "s_orelha": 0.14,
-   "z_baixo": 0.035,
-   "z_alto": 0.07,
+   "z_baixo": 0.045,
+   "z_alto": 0.085,
    "mesa_terca": 0.085,
-   "d_tir": 0.0125
+   "d_tir": 0.016,
+   "z_fundo_terca": 0.01
   },
-  "n_tirantes": 192,
-  "n_nos_CHX": 84,
-  "subpaineis": 4,
+  "n_tirantes": 48,
+  "subpaineis": 1,
   "amostra": [
    {
     "vao": "L2-L3",
     "painel": 1,
-    "subpainel": 1,
     "diagonal": "/",
-    "comp_m": 3.607,
-    "ang_eixo_viga": 37.1,
+    "comp_m": 10.195,
+    "ang_eixo_viga": 73.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
-     "y_m": 1.23,
+     "y_m": 5.037,
      "h_mm": 35
     }
    },
    {
     "vao": "L2-L3",
     "painel": 1,
-    "subpainel": 1,
     "diagonal": "\\",
-    "comp_m": 3.607,
-    "ang_eixo_viga": 37.1,
+    "comp_m": 10.195,
+    "ang_eixo_viga": 73.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
-     "y_m": 1.23,
-     "h_mm": 70
+     "y_m": 5.037,
+     "h_mm": 75
     }
    },
    {
     "vao": "L2-L3",
-    "painel": 1,
-    "subpainel": 2,
+    "painel": 2,
     "diagonal": "/",
-    "comp_m": 3.631,
-    "ang_eixo_viga": 37.6,
+    "comp_m": 10.195,
+    "ang_eixo_viga": 73.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
-     "y_m": 3.62,
+     "y_m": 5.037,
      "h_mm": 35
     }
    },
    {
     "vao": "L2-L3",
-    "painel": 1,
-    "subpainel": 2,
+    "painel": 2,
     "diagonal": "\\",
-    "comp_m": 3.631,
-    "ang_eixo_viga": 37.6,
+    "comp_m": 10.195,
+    "ang_eixo_viga": 73.9,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
-     "y_m": 3.62,
-     "h_mm": 70
+     "y_m": 5.038,
+     "h_mm": 75
     }
    }
   ],
-  "nos_CHX": [
-   {
-    "vao": "L2-L3",
-    "x_m": 0.58,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 0.58,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 0.58,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 3.738,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 3.738,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 3.738,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 6.896,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 6.896,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 6.896,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 10.054,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 10.054,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 10.054,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 13.212,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 13.212,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 13.212,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 16.37,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 16.37,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 16.37,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 19.528,
-    "y_m": 12.464
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 19.528,
-    "y_m": 14.877
-   },
-   {
-    "vao": "L2-L3",
-    "x_m": 19.528,
-    "y_m": 17.291
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 0.58,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 0.58,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 0.58,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 3.738,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 3.738,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 3.738,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 6.896,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 6.896,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 6.896,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 10.054,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 10.054,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 10.054,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 13.212,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 13.212,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 13.212,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 16.37,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 16.37,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 16.37,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 19.528,
-    "y_m": 31.736
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 19.528,
-    "y_m": 34.112
-   },
-   {
-    "vao": "L4-L5",
-    "x_m": 19.528,
-    "y_m": 36.489
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 0.58,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 0.58,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 0.58,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 3.738,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 3.738,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 3.738,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 6.896,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 6.896,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 6.896,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 10.054,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 10.054,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 10.054,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 13.212,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 13.212,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 13.212,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 16.37,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 16.37,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 16.37,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 19.528,
-    "y_m": 41.26
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 19.528,
-    "y_m": 43.655
-   },
-   {
-    "vao": "L5-L6",
-    "x_m": 19.528,
-    "y_m": 46.05
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 0.58,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 0.58,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 0.58,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 3.738,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 3.738,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 3.738,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 6.896,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 6.896,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 6.896,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 10.054,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 10.054,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 10.054,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 13.212,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 13.212,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 13.212,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 16.37,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 16.37,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 16.37,
-    "y_m": 65.21
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 19.528,
-    "y_m": 60.42
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 19.528,
-    "y_m": 62.815
-   },
-   {
-    "vao": "L7-L8",
-    "x_m": 19.528,
-    "y_m": 65.21
-   }
-  ],
+  "borda_furo_fundo_terca_mm": 26,
   "folga_min_terca_mm": 55,
-  "comp_max_m": 3.631,
-  "folga_cruzamento_mm": 22.500000000000004,
+  "comp_max_m": 10.195,
+  "folga_cruzamento_mm": 24.000000000000007,
   "ok": true
  },
  "apoios": [
@@ -547,27 +122,27 @@
    "ligacao": "apoio",
    "peca": "TS-01 L2 esq",
    "inserto": "TB-1.1",
-   "com": "pilar central 50×50 (consolo CP-TS) L2",
+   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 74,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 dir",
    "inserto": "TB-1.0",
-   "com": "pilar central 50×50 (consolo CP-TS) L2",
+   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
    "tipo": "PN-1 Ø20 no consolo",
    "dist_mm": 0.1,
    "dz_mm": 0.5,
    "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 75,
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -575,12 +150,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L2",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -601,12 +176,12 @@
    "inserto": "TB-1.1",
    "com": "I110 (consolo CV-TS) L3",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_consolo_mm": 24,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
@@ -619,7 +194,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -627,12 +202,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L3",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -651,27 +226,27 @@
    "ligacao": "apoio",
    "peca": "TS-01 L4 esq",
    "inserto": "TB-1.1",
-   "com": "pilar central 50×50 (consolo CP-TS) L4",
+   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 74,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 dir",
    "inserto": "TB-1.0",
-   "com": "pilar central 50×50 (consolo CP-TS) L4",
+   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
    "tipo": "PN-1 Ø20 no consolo",
    "dist_mm": 0.1,
    "dz_mm": 0.5,
    "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "folga_ponta_mm": 75,
+   "folga_consolo_mm": 75,
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -679,12 +254,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L4",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -705,12 +280,12 @@
    "inserto": "TB-1.1",
    "com": "I110 (consolo CV-TS) L5",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_consolo_mm": 24,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
@@ -723,7 +298,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -731,12 +306,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L5",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -757,12 +332,12 @@
    "inserto": "TB-1.1",
    "com": "I110 (consolo CV-TS) L6",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_consolo_mm": 24,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
@@ -775,7 +350,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -783,12 +358,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L6",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -809,12 +384,12 @@
    "inserto": "TB-1.1",
    "com": "I110 (consolo CV-TS) L7",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_consolo_mm": 24,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
@@ -827,7 +402,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -835,12 +410,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L7",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   },
   {
    "ligacao": "apoio",
@@ -861,12 +436,12 @@
    "inserto": "TB-1.1",
    "com": "I110 (consolo CV-TS) L8",
    "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.489
+   "folga_consolo_mm": 24,
+   "z_assento": 8.48
   },
   {
    "ligacao": "apoio",
@@ -879,7 +454,7 @@
    "ok": true,
    "folga_ponta_mm": 75,
    "folga_consolo_mm": 25,
-   "z_assento": 8.514
+   "z_assento": 8.505
   },
   {
    "ligacao": "apoio",
@@ -887,12 +462,12 @@
    "inserto": "TB-1.1",
    "com": "P2 L8",
    "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.3,
+   "dist_mm": 0.5,
    "dz_mm": -0.0,
    "ok": true,
    "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 9.089
+   "folga_consolo_mm": 24,
+   "z_assento": 9.071
   }
  ],
  "tercas": [
@@ -1040,72 +615,72 @@
  "berco_I110": [
   {
    "linha": 3,
-   "consolo_esq": 8.489,
-   "consolo_dir": 8.514,
+   "consolo_esq": 8.48,
+   "consolo_dir": 8.505,
    "desnivel_mm": 25.0,
    "topo_I110": 8.88,
    "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 86,
+   "folga_topo_I110_tercas_mm": 77,
    "ok": true
   },
   {
    "linha": 5,
-   "consolo_esq": 8.489,
-   "consolo_dir": 8.514,
+   "consolo_esq": 8.48,
+   "consolo_dir": 8.505,
    "desnivel_mm": 25.0,
    "topo_I110": 8.88,
    "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 86,
+   "folga_topo_I110_tercas_mm": 77,
    "ok": true
   },
   {
    "linha": 6,
-   "consolo_esq": 8.489,
-   "consolo_dir": 8.514,
+   "consolo_esq": 8.48,
+   "consolo_dir": 8.505,
    "desnivel_mm": 25.0,
    "topo_I110": 8.88,
    "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 86,
+   "folga_topo_I110_tercas_mm": 77,
    "ok": true
   },
   {
    "linha": 7,
-   "consolo_esq": 8.489,
-   "consolo_dir": 8.514,
+   "consolo_esq": 8.48,
+   "consolo_dir": 8.505,
    "desnivel_mm": 25.0,
    "topo_I110": 8.88,
    "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 86,
+   "folga_topo_I110_tercas_mm": 77,
    "ok": true
   },
   {
    "linha": 8,
-   "consolo_esq": 8.489,
-   "consolo_dir": 8.514,
+   "consolo_esq": 8.48,
+   "consolo_dir": 8.505,
    "desnivel_mm": 25.0,
    "topo_I110": 8.88,
    "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 86,
+   "folga_topo_I110_tercas_mm": 77,
    "ok": true
   }
  ],
  "nos_contraventamento_x_esq": [
   0.58,
-  3.738,
-  6.896,
-  10.054,
-  13.212,
-  16.37,
-  19.528
+  3.688,
+  6.796,
+  9.904,
+  13.012,
+  16.12,
+  19.228
  ],
  "alcas": [
   2.1,
   7.4,
-  12.059,
-  17.359
+  11.759,
+  17.059
  ],
  "estoque": [
   2.1,
-  17.359
+  17.059
  ]
 }

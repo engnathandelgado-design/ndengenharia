@@ -10,6 +10,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         desenho="ND-LET-TS01-3", folha="03/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1 DETALHADA, TB-1 NO DENTE")
 pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T (SEM LUVAS NEM CT-1); OR-1 VIRA CHAPA SOLDADA NA CH-MF")
+pr.revisao("03", "12/10/2026", "GEOMETRIA DO R01 (L 19,15 m); CH-T2 COM 4 ORELHAS DO X NÓ A NÓ (COB02 DET. 4)")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
 ch = CB["chumbadores"]

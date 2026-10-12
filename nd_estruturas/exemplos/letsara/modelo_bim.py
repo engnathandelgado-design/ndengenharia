@@ -24,11 +24,11 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-LARG = 40.10
-Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
+from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES
+LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
-X_FACH = [0.0, 9.87, 20.05, 29.63, LARG]
-X_C = 20.05
+X_C = X_EIXO["C"]
+REC = (8.40, 9.55)                                 # recuo da cabeça dos pilares laterais (a validar) — ND-LET-LOC01
 TOPO_PLAT, Z_CALICE = 10.00, -1.00
 INCL = 0.03
 Z0 = LG["Z0_TS"]                                   # fundo da TS-01 no eixo A
@@ -36,9 +36,8 @@ C3 = math.cos(math.atan(INCL))
 zf = lambda x: Z0 + INCL * x                       # fundo (altura cheia) da TS-01 em x
 H_TS, H_DENTE, L_DENTE = 0.90, 0.45, 0.30
 L_TS = LG["L_TS"] * C3                             # projeção horizontal entre pontas
-PONTAS = [(0.325, 0.325 + L_TS), (2 * X_C - (0.325 + L_TS), 2 * X_C - 0.325)]
+PONTAS = [(0.325, 0.325 + L_TS), (LARG - 0.325 - L_TS, LARG - 0.325)]
 Z_I110_TOPO, H_I110 = 8.88, 1.10
-Y_P13 = Y_LIN[5] + 4.6
 CENTRAIS = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13)]
 I110_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])]   # V405 vai até a linha 9 (P14)
 NIVEIS_MEZ, H_LAJE = [3.15, 6.55], 0.20 + 0.05
@@ -59,8 +58,10 @@ def montar() -> ModeloBIM:
 
     # 1. pilares laterais (60 na direção X) com consolos CP-TS para os dentes da TS-01
     for i, y in enumerate(Y_LIN, start=1):
-        m.pilar(f"P1-L{i}", 0.0, y, 0.60, 0.40, Z_CALICE, TOPO_PLAT, obs="60 na direção X; platibanda até +10,00")
-        m.pilar(f"P2-L{i}", LARG, y, 0.60, 0.40, Z_CALICE, TOPO_PLAT, obs="60 na direção X; platibanda até +10,00")
+        m.pilar(f"P1-L{i}", 0.0, y, 0.60, 0.40, Z_CALICE, REC[0], obs="60 na direção X; cabeça 40×30 recuada acima de +8,40")
+        m.pilar(f"P1-L{i} cabeça", -0.15, y, 0.30, 0.40, REC[0], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe) — a validar")
+        m.pilar(f"P2-L{i}", LARG, y, 0.60, 0.40, Z_CALICE, REC[1], obs="60 na direção X; cabeça 40×30 recuada acima de +9,55")
+        m.pilar(f"P2-L{i} cabeça", LARG + 0.15, y, 0.30, 0.40, REC[1], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe) — a validar")
         if 2 <= i <= 8:
             for x_ap, xc in ((0.475, 0.45), (LARG - 0.475, LARG - 0.45)):
                 m.bloco("consolo", f"CP-TS L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.30, 0.40, 0.45, "Consolos")
@@ -68,11 +69,11 @@ def montar() -> ModeloBIM:
     # pilares das fachadas frente e fundo, centrais e do mezanino
     for j, x in enumerate(X_FACH[1:-1]):
         m.pilar(["P3", "P4", "P5"][j], x, 0.0, 0.40, 0.60, Z_CALICE, TOPO_PLAT, obs="60 ⊥ fachada")
-        m.pilar(["P14", "P15", "P16"][j], x, COMP, 0.40, 0.60, Z_CALICE, TOPO_PLAT, obs="60 ⊥ fachada")
-    for marca, y in CENTRAIS:
-        m.pilar(marca, X_C, y, 0.50, 0.50, Z_CALICE, Z_I110_TOPO, obs="50×50; apoio I110 / TS-01")
-    for marca, x in (("P8", 9.87), ("P8B", 29.63)):
-        m.pilar(marca, x, Y_LIN[1], 0.60, 0.40, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino")
+        m.pilar(["P3", "P14", "P5"][j], x, COMP, 0.40, 0.60, Z_CALICE, TOPO_PLAT, obs="60 ⊥ fachada")
+    for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.60, 0.60))):
+        m.pilar(marca, X_C, y, bx, by, Z_CALICE, Z_I110_TOPO, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I110 / TS-01")
+    for marca, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
+        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino")
 
     # 2. vigas centrais I110 (dentes nas pontas) e consolos CV-TS nas linhas das TS-01
     zc = Z_I110_TOPO - H_I110 / 2
@@ -84,8 +85,8 @@ def montar() -> ModeloBIM:
     for i in range(2, 9):
         y = Y_LIN[i - 1]
         if any(abs(y - yy) < 0.01 for _, yy in CENTRAIS):
-            for xc, x_ap in ((X_C - 0.40, PONTAS[0][1] - 0.15), (X_C + 0.40, PONTAS[1][0] + 0.15)):
-                m.bloco("consolo", f"CP-TS central L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.30, 0.40, 0.45, "Consolos")
+            for xc, x_ap in ((X_C - 0.375, PONTAS[0][1] - 0.15), (X_C + 0.375, PONTAS[1][0] + 0.15)):
+                m.bloco("consolo", f"CP-TS central L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.35, 0.40, 0.45, "Consolos")
         else:
             for xc, x_ap in ((X_C - 0.375, PONTAS[0][1] - 0.15), (X_C + 0.375, PONTAS[1][0] + 0.15)):
                 m.bloco("consolo", f"CV-TS L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.35, 0.40, 0.45, "Consolos")
@@ -135,14 +136,13 @@ def montar() -> ModeloBIM:
     # 6. placas de fechamento conforme a locação do R01 (vistas A–J): perímetro (eixos A/E nas linhas 4–9 inteiros,
     #    linhas 1–4 só as 2 fiadas de cima = docas), fachada 9 inteira, fachada 1 só nas extremidades (A–B e D–E),
     #    parede da linha 2 inteira e parede da linha 3 com 4 portões (placas só acima de +6,10)
-    E_PL, Z_VERGA = 0.15, 6.25
+    E_PL, Z_VERGA = 0.15, 7.50                                          # VT/VV 25×60 de +7,50 a +8,10
     def fiadas(z0=0.0):
         z = z0
         while z + 1.0 < TOPO_PLAT:
             yield z + H_PLACA / 2
             z += H_PLACA
-    X_L3 = [0.0, 9.87, 14.96, 20.05, 25.14, 29.63, LARG]                   # P1, P9, P10, P11, P10, P12, P2
-    X_L2 = [0.0, 9.87, 20.05, 29.63, 36.30, LARG]                          # P1, P8, P8A, P8B, P6, P2
+    X_L3, YP = X_L4, Y_LIN[LINHA_PORTOES]                                   # parede dos portões: linha 4 do R01
     for x, nome in ((-0.30 - E_PL / 2 - 0.05, "CM eixo A"), (LARG + 0.30 + E_PL / 2 + 0.05, "CM eixo E")):
         for i in range(len(Y_LIN) - 1):
             z0 = 0.0 if i >= 3 else 7.50                                   # linhas 1–4: docas, só as 2 fiadas de cima
@@ -151,26 +151,26 @@ def montar() -> ModeloBIM:
     for z in fiadas():
         for xa, xb in itertools.pairwise(X_FACH):                            # fachada linha 9 inteira
             m.linear("placa", "CM linha 9", PLACA, (xa - 0.40 if xa == 0 else xa, COMP + 0.30 + E_PL / 2, z), (xb + 0.40 if xb == LARG else xb, COMP + 0.30 + E_PL / 2, z), "Placas de fechamento")
-        for xa, xb in ((-0.40, 9.87), (29.63, LARG + 0.40)):                 # fachada linha 1: só A–B e D–E (vistas H e J)
+        for xa, xb in ((-0.40, X_EIXO["B"]), (X_EIXO["D"], LARG + 0.40)):                 # fachada linha 1: só A–B e D–E (vistas H e J)
             m.linear("placa", "CM linha 1", PLACA, (xa, -0.30 - E_PL / 2, z), (xb, -0.30 - E_PL / 2, z), "Placas de fechamento")
         for xa, xb in itertools.pairwise(X_L2):                              # parede da linha 2 (vistas G/I)
             m.linear("placa", "CM linha 2", PLACA, (xa, Y_LIN[1] + 0.20 + E_PL / 2, z), (xb, Y_LIN[1] + 0.20 + E_PL / 2, z), "Placas de fechamento")
-    for k, (xa, xb) in enumerate(itertools.pairwise(X_L3)):                 # parede da linha 3 (vista C): portões nas 4 bays centrais
+    for k, (xa, xb) in enumerate(itertools.pairwise(X_L3)):                 # parede da linha 4 (vista C): portões nas 4 bays centrais
         gate = 1 <= k <= 4
         for z in fiadas(Z_VERGA if gate else 0.0):
-            m.linear("placa", "CM linha 3" + (" (sobre o portão)" if gate else ""), PLACA, (xa, Y_LIN[2] + 0.20 + E_PL / 2, z), (xb, Y_LIN[2] + 0.20 + E_PL / 2, z), "Placas de fechamento")
-    # pilares dos portões (linha 3) e do anexo (linha 2), indicativos
-    for x, b in ((9.87, 0.40), (14.96, 0.25), (20.05, 0.40), (25.14, 0.25), (29.63, 0.40)):
-        m.pilar(f"P-portão {x:.2f}", x, Y_LIN[2], b, b, Z_CALICE, 7.0, obs="pilar dos portões (R01: P9/P10/P11/P12), topo a confirmar")
-    m.pilar("P6", 36.30, Y_LIN[1], 0.25, 0.40, Z_CALICE, 7.0, obs="anexo (R01), a confirmar")
+            m.linear("placa", "CM linha 4" + (" (sobre o portão)" if gate else ""), PLACA, (xa, YP + 0.20 + E_PL / 2, z), (xb, YP + 0.20 + E_PL / 2, z), "Placas de fechamento")
+    # pilares dos portões (linha 4) e do anexo (linha 2)
+    for nome, x, b in (("P9", 9.87, 0.40), ("P10", 15.195, 0.25), ("P10", 24.305, 0.25), ("P12", 29.63, 0.40)):
+        m.pilar(nome, x, YP, b, b, Z_CALICE, 8.10, obs="pilar dos portões (R01), topo a confirmar")
+    m.pilar("P6", 36.175, Y_LIN[1], 0.25, 0.40, Z_CALICE, 8.10, obs="anexo (R01), a confirmar")
     # vigas de travamento VT e vergas VV 25×60 (+5,50 a +6,10), atrás das placas
     VT = PerfilRetangular(0.25, 0.60, "VT 25x60")
     for i in range(1, 8):
         for x in (0.0, LARG):
             m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, Y_LIN[i] + 0.20, Z_VERGA + 0.30), (x, Y_LIN[i + 1] - 0.20, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
-    for xs, y in ((X_L2, Y_LIN[1]), (X_L3, Y_LIN[2])):
+    for xs, y in ((X_L2, Y_LIN[1]), (X_L3, YP)):
         for k, (xa, xb) in enumerate(itertools.pairwise(xs)):
-            nome = "VV (verga do portão)" if (y == Y_LIN[2] and 1 <= k <= 4) else "VT"
+            nome = "VV (verga do portão)" if (y == YP and 1 <= k <= 4) else "VT"
             m.linear("viga", nome, VT, (xa + 0.20, y, Z_VERGA + 0.30), (xb - 0.20, y, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
 
     # 7. insertos metálicos e conexões (para conferir no 3D o que está nas pranchas)
@@ -238,9 +238,9 @@ def montar() -> ModeloBIM:
     m.pendente("! Laje alveolar h20 + 5 com 500 kgf/m² em 9,75 m NÃO passa com 7 Ø12,7 (seção genérica): ELU 209 > 192 kN·m "
                "por painel; descompressão só até 9,05 m. Confirmar com a tabela do fabricante ou manter h26,5 + 5.")
     m.pendente("Vigas do mezanino em I90 com dentes 45×30 (dente da I70 reprovado no MEF): assentos CP-MEZ +2,45 / +5,85; pé-direito livre sob a viga = nível − 1,15 m.")
-    m.pendente("Comprimento entre fachadas adotado nos cálculos: 76,81 m (eixos 1–9). Conferir com o R01 (havia 79,75 em outro registro).")
-    m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento e correntes não modelados no 3D.")
-    m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; VT/VV 25×60 de +6,25 a +6,85 com dentes Gerber nos consolos CP-VT; altura livre dos portões 6,25 m.")
+    m.pendente("Geometria do R01: 79,35 m entre os eixos 1 e 9 e 39,50 m entre A e E; TS-01 com 19,15 m. Pilares laterais com a cabeça recuada (40×30) acima de +8,40 (A) / +9,55 (E) — a validar com a Marques.")
+    m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento em X (nó a nó), correntes e mãos-francesas nas pranchas COB01/COB02, não modelados no 3D.")
+    m.pendente("Placas conforme a locação do R01 (vistas A–J); vistas E/F (docas) e centro da fachada 1 sem placas — a confirmar; VT/VV 25×60 de +7,50 a +8,10 com dentes Gerber nos consolos CP-VT; portões na linha 4.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
@@ -261,8 +261,8 @@ if __name__ == "__main__":
         import base64, io
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
-                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais PC-01/02 50×50"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento, ST-1, mão-francesa) e COB02 (correntes, diagonais)"),
+                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"), ("ND-LET-PC01", "pilares centrais (a revisar com o R01)"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB-rev02", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento e travamento, ST-1, mão-francesa) e COB02 (X nó a nó, correntes, tirantes, diagonais)"),
                  ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
                  ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
@@ -281,7 +281,7 @@ if __name__ == "__main__":
                                      img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
-                        "Pavilhão pré-moldado 40,10 × 76,81 m · Marques Engenharia e Construções · cobertura escondida na platibanda · pranchas e conferência de insertos",
+                        "Pavilhão pré-moldado 39,50 × 79,35 m · Marques Engenharia e Construções · cobertura escondida na platibanda · pranchas e conferência de insertos",
                         pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Piso e fundações"), pranchas=pranchas, conexoes=cx,
                         logo_cliente=AQ / "pranchas" / "logos" / "marques.jpg", cliente="Marques Engenharia e Construções")
     for g, d in q.items():

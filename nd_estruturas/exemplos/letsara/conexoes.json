@@ -14,23 +14,23 @@
   "grupo": "TS-01 × consolo",
   "peca_a": "TS-01 L2 esq",
   "inserto_a": "TB-1.1",
-  "peca_b": "pilar central 50×50 (consolo CP-TS) L2",
+  "peca_b": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 74 mm"
  },
  {
   "grupo": "TS-01 × consolo",
   "peca_a": "TS-01 L2 dir",
   "inserto_a": "TB-1.0",
-  "peca_b": "pilar central 50×50 (consolo CP-TS) L2",
+  "peca_b": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 75 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -39,9 +39,9 @@
   "peca_b": "P2 L2",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -61,9 +61,9 @@
   "peca_b": "I110 (consolo CV-TS) L3",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -74,7 +74,7 @@
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -83,9 +83,9 @@
   "peca_b": "P2 L3",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -102,23 +102,23 @@
   "grupo": "TS-01 × consolo",
   "peca_a": "TS-01 L4 esq",
   "inserto_a": "TB-1.1",
-  "peca_b": "pilar central 50×50 (consolo CP-TS) L4",
+  "peca_b": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 74 mm"
  },
  {
   "grupo": "TS-01 × consolo",
   "peca_a": "TS-01 L4 dir",
   "inserto_a": "TB-1.0",
-  "peca_b": "pilar central 50×50 (consolo CP-TS) L4",
+  "peca_b": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 75 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -127,9 +127,9 @@
   "peca_b": "P2 L4",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -149,9 +149,9 @@
   "peca_b": "I110 (consolo CV-TS) L5",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -162,7 +162,7 @@
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -171,9 +171,9 @@
   "peca_b": "P2 L5",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -193,9 +193,9 @@
   "peca_b": "I110 (consolo CV-TS) L6",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -206,7 +206,7 @@
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -215,9 +215,9 @@
   "peca_b": "P2 L6",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -237,9 +237,9 @@
   "peca_b": "I110 (consolo CV-TS) L7",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -250,7 +250,7 @@
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -259,9 +259,9 @@
   "peca_b": "P2 L7",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -281,9 +281,9 @@
   "peca_b": "I110 (consolo CV-TS) L8",
   "inserto_b": "PN-1 Ø20 no consolo",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +8.489; dz -0.0 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.480; dz -0.0 mm; folga de ponta 75 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -294,7 +294,7 @@
   "verificacao": "eixo do tubo × eixo do pino (planta)",
   "valor": "0.1 mm",
   "ok": true,
-  "obs": "nível do assento +8.514; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
+  "obs": "nível do assento +8.505; dz +0.5 mm; folga de ponta 75 / dente 25 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -303,9 +303,9 @@
   "peca_b": "P2 L8",
   "inserto_b": "PN-1 Ø20 no consolo CP-TS",
   "verificacao": "eixo do tubo × eixo do pino (planta)",
-  "valor": "0.3 mm",
+  "valor": "0.5 mm",
   "ok": true,
-  "obs": "nível do assento +9.089; dz -0.0 mm; folga de ponta 25 / dente 25 mm"
+  "obs": "nível do assento +9.071; dz -0.0 mm; folga de ponta 25 / dente 24 mm"
  },
  {
   "grupo": "TS-01 × consolo",
@@ -360,7 +360,7 @@
   "verificacao": "desnível dos assentos esq/dir (caimento 3 %)",
   "valor": "25 mm",
   "ok": true,
-  "obs": "topo da I110 +8.88; folga topo I110 × terças 86 mm; folga lateral dente 75 mm"
+  "obs": "topo da I110 +8.88; folga topo I110 × terças 77 mm; folga lateral dente 75 mm"
  },
  {
   "grupo": "TS-01 × I110",
@@ -371,7 +371,7 @@
   "verificacao": "desnível dos assentos esq/dir (caimento 3 %)",
   "valor": "25 mm",
   "ok": true,
-  "obs": "topo da I110 +8.88; folga topo I110 × terças 86 mm; folga lateral dente 75 mm"
+  "obs": "topo da I110 +8.88; folga topo I110 × terças 77 mm; folga lateral dente 75 mm"
  },
  {
   "grupo": "TS-01 × I110",
@@ -382,7 +382,7 @@
   "verificacao": "desnível dos assentos esq/dir (caimento 3 %)",
   "valor": "25 mm",
   "ok": true,
-  "obs": "topo da I110 +8.88; folga topo I110 × terças 86 mm; folga lateral dente 75 mm"
+  "obs": "topo da I110 +8.88; folga topo I110 × terças 77 mm; folga lateral dente 75 mm"
  },
  {
   "grupo": "TS-01 × I110",
@@ -393,7 +393,7 @@
   "verificacao": "desnível dos assentos esq/dir (caimento 3 %)",
   "valor": "25 mm",
   "ok": true,
-  "obs": "topo da I110 +8.88; folga topo I110 × terças 86 mm; folga lateral dente 75 mm"
+  "obs": "topo da I110 +8.88; folga topo I110 × terças 77 mm; folga lateral dente 75 mm"
  },
  {
   "grupo": "TS-01 × I110",
@@ -404,7 +404,7 @@
   "verificacao": "desnível dos assentos esq/dir (caimento 3 %)",
   "valor": "25 mm",
   "ok": true,
-  "obs": "topo da I110 +8.88; folga topo I110 × terças 86 mm; folga lateral dente 75 mm"
+  "obs": "topo da I110 +8.88; folga topo I110 × terças 77 mm; folga lateral dente 75 mm"
  },
  {
   "grupo": "terça × TS-01",
@@ -589,7 +589,7 @@
   "peca_b": "terça Ue 300 (alma 3,0)",
   "inserto_b": "M12 8.8",
   "verificacao": "2 M12 por ponta: corte / contato na alma",
-  "valor": "uso 0.95",
+  "valor": "uso 0.94",
   "ok": true,
   "obs": "contato na alma de 3,0 mm governa (αe = 0,183t + 1,53)"
  },
@@ -613,18 +613,18 @@
   "verificacao": "OR-1 (300) dentro da CH-MF (360)",
   "valor": "300 ≤ 360",
   "ok": true,
-  "obs": "OR-1 soldada na fábrica, no plano da terça"
+  "obs": "OR-1 soldada na fábrica, face a 5 mm do plano da alma da terça (aba da MF entre as duas)"
  },
  {
   "grupo": "mão-francesa",
   "peca_a": "MF-1 L 50×5",
   "inserto_a": "furo Ø14 nas duas pontas",
   "peca_b": "TS-01 / terça",
-  "inserto_b": "OR-1 (furo Ø14) / mesa inferior da terça (furo Ø14 a 1070 do eixo)",
+  "inserto_b": "OR-1 (furo Ø14) / alma da terça (furo Ø14 a 40 do fundo, a 1070 do eixo da viga)",
   "verificacao": "M12 8.8 × furo Ø14",
   "valor": "uso 0.07",
   "ok": true,
-  "obs": "Nd 2.87 kN; comprimento 1.28 m a 45°; do fundo da viga até a terça"
+  "obs": "Nd 2.86 kN; comprimento 1.31 m a 45°; do fundo da viga até a terça"
  },
  {
   "grupo": "chumbadores",
@@ -633,7 +633,7 @@
   "peca_b": "terça / mão-francesa",
   "inserto_b": "4 Ø16 c/ cabeça, hef 100, nos cantos (grade 150×150)",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.38 ≤ 1,2",
+  "valor": "0.37 ≤ 1,2",
   "ok": true,
   "obs": ""
  },
@@ -644,7 +644,7 @@
   "peca_b": "terça / mão-francesa",
   "inserto_b": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.46 ≤ 1,2",
+  "valor": "0.64 ≤ 1,2",
   "ok": true,
   "obs": ""
  },
@@ -655,53 +655,97 @@
   "peca_b": "terça / mão-francesa",
   "inserto_b": "2 Ø12,5 c/ cabeça, hef 80",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.27 ≤ 1,2",
+  "valor": "0.26 ≤ 1,2",
   "ok": true,
   "obs": ""
  },
  {
   "grupo": "contraventamento",
-  "peca_a": "diagonal Ø12,5 (rosca M12)",
-  "inserto_a": "subpainel 3158 × L/4, L ≈ 4.04 m",
-  "peca_b": "CH-T2 (viga) / CH-X (terça)",
-  "inserto_b": "orelhas 9,5 com furo Ø14",
+  "peca_a": "diagonal Ø16 (rosca M16) + esticador",
+  "inserto_a": "painel 3108 × vão, L ≈ 10.195 m",
+  "peca_b": "CH-T2 (viga da linha i) / CH-T2 (linha i+1)",
+  "inserto_b": "orelhas 9,5 com furo Ø18",
   "verificacao": "tração na diagonal (NBR 8800:2008 6.3.3)",
-  "valor": "4.86 ≤ 25.1 kN",
+  "valor": "12.52 ≤ 44.7 kN",
   "ok": true,
-  "obs": "4 subdiagonais dividem a cortante Vd 12.1 kN do painel; 384 diagonais"
+  "obs": "Vd 12.0 kN por painel; 96 diagonais (48 por meia água × 2)"
  },
  {
   "grupo": "contraventamento",
-  "peca_a": "corrente rígida (tubo Ø42,2×2,65)",
-  "inserto_a": "corda intermediária do X",
-  "peca_b": "terças do vão contraventado",
-  "inserto_b": "furo Ø14 no meio da alma",
-  "verificacao": "compressão (corrente + componente x das diagonais)",
-  "valor": "16.5 ≤ 37.5 kN",
+  "peca_a": "cruzamento do X",
+  "inserto_a": "2 diagonais a 45 e 85 mm do concreto",
+  "peca_b": "terça intermediária do painel",
+  "inserto_b": "furos Ø18 na alma a 35 e 75 do fundo",
+  "verificacao": "folga entre as diagonais / borda do furo ao fundo da terça",
+  "valor": "24 mm / 26 mm",
+  "ok": true,
+  "obs": "as diagonais cruzam-se sobre a terça, no meio do vão"
+ },
+ {
+  "grupo": "contraventamento",
+  "peca_a": "orelha da CH-T2",
+  "inserto_a": "a 140 do eixo da terça",
+  "peca_b": "terça do nó (mesa 85)",
+  "inserto_b": "ST-1",
+  "verificacao": "folga orelha × mesa da terça",
+  "valor": "55 mm ≥ 20",
   "ok": true,
   "obs": ""
  },
  {
   "grupo": "contraventamento",
-  "peca_a": "CH-X 9,5×250×200 + 4 orelhas",
-  "inserto_a": "2 M12 na mesa inferior da terça (furos Ø14 a 42 da alma)",
-  "peca_b": "terça Ue 300",
-  "inserto_b": "mesa inferior 85",
-  "verificacao": "nó na linha de corrente (L/4, L/2, 3L/4)",
-  "valor": "168 nós",
+  "peca_a": "terça escora (nó do X)",
+  "inserto_a": "Ue 300×85×25×3,00",
+  "peca_b": "CH-T2",
+  "inserto_b": "2 M12 por ponta",
+  "verificacao": "N + M (NBR 14762:2010 9.9)",
+  "valor": "0.84 ≤ 1",
   "ok": true,
-  "obs": "força no nó: x 7.6 kN, y 6.05 kN"
+  "obs": ""
  },
  {
   "grupo": "contraventamento",
   "peca_a": "CH-T2 300×380×12,5",
   "inserto_a": "6 pinos Ø16 + 2 grampos U",
-  "peca_b": "2 diagonais curtas + terça escora",
+  "peca_b": "2 diagonais + terça escora",
   "inserto_b": "orelhas",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.46 ≤ 1,2",
+  "valor": "0.64 ≤ 1,2",
+  "ok": true,
+  "obs": "nó: x 6.94 kN, y 24.06 kN"
+ },
+ {
+  "grupo": "correntes",
+  "peca_a": "corrente flexível Ø12,5 M12",
+  "inserto_a": "furo Ø14 no meio da alma",
+  "peca_b": "terças",
+  "inserto_b": "porca + contraporca dos 2 lados",
+  "verificacao": "tração acumulada (13 terças)",
+  "valor": "8.62 ≤ 25.1 kN",
   "ok": true,
   "obs": ""
+ },
+ {
+  "grupo": "correntes",
+  "peca_a": "tirante rígido L 51×51×3,2",
+  "inserto_a": "clipe L 32×3 + M10 em furo oval",
+  "peca_b": "1ª e 2ª terça junto às ancoragens",
+  "inserto_b": "furo oval 11×23 na alma",
+  "verificacao": "compressão, λ 155",
+  "valor": "8.62 ≤ 20.4 kN",
+  "ok": true,
+  "obs": ""
+ },
+ {
+  "grupo": "correntes",
+  "peca_a": "diagonal de ancoragem Ø16",
+  "inserto_a": "nó da corrente na 2ª terça",
+  "peca_b": "ST-1 da 1ª terça (furo Ø18)",
+  "inserto_b": "porca + contraporca",
+  "verificacao": "tração",
+  "valor": "16.4 ≤ 44.7 kN",
+  "ok": true,
+  "obs": "L/4 e 3L/4 ao apoio mais próximo; L/2 aos dois apoios"
  },
  {
   "grupo": "pilar × placa",
@@ -842,7 +886,7 @@
   "peca_b": "pilar PL-05..08",
   "inserto_b": "platibanda +10,000",
   "verificacao": "folga",
-  "valor": "104 mm ≥ 100",
+  "valor": "122 mm ≥ 100",
   "ok": true,
   "obs": ""
  }

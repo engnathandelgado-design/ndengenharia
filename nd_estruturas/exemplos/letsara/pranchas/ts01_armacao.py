@@ -9,6 +9,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO, DENTES E PROTENSÃO",
                         desenho="ND-LET-TS01-2", folha="02/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "ARMADURA DOS DENTES GERBER (NBR 9062 + PCI, VERIFICADA POR MEF)")
+pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01: L 19,15 m ENTRE FACES")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
 sk = lambda h: h * DX / H

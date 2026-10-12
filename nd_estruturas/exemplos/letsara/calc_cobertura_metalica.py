@@ -15,8 +15,10 @@ AQUI = Path(__file__).parent
 R = {}
 
 # ------------------------------------------------------------------ dados
-L = 10.05            # maior vão de terça (entre eixos 1 e 2); demais 9,2–9,7 m
-s = 1.60             # espaçamento entre terças
+from geometria import VAOS_Y
+LG = json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))
+L = max(VAOS_Y)      # maior vão de terça (eixos 2–3 e 3–4: 10,075 m); demais 9,625–10,0 m
+s = LG["passo_tercas"]   # espaçamento entre terças (ao longo da água)
 g, q = 0.25, 0.25    # kN/m² — telha 0,5 + PIR 30 (0,07), terça (0,07), instalações (0,10); sobrecarga NBR 8800 Anexo B
 q0 = 0.874           # kN/m² — V0 45 m/s, S2 cat. III classe C, S3 0,95 (rodada 2)
 cp = dict(geral=-1.0, borda=-1.6)    # Cpe −0,8 / −1,4 (faixa de borda, NBR 6123 tab. 6 — conferir) com Cpi +0,2
@@ -74,43 +76,45 @@ for nome, wq, incl in (("sucção", (1.4 * abs(cp["geral"]) * q0 - g) * s, 0.0),
     casos_c[nome] = dict(W_kN=round(W, 2), PL_por_terca_kN=round(PL, 3), F_acumulada_kN=round(PL * n_run, 2))
 Fc = max(v["F_acumulada_kN"] for v in casos_c.values())
 cf = barra_redonda_tracao_Rd(12.0)        # Ø12,5 rosqueada M12 — área da rosca pela barra Ø12
-tubo = dict(D=42.2, t=2.65)
-A_t = math.pi / 4 * (tubo["D"] ** 2 - (tubo["D"] - 2 * tubo["t"]) ** 2)
-r_t = math.sqrt(tubo["D"] ** 2 + (tubo["D"] - 2 * tubo["t"]) ** 2) / 4
-cr, lam0_cr, esb_cr = compressao_laminado_Rd(A_t, r_t, s * 1000, fy=250)
-diag_len = math.hypot(s, L / 2)           # pior diagonal: a da corrente do meio do vão (L/2) até o apoio
-T_diag = Fc * diag_len / s
+# tirante rígido (1º espaço de terças junto a cada ancoragem): L 51×51×3,2 (A36), A 3,13 cm², rz 1,00 cm
+A_L51, rz_L51 = 313.0, 10.0
+cr, lam0_cr, esb_cr = compressao_laminado_Rd(A_L51, rz_L51, s * 1000, fy=250)
+# diagonais de ancoragem (Λ) no 1º espaço: do nó da corrente na 2ª terça até o suporte ST-1 da 1ª terça (na viga):
+# L/4 → apoio mais próximo; L/2 → os dois apoios (metade da força em cada); 3L/4 → apoio mais próximo
+d_q = math.hypot(s, L / 4); d_m = math.hypot(s, L / 2)
+T_q, T_m = Fc * d_q / s, Fc / 2 * d_m / s
+T_diag, diag_len = max(T_q, T_m), (d_q if T_q >= T_m else d_m)
 td = barra_redonda_tracao_Rd(16.0)
-R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furos Ø14 na alma a 75 mm da face inferior", casos=casos_c,
+R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø14 no meio da alma (150 do fundo)", casos=casos_c,
                       F_max_kN=Fc,
-                      flexivel=dict(barra="Ø12,5 A36, roscas M12 + 2 porcas e arruela em cada terça", NtRd=round(cf, 1), uso=round(Fc / cf, 3)),
-                      rigida=dict(perfil="tubo Ø42,2×2,65 (A36) com Ø12,5 passante", L_mm=s * 1000, NcRd=round(cr, 1),
-                                  esbeltez=round(esb_cr), uso=round(Fc / cr, 3), onde="1º vão de terças junto a cada ancoragem"),
-                      diagonal=dict(barra="Ø16 A36, rosca M16", comp_m=round(diag_len, 2), Td=round(T_diag, 1), NtRd=round(td, 1),
-                                    uso=round(T_diag / td, 3), liga="do ponto de corrente da 2ª terça à cantoneira CT-1 da 1ª terça"))
+                      flexivel=dict(barra="Ø12,5 A36, roscas M12, porca + contraporca e arruela dos 2 lados de cada terça", NtRd=round(cf, 1), uso=round(Fc / cf, 3)),
+                      rigida=dict(perfil="L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma", L_mm=round(s * 1000), NcRd=round(cr, 1),
+                                  esbeltez=round(esb_cr), uso=round(Fc / cr, 3), onde="1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"),
+                      diagonal=dict(barra="Ø16 A36, rosca M16", comp_L4_m=round(d_q, 2), comp_L2_m=round(d_m, 2), Td_L4=round(T_q, 1), Td_L2=round(T_m, 1),
+                                    Td=round(T_diag, 1), NtRd=round(td, 1), uso=round(T_diag / td, 3),
+                                    liga="do nó da corrente na 2ª terça (L/4, L/2, 3L/4) ao furo Ø18 do ST-1 da 1ª terça, na viga"))
 
-# ------------------------------------------------------------------ contraventamento em X com painéis curtos (padrão das coberturas de referência)
-# Treliça no plano da cobertura: cordas = vigas TS-01 (linhas), diagonais Ø12,5 em X dentro de cada subpainel 3158 × L/4
-# (nós nas CH-T2 da viga e nas chapas CH-X das terças, nas linhas de correntes). Um corte x = const atravessa 4 subdiagonais,
-# que dividem a cortante V do painel; as correntes rígidas (tubo) nos painéis contraventados fazem de cordas intermediárias.
+# ------------------------------------------------------------------ contraventamento em X (padrão das coberturas de referência)
+# Treliça no plano da cobertura: cordas = vigas TS-01 das duas linhas do vão; montantes = terças dos nós (escoras, a cada
+# 2 espaços de terças); diagonais em X Ø16 A36 de nó a nó (CH-T2 de uma viga à CH-T2 da outra), cada uma com esticador.
 mg = json.loads((AQUI / "modelo_global.json").read_text(encoding="utf-8"))
-F_contr_k = max(v["forca_max_kN"]["contravento"] for v in mg.values())          # diagonal de altura inteira do modelo global (4,0 × 9,65 m)
-P_X, N_SUB = 3.158, 4
-V_k = F_contr_k * math.sin(math.atan(L / 4.0))                                    # cortante do painel (componente y)
+F_contr_k = max(v["forca_max_kN"]["contravento"] for v in mg.values())          # diagonal do modelo global (4,0 × 9,65 m)
+P_X = 2 * s
+V_k = F_contr_k * math.sin(math.atan(9.65 / 4.0))                                 # cortante do painel (componente y)
 V_d = 1.4 * V_k
-L_sub = math.hypot(P_X, L / N_SUB)
-ang_sub = math.degrees(math.atan2(L / N_SUB, P_X))
-T_sub = V_d / (N_SUB * math.sin(math.radians(ang_sub)))
-t12 = barra_redonda_tracao_Rd(12.0)
-Fx_no = 2 * T_sub * math.cos(math.radians(ang_sub))                                # componente x de 2 diagonais num nó (CH-T2 / CH-X)
-Fy_no = 2 * T_sub * math.sin(math.radians(ang_sub))
-N_corr_X = Fc + Fx_no                                                              # corrente rígida nos painéis contraventados
-R["contraventamento"] = dict(painel_x_m=P_X, subpaineis=N_SUB, L_sub_m=round(L_sub, 2), ang_graus=round(ang_sub, 1),
-                             F_modelo_global_k=round(F_contr_k, 1), V_painel_d=round(V_d, 1), T_diag_d=round(T_sub, 2),
-                             NtRd_12=round(t12, 1), uso_diag=round(T_sub / t12, 3),
+amostra = LG["contraventamento"]["amostra"][0]
+L_X = amostra["comp_m"]
+ang = math.radians(amostra["ang_eixo_viga"])
+T_X = V_d / math.sin(ang)
+t16 = barra_redonda_tracao_Rd(16.0)
+Fx_no = 2 * T_X * math.cos(ang)                                                    # 2 diagonais no mesmo nó (painéis vizinhos)
+Fy_no = 2 * T_X * math.sin(ang)
+R["contraventamento"] = dict(painel_x_m=round(P_X, 3), subpaineis=1, L_diag_m=L_X, ang_graus=amostra["ang_eixo_viga"],
+                             F_modelo_global_k=round(F_contr_k, 1), V_painel_d=round(V_d, 1), T_diag_d=round(T_X, 2),
+                             NtRd_16=round(t16, 1), uso_diag=round(T_X / t16, 3),
                              no=dict(Fx_kN=round(Fx_no, 2), Fy_kN=round(Fy_no, 2)),
-                             corrente_rigida=dict(Nd=round(N_corr_X, 1), NcRd=round(cr, 1), uso=round(N_corr_X / cr, 3)),
-                             nota="X em cada subpainel 3158 × L/4 (comprimento da diagonal ≈ 4 m) em vez de altura inteira (9,8 m)")
+                             barra="Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
+                             nota="X de nó a nó das vigas, abrangendo 2 espaços de terças; terças dos nós trabalham como escoras")
 
 # ------------------------------------------------------------------ cantoneira CT-1 e parafusos
 Vsuc_end = casos["geral"]["w_suc_kNm"] * L / 2      # reação de arrancamento por terça
@@ -146,15 +150,15 @@ R["CT1"] = dict(perfil="L 102×102×9,5 (A36) L=200", reacao_suc_kN=round(Vsuc_e
 e_carga = u.bf / 2 + u.m_ct            # carga na mesa superior (meio da mesa) × centro de torção
 T_tors = casos["geral"]["w_suc_kNm"] * e_carga / 1000 * L / 2
 H_mf = T_tors / (u.bw / 1000)          # binário cantoneira (topo) × mão-francesa (mesa inferior)
-dz = 0.90 + 0.0125                      # fundo da viga I90 até a face inferior da terça
+dz = 0.90 + 0.010 + 0.040               # fundo da TS-01 até o furo da MF na alma da terça (40 mm acima do fundo dela)
 dy = 0.90                               # 45°
 N_mf = H_mf * math.hypot(dy, dz) / dy
 A_mf, r_mf = 4.80e2, 9.8                 # L 50×5: A = 4,80 cm², rz = 0,98 cm
 Ncr_mf, l0_mf, esb_mf = compressao_laminado_Rd(A_mf, r_mf, math.hypot(dy, dz) * 1000)
 R["MF1"] = dict(perfil="L 50×5 (A36)", comp_m=round(math.hypot(dy, dz), 2), angulo="45°", e_torcao_mm=round(e_carga, 1),
                 T_apoio_kNm=round(T_tors, 3), H_kN=round(H_mf, 2), Nd_kN=round(N_mf, 2), NcRd=round(Ncr_mf, 1), esbeltez=round(esb_mf),
-                uso=round(N_mf / Ncr_mf, 3), parafusos="M12 8.8 na mesa inferior da terça (furo Ø14) e M12 na orelha OR-1",
-                contato_mesa_terca_Rd=round(pressao_contato_fino_Rd(12, 3.0, fu_terca), 1))
+                uso=round(N_mf / Ncr_mf, 3), parafusos="M12 8.8 na alma da terça (furo Ø14 a 40 mm do fundo; aba da MF encostada na alma) e M12 na orelha OR-1",
+                contato_alma_terca_Rd=round(pressao_contato_fino_Rd(12, 3.0, fu_terca), 1))
 
 # ------------------------------------------------------------------ chumbadores (ACI 318-19 cap. 17), C50
 # CH-T1 200×200: 4 pinos Ø16 c/ cabeça Ø32, hef 100, grade 150 × 150 (fora das luvas M16); mesa de 400 → borda lateral 125
@@ -168,7 +172,7 @@ ch["CH-T1"] = dict(pinos="4 Ø16 c/ cabeça, hef 100, nos cantos (grade 150×150
                    modoN=t1["modo"], phiVn=round(v1["phiVn_kN"], 1), modoV=v1["modo"],
                    interacao=round(interacao(Nu1, t1["phiNn_kN"], Vx1, v1["phiVn_kN"])[0], 3))
 g2 = GrupoPinos(d=16, d_cabeca=32, hef=100, nx=2, ny=3, sx=200, sy=150, cx_neg=2000, cx_pos=2000, cy_neg=50, cy_pos=50, ha=200)
-Vu2 = math.hypot(Nd + Fy_no, Fx_no)     # escora (direção y) + 2 diagonais curtas do subpainel junto à viga (componentes y e x)
+Vu2 = math.hypot(Nd + Fy_no, Fx_no)     # escora (direção y) + 2 diagonais do X que chegam ao nó (componentes y e x)
 gr = grampo_ancoragem_kN(10, pernas=2)
 t2 = g2.tracao()
 v2_sem = g2.cortante("y+")

@@ -5,7 +5,7 @@ from nd_estruturas.prefabricados import (Concreto, Carregamento, secao_I, verifi
                                          icamento_viga, pressao_vento, transitorias_viga, CORD)
 
 I_CAI = 0.03
-L_H = 19450                                           # entre as faces das pontas (a prumo): 0,325 → 19,775 m
+L_H = 19150                                           # entre as faces das pontas (a prumo): 0,325 → 19,475 m (geometria R01)
 L = round(L_H / math.cos(math.atan(I_CAI)))           # comprimento de fabricação ao longo do eixo (ponto 0 a ponto 0)
 H = 900
 DX = round(H * I_CAI)                                 # ponta a prumo: topo deslocado 27 mm
@@ -19,7 +19,7 @@ P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, m
 C = Concreto(P["fck"])
 sec = secao_I(H / 1000, bs=0.40, ts=0.12, ms=0.08, bw=0.15, bi=0.40, ti=0.15, mi=0.08)
 L_calc = (L - 2 * P["pino_x"]) / 1000          # entre pinos (apoios nos dentes)
-TRIB, qv = 9.655, pressao_vento(45.0, S3=0.95)
+TRIB, qv = 10.075, pressao_vento(45.0, S3=0.95)
 car = Carregamento(sec.A * 25, 0.25 * TRIB, 0.25 * TRIB, w=qv * TRIB, psi1=0.4, psi2=0.0)
 R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"])
 Ap = P["n_cord"] * CORD["12.7"]

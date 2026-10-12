@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Letsara: `geometria.py` aplicado à cobertura (ligacoes, calc_cobertura_metalica, checar_conexoes 81 itens), COB01/COB02 rev 02 com o travamento das coberturas de referência, LOC01/MON01/CT01 com geometria do R01 e recuo da cabeça dos pilares (a validar), 3D atualizado.
+
 - prancha_nd: `MEMORIA_NA_PRANCHA = False` — tabelas de memória/verificações não entram nas pranchas de detalhamento para o cliente (ficam nas memórias MC); todas as pranchas Letsara regeradas.
 - Letsara MC04: `calc_segundo_estagio.py` (análise em duas fases da VM I90 + laje alveolar + capa, interface NBR 9062:2017 6.3.5, armadura de 2º estágio); VM01 com corte C-C da solidarização (N9 salientes Ø8 c/15, N10, enchimento + capa, tela, negativas) e sequência de obra; MON02 e `checar_conexoes` (77 itens).
 - Letsara: contraventamento da cobertura em X por subpainel 3158 × L/4 (diagonais Ø12,5 de ≈ 4 m, esticador) com nós CH-X nas terças e correntes rígidas como corda intermediária; cálculo em `calc_cobertura_metalica` (cortante do modelo global dividida pelas 4 subdiagonais) e 75 verificações em `checar_conexoes`.

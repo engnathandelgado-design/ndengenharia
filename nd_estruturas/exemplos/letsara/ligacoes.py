@@ -11,8 +11,8 @@ from pathlib import Path
 AQUI = Path(__file__).parent
 TOL = 0.005                     # 5 mm entre eixos de pino/tubo e furos
 I = 0.03                        # caimento da cobertura (3%)
-YL = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
-X_CEN, X_P2 = 20.05, 40.10
+from geometria import Y_LIN as YL, X_EIXO
+X_CEN, X_P2 = X_EIXO["C"], X_EIXO["E"]
 NEO = 0.010                     # neoprene
 
 
@@ -28,8 +28,8 @@ def z_fundo_viga(x):            # fundo da TS-01 montada (x a partir do eixo do 
 # ------------------------------------------------------------------ TS-01 (coordenadas locais, m)
 # Dentes Gerber nas duas pontas (dente de 450 de altura e 300 de comprimento; apoio a 150 da ponta).
 # Ponta do lado do pilar a 25 mm da face do pilar (40×60, face a 0,30 do eixo); ponta do lado central a 75 mm da face
-# da I110 (largura 400) e a 25 mm da face do pilar central 50×50 — mesmo comprimento nas 14 vigas.
-X_PONTA_ESQ, X_PONTA_CEN = 0.325, X_CEN - 0.25 - 0.025
+# da I110 e dos pilares centrais P8A/P11 (todos com 400 em x) — mesmo comprimento nas 14 vigas (L_H 19 150).
+X_PONTA_ESQ, X_PONTA_CEN = 0.325, X_CEN - 0.20 - 0.075
 H_DENTE, L_DENTE = 0.45, 0.30
 L_TS = round((X_PONTA_CEN - X_PONTA_ESQ) / math.cos(math.atan(I)), 3)
 PASSO_T = round((L_TS - 2 * 0.255) / 12, 3)
@@ -75,8 +75,8 @@ for i in range(1, 8):
     y = YL[i]
     apoios.append(dict(peca=f"P1 L{i+1}", tipo="PN-1 Ø20 no consolo CP-TS", x=round(X_PINO[0], 3), y=y, z=zc(X_PINO[0]), face=0.30))
     apoios.append(dict(peca=f"P2 L{i+1}", tipo="PN-1 Ø20 no consolo CP-TS", x=round(X_PINO[3], 3), y=y, z=zc(X_PINO[3]), face=X_P2 - 0.30))
-    sup = "pilar central 50×50 (consolo CP-TS)" if i in (1, 3) else "I110 (consolo CV-TS)"
-    meia = 0.25 if i in (1, 3) else 0.20
+    sup = "pilar central P8A/P11 40×60 (consolo CP-TS)" if i in (1, 3) else "I110 (consolo CV-TS)"
+    meia = 0.20
     for x, f_ in ((X_PINO[1], X_CEN - meia), (X_PINO[2], X_CEN + meia)):
         apoios.append(dict(peca=f"{sup} L{i+1}", tipo="PN-1 Ø20 no consolo", x=round(x, 3), y=y, z=zc(x), face=f_))
 # ------------------------------------------------------------------ checagens
@@ -122,43 +122,40 @@ for i in (2, 4, 5, 6, 7):
 erros += sum(not b_["ok"] for b_ in berco)
 # contraventamento: nós de painel nas CH-T2 — mesma posição nas duas vigas do vão
 paineis = [round(TS["x0"] if False else 0.325 + s, 3) for s in TS["no_contrav"]]
-# contraventamento Ø12,5 A36 — CH-T2 com 4 orelhas, simétrica por rotação de 180° (uma só peça):
-# orelhas em s = ±140 mm do eixo da terça (fora da mesa de 85 mm e da cantoneira) e y = ±140 mm do eixo da viga.
-# Uma diagonal corre a 35 mm e a outra a 70 mm acima da chapa (furos na alma da terça intermediária a 35 mm entre centros).
-CT2 = dict(y_orelha=0.140, s_orelha=0.140, z_baixo=0.035, z_alto=0.070, mesa_terca=0.085, d_tir=0.0125)
+# contraventamento em X Ø16 A36 (padrão das coberturas de referência): cada diagonal vai de nó a nó das vigas TS-01 do vão
+# (CH-T2 de uma linha à CH-T2 da linha seguinte), abrangendo 2 espaços de terças; terças dos nós = montantes (escoras).
+# CH-T2 com 4 orelhas, simétrica por rotação de 180° (uma só peça): orelhas em s = ±140 mm do eixo da terça (fora da mesa
+# de 85 mm e do ST-1) e y = ±140 mm do eixo da viga. As duas diagonais do X cruzam-se no meio do vão, exatamente sobre a
+# terça intermediária: uma passa a 45 mm e a outra a 85 mm acima do concreto (furos Ø18 na alma dessa terça, a 35 e 75 mm
+# do fundo dela, que fica 10 mm acima do concreto).
+CT2 = dict(y_orelha=0.140, s_orelha=0.140, z_baixo=0.045, z_alto=0.085, mesa_terca=0.085, d_tir=0.016, z_fundo_terca=0.010)
 VAOS = [(1, 2), (3, 4), (4, 5), (6, 7)]            # vãos contraventados entre linhas com TS-01 (fachadas: VB)
-tir, nos_x = [], []
-N_SUB = 4                                          # subpainéis por vão (nas linhas de correntes L/4, L/2, 3L/4): diagonais curtas (≈ 4 m)
+tir = []
+N_SUB = 1
 for (ia, ib) in VAOS:
-    Lv = YL[ib] - YL[ia]
     for k in range(len(paineis) - 1):
         xa, xb = paineis[k], paineis[k + 1]
-        for j in range(N_SUB):
-            ya = YL[ia] + j * Lv / N_SUB + (CT2["y_orelha"] if j == 0 else 0.10)
-            yb = YL[ia] + (j + 1) * Lv / N_SUB - (CT2["y_orelha"] if j == N_SUB - 1 else 0.10)
-            for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - CT2["s_orelha"]), CT2["z_baixo"]),
-                                      ("\\", (xb - CT2["s_orelha"], xa + CT2["s_orelha"]), CT2["z_alto"])):
-                fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
-                xm = (xa + xb) / 2
-                t = (xm - x1) / (x2 - x1)
-                tir.append(dict(vao=f"L{ia+1}-L{ib+1}", painel=k + 1, subpainel=j + 1, diagonal=nome,
-                                comp_m=round(math.dist((x1, ya), (x2, yb)), 3),
-                                ang_eixo_viga=round(math.degrees(math.atan2(yb - ya, abs(x2 - x1))), 1),
-                                folga_terca_no_mm=round(fol * 1000), furo_terca_interm=dict(y_m=round(ya + t * (yb - ya) - YL[ia], 2),
-                                                                                           h_mm=round(z * 1000))))
-        for j in range(1, N_SUB):                   # nós intermediários: chapa CH-X na terça da linha de corrente
-            nos_x.append(dict(vao=f"L{ia+1}-L{ib+1}", x_m=round(xa, 3), y_m=round(YL[ia] + j * Lv / N_SUB, 3)))
-    for j in range(1, N_SUB):
-        nos_x.append(dict(vao=f"L{ia+1}-L{ib+1}", x_m=round(paineis[-1], 3), y_m=round(YL[ia] + j * Lv / N_SUB, 3)))
+        ya, yb = YL[ia] + CT2["y_orelha"], YL[ib] - CT2["y_orelha"]
+        for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - CT2["s_orelha"]), CT2["z_baixo"]),
+                                  ("\\", (xb - CT2["s_orelha"], xa + CT2["s_orelha"]), CT2["z_alto"])):
+            fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
+            xm = (xa + xb) / 2
+            t = (xm - x1) / (x2 - x1)
+            tir.append(dict(vao=f"L{ia+1}-L{ib+1}", painel=k + 1, diagonal=nome,
+                            comp_m=round(math.dist((x1, ya), (x2, yb)), 3),
+                            ang_eixo_viga=round(math.degrees(math.atan2(yb - ya, abs(x2 - x1))), 1),
+                            folga_terca_no_mm=round(fol * 1000), furo_terca_interm=dict(y_m=round(ya + t * (yb - ya) - YL[ia], 3),
+                                                                                       h_mm=round((z - CT2["z_fundo_terca"]) * 1000))))
 gap_cruz = (CT2["z_alto"] - CT2["z_baixo"] - CT2["d_tir"]) * 1000
-ok_tir = all(t["folga_terca_no_mm"] >= 20 for t in tir) and gap_cruz >= 5
+furo_min = min(t["furo_terca_interm"]["h_mm"] for t in tir) - 9          # borda do furo Ø18 ao fundo da terça
+ok_tir = all(t["folga_terca_no_mm"] >= 20 for t in tir) and gap_cruz >= 5 and furo_min >= 20
 erros += not ok_tir
 z_telha = lambda x: z_fundo_viga(x) + (0.90 + 0.0125 + 0.30 + 0.03) * math.cos(math.atan(I))
 folga_plat = dict(platibanda=10.00, telha_P2=round(z_telha(X_P2 - 0.30), 3), telha_P1=round(z_telha(0.30), 3),
                   folga_P2_mm=round((10.00 - z_telha(X_P2 - 0.30)) * 1000), ok=10.00 - z_telha(X_P2 - 0.30) >= 0.10)
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"], X_PINO=[round(v, 3) for v in X_PINO],
-           TB1_s_fabricacao=[i_["s"] for i_ in TS["insertos"] if i_["tipo"] == "TB-1"], contraventamento=dict(chapa=CT2, n_tirantes=len(tir), n_nos_CHX=len(nos_x), subpaineis=N_SUB, amostra=tir[:4], nos_CHX=nos_x,
+           TB1_s_fabricacao=[i_["s"] for i_ in TS["insertos"] if i_["tipo"] == "TB-1"], contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], borda_furo_fundo_terca_mm=furo_min,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=rel[:28], tercas=[r for r in rel if r["ligacao"] == "terças"],
            berco_I110=berco, nos_contraventamento_x_esq=paineis,
