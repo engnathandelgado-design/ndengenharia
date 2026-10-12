@@ -1,0 +1,202 @@
+{
+ "pilares": {
+  "lateral/fachada armado": {
+   "armadura": "5 Ø20/face (60) + 4 Ø25/face (40), cantos comuns",
+   "As_prov_cm2": 51.0,
+   "As_min_cm2": 9.6,
+   "taxa_pct": 2.13,
+   "ok_min": true,
+   "ok_max": true,
+   "nota": "protendido: a mínima passiva é atendida sem contar as cordoalhas",
+   "sigma_t_freq_MPa": 1.45,
+   "sigma_t_rara_MPa": 8.84,
+   "fctk_inf": 2.46,
+   "estadio_I_freq": true,
+   "estadio_I_rara": false,
+   "fissuracao": "sem fissura na frequente",
+   "wk_freq_mm": 0.0,
+   "cord_para_estadio_I_na_rara": 16
+  },
+  "lateral/fachada protendido": {
+   "armadura": "8 Ø20 + 10 cord. Ø12,7",
+   "As_prov_cm2": 25.1,
+   "As_min_cm2": 9.6,
+   "taxa_pct": 1.05,
+   "ok_min": true,
+   "ok_max": true,
+   "nota": "protendido: a mínima passiva é atendida sem contar as cordoalhas",
+   "sigma_t_freq_MPa": -2.66,
+   "sigma_t_rara_MPa": 4.73,
+   "fctk_inf": 2.46,
+   "estadio_I_freq": true,
+   "estadio_I_rara": false,
+   "fissuracao": "sem fissura na frequente",
+   "wk_freq_mm": 0.0,
+   "cord_para_estadio_I_na_rara": 16
+  },
+  "central 50×50": {
+   "armadura": "8 Ø20 (a confirmar na prancha)",
+   "As_prov_cm2": 25.1,
+   "As_min_cm2": 10.0,
+   "taxa_pct": 1.0,
+   "ok_min": true,
+   "ok_max": true,
+   "nota": "protendido: a mínima passiva é atendida sem contar as cordoalhas"
+  }
+ },
+ "vigas": {
+  "TS-01 (I90 cobertura)": {
+   "cordoalhas": 6,
+   "Ap_cm2": 5.92,
+   "rho_min_tab_cm2": 4.63,
+   "Md_min_kNm": 199,
+   "MRd_kNm": 758.1,
+   "ok_Md_min": true,
+   "criterio": "17.3.5.2.1: armadura ativa atende a mínima se MRd ≥ Md,min = 0,8 W0 fctk,sup",
+   "pele_cm2_por_face": 1.35,
+   "pele_adotada": "2 Ø8 por face na alma",
+   "estribo_min_cm2_m": 2.44,
+   "estribo_adotado": "Ø6,3 c/25 = 2,5 cm²/m",
+   "ok_estribo": true,
+   "ELS": {
+    "elsf_inf_MPa": 0.49,
+    "elsf_lim_MPa": 3.71,
+    "elsd_inf_MPa": -0.45,
+    "vento_sup_MPa": -3.11,
+    "els_ok": true,
+    "nota": "protensão limitada (CAA II): ELS-F na frequente e ELS-D na quase permanente — sem abertura de fissura a calcular"
+   },
+   "ELU_ok": true,
+   "avisos": []
+  },
+  "I110 V405 (23 m)": {
+   "cordoalhas": 24,
+   "Ap_cm2": 23.69,
+   "rho_min_tab_cm2": 6.29,
+   "Md_min_kNm": 318,
+   "MRd_kNm": 2920.0,
+   "ok_Md_min": true,
+   "criterio": "17.3.5.2.1: armadura ativa atende a mínima se MRd ≥ Md,min = 0,8 W0 fctk,sup",
+   "pele_cm2_por_face": 1.65,
+   "pele_adotada": "2 Ø8 por face na alma",
+   "estribo_min_cm2_m": 2.44,
+   "estribo_adotado": "Ø8 c/15 = 6,7 cm²/m",
+   "ok_estribo": true,
+   "ELS": {
+    "elsf_inf_MPa": 1.7,
+    "elsf_lim_MPa": 3.71,
+    "elsd_inf_MPa": -0.09,
+    "vento_sup_MPa": -16.33,
+    "els_ok": true,
+    "nota": "protensão limitada (CAA II): ELS-F na frequente e ELS-D na quase permanente — sem abertura de fissura a calcular"
+   },
+   "ELU_ok": true,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo"
+   ]
+  },
+  "Mezanino I90 (h26,5+5)": {
+   "cordoalhas": 9,
+   "Ap_cm2": 8.88,
+   "rho_min_tab_cm2": 4.63,
+   "Md_min_kNm": 199,
+   "MRd_kNm": 1073.2,
+   "ok_Md_min": true,
+   "criterio": "17.3.5.2.1: armadura ativa atende a mínima se MRd ≥ Md,min = 0,8 W0 fctk,sup",
+   "pele_cm2_por_face": 1.35,
+   "pele_adotada": "2 Ø8 por face na alma",
+   "estribo_min_cm2_m": 2.44,
+   "estribo_adotado": "Ø8 c/15 = 6,7 cm²/m",
+   "ok_estribo": true,
+   "ELS": {
+    "elsf_inf_MPa": -0.02,
+    "elsf_lim_MPa": 3.71,
+    "elsd_inf_MPa": -1.17,
+    "vento_sup_MPa": -5.21,
+    "els_ok": true,
+    "nota": "protensão limitada (CAA II): ELS-F na frequente e ELS-D na quase permanente — sem abertura de fissura a calcular"
+   },
+   "ELU_ok": true,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo"
+   ]
+  },
+  "Mezanino I70 (h20+5)": {
+   "cordoalhas": 10,
+   "Ap_cm2": 9.87,
+   "rho_min_tab_cm2": 4.0,
+   "Md_min_kNm": 129,
+   "MRd_kNm": 853.5,
+   "ok_Md_min": true,
+   "criterio": "17.3.5.2.1: armadura ativa atende a mínima se MRd ≥ Md,min = 0,8 W0 fctk,sup",
+   "pele_cm2_por_face": 1.05,
+   "pele_adotada": "2 Ø8 por face na alma",
+   "estribo_min_cm2_m": 2.44,
+   "estribo_adotado": "Ø6,3 c/25 = 2,5 cm²/m",
+   "ok_estribo": true,
+   "ELS": {
+    "elsf_inf_MPa": 1.25,
+    "elsf_lim_MPa": 3.71,
+    "elsd_inf_MPa": -0.52,
+    "vento_sup_MPa": -6.91,
+    "els_ok": true,
+    "nota": "protensão limitada (CAA II): ELS-F na frequente e ELS-D na quase permanente — sem abertura de fissura a calcular"
+   },
+   "ELU_ok": true,
+   "avisos": [
+    "Ato no apoio fora do limite: isolar cordoalhas nas pontas (detalhar comprimentos) e/ou armadura passiva no topo"
+   ]
+  }
+ },
+ "fissuracao_armados": {
+  "dente TS-01": {
+   "sigma_s_serv_MPa": 257,
+   "wk_mm": 0.139,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "4 Ø16 (804 mm²)"
+  },
+  "dente I110": {
+   "sigma_s_serv_MPa": 239,
+   "wk_mm": 0.15,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "4 Ø20 (1257 mm²)"
+  },
+  "dente MEZ-I90": {
+   "sigma_s_serv_MPa": 257,
+   "wk_mm": 0.173,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "3 Ø20 (943 mm²)"
+  },
+  "CP-TS pilar lateral (recebe TS-01)": {
+   "sigma_s_serv_MPa": 229,
+   "wk_mm": 0.11,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "3 Ø16 (603 mm²)"
+  },
+  "CV-TS na I110 (recebe TS-01, cada lado)": {
+   "sigma_s_serv_MPa": 229,
+   "wk_mm": 0.11,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "3 Ø16 (603 mm²)"
+  },
+  "CP-I110 pilar central (recebe I110)": {
+   "sigma_s_serv_MPa": 253,
+   "wk_mm": 0.167,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "3 Ø20 (943 mm²)"
+  },
+  "CP-MEZ pilar (recebe viga do mezanino)": {
+   "sigma_s_serv_MPa": 217,
+   "wk_mm": 0.123,
+   "limite_mm": 0.3,
+   "ok": true,
+   "tirante": "3 Ø20 (943 mm²)"
+  }
+ }
+}
