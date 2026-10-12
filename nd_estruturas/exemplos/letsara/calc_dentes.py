@@ -19,8 +19,10 @@ SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: n
 VIGAS = {
     "TS-01": dict(Vd=138.0, Hd=40.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=150,
                   cord=[dict(y=75, n=6)], estribo=(6.3, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0], d_tir=16.0, d_sus=12.5),
-    "I110": dict(Vd=448.0, Hd=72.0, H=1100, ti=250, ts=220, hd=550, ln=350, a_apoio=175, x_mac=1400, l_apoio=200,
-                 cord=[dict(y=75, n=7), dict(y=117, n=7), dict(y=159, n=7), dict(y=201, n=3)], estribo=(8.0, 150),
+    # I110: dente de 660 (60% da altura) e 10 cordoalhas isoladas por 2 m nas pontas — com as 24 aderentes
+    # junto ao dente a protensão fissura o topo da extremidade e o MEF não sustenta a carga (ver memória MC02)
+    "I110": dict(Vd=448.0, Hd=72.0, H=1100, ti=250, ts=220, hd=660, ln=350, a_apoio=175, x_mac=1400, l_apoio=250,
+                 cord=[dict(y=75, n=7), dict(y=117, n=7), dict(y=159, n=7, isol=2000), dict(y=201, n=3, isol=2000)], estribo=(8.0, 150),
                  sup=4 * AREA[12.5], inf=2 * AREA[12.5], d_tir=20.0, d_sus=16.0),
     "MEZ-I90": dict(Vd=383.0, Hd=65.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=200,
                     cord=[dict(y=75, n=7), dict(y=117, n=1)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],

@@ -123,7 +123,9 @@ E += [Paragraph("6. Dentes Gerber", T2),
       P("Todas as pontas de viga que apoiam em consolo receberam dente: TS-01 (no pilar lateral, no pilar central e na I110), "
         "I110 (no pilar central) e vigas do mezanino. Dimensionamento pela NBR 9062:2017 (consolo curto/muito curto + suspensão "
         "≥ Vd/fyd) e pelo PCI 5.6 (flexão e tração no dente, cisalhamento direto, tração diagonal no canto reentrante e no dente), "
-        "adotando a maior armadura.")]
+        "adotando a maior armadura. I110: dente de 660 mm (60% da altura) e 10 das 24 cordoalhas isoladas por 2 m nas pontas; "
+        "com as 24 aderentes junto ao dente a protensão fissurava o topo da extremidade e o MEF não sustentava a carga. "
+        "Assento da I110 no consolo do pilar central: fundo da I110 + 440 mm = 8,84 m.")]
 lin = [["Viga", "Vd / Hd (kN)", "Dente h × l (mm)", "Tirante", "Suspensão", "Costura", "a/d"]]
 for k in ("TS-01", "I110", "MEZ-I90"):
     v = DT[k]; a = v["calculo"]["adotado"]
@@ -139,12 +141,16 @@ E += [Paragraph("7. Verificação dos dentes por MEF não linear", T2),
         "armaduras e cordoalhas como barras aderentes (cordoalhas cortadas na face do dente, com deformação inicial crescendo no "
         "comprimento de transferência de 760 mm), aparelho de apoio como placa de aço sobre um único pino. Resistências de cálculo "
         "(fcd, fctd, fyd). Trecho de 3 m com carga no topo; a força no dente é lida na reação do apoio. Validação: viga retangular "
-        "400×600 com 3 Ø20 — o MEF deu 226 kN·m contra 213,7 kN·m da NBR 6118 (+6%); por isso exige-se Vu ≥ 1,06 Vd.")]
+        "400×600 com 3 Ø20 — o MEF deu 226 kN·m contra 213,7 kN·m da NBR 6118 (+6%); por isso exige-se Vu ≥ 1,06 Vd. "
+        "A etapa de protensão é levada ao equilíbrio (resíduo < 1 N) antes da carga; a reação residual é descontada. "
+        "Critério de ruptura: primeiro entre 10‰ no aço, 3,5‰ no concreto (fora das placas de apoio e de carga) ou pico da curva.")]
 lin = [["Viga", "Vd (kN)", "Vu MEF (kN)", "Vu/Vd", "Critério de parada", "Atende"]]
 for k in ("TS-01", "I110", "MEZ-I90"):
     m = DT[k].get("mef")
     if m:
         crit = (m.get("limite") or {}).get("criterio", "pico da curva (perda de convergência)")
+        if DT[k].get("nota_mef"):
+            crit = "limite inferior: análise parou sem atingir os limites de deformação"
         lin.append([k, f"{DT[k]['Vd']:.0f}", f(m["Vu_kN"]), f(m["FS"], 2), crit, "sim" if m["ok"] else "NÃO"])
 E += [tab(lin, [20, 18, 24, 16, 60, 16])]
 for k in ("TS-01", "I110", "MEZ-I90"):
