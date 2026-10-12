@@ -127,6 +127,42 @@ cord = [dict(pos="C1", diam=12.7, qtd=4, y=51, forca=137.0, isol=3350, local="CE
 pr.tabela_cordoalhas(x, y_topo, cord, L_pista_m=100)       # ΔL = F·L/(Ep·Ap); σpi > min(0,77fptk; 0,85fpyk) → ERRO no QA
 ```
 
+## 6B. Do modelo à prancha — fluxo de pré-moldado (padrão de mercado BIM adaptado à ND)
+
+Fonte: manuais do Tekla Structures 2026 (Create models, Create drawings, Analyze models, Template editor) e tutorial de padrões de desenho — lidos em 12/10/2026. Não usamos o programa; copiamos o **fluxo**. Implementação no módulo `prefabricados` do `nd_estruturas` (DEC-008).
+
+**Regra-mãe:** prancha, lista de peças, quantitativo, 3D e orçamento saem do **mesmo modelo de peças**. Nada é redigitado na folha; mudou a peça, regenera tudo.
+
+**Peça de concretagem (cast unit)** = peça principal (maior volume) + secundárias monolíticas (consolo, dente, nicho em positivo) + recortes/furos/chanfros + insertos (chapas, alças, buchas, chumbadores) + armaduras. Atributos calculados, nunca digitados: volume, peso de concreto, peso de aço, peso total, **CG** (vai para a prancha e para o içamento), face de concretagem (define a vista frontal), fase, fck.
+
+**Convenção de marcas ND** (prefixo · número inicial · estilo):
+
+| Peça | Prefixo | Início | Peça | Prefixo | Início |
+|---|---|---|---|---|---|
+| Pilar | P | 1 | Laje alveolar | LA | 1 |
+| Viga / longarina | V | 1 | Placa de fechamento | PF | 1 |
+| Viga-calha | VC | 1 | Bloco / cálice | BL | 1 |
+| Tesoura / viga de cobertura | TS | 1 | Estaca | E | 1 |
+| Terça | TR | 1 | Inserto metálico | IM | 1 |
+| Escada / patamar | ES | 1 | Console metálico de placa | CM | 1 |
+
+- **Identidade:** peças com mesma geometria (tolerância 1 mm), tipo, face de concretagem, insertos e armadura recebem a **mesma marca** e **uma única prancha** (quantidade no carimbo). Qualquer diferença (um inserto a mais) = marca nova.
+- **Armadura:** posição global N1, N2… por identidade (bitola, CA-50/60, raio de dobra, geometria; nome não conta) e lista ordenada por peça na ordem de montagem.
+
+**Prancha de peça (padrão ND):**
+1. **Fôrma**: elevação frontal (face de concretagem para cima), topo e lado, cortes automáticos onde a seção muda (consolo, dente, nicho); cota total + cadeia; cotas só dos insertos em linha própria (filtradas); recortes em linha oculta; **símbolo do CG** com cotas.
+2. **Armação**: mesma elevação com marcas de grupo (`N3 – 12 Ø8 c/15`) e o **croqui da barra junto da marca**; cortes com cobrimento.
+3. **3D isométrico** pequeno da peça (orientação no pátio).
+4. **Coluna direita**: tabela de dobramento com croqui · relação do aço + resumo por bitola (+10%) · insertos · **quadro da peça** (marca, quantidade, volume, peso de concreto, aço, peso total, fck, fckj de desforma/içamento, CG) · notas paramétricas.
+
+**Planta de montagem/locação:** grade com eixos, marcas de todas as peças, níveis, cortes de montagem, locação de chumbadores/cálices, tabela-resumo por marca (quantidade, peso, maior peça → guindaste).
+
+**Estilos por material (camadas, aplicados por filtro, nunca à mão):** concreto preto, corte hachurado AR-CONC cinza; metálica em outra cor com linhas ocultas; armadura linha única com pontas cheias; insertos em linha média. A cor define a espessura de impressão.
+
+**Padrões da empresa num lugar só** (`skills/` + `nd_estruturas` no GitHub): carimbo, formatos (A1/A2/A3 do mesmo layout), estilos, convenção de marcas e templates de prancha por tipo de peça. Ordem ao gerar: template da peça parecida → configuração salva → padrão.
+
+**Relatórios (linha = tipo de objeto + agrupar + somar):** lista de peças, aço por bitola, concreto por fck, insertos, cronograma de montagem/carregamento → Excel e prancha.
+
 ## 7. Armadilhas já encontradas
 
 - `ColorPolicy.COLOR_NEGATIVE` some com tudo que é cor 7 em fundo branco → usar `ColorPolicy.COLOR` + fundo branco.

@@ -4,6 +4,9 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Agora
 
+- [ ] Módulo `prefabricados` (DEC-008): peça, armadura, inserto; volume/peso/CG; marcas por identidade; lista de peças e aço por bitola; pytest com conferência manual.
+- [ ] Prancha de peça automática (fôrma + armação + quadro da peça + dobramento) e planta de montagem, usando `prancha_nd.py`.
+- [ ] Teste real com a obra Letsara (precisa do PDF arquitetônico R01).
 - [ ] Alinhar as skills `projetos-estruturais-concreto-armado-protendido` e `mef-opensees-opsvis` com a Parte D (especificação viva).
 - [ ] Criar o registro de normas por chave com ano (`"NBR6118:2023"`) e os objetos de valor (Concreto, Aco, Secao).
 

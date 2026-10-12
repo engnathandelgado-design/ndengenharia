@@ -497,6 +497,8 @@ def ex_ferreira(npav=5, aR=1.0, bp=.5, hp=.5, red_p=.8, aR_base=1.0, Ec=35e6):
 9. Incêndio (11): TRRF (NBR 14432) → tabelas/isoterma; ligações e juntas.
 10. Pranchas (montagem + produção), lista de peças, quantitativos e orçamento (12).
 
+**Modelo único de peças (desde 12/10/2026):** do passo 2 em diante, toda peça entra no modelo de peças do `nd_estruturas.prefabricados` (marca por identidade, armadura, insertos, CG, peso). O modelo analítico (passo 5) é gerado dele — eixo de cada peça, link rígido até o apoio, liberações por grau de liberdade (rótula, engaste ou grau de conexão 0–1 do consolo/chumbador, seção 4.5), grupos de carga e combinações NBR 8681 — e os esforços voltam gravados em cada peça. Pranchas, listas e orçamento (passo 10) saem do mesmo modelo — ver `pranchas-tecnicas-nd` 6B.
+
 ## 15. Armadilhas
 - Adaptar projeto moldado in loco para pré-moldado (ligações caras, peças únicas).
 - Galpão com cobertura leve tratado como diafragma rígido.

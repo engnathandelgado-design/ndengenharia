@@ -26,6 +26,20 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-008 — Modelo único de peças pré-moldadas (padrão "cast unit")
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+Pranchas, listas, 3D e orçamento eram feitos em scripts separados por obra, com números redigitados. Os manuais do Tekla Structures 2026 mostram o fluxo do mercado: um modelo de peças alimenta análise, desenhos e relatórios.
+
+### Decisão
+Módulo `prefabricados`: peça de concretagem = principal + secundárias + recortes + insertos + armaduras; volume, pesos e CG calculados; marca por identidade (prefixo da convenção ND + número) e posição de armadura por identidade; modelo analítico gerado das peças (OpenSees pelo Protocol do motor); pranchas de peça e de montagem, listas e quantitativos gerados do modelo. Convenção de marcas e padrão de prancha em `skills/pranchas-tecnicas-nd` 6B.
+
+### Consequências
+Mais trabalho inicial por tipo de peça (pilar, viga, terça, tesoura, placa, laje). Em troca, mudança de projeto regenera tudo e prancha nunca diverge da memória. Primeiro teste real: obra Letsara (Marque Engenharia).
+
 ## DEC-007 — GitHub como fonte única; Streamlit como interface web
 
 **Data:** 2026-10-12
