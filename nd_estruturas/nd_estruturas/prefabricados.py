@@ -217,18 +217,50 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
     ok_els = ok_els and ss_w <= fct_f
     out["els_ok"] = ok_els
 
-    # ELU flexão — bloco retangular na mesa superior, σpd ≈ fpyd (conferir compatibilidade)
+    # ELU flexão — compatibilidade de deformações (NBR 6118 17.2.2): bloco 0,8x sobre a seção real,
+    # cordoalha com pré-alongamento εpn e diagrama bilinear CP-190 (fpyd até εyd, fptd em 35‰)
     Md = gama_g * (Mg1 + Mg2) + gama_q * Mq
-    fpyd = 1710 / 1.15 * 1000
+    fpyd, fptd = 1710 / 1.15 * 1000, 1900 / 1.15 * 1000
+    eyd = fpyd / EP
     dp = sec.h - y_cord
-    bs = sec.largura_em(sec.h - 0.01)
-    x = Ap_inf * fpyd / (0.85 * conc.fcd * 0.8 * bs)  # cordoalhas superiores desprezadas no ELU
-    if 0.8 * x > 0.10:
-        av.append("Linha neutra sai da mesa: refinar ELU pela seção real")
-    MRd = Ap_inf * fpyd * (dp - 0.4 * x)
+    epn = (Pinf / Ap) / EP
+
+    def sigma_p(ep_):
+        if ep_ <= eyd:
+            return ep_ * EP
+        return min(fptd, fpyd + (ep_ - eyd) / (0.035 - eyd) * (fptd - fpyd))
+
+    def Fc(x):
+        y, n, F = min(0.8 * x, sec.h), 40, 0.0
+        for k in range(n):
+            yy = sec.h - (k + 0.5) * y / n
+            F += 0.85 * conc.fcd * sec.largura_em(yy) * y / n
+        return F
+
+    def zc(x):
+        y, n, F, Mz = min(0.8 * x, sec.h), 40, 0.0, 0.0
+        for k in range(n):
+            dy = (k + 0.5) * y / n
+            f = sec.largura_em(sec.h - dy) * y / n
+            F += f
+            Mz += f * dy
+        return Mz / F
+
+    lo, hi = 1e-4, dp
+    for _ in range(60):
+        x = (lo + hi) / 2
+        ep_ = epn + 0.0035 * (dp - x) / x
+        if Fc(x) > Ap_inf * sigma_p(ep_):
+            hi = x
+        else:
+            lo = x
+    ep_u = epn + 0.0035 * (dp - x) / x
+    sp = sigma_p(ep_u)
+    MRd = Ap_inf * sp * (dp - zc(x))
     out["Md_kNm"] = round(Md, 1)
     out["MRd_kNm"] = round(MRd, 1)
     out["x_d"] = round(x / dp, 3)
+    out["sigma_pd_MPa"] = round(sp / 1000)
     ok_elu = MRd >= Md and x / dp <= 0.45
     # ELU sucção: 1,0G + 1,4W com protensão — topo não pode esmagar/romper (checagem de tensão)
     Mdw = (Mg1 + Mg2) - 1.4 * Mw
