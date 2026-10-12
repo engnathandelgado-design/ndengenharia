@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- bim/visualizador: galeria de pranchas (imagens embutidas, ampliáveis no celular) e tabela de conferência cruzada de conexões na página 3D.
+- Letsara: `checar_conexoes.py` (68 verificações inserto × inserto entre peças) e insertos/pinos/consolos CP-VB e CP-MEZ no modelo 3D; pino PN-1 unificado em Ø20 (TB-1 Ø50×3,0) para todas as TS-01.
 - Letsara: pranchas de montagem ND-LET-MON01 (cobertura: planta, corte do pórtico, lista de peças, sequência) e ND-LET-MON02 (mezanino +3,15/+6,55: plantas, corte, lista, sequência).
 - prancha_nd: `Vista.cota_ord_v` (cotas ordenadas verticais) e `Vista.chapa` (chaparia hachurada ANSI31).
 - Letsara: pilar PL-01 desenhado em pé (posição de montagem), rev. 02, com Detalhe 4 de protensão (posição das cordoalhas e força no macaco) na opção B.

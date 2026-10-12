@@ -251,7 +251,7 @@ ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "1,5", "ver pla
        ["CH-T2", "Chapa 300×380×12,5 + 2 luvas + 4 orelhas + 6 pinos", n2, "14,5", f"nós c/ {2*PASSO_T}"],
        ["CH-MF", "Chapa 150×360×12,5 + 2 luvas M16 + 2 pinos Ø12,5", len(MF_FUNDO), "6,1", "fundo, terça − 27"],
        ["CH-MF2", "Chapa 120×90×9,5 + luva M16 + 2 pinos (lateral)", 4, "1,3", "dente, 2 faces"],
-       ["TB-1", "Tubo Ø50×3,0 L=450 a prumo (pino Ø25)", 2, "1,6", "no dente"],
+       ["TB-1", "Tubo Ø50×3,0 L=450 a prumo (pino PN-1 Ø20)", 2, "1,6", "no dente"],
        ["CH-A1", "Chapa 300×150×12,5 furo Ø52 + 4 grapas Ø10", 2, "5,2", "fundo do dente"]]
 y = pr.tabela(x0, y, "INSERTOS (CHAPARIA NA FOLHA 03)", ["MARCA", "DESCRIÇÃO", "QT", "kg/un", "POSIÇÃO"], ins,
               [16, 92, 10, 16, 46])

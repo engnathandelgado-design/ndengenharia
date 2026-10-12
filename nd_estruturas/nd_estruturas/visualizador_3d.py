@@ -42,6 +42,23 @@ label.l:last-child{border-bottom:0}
 ul{margin:0;padding-left:18px;display:grid;gap:8px}
 li.alert{background:var(--warn-bg);border-left:3px solid var(--warn);padding:8px 10px;border-radius:4px;list-style:none;margin-left:-18px}
 .foot{color:var(--muted);font-size:.8rem;margin:0}
+.gal{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+.gal figure{margin:0;flex:0 0 min(78vw,300px);scroll-snap-align:start;cursor:pointer}
+.gal img{width:100%;aspect-ratio:1.41;object-fit:cover;object-position:left top;border:1px solid var(--line);border-radius:6px;background:#fff}
+.gal figcaption{font:.78rem var(--f-mono);color:var(--muted);margin-top:4px}
+.ov{position:fixed;inset:0;background:rgba(10,12,11,.92);z-index:50;display:none;flex-direction:column}
+.ov.on{display:flex}
+.ov .bar{display:flex;gap:6px;align-items:center;padding:8px 12px;color:#fff;font:.82rem var(--f-mono)}
+.ov .bar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov .sc{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.ov img{display:block;background:#fff;max-width:none}
+table.cx{width:100%;border-collapse:collapse;font:.76rem var(--f-mono)}
+table.cx th,table.cx td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cx th{font:600 .7rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td.ok{color:#2f7d4f;font-weight:600}td.nok{color:var(--warn);font-weight:600}
+.cxwrap{overflow-x:auto}
+.filt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
 
@@ -61,8 +78,13 @@ li.alert{background:var(--warn-bg);border-left:3px solid var(--warn);padding:8px
     <section><h2>Camadas · peças · volume (m³)</h2><div id="layers"></div></section>
     <section id="sec-pend"><h2>Pendências do modelo</h2><ul id="pend"></ul></section>
   </div>
+  <section id="sec-pr" hidden><h2>Projetos — pranchas (toque para abrir e ampliar)</h2><div class="gal" id="gal"></div></section>
+  <section id="sec-cx" hidden><h2>Insertos, conexões e furos — conferência cruzada entre peças</h2>
+    <div class="filt" id="filt"></div><div class="cxwrap"><table class="cx"><thead><tr><th>Peça A · inserto</th><th>Peça B · inserto</th><th>Verificação</th><th>Valor</th><th>OK</th><th>Obs.</th></tr></thead><tbody id="cx"></tbody></table></div>
+  </section>
   <p class="foot">Gerado do modelo IFC da obra. Volumes pelo envelope do perfil (sem alvéolos, chanfros ou recortes).</p>
 </div>
+<div class="ov" id="ov"><div class="bar"><span id="ovt"></span><button type="button" id="z-">−</button><button type="button" id="z+">+</button><button type="button" id="ovx">Fechar</button></div><div class="sc"><img id="ovi" alt=""></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -76,6 +98,42 @@ document.getElementById('mark').textContent = CFG.autoria;
 const ul = document.getElementById('pend');
 if (!CFG.pendencias.length) document.getElementById('sec-pend').hidden = true;
 CFG.pendencias.forEach((t, i) => { const li = document.createElement('li'); li.textContent = t; if (t.startsWith('!')) { li.className = 'alert'; li.textContent = t.slice(1).trim(); } ul.appendChild(li); });
+
+// galeria de pranchas
+if (CFG.pranchas && CFG.pranchas.length) {
+  document.getElementById('sec-pr').hidden = false;
+  const gal = document.getElementById('gal'), ov = document.getElementById('ov'), ovi = document.getElementById('ovi');
+  let zoom = 1;
+  const fit = () => { ovi.style.width = Math.round(Math.max(document.documentElement.clientWidth, 320) * zoom) + 'px'; };
+  CFG.pranchas.forEach(p => {
+    const fg = document.createElement('figure'); const im = document.createElement('img'); im.src = p.img; im.alt = p.nome; im.loading = 'lazy';
+    const fc = document.createElement('figcaption'); fc.textContent = p.nome + (p.desc ? ' — ' + p.desc : '');
+    fg.append(im, fc); gal.appendChild(fg);
+    fg.addEventListener('click', () => { ovi.src = p.img; document.getElementById('ovt').textContent = p.nome + (p.desc ? ' — ' + p.desc : ''); zoom = 1.6; fit(); ov.classList.add('on'); });
+  });
+  document.getElementById('ovx').addEventListener('click', () => ov.classList.remove('on'));
+  document.getElementById('z+').addEventListener('click', () => { zoom = Math.min(zoom * 1.4, 8); fit(); });
+  document.getElementById('z-').addEventListener('click', () => { zoom = Math.max(zoom / 1.4, 0.8); fit(); });
+}
+// conferência de conexões
+if (CFG.conexoes && CFG.conexoes.length) {
+  document.getElementById('sec-cx').hidden = false;
+  const tb = document.getElementById('cx'), fl = document.getElementById('filt');
+  const grupos = ['todas', 'pendências', ...new Set(CFG.conexoes.map(c => c.grupo))];
+  let atual = 'todas';
+  function render() {
+    tb.innerHTML = '';
+    CFG.conexoes.filter(c => atual === 'todas' || (atual === 'pendências' ? (!c.ok || c.obs.startsWith('!')) : c.grupo === atual)).forEach(c => {
+      const tr = document.createElement('tr');
+      const cells = [c.peca_a + ' · ' + c.inserto_a, c.peca_b + ' · ' + c.inserto_b, c.verificacao, c.valor, c.ok ? 'OK' : 'VER', c.obs.replace(/^!\s*/, '')];
+      cells.forEach((t, i) => { const td = document.createElement('td'); td.textContent = t; if (i === 4) td.className = c.ok ? 'ok' : 'nok'; tr.appendChild(td); });
+      tb.appendChild(tr);
+    });
+    [...fl.children].forEach(b => b.classList.toggle('sel', b.dataset.g === atual));
+  }
+  grupos.forEach(g => { const b = document.createElement('button'); b.type = 'button'; b.textContent = g; b.dataset.g = g; b.addEventListener('click', () => { atual = g; render(); }); fl.appendChild(b); });
+  render();
+}
 
 const canvas = document.getElementById('c'), stage = document.getElementById('stage');
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});

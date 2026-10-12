@@ -275,14 +275,19 @@ def ler_malha_ifc(caminho) -> OrderedDict[str, list]:
 
 
 def gravar_visualizador(malha, caminho, titulo: str, subtitulo: str = "", pendencias=(), cores=None,
-                        ocultas=("Placas de fechamento",), quant=None) -> Path:
-    """Página HTML única (three.js) com camadas, toque na peça, pendências e marca d'água ND."""
+                        ocultas=("Placas de fechamento",), quant=None, pranchas=(), conexoes=()) -> Path:
+    """Página HTML única (three.js) com camadas, toque na peça, pendências e marca d'água ND.
+
+    pranchas: lista de dict(nome, desc, img) — img é data-URL (jpeg/png) da prancha, para ver no celular;
+    conexoes: lista de dict(grupo, peca_a, inserto_a, peca_b, inserto_b, verificacao, valor, ok, obs).
+    """
     from .visualizador_3d import MODELO_HTML
 
     leve = OrderedDict((g, [{"n": it["n"], "v": it["v"], "f": it["f"]} for it in itens]) for g, itens in malha.items())
     cfg = {
         "titulo": titulo, "subtitulo": subtitulo, "pendencias": list(pendencias),
         "cores": cores or {}, "ocultas": list(ocultas), "autoria": AUTORIA, "quant": quant or {},
+        "pranchas": list(pranchas), "conexoes": list(conexoes),
     }
     html = (MODELO_HTML
             .replace("__TITULO__", _esc(titulo))

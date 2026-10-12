@@ -438,7 +438,7 @@ notas = [("Concreto C50; cordoalhas CP-190 RB Ø12,7 na grade da cabeceira (pass
          f"Estribos N2 Ø8 fechados com ganchos de 135° (8 cm), c/15 no trecho corrente e c/10 nos 150 cm junto ao topo e no cálice; "
          "2 grampos N3 Ø8 por estribo nas linhas a 8,4 cm do eixo (NBR 6118:2023 18.4.3).",
          "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela.",
-         "Pino PN-1 Ø20 CA-50 (resiste 82 kN ≥ Hd 40 kN): concretado no consolo; tubo TB-1 da viga Ø40, grauteado numa ponta só de cada viga.",
+         "Pino PN-1 Ø20 CA-50 (resiste 82 kN ≥ Hd 40 kN): concretado no consolo; tubo TB-1 Ø50×3,0 da viga (furo 44), grauteado numa ponta só de cada viga.",
          "Faces: A = consolo (interna), B e D = lados de 40, C = placas (externa). Pilar concretado deitado com a face A para cima e a face C no fundo da fôrma.",
          "Insertos IP-01 na face C a cada fiada de placa (125 cm a partir do piso); chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
          "Içar na horizontal pelas 2 alças AL-2 e levantar à vertical pela alça superior com a base apoiada; estocar sobre 2 calços nas alças.",

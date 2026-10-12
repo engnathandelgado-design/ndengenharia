@@ -142,6 +142,57 @@ def montar() -> ModeloBIM:
                 b = xb + 0.40 if xb == LARG else xb
                 m.linear("placa", nome, PLACA, (a, y, z), (b, y, z), "Placas de fechamento")
 
+    # 7. insertos metálicos e conexões (para conferir no 3D o que está nas pranchas)
+    INS = "Insertos metálicos"
+    PIN = "Pinos, tubos e neoprenes"
+    for i in range(2, 9):                                                   # TS-01: TB-1 + PN-1 + NEO-1 em cada ponta (28 apoios)
+        y = Y_LIN[i - 1]
+        for xp in LG["X_PINO"]:
+            z_as = zf(xp) + H_DENTE * C3 - 0.01
+            m.bloco("inserto", "PN-1 pino Ø20 L=700", (xp, y, z_as + 0.40), 0.02, 0.02, 0.70, PIN)
+            m.bloco("inserto", "TB-1 tubo Ø50×3,0 L=450 (no dente)", (xp, y, z_as + 0.45), 0.05, 0.05, 0.45, PIN)
+            m.bloco("inserto", "NEO-1 300×150×10", (xp, y, z_as + 0.01), 0.30, 0.15, 0.01, PIN)
+            m.bloco("inserto", "CH-A1 300×150×12,5 (fundo do dente)", (xp, y, z_as + 0.0225), 0.30, 0.15, 0.0125, INS)
+    for i in range(2, 9):                                                   # CH-T1/T2 no topo e CH-MF no fundo das TS-01; AL-1
+        y = Y_LIN[i - 1]
+        for xa, _ in PONTAS:
+            for k, s_ in enumerate(LG["s_tercas"]):
+                x = xa + s_ * C3 - 0.027
+                no = k % 2 == 0
+                m.bloco("inserto", "CH-T2 300×200×12,5 (nó do contraventamento)" if no else "CH-T1 150×150×12,5", (x, y, zf(x) + H_TS + 0.0125),
+                        0.30 if no else 0.15, 0.20 if no else 0.15, 0.0125, INS)
+                if 0 < k < len(LG["s_tercas"]) - 1:
+                    m.bloco("inserto", "CH-MF 150×360×12,5 (mão-francesa, fundo)", (x, y, zf(x)), 0.15, 0.36, 0.0125, INS)
+            for s_ in LG["alcas"]:
+                x = xa + s_ * C3
+                m.bloco("inserto", "AL-1 alça cordoalha Ø12,7", (x, y, zf(x) + H_TS + 0.14), 0.12, 0.02, 0.14, INS)
+    for i, y in enumerate(Y_LIN, start=1):                                  # IP-01 nas faces externas dos pilares laterais (8 fiadas)
+        for k in range(N_FIADAS):
+            z = 1.25 * (k + 1) - 0.10
+            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (-0.30 - 0.00475, y, z + 0.075), 0.0095, 0.15, 0.15, INS)
+            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (LARG + 0.30 + 0.00475, y, z + 0.075), 0.0095, 0.15, 0.15, INS)
+    for x in X_FACH[1:-1]:                                                  # IP-01 nos pilares de fachada (faces y− / y+)
+        for k in range(N_FIADAS):
+            z = 1.25 * (k + 1) - 0.10
+            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (x, -0.30 - 0.00475, z + 0.075), 0.15, 0.0095, 0.15, INS)
+            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (x, COMP + 0.30 + 0.00475, z + 0.075), 0.15, 0.0095, 0.15, INS)
+    # consolos CP-VB (fachadas) e CP-MEZ (linhas 1–2, dois níveis) com pinos
+    for y in (0.0, COMP):
+        for x in X_FACH:
+            for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
+                xc = x + sg * (0.20 + 0.15)
+                m.bloco("consolo", "CP-VB 30×40×35/20", (xc, y, zf(x) - 0.01), 0.30, 0.40, 0.35, "Consolos")
+                m.bloco("inserto", "PN-1 pino Ø20 (VB-01)", (xc, y, zf(x) + 0.39), 0.02, 0.02, 0.70, PIN)
+    for nivel in NIVEIS_MEZ:
+        z_as = nivel - H_LAJE - 0.425
+        for y in (Y_LIN[0], Y_LIN[1]):
+            for x in X_FACH:
+                for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
+                    xc = x + sg * (0.30 + 0.15)
+                    m.bloco("consolo", "CP-MEZ 30×40×35/20", (xc, y, z_as - 0.01), 0.30, 0.40, 0.35, "Consolos")
+                    m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xc, y, z_as + 0.39), 0.02, 0.02, 0.70, PIN)
+                    m.bloco("inserto", "NEO 300×150×10", (xc, y, z_as + 0.01), 0.15, 0.30, 0.01, PIN)
+
     pl = LG["platibanda"]
     m.pendente(f"Cobertura escondida: telha junto ao P2 em +{pl['telha_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00; "
                f"junto ao P1 em +{pl['telha_P1']:.3f}.")
@@ -150,6 +201,10 @@ def montar() -> ModeloBIM:
     m.pendente("Vigas do mezanino I70 (10 cord. Ø12,7) passam na flexão; dente de 425 em verificação no MEF.")
     m.pendente("Comprimento entre fachadas adotado nos cálculos: 76,81 m (eixos 1–9). Conferir com o R01 (havia 79,75 em outro registro).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento e correntes não modelados no 3D.")
+    cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
+    for c in cx:
+        if not c["ok"] or c["obs"].startswith("!"):
+            m.pendente("! " + f"{c['peca_a']} × {c['peca_b']}: {c['obs'].lstrip('! ')}")
     return m
 
 
@@ -160,9 +215,28 @@ if __name__ == "__main__":
     q = quantitativos(modelo)
     ifc = gravar_ifc(modelo, saida / "letsara.ifc")
     malha = ler_malha_ifc(ifc)
-    gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural",
-                        "Pavilhão pré-moldado 40,10 × 76,81 m · Marque Engenharia · cobertura escondida na platibanda",
-                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas"))
+    pranchas = []
+    pasta_pr = Path("/home/claude/letsara/pranchas")
+    if pasta_pr.exists():
+        import base64, io
+        import pymupdf
+        LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
+                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A)"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B)"),
+                 ("ND-LET-TS01-COB01-rev01", "TS-01 fôrma, armação, chaparia e cobertura metálica"), ("ND-LET-CT01", "cortes da estrutura")]
+        for nome, desc in LISTA:
+            arq = pasta_pr / f"{nome}.pdf"
+            if not arq.exists():
+                continue
+            doc = pymupdf.open(arq)
+            for k, pg in enumerate(doc):
+                pix = pg.get_pixmap(dpi=int(1800 / pg.rect.width * 72))
+                img = pix.tobytes("jpeg", jpg_quality=72)
+                pranchas.append(dict(nome=nome + (f" ({k + 1}/{len(doc)})" if len(doc) > 1 else ""), desc=desc,
+                                     img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
+    cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
+    gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
+                        "Pavilhão pré-moldado 40,10 × 76,81 m · Marque Engenharia · cobertura escondida na platibanda · pranchas e conferência de insertos",
+                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas"), pranchas=pranchas, conexoes=cx)
     for g, d in q.items():
         print(f"{g:26s} {d['pecas']:4d} peças  {d['volume_m3']:8.1f} m³")
     print("pendências:", len(modelo.pendencias), "->", saida)

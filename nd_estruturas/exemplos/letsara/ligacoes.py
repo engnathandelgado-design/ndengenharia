@@ -73,12 +73,12 @@ zc = lambda x: round(z_fundo_viga(x) + H_DENTE * math.cos(math.atan(I)) - NEO, 3
 X_PINO = [X_PONTA_ESQ + 0.15, X_PONTA_CEN - 0.15, 2 * X_CEN - X_PONTA_CEN + 0.15, X_P2 - X_PONTA_ESQ - 0.15]
 for i in range(1, 8):
     y = YL[i]
-    apoios.append(dict(peca=f"P1 L{i+1}", tipo="PN-1 Ø25 no consolo CP-TS", x=round(X_PINO[0], 3), y=y, z=zc(X_PINO[0]), face=0.30))
-    apoios.append(dict(peca=f"P2 L{i+1}", tipo="PN-1 Ø25 no consolo CP-TS", x=round(X_PINO[3], 3), y=y, z=zc(X_PINO[3]), face=X_P2 - 0.30))
+    apoios.append(dict(peca=f"P1 L{i+1}", tipo="PN-1 Ø20 no consolo CP-TS", x=round(X_PINO[0], 3), y=y, z=zc(X_PINO[0]), face=0.30))
+    apoios.append(dict(peca=f"P2 L{i+1}", tipo="PN-1 Ø20 no consolo CP-TS", x=round(X_PINO[3], 3), y=y, z=zc(X_PINO[3]), face=X_P2 - 0.30))
     sup = "pilar central 50×50 (consolo CP-TS)" if i in (1, 3) else "I110 (consolo CV-TS)"
     meia = 0.25 if i in (1, 3) else 0.20
     for x, f_ in ((X_PINO[1], X_CEN - meia), (X_PINO[2], X_CEN + meia)):
-        apoios.append(dict(peca=f"{sup} L{i+1}", tipo="PN-2 Ø25 no consolo", x=round(x, 3), y=y, z=zc(x), face=f_))
+        apoios.append(dict(peca=f"{sup} L{i+1}", tipo="PN-1 Ø20 no consolo", x=round(x, 3), y=y, z=zc(x), face=f_))
 # ------------------------------------------------------------------ checagens
 rel, erros = [], 0
 for it in inst:
