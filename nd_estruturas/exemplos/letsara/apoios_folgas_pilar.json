@@ -1,0 +1,167 @@
+{
+ "folgas": {
+  "tolerancias": "NBR 9062:2017 (adotadas): comprimento ±(10 + L[m]) mm, pilar ±10, prumo 10/10 m, consolo ±10, furo ±5",
+  "pecas": {
+   "TS-01 (pilar lateral)": {
+    "folga_ponta_mm": 25,
+    "desvio_provavel_mm": 35,
+    "ok_ponta": false,
+    "folga_consolo_dente_mm": 25,
+    "desvio_consolo_mm": 25,
+    "ok_consolo": true,
+    "pino_folga_radial_mm": 12.5,
+    "ok_pino": true
+   },
+   "TS-01 (lado da I110)": {
+    "folga_ponta_mm": 75,
+    "desvio_provavel_mm": 35,
+    "ok_ponta": true,
+    "folga_consolo_dente_mm": 25,
+    "desvio_consolo_mm": 25,
+    "ok_consolo": true,
+    "pino_folga_radial_mm": 12.5,
+    "ok_pino": true
+   },
+   "I110 (pilar central)": {
+    "folga_ponta_mm": 25,
+    "desvio_provavel_mm": 36,
+    "ok_ponta": false,
+    "folga_consolo_dente_mm": 25,
+    "desvio_consolo_mm": 26,
+    "ok_consolo": false,
+    "pino_folga_radial_mm": 12.5,
+    "ok_pino": true
+   },
+   "Viga do mezanino": {
+    "folga_ponta_mm": 25,
+    "desvio_provavel_mm": 30,
+    "ok_ponta": false,
+    "folga_consolo_dente_mm": 25,
+    "desvio_consolo_mm": 20,
+    "ok_consolo": true,
+    "pino_folga_radial_mm": 12.5,
+    "ok_pino": true
+   },
+   "Terça Ue (entre vigas)": {
+    "folga_ponta_mm": 5,
+    "desvio_provavel_mm": 30,
+    "ok_ponta": false,
+    "folga_consolo_dente_mm": null,
+    "desvio_consolo_mm": 20,
+    "ok_consolo": true,
+    "pino_folga_radial_mm": null,
+    "ok_pino": true
+   }
+  },
+  "descida_vertical": {
+   "TS01_pilar": "livre: a platibanda sobe reta acima do consolo e a ponta desce a prumo",
+   "TS01_I110": "livre: topo da I110 (+8,88) fica 86 mm abaixo das terças e o dente desce ao lado da I110 com 75 mm",
+   "I110": "livre: topo do pilar central = topo da I110 (+8,88)",
+   "mezanino": "livre, mas 25 + 25 mm entre pilares em 9,3 m: pede pilares aprumados antes (± 10 mm)",
+   "tercas": "descem entre as CT-1; furo d+2 e 5 mm de folga na ponta"
+  }
+ },
+ "apoios": {
+  "regras": "pressão ≤ 5 MPa (simples) / 10 MPa (fretado); distorção ≤ 0,7; sem descolamento de borda; pino grauteado só numa ponta de cada viga (a outra com graute flexível ou furo oblongo) ou aceitar a força de restrição",
+  "apoios": {
+   "TS-01 → CP-TS / CV-TS": {
+    "neoprene": "300×150×10 simples",
+    "pressao_k_MPa": 2.31,
+    "pressao_d_MPa": 3.07,
+    "limite_MPa": 5.0,
+    "ok_pressao": true,
+    "fator_forma": 5.0,
+    "recalque_mm": 0.15,
+    "rotacao_mrad": 1.81,
+    "ok_rotacao": true,
+    "obs_rotacao": "sem descolamento da borda (recalque ≥ θ·b/2)",
+    "encurtamento_mm": 4.9,
+    "distorcao": 0.49,
+    "ok_distorcao": true,
+    "forca_restricao_pinos_kN": 3.8,
+    "pressao_concreto_consolo_MPa": 3.07,
+    "ok_concreto": true,
+    "componente_3pct_kN": 4.1,
+    "borda_neoprene_mm": 75
+   },
+   "I110 → CP-I110": {
+    "neoprene": "300×250×20 fretado",
+    "pressao_k_MPa": 4.27,
+    "pressao_d_MPa": 5.97,
+    "limite_MPa": 10.0,
+    "ok_pressao": true,
+    "fator_forma": 6.8,
+    "recalque_mm": 0.3,
+    "rotacao_mrad": 5.98,
+    "ok_rotacao": false,
+    "obs_rotacao": "borda descola: usar fretado ou mais espessura",
+    "encurtamento_mm": 5.8,
+    "distorcao": 0.29,
+    "ok_distorcao": true,
+    "forca_restricao_pinos_kN": 4.5,
+    "pressao_concreto_consolo_MPa": 5.97,
+    "ok_concreto": true,
+    "componente_3pct_kN": 13.4,
+    "borda_neoprene_mm": 25
+   },
+   "Viga mezanino I90 → CP-MEZ": {
+    "neoprene": "300×200×15 fretado",
+    "pressao_k_MPa": 4.58,
+    "pressao_d_MPa": 6.38,
+    "limite_MPa": 10.0,
+    "ok_pressao": true,
+    "fator_forma": 8.0,
+    "recalque_mm": 0.18,
+    "rotacao_mrad": 0.69,
+    "ok_rotacao": true,
+    "obs_rotacao": "sem descolamento da borda (recalque ≥ θ·b/2)",
+    "encurtamento_mm": 2.3,
+    "distorcao": 0.15,
+    "ok_distorcao": true,
+    "forca_restricao_pinos_kN": 1.8,
+    "pressao_concreto_consolo_MPa": 6.38,
+    "ok_concreto": true,
+    "componente_3pct_kN": 11.5,
+    "borda_neoprene_mm": 50
+   }
+  }
+ },
+ "pilar_protendido": {
+  "secao": "40×60, L = 10 m em balanço, C40, vento transversal (q = 0,874 kN/m²)",
+  "Mk_base_vento_kNm": 253,
+  "opcoes": {
+   "armado 5 Ø20 por face": {
+    "P_inf_kN": 0,
+    "sigma_p_MPa": 0.0,
+    "M_fissuracao_kNm": 125,
+    "Mk_vento_kNm": 253,
+    "fica_no_estadio_I": true,
+    "lambda_u": 1.03,
+    "ok_ELU": true,
+    "topo_mm_ELU": 161.0
+   },
+   "protendido: 6 cord. (3 por face a 250 do eixo) + 4 Ø12,5": {
+    "P_inf_kN": 592,
+    "sigma_p_MPa": 2.47,
+    "M_fissuracao_kNm": 185,
+    "Mk_vento_kNm": 253,
+    "fica_no_estadio_I": true,
+    "lambda_u": 0.9,
+    "ok_ELU": false,
+    "topo_mm_ELU": null
+   },
+   "protendido: 8 cord. (4 por face) + 4 Ø12,5": {
+    "P_inf_kN": 790,
+    "sigma_p_MPa": 3.29,
+    "M_fissuracao_kNm": 204,
+    "Mk_vento_kNm": 253,
+    "fica_no_estadio_I": true,
+    "lambda_u": 1.06,
+    "ok_ELU": true,
+    "topo_mm_ELU": 160.2
+   }
+  },
+  "cabeceira": "cabeçote REV05: linha inferior 75–243 mm e superior 1050–1092 mm do fundo da fôrma — pilar de 60 deitado só alcança a linha inferior: cordoalhas a 250 do eixo nas DUAS faces exigem furar o cabeçote a 525 mm ou cabeçote intermediário; com 40 de altura (deitado de lado) idem (325 mm)",
+  "transitorias": "pilar de 11 m içado por 2 pontos a 0,21 L: M = 0,0215 w L² ≈ 7 kN·m·m⁻¹… ver cálculo no texto"
+ }
+}

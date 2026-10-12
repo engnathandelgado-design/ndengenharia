@@ -437,16 +437,21 @@ def pressao_vento(V0, z=10.0, b=0.93, Fr=0.95, p=0.115, S1=1.0, S3=1.0):
 
 
 def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.0, Hd_top=0.0,
-                       phi_ef=1.0, c=0.045, n_el=10, ea_rad=None):
+                       phi_ef=1.0, c=0.045, n_el=10, ea_rad=None, cord=(), sig_pinf=0.0):
     """Pilar em balanço — não linearidade física (fibras, concreto 0,85fcd/γ e CA-50 de cálculo)
     e geométrica (corrotacional), fluência pelo alongamento do diagrama do concreto (1+φef),
     imperfeição global θ1 (NBR 6118 11.3.3.4.1). Carrega N fixo e cresce H/M até λ.
     Retorna o fator de carga último λu (passa se ≥ 1,0) e o deslocamento do topo em λ=1.
+    cord: cordoalhas Ø12,7 pré-tracionadas [(y a partir do eixo, n), ...] com tensão após perdas sig_pinf (MPa):
+    entram como fibras CP-190 com deformação inicial (pilar protendido centrado ou não).
     """
     import openseespy.opensees as ops
     ops.wipe()
     ops.logFile("/dev/null", "-noEcho")
     ops.model("basic", "-ndm", 2, "-ndf", 3)
+    if cord:
+        ops.uniaxialMaterial("Steel01", 3, 0.9 * 1900 / 1.15 * 1e3, EP, 0.001)
+        ops.uniaxialMaterial("InitStrainMaterial", 4, 3, sig_pinf / (EP / 1e3))
     for i in range(n_el + 1):
         ops.node(i + 1, 0.0, L * i / n_el)
     ops.fix(1, 1, 1, 1)
@@ -461,6 +466,8 @@ def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.
     nb = 4
     for y in (-h / 2 + c, h / 2 - c):
         ops.layer("straight", 2, nb, As / nb, y, -b / 2 + c, y, b / 2 - c)
+    for y, n in cord:
+        ops.layer("straight", 4, n, CORD["12.7"], y, -b / 2 + 0.05, y, b / 2 - 0.05)
     ops.geomTransf("Corotational", 1)
     ops.beamIntegration("Lobatto", 1, 1, 5)
     for i in range(n_el):
@@ -473,6 +480,10 @@ def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.
     ops.system("BandGeneral"); ops.numberer("RCM"); ops.constraints("Plain")
     ops.test("NormDispIncr", 1e-8, 50); ops.algorithm("Newton")
     ops.integrator("LoadControl", 0.1); ops.analysis("Static")
+    if cord:                                           # equilíbrio da protensão antes das cargas
+        ops.integrator("LoadControl", 0.0)
+        ops.analyze(3)
+        ops.integrator("LoadControl", 0.1)
     if ops.analyze(10) != 0 or ops.nodeDisp(n_el + 1, 1) < 0:
         ops.wipe()
         return dict(lambda_u=0.0, ok=False, topo_mm=None, motivo="instável só com a força normal")
