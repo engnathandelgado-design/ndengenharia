@@ -25,14 +25,14 @@ ini = LN + 40 + AD["n_sus"] * 60 + 100
 x_est = list(range(ini, zona + 1, 150)) + list(range(zona + 250, L - zona, 250)) + list(range(L - ini, L - zona - 1, -150))
 x_est = sorted(set(x_est))
 for x in x_est:
-    va.linha((x + sk(40), 40), (x + sk(H - 40), H - 40), "ARMADURA")
+    va.linha((x + sk(40), 40), (x + sk(H - 40), H - 40), "ARM_TRANSV")
 for xs_ in (X_SUS, [L - x for x in X_SUS]):
     for x in xs_:
-        va.linha((x + sk(40), 40), (x + sk(H - 40), H - 40), "ARMADURA")
+        va.linha((x + sk(40), 40), (x + sk(H - 40), H - 40), "ARM_TRANSV")
 n1 = len(x_est)
 va.barra([(30, H - 45), (L - 30, H - 45)], "N2", 4, 12.5, comp_cm=(L - 60) / 10, ponto_rotulo=(L * 0.62, H - 45), desloc=(10, 10))
 va.barra([(LN + 30, 40), (L - LN - 30, 40)], "N5", 2, 10, comp_cm=(L - 2 * LN - 60) / 10, ponto_rotulo=(L * 0.70, 40), desloc=(10, -12))
-va.linha((LN, P["y_cord"]), (L - LN, P["y_cord"]), "ARMADURA")
+va.linha((LN, P["y_cord"]), (L - LN, P["y_cord"]), "ARM_PROT")
 for x0_, sg in ((0, 1), (L, -1)):
     va.linha((x0_ + sg * 30, HD + 55), (x0_ + sg * (LN + ANC), HD + 55), "ARMADURA")
 va.chamada((L * 0.3, P["y_cord"]), (-10, -16), f"C1 — {P['n_cord']} cord. Ø12,7 aderentes")
@@ -53,17 +53,17 @@ d4.interrupcao((XF, 0), (XF + DX, H))
 d4.barra([(30, HD + 55), (LN + ANC, HD + 55)], "N8", AD["n_tir"], AD["d_tir"], comp_cm=2 * (LN + ANC) / 10 + 30,
          ponto_rotulo=(LN + 700, HD + 55), desloc=(10, -14))
 for x in X_SUS:
-    d4.poli([(x, 40), (x, H - 40)], "ARMADURA")
+    d4.poli([(x, 40), (x, H - 40)], "ARM_TRANSV")
 d4.chamada((X_SUS[-1], 250), (14, -16), f"N9 - {AD['n_sus']} estribos Ø{AD['d_sus']:g} (suspensão)".replace(".", ","))
 d_ = HD - 55
 for k in range(AD["n_cost"]):
     yk = HD + 55 + (k + 1) * (2 / 3 * d_) / (AD["n_cost"] + 1)
-    d4.poli([(30, yk), (LN + 450, yk)], "ARMADURA")
+    d4.poli([(30, yk), (LN + 450, yk)], "ARM_TRANSV")
 d4.chamada((LN + 400, HD + 55 + (2 / 3 * d_) / (AD["n_cost"] + 1)), (16, 20), f"N10 - {AD['n_cost']} estribos horiz. Ø10 (costura)")
 for x in X_VD:
-    d4.poli([(x, HD + 30), (x, H - 30)], "ARMADURA")
+    d4.poli([(x, HD + 30), (x, H - 30)], "ARM_TRANSV")
 d4.chamada((X_VD[0], H - 100), (-10, 12), "N11 - 2 estribos Ø10 no dente")
-d4.linha((LN, P["y_cord"]), (XF, P["y_cord"]), "ARMADURA")
+d4.linha((LN, P["y_cord"]), (XF, P["y_cord"]), "ARM_PROT")
 d4.chamada((LN + 200, P["y_cord"]), (8, -10), "C1 começa na face do dente (transferência 760 mm)")
 d4.cota_h([sk(HD), LN + sk(HD)], HD, 34, total=False)
 d4.cota_h([30, LN, LN + ANC], HD + 55, 22, total=False)
@@ -75,14 +75,14 @@ pts = [(x * 1000, y * 1000) for x, y in sec.pts]
 vc = pr.vista("CORTE D-D", (330, 300), 10, titulo="CORTE D-D", subtitulo="seção corrente")
 vc.poli(pts, "CORTADO", fechada=True)
 for x in P["x_cord"]:
-    vc.ponto_barra((x, P["y_cord"]), 12.7)
+    vc.ponto_barra((x, P["y_cord"]), 12.7, "ARM_PROT_SECAO")
 for x in (-160, -60, 60, 160):
     vc.ponto_barra((x, H - 45), 12.5)
 for x in (-165, 165):
     vc.ponto_barra((x, 40), 10)
-vc.poli([(-45, 30), (45, 30), (45, H - 30), (-45, H - 30)], "ARMADURA", fechada=True)
-vc.poli([(-170, H - 30), (170, H - 30), (170, H - 100), (-170, H - 100)], "ARMADURA", fechada=True)
-vc.poli([(-170, 30), (170, 30), (170, 100), (-170, 100)], "ARMADURA", fechada=True)
+vc.poli([(-45, 30), (45, 30), (45, H - 30), (-45, H - 30)], "ARM_TRANSV", fechada=True)
+vc.poli([(-170, H - 30), (170, H - 30), (170, H - 100), (-170, H - 100)], "ARM_TRANSV", fechada=True)
+vc.poli([(-170, 30), (170, 30), (170, 100), (-170, 100)], "ARM_TRANSV", fechada=True)
 vc.chamada((100, P["y_cord"]), (22, -10), f"C1 - {P['n_cord']} Ø12,7")
 vc.chamada((160, H - 45), (20, 8), "N2 - 4 Ø12,5")
 vc.chamada((165, 40), (20, 2), "N5 - 2 Ø10")
@@ -97,12 +97,12 @@ rb = [(-200, 0), (200, 0), (200, H), (-200, H)]
 ve.poli(rb, "CORTADO", fechada=True)
 ve.ret(-25, 0, 50, H, "OCULTA")
 for x in P["x_cord"]:
-    ve.ponto_barra((x, P["y_cord"]), 12.7)
+    ve.ponto_barra((x, P["y_cord"]), 12.7, "ARM_PROT_SECAO")
 for x in (-160, -60, 60, 160):
     ve.ponto_barra((x, H - 45), 12.5)
-ve.poli([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARMADURA", fechada=True)
+ve.poli([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARM_TRANSV", fechada=True)
 for yy in (250, 450, 650):
-    ve.poli([(-120, yy + 60), (-170, yy + 60), (-170, yy), (170, yy), (170, yy + 60), (120, yy + 60)], "ARMADURA")
+    ve.poli([(-120, yy + 60), (-170, yy + 60), (-170, yy), (170, yy), (170, yy + 60), (120, yy + 60)], "ARM_TRANSV")
 ve.chamada((170, 520), (20, 6), "N6 Ø8 c/7 (7 por ponta, após a suspensão)")
 ve.chamada((-170, 250), (-20, -6), "N7 Ø10 grampo (4 por ponta)")
 ve.cota_h([-200, 200], 0, -10)
@@ -118,7 +118,7 @@ for c in range(-150, 151, 50):
         if abs(c) > 75 and y > 150 or abs(c) <= 75 and y > 300:
             continue
         if r == 0 and c in P["x_cord"]:
-            d3.ponto_barra((c, y), 12.7)
+            d3.ponto_barra((c, y), 12.7, "ARM_PROT_SECAO")
         else:
             d3.circulo((c, y), 8.5, "OCULTA")
 d3.cota_h([-150, -100, -50, 0, 50, 100, 150], 0, -8, total=False)
@@ -166,7 +166,8 @@ notas = [f"Concreto C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj
          "As alças AL-1 (laço de cordoalha) estão na folha 01 e são posicionadas entre os estribos N1, sem cortar armadura.",
          "Cobrimento 30 mm (CAA II). Dobramento conforme NBR 6118:2023 item 9.4.6. Medidas em cm na tabela e mm no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
-pr.notas(x0, tc["y_base"] - 4, notas, 180)
+yl = pr.legenda_armadura(x0, tc["y_base"] - 4, True)
+pr.notas(x0, yl - 4, notas, 180)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-TS01-2")
 for a in avisos:
     print(a)

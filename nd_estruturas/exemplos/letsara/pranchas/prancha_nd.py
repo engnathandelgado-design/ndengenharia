@@ -19,6 +19,7 @@ CAMADAS = {
     "MOLDURA": (7, 70, "Continuous"), "CARIMBO": (7, 35, "Continuous"), "CARIMBO_FINO": (8, 18, "Continuous"),
     "CORTADO": (7, 70, "Continuous"), "VISTA": (7, 35, "Continuous"), "OCULTA": (8, 25, "ACAD_ISO02W100"),
     "EIXO": (8, 18, "ACAD_ISO10W100"), "ARMADURA": (5, 50, "Continuous"), "ARM_SECAO": (5, 50, "Continuous"),
+    "ARM_TRANSV": (6, 50, "Continuous"), "ARM_PROT": (3, 50, "Continuous"), "ARM_PROT_SECAO": (3, 50, "Continuous"),
     "METALICA": (30, 50, "Continuous"), "TERRENO": (34, 35, "Continuous"), "HACHURA": (8, 13, "Continuous"),
     "COTA": (1, 18, "Continuous"), "TEXTO": (7, 25, "Continuous"), "TITULO": (7, 50, "Continuous"),
     "CHAMADA": (7, 18, "Continuous"), "INDICACAO": (7, 50, "Continuous"), "TABELA": (7, 25, "Continuous"),
@@ -202,6 +203,20 @@ class Prancha:
                         linhas, [12, 14, 14, 14, 18, 18, 38])
         self.avisos_extra += av                     # entram no verificar()/salvar()
         return dict(y_base=y, avisos=av, sig_lim=lim)
+
+    def legenda_armadura(self, x, y_topo, protensao=True):
+        """Legenda de cores: longitudinal (azul), transversal (magenta), protensão (verde)."""
+        self.texto(x, y_topo - ALTURAS["sub"], "LEGENDA DAS ARMADURAS", "sub", "TITULO")
+        y = y_topo - ALTURAS["sub"] - 6
+        itens = [("ARMADURA", "longitudinal (barras N, tirantes, pele)"), ("ARM_TRANSV", "transversal (estribos, grampos, suspensão, costura)")]
+        if protensao:
+            itens.append(("ARM_PROT", "protensão (cordoalhas)"))
+        for cam, txt in itens:
+            self.linha((x, y + 1), (x + 14, y + 1), cam)
+            self.texto(x + 17, y, txt, "nota")
+            y -= 5
+        self.blocos_livres.append((x, y, x + 170, y_topo, "LEGENDA DAS ARMADURAS"))
+        return y
 
     def notas(self, x, y_topo, linhas, largura=170, titulo="NOTAS"):
         """Notas numeradas, quebra pela largura real. Use f-strings com os parâmetros (nota paramétrica)."""
@@ -654,9 +669,9 @@ class Vista:
         self._add(self.pr.msp.add_circle((x0, y0), 0.5, dxfattribs={"layer": "CHAMADA"}))
         return self._add(self.pr.texto(x1 + lado, y1 + 0.8, texto, h, "TEXTO", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT"))
 
-    def barra(self, pts, pos, n, diam, espac=None, comp_cm=None, ponto_rotulo=None, desloc=(10, 8)):
-        """Armadura em vista longitudinal + rótulo NBR 7191: 'N1 - 8 Ø16 c/15 C=250'."""
-        self.poli(pts, "ARMADURA")
+    def barra(self, pts, pos, n, diam, espac=None, comp_cm=None, ponto_rotulo=None, desloc=(10, 8), camada="ARMADURA"):
+        """Armadura em vista longitudinal + rótulo NBR 7191: 'N1 - 8 Ø16 c/15 C=250'. camada: ARMADURA (longitudinal) ou ARM_TRANSV."""
+        self.poli(pts, camada)
         if comp_cm is None:
             comp_cm = sum(math.dist(a, b) for a, b in zip(pts[:-1], pts[1:])) / 10
         rot = f"{pos} - {n} Ø{diam:g}".replace(".", ",") + (f" c/{espac:g}" if espac else "") + f" C={comp_cm:.0f}"

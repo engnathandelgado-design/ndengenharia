@@ -143,7 +143,7 @@ def corte_I(nome, org, sub, s_tipo):
     v = pr.vista(nome, org, 10, titulo=nome, subtitulo=sub)
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
     for x in P["x_cord"]:
-        v.ponto_barra((x, P["y_cord"]), 12.7)
+        v.ponto_barra((x, P["y_cord"]), 12.7, "ARM_PROT_SECAO")
     dy = 190 if s_tipo == "CH-T2" else 100
     v.ret(-dy, H - 12.5, 2 * dy, 12.5, "METALICA")
     for yy in (-50, 50):
@@ -152,7 +152,7 @@ def corte_I(nome, org, sub, s_tipo):
     for yy in pinos:
         v.linha((yy, H - 12.5), (yy, H - 112.5), "METALICA"); v.ret(yy - 16, H - 120, 32, 8, "METALICA")
     if s_tipo == "CH-T2":
-        v.poli([(-170, H - 140), (-170, H - 60), (170, H - 60), (170, H - 140)], "ARMADURA")   # grampo U Ø10
+        v.poli([(-170, H - 140), (-170, H - 60), (170, H - 60), (170, H - 140)], "ARM_TRANSV")   # grampo U Ø10
     v.ret(-180, 0, 360, 12.5, "METALICA")                                       # CH-MF no fundo
     for yy in (-150, 150):
         v.ret(yy - 12, 12.5, 24, 40, "METALICA")

@@ -694,25 +694,25 @@
  },
  {
   "grupo": "VM × consolo",
-  "peca_a": "VM-01..04 I70 (nível +3.15)",
-  "inserto_a": "ponta sem dente, TB-1 Ø50 a 150 da face",
+  "peca_a": "VM-01..04 I90 (nível +3.15)",
+  "inserto_a": "dente 450×300, TB-1 Ø50 a 150 da face",
   "peca_b": "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07",
   "inserto_b": "CP-MEZ 40×30×45/25 + PN-1 Ø20",
-  "verificacao": "assento = topo da viga − 70 (apoio direto 25 cm)",
-  "valor": "+2.200",
+  "verificacao": "assento = topo da viga − 45 (dente)",
+  "valor": "+2.450",
   "ok": true,
-  "obs": "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)"
+  "obs": "dente I90 45×30 verificado por MEF (FS 1,14); dente da I70 reprovado"
  },
  {
   "grupo": "VM × consolo",
-  "peca_a": "VM-01..04 I70 (nível +6.55)",
-  "inserto_a": "ponta sem dente, TB-1 Ø50 a 150 da face",
+  "peca_a": "VM-01..04 I90 (nível +6.55)",
+  "inserto_a": "dente 450×300, TB-1 Ø50 a 150 da face",
   "peca_b": "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07",
   "inserto_b": "CP-MEZ 40×30×45/25 + PN-1 Ø20",
-  "verificacao": "assento = topo da viga − 70 (apoio direto 25 cm)",
-  "valor": "+5.600",
+  "verificacao": "assento = topo da viga − 45 (dente)",
+  "valor": "+5.850",
   "ok": true,
-  "obs": "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)"
+  "obs": "dente I90 45×30 verificado por MEF (FS 1,14); dente da I70 reprovado"
  },
  {
   "grupo": "I110 × PC",

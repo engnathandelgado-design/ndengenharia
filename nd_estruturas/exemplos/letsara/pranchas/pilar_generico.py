@@ -140,7 +140,7 @@ def prancha_pilar(P):
     W = B
     va.ret(0, 0, W, L_TOT, "VISTA")
     for z in z_est:
-        va.linha((COB, z), (W - COB, z), "ARMADURA")
+        va.linha((COB, z), (W - COB, z), "ARM_TRANSV")
     va.barra([(COB + 18, 40), (COB + 18, L_TOT - 40)], "N1", len(xy), 20, comp_cm=round((L_TOT - 80) / 10), ponto_rotulo=(COB + 18, 3000), desloc=(14, 12))
     va.linha((W - COB - 18, 40), (W - COB - 18, L_TOT - 40), "ARMADURA")
     va.chamada((W - COB, 5000), (12, 10), f"N2 Ø8 c/{EST['s_corr']//10}" + (" + N3" if P["grampos"] else ""))
@@ -161,10 +161,10 @@ def prancha_pilar(P):
     v = pr.vista("CORTE A-A", (XD + 40, YS), 10, titulo="CORTE A-A", subtitulo="corrente; cobr. 3,0 cm", unidade="cm")
     pts = [(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2), (-B / 2, H / 2)]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
-    v.poli([(-B / 2 + COB, -H / 2 + COB), (B / 2 - COB, -H / 2 + COB), (B / 2 - COB, H / 2 - COB), (-B / 2 + COB, H / 2 - COB)], "ARMADURA", fechada=True)
-    v.poli([(-B / 2 + COB, H / 2 - COB), (-B / 2 + COB + 60, H / 2 - COB - 60)], "ARMADURA"); v.poli([(-B / 2 + COB + 60, H / 2 - COB), (-B / 2 + COB, H / 2 - COB - 60)], "ARMADURA")
+    v.poli([(-B / 2 + COB, -H / 2 + COB), (B / 2 - COB, -H / 2 + COB), (B / 2 - COB, H / 2 - COB), (-B / 2 + COB, H / 2 - COB)], "ARM_TRANSV", fechada=True)
+    v.poli([(-B / 2 + COB, H / 2 - COB), (-B / 2 + COB + 60, H / 2 - COB - 60)], "ARM_TRANSV"); v.poli([(-B / 2 + COB + 60, H / 2 - COB), (-B / 2 + COB, H / 2 - COB - 60)], "ARM_TRANSV")
     for yg in P["grampos"]:
-        v.linha((-B / 2 + COB, yg), (B / 2 - COB, yg), "ARMADURA")
+        v.linha((-B / 2 + COB, yg), (B / 2 - COB, yg), "ARM_TRANSV")
     for x, y in xy:
         v.ponto_barra((x, y), 20)
     v.cota_h([-B / 2, B / 2], -H / 2, -8); v.cota_v([-H / 2, H / 2], B / 2, 8)
@@ -190,11 +190,11 @@ def prancha_pilar(P):
     d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
     d1.poli([(-PW + COB + 8, zc0 - 55 - 150), (-PW + COB + 8, zc0 - 55), (proj - 40, zc0 - 55)], "ARMADURA"); d1.poli([(proj - 40, zc0 - 55), (proj - 40, zc0 - 85)], "ARMADURA")
     for dz in (-150, -250):
-        d1.poli([(proj - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARMADURA")
+        d1.poli([(proj - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARM_TRANSV")
     for dx in range(60, proj - 40, 80):
-        d1.poli([(dx, zc0 - 30 + dx * 0.03), (dx, zc0 - h + (h - hp) * dx / proj + 30)], "ARMADURA")
+        d1.poli([(dx, zc0 - 30 + dx * 0.03), (dx, zc0 - h + (h - hp) * dx / proj + 30)], "ARM_TRANSV")
     for z in range(500, Z2, 100):
-        d1.linha((-PW + COB, z), (-COB, z), "ARMADURA")
+        d1.linha((-PW + COB, z), (-COB, z), "ARM_TRANSV")
     for x in (-PW + COB + 18, -COB - 18):
         d1.linha((x, Z1), (x, Z2), "ARMADURA")
     d1.cota_v([zc0 - h, zc0 - hp, zc0, zc0 + proj * 0.03], proj, 10, total=False)
@@ -217,7 +217,7 @@ def prancha_pilar(P):
     for x in (-H / 2 + COB + 18, H / 2 - COB - 18):
         d2.linha((x, 40), (x, 1600), "ARMADURA")
     for z in range(50, 1500, 100):
-        d2.linha((-H / 2 + COB, z), (H / 2 - COB, z), "ARMADURA")
+        d2.linha((-H / 2 + COB, z), (H / 2 - COB, z), "ARM_TRANSV")
     d2.cota_v([0, L_CAL, 1500], H / 2 + 150, 10, total=False); d2.cota_h([-H / 2, H / 2], 0, -8)
     d2.chamada((H / 2 + 30, 250), (14, 4), "chaves 4×20 (4 faces)"); d2.chamada((H / 2 - COB, 1350), (12, 8), "N2 Ø8 c/10")
     d2.chamada((H / 2 + 150, -300), (8, -8), "cálice (fundações)"); d2.chamada((H / 2, L_CAL), (16, 18), "piso ±0,000; graute")
@@ -246,6 +246,7 @@ def prancha_pilar(P):
           ["QUANTIDADE", f"{P['qtd']}", "COBRIMENTO", "3,0 cm (CAA II)"]]
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
+    y = pr.legenda_armadura(XC, y - 4, False)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
     pr.posicoes_desenho.add("N1")
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
@@ -287,21 +288,21 @@ def dados_pc():
 
 
 def dados_pm():
-    cons = [consolo("A", 2200, "CP-MEZ", 400, 300, 450, 250), consolo("C", 2200, "CP-MEZ", 400, 300, 450, 250),
-            consolo("A", 5600, "CP-MEZ", 400, 300, 450, 250), consolo("C", 5600, "CP-MEZ", 400, 300, 450, 250)]
+    cons = [consolo("A", 2450, "CP-MEZ", 400, 300, 450, 250), consolo("C", 2450, "CP-MEZ", 400, 300, 450, 250),
+            consolo("A", 5850, "CP-MEZ", 400, 300, 450, 250), consolo("C", 5850, "CP-MEZ", 400, 300, 450, 250)]
     xy = [(sx * 152, sy * 252) for sx in (-1, 1) for sy in (-1, 1)] + [(sx * 152, sy * 84) for sx in (-1, 1) for sy in (-1, 1)] + [(0, 252), (0, -252)]
     return dict(marca="PM-01", qtd=2, B=400, H=600, L_CAL=1000, Z_TOP=6550, al=[6550 + 1000 - 2500, 1000 + 1500], consolos=cons, xy=xy, grampos=[-84, 84],
                 est=dict(s_corr=150, s_dens=100, zona=1500), vistas=["A", "B", "C"], ip01=[], zoom=2.6,
                 desenho="ND-LET-PM01", conteudo="PILARES DO MEZANINO PM-01 (40×60) — B2 E D2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 posicao="POSIÇÃO: linha 2, eixos B e D (P8 e P8B); consolos CP-MEZ nas faces A e C nos níveis +3,15 e +6,55", familia="PILARES DO MEZANINO 40×60",
                 kp=[("P8", 9.87, 10.05, 600, 400, "PM-01"), ("P8B", 29.63, 10.05, 600, 400, "PM-01")],
-                marcas=[["PM-01", "B2, D2", 2, "CP-MEZ +2,200 e +5,600 (A e C)", "2 AL-2"]],
+                marcas=[["PM-01", "B2, D2", 2, "CP-MEZ +2,450 e +5,850 (A e C)", "2 AL-2"]],
                 insertos=[["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 4, "CP-MEZ"],
                           ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700)", 2, "face A: 250 do topo; 150 da base"]],
                 memoria=[["Nd (2 níveis de mezanino)", "≈ 1,4 × 2 × 383 = 1072 kN"], ["λ (balanço 7,55 m, i = 17,3 cm)", "87 — método geral"], ["Armadura mínima (0,4 %)", "31,4 ≥ 9,6 cm²"],
                          ["ELU método geral (λu)", "a emitir na memória MC03"], ["Consolo CP-MEZ (Vd 383 kN)", "3 Ø16 tirante (NBR 9062 7.3)"], ["Grampos (18.4.3)", "2 N3 por estribo (linhas a 8,4 cm do eixo)"]],
                 notas=["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°; 2 grampos N3 por estribo.",
-                       "Consolos CP-MEZ nas faces A e C (eixo da linha 2): assentos +2,200 e +5,600 (viga VM I70 sem dente: nível − 25 − 70); pino PN-1 Ø20 no TB-1 da VM.",
+                       "Consolos CP-MEZ nas faces A e C (eixo da linha 2): assentos +2,450 e +5,850 (viga VM I90 com dente 45: nível − 25 − 45); pino PN-1 Ø20 no TB-1 da VM.",
                        "Topo do pilar em +6,550 (nível do piso superior do mezanino); a cobertura das linhas 1–2 apoia nas VB-01 e TS-01 L2, não neste pilar."])
 
 

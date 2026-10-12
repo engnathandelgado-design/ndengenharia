@@ -71,7 +71,7 @@ va = pr.vista("ARMAÇÃO", (Q[0] + 40, Q[3] - 290), ESC, titulo="ELEVAÇÃO DE A
 va.ret(0, 0, L, H, "VISTA")
 xs_e = list(range(50, 1500, 100)) + list(range(1500, L - 1500, 150)) + list(range(L - 1500, L - 40, 100))
 for x in xs_e:
-    va.linha((x, COB), (x, H - COB), "ARMADURA")
+    va.linha((x, COB), (x, H - COB), "ARM_TRANSV")
 va.barra([(COB, COB + 10), (L - COB, COB + 10)], "N1", 3, 12.5, comp_cm=round((L - 2 * COB) / 10), ponto_rotulo=(L / 3, COB + 10), desloc=(10, -14))
 va.barra([(COB, H - COB - 10), (L - COB, H - COB - 10)], "N2", 3, 12.5, comp_cm=round((L - 2 * COB) / 10), ponto_rotulo=(L / 3, H - COB - 10), desloc=(10, 14))
 for y in (300, 600):
@@ -86,7 +86,7 @@ YR = Q[3] - 470
 ca = pr.vista("CORTE A-A", (Q[0] + 60, YR), 10, titulo="CORTE A-A", subtitulo="seção corrente; cobrimento 3,0 cm", unidade="cm")
 pts = [(-B / 2, 0), (B / 2, 0), (B / 2, H), (-B / 2, H)]
 ca.poli(pts, "CORTADO", fechada=True); ca.hachura(pts, "AR-CONC", 0.03)
-ca.poli([(-B / 2 + COB, COB), (B / 2 - COB, COB), (B / 2 - COB, H - COB), (-B / 2 + COB, H - COB)], "ARMADURA", fechada=True)
+ca.poli([(-B / 2 + COB, COB), (B / 2 - COB, COB), (B / 2 - COB, H - COB), (-B / 2 + COB, H - COB)], "ARM_TRANSV", fechada=True)
 for x in (-B / 2 + COB + 10, 0, B / 2 - COB - 10):
     ca.ponto_barra((x, COB + 10), 12.5); ca.ponto_barra((x, H - COB - 10), 12.5)
 for y in (300, 600):
@@ -106,7 +106,7 @@ LD = 1400
 d1.poli([(0, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True); d1.interrupcao((LD, 0), (LD, H))
 d1.chapa(150 - 25, 0, 50, 450); d1.chapa(0, -12.5, 300, 12.5); d1.chapa(25, -22.5, 250, 10)
 for x in (50, 150, 250, 350, 450, 550, 650, 750):
-    d1.linha((x, COB), (x, H - COB), "ARMADURA")
+    d1.linha((x, COB), (x, H - COB), "ARM_TRANSV")
 d1.poli([(COB, COB + 200), (COB, COB), (LD, COB)], "ARMADURA"); d1.poli([(COB, H - COB - 200), (COB, H - COB), (LD, H - COB)], "ARMADURA")
 d1.ret(-25, -32, 300, 10, "OCULTA")
 d1.cota_h([0, 150, 300, LD], 0, -12, total=False); d1.cota_v([0, 450, H], LD, 10, total=False)
@@ -141,6 +141,7 @@ notas = ["Concreto C40, aço CA-50; cobrimento 3,0 cm (CAA II). Barras N1/N2 com
          "Placas de fechamento CM-01 por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos IP-01).",
          "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
+y = pr.legenda_armadura(XC, y - 4, False)
 pr.notas(XC, y - 4, notas, 182)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VB01")
 print(len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")

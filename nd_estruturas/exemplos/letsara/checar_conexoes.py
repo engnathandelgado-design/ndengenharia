@@ -62,9 +62,9 @@ zf = lambda x: LG["Z0_TS"] + 0.03 * x
 for pil, x in (("PL-03/04 (P1 L1/L9)", 0.0), ("PF-01 (P3/P14)", 9.87), ("PF-02 (P4/P15)", 20.05), ("PF-03 (P5/P16)", 29.63), ("PL-07/08 (P2 L1/L9)", 39.625 + 0.475)):
     reg("VB-01 × consolo", "VB-01 15×70", "fundo da viga", pil, "CP-VB", "nível do assento = fundo da VB", f"+{zf(x):.3f}", True, "VB-01 15×90 com TB-1 Ø50 e NEO-1 (ND-LET-VB01)")
 for nivel in (3.15, 6.55):
-    ass = nivel - 0.25 - 0.70
-    reg("VM × consolo", f"VM-01..04 I70 (nível +{nivel:.2f})", "ponta sem dente, TB-1 Ø50 a 150 da face", "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07", "CP-MEZ 40×30×45/25 + PN-1 Ø20",
-        "assento = topo da viga − 70 (apoio direto 25 cm)", f"+{ass:.3f}", True, "dente da I70 reprovado no MEF → adotado apoio direto (ND-LET-VM01, PM01, MON02)")
+    ass = nivel - 0.25 - 0.45
+    reg("VM × consolo", f"VM-01..04 I90 (nível +{nivel:.2f})", "dente 450×300, TB-1 Ø50 a 150 da face", "PM-01 / PL-02 / PL-06 / PF-01..03 / PL-03 / PL-07", "CP-MEZ 40×30×45/25 + PN-1 Ø20",
+        "assento = topo da viga − 45 (dente)", f"+{ass:.3f}", True, "dente I90 45×30 verificado por MEF (FS 1,14); dente da I70 reprovado")
 
 # ------------------------------------------------------------------ 5. I110 × pilares centrais (PN-2) e apoio da V405
 reg("I110 × PC", "V405/406/407 I110", "dente 660×350 + TB-2 tubo Ø60,3×3,6 (furo 53)", "PC-01/02 50×50", "consolo CP-I110 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,

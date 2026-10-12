@@ -29,6 +29,8 @@ Z_PLACA = [1250 * k - 100 for k in range(1, 9)]          # insertos das placas (
 Z_PLACA_ABS = [z + L_CAL for z in Z_PLACA]
 AL = [L_TOT - 3200, L_CAL + 2300]                        # alças (a partir da base): içamento na vertical e transporte
 COB = 30                                                 # NBR 6118:2023 Tab. 7.2 — CAA II, pilar: 30 mm (sem a redução de 5 mm)
+Z_VT = 5490 + 1000                                       # assento do consolo CP-VT (viga de travamento 25×60, fundo +5,50) — faces B e D
+VT = dict(larg=250, proj=200, h=300, hp=200)
 zc = Z_CONS["P1"] + L_CAL                                # topo do consolo (a partir da base)
 json.dump(dict(B=B, H=H, L_TOT=L_TOT, zc=zc, cons=CONS, incl=I_CAI, pino_x=PINO["x"], z_placa_abs=Z_PLACA_ABS, al=AL),
           open("/home/claude/letsara/pranchas/pilar_geom.json", "w"))
@@ -104,6 +106,7 @@ pr = Prancha("A0", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO
 pr.revisao("00", "12/10/2026", "EMISSÃO PARA COMPARAÇÃO DE CUSTO (OPÇÕES A E B)")
 pr.revisao("01", "12/10/2026", "VISTAS DAS FACES A/B/C, ISOMÉTRICOS, PLANTA-CHAVE, COTAS EM CM, ESTRIBOS E COBRIMENTOS CONFORME NBR 6118")
 pr.revisao("02", "12/10/2026", "PILAR DESENHADO EM PÉ (POSIÇÃO DE MONTAGEM); CHAPARIA HACHURADA; DETALHE DE PROTENSÃO (FORÇA NO MACACO)")
+pr.revisao("03", "12/10/2026", "CONSOLOS CP-VT (VIGAS DE TRAVAMENTO +5,50/+6,10) NAS FACES B E D; CORES DAS ARMADURAS")
 Q = pr.quadro                     # (25, 10, 1179, 831)
 ESC = 20
 XC = Q[2] - 190                   # coluna de tabelas à direita
@@ -187,7 +190,11 @@ for z in AL:
 for z in Z_PLACA_ABS:
     vA.ret(B / 2 - 75, z - 75, 150, 150, "OCULTA")
 chaves_frente(vA, B)
-vA.cota_v([0, L_CAL, zc - CONS["h"], zc, L_TOT], 0, -9)
+for x0, lado in ((B, 1), (0, -1)):
+    vA.poli([(x0, Z_VT - VT["h"]), (x0 + lado * VT["proj"], Z_VT - VT["hp"]), (x0 + lado * VT["proj"], Z_VT), (x0, Z_VT)], "VISTA")
+    vA.chapa(x0 + (25 if lado > 0 else -25 - 150), Z_VT, 150, 10)
+vA.chamada((B + VT["proj"], Z_VT), (10, 10), "CP-VT (faces B e D) +5,490")
+vA.cota_v([0, L_CAL, Z_VT, zc - CONS["h"], zc, L_TOT], 0, -9)
 vA.cota_v([L_CAL, AL[1], AL[0], L_TOT], B, 9, total=False)
 vA.cota_h([0, B], 0, -8)
 vA.chamada((B / 2, zc - 225), (12, -12), "CP-TS 40×30×45/25")
@@ -213,6 +220,9 @@ for z in Z_PLACA_ABS:
     vB.chapa(-9.5, z - 75, 9.5, 150)
 for z in AL:
     vB.poli([(H, z - 50), (H + 110, z - 50), (H + 150, z), (H + 110, z + 50), (H, z + 50)], "METALICA")
+vB.ret((H - VT["larg"]) / 2, Z_VT - VT["h"], VT["larg"], VT["h"], "VISTA"); vB.linha(((H - VT["larg"]) / 2, Z_VT - VT["hp"]), ((H + VT["larg"]) / 2, Z_VT - VT["hp"]), "VISTA")
+vB.chapa(H / 2 - 10, Z_VT, 20, 300); vB.chapa(H / 2 - 75, Z_VT, 150, 10)
+vB.chamada((H / 2, Z_VT - 150), (12, -12), "CP-VT 25×20×30/20 + PN-1 (viga VT-xx)")
 vB.cota_ord_v(ORD, 0, -9, y0=0, rotulos=ORD_R)
 vB.cota_v([0, L_CAL, c0, zc, L_TOT], H + CONS["proj"], 9)
 vB.cota_h([0, H, H + CONS["proj"]], 0, -8, total=False)
@@ -238,6 +248,8 @@ for z in Z_PLACA_ABS:
         vC.circulo((B / 2 + dy, z), 6.25, "VISTA")
 chaves_frente(vC, B)
 vC.ret(0, zc - CONS["h"], B, CONS["h"], "OCULTA")
+for x0, lado in ((B, 1), (0, -1)):
+    vC.poli([(x0, Z_VT - VT["h"]), (x0 + lado * VT["proj"], Z_VT - VT["hp"]), (x0 + lado * VT["proj"], Z_VT), (x0, Z_VT)], "VISTA")
 vC.cota_ord_v([0, L_CAL] + Z_PLACA_ABS + [L_TOT], B, 9, y0=0, rotulos=[f"{z/10:g}" for z in [0, L_CAL] + Z_PLACA_ABS + [L_TOT]])
 vC.cota_v([L_CAL, Z_PLACA_ABS[0], Z_PLACA_ABS[1]], 0, -9, total=False)
 vC.cota_h([0, B / 2 - 75, B / 2 + 75, B], 0, -8)
@@ -248,12 +260,12 @@ vC.texto((B / 2, L_TOT + 120), "FACE C", "sub", "BOTTOM_CENTER")
 va = pr.vista("ARMAÇÃO", (Q[0] + 375, Y0), ESC, titulo="ARMAÇÃO", subtitulo="igual nas 11 marcas", unidade="cm")
 va.ret(0, 0, H, L_TOT, "VISTA")
 for z in z_est:
-    va.linha((COB, z), (H - COB, z), "ARMADURA")
+    va.linha((COB, z), (H - COB, z), "ARM_TRANSV")
 va.barra([(COB + 18, 40), (COB + 18, L_TOT - 40)], "N1", LONG["n"], 20, comp_cm=round((L_TOT - 80) / 10), ponto_rotulo=(COB + 18, 4000), desloc=(14, 12))
 va.linha((H - COB - 18, 40), (H - COB - 18, L_TOT - 40), "ARMADURA")
 if PROT:
     for x in (H / 2 - 250, H / 2 + 250):
-        va.linha((x, 0), (x, L_TOT), "ARMADURA")
+        va.linha((x, 0), (x, L_TOT), "ARM_PROT")
     va.chamada((H / 2 + 250, 6500), (12, 10), "C1 — 10 cord. Ø12,7")
 va.chamada((H - COB, z_est[-13]), (12, 10), f"N2 Ø8 c/10 + 2 N3")
 va.chamada((H - COB, 5000), (12, 10), "N2 Ø8 c/15 + 2 N3")
@@ -279,16 +291,16 @@ def secao(nome, org, sub, consolo=False):
         pts = [(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2 + CONS["proj"]), (-B / 2, H / 2 + CONS["proj"])]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
     e = [(-B / 2 + COB, -H / 2 + COB), (B / 2 - COB, -H / 2 + COB), (B / 2 - COB, H / 2 - COB), (-B / 2 + COB, H / 2 - COB)]
-    v.poli(e, "ARMADURA", fechada=True)
-    v.poli([(-B / 2 + COB, H / 2 - COB), (-B / 2 + COB + 60, H / 2 - COB - 60)], "ARMADURA")       # gancho 135°
-    v.poli([(-B / 2 + COB + 60, H / 2 - COB), (-B / 2 + COB, H / 2 - COB - 60)], "ARMADURA")
+    v.poli(e, "ARM_TRANSV", fechada=True)
+    v.poli([(-B / 2 + COB, H / 2 - COB), (-B / 2 + COB + 60, H / 2 - COB - 60)], "ARM_TRANSV")       # gancho 135°
+    v.poli([(-B / 2 + COB + 60, H / 2 - COB), (-B / 2 + COB, H / 2 - COB - 60)], "ARM_TRANSV")
     for y in Y_GR:                                                                                   # N3 grampos
-        v.linha((-B / 2 + COB, y), (B / 2 - COB, y), "ARMADURA")
-        v.poli([(-B / 2 + COB, y), (-B / 2 + COB + 50, y - 50)], "ARMADURA"); v.poli([(B / 2 - COB, y), (B / 2 - COB - 50, y + 50)], "ARMADURA")
+        v.linha((-B / 2 + COB, y), (B / 2 - COB, y), "ARM_TRANSV")
+        v.poli([(-B / 2 + COB, y), (-B / 2 + COB + 50, y - 50)], "ARM_TRANSV"); v.poli([(B / 2 - COB, y), (B / 2 - COB - 50, y + 50)], "ARM_TRANSV")
     for x, y in LONG["xy"]:
         v.ponto_barra((x, y), 20)
     for x, y in CORD:
-        v.ponto_barra((x, y), 12.7)
+        v.ponto_barra((x, y), 12.7, "ARM_PROT_SECAO")
     v.cota_h([-B / 2, B / 2], -H / 2, -8)
     v.cota_v([-H / 2, H / 2], B / 2, 8)
     v.texto((0, H / 2 + (CONS["proj"] if consolo else 0) + 30), "FACE A", "min", "BOTTOM_CENTER")
@@ -318,7 +330,7 @@ if PROT:
     d4.poli(pts, "VISTA", fechada=True)
     d4.linha((-B / 2 - 100, 0), (B / 2 + 100, 0), "EIXO"); d4.linha((0, -H / 2 - 100), (0, H / 2 + 100), "EIXO")
     for k, (x, y) in enumerate(CORD, 1):
-        d4.ponto_barra((x, y), 12.7)
+        d4.ponto_barra((x, y), 12.7, "ARM_PROT_SECAO")
         d4.texto((x, y + (18 if y > 0 else -18)), str(k), "min", "BOTTOM_CENTER" if y > 0 else "TOP_CENTER")
     d4.cota_h([-100, -50, 0, 50, 100], -H / 2, -8, total=False)
     d4.cota_v([-250, 0, 250], B / 2, 8, total=False)
@@ -340,11 +352,11 @@ d1.chapa(25, zc0 + 1, 250, 10)
 d1.poli([(-PW + COB + 8, zc0 - 55 - 150), (-PW + COB + 8, zc0 - 55), (CONS["proj"] - 40, zc0 - 55)], "ARMADURA")
 d1.poli([(CONS["proj"] - 40, zc0 - 55), (CONS["proj"] - 40, zc0 - 55 - 30)], "ARMADURA")
 for dz in (-150, -250):
-    d1.poli([(CONS["proj"] - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARMADURA")
+    d1.poli([(CONS["proj"] - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARM_TRANSV")
 for dx in (60, 140, 220):
-    d1.poli([(dx, zc0 - 30 + dx * I_CAI), (dx, zc0 - CONS["h"] + (CONS["h"] - CONS["hp"]) * dx / CONS["proj"] + 30)], "ARMADURA")
+    d1.poli([(dx, zc0 - 30 + dx * I_CAI), (dx, zc0 - CONS["h"] + (CONS["h"] - CONS["hp"]) * dx / CONS["proj"] + 30)], "ARM_TRANSV")
 for z in range(500, Z2, 100):
-    d1.linha((-PW + COB, z), (-COB, z), "ARMADURA")
+    d1.linha((-PW + COB, z), (-COB, z), "ARM_TRANSV")
 for x in (-PW + COB + 18, -COB - 18):
     d1.linha((x, Z1), (x, Z2), "ARMADURA")
 d1.cota_v([zc0 - CONS["h"], zc0 - CONS["hp"], zc0, zc0 + CONS["proj"] * I_CAI], CONS["proj"], 10, total=False)
@@ -369,7 +381,7 @@ d2.poli([(-H / 2 - 150, L_CAL), (-H / 2 - 150, -500), (H / 2 + 150, -500), (H / 
 for x in (-H / 2 + COB + 18, H / 2 - COB - 18):
     d2.linha((x, 40), (x, 1600), "ARMADURA")
 for z in range(50, 1500, 100):
-    d2.linha((-H / 2 + COB, z), (H / 2 - COB, z), "ARMADURA")
+    d2.linha((-H / 2 + COB, z), (H / 2 - COB, z), "ARM_TRANSV")
 d2.cota_v([0, L_CAL, 1500], H / 2 + 150, 10, total=False)
 d2.cota_v([150, 350, 450, 650, 750, 950], -H / 2 - 30, -8, total=False)
 d2.cota_h([-H / 2, H / 2], 0, -8)
@@ -412,7 +424,8 @@ y = ta["y_base"]
 if PROT:
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=10, y=250, forca=SIG_PI * 98.7 / 1000, isol=0)], 60)
     y = tc["y_base"]
-ins = [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo), a 175 mm da face", 1, "consolo, face A"],
+ins = [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo), a 175 mm da face", 3, "CP-TS (face A) e 2 CP-VT (faces B e D)"],
+       ["CP-VT", "Consolo 25×20×30/20 p/ viga VT 25×60 (+5,490)", 2, "faces B e D (canto: 1)"],
        ["IP-01", "Chapa A36 150×150×9,5 + 2 pinos Ø12,5 c/ cabeça (p/ CM-01)", 8, "face C, c/1250 a partir do piso"],
        ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700), carga 40 kN", 2, "face A: 3200 do topo; 2300 da base"],
        ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30 (montagem)", 1, "sobre o consolo"]]
@@ -437,13 +450,14 @@ notas = [("Concreto C50; cordoalhas CP-190 RB Ø12,7 na grade da cabeceira (pass
          "Cobrimento nominal 3,0 cm aos estribos (NBR 6118:2023 Tab. 7.2, CAA II); espaçadores plásticos a cada 100 cm nas 4 faces.",
          f"Estribos N2 Ø8 fechados com ganchos de 135° (8 cm), c/15 no trecho corrente e c/10 nos 150 cm junto ao topo e no cálice; "
          "2 grampos N3 Ø8 por estribo nas linhas a 8,4 cm do eixo (NBR 6118:2023 18.4.3).",
-         "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela.",
+         "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela. Consolos CP-VT (2 Ø12,5 tirante + 2 estribos Ø8) nas faces B e D em +5,490 para as vigas de travamento VT 25×60 (ND-LET-VT01), escondidas no fechamento.",
          "Pino PN-1 Ø20 CA-50 (resiste 82 kN ≥ Hd 40 kN): concretado no consolo; tubo TB-1 Ø50×3,0 da viga (furo 44), grauteado numa ponta só de cada viga.",
          "Faces: A = consolo (interna), B e D = lados de 40, C = placas (externa). Pilar concretado deitado com a face A para cima e a face C no fundo da fôrma.",
          "Insertos IP-01 na face C a cada fiada de placa (125 cm a partir do piso); chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
          "Içar na horizontal pelas 2 alças AL-2 e levantar à vertical pela alça superior com a base apoiada; estocar sobre 2 calços nas alças.",
          "Marca = geometria + insertos + armadura iguais; qualquer consolo a mais é marca nova. Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
+y = pr.legenda_armadura(XC, y - 4, PROT)
 pr.notas(XC, y - 4, notas, 182)
 pr.posicoes_desenho.add("N1")
 avisos = pr.salvar(f"/home/claude/letsara/pranchas/ND-LET-PIL-{'P' if PROT else 'A'}01")

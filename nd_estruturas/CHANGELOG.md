@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- prancha_nd: camadas de cor da armadura (ARMADURA azul = longitudinal, ARM_TRANSV magenta = transversal, ARM_PROT verde = cordoalhas) e `legenda_armadura`; aplicado em todas as pranchas.
+- Letsara: VM volta a ter dentes Gerber (I90, 45×30, MEF FS 1,14); CM01 rev. 01 com a locação de placas do R01 (vistas A–J, portões na linha 3); ND-LET-VT01 (vigas de travamento e vergas 25×60 a +5,50/+6,10 escondidas no fechamento); CP-VT nos pilares PL.
 - Letsara: pranchas de todas as peças — I110 (V405/406/407), VM (mezanino, I70 sem dente), VB-01 (15×90), PC-01/02 (50×50), PM-01, LA-01 (lajes) e CM-01 (placas); geradores genéricos `viga_i.py`, `pilar_generico.py`, `iso3d_pilar_gen.py`; galeria do artefato com as 17 páginas.
 - bim/visualizador: galeria de pranchas (imagens embutidas, ampliáveis no celular) e tabela de conferência cruzada de conexões na página 3D.
 - Letsara: `checar_conexoes.py` (68 verificações inserto × inserto entre peças) e insertos/pinos/consolos CP-VB e CP-MEZ no modelo 3D; pino PN-1 unificado em Ø20 (TB-1 Ø50×3,0) para todas as TS-01.
