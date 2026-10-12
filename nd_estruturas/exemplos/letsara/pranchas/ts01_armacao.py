@@ -1,7 +1,7 @@
 """ND-LET-TS01-2 — TS-01: armação passiva e protensão (A1), com croquis de dobramento."""
 import json
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, DX, HD, LN, sec, F_cord, Ap, f
+from ts01_dados import P, L, H, DX, HD, LN, sec, F_cord, Ap, f, peso, V
 
 DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["TS-01"]
 AD = DT["calculo"]["adotado"]
@@ -9,6 +9,8 @@ pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO, DENTES E PROTENSÃO",
                         desenho="ND-LET-TS01-2", folha="02/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "ARMADURA DOS DENTES GERBER (NBR 9062 + PCI, VERIFICADA POR MEF)")
+pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
+                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
 sk = lambda h: h * DX / H
 mac = P["x_mac"]
 ANC = AD["ancoragem_tirante_mm"]

@@ -1,7 +1,7 @@
 """ND-LET-TS01-3 — TS-01: chaparia e insertos concretados na peça + peças de ligação da montagem (A1). Rev. 01."""
 import json
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, HD, LN, PASSO_T, f
+from ts01_dados import P, L, H, HD, LN, PASSO_T, f, peso, V
 
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
@@ -10,6 +10,8 @@ pr = Prancha("A1", dict(cliente="MARQUE ENGENHARIA", obra="LETSARA — PAVILHÃO
                         desenho="ND-LET-TS01-3", folha="03/04", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1 DETALHADA, TB-1 NO DENTE")
 pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T (SEM LUVAS NEM CT-1); OR-1 VIRA CHAPA SOLDADA NA CH-MF")
+pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
+                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
 ch = CB["chumbadores"]
 
 

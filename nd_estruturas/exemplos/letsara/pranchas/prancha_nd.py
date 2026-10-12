@@ -311,6 +311,15 @@ class Prancha:
                         lin_r, [40, 34, 46, 46], destaque_ultima=True)
         return dict(total_kg=total, resumo=resumo, y_base=y)
 
+    def cabecalho_peca(self, marca, titulo, linha2, largura=500):
+        """Quadro no canto superior esquerdo: marca grande, título (seção, comprimento) e linha de dados — padrão de produção."""
+        Q = self.quadro
+        self.ret(Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CARIMBO")
+        self.texto(Q[0] + 10, Q[3] - 24, marca, "grande", "TITULO")
+        self.texto(Q[0] + 10 + _wtext(marca, ALTURAS["grande"]) + 8, Q[3] - 24, titulo, "titulo", "TITULO")
+        self.texto(Q[0] + 10, Q[3] - 14, linha2, "nota", "TEXTO")
+        self.blocos_livres.append((Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CABEÇALHO"))
+
     def revisao(self, rev, data, descricao):
         self.revisoes.append((rev, data, descricao))
         self.dados["rev"] = rev
