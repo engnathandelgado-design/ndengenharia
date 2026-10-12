@@ -71,3 +71,15 @@ As vigas de travamento V401–V404 não mudam o comprimento de flambagem (le = 2
 | Pilar de fachada 40×60 (40 na direção do vento) | 5Ø25 por face | — | — | Mesma orientação dos pilares laterais |
 
 Com a viga I de cobertura no padrão de mesas 40×25 (I90), as vigas centrais de 23 m não passam nem em I120. A cobertura tem que ser a I70 de mesas finas.
+
+## Seções padrão (12/10/2026, decisão de Nathan)
+- Só duas seções I, ambas com largura de 40 e **a mesma fôrma**: alma de 15, alma reta de 47 e chanfros de 8. Concreto C50, liberação com fckj de 35 MPa.
+- **I90:** mesa superior de 12 e mesa inferior de 15.
+- **I110:** as mesas crescem 10 cm cada, ficando a superior com 22 e a inferior com 25.
+
+| Viga | Seção | Cordoalhas Ø12,7 | Peso | Flecha final |
+|---|---|---|---|---|
+| Cobertura (19,2 m) | I90 | 6 | 11,1 t | 10,7 mm |
+| Mezanino (9,3 m, laje 500 kgf/m²) | I90 | 8 | — | 1,5 mm |
+| V407 (19 m) | I110 | 15 | 14,9 t | 14,4 mm |
+| V406/V405 (23 m) | I110 | 24 | 18,3 t | 43 mm; x/d 0,445 (limite 0,45) |
