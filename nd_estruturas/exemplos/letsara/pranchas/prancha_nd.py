@@ -25,7 +25,8 @@ CAMADAS = {
     "TABELA_FINA": (8, 13, "Continuous"),
 }
 EMPRESA = dict(nome="ND ENGENHARIA E ASSESSORIA LTDA", cnpj="46.745.157/0001-47",
-               rt="Eng. Civil Nathan Henrique Delgado", crea="CREA-SC 168298-1", site="ndengenharia.com")
+               rt="Eng. Civil Nathan Henrique Delgado", crea="CREA-SC 168298-1", site="ndengenharia.com",
+               contato="WhatsApp (46) 92000-4685 · Saudade do Iguaçu/PR")
 AREA_CORD = {9.5: 55.5, 12.7: 98.7, 15.2: 140.0}   # mm², cordoalhas de 7 fios CP-190 RB (NBR 7483 — conferir)
 FONTE = "DejaVuSansCondensed.ttf"
 _FONT_CACHE = {}
@@ -114,7 +115,8 @@ class Prancha:
     @property
     def carimbo_bbox(self):
         x0, y0, x1, y1 = self.quadro
-        return (x1 - 180, y0, x1, y0 + 70 + 5 * max(len(self.revisoes), 1) + 6)
+        extra = 8 if self.dados.get("marca") else 0
+        return (x1 - 180, y0, x1, y0 + 70 + extra + 5 * max(len(self.revisoes), 1) + 6)
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
@@ -318,8 +320,8 @@ class Prancha:
         h2 = 10
         self.ret(cx0, y, cx1, y + h2)
         esc = d.get("escala") or self._escalas_txt()
-        for a, b, lab, val in [(0, 40, "ESCALA", esc), (40, 70, "DATA", d["data"]), (70, 125, "DESENHO", d["desenhista"]),
-                               (125, 180, "VERIFICADO", d["verificado"] or "-")]:
+        for a, b, lab, val in [(0, 32, "ESCALA", esc), (32, 60, "DATA", d["data"]), (60, 100, "DESENHO", d["desenhista"]),
+                               (100, 140, "VERIFICADO", d["verificado"] or "-"), (140, 180, "APROVADO", d.get("aprovado") or "-")]:
             if a:
                 self.linha((cx0 + a, y), (cx0 + a, y + h2))
             self.texto(cx0 + a + 1.5, y + h2 - 2.5, lab, "min")
@@ -332,6 +334,16 @@ class Prancha:
         for k, p in enumerate(parts):
             self.texto(cx0 + L / 2, y + (5.5 if len(parts) == 1 else 7.6 - k * 4.6), p, "sub", "TITULO", "MIDDLE_CENTER")
         y += h3
+        if d.get("marca"):                                  # faixa da peça (prancha de produção): marca, quantidade, peso
+            h35 = 8
+            self.ret(cx0, y, cx1, y + h35)
+            for a, b, lab, val in [(0, 50, "MARCA", d["marca"]), (50, 90, "QUANTIDADE", str(d.get("qtd", "-"))),
+                                   (90, 135, "PESO (kN)", str(d.get("peso", "-"))), (135, 180, "VOLUME (m³)", str(d.get("volume", "-")))]:
+                if a:
+                    self.linha((cx0 + a, y), (cx0 + a, y + h35))
+                self.texto(cx0 + a + 1.5, y + h35 - 2.5, lab, "min")
+                self.texto(cx0 + (a + b) / 2, y + 2.2, val, "nota", "TITULO", "MIDDLE_CENTER")
+            y += h35
         h4 = 16
         self.ret(cx0, y, cx1, y + h4)
         for k, (lab, val) in enumerate([("CLIENTE", d["cliente"]), ("OBRA", d["obra"]), ("LOCAL", d["local"])]):
@@ -343,8 +355,9 @@ class Prancha:
         self.ret(cx0, y, cx1, y + h5)
         self.texto(cx0 + 3, y + 5, "ND", 7.0, "TITULO")
         self.texto(cx0 + 19, y + h5 - 6, EMPRESA["nome"], "sub", "TITULO")
-        self.texto(cx0 + 19, y + h5 - 10.5, f"CNPJ {EMPRESA['cnpj']} · {EMPRESA['site']}", "min")
-        self.texto(cx0 + 19, y + 2.5, f"RESP. TÉCNICO: {EMPRESA['rt']} — {EMPRESA['crea']}", "min")
+        self.texto(cx0 + 19, y + h5 - 10.0, f"CNPJ {EMPRESA['cnpj']} · {EMPRESA['site']} · {EMPRESA['contato']}", "min")
+        self.texto(cx0 + 19, y + 6.2, f"RESP. TÉCNICO: {EMPRESA['rt']} — {EMPRESA['crea']}", "min")
+        self.texto(cx0 + 19, y + 2.3, f"ART Nº: {d.get('art') or '________________'}", "min")
         self.texto(cx1 - 2, y + h5 - 6, d.get("fase", ""), "nota", "TITULO", "BOTTOM_RIGHT")
         y += h5
         nrev = max(len(self.revisoes), 1)
