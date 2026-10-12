@@ -9,6 +9,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Publicar o app no Streamlit Community Cloud (repositório privado, acesso só por convite).
+- [ ] Tirar a cópia de código da pasta nd_estruturas do Drive (deixar só entradas e saídas).
 - [ ] Definir o Protocol do motor de análise e implementar o stub de teste.
 - [ ] Portar o módulo `secoes` (flexão simples, ELU) com 3 testes conferidos à mão.
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
@@ -25,10 +27,11 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Travadas
 
-- [ ] Camada web (FastAPI): aguarda decisão da interface final.
+- [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
 
+- [x] 2026-10-12 — GitHub como fonte única (DEC-007): `pyproject.toml`, páginas Streamlit (arco funicular, casca nos cantos), atalhos .bat para Windows, pasta `skills/`.
 - [x] 2026-10-12 — Módulo `formfinding` (JAX FDM → OpenSeesPy): casca apoiada nos cantos, arco funicular 2D, estabilidade não linear; 7 testes (2 conferidos à mão). Caso do barracão Vitalle em `exemplos/`.
 - [x] 2026-10-11 — Estrutura de documentos do projeto criada.
 - [x] 2026-10 — Referências estudadas: Hanai 2005, Inforsato 2009, Real 2000, Gonçalves 2017, Oliveira/Barros/Giongo 2014, Andrade 1989, apostila TM266 (MEF).

@@ -1,0 +1,6 @@
+numpy>=1.26
+pandas>=2.0
+openseespy>=3.7
+jax-fdm>=0.14
+streamlit>=1.40
+plotly>=5.20

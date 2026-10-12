@@ -26,6 +26,20 @@ O que fica mais fácil, o que fica mais difícil, o que se abriu mão.
 
 ---
 
+## DEC-007 — GitHub como fonte única; Streamlit como interface web
+
+**Data:** 2026-10-12
+**Situação:** aceita
+
+### Contexto
+O código existia no GitHub e em cópia na pasta do Drive, o que leva a versões divergentes. Era preciso rodar as ferramentas no PC e no celular. O Drive não executa código nem versiona; o GitHub versiona e alimenta serviços que rodam Python online.
+
+### Decisão
+Código e skills ficam só no repositório privado `ndengenharia`. Drive guarda materiais, entradas das obras e resultados. Interface web inicial em Streamlit (`streamlit_app.py` na raiz), publicada no Streamlit Community Cloud; no PC roda com `streamlit run`. As páginas só leem entrada e mostram resultado: o cálculo fica no pacote.
+
+### Consequências
+Uma versão só do código, atualizada por `git pull` no PC e automaticamente online. Streamlit atende uso interno e de poucas pessoas; se virar produto para clientes, reavaliar FastAPI. OpenSeesPy tem estado global: as páginas usam trava para uma análise por vez.
+
 ## DEC-006 — JAX FDM para form-finding, OpenSees para análise
 
 **Data:** 2026-10-12

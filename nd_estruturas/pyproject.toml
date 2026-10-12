@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nd_estruturas"
+version = "0.1.0"
+description = "Software estrutural da ND Engenharia (kN, m, compressão negativa)"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "openseespy>=3.7",
+]
+
+[project.optional-dependencies]
+formfinding = ["jax-fdm>=0.14"]
+web = ["streamlit>=1.40", "plotly>=5.20"]
+dev = ["pytest>=8", "ruff>=0.5", "jax-fdm>=0.14"]
+
+[tool.setuptools]
+packages = ["nd_estruturas"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
