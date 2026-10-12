@@ -90,7 +90,7 @@ v.texto((M(Y_LIN[3]), Ly + 6700), "SENTIDO DE MONTAGEM: linha 1 → linha 9 (mez
 v.marcador_corte((M(Y_LIN[2]), -5500), (M(Y_LIN[2]), Ly + 5500), "1", lado=1)
 
 # ------------------------------------------------------------------ CORTE DE MONTAGEM 1:100 — pórtico eixo 3
-c = pr.vista("CORTE 1-1", (Q[0] + 75, Q[3] - 432), 100, titulo="CORTE 1-1 — PÓRTICO DE MONTAGEM (LINHA 3)", subtitulo="níveis de montagem; pilares no cálice; TS-01 nos consolos", unidade="cm")
+c = pr.vista("CORTE 1-1", (Q[0] + 75, Q[3] - 445), 100, titulo="CORTE 1-1 — PÓRTICO DE MONTAGEM (LINHA 3)", subtitulo="níveis de montagem; pilares no cálice; TS-01 nos consolos", unidade="cm")
 c.linha((-2000, 0), (Ly + 2000, 0), "TERRENO")
 for x, bx, top, marca in ((0, 600, 10.0, "PL-01"), (M(20.05), 500, 8.88, "PC-01"), (Ly, 600, 10.0, "PL-05")):
     c.ret(x - bx / 2, -1000, bx, M(top) + 1000, "VISTA")

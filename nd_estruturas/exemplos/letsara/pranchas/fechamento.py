@@ -73,7 +73,8 @@ MARCA = {k: f"CM-{i+1:02d}" for i, k in enumerate(ordem)}
 
 def desenhar_vista(pr, v, origem, esc=200):
     d = VISTAS[v]
-    vv = pr.vista(f"VISTA {v}", origem, esc, titulo=d["titulo"], subtitulo="placas 125 × 15 (juntas 10 mm); VT/VV 25×60 a +6,10 atrás das placas", unidade="cm")
+    sub = "placas 125 × 15 (juntas 10 mm); VT/VV 25×60 a +6,10 atrás das placas" if len(d["bays"]) > 2 else "idem"
+    vv = pr.vista(f"VISTA {v}", origem, esc, titulo=d["titulo"], subtitulo=sub, unidade="cm")
     x0 = d["pil"][0][0]
     for x, b in d["pil"]:
         vv.ret(x - b / 2, -1000, b, Z_TOPO + 1000, "CORTADO")
@@ -120,7 +121,7 @@ def prancha_cm():
     pr.texto(Q[0] + 50, Q[3] - 24, f"PLACAS DE FECHAMENTO PROTENDIDAS 125 × 15 — {len(ordem)} MARCAS · {n_tot} PLACAS · VISTAS A A J", "titulo", "TITULO")
     pr.texto(Q[0] + 10, Q[3] - 14, "por fora dos pilares (juntas de 10 mm no eixo dos pilares); 4 cord. Ø9,5 CP-190; fixação nos IP-01; nas bays dos portões as placas começam em +6,10 sobre a verga VV-01", "nota", "TEXTO")
     # planta de locação 1:400
-    kp = pr.vista("LOCAÇÃO", (Q[0] + 330, Q[3] - 400), 400, titulo="PLANTA DE LOCAÇÃO DAS PLACAS", subtitulo="letras = vistas (como no R01); linha 3 = parede dos portões", unidade="cm")
+    kp = pr.vista("LOCAÇÃO", (Q[0] + 345, Q[3] - 395), 400, titulo="PLANTA DE LOCAÇÃO DAS PLACAS", subtitulo="letras = vistas (como no R01); linha 3 = parede dos portões", unidade="cm")
     for y in Y_LIN:
         kp.linha((M(-1.5), M(y)), (M(41.6), M(y)), "EIXO")
     for x in X_FACH:
@@ -153,11 +154,11 @@ def prancha_cm():
     # vistas 1:200
     desenhar_vista(pr, "B", (Q[0] + 340 - M(Y_LIN[3]) / 250, Q[3] - 110), 250)
     desenhar_vista(pr, "C", (Q[0] + 40, Q[3] - 115))
-    desenhar_vista(pr, "A", (Q[0] + 40, Q[3] - 200))
-    desenhar_vista(pr, "G", (Q[0] + 40, Q[3] - 285))
-    desenhar_vista(pr, "E", (Q[0] + 40, Q[3] - 370))
-    desenhar_vista(pr, "H", (Q[0] + 30, Q[3] - 455))
-    desenhar_vista(pr, "J", (Q[0] + 140 - M(29.63) / 200, Q[3] - 455))
+    desenhar_vista(pr, "A", (Q[0] + 40, Q[3] - 215))
+    desenhar_vista(pr, "G", (Q[0] + 40, Q[3] - 315))
+    desenhar_vista(pr, "E", (Q[0] + 40, Q[3] - 415))
+    desenhar_vista(pr, "H", (Q[0] + 30, Q[3] - 515))
+    desenhar_vista(pr, "J", (Q[0] + 140 - M(29.63) / 200, Q[3] - 515))
 
     # seção placa × pilar × viga de travamento (1:20) — a viga fica atrás da placa, entre os pilares
     s = pr.vista("SEÇÃO", (Q[0] + 640, Q[3] - 420), 25, titulo="SEÇÃO TÍPICA — PLACA, PILAR E VIGA DE TRAVAMENTO", subtitulo="VT/VV 25×60 escondida atrás das placas; placa por fora do pilar", unidade="cm")
@@ -283,7 +284,7 @@ def prancha_vt():
         s.ponto_barra((40, yy), 8); s.ponto_barra((210, yy), 8)
     s.cota_h([0, 250], 0, -8); s.cota_v([0, 600], 250, 8)
     s.chamada((205, 555), (12, 8), "N1/N2 — 3 Ø12,5 em cima e embaixo"); s.chamada((210, 380), (12, 0), "N3 pele 2 Ø8/face"); s.chamada((220, 300), (12, -10), "N4 Ø6,3 c/15")
-    a = pr.vista("DETALHE 1", (Q[0] + 180, Q[3] - 500), 20, titulo="DETALHE 1 — APOIO DA VT NO PILAR", subtitulo="consolo CP-VT 25×20×30/20 + pino PN-1 Ø20; neoprene 200×150×10", unidade="cm")
+    a = pr.vista("DETALHE 1", (Q[0] + 230, Q[3] - 500), 20, titulo="DETALHE 1 — APOIO DA VT NO PILAR", subtitulo="consolo CP-VT 25×20×30/20 + pino PN-1 Ø20; neoprene 200×150×10", unidade="cm")
     a.ret(-600, -500, 600, 1700, "VISTA")
     a.poli([(0, 0), (200, 0), (200, 100), (0, 300)], "VISTA")
     a.ret(250 - 10, 100, 20, 400, "OCULTA"); a.chapa(25, 300, 150, 10)
