@@ -67,7 +67,8 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in tab("PIL-A01", "MARCAS")["linhas"
             n = int(m.group(1)) if m.group(1) else (len(m.group(3).split(",")) if m.group(3) else 1)
             vc += n * VOLC[m.group(2)]
     vol = 0.24 * (1.0 + zr) + cab * (10.0 - zr) + vc
-    pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", "ND-LET-PIL-A01"))
+    folha_mk = "PIL-A01" if mk == "PL-01" else mk.replace("-", "")
+    pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     q = quadro(f_)
     pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", ""), num(q["COMPRIMENTO"].split()[0]) / 100,
@@ -92,8 +93,9 @@ for tp, L, qt, p, vis in tab("PP00", "TIPOS")["linhas"]:
 
 # ------------------------------------------------------------------ aço CA-50 (relações das pranchas)
 aco = []     # (peça, prancha, qtd, {diam: kg/peça}, obs)
-aco.append(("Pilares PL / PF (família 40×60)", "ND-LET-PIL-A01", sum(p[5] for p in pecas if p[1][:2] in ("PL", "PF")), kg_diam("PIL-A01"),
-            "relação do PL-01 aplicada às 24 peças da família (consolos variam por marca: diferença < 2 %)"))
+for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
+    folha_mk = p_[9].replace("ND-LET-", "")
+    aco.append((f"Pilar {p_[1]}", p_[9], p_[5], kg_diam(folha_mk), "consolos e cabeça da marca"))
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     aco.append((f"Pilar {quadro(f_)['MARCA']}", f"ND-LET-{f_}", int(quadro(f_)["QUANTIDADE"].split()[0]), kg_diam(f_), ""))
 aco.append(("TS-01", "ND-LET-TS01-2", 14, kg_diam("TS01-2"), ""))
@@ -138,7 +140,8 @@ def add_ins(f_, peca, qtd, titulo="INSERTOS"):
         except ValueError:
             continue
         ins.append((f"ND-LET-{f_}", peca, l[0], l[1], q, qtd))
-add_ins("PIL-A01", "PL / PF (família)", 24)
+for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
+    add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
 add_ins("I110", "I110", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8); add_ins("VT01", "VT", 14)

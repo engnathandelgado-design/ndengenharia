@@ -29,7 +29,18 @@ def prisma(pts2, eixo_u, eixo_v, w0, w1, origem):
 def cena(p, z0=0.0, z1=L, chaves=True):
     conc = dict(color="#c9c9c4", smooth_shading=False, show_edges=True, edge_color="#7a7a7a", line_width=0.6)
     aco = dict(color="#d9822b", show_edges=True, edge_color="#6b3d10", line_width=0.4)
-    p.add_mesh(box(-H / 2, -B / 2, z0, H, B, z1 - z0), **conc)
+    R = G.get("rec")
+    if R:
+        zr = R["z"] / 1000
+        d = {k: v / 1000 for k, v in R["d"].items()}
+        if z0 < zr:
+            p.add_mesh(box(-H / 2, -B / 2, z0, H, B, min(zr, z1) - z0), **conc)
+        if z1 > zr:
+            xa, xb = -H / 2 + d.get("C", 0), H / 2 - d.get("A", 0)
+            ya, yb = -B / 2 + d.get("D", 0), B / 2 - d.get("B", 0)
+            p.add_mesh(box(xa, ya, max(zr, z0), xb - xa, yb - ya, z1 - max(zr, z0)), **conc)
+    else:
+        p.add_mesh(box(-H / 2, -B / 2, z0, H, B, z1 - z0), **conc)
     labs = []
     for c in G["consolos"]:
         nx, ny = FACE_N[c["face"]]

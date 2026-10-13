@@ -19,6 +19,8 @@ IP_C = [1250 * (k + 1) - 100 + 1000 for k in range(6)]            # IP-01 das pa
 COB = 30
 # direção horizontal de cada vista (olhando a face de fora, z para cima): (eixo, sinal) -> coordenada à direita
 VISTA = {"A": ("y", 1), "B": ("x", -1), "C": ("y", -1), "D": ("x", 1)}
+DIR = {"A": "B", "B": "C", "C": "D", "D": "A"}                    # face à direita de quem olha a face de fora
+ESQ = {"A": "D", "B": "A", "C": "B", "D": "C"}
 OPOSTA = {"A": "C", "B": "D", "C": "A", "D": "B"}
 
 
@@ -26,11 +28,15 @@ def prancha_pilar(P):
     B, H, L_CAL, Z_TOP = P["B"], P["H"], P["L_CAL"], P["Z_TOP"]
     L_TOT = L_CAL + Z_TOP
     D1 = P.get("d1", 20.0)
-    PESO = B * H / 1e6 * L_TOT / 1000 * 25
-    V = B * H / 1e6 * L_TOT / 1000
     AL = P["al"]
     cons = P["consolos"]
-    json.dump(dict(B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2)),
+    REC = P.get("rec")                                                   # cabeça recuada: dict(z = nível abs (mm), d = {face: recuo mm})
+    rd = (lambda fc: REC["d"].get(fc, 0)) if REC else (lambda fc: 0)
+    z_rec = REC["z"] if REC else L_TOT
+    HB, HH = B - rd("B") - rd("D"), H - rd("A") - rd("C")               # seção da cabeça (B–D × A–C)
+    V = (B * H * z_rec + HB * HH * (L_TOT - z_rec)) / 1e9 + sum(c["larg"] * c["proj"] * c["h"] for c in cons) / 1e9
+    PESO = V * 25
+    json.dump(dict(B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2), rec=REC),
               open(f"/home/claude/letsara/pranchas/{P['marca']}_geom.json", "w"))
     subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_pilar_gen.py", f"/home/claude/letsara/pranchas/{P['marca']}_geom.json",
                     "/home/claude/letsara/pranchas/"], check=True, capture_output=True)
@@ -39,6 +45,25 @@ def prancha_pilar(P):
     EST = P["est"]
     z_est = sorted(set(list(range(50, EST["zona"] + L_CAL, EST["s_dens"])) + list(range(EST["zona"] + L_CAL, L_TOT - EST["zona"], EST["s_corr"])) +
                        list(range(L_TOT - EST["zona"], L_TOT - 40, EST["s_dens"]))))
+    if REC:                                                              # corpo até o recuo; cabeça com estribos próprios (N14 c/10)
+        z_est = [z for z in z_est if z <= z_rec + 40]
+        z_cab = list(range(z_rec + 100, L_TOT - 40, 100))
+        u0, u1 = -B / 2 + rd("D"), B / 2 - rd("B")
+        w0, w1 = -H / 2 + rd("C"), H / 2 - rd("A")
+        dentro = lambda u, w: u0 + 40 <= u <= u1 - 40 and w0 + 40 <= w <= w1 - 40
+        sw = P.get("sobe_w")
+        xy_sobe = [p_ for p_ in xy if dentro(*p_) and (sw is None or p_[1] <= sw)]
+        xy_para = [p_ for p_ in xy if p_ not in xy_sobe]
+        cantos = [(u, w) for u in (u0 + COB + 18, u1 - COB - 18) for w in (w0 + COB + 18, w1 - COB - 18)]
+        n_in = P.get("n13_inner", 0)
+        if n_in:
+            cantos += [(u0 + COB + 18 + k * (u1 - u0 - 2 * (COB + 18)) / (n_in - 1), w1 - COB - 16) for k in range(n_in)]
+        xy_cab = []
+        for c_ in cantos:
+            if all(math.hypot(c_[0] - a, c_[1] - b) > 40 for a, b in xy_sobe + xy_cab):
+                xy_cab.append((round(c_[0]), round(c_[1])))
+    else:
+        z_cab, xy_sobe, xy_para, xy_cab = [], xy, [], []
     n_est = len(z_est)
     pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=P["conteudo"], desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
@@ -50,8 +75,8 @@ def prancha_pilar(P):
     ESC = 20
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
     pr.texto(Q[0] + 10, Q[3] - 24, P["marca"], "grande", "TITULO")
-    pr.texto(Q[0] + 62, Q[3] - 24, f"PILAR PRÉ-MOLDADO  {H/10:g} × {B/10:g} cm (x × y)   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {P['qtd']} {'peça' if P['qtd'] == 1 else 'peças'}", "titulo", "TITULO")
-    pr.texto(Q[0] + 10, Q[3] - 14, P["posicao"] + f"   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   FACES: A = x+, B = y+, C = x−, D = y−   ·   desenhado em pé, como montado", "nota", "TEXTO")
+    pr.texto(Q[0] + 62, Q[3] - 24, f"PILAR PRÉ-MOLDADO  {P.get('secao_txt', f'{H/10:g} × {B/10:g} cm (x × y)')}   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {P['qtd']} {'peça' if P['qtd'] == 1 else 'peças'}", "titulo", "TITULO")
+    pr.texto(Q[0] + 10, Q[3] - 14, P["posicao"] + f"   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {P.get('faces_txt', 'FACES: A = x+, B = y+, C = x−, D = y−')}   ·   desenhado em pé, como montado", "nota", "TEXTO")
 
     # planta-chave 1:750
     kp = pr.vista("PLANTA-CHAVE", (Q[0] + 487, Q[3] - 172), 750, titulo="PLANTA-CHAVE", subtitulo=f"{P['marca']} hachurado", unidade="cm")
@@ -83,7 +108,10 @@ def prancha_pilar(P):
         W = largura(face)
         eixo, sg = VISTA[face]
         v = pr.vista(f"FACE {face}", (x_papel, Y0), ESC, titulo=f"FACE {face}" + (" (CONSOLOS)" if any(c["face"] == face for c in cons) else ""), subtitulo="pilar em pé", unidade="cm")
-        v.ret(0, 0, W, L_TOT, "VISTA")
+        dr, dl = rd(DIR[face]), rd(ESQ[face])
+        v.poli([(0, 0), (W, 0), (W, z_rec), (W - dr, z_rec), (W - dr, L_TOT), (dl, L_TOT), (dl, z_rec), (0, z_rec)], "VISTA", True)
+        if REC and rd(face):
+            v.linha((dl, z_rec), (W - dr, z_rec), "VISTA")
         v.linha((0, L_CAL), (W, L_CAL), "EIXO")
         for k in range(3):                                                                   # chaves de cisalhamento (frontal)
             v.ret(50, 150 + k * 300 + 40, W - 100, 120, "OCULTA")
@@ -95,7 +123,7 @@ def prancha_pilar(P):
                 v.ret(W / 2 - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
                 v.chapa(W / 2 - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
                 v.chapa(W / 2 - c["neo"][0] / 2, zc, c["neo"][0], 10)
-                v.chamada((W / 2, zc - h + hp / 2), (12, -12), f"{c['tipo']} {larg/10:g}×{proj/10:g}×{h/10:g}" + (f"/{hp/10:g}" if hp != h else ""))
+                v.chamada((W / 2, zc - h + hp / 2), (12, -44 if c["tipo"] == "CP-I110" else -30), f"{c['tipo']} {larg/10:g}×{proj/10:g}×{h/10:g}" + (f"/{hp/10:g}" if hp != h else ""))
             elif c["face"] == OPOSTA[face]:
                 v.ret((W - larg) / 2, zc - h, larg, h, "OCULTA")
             else:                                                                            # lateral: projeção para fora
@@ -105,7 +133,7 @@ def prancha_pilar(P):
                 lado = 1 if ((c["face"] == "B" and eixo == "y" and sg > 0) or (c["face"] == "D" and eixo == "y" and sg < 0) or
                              (c["face"] == "A" and eixo == "x" and sg > 0) or (c["face"] == "C" and eixo == "x" and sg < 0)) else -1
                 x0 = W if lado > 0 else 0
-                v.poli([(x0, zc - h), (x0 + lado * proj, zc - hp), (x0 + lado * proj, zc + proj * 0.03), (x0, zc)], "VISTA")
+                v.poli([(x0, zc - h), (x0 + lado * proj, zc - hp), (x0 + lado * proj, zc + proj * c.get("incl", 0.03)), (x0, zc)], "VISTA")
                 v.ret(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
                 v.chapa(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
                 v.chapa(x0 + (25 if lado > 0 else -25 - c["neo"][1]), zc, c["neo"][1], 10)
@@ -122,13 +150,14 @@ def prancha_pilar(P):
             for z in AL:
                 v.linha((W / 2 - 50, z), (W / 2 + 50, z), "METALICA"); v.circulo((W / 2 - 50, z), 6.35, "METALICA"); v.circulo((W / 2 + 50, z), 6.35, "METALICA")
         cf = [c for c in cons if c["face"] == face]
-        zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + [L_TOT]))
+        zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]))
         v.cota_v(zs, 0, -9)
         ords = sorted(set([0, L_CAL] + [c["z"] for c in cons if c["face"] == face] + [z for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
         if len(ords) > 3:
             v.cota_ord_v(ords, W, 9, y0=0)
         v.cota_h([0, W], 0, -8)
-        v.texto((W / 2, L_TOT + 120), f"FACE {face}", "sub", "BOTTOM_CENTER")
+        if REC and (dl or dr):
+            v.cota_h(sorted(set([0, dl, W - dr, W])), L_TOT, 8, total=False)
         return v
 
     xs_faces = {}
@@ -143,20 +172,33 @@ def prancha_pilar(P):
         if c["face"] == P["vistas"][0]:
             nivel(vA, 0, c["z"], f"+{f((c['z'] - L_CAL)/1000, 3)} assento", -1)
     vA.marcador_corte((-80, 4300), (largura(P["vistas"][0]) + 80, 4300), "A", lado=1)
+    if REC:
+        vA.marcador_corte((-20, (z_rec + L_TOT) / 2), (largura(P["vistas"][0]) + 20, (z_rec + L_TOT) / 2), "C", lado=1)
+        nivel(vA, 0, z_rec, f"+{f((z_rec - L_CAL)/1000, 3)} recuo", -1)
 
     # ------------------------------------------------------------ ARMAÇÃO
     va = pr.vista("ARMAÇÃO", (xp, Y0), ESC, titulo="ARMAÇÃO", subtitulo="vista pela face A", unidade="cm")
     W = B
-    va.ret(0, 0, W, L_TOT, "VISTA")
+    dl_, dr_ = rd("D"), rd("B")
+    va.poli([(0, 0), (W, 0), (W, z_rec), (W - dr_, z_rec), (W - dr_, L_TOT), (dl_, L_TOT), (dl_, z_rec), (0, z_rec)], "VISTA", True)
     for z in z_est:
         va.linha((COB, z), (W - COB, z), "ARM_TRANSV")
-    va.barra([(COB + 18, 40), (COB + 18, L_TOT - 40)], "N1", len(xy), D1, comp_cm=round((L_TOT - 80) / 10), ponto_rotulo=(COB + 18, 3000), desloc=(14, 12))
-    va.linha((W - COB - 18, 40), (W - COB - 18, L_TOT - 40), "ARMADURA")
+    for z in z_cab:
+        va.linha((dl_ + COB, z), (W - dr_ - COB, z), "ARM_TRANSV")
+    va.barra([(COB + 18, 40), (COB + 18, (L_TOT if not dl_ else z_rec) - 40)], "N1" if not dl_ else "N1A", len(xy_sobe) if not dl_ else len(xy_para), D1,
+             comp_cm=round(((L_TOT if not dl_ else z_rec) - 80) / 10), ponto_rotulo=(COB + 18, 3000), desloc=(14, 12))
+    va.linha((W - COB - 18, 40), (W - COB - 18, (L_TOT if not dr_ else z_rec) - 40), "ARMADURA")
+    if REC:
+        va.cota_v([z_rec, L_TOT], 0, -18, total=False)
+        va.chamada((W / 2, z_rec - 100), (10, 6), "N1A param no recuo")
+        va.chamada((W / 2, z_rec + 250), (14, 24), "N14 Ø8 c/10 (cabeça)")
+        if dl_:
+            va.linha((dl_ + COB + 18, z_rec - 600), (dl_ + COB + 18, L_TOT - 40), "ARMADURA")
     va.chamada((W - COB, 5000), (12, 10), f"N2 Ø8 c/{EST['s_corr']//10}" + (" + N3" if P["grampos"] else ""))
     va.chamada((W - COB, 600), (12, 10), f"N2 Ø8 c/{EST['s_dens']//10}" + (" + N3" if P["grampos"] else ""))
     va.cota_v([0, EST["zona"] + L_CAL, L_TOT - EST["zona"], L_TOT], 0, -9)
     if cons:
-        va.chamada((W, max(cons, key=lambda c: c["h"])["z"] - 200), (10, 8), "N4/N5/N6 — DET. 1")
+        va.chamada((W, max(cons, key=lambda c: c["h"])["z"] - 200), (10, 16), "N4/N5/N6 — DET. 1")
     va.texto((W / 2, L_TOT + 120), "ARMAÇÃO", "sub", "BOTTOM_CENTER")
     pr.posicoes_desenho.update({"N2"} | ({"N3"} if P["grampos"] else set()))
     xp += 40 + W / ESC
@@ -184,6 +226,24 @@ def prancha_pilar(P):
     if P["grampos"]:
         v.chamada((0, P["grampos"][0]), (-10, -14), "N3 grampo Ø8")
 
+    if REC:
+        vc = pr.vista("CORTE C-C", (XD + 165, YS), 10, titulo="CORTE C-C", subtitulo="cabeça recuada", unidade="cm")
+        u0, u1 = -B / 2 + rd("D"), B / 2 - rd("B")
+        w0, w1 = -H / 2 + rd("C"), H / 2 - rd("A")
+        vc.poli([(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2), (-B / 2, H / 2)], "OCULTA", fechada=True)
+        pc = [(u0, w0), (u1, w0), (u1, w1), (u0, w1)]
+        vc.poli(pc, "CORTADO", fechada=True); vc.hachura(pc, "AR-CONC", 0.03)
+        vc.poli([(u0 + COB, w0 + COB), (u1 - COB, w0 + COB), (u1 - COB, w1 - COB), (u0 + COB, w1 - COB)], "ARM_TRANSV", fechada=True)
+        for x_, y_ in xy_sobe:
+            vc.ponto_barra((x_, y_), D1)
+        for x_, y_ in xy_cab:
+            vc.ponto_barra((x_, y_), 16.0)
+        vc.cota_h([u0, u1], w0, -8); vc.cota_v([w0, w1], u1, 8)
+        vc.chamada((xy_sobe[0][0], xy_sobe[0][1]) if xy_sobe else (0, w0 + 50), (-10, -12), f"N1 — {len(xy_sobe)} Ø{D1:g}".replace(".", ","))
+        if xy_cab:
+            vc.chamada(xy_cab[-1], (10, 12), f"N13 — {len(xy_cab)} Ø16")
+        vc.chamada((u1 - COB, (w0 + w1) / 2), (10, 0), "N14 Ø8 c/10")
+
     # ------------------------------------------------------------ DETALHE 1 — consolo (1:10) e DETALHE 2 — base (1:20)
     YM = Q[3] - 455
     if cons:
@@ -194,7 +254,7 @@ def prancha_pilar(P):
         zc0, Z1, Z2 = 1000, 400, 1450
         proj, h, hp = c0["proj"], c0["h"], c0["hp"]
         d1.poli([(-PW, Z1), (-PW, Z2), (0, Z2), (0, Z1)], "VISTA"); d1.interrupcao((-PW, Z1), (0, Z1)); d1.interrupcao((-PW, Z2), (0, Z2))
-        d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * 0.03), (0, zc0)], "VISTA")
+        d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * c0.get("incl", 0.03)), (0, zc0)], "VISTA")
         d1.ret(c0["pino_x"] - c0["pino_d"] / 2, zc0 - c0["pino_emb"] + 5, c0["pino_d"], c0["pino_emb"], "OCULTA")
         d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
         d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
@@ -207,7 +267,7 @@ def prancha_pilar(P):
             d1.linha((-PW + COB, z), (-COB, z), "ARM_TRANSV")
         for x in (-PW + COB + 18, -COB - 18):
             d1.linha((x, Z1), (x, Z2), "ARMADURA")
-        d1.cota_v([zc0 - h, zc0 - hp, zc0, zc0 + proj * 0.03], proj, 10, total=False)
+        d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0] + ([zc0 + proj * c0.get("incl", 0.03)] if c0.get("incl", 0.03) else []))), proj, 10, total=False)
         d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -8, total=False); d1.cota_h([-PW, 0], Z1, -8)
         d1.chamada((-PW + 300, zc0 - 55), (-4, 12), f"N4 — {c0['tir']} U ({(PW + proj - 80)/10:.0f} + 15)")
         d1.chamada((-200, zc0 - 250), (-6, -12), "N5 — 2 Ø10 (costura)")
@@ -239,8 +299,12 @@ def prancha_pilar(P):
     y = pr.tabela(XC, y, f"MARCAS — {P['familia']}", ["MARCA", "POSIÇÃO", "QT", "CONSOLOS (face)", "INSERTOS"], P["marcas"], [16, 22, 8, 86, 50], h_lin=6.0)
     L_N1 = round((L_TOT - 80) / 10)
     EXT_B, EXT_H = B - 2 * COB, H - 2 * COB
-    barras = [dict(pos="N1", diam=D1, qtd=len(xy), comp=L_N1, trechos=[f"{L_N1}"]),
-              dict(pos="N2", diam=8.0, qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""])]
+    L_N1A = round((z_rec - 30 - 40) / 10 + 15)
+    barras = ([dict(pos="N1", diam=D1, qtd=len(xy_sobe), comp=L_N1, trechos=[f"{L_N1}"])] if xy_sobe else []) + \
+             ([dict(pos="N1A", diam=D1, qtd=len(xy_para), comp=L_N1A, forma=[(0, 0), (85, 0), (85, 8)], trechos=[f"{L_N1A - 15}", "15"])] if xy_para else []) + \
+             ([dict(pos="N13", diam=16.0, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - 600)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - 600)) / 10)}"])] if xy_cab else []) + \
+             ([dict(pos="N14", diam=8.0, qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""])] if z_cab else []) + [
+              dict(pos="N2", diam=P.get("d_est", 8.0), qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""])]
     if P["grampos"]:
         barras.append(dict(pos="N3", diam=8.0, qtd=len(P["grampos"]) * n_est, comp=round((EXT_H + 160) / 10), forma=[(0, 6), (0, 0), (EXT_H / 10, 0), (EXT_H / 10, 6)], trechos=["8", f"{EXT_H/10:g}", "8"]))
     grupos = {}
@@ -257,18 +321,19 @@ def prancha_pilar(P):
                    dict(pos=pc, diam=8.0, qtd=len(range(60, proj - 40, 80)) * n_cons, comp=round((2 * (340 + 400) + 160) / 10), forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "40", "", ""])]
         pr.posicoes_desenho.update({pa, pb, pc})
         if k > 0:
-            va.chamada((W, cs[0]["z"] - 150), (10, -10), f"{pa}/{pb}/{pc} — {tipos} ({nt} Ø{dt:g} tirante)".replace(".", ","))
+            va.chamada((W, cs[0]["z"] - 150), (10, -16), f"{pa}/{pb}/{pc} — {tipos} ({nt} Ø{dt:g} tirante)".replace(".", ","))
     ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
     y = ta["y_base"]
     y = pr.tabela(XC, y - 4, f"INSERTOS POR PILAR ({P['marca']}) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [14, 100, 10, 58])
     qd = [["MARCA", P["marca"], "SEÇÃO", f"{H/10:g} × {B/10:g} cm (x × y)"], ["COMPRIMENTO", f"{L_TOT/10:g} cm", "CONCRETO", "C40"],
           ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"], ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(len(xy) * 3.1416 * (D1 / 10) ** 2 / 4 / (B * H / 100) * 100, 2)} %"],
-          ["QUANTIDADE", f"{P['qtd']}", "COBRIMENTO", "3,0 cm (CAA II)"]]
+          ["QUANTIDADE", f"{P['qtd']}", "COBRIMENTO", "3,0 cm (CAA II)"]] + ([["CABEÇA", f"{HB/10:g} × {HH/10:g} cm acima de +{f((z_rec - L_CAL)/1000, 2)}", "", ""]] if REC else [])
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, False)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
-    pr.posicoes_desenho.add("N1")
+    pr.posicoes_desenho.update({b["pos"] for b in barras if b["pos"] in ("N1", "N1A", "N13", "N14")})
+    pr.posicoes_desenho.discard("N1") if not xy_sobe else None
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
     print(P["desenho"], len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")
     for a in avisos:

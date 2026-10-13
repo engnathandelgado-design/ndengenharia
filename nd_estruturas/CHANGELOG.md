@@ -6,6 +6,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ### Adicionado
 
+- Letsara (13/10/2026): prancha própria para cada marca da família 40×60 (PL-02 a PL-12, PF-01 a PF-06) com cabeça recuada, consolos e insertos da marca (`pilares_familia.py`, `familia_pl.py`); `pilar_generico` com cabeça recuada (vistas, corte C-C, N1A/N13/N14, isométrico); quantitativos por marca; PDF em 3 volumes.
+
 - Letsara (12/10/2026): consolos sem chanfro com h = altura da viga − dente − neoprene (fundos alinhados), verificados pela NBR 9062:2017 7.3 em `calc_consolos.py` (nenhum precisou de mísula); I110 reverificada com os vãos do R01 (`calc_i110_r01.py`, 4 Ø20 na mesa); laje h20 com 8 Ø12,7; pórtico global `modelo_global_r01.py` (OpenSeesPy, P-Δ, X só de tração, diafragma rígido do mezanino, todas as terças inclusive nos vãos de oitão sobre a VB) e página `letsara_portico.html` com deformadas ELU/ELS e tabela 3D × pórtico; todas as 32 pranchas regeradas sem textos sobrepostos (aviso com posição no `prancha_nd`), relação do aço da VT, aço passivo das placas, `quantitativos.py` (xlsx a partir das tabelas das pranchas, exportadas em `*.tabelas.json`) e `dxf3d.py` (modelo 3D em DXF).
 
 - Letsara: `geometria.py` aplicado à cobertura (ligacoes, calc_cobertura_metalica, checar_conexoes 81 itens), COB01/COB02 rev 02 com o travamento das coberturas de referência, LOC01/MON01/CT01 com geometria do R01 e recuo da cabeça dos pilares (a validar), 3D atualizado.
