@@ -16,11 +16,11 @@ n=Ec30/Ec50
 # composta (capa 50 em cima, largura 1,25)
 Ac=1.25*0.05*n; ycc=(A*yc+Ac*(h+0.025))/(A+Ac); Icomp=I+A*(yc-ycc)**2+1.25*n*0.05**3/12+Ac*(h+0.025-ycc)**2
 print(f"A={A:.4f} m² ({A*25/1.25:.2f} kN/m²) yc={yc:.3f} I={I*1e6:.0f}e-6  comp: ycc={ycc:.3f} I={Icomp*1e6:.0f}e-6")
-L=10.05-0.40+0.10
+L=9.65-0.40+0.10                     # geometria do R01: vão de cálculo entre apoios (mesas das VM)
 q_, rev, capa = 5.0*1.25, 1.0*1.25, 1.25*1.25
 g1=A*25
 fpd=1900/1.15*0.95  # aprox sigma pd
-for ncord in (7,):
+for ncord in (7, 8, 9):
     Ap=ncord*98.7e-6; ep=yc-0.040
     P0=ncord*98.7e-6*1400e3*0.95; Pinf=P0*0.80
     Mg1=g1*L**2/8; Mcapa=capa*L**2/8; Mrev=rev*L**2/8; Mq=q_*L**2/8

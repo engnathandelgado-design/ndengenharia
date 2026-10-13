@@ -111,7 +111,7 @@ for s in MF_FUNDO:
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
 vi.chamada((MF_FUNDO[0], 150), (8, 12), "CH-MF 150×360×12,5 (OR-1 soldada por baixo)")
-vi.chamada((EST[0], -260), (30, -14), "calço de estoque/transporte (2x)")
+vi.chamada((EST[0], -260), (30, -26), "calço de estoque/transporte (2x)")
 vi.chamada((S_PINO[1], 150), (6, 14), "CH-A1 no fundo do dente")
 vi.cota_ord([0] + MF_FUNDO, -200, -6, x0=0, rotulos=["0"] + [f"{s:.0f}" for s in MF_FUNDO])
 
@@ -222,7 +222,7 @@ d1.cota((LN - 25, -200), (LN, -200), -8, 0)
 d1.chamada((DX / 2 + sk(HD) / 2, (H + HD) / 2), (-12, 12), "ponta a prumo")
 d1.chamada((s0, 700), (14, 30), "TB-1 Ø50 inclinado 3% na fôrma")
 d1.chamada((s0 + 60, HD - 5), (26, -10), "neoprene 300×150×10 c/ furo Ø40")
-d1.chamada((s0, HD - 250), (-10, -8), "pino PN-1 Ø25 (consolo)")
+d1.chamada((s0, HD - 250), (-10, -8), "pino PN-1 Ø20 (consolo)")
 d1.chamada((LN - 25, -120), (8, -14), "consolo CP-TS, folga 25 até a face do dente")
 d1.chamada((-25, 200), (-8, 10), "face do pilar")
 

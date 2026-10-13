@@ -77,9 +77,9 @@ for k in range(8):
     v.texto(M(ym - 1800, XT[21] + 500), f"L = {L_TERCA[k]}", "min", "MIDDLE_CENTER", rot=90)
 v.cota_h(YLmm, -900, -10, total=False)
 v.cota_h([YLmm[0], YLmm[-1]], X_E + 1900, 10, total=False)
-v.cota_v([325] + XT[:13] + [X0E + LTS], YLmm[0] - 900, -12, total=False)
+v.cota_v(XT[:13], YLmm[0] - 900, -12, total=False)
 v.cota_v([325, X0E + LTS], YLmm[0] - 900, -24, total=False)
-v.cota_v([X0D] + XT[13:] + [X0D + LTS], YLmm[0] - 900, -12, total=False)
+v.cota_v(XT[13:], YLmm[0] - 900, -12, total=False)
 v.cota_v([X0D, X0D + LTS], YLmm[0] - 900, -24, total=False)
 v.cota_v([0, X_C, X_E], YLmm[0] - 900, -36, total=False)
 RX = YLmm[8] - 300
@@ -88,7 +88,7 @@ v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[18] + XT[19]) / 2), (18, 4), "corrente
 v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[0] + XT[1]) / 2), (14, -14), "tirante rígido L 51×51×3,2 no 1º espaço")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.15, (XT[24] + XT[25]) / 2), (24, 12), "diagonal de ancoragem Ø16")
 _ym = (YLmm[6] + YLmm[7]) / 2
-v.chamada(M(_ym, (NOS_D[4] + NOS_D[5]) / 2), (66, -12), "X Ø16 c/ esticador, de nó a nó das vigas")
+v.chamada(M(_ym, (NOS_D[4] + NOS_D[5]) / 2), (66, -6), "X Ø16 c/ esticador, de nó a nó das vigas")
 v.chamada(M(YLmm[8] - 700, XT[14] + 200), (16, -6), "MF = mão-francesa (det. 2)")
 v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I110 (eixo C)")
 v.marcador_detalhe(M(YLmm[5], XT[20]), 600, 1, ang=60, dist=8)
@@ -139,7 +139,7 @@ c.poli(u, "METALICA", True); c.hachura(u, "SOLID", 1, "METALICA")
 for z in Z_FURO:
     c.ret(-ST1["t"] - 8, zb + z - 6, ST1["t"] + 3 + 8 + 10, 12, "METALICA"); c.ret(3, zb + z - 10, 10, 20, "METALICA")
 c.linha((-ST1["t"], 0), (-ST1["t"] - 6, -6), "METALICA"); c.linha((0, 0), (6, -6), "METALICA")
-c.cota_h([-ST1["t"] - 90, -ST1["t"], 0, B_TERCA], -IT1["t"] - 120, -10, total=False)
+c.cota_h([-ST1["t"] - 90, 0, B_TERCA], -IT1["t"] - 120, -10, total=False)
 c.cota_v([0, zb, zb + Z_FURO[0], zb + Z_FURO[1], zb + H_TERCA], B_TERCA + 20, 10, total=False)
 c.chamada((-ST1["t"] - 45, 40), (-16, 14), "enrijecedor chapa 8 × 90 × 90, nos 2 lados do furo")
 c.chamada((-ST1["t"] / 2, 200), (-14, 6), "solda ST-1 × CH-T1: filete 6 mm nos 2 lados (fábrica)")
@@ -161,7 +161,7 @@ for sg in (-1, 1):
     p.circulo((0, sg * (FOLGA + E_FURO)), 7, "OCULTA")
 p.poli([(-ST1["t"], -45), (-ST1["t"] - 90, -45), (-ST1["t"] - 90, 45), (-ST1["t"], 45)], "METALICA", True)
 p.cota_v([-ST1["larg"] / 2, -(FOLGA + E_FURO), -FOLGA, FOLGA, FOLGA + E_FURO, ST1["larg"] / 2], B_TERCA + 20, 10, total=False)
-p.cota_h([-200, -IT1["lx"] / 2, -ST1["t"], 0, B_TERCA, IT1["lx"] / 2, 200], -300, -10, total=False)
+p.cota_h([-200, -IT1["lx"] / 2, 0, B_TERCA, IT1["lx"] / 2, 200], -300, -10, total=False)
 p.chamada((B_TERCA / 2, 250), (14, 10), "mesa da terça (85) — alma na face +x")
 p.chamada((-ST1["t"] - 60, 0), (-12, 16), "ST-1 + enrijecedor")
 p.chamada((-60, -80), (-10, -14), "CH-T1 200×200")
@@ -188,13 +188,13 @@ for sg in (1, -1):
             (xa - ux * 40 - nx * sg, za - uz * 40 - nz * sg)], "METALICA", True)
     d.circulo((xa, za), 7, "METALICA"); d.circulo((xb, zb2), 7, "METALICA")
 d.cota_h([-Y_MF, -100, 0, 100, Y_MF], -CHMF["h"] - 20, -10, total=False)
-d.cota_v([-CHMF["h"], -50, 0, H, H + Z_TERCA, H + Z_TERCA + Z_MF, H + Z_TERCA + H_TERCA], -1450, -10, total=False)
+d.cota_v([-CHMF["h"], -50, 0, H, H + Z_TERCA + Z_MF, H + Z_TERCA + H_TERCA], -1450, -10, total=False)
 d.chamada((-650, 470), (-14, 10), f"MF-1 L 50×5 (A36) L = {f(mf['comp_m'],2)} m entre furos, a 45°")
 d.chamada((100, -50), (36, 8), f"OR-1 {CHMF['t']:g}×{CHMF['l']}×{CHMF['h']}: 2 Ø14 a ±100; M12 8.8")
 d.chamada((-IM1["ly"] / 2 + 20, IM1["t"] / 2), (-16, 12), f"CH-MF chapa {IM1['t']:g}×{IM1['lx']}×{IM1['ly']} nivelada no fundo, 2 pinos Ø12,5 hef 80")
 d.chamada((Y_MF, H + Z_TERCA + Z_MF), (10, -14), f"M12 8.8 na alma da terça: furo Ø14 a {Z_MF} do fundo")
 d.chamada((-80, H + 60), (-26, -16), "ST-1 / CH-T1 — ver DETALHE 1")
-d.marcador_corte((-60, -160), (-60, 120), "B", lado=1)
+d.marcador_corte((-160, -110), (-160, 120), "B", lado=1)
 
 bb = pr.vista("CORTE B-B", (392, 118), E5, titulo="CORTE B-B", subtitulo="plano da MF")
 bb.ret(-200, -60, 400, 60, "CORTADO"); bb.hachura([(-200, -60), (200, -60), (200, 0), (-200, 0)], "AR-CONC", 0.03)
@@ -202,7 +202,7 @@ bb.chapa(-75, 0, 150, IM1["t"], 0.2)                                           #
 bb.chapa(-13, -CHMF["h"] + IM1["t"] - 60, 8, CHMF["h"], 0.25)                  # OR-1 (face +x a −5)
 bb.ret(-5, -CHMF["h"] + IM1["t"] - 60, 5, 60, "METALICA"); bb.ret(-5, -CHMF["h"] + IM1["t"] - 60, -45, 5, "METALICA")   # aba e aba saliente da MF
 bb.ret(-30, -CHMF["h"] + IM1["t"] - 18, 36, 12, "METALICA")                   # parafuso M12
-bb.cota_h([-13, -5, 0], -CHMF["h"] + IM1["t"] - 60, -10, total=False)
+bb.cota_h([-13, 0], -CHMF["h"] + IM1["t"] - 60, -10, total=False)
 bb.texto((0, 40), "fundo da TS-01 (concreto)", "min", "BOTTOM_CENTER")
 bb.chamada((-9, -CHMF["h"] + IM1["t"] - 20), (-10, -8), "OR-1 a 5 mm da alma")
 bb.chamada((-2, -CHMF["h"] + IM1["t"] - 50), (10, -8), "aba da MF L 50×5")
@@ -241,7 +241,7 @@ x0, y = pr.quadro[2] - 196, pr.quadro[3] - 6
 LM = lista_marcas()
 tabT = []
 for m_, dd in LM.items():
-    fur = "pontas, correntes, MF" + (" + diag. Ø18 (a/4, a/2 ± 60, 3a/4)" if "D" in m_[2:] else "") + (" + X 2 Ø18 em a/2" if "X" in m_[2:] else "")
+    fur = "pontas, correntes, MF" + (" + diag. Ø18" if "D" in m_[2:] else "") + (" + X 2 Ø18" if "X" in m_[2:] else "")
     tabT.append([m_, f"{dd['L']}", ", ".join(sorted(dd["vaos"])), fur, f"{dd['qt']}", f"{dd['qt']*dd['L']/1000*PESO_UE:,.0f}".replace(",", ".")])
 qt_t = sum(dd["qt"] for dd in LM.values())
 kg_t = sum(dd["qt"] * dd["L"] / 1000 * PESO_UE for dd in LM.values())
@@ -258,7 +258,7 @@ lm = [["CH-T1", f"chapa {IT1['t']:g}×{IT1['lx']}×{IT1['ly']} A36 + 4 pinos Ø1
       ["MF-1", f"L 50×5 A36, {f(mf['comp_m'],2)} m entre furos, 2 furos Ø14", f"{n_mf}", "parafusada na montagem"],
       ["M12 8.8", "parafuso + porca + 2 arruelas, zincado", f"{n_m12_st + 2 * n_mf}", f"{n_m12_st} no ST-1 + {2*n_mf} nas MF"]]
 y = pr.tabela(x0, y - 4, "LISTA DE MATERIAIS — LIGAÇÕES TERÇA × VIGA", ["MARCA", "DESCRIÇÃO", "QT", "ONDE"], lm, [18, 106, 14, 58])
-notas = [f"Terças simplesmente apoiadas de viga a viga: L = vão entre eixos − {2*FOLGA} mm (folga de {FOLGA} mm de cada ponta ao eixo do suporte). Todas com a alma na face +x do ST-1. Marca = comprimento (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais de ancoragem), X = terça intermediária dos painéis do contraventamento.",
+notas = [f"Terças simplesmente apoiadas de viga a viga: L = vão entre eixos − {2*FOLGA} mm (folga de {FOLGA} mm de cada ponta ao eixo do suporte). Todas com a alma na face +x do ST-1. Marca = comprimento (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais de ancoragem), X = terça intermediária dos painéis do contraventamento. Furos: diag. Ø18 em a/4, a/2 ± 60 e 3a/4; X 2 Ø18 em a/2 (esquema de furação).",
          "Furação toda de fábrica (d + 2 mm): proibido furar a terça galvanizada na obra sem retoque com tinta rica em zinco.",
          "CH-T1 (CH-T2 nos nós do X) e CH-MF são os insertos embutidos na fôrma da TS-01 (ND-LET-TS01); o ST-1 e a OR-1 são soldados a eles na fábrica de pré-moldados, com gabarito, antes do transporte (filete 6 mm, E7018). Conferir posição ±5 mm.",
          "Montagem: terça com o fundo 10 mm acima do concreto, 2 M12 8.8 por ponta (aperto com chave). Depois as MF (M12 na OR-1 e na alma da terça), depois correntes, tirantes rígidos e diagonais; por último o X, tensionado no esticador até tirar a flecha da barra.",

@@ -20,14 +20,15 @@ Z_AS = dict(P1=round(zf(0.475) + 0.45 * C3 - 0.01, 3), P2=round(zf(X_FACH["E"] -
 # pesos (kN/m³ = 25)
 A_I90 = 0.40 * 0.15 * 2 + 0.15 * 0.60 + 2 * 0.5 * 0.125 * 0.08 * 2
 A_I110 = 0.40 * 0.25 * 2 + 0.15 * 0.60 + 2 * 0.5 * 0.125 * 0.08 * 2
-PESO = dict(TS01=round(A_I90 * 25 * LG["L_TS"] / 10, 1), I110=lambda L: round(A_I110 * 25 * L / 10, 1), VB=lambda L: round(0.15 * 0.70 * 25 * L / 10, 1),
+PESO = dict(TS01=round(A_I90 * 25 * LG["L_TS"] / 10, 1), I110=lambda L: round(A_I110 * 25 * L / 10, 1), VB=lambda L: round(0.15 * 0.90 * 25 * L / 10, 1),
             PL=round(0.24 * 11 * 25 / 10, 1), PC=round(0.25 * 9.88 * 25 / 10, 1))
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I110 E VB-01 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
-                        desenho="ND-LET-MON01", folha="01/02", fase="PARA APROVAÇÃO", rev="01"))
+                        conteudo="PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I110, VB-01 A VB-04 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
+                        desenho="ND-LET-MON01", folha="01/02", fase="PARA APROVAÇÃO", rev="02"))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("01", "12/10/2026", "geometria do R01 (79,35 × 39,50 m); corte 1-1 com I110 em corte e recuo dos pilares")
+pr.revisao("02", "12/10/2026", "MARCAS DOS PILARES POR LINHA; VB-01 A VB-04 15×90; PILARES DOS PORTÕES; CONSOLOS SEM CHANFRO")
 Q = pr.quadro
 
 # ------------------------------------------------------------------ PLANTA DE MONTAGEM 1:200 (x = comprimento 1–9, y = largura A–E)
@@ -45,18 +46,20 @@ def pilar(x, y, bx, by, marca, lado=1, dy=0):
     pts = [(x - bx / 2, y - by / 2), (x + bx / 2, y - by / 2), (x + bx / 2, y + by / 2), (x - bx / 2, y + by / 2)]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "SOLID", 1, "CORTADO")
     v.texto((x + lado * (bx / 2 + 250), y + dy), marca, "min", "MIDDLE_LEFT" if lado > 0 else "MIDDLE_RIGHT")
-PL = {1: ("PL-03", "PL-07"), 2: ("PL-02", "PL-06"), 9: ("PL-04", "PL-08")}
+PL = {1: ("PL-03", "PL-07"), 2: ("PL-02", "PL-06"), 3: ("PL-09", "PL-11"), 4: ("PL-10", "PL-12"), 9: ("PL-04", "PL-08")}
 for i, yl in enumerate(Y_LIN, 1):
     a, b = PL.get(i, ("PL-01", "PL-05"))
     pilar(M(yl), 0, 400, 600, a, 1, -900)
     pilar(M(yl), Ly, 400, 600, b, 1, 900)
 for j, (nome, x) in enumerate((("B", X_FACH["B"]), ("C", X_FACH["C"]), ("D", X_FACH["D"]))):
     pilar(0, M(x), 600, 400, ["PF-01", "PF-02", "PF-03"][j], 1, 700)
-    pilar(Lx, M(x), 600, 400, ["PF-01", "PF-04 (P14: recebe a V405)", "PF-03"][j], -1, 700)
+    pilar(Lx, M(x), 600, 400, ["PF-05", "PF-04 (P14)", "PF-06"][j], -1, 700)
 for marca, y, bx, by in (("PC-01 (P8A)", Y_LIN[1], 600, 400), ("PC-02 (P11)", Y_LIN[3], 400, 400), ("PC-03 (P13)", Y_P13, 600, 600)):
     pilar(M(y), M(X_FACH["C"]), bx, by, marca, 1, 700)
 for marca, x in (("PM-01", X_FACH["B"]), ("PM-01", X_FACH["D"])):
-    pilar(M(Y_LIN[1]), M(x), 400, 600, marca, 1, 700)
+    pilar(M(Y_LIN[1]), M(x), 600, 400, marca, 1, 700)
+for marca, x, b_ in (("PG-01 (P9)", 9.87, 400), ("PG-02 (P10)", 15.195, 250), ("PG-02 (P10)", 24.305, 250), ("PG-01 (P12)", 29.63, 400)):
+    pilar(M(Y_LIN[3]), M(x), b_, b_, marca, 1, -700)
 # I110 central (eixo C)
 for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])):
     v.ret(M(ya) + 275, M(X_FACH["C"]) - 200, M(yb - ya) - 550, 400, "VISTA")
@@ -72,15 +75,15 @@ for i in range(2, 9):
         v.poli([(y, xm - 1500), (y, xm + 1500), (y - 150, xm + 1200), (y, xm + 1500), (y + 150, xm + 1200)], "COTA")
         for xd in (M(xa) + 150, M(xb) - 150):                                       # pinos / dentes
             v.circulo((y, xd), 60, "VISTA")
-# vigas de borda VB-01 (fachadas 1 e 9)
+# vigas de borda VB-01 a VB-04 (fachadas 1 e 9)
 xs = list(X_FACH.values())
 for y in (0.0, Y_LIN[-1]):
-    for xa, xb in zip(xs[:-1], xs[1:]):
+    for k, (xa, xb) in enumerate(zip(xs[:-1], xs[1:]), 1):
         v.ret(M(y) - 75, M(xa) + 250, 150, M(xb - xa) - 500, "VISTA")
-        v.texto((M(y) + (-400 if y == 0 else 400), M((xa + xb) / 2)), "VB-01", "min", "MIDDLE_CENTER", rot=90)
+        v.texto((M(y) + (-400 if y == 0 else 400), M((xa + xb) / 2)), f"VB-0{k}", "min", "MIDDLE_CENTER", rot=90)
 # níveis dos assentos
-v.texto((M(Y_LIN[4]), -1500), f"assento CP-TS eixo A: +{f(Z_AS['P1'])}", "min", "MIDDLE_CENTER")
-v.texto((M(Y_LIN[4]), Ly + 1500), f"assento CP-TS eixo E: +{f(Z_AS['P2'])}", "min", "MIDDLE_CENTER")
+v.texto((M((Y_LIN[4] + Y_LIN[5]) / 2), -1500), f"assento CP-TS eixo A: +{f(Z_AS['P1'])}", "min", "MIDDLE_CENTER")
+v.texto((M((Y_LIN[4] + Y_LIN[5]) / 2), Ly + 1500), f"assento CP-TS eixo E: +{f(Z_AS['P2'])}", "min", "MIDDLE_CENTER")
 v.texto((M(Y_LIN[4]) + 2500, M(X_FACH["C"]) - 800), f"assentos no eixo C: +{f(Z_AS['C_esq'])} (lado A) / +{f(Z_AS['C_dir'])} (lado E); topo da I110 +8,880", "min", "MIDDLE_CENTER")
 v.cota_h([M(y) for y in Y_LIN], -4600, -8)
 v.cota_v([M(x) for x in xs], Lx + 4600, 8)
@@ -93,7 +96,7 @@ v.marcador_corte((M(Y_LIN[2]), -5500), (M(Y_LIN[2]), Ly + 5500), "1", lado=1)
 c = pr.vista("CORTE 1-1", (Q[0] + 75, Q[3] - 445), 100, titulo="CORTE 1-1 — PÓRTICO DE MONTAGEM (LINHA 3)", subtitulo="níveis de montagem; pilares no cálice; TS-01 nos consolos", unidade="cm")
 c.linha((-2000, 0), (Ly + 2000, 0), "TERRENO")
 REC = (8.40, 9.55)                                         # recuo da cabeça dos pilares laterais (ND-LET-LOC01, a validar)
-for x, bx, top, marca in ((0, 600, 10.0, "PL-01"), (Ly, 600, 10.0, "PL-05")):
+for x, bx, top, marca in ((0, 600, 10.0, "PL-09"), (Ly, 600, 10.0, "PL-11")):
     lado = 1 if x == 0 else -1
     zr = M(REC[0] if x == 0 else REC[1])
     c.poli([(x - lado * 300, -1000), (x + lado * 300, -1000), (x + lado * 300, zr), (x, zr), (x, M(top)), (x - lado * 300, M(top))], "VISTA", True)
@@ -104,8 +107,8 @@ for x, bx, top, marca in ((M(X_FACH["C"]), 400, 8.88, "I110 (linha 3: entre P8A 
 for (xa, xb) in PONTAS:
     pts = [(M(xa), M(zf(xa))), (M(xb), M(zf(xb))), (M(xb), M(zf(xb) + 0.90)), (M(xa), M(zf(xa) + 0.90))]
     c.poli(pts, "VISTA", fechada=True)
-c.ret(300, M(Z_AS["P1"] - 0.45), 300, 450, "VISTA"); c.ret(Ly - 600, M(Z_AS["P2"] - 0.45), 300, 450, "VISTA")
-c.ret(M(X_FACH["C"]) - 550, M(Z_AS["C_esq"] - 0.45), 350, 450, "VISTA"); c.ret(M(X_FACH["C"]) + 200, M(Z_AS["C_dir"] - 0.45), 350, 450, "VISTA")
+c.ret(300, M(Z_AS["P1"] - 0.44), 300, 440, "VISTA"); c.ret(Ly - 600, M(Z_AS["P2"] - 0.44), 300, 440, "VISTA")
+c.ret(M(X_FACH["C"]) - 550, M(Z_AS["C_esq"] - 0.44), 350, 440, "VISTA"); c.ret(M(X_FACH["C"]) + 200, M(Z_AS["C_dir"] - 0.44), 350, 440, "VISTA")
 c.texto((M(X_FACH["C"]), M(8.88 - 1.10) - 150), "I110 V407 (corte) + consolos CV-TS", "min", "TOP_CENTER")
 # terças e telha (cobertura escondida)
 for s in LG["s_tercas"]:
@@ -132,29 +135,38 @@ c.chamada((Ly / 4, M(zf(Ly / 4000) + 0.9)), (8, -24), "TS-01: 11,6 t, içar pela
 # ------------------------------------------------------------------ coluna direita: lista de peças, sequência, notas
 XC = Q[2] - 200
 y = Q[3] - 6
-pecas = [["PL-01 / 05", "Pilar 40×60 lateral, L 1100", "12", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
-         ["PL-02 / 06", "Pilar 40×60 lateral c/ CP-MEZ (linha 2)", "2", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
-         ["PL-03 / 04 / 07 / 08", "Pilar 40×60 de canto", "4", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
-         ["PF-01 a 03", "Pilar 40×60 de fachada (1 e 9)", "6", f(PESO["PL"], 1), "cálice −1,00; topo +10,00"],
-         ["PC-01..03", "P8A 40×60, P11 40×40, P13 60×60", "3", f(PESO["PC"], 1), "cálice −1,00; topo +8,88"],
-         ["PM-01", "Pilar do mezanino 40×60 (B2, D2)", "2", "—", "ver ND-LET-MON02"],
-         ["TS-01", f"Viga I90 de cobertura, L {LG['L_TS']*100:.0f}, dentes 45×30", "14", f(PESO["TS01"], 1), f"+{f(Z_AS['P1'])} / +{f(Z_AS['C_esq'])} / +{f(Z_AS['P2'])}"],
-         ["V407", f"Viga I110 central, L {f(Y_LIN[3]-Y_LIN[1]-0.55, 2)} m", "1", f(PESO["I110"](Y_LIN[3] - Y_LIN[1] - 0.55), 1), "consolos P8A / P11 (+7,78)"],
-         ["V406", f"Viga I110 central, L {f(Y_P13-Y_LIN[3]-0.55, 2)} m", "1", f(PESO["I110"](Y_P13 - Y_LIN[3] - 0.55), 1), "consolos P11 / P13 (+7,78)"],
-         ["V405", f"Viga I110 central, L {f(Y_LIN[8]-Y_P13-0.55, 2)} m", "1", f(PESO["I110"](Y_LIN[8] - Y_P13 - 0.55), 1), "consolos P13 / P14 (linha 9)"],
-         ["VB-01", "Viga de borda 15×70, L ≈ 9,4–9,7 m", "8", f(PESO["VB"](9.6), 1), "consolos CP-VB (+7,46 a +8,65)"]]
+from viga_vb import MARCAS as VBM
+import json as _j
+I110 = _j.load(open(AQ + "i110_r01.json"))
+def peso_pil(b, h, zr, cab):                                    # corpo b×h do cálice (−1,00) ao recuo + cabeça até +10,00
+    return round((b * h * (1.0 + zr) + cab * (10.0 - zr)) * 25 / 10, 1)
+pecas = [["PL-01 / 05", "Pilar 40×60 lateral (L5–L8), L 1100", "8", f"{f(peso_pil(.4, .6, 8.40, .12), 1)} / {f(peso_pil(.4, .6, 9.55, .12), 1)}", "cálice −1,00; topo +10,00"],
+         ["PL-09..12", "Pilar 40×60 lateral (L3, L4), L 1100", "4", f(peso_pil(.4, .6, 9.55, .12), 1), "cálice −1,00; topo +10,00"],
+         ["PL-02 / 06", "Pilar 40×60 lateral c/ CP-MEZ (L2)", "2", f(peso_pil(.4, .6, 9.55, .12), 1), "cálice −1,00; topo +10,00"],
+         ["PL-03/04/07/08", "Pilar 40×60 de canto, cabeça 30×30", "4", f(peso_pil(.4, .6, 8.70, .09), 1), "cálice −1,00; topo +10,00"],
+         ["PF-01..06", "Pilar 40×60 de fachada (1 e 9)", "6", f(peso_pil(.4, .6, 9.25, .12), 1), "cálice −1,00; topo +10,00"],
+         ["PC-01..03", "P8A 40×60, P11 40×40, P13 60×60, L 988", "3", f"{f(.24*9.88*2.5, 1)} / {f(.16*9.88*2.5, 1)} / {f(.36*9.88*2.5, 1)}", "cálice −1,00; topo +8,88"],
+         ["PM-01", "Pilar do mezanino 40×60 (B2, D2)", "2", f(.24 * 7.55 * 2.5, 1), "ver ND-LET-MON02"],
+         ["PG-01 / 02", "Pilares dos portões 40×40 / 25×25 (linha 4)", "2 + 2", f"{f(.16*8.5*2.5, 1)} / {f(.0625*8.5*2.5, 1)}", "cálice −1,00; topo +7,50"],
+         ["TS-01", f"Viga I90 de cobertura, L {LG['L_TS']*100:.0f}, dentes 45×30", "14", f(PESO["TS01"], 1), f"+{f(Z_AS['P1'])} / +{f(Z_AS['C_esq'])} / +{f(Z_AS['P2'])}"]]
+for mk in ("V407", "V406", "V405"):
+    Lm = {"V407": 19.5, "V406": 24.125, "V405": 24.025}[mk]
+    pecas.append([mk, f"Viga I110 central, L {f(Lm, 2)} m", "1", f(PESO["I110"](Lm), 1), "consolos CP-I110 (+8,190)"])
+for mk, pos, qt, Lmm, _x in VBM:
+    pecas.append([mk, f"Viga de borda 15×90, L {Lmm/10:.0f} cm ({pos.split(',')[0]})", str(qt), f(PESO["VB"](Lmm / 1000), 1), "consolos CP-VB"])
+pecas.append(["VT", "Viga de travamento 25×60 (ND-LET-VT01)", "14", "—", "consolos CP-VT (+7,79)"])
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — COBERTURA", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [26, 72, 14, 18, 70], h_lin=6.0)
 seq = ["Locar os cálices (±10 mm), nivelar o fundo com calços; conferir prumo das paredes do cálice.",
        "Pilares linha a linha, 1 → 9: içar na horizontal pelas 2 AL-2, levantar à vertical, descer no cálice, aprumar (10 mm/10 m) com cunhas, grautear (fck ≥ 30 MPa) e só soltar após 24 h.",
        "Mezanino (linhas 1–2): vigas VM e lajes do +3,15, depois do +6,55 — ver ND-LET-MON02.",
        "Vigas centrais I110 V407, V406 e V405 nos consolos dos PC: neoprene 300×250×30 fretado; pino grauteado numa ponta só.",
        "TS-01 L2 a L8, dois vãos por linha: neoprene NEO-1, pino PN-1 pela ponta do eixo A (graute) e ponta do eixo C/E com graute flexível.",
-       "VB-01 das fachadas nos consolos CP-VB; travar as TS-01 com as terças e correntes da linha montada antes de soltar a próxima (ND-LET-COB01).",
+       "VB-01 a VB-04 das fachadas nos consolos CP-VB; VT nos CP-VT; travar as TS-01 com as terças e correntes da linha montada antes de soltar a próxima (ND-LET-COB01).",
        "Terças, correntes, mãos-francesas e contraventamento; telhas; placas de fechamento (CM-01) por último."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 notas = ["Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; prumo 10 mm em 10 m; consolo ±10 mm; folga de ponta 25 mm e de dente 25 mm já previstas.",
          "TS-01 só pode ser solta do guindaste com os dois pinos encaixados e a linha anterior travada; viga de 19,15 m: içar pelas 4 alças com balancim (ângulo ≥ 60°).",
-         "Pino PN-1 Ø20 no consolo; tubo TB-1 Ø40 na viga; grautear o tubo de uma ponta só por viga (a outra recebe graute flexível) para não travar o encurtamento.",
+         "Pino PN-1 Ø20 no consolo; tubo TB-1 Ø50 na viga; grautear o tubo de uma ponta só por viga (a outra recebe graute flexível) para não travar o encurtamento.",
          "Cobertura escondida: telha 104 mm abaixo da platibanda +10,00 no eixo E; nenhuma peça pode ficar acima de +9,90.",
          "V405 vai do P13 até a linha 9 e apoia no consolo CP-I110 do pilar P14 (PF-04), como na planta de vigas de cobertura do R01.",
          "Níveis em m, cotas em cm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

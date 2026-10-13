@@ -6,8 +6,16 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha
 
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
-Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
-X_FACH = [0.0, 9.87, 20.05, 29.63, 40.10]
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13
+CONS_J = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))
+LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
+ZF = lambda x: LG["Z0_TS"] + 0.03 * x
+ASS_TS = lambda x: round((ZF(x) + 0.45 * (1 / (1 + 0.03 ** 2)) ** 0.5 - 0.01) * 1000)
+Z_I110 = 8190                                                     # topo da I110 8,88 − 1,10 + recorte 0,44 − neoprene 0,03
+Z_MEZ_ASS = (2440, 5840)                                          # VM I90: nível − 0,25 − recorte 0,45 + ... − neoprene 0,01
+H_C = {k: round(v["h_total_m"] * 1000) for k, v in CONS_J.items()}
+IP_C = [1250 * (k + 1) - 100 + 1000 for k in range(6)]            # IP-01 das paredes internas (vistas C e G): fiadas 0 a 5 (até +7,50)
 COB = 30
 # direção horizontal de cada vista (olhando a face de fora, z para cima): (eixo, sinal) -> coordenada à direita
 VISTA = {"A": ("y", 1), "B": ("x", -1), "C": ("y", -1), "D": ("x", 1)}
@@ -17,6 +25,7 @@ OPOSTA = {"A": "C", "B": "D", "C": "A", "D": "B"}
 def prancha_pilar(P):
     B, H, L_CAL, Z_TOP = P["B"], P["H"], P["L_CAL"], P["Z_TOP"]
     L_TOT = L_CAL + Z_TOP
+    D1 = P.get("d1", 20.0)
     PESO = B * H / 1e6 * L_TOT / 1000 * 25
     V = B * H / 1e6 * L_TOT / 1000
     AL = P["al"]
@@ -41,20 +50,20 @@ def prancha_pilar(P):
     ESC = 20
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
     pr.texto(Q[0] + 10, Q[3] - 24, P["marca"], "grande", "TITULO")
-    pr.texto(Q[0] + 62, Q[3] - 24, f"PILAR PRÉ-MOLDADO  {B/10:g} × {H/10:g} cm   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {P['qtd']} peças", "titulo", "TITULO")
+    pr.texto(Q[0] + 62, Q[3] - 24, f"PILAR PRÉ-MOLDADO  {H/10:g} × {B/10:g} cm (x × y)   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {P['qtd']} {'peça' if P['qtd'] == 1 else 'peças'}", "titulo", "TITULO")
     pr.texto(Q[0] + 10, Q[3] - 14, P["posicao"] + f"   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   FACES: A = x+, B = y+, C = x−, D = y−   ·   desenhado em pé, como montado", "nota", "TEXTO")
 
     # planta-chave 1:750
     kp = pr.vista("PLANTA-CHAVE", (Q[0] + 487, Q[3] - 172), 750, titulo="PLANTA-CHAVE", subtitulo=f"{P['marca']} hachurado", unidade="cm")
     Xm = lambda m: m * 1000
     for y in Y_LIN:
-        kp.linha((Xm(-2.5), Xm(y)), (Xm(42.6), Xm(y)), "EIXO")
+        kp.linha((Xm(-2.5), Xm(y)), (Xm(42.0), Xm(y)), "EIXO")
     for x in X_FACH:
-        kp.linha((Xm(x), Xm(-2.5)), (Xm(x), Xm(83)), "EIXO")
+        kp.linha((Xm(x), Xm(-2.5)), (Xm(x), Xm(85.5)), "EIXO")
     for i, y in enumerate(Y_LIN, 1):
         kp.circulo((Xm(-2.5), Xm(y)), 1100, "VISTA"); kp.texto((Xm(-2.5), Xm(y)), str(i), "nota", "MIDDLE_CENTER")
     for j, x in enumerate(X_FACH):
-        kp.circulo((Xm(x), Xm(83)), 1100, "VISTA"); kp.texto((Xm(x), Xm(83)), "ABCDE"[j], "nota", "MIDDLE_CENTER")
+        kp.circulo((Xm(x), Xm(85.5)), 1100, "VISTA"); kp.texto((Xm(x), Xm(85.5)), "ABCDE"[j], "nota", "MIDDLE_CENTER")
     for nome, x, y, bx, by, mk in P["kp"]:
         pts = [(Xm(x) - bx / 2, Xm(y) - by / 2), (Xm(x) + bx / 2, Xm(y) - by / 2), (Xm(x) + bx / 2, Xm(y) + by / 2), (Xm(x) - bx / 2, Xm(y) + by / 2)]
         kp.poli(pts, "CORTADO", fechada=True)
@@ -86,7 +95,7 @@ def prancha_pilar(P):
                 v.ret(W / 2 - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
                 v.chapa(W / 2 - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
                 v.chapa(W / 2 - c["neo"][0] / 2, zc, c["neo"][0], 10)
-                v.chamada((W / 2, zc - h + hp / 2), (12, -12), f"{c['tipo']} {larg/10:g}×{proj/10:g}×{h/10:g}/{hp/10:g}")
+                v.chamada((W / 2, zc - h + hp / 2), (12, -12), f"{c['tipo']} {larg/10:g}×{proj/10:g}×{h/10:g}" + (f"/{hp/10:g}" if hp != h else ""))
             elif c["face"] == OPOSTA[face]:
                 v.ret((W - larg) / 2, zc - h, larg, h, "OCULTA")
             else:                                                                            # lateral: projeção para fora
@@ -141,19 +150,19 @@ def prancha_pilar(P):
     va.ret(0, 0, W, L_TOT, "VISTA")
     for z in z_est:
         va.linha((COB, z), (W - COB, z), "ARM_TRANSV")
-    va.barra([(COB + 18, 40), (COB + 18, L_TOT - 40)], "N1", len(xy), 20, comp_cm=round((L_TOT - 80) / 10), ponto_rotulo=(COB + 18, 3000), desloc=(14, 12))
+    va.barra([(COB + 18, 40), (COB + 18, L_TOT - 40)], "N1", len(xy), D1, comp_cm=round((L_TOT - 80) / 10), ponto_rotulo=(COB + 18, 3000), desloc=(14, 12))
     va.linha((W - COB - 18, 40), (W - COB - 18, L_TOT - 40), "ARMADURA")
     va.chamada((W - COB, 5000), (12, 10), f"N2 Ø8 c/{EST['s_corr']//10}" + (" + N3" if P["grampos"] else ""))
     va.chamada((W - COB, 600), (12, 10), f"N2 Ø8 c/{EST['s_dens']//10}" + (" + N3" if P["grampos"] else ""))
     va.cota_v([0, EST["zona"] + L_CAL, L_TOT - EST["zona"], L_TOT], 0, -9)
-    for z in sorted(set(round(c["z"] / 500) * 500 for c in cons)):
-        va.chamada((W, z - 200), (10, 8), "N4/N5/N6 — DET. 1")
+    if cons:
+        va.chamada((W, max(cons, key=lambda c: c["h"])["z"] - 200), (10, 8), "N4/N5/N6 — DET. 1")
     va.texto((W / 2, L_TOT + 120), "ARMAÇÃO", "sub", "BOTTOM_CENTER")
-    pr.posicoes_desenho.update({"N2", "N4", "N5", "N6"} | ({"N3"} if P["grampos"] else set()))
+    pr.posicoes_desenho.update({"N2"} | ({"N3"} if P["grampos"] else set()))
     xp += 40 + W / ESC
 
     # ------------------------------------------------------------ isométrico geral
-    pr.imagem(Q[0] + 455 + 0, Y0 - 10, Q[0] + 575, Y0 + 540, f"/home/claude/letsara/pranchas/ISO-{P['marca']}-geral.png", titulo="ISOMÉTRICO", subtitulo="faces B e C; sem escala")
+    pr.imagem(xp + 5, Y0 - 10, xp + 120, Y0 + 540, f"/home/claude/letsara/pranchas/ISO-{P['marca']}-geral.png", titulo="ISOMÉTRICO", subtitulo="faces B e C; sem escala")
 
     # ------------------------------------------------------------ CORTE A-A (1:10)
     XD = Q[0] + 625
@@ -166,45 +175,46 @@ def prancha_pilar(P):
     for yg in P["grampos"]:
         v.linha((-B / 2 + COB, yg), (B / 2 - COB, yg), "ARM_TRANSV")
     for x, y in xy:
-        v.ponto_barra((x, y), 20)
+        v.ponto_barra((x, y), D1)
     v.cota_h([-B / 2, B / 2], -H / 2, -8); v.cota_v([-H / 2, H / 2], B / 2, 8)
     v.texto((0, H / 2 + 30), "FACE A", "min", "BOTTOM_CENTER"); v.texto((0, -H / 2 - 130), "FACE C", "min", "TOP_CENTER")
     v.texto((B / 2 + 110, 0), "FACE B", "min", "MIDDLE_LEFT", rot=90); v.texto((-B / 2 - 30, 0), "FACE D", "min", "MIDDLE_RIGHT", rot=90)
-    v.chamada((-xy[0][0], xy[0][1]), (-10, 10), f"N1 — {len(xy)} Ø20")
+    v.chamada((-xy[0][0], xy[0][1]), (-10, 10), f"N1 — {len(xy)} Ø{D1:g}".replace(".", ","))
     v.chamada((-B / 2 + COB, 100), (-10, 0), "N2 Ø8")
     if P["grampos"]:
         v.chamada((0, P["grampos"][0]), (-10, -14), "N3 grampo Ø8")
 
     # ------------------------------------------------------------ DETALHE 1 — consolo (1:10) e DETALHE 2 — base (1:20)
-    c0 = max(cons, key=lambda c: c["h"])
     YM = Q[3] - 455
-    d1 = pr.vista("DETALHE 1", (XD + 70, YM - 40), 10, titulo=f"DETALHE 1 — CONSOLO {c0['tipo']}", subtitulo="armadura e pino; NBR 9062:2017 7.3", unidade="cm")
-    PW = largura(OPOSTA[c0["face"]]) if c0["face"] in "BD" else H
-    PW = H if c0["face"] in "AC" else B
-    zc0, Z1, Z2 = 1000, 400, 1450
-    proj, h, hp = c0["proj"], c0["h"], c0["hp"]
-    d1.poli([(-PW, Z1), (-PW, Z2), (0, Z2), (0, Z1)], "VISTA"); d1.interrupcao((-PW, Z1), (0, Z1)); d1.interrupcao((-PW, Z2), (0, Z2))
-    d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * 0.03), (0, zc0)], "VISTA")
-    d1.ret(c0["pino_x"] - c0["pino_d"] / 2, zc0 - c0["pino_emb"] + 5, c0["pino_d"], c0["pino_emb"], "OCULTA")
-    d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
-    d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
-    d1.poli([(-PW + COB + 8, zc0 - 55 - 150), (-PW + COB + 8, zc0 - 55), (proj - 40, zc0 - 55)], "ARMADURA"); d1.poli([(proj - 40, zc0 - 55), (proj - 40, zc0 - 85)], "ARMADURA")
-    for dz in (-150, -250):
-        d1.poli([(proj - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARM_TRANSV")
-    for dx in range(60, proj - 40, 80):
-        d1.poli([(dx, zc0 - 30 + dx * 0.03), (dx, zc0 - h + (h - hp) * dx / proj + 30)], "ARM_TRANSV")
-    for z in range(500, Z2, 100):
-        d1.linha((-PW + COB, z), (-COB, z), "ARM_TRANSV")
-    for x in (-PW + COB + 18, -COB - 18):
-        d1.linha((x, Z1), (x, Z2), "ARMADURA")
-    d1.cota_v([zc0 - h, zc0 - hp, zc0, zc0 + proj * 0.03], proj, 10, total=False)
-    d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -8, total=False); d1.cota_h([-PW, 0], Z1, -8)
-    d1.chamada((-PW + 300, zc0 - 55), (-4, 12), f"N4 — {c0['tir']} U ({(PW + proj - 80)/10:.0f} + 15)")
-    d1.chamada((-200, zc0 - 250), (-6, -12), "N5 — 2 Ø10 (costura)")
-    d1.chamada((140, zc0 - 300), (14, -12), f"N6 — {len(range(60, proj - 40, 80))} Ø8")
-    d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} CA-50 L={c0['pino_L']/10:g}")
-    d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
-    d1.chamada((-COB - 18, 1350), (-8, 8), "N1 / N2 c/10")
+    if cons:
+        c0 = max(cons, key=lambda c: c["h"])
+        d1 = pr.vista("DETALHE 1", (XD + 70, YM - 40), 10, titulo=f"DETALHE 1 — CONSOLO {c0['tipo']}", subtitulo="armadura e pino; NBR 9062:2017 7.3", unidade="cm")
+        PW = largura(OPOSTA[c0["face"]]) if c0["face"] in "BD" else H
+        PW = H if c0["face"] in "AC" else B
+        zc0, Z1, Z2 = 1000, 400, 1450
+        proj, h, hp = c0["proj"], c0["h"], c0["hp"]
+        d1.poli([(-PW, Z1), (-PW, Z2), (0, Z2), (0, Z1)], "VISTA"); d1.interrupcao((-PW, Z1), (0, Z1)); d1.interrupcao((-PW, Z2), (0, Z2))
+        d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * 0.03), (0, zc0)], "VISTA")
+        d1.ret(c0["pino_x"] - c0["pino_d"] / 2, zc0 - c0["pino_emb"] + 5, c0["pino_d"], c0["pino_emb"], "OCULTA")
+        d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
+        d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
+        d1.poli([(-PW + COB + 8, zc0 - 55 - 150), (-PW + COB + 8, zc0 - 55), (proj - 40, zc0 - 55)], "ARMADURA"); d1.poli([(proj - 40, zc0 - 55), (proj - 40, zc0 - 85)], "ARMADURA")
+        for dz in (-150, -250):
+            d1.poli([(proj - 40, zc0 + dz), (-PW + COB, zc0 + dz)], "ARM_TRANSV")
+        for dx in range(60, proj - 40, 80):
+            d1.poli([(dx, zc0 - 30 + dx * 0.03), (dx, zc0 - h + (h - hp) * dx / proj + 30)], "ARM_TRANSV")
+        for z in range(500, Z2, 100):
+            d1.linha((-PW + COB, z), (-COB, z), "ARM_TRANSV")
+        for x in (-PW + COB + 18, -COB - 18):
+            d1.linha((x, Z1), (x, Z2), "ARMADURA")
+        d1.cota_v([zc0 - h, zc0 - hp, zc0, zc0 + proj * 0.03], proj, 10, total=False)
+        d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -8, total=False); d1.cota_h([-PW, 0], Z1, -8)
+        d1.chamada((-PW + 300, zc0 - 55), (-4, 12), f"N4 — {c0['tir']} U ({(PW + proj - 80)/10:.0f} + 15)")
+        d1.chamada((-200, zc0 - 250), (-6, -12), "N5 — 2 Ø10 (costura)")
+        d1.chamada((140, zc0 - 300), (14, -24), f"N6 — {len(range(60, proj - 40, 80))} Ø8")
+        d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} CA-50 L={c0['pino_L']/10:g}")
+        d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
+        d1.chamada((-COB - 18, 1350), (-8, 8), "N1 / N2 c/10")
 
     d2 = pr.vista("DETALHE 2", (XD + 245, YM - 15), 20, titulo="DETALHE 2 — BASE NO CÁLICE", subtitulo="embutimento 100 cm; chaves", unidade="cm")
     d2.poli([(-H / 2, 0), (H / 2, 0), (H / 2, 1600), (-H / 2, 1600)], "VISTA")
@@ -226,23 +236,33 @@ def prancha_pilar(P):
 
     # ------------------------------------------------------------ tabelas
     y = Q[3] - 6
-    y = pr.tabela(XC, y, f"MARCAS — {P['familia']}", ["MARCA", "POSIÇÃO", "QT", "CONSOLOS (nível do assento, face)", "INSERTOS"], P["marcas"], [16, 22, 8, 92, 44], h_lin=6.0)
+    y = pr.tabela(XC, y, f"MARCAS — {P['familia']}", ["MARCA", "POSIÇÃO", "QT", "CONSOLOS (face)", "INSERTOS"], P["marcas"], [16, 22, 8, 86, 50], h_lin=6.0)
     L_N1 = round((L_TOT - 80) / 10)
     EXT_B, EXT_H = B - 2 * COB, H - 2 * COB
-    barras = [dict(pos="N1", diam=20.0, qtd=len(xy), comp=L_N1, trechos=[f"{L_N1}"]),
+    barras = [dict(pos="N1", diam=D1, qtd=len(xy), comp=L_N1, trechos=[f"{L_N1}"]),
               dict(pos="N2", diam=8.0, qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""])]
     if P["grampos"]:
         barras.append(dict(pos="N3", diam=8.0, qtd=len(P["grampos"]) * n_est, comp=round((EXT_H + 160) / 10), forma=[(0, 6), (0, 0), (EXT_H / 10, 0), (EXT_H / 10, 6)], trechos=["8", f"{EXT_H/10:g}", "8"]))
-    n_cons = len(cons)
-    PWc = (H if c0["face"] in "AC" else B)
-    barras += [dict(pos="N4", diam=c0["d_tir"], qtd=c0["n_tir"] * n_cons, comp=round((2 * (PWc + c0["proj"] - 80) + 300) / 10), forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", f"{(PWc + c0['proj'] - 80)/10:.0f}", "34", "", "15"]),
-               dict(pos="N5", diam=10.0, qtd=2 * n_cons, comp=round((2 * (340 + PWc + c0["proj"] - 80) + 160) / 10), forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=[f"{(PWc + c0['proj'] - 80)/10:.0f}", "34", "", ""]),
-               dict(pos="N6", diam=8.0, qtd=len(range(60, c0["proj"] - 40, 80)) * n_cons, comp=round((2 * (340 + 400) + 160) / 10), forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "40", "", ""])]
+    grupos = {}
+    for c in cons:
+        PWc = (H if c["face"] in "AC" else B)
+        grupos.setdefault((c["n_tir"], c["d_tir"], c["proj"], PWc), []).append(c)
+    nomes_pos = [("N4", "N5", "N6"), ("N7", "N8", "N9"), ("N10", "N11", "N12")]
+    for k, ((nt, dt, proj, PWc), cs) in enumerate(grupos.items()):
+        pa, pb, pc = nomes_pos[k]
+        n_cons = len(cs)
+        tipos = "/".join(sorted(set(c["tipo"] for c in cs)))
+        barras += [dict(pos=pa, diam=dt, qtd=nt * n_cons, comp=round((2 * (PWc + proj - 80) + 300) / 10), forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", f"{(PWc + proj - 80)/10:.0f}", "34", "", "15"]),
+                   dict(pos=pb, diam=10.0, qtd=2 * n_cons, comp=round((2 * (340 + PWc + proj - 80) + 160) / 10), forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=[f"{(PWc + proj - 80)/10:.0f}", "34", "", ""]),
+                   dict(pos=pc, diam=8.0, qtd=len(range(60, proj - 40, 80)) * n_cons, comp=round((2 * (340 + 400) + 160) / 10), forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "40", "", ""])]
+        pr.posicoes_desenho.update({pa, pb, pc})
+        if k > 0:
+            va.chamada((W, cs[0]["z"] - 150), (10, -10), f"{pa}/{pb}/{pc} — {tipos} ({nt} Ø{dt:g} tirante)".replace(".", ","))
     ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
     y = ta["y_base"]
     y = pr.tabela(XC, y - 4, f"INSERTOS POR PILAR ({P['marca']}) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [14, 100, 10, 58])
-    qd = [["MARCA", P["marca"], "SEÇÃO", f"{B/10:g} × {H/10:g} cm"], ["COMPRIMENTO", f"{L_TOT/10:g} cm", "CONCRETO", "C40"],
-          ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"], ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(len(xy) * 3.14 / (B * H / 100) * 100, 2)} %"],
+    qd = [["MARCA", P["marca"], "SEÇÃO", f"{H/10:g} × {B/10:g} cm (x × y)"], ["COMPRIMENTO", f"{L_TOT/10:g} cm", "CONCRETO", "C40"],
+          ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"], ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(len(xy) * 3.1416 * (D1 / 10) ** 2 / 4 / (B * H / 100) * 100, 2)} %"],
           ["QUANTIDADE", f"{P['qtd']}", "COBRIMENTO", "3,0 cm (CAA II)"]]
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
@@ -261,51 +281,114 @@ def consolo(face, z_assento, tipo, larg, proj, h, hp, pino=("PN-1", 20, 700, 300
                 pino_emb=pino[3], pino_x=pino[4], neo=list(neo), tir=tir[0], n_tir=tir[1], d_tir=tir[2])
 
 
-def dados_pc():
-    z_i110 = 8190                                                   # assento da I110: topo 8,88 − dente 0,66 − neoprene 0,03
-    cons = [consolo("A", 8514, "CP-TS", 400, 300, 450, 250), consolo("C", 8489, "CP-TS", 400, 300, 450, 250),
-            consolo("B", z_i110, "CP-I110", 500, 400, 500, 300, ("PN-2", 25, 900, 350, 200), (300, 250, 30), ("4 Ø16", 4, 16.0)),
-            consolo("D", z_i110, "CP-I110", 500, 400, 500, 300, ("PN-2", 25, 900, 350, 200), (300, 250, 30), ("4 Ø16", 4, 16.0))]
-    xy = [(sx * 202, sy * 202) for sx in (-1, 1) for sy in (-1, 1)] + [(sx * 67, sy * 202) for sx in (-1, 1) for sy in (-1, 1)] + [(sx * 202, sy * 67) for sx in (-1, 1) for sy in (-1, 1)]
-    return dict(marca="PC-01", qtd=2, B=500, H=500, L_CAL=1000, Z_TOP=8880, al=[8880 + 1000 - 3000, 1000 + 2000], consolos=cons, xy=xy, grampos=[],
-                est=dict(s_corr=150, s_dens=100, zona=1500), vistas=["A", "B", "C"], ip01=[],
-                desenho="ND-LET-PC01", conteudo="PILARES CENTRAIS PC-01 E PC-02 (50×50) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                posicao="POSIÇÃO: eixo C, linhas 2 e 4 (PC-01) e P13 (PC-02, sem CP-TS)", familia="PILARES CENTRAIS 50×50 (EIXO C)",
-                kp=[("P8A", 20.05, 10.05, 500, 500, "PC-01"), ("P11", 20.05, 29.36, 500, 500, "PC-01"), ("P13", 20.05, 53.05, 500, 500, "PC-02")],
-                marcas=[["PC-01", "C2, C4", 2, "CP-I110 +8,190 (B e D); CP-TS +8,489 (C) e +8,514 (A)", "2 AL-2"],
-                        ["PC-02", "C, P13", 1, "CP-I110 +8,190 (B e D)", "2 AL-2"],
-                        ["PF-04", "C9 (P14, fachada)", 1, "CP-I110 +8,190 na face interna — recebe a V405 (ND-LET-PIL)", "8 IP-01"]],
-                insertos=[["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I110", 2, "consolos B e D"], ["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo) — CP-TS", 2, "consolos A e C"],
-                          ["NEO-2", "Neoprene 300×250×30 fretado (3 camadas)", 2, "CP-I110"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 2, "CP-TS"],
-                          ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700)", 2, "face A: 300 do topo; 200 da base"]],
-                memoria=[["Nd (I110 + 2 TS-01 + pp)", "≈ 1,4 × 600 = 840 kN"], ["λ (balanço 9,88 m, i = 14,4 cm)", "137 < 140 — método geral"], ["Armadura mínima (0,4 %)", "37,7 ≥ 10,0 cm²"],
-                         ["ELU método geral (λu)", "a emitir na memória MC03"], ["Consolo CP-I110 (Vd 448 kN)", "4 Ø16 tirante; As,min atendida"], ["Estribos (18.4.3)", "s = 15 ≤ min(20; 50; 24) cm; sem grampos (barras a ≤ 16 cm dos cantos)"]],
-                notas=["Concreto C40; 12 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.",
-                       "Consolos CP-I110 nas faces B e D (eixo C): assento +8,190 = topo da I110 +8,880 − dente 66 − neoprene 3; pino PN-2 Ø25 no TB-2 da viga.",
-                       "Consolos CP-TS nas faces A e C (só PC-01, linhas 2 e 4): assentos +8,489 (lado A, face C) e +8,514 (lado E, face A), pino PN-1 Ø20 no TB-1 da TS-01.",
-                       "Topo do pilar em +8,880 (nível do topo da I110); as terças passam 86 mm acima. FACE D igual à FACE B (consolo CP-I110 +8,190).",
-                       "A V405 vai do P13 até a linha 9 e apoia no pilar de fachada P14 (marca PF-04, 40×60 com CP-I110 na face interna) — ver prancha dos pilares PL/PF."])
+KP_CEN = [("P8A", X_EIXO["C"], Y_LIN[1], 400, 600, "PC-01"), ("P11", X_EIXO["C"], Y_LIN[3], 400, 400, "PC-02"), ("P13", X_EIXO["C"], Y_P13, 600, 600, "PC-03"),
+          ("P8", X_EIXO["B"], Y_LIN[1], 400, 600, "PM-01"), ("P8B", X_EIXO["D"], Y_LIN[1], 400, 600, "PM-01"),
+          ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-01"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-02")]
+F = lambda v: f"{v/1000:.3f}".replace(".", ",")
+TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
+I110 = lambda face: consolo(face, Z_I110, "CP-I110", 500, 400, H_C["CP-I110"], H_C["CP-I110"], ("PN-2", 25, 900, 350, 200), (300, 250, 30), (CONS_J["CP-I110"]["tirante"], 3, 20.0))
+TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
+MEZ = lambda face, z: consolo(face, z, "CP-MEZ", 400, 300, H_C["CP-MEZ"], H_C["CP-MEZ"])
+EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
+NOTA_CONS = "Consolos sem chanfro: altura = recorte do dente da viga − neoprene, fundo do consolo alinhado ao fundo da viga (CP-TS 44, CP-MEZ 44, CP-I110 41 cm — memória consolos.json, NBR 9062:2017 7.3)."
+
+
+def bars_ret(B, H, nb, nh, c=48):
+    """Barras no perímetro: nb ao longo de B (faces de cima/baixo da seção), nh ao longo de H (inclui cantos)."""
+    xs = [-B / 2 + c + k * (B - 2 * c) / (nb - 1) for k in range(nb)]
+    ys = [-H / 2 + c + k * (H - 2 * c) / (nh - 1) for k in range(nh)]
+    pts = {(round(x), round(y)) for x in xs for y in (ys[0], ys[-1])} | {(round(x), round(y)) for y in ys for x in (xs[0], xs[-1])}
+    return sorted(pts)
+
+
+def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, marcas, insertos, notas, ip01=(), d1=20.0, grampos=(), vistas=("A", "B", "C"), zoom=3.2):
+    return dict(marca=marca, qtd=qtd, B=B, H=H, L_CAL=1000, Z_TOP=ztop, al=[ztop + 1000 - 2500, 1000 + 1500], consolos=cons, xy=xy, grampos=list(grampos),
+                est=EST_STD, vistas=list(vistas), ip01=list(ip01), d1=d1, zoom=zoom, desenho=desenho, conteudo=conteudo, posicao=posicao, familia=familia,
+                kp=KP_CEN, marcas=marcas, insertos=insertos, memoria=[], notas=notas)
+
+
+def dados_pc1():
+    cons = [TSC("A", TS_E), TSC("C", TS_A), I110("B"), MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
+    return base("PC-01", 1, 600, 400, 8880, cons, bars_ret(600, 400, 4, 3), "ND-LET-PC01",
+                "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: eixo C, linha 2 (P8A); 40 em x × 60 em y", "PILAR CENTRAL PC-01",
+                [["PC-01", "P8A (C2)", 1, "CP-TS (A, C); CP-I110 (B); 2 CP-MEZ (A, C)", "6 IP-01 (B); 2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I110", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=700 — CP-TS e CP-MEZ", 6, "faces A e C"],
+                 ["NEO-2", "Neoprene 300×250×30 fretado", 1, "CP-I110"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 6, "CP-TS e CP-MEZ"],
+                 ["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5 (placas da vista G)", 6, "face B, fiadas 0 a 5"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
+                 f"CP-TS nas faces A (lado E, +{F(TS_E)}) e C (lado A, +{F(TS_A)}) para a TS-01 da linha 2; CP-I110 na face B (+{F(Z_I110)}) para a ponta da V407; CP-MEZ nas faces A e C para as VM dos dois níveis.",
+                 "Topo do pilar em +8,880 (nível do topo da I110); as terças passam por cima. IP-01 na face B para as placas da parede interna da linha 2 (vista G, até +7,50)."],
+                ip01=[dict(face="B", z=IP_C)])
+
+
+def dados_pc2():
+    cons = [TSC("A", TS_E), TSC("C", TS_A), I110("B"), I110("D")]
+    return base("PC-02", 1, 400, 400, 8880, cons, bars_ret(400, 400, 3, 3), "ND-LET-PC02",
+                "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: eixo C, linha 4 (P11), parede dos portões", "PILAR CENTRAL PC-02",
+                [["PC-02", "P11 (C4)", 1, "CP-TS (A, C); CP-I110 (B, D)", "6 IP-01 (B); 2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I110", 2, "faces B e D"], ["PN-1", "Pino Ø20 CA-50 L=700 — CP-TS", 2, "faces A e C"],
+                 ["NEO-2", "Neoprene 300×250×30 fretado", 2, "CP-I110"], ["NEO-1", "Neoprene 300×150×10", 2, "CP-TS"],
+                 ["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5 (placas da vista C)", 6, "face B"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 8 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
+                 f"CP-I110 nas faces B (V406) e D (V407), assento +{F(Z_I110)}; CP-TS nas faces A e C para a TS-01 da linha 4.",
+                 "IP-01 na face B para as placas da parede dos portões (vista C, fiadas até +7,50)."],
+                ip01=[dict(face="B", z=IP_C)])
+
+
+def dados_pc3():
+    cons = [I110("B"), I110("D")]
+    return base("PC-03", 1, 600, 600, 8880, cons, bars_ret(600, 600, 4, 4), "ND-LET-PC03",
+                "PILAR CENTRAL PC-03 (P13, 60×60) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: eixo C, y = 54,575 m (P13), entre as V406 e V405", "PILAR CENTRAL PC-03",
+                [["PC-03", "P13", 1, "CP-I110 (B, D)", "2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I110", 2, "faces B e D"], ["NEO-2", "Neoprene 300×250×30 fretado", 2, "CP-I110"],
+                 ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 12 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
+                 f"CP-I110 nas faces B (V405) e D (V406), assento +{F(Z_I110)}; sem TS-01 (P13 fica entre as linhas 6 e 7)."])
 
 
 def dados_pm():
-    cons = [consolo("A", 2450, "CP-MEZ", 400, 300, 450, 250), consolo("C", 2450, "CP-MEZ", 400, 300, 450, 250),
-            consolo("A", 5850, "CP-MEZ", 400, 300, 450, 250), consolo("C", 5850, "CP-MEZ", 400, 300, 450, 250)]
-    xy = [(sx * 152, sy * 252) for sx in (-1, 1) for sy in (-1, 1)] + [(sx * 152, sy * 84) for sx in (-1, 1) for sy in (-1, 1)] + [(0, 252), (0, -252)]
-    return dict(marca="PM-01", qtd=2, B=400, H=600, L_CAL=1000, Z_TOP=6550, al=[6550 + 1000 - 2500, 1000 + 1500], consolos=cons, xy=xy, grampos=[-84, 84],
-                est=dict(s_corr=150, s_dens=100, zona=1500), vistas=["A", "B", "C"], ip01=[], zoom=2.6,
-                desenho="ND-LET-PM01", conteudo="PILARES DO MEZANINO PM-01 (40×60) — B2 E D2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                posicao="POSIÇÃO: linha 2, eixos B e D (P8 e P8B); consolos CP-MEZ nas faces A e C nos níveis +3,15 e +6,55", familia="PILARES DO MEZANINO 40×60",
-                kp=[("P8", 9.87, 10.05, 600, 400, "PM-01"), ("P8B", 29.63, 10.05, 600, 400, "PM-01")],
-                marcas=[["PM-01", "B2, D2", 2, "CP-MEZ +2,450 e +5,850 (A e C)", "2 AL-2"]],
-                insertos=[["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 4, "CP-MEZ"],
-                          ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700)", 2, "face A: 250 do topo; 150 da base"]],
-                memoria=[["Nd (2 níveis de mezanino)", "≈ 1,4 × 2 × 383 = 1072 kN"], ["λ (balanço 7,55 m, i = 17,3 cm)", "87 — método geral"], ["Armadura mínima (0,4 %)", "31,4 ≥ 9,6 cm²"],
-                         ["ELU método geral (λu)", "a emitir na memória MC03"], ["Consolo CP-MEZ (Vd 383 kN)", "3 Ø16 tirante (NBR 9062 7.3)"], ["Grampos (18.4.3)", "2 N3 por estribo (linhas a 8,4 cm do eixo)"]],
-                notas=["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°; 2 grampos N3 por estribo.",
-                       "Consolos CP-MEZ nas faces A e C (eixo da linha 2): assentos +2,450 e +5,850 (viga VM I90 com dente 45: nível − 25 − 45); pino PN-1 Ø20 no TB-1 da VM.",
-                       "Topo do pilar em +6,550 (nível do piso superior do mezanino); a cobertura das linhas 1–2 apoia nas VB-01 e TS-01 L2, não neste pilar."])
+    cons = [MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
+    return base("PM-01", 2, 600, 400, 6550, cons, bars_ret(600, 400, 4, 3), "ND-LET-PM01",
+                "PILARES DO MEZANINO PM-01 (P8 E P8B, 40×60) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: linha 2, eixos B e D (P8 e P8B); 40 em x × 60 em y", "PILARES DO MEZANINO PM-01",
+                [["PM-01", "P8, P8B", 2, "2 CP-MEZ (A, C)", "6 IP-01 (B); 2 AL-2"]],
+                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30", 4, "CP-MEZ"],
+                 ["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5 (placas da vista G)", 6, "face B"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS,
+                 f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM I90: nível − 25 − recorte 45 − neoprene 1); pino PN-1 Ø20 no TB-1 da VM.",
+                 "Topo do pilar em +6,550 (piso superior do mezanino). IP-01 na face B para as placas da parede interna da linha 2 (vista G)."],
+                ip01=[dict(face="B", z=IP_C)])
+
+
+def dados_pg1():
+    return base("PG-01", 2, 400, 400, 7500, [], bars_ret(400, 400, 2, 2), "ND-LET-PG01",
+                "PILARES DA PAREDE DOS PORTÕES PG-01 (P9 E P12, 40×40) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: linha 4, eixos B e D (P9 e P12); topo +7,50 (a TS-01 passa por cima)", "PILARES DA PAREDE DOS PORTÕES",
+                [["PG-01", "P9, P12", 2, "sem consolo", "6 IP-01 (B); 2 AL-2"]],
+                [["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5 (placas da vista C)", 6, "face B, fiadas 0 a 5"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 4 Ø20 retos (cantos); estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
+                 "Pilar de fechamento: recebe só as placas da parede dos portões (vista C) e o vento sobre elas; topo em +7,50, 26 cm abaixo do fundo da TS-01 da linha 4.",
+                 "Portões entre P9–P10 e P10–P12 (vão livre até +7,50): marco e fixação do portão pelo fornecedor, nos IP-01 da face lateral se necessário (a confirmar)."],
+                ip01=[dict(face="B", z=IP_C)], zoom=2.8)
+
+
+def dados_pg2():
+    return base("PG-02", 2, 250, 250, 7500, [], bars_ret(250, 250, 2, 2), "ND-LET-PG02",
+                "PILARES DOS PORTÕES PG-02 (P10, 25×25) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+                "POSIÇÃO: linha 4, x = 15,195 e 24,305 m (P10); topo +7,50", "PILARES DOS PORTÕES 25×25",
+                [["PG-02", "P10 (2×)", 2, "sem consolo", "6 IP-01 (B); 2 AL-2"]],
+                [["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5", 6, "face B"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                ["Concreto C40; 4 Ø16 retos (cantos); estribos N2 Ø6,3 c/15 (c/10 nas pontas), ganchos 135°.",
+                 "Pilar de fechamento entre o portão e as placas da vista C; topo +7,50."],
+                ip01=[dict(face="B", z=IP_C)], d1=16.0, zoom=2.4)
+
+
+DADOS = dict(pc1=dados_pc1, pc2=dados_pc2, pc3=dados_pc3, pm=dados_pm, pg1=dados_pg1, pg2=dados_pg2)
 
 
 if __name__ == "__main__":
-    qual = sys.argv[1] if len(sys.argv) > 1 else "pc"
-    prancha_pilar(dados_pc() if qual == "pc" else dados_pm())
+    for q in (sys.argv[1:] or list(DADOS)):
+        prancha_pilar(DADOS[q]())

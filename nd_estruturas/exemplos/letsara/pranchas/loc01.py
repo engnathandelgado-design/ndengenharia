@@ -27,8 +27,9 @@ FOLGA_PL, E_PL = 25, 150                                     # placa por fora do
 REC = dict(A=math.ceil((zf(325) + H_TS * C3) / 50) * 50, E=math.ceil((zf(Ly - 325) + H_TS * C3) / 50) * 50, prof=300)
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="LOCAÇÃO DE PILARES E VIGAS DE COBERTURA — CORTE DO PÓRTICO E RECUO DOS PILARES NA PLATIBANDA",
-                        desenho="ND-LET-LOC01", folha="01/01", fase="PARA APROVAÇÃO", rev="01"))
+                        desenho="ND-LET-LOC01", folha="01/01", fase="PARA APROVAÇÃO", rev="02"))
 pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); corte 1-1 refeito; recuo dos pilares acima da viga (a validar)")
+pr.revisao("02", pr.dados["data"], "RECUO APROVADO; CONSOLOS SEM CHANFRO (h 44); P6/P7 FORA DO PROJETO")
 
 # ------------------------------------------------------------------ PLANTA 1:200 (horizontal = y da obra, vertical = x)
 v = pr.vista("PLANTA", (62, 330), 200, titulo="PLANTA DE LOCAÇÃO DE PILARES E VIGAS DE COBERTURA", subtitulo="eixos e ordenadas do R01; contraventamento da cobertura em X")
@@ -69,7 +70,7 @@ v.texto((YL[4], Ly + 900), "P2 40×60 (60 em x) nas linhas 2 a 8; P2C nos cantos
 v.cota_h(YL, -1500, -14)
 v.cota_v(list(XA.values()), Lx + 1500, 16)
 v.chamada((YL[4] + 2500, X0D + 4000), (6, 8), "X = contraventamento Ø16 (vãos 2-3, 4-5, 5-6, 7-8)")
-v.chamada((YL[8], XA["B"] + 3000), (10, 6), "VB-01 nas fachadas 1 e 9")
+v.chamada((YL[8], XA["B"] + 3000), (30, 12), "VB-01 a VB-04 nas fachadas 1 e 9")
 v.marcador_corte((YL[2] + 2500, -3400), (YL[2] + 2500, Ly + 3400), "1", lado=1)
 
 # ------------------------------------------------------------------ CORTE 1-1 (linha 3, 1:150)
@@ -94,7 +95,7 @@ for x_e, lado, z_r in ((0, 1, REC["A"]), (Ly, -1, REC["E"])):
 c.linha((-2500, 0), (Ly + 2500, 0), "TERRENO")
 for xi_, lado in ((300, 1), (Ly - 300, -1), (XA["C"] - 200, -1), (XA["C"] + 200, 1)):
     zc_ = round(zf(xi_ + lado * 175) + 450 * C3 - 10)
-    c.ret(min(xi_, xi_ + lado * 300), zc_ - 450, 300, 450, "CORTADO")
+    c.ret(min(xi_, xi_ + lado * 300), zc_ - 440, 300, 440, "CORTADO")
 for (xa, xb) in ((X0E, X0E + LTS), (X0D, X0D + LTS)):
     c.poli([(xa, zf(xa)), (xb, zf(xb)), (xb, zf(xb) + H_TS), (xa, zf(xa) + H_TS)], "VISTA", True)
 c.ret(XA["C"] - 200, Z_I110 - 1100, 400, 1100, "CORTADO")
@@ -107,11 +108,11 @@ zt = lambda x: zf(x) + (H_TS + 10 + T_TERCA + TELHA) * C3
 c.linha((0, zt(0)), (Ly, zt(Ly)), "METALICA")
 c.cota_h([0, XA["C"], Ly], -1000, -10)
 c.cota_v([0, round(zf(325)), REC["A"], 10000], -2200, -10, total=False)
-c.cota_v([0, round(zf(Ly - 325)), REC["E"], 10000], Ly + 2200, 10, total=False)
+c.cota_v([0, round(zf(Ly - 325)), 10000], Ly + 2200, 10, total=False)
 c.cota_v([0, Z_I110 - 1100, Z_I110], XA["C"] + 1300, 8, total=False)
 c.chamada((XA["C"] / 2, zf(XA["C"] / 2) + 450), (0, -16), "TS-01 (I90, L 19,15 m) — 3 %")
 c.chamada((XA["C"], Z_I110 - 550), (10, -14), "I110 V407 (corte) + consolos CV-TS")
-c.chamada((XA["C"] * 0.75, zt(XA["C"] * 0.75)), (4, 12), "terças Ue 300 + telha PIR 30 (COB01)")
+c.chamada((XA["C"] * 0.35, zt(XA["C"] * 0.35)), (4, 12), "terças Ue 300 + telha PIR 30 (COB01)")
 c.chamada((-150, 9500), (14, 12), "cabeça do pilar 40×30 (recuo)")
 c.marcador_detalhe((0, REC["A"]), 1300, 1, ang=150)
 c.marcador_detalhe((XA["C"], Z_I110 - 300), 1300, 2, ang=60)
@@ -132,7 +133,7 @@ def det_lateral(nome, org, x_eixo, lado, z_rec, z0, titulo):
     d.poli(pts, "CORTADO", True); d.hachura(pts, "AR-CONC", 0.02)
     xs = lado * 325
     zc = round(zfl(xs + lado * 150) + 450 * C3 - 10)
-    cons = [(xi, z(zc - 450)), (xi + lado * 300, z(zc - 450)), (xi + lado * 300, z(zc)), (xi, z(zc))]
+    cons = [(xi, z(zc - 440)), (xi + lado * 300, z(zc - 440)), (xi + lado * 300, z(zc)), (xi, z(zc))]       # CP-TS 30 × 44 sem chanfro
     d.poli(cons, "CORTADO", True); d.hachura(cons, "AR-CONC", 0.02)
     xb = xs + lado * 1500
     d.poli([(xs, z(zfl(xs) + 450)), (xs + lado * 300, z(zfl(xs + lado * 300) + 450)), (xs + lado * 300, z(zfl(xs + lado * 300))), (xb, z(zfl(xb))),
@@ -156,13 +157,13 @@ def det_lateral(nome, org, x_eixo, lado, z_rec, z0, titulo):
     zcr = min(zr + 300, 10020)
     d.poli([(xp, z(zcr + 60)), (xp, z(zcr)), (xend - lado * 40 if calha else xend + lado * 120, z(zcr)),
             (xend - lado * 40 if calha else xend + lado * 120, z(zr) + (-40 if calha else 20))], "OCULTA")
-    d.cota_h(sorted([xp - lado * E_PL, xp, xe, xr, xi]), z(z0), -10, total=False)
-    d.cota_v(sorted([z(z0), z(zc - 450), z(zc), z(z_rec), z(10000)]), xp - lado * E_PL - lado * 300, -lado * 12, total=False)
+    d.cota_h(sorted([xp - lado * E_PL, xe, xr, xi]), z(z0), -10, total=False)
+    d.cota_v(sorted([z(z0), z(zc - 440), z(zc), z(z_rec), z(10000)]), xp - lado * E_PL - lado * 300, -lado * 12, total=False)
     d.chamada((xr - lado * 150, z(10000) - 300), (-lado * 10, 8), "cabeça 40×30: só a parte externa sobe")
     d.chamada((xi, z(z_rec)), (lado * 10, 10), f"recuo em +{f(z_rec / 1000)} (topo da TS-01 na face)")
     d.chamada((xr + lado * 15, z(zcr)), (lado * 14, 16), "contra-rufo reto nas placas (tracejado: entre pilares)")
-    d.chamada((xi + lado * 200, z(zc - 200)), (lado * 10, -12), "consolo CP-TS + pino PN-1")
-    d.chamada((xp - lado * E_PL / 2, z(z0) + 400), (-lado * 8, -10), "placas 125×15 por fora")
+    d.chamada((xi + lado * 200, z(zc - 200)), (lado * 10, -12), "CP-TS 30 × 44 + PN-1")
+    d.chamada((xp - lado * E_PL / 2, z(z0) + 400), (-lado * 8, -10), "placas 125×15 por fora (folga 25)")
     return d
 
 
@@ -175,7 +176,7 @@ zb = Z_I110 - 1100
 z = lambda v_: v_ - zb
 d2.poli([(-200, 0), (200, 0), (200, 150), (75, 230), (75, 860), (200, 940), (200, 1100), (-200, 1100), (-200, 940), (-75, 860), (-75, 230), (-200, 150)], "CORTADO", True)
 for lado, zc in ((-1, LG["berco_I110"][0]["consolo_esq"] * 1000), (1, LG["berco_I110"][0]["consolo_dir"] * 1000)):
-    cons = [(lado * 200, z(zc - 450)), (lado * 550, z(zc - 450)), (lado * 550, z(zc)), (lado * 200, z(zc))]
+    cons = [(lado * 200, z(zc - 440)), (lado * 550, z(zc - 440)), (lado * 550, z(zc)), (lado * 200, z(zc))]   # CV-TS 35 × 44
     d2.poli(cons, "CORTADO", True)
     xs = XA["C"] + lado * 275
     xb = XA["C"] + lado * 1700
@@ -184,8 +185,8 @@ for lado, zc in ((-1, LG["berco_I110"][0]["consolo_esq"] * 1000), (1, LG["berco_
     d2.poli(pts, "VISTA", True)
     d2.texto((lado * 1000, z(zc) + 700), f"assento +{f(zc / 1000, 3)}", "min", "BOTTOM_CENTER")
 d2.cota_v([0, 1100], -700, -10, total=False)
-d2.chamada((0, 550), (14, -10), "I110 V407 (40 × 110)")
-d2.chamada((400, z(LG["berco_I110"][0]["consolo_dir"] * 1000) - 200), (20, -22), "consolo CV-TS + PN-1")
+d2.chamada((0, 80), (-10, -14), "I110 V407 (40 × 110)")
+d2.chamada((400, z(LG["berco_I110"][0]["consolo_dir"] * 1000) - 300), (6, -26), "CV-TS 35 × 44 + PN-1")
 
 # ------------------------------------------------------------------ tabelas e notas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
@@ -195,17 +196,17 @@ tab = [["P1 / P2", "40×60", "14", "laterais (A e E), linhas 2–8", f"recuo +{f
        ["P8 P8B / P8A", "40×60", "3", "linha 2 (mezanino / eixo C)", "-"],
        ["P9 P11 P12 / P10", "40×40 / 25×25", "5", "linha 4 (portões)", "-"],
        ["P13", "60×60", "1", "eixo C (apoio V405/V406)", "-"],
-       ["P6 / P7", "25×40 / 60×40", "3", "anexo do eixo E", "-"]]
+       ["P6 / P7", "25×40 / 60×40", "3", "anexo do eixo E", "fora do projeto (a definir)"]]
 y = pr.tabela(x0, y, "PILARES (R01)", ["MARCA", "SEÇÃO", "QT", "POSIÇÃO", "CABEÇA"], tab, [38, 24, 10, 54, 54])
 vg = [["TS-01", "I90", "14", f(LTS / 1000), "cobertura, linhas 2 a 8 (2 por linha)"],
       ["V407", "I110", "1", f((YL[3] - YL[1] - 550) / 1000), "eixo C, linha 2 → linha 4"],
       ["V406", "I110", "1", f((Y_P13 * 1000 - YL[3] - 550) / 1000), "eixo C, linha 4 → P13"],
       ["V405", "I110", "1", f((YL[8] - Y_P13 * 1000 - 550) / 1000), "eixo C, P13 → linha 9"],
-      ["VB-01", "15×70", "8", "≈ 9,3", "bordas das fachadas 1 e 9"]]
+      ["VB-01..04", "15×90", "8", "9,32–9,43", "bordas das fachadas 1 e 9 (ND-LET-VB01)"]]
 y = pr.tabela(x0, y - 4, "VIGAS DE COBERTURA", ["MARCA", "SEÇÃO", "QT", "L (m)", "POSIÇÃO"], vg, [22, 18, 10, 20, 110])
 pr.notas(x0, y - 4, [
     "Geometria do R01 (locação de pilares): 79,35 m entre os eixos 1 e 9; 39,50 m entre os eixos A e E. Água única de 3 %, subindo de A para E; cobertura escondida pela platibanda +10,00 (placas por fora dos pilares).",
-    f"RECUO DOS PILARES (a validar): acima do topo da TS-01 junto à face do pilar (+{f(REC['A']/1000)} no eixo A, +{f(REC['E']/1000)} no eixo E) o pilar sobe só com os 300 mm externos (cabeça 40×30) até +10,00, segurando as placas da platibanda. A telha e a calha (lado A) correm retas por dentro da linha das cabeças; o contra-rufo é reto, fixado nas placas entre pilares e na face da cabeça nos pilares (retorno de 30 cm só), sem rufos grandes contornando o pilar. No lado E (alto) a telha fica 12 cm abaixo do topo e o rufo-capa cobre placa + faixa do recuo.",
+    f"RECUO DOS PILARES (aprovado em 12/10/2026): acima do topo da TS-01 junto à face do pilar (+{f(REC['A']/1000)} no eixo A, +{f(REC['E']/1000)} no eixo E) o pilar sobe só com os 300 mm externos (cabeça 40×30) até +10,00, segurando as placas da platibanda. A telha e a calha (lado A) correm retas por dentro da linha das cabeças; o contra-rufo é reto, fixado nas placas entre pilares e na face da cabeça nos pilares (retorno de 30 cm só), sem rufos grandes contornando o pilar. No lado E (alto) a telha fica 12 cm abaixo do topo e o rufo-capa cobre placa + faixa do recuo.",
     "TS-01 apoiada nos consolos CP-TS dos pilares (eixos A e E) e nos consolos CV-TS da I110 ou dos pilares P8A/P11 (eixo C), com dente 45×30, neoprene e pino PN-1 Ø20.",
     "Contraventamento da cobertura em X Ø16 nos vãos 2-3, 4-5, 5-6 e 7-8 (ND-LET-COB02).",
     "Níveis em metros a partir do piso acabado; cotas em mm. Conferir a locação com o arquitetônico.",

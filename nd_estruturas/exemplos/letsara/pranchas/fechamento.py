@@ -177,9 +177,9 @@ def corte_parede(pr, V, origem, esc=50):
         c.ret(175, Z_VT0, 250, Z_VT1 - Z_VT0, "OCULTA")
         c.chamada((300, Z_VT1), (10, 8), "VT 25×60 entre os pilares (atrás)")
     c.cota_v([k * H_PL for k in range(0, 9)], -FOLGA - E_PL, -10, total=False)
-    c.cota_h([-FOLGA - E_PL, -FOLGA, 0, 600], -500, -8, total=False)
+    c.cota_h([-FOLGA - E_PL, 0, 600], -500, -8, total=False)
     k0 = ks[-1]
-    c.chamada((-FOLGA - E_PL / 2, k0 * H_PL + 600), (-14, 8), "placa 125 × 15")
+    c.chamada((-FOLGA - E_PL / 2, k0 * H_PL + 600), (-14, 8), "placa 125 × 15 + folga 2,5")
     c.chamada((-12, k0 * H_PL + H_PL - 100), (16, 10), "IP-01 + CL-1 + CH-P1 (PP00, det. 2)")
     if ks[0] > 0 or len(ks) < 8:
         kk = [k for k in ks if k > 0 and (k - 1) not in ks]
@@ -211,7 +211,7 @@ def planta_chave(pr, Vs, origem, esc=1000):
         k.hachura([(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
                    (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], "SOLID", 1, "CORTADO")
         cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
-        off = (0, 3500) if horiz and a[1] > 40000 else (0, -3500) if horiz and a[1] < 1000 else (0, 3000) if horiz else (-3500, 0) if a[0] < 0 else (3500, 0)
+        off = (0, 5600) if horiz and a[1] > 40000 else (0, -3500) if horiz and a[1] < 1000 else (0, 3000) if horiz else (-5600, 0) if a[0] < 0 else (3500, 0)
         k.circulo((cx + off[0], cy + off[1]), 1800, "INDICACAO")
         k.texto((cx + off[0], cy + off[1]), V, "nota", "MIDDLE_CENTER")
     return k
@@ -276,6 +276,9 @@ def prancha_vista(Vs, desenho, folha):
 
 
 # ================================================================== ND-LET-PP00 — placa típica
+TELA_PL = 2 * 2 * 0.60 * 1.19                      # N1: tela Q92 nas 2 faces, 60 cm em cada ponta (m²/placa)
+
+
 def prancha_tipo():
     P = PL
     pr = carimbo("ND-LET-PP00", "PLACA DE FECHAMENTO PROTENDIDA 125 × 15 — FÔRMA, PROTENSÃO, INSERTOS, ALÇAS, LIGAÇÕES E TIPOS (PRODUÇÃO)", "01/01")
@@ -302,9 +305,9 @@ def prancha_tipo():
     e.cota_v([0, 156, 469, 781, 1094, H_PL], 0, -10, total=False)
     e.cota_v([H_PL - 150, H_PL - 100, H_PL - 50, H_PL], LD + 500 + LE, 10, total=False)
     e.chamada((60, H_PL - 100), (12, -14), "CH-P1 nas 2 pontas, centro a 6,5 cm do eixo do pilar e 10 cm do topo")
-    e.chamada((2100, H_PL + 120), (10, 10), "AL-P alça de cordoalha Ø12,7 (2 por placa, a 0,21 L das pontas)")
+    e.chamada((2100, H_PL + 120), (-6, 24), "AL-P alça de cordoalha Ø12,7 (2 por placa, a 0,21 L das pontas)")
     e.chamada((1500, 781), (12, -20), "C1 — 8 cord. Ø9,5 (4 por face), aderentes, cortadas rente às pontas")
-    e.marcador_corte((2800, -350), (2800, H_PL + 350), "A", lado=1)
+    e.marcador_corte((1200, -350), (1200, H_PL + 100), "A", lado=1)
     # ---- corte A-A (1:5)
     s = pr.vista("CORTE A-A", (Q[0] + 520, Q[1] + 70), 10, titulo="CORTE A-A", subtitulo="encaixe macho-fêmea, cordoalhas, cobrimento 3,5", unidade="cm")
     pts = [(0, 0), (45, 0), (45, 35), (105, 35), (105, 0), (150, 0), (150, 1250), (105, 1250), (105, 1280), (45, 1280), (45, 1250), (0, 1250)]
@@ -345,7 +348,7 @@ def prancha_tipo():
         d2.chapa(sg * 65 - 50, -FOLGA, 100, 9.5, 0.4)                        # CH-P1 (face interna da placa)
         d2.chapa(sg * 65 - 30, -FOLGA + 9.5, 60, FOLGA - 9.5 - 9.5, 0.4)      # CL-1
     d2.chapa(-75, -9.5, 150, 9.5, 0.4)                                       # IP-01 do pilar
-    d2.cota_h([-650, -115, -15, -5, 5, 15, 115, 650], -FOLGA - 150, -10, total=False)
+    d2.cota_h([-650, -115, -15, 15, 115, 650], -FOLGA - 150, -10, total=False)
     d2.cota_v([-FOLGA - 150, -FOLGA, 0, 450], 200, 10, total=False)
     d2.chamada((0, -5), (12, 18), "IP-01 150 × 150 × 9,5 do pilar")
     d2.chamada((65, -FOLGA / 2), (30, 4), "CL-1 chapa 6 × 60 × 80 A36, filete 6 mm nos 2 lados")
@@ -361,9 +364,9 @@ def prancha_tipo():
     d4.ret(-9.5 - FOLGA - 140, 0, 130, 10, "METALICA")                       # neoprene 10
     pts = [(-9.5 - FOLGA - 150, 10), (-9.5 - FOLGA, 10), (-9.5 - FOLGA, 400), (-9.5 - FOLGA - 150, 400)]
     d4.poli(pts, "CORTADO", fechada=True); d4.hachura(pts, "AR-CONC", 0.03)
-    d4.cota_v([-166, -16, 0, 10], -9.5 - FOLGA - 150, -10, total=False)
-    d4.cota_h([-9.5 - FOLGA - 150, -9.5 - FOLGA, -9.5, 0], -166, -10, total=False)
-    d4.chamada((-60, -8), (-16, -20), "CA-1: mesa 16 × 175 × 200 + nervura 16 × 120 × 150 (A36)")
+    d4.cota_v([-166, -16, 0], -9.5 - FOLGA - 150, -10, total=False)
+    d4.cota_h([-9.5 - FOLGA - 150, -9.5 - FOLGA, 0], -166, -20, total=False)
+    d4.chamada((-100, -120), (-6, -44), "CA-1: mesa 16 × 175 × 200 + nervura 16 × 120 × 150 (A36)")
     d4.chamada((-5, -110), (14, -12), "IP-01 do pilar")
     d4.chamada((-100, 5), (-14, 16), "neoprene 130 × 150 × 10")
     d4.chamada((-120, 250), (-12, 10), "1ª placa do pacote")
@@ -391,6 +394,12 @@ def prancha_tipo():
            ["CL-1", "Chapa 6×60×80 A36 (obra)", 2, "entre IP-01 e CH-P1"],
            ["CA-1", "Consolo metálico, mesa 16 + nervura 16", "—", "sob a 1ª placa de pacote suspenso"]]
     y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS METÁLICAS — mm", ["MARCA", "DESCRIÇÃO", "QT/PL", "POSIÇÃO"], ins, [14, 86, 14, 76])
+    rows_a = []
+    for L in sorted(TIPOS, key=lambda L: -L):
+        n = len(TIPOS[L])
+        kg_n2 = 2 * (L - 60) / 1000 * 0.395 * 1.10
+        rows_a.append([TIPO[L], n, f"2 Ø8 C={(L - 60)/10:.0f}".replace(".", ","), f(TELA_PL, 2), f(kg_n2 + TELA_PL * 1.48 * 1.10, 1), f((kg_n2 + TELA_PL * 1.48 * 1.10) * n, 0)])
+    y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/placa", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, [
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento 3,5 cm (CAA II).",
@@ -440,7 +449,7 @@ def prancha_cm():
         x0 = FACE_X[0] if b == 0 else M(xa)
         x1 = FACE_X[1] if b == 5 else M(xb)
         kp.ret(x0, M(Y_LIN[3]) - 200 - o - 150, x1 - x0, 150, "CORTADO")                                # C
-    pos = {"A": (19.75, 82.8), "B": (-5.5, 54.5), "C": (19.75, 25.5), "D": (45.0, 54.5), "E": (-5.5, 19.7), "F": (45.0, 19.7),
+    pos = {"A": (19.75, 85.6), "B": (-5.5, 54.5), "C": (19.75, 25.5), "D": (45.0, 54.5), "E": (-5.5, 19.7), "F": (45.0, 19.7),
            "G": (19.75, 13.5), "H": (-5.5, 4.8), "I": (19.75, -3.6), "J": (45.0, 4.8)}
     for V, (x, y) in pos.items():
         kp.circulo((M(x), M(y)), 1500, "INDICACAO")
@@ -483,6 +492,20 @@ def prancha_cm():
 
 
 # ================================================================== ND-LET-VT01 rev 02 — vigas de travamento
+def vt_barras(Lc):
+    """Armadura da VT 25×60 (cm): N1 3 Ø12,5 inferior (só no corpo), N2 3 Ø12,5 superior, N3 pele 4 Ø8, N4 estribos Ø6,3 c/15,
+    N5 tirante do dente 2 Ø12,5 por ponta, N6 suspensão 2 estribos Ø8 por ponta, N7 estribos do dente 3 Ø6,3 por ponta."""
+    Lb = round(Lc - 46)
+    n4 = int((Lc - 46) // 15) + 1
+    return [dict(pos="N1", diam=12.5, qtd=3, comp=Lb, forma=[(0, 0), (85, 0)], trechos=[f"{Lb}"]),
+            dict(pos="N2", diam=12.5, qtd=3, comp=round(Lc - 6), forma=[(0, 0), (85, 0)], trechos=[f"{round(Lc - 6)}"]),
+            dict(pos="N3", diam=8.0, qtd=4, comp=Lb, forma=[(0, 0), (85, 0)], trechos=[f"{Lb}"]),
+            dict(pos="N4", diam=6.3, qtd=n4, comp=162, forma=[(0, 0), (19, 0), (19, 54), (0, 54), (0, 0), (2, 2)], trechos=["19", "54", "", ""]),
+            dict(pos="N5", diam=12.5, qtd=4, comp=70, forma=[(0, 6), (0, 0), (64, 0)], trechos=["6", "64"]),
+            dict(pos="N6", diam=8.0, qtd=4, comp=162, forma=[(0, 0), (19, 0), (19, 54), (0, 54), (0, 0), (2, 2)], trechos=["19", "54", "", ""]),
+            dict(pos="N7", diam=6.3, qtd=6, comp=102, forma=[(0, 0), (19, 0), (19, 24), (0, 24), (0, 0), (2, 2)], trechos=["19", "24", "", ""])]
+
+
 def prancha_vt():
     agr = {}
     for i in range(1, 8):
@@ -490,9 +513,10 @@ def prancha_vt():
     lista = sorted(agr.items(), key=lambda t: -t[0])
     MK = {L: f"VT-{k+1:02d}" for k, (L, _) in enumerate(lista)}
     peso = lambda L: 0.25 * 0.60 * L * 25
-    pr = carimbo("ND-LET-VT01", "VIGAS DE TRAVAMENTO VT 25 × 60 (EIXOS A E E, +7,50 A +8,10, DENTES GERBER) — PLANTA, ELEVAÇÃO, SEÇÃO E APOIO", "01/01", rev="02")
+    pr = carimbo("ND-LET-VT01", "VIGAS DE TRAVAMENTO VT 25 × 60 (EIXOS A E E, +7,50 A +8,10, DENTES GERBER) — PLANTA, ELEVAÇÃO, SEÇÃO E APOIO", "01/01", rev="03")
     pr.revisao("01", "12/10/2026", "VT/VV A +6,25/+6,85 COM DENTES GERBER")
     pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01; VT A +7,50/+8,10 ATRÁS DA FIADA +7,50; SEM VERGAS (PORTÕES SOB A TS-01)")
+    pr.revisao("03", "12/10/2026", "CP-VT 25×20×29 SEM CHANFRO (FUNDO ALINHADO À VT); DENTE REDESENHADO; RELAÇÃO DO AÇO")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("VT", f"VIGA DE TRAVAMENTO 25 × 60 cm — L = {lista[-1][0]*100:.1f} A {lista[0][0]*100:.1f} cm — 14 PEÇAS".replace(".", ","),
@@ -533,25 +557,32 @@ def prancha_vt():
     for yy in (220, 380):
         s.ponto_barra((40, yy), 8); s.ponto_barra((210, yy), 8)
     s.cota_h([0, 250], 0, -8); s.cota_v([0, 600], 250, 8)
-    s.chamada((205, 555), (12, 8), "N1/N2 — 3 Ø12,5 em cima e embaixo"); s.chamada((210, 380), (12, 0), "N3 pele 2 Ø8/face"); s.chamada((220, 300), (12, -10), "N4 Ø6,3 c/15")
-    a = pr.vista("DETALHE 1", (Q[0] + 500, Q[1] + 75), 20, titulo="DETALHE 1 — DENTE GERBER DA VT NO CONSOLO CP-VT", subtitulo="dente 30 × 20; CP-VT + PN-1 Ø20; neoprene 200×150×10", unidade="cm")
+    s.chamada((205, 555), (12, 8), "N1/N2 — 3 Ø12,5 em cima e embaixo"); s.chamada((210, 380), (12, 0), "N3 pele 2 Ø8/face"); s.chamada((220, 300), (12, -10), "N4 estribo Ø6,3 c/15")
+    a = pr.vista("DETALHE 1", (Q[0] + 400, Q[1] + 205), 10, titulo="DETALHE 1 — DENTE GERBER DA VT NO CONSOLO CP-VT", subtitulo="dente 30 × 20; CP-VT + PN-1 Ø20; neoprene 200×150×10", unidade="cm")
     a.ret(-600, -500, 600, 1700, "VISTA")
-    a.poli([(0, 0), (250, 0), (250, 100), (0, 300)], "VISTA")
-    a.ret(125 - 10, 100, 20, 400, "OCULTA"); a.chapa(25, 300, 200, 10)
-    a.poli([(25, 310), (225, 310), (225, 610), (1025, 610), (1025, 910), (25, 910)], "VISTA", fechada=True)
-    a.interrupcao((1025, 610), (1025, 910))
-    a.poli([(60, 370), (60, 340), (700, 340)], "ARMADURA"); a.poli([(260, 640), (260, 880)], "ARM_TRANSV"); a.poli([(340, 640), (340, 880)], "ARM_TRANSV")
-    a.cota_h([-600, 0, 250, 1025], -500, -8, total=False); a.cota_v([0, 300, 610, 910], 1025, 8, total=False)
-    a.chamada((100, 150), (14, -30), "CP-VT nas faces laterais dos pilares (assento +7,79)")
-    a.chamada((125, 450), (14, 10), "PN-1 Ø20 no TB-1 Ø50 da viga"); a.chamada((-300, 1000), (-10, 8), "pilar")
-    a.chamada((500, 340), (12, -22), "N5 tirante 2 Ø12,5 (NBR 9062:2017 7.4)"); a.chamada((300, 760), (12, 10), "N6 suspensão 2 estribos Ø8")
+    a.ret(0, 10, 200, 290, "VISTA")                                                   # CP-VT 20 × 29 (proj.) sem chanfro: fundo alinhado ao da VT
+    a.ret(100 - 10, 100, 20, 400, "OCULTA"); a.chapa(25, 300, 200, 10)
+    a.poli([(25, 310), (225, 310), (225, 10), (1025, 10), (1025, 610), (25, 610)], "VISTA", fechada=True)   # VT com dente 20 × 30
+    a.interrupcao((1025, 10), (1025, 610))
+    a.poli([(60, 370), (60, 340), (700, 340)], "ARMADURA"); a.poli([(260, 40), (260, 580)], "ARM_TRANSV"); a.poli([(340, 40), (340, 580)], "ARM_TRANSV")
+    a.cota_h([-600, 0, 200, 225, 1025], -500, -8, total=False); a.cota_v([10, 300, 310, 610], 1025, 8, total=False)
+    a.chamada((100, 150), (14, -30), "CP-VT (b 25, proj. 20, h 29) sem chanfro, faces laterais dos pilares (assento +7,79)")
+    a.chamada((100, 450), (14, 10), "PN-1 Ø20 no TB-1 Ø50 da viga"); a.chamada((-300, 1000), (-10, 8), "pilar")
+    a.chamada((500, 340), (4, -30), "N5 tirante 2 Ø12,5 (NBR 9062:2017 7.4)"); a.chamada((300, 500), (12, 14), "N6 suspensão 2 estribos Ø8")
     y = Q[3] - 40
     linhas = [[MK[L], ", ".join(pos), 2 * len(pos), f"{L*100:.1f}".replace(".", ","), f(peso(L) / 9.81, 2)] for L, pos in lista]
     y = pr.tabela(XC, y, "MARCAS — VT 25×60 (eixos A e E)", ["MARCA", "TRECHO (linhas)", "QT", "L (cm)", "PESO (t)"], linhas, [18, 90, 12, 24, 26], h_lin=5.5)
     ins = [["TB-1", "Tubo Ø50×3,0 L=280 a prumo (no dente)", 2, "a 10 cm das pontas"], ["CH-A3", "Chapa 200×150×9,5 + 2 grapas Ø10", 2, "fundo das pontas"], ["AL-1", "Laço de cordoalha Ø12,7", 2, "a L/5 das pontas"]]
     y = pr.tabela(XC, y - 4, "INSERTOS POR VIGA — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 100, 10, 64])
+    Lmax = lista[0][0] * 100
+    y = pr.tabela_croqui(XC, y - 4, vt_barras(Lmax), h_lin=9.0)["y_base"]
+    kgm = {6.3: 0.245, 8.0: 0.395, 12.5: 0.963}
+    kg = lambda Lc: sum(b["qtd"] * b["comp"] / 100 * kgm[b["diam"]] for b in vt_barras(Lc)) * 1.10
+    y = pr.tabela(XC, y - 4, "AÇO CA-50 POR MARCA (+10% perdas)", ["MARCA", "L (cm)", "QT", "kg/peça", "kg total"],
+                  [[MK[L], f"{L*100:.1f}".replace(".", ","), 2 * len(pos), f(kg(L * 100), 1), f(kg(L * 100) * 2 * len(pos), 1)] for L, pos in lista], [18, 30, 14, 30, 30], h_lin=5.5)
     y = pr.legenda_armadura(XC, y - 4, False)
-    pr.notas(XC, y - 4, ["Todas no mesmo nível: fundo +7,50, topo +8,10, atrás da fiada de placas +7,50/+8,75 (placa inteira por fora); dentes Gerber 30 × 20 nos consolos CP-VT dos pilares (assento +7,79).",
+    pr.notas(XC, y - 4, [f"Relação do aço desenhada para {MK[lista[0][0]]} (L = {Lmax:.1f} cm); nas demais marcas N1, N2, N3 e a quantidade de N4 seguem o comprimento da peça (tabela por marca).".replace(".", ",", 1),
+                         "Todas no mesmo nível: fundo +7,50, topo +8,10, atrás da fiada de placas +7,50/+8,75 (placa inteira por fora); dentes Gerber 30 × 20 nos consolos CP-VT dos pilares (assento +7,79).",
                          "Linha 4 sem verga: os portões ficam sob a TS-01 da linha 4, livres até +7,50.",
                          "Linhas 2–4 (vistas E e F) abertas até +7,50: a VT fica aparente por dentro e escondida por fora pela fiada +7,50.",
                          "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)

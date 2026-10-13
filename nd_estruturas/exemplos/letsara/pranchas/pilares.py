@@ -29,14 +29,14 @@ Z_CONS = {"P1": round(zf(475) + 450 * math.cos(math.atan(I_CAI)) - 10), "P2": ro
 # sobem até +10,00 — cabeça 40×30. Eixo A: +8,40; eixo E: +9,55 (topo da TS-01 na face, arredondado a 5 cm).
 Z_REC = {"P1": 8400, "P2": 9550}
 H_CAB = 300
-CONS = dict(proj=300, h=450, hp=250, larg=400)           # consolo CP-TS: balanço 300, altura 450 na face, 250 na ponta
+CONS = dict(proj=300, h=440, hp=440, larg=400)           # consolo CP-TS: balanço 300, altura 440 = recorte do dente da TS-01 (450) − neoprene: fundo alinhado ao da viga (consolos.json)
 PINO = dict(d=20, L=700, emb=300, x=175)                 # pino Ø20 CA-50: 300 no consolo + 400 no tubo TB-1 da viga; a 175 da face
 Z_PLACA = [1250 * k - 100 for k in range(1, 9)]          # insertos das placas (fiadas de 1,25 m), a partir do piso
 Z_PLACA_ABS = [z + L_CAL for z in Z_PLACA]
 AL = [L_TOT - 3200, L_CAL + 2300]                        # alças (a partir da base): içamento na vertical e transporte
 COB = 30                                                 # NBR 6118:2023 Tab. 7.2 — CAA II, pilar: 30 mm (sem a redução de 5 mm)
 Z_VT = 7790 + 1000                                       # assento do consolo CP-VT: viga VT 25×60 (+7,50/+8,10) com dente 30×20 — faces B e D
-VT = dict(larg=250, proj=250, h=300, hp=200)
+VT = dict(larg=250, proj=200, h=290, hp=290)            # CP-VT: altura = recorte do dente da VT (300) − neoprene
 zc = Z_CONS["P1"] + L_CAL                                # topo do consolo (a partir da base)
 z_rec = Z_REC["P1"] + L_CAL                              # nível do recuo (a partir da base)
 json.dump(dict(B=B, H=H, L_TOT=L_TOT, zc=zc, z_rec=z_rec, h_cab=H_CAB, cons=CONS, incl=I_CAI, pino_x=PINO["x"], z_placa_abs=Z_PLACA_ABS, al=AL),
@@ -44,18 +44,24 @@ json.dump(dict(B=B, H=H, L_TOT=L_TOT, zc=zc, z_rec=z_rec, h_cab=H_CAB, cons=CONS
 
 # planta-chave (m) — eixos do R01 como no modelo BIM
 MARCAS = [
-    ("PL-01", "P1 L3–L8", 6, "CP-TS +7,914 (A); recuo +8,40", "8 IP-01 (C)"),
-    ("PL-02", "P1 L2", 1, "CP-TS +7,914 (A); 2 CP-MEZ (A); recuo +8,40", "8 IP-01 (C)"),
-    ("PL-03", "P1 L1 canto", 1, "CP-VB +7,460 (B); 2 CP-MEZ; recuo A e B", "8 IP-01 (C) + 8 (D)"),
-    ("PL-04", "P1 L9 canto", 1, "CP-VB +7,460 (D); recuo A e D", "8 IP-01 (C) + 8 (B)"),
-    ("PL-05", "P2 L3–L8", 6, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); recuo +9,55", "8 IP-01 (C)"),
-    ("PL-06", "P2 L2", 1, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); 2 CP-MEZ; recuo +9,55", "8 IP-01 (C)"),
-    ("PL-07", "P2 L1 canto", 1, "CP-VB +8,645 (D); 2 CP-MEZ; recuo A e D", "8 IP-01 (C) + 8 (B)"),
-    ("PL-08", "P2 L9 canto", 1, "CP-VB +8,645 (B); recuo A e B", "8 IP-01 (C) + 8 (D)"),
-    ("PF-01", "P3 (L1 e L9)", 2, "2 CP-VB +7,756 (B e D); L1: 2 CP-MEZ; recuo no topo da VB", "8 IP-01 (C)"),
-    ("PF-02", "P4", 1, "2 CP-VB +8,053 (B e D); 2 CP-MEZ; recuo no topo da VB", "8 IP-01 (C)"),
-    ("PF-04", "P14 (L9, C)", 1, "2 CP-VB +8,053; CP-I110 (V405); recuo no topo da VB", "8 IP-01 (C)"),
-    ("PF-03", "P5 (L1 e L9)", 2, "2 CP-VB +8,349 (B e D); L1: 2 CP-MEZ; recuo no topo da VB", "8 IP-01 (C)"),
+    ("PL-01", "P1 L5–L8", 4, "CP-TS +7,914 (A); CP-VT (B, D); recuo +8,40", "8 IP-01 (C)"),
+    ("PL-09", "P1 L3", 1, "CP-TS +7,914 (A); CP-VT (B, D); recuo +8,40", "2 IP-01 (C, fiadas 6–7)"),
+    ("PL-10", "P1 L4", 1, "CP-TS +7,914 (A); CP-VT (B, D); recuo +8,40", "8 IP-01 (C) + 6 (B, vista C)"),
+    ("PL-02", "P1 L2", 1, "CP-TS +7,914 (A); 2 CP-MEZ (A); CP-VT (B); recuo +8,40", "6 IP-01 (C) + 6 (B, vista G)"),
+    ("PL-03", "P1 L1 canto", 1, "CP-VB +7,460 (A); 2 CP-MEZ (A); recuo A e B", "6 IP-01 (C) + 6 (D)"),
+    ("PL-04", "P1 L9 canto", 1, "CP-VB +7,460 (A); CP-VT (D); recuo A e D", "8 IP-01 (C) + 8 (B)"),
+    ("PL-05", "P2 L5–L8", 4, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); CP-VT (B, D); recuo +9,55", "8 IP-01 (C)"),
+    ("PL-11", "P2 L3", 1, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); CP-VT (B, D); recuo +9,55", "2 IP-01 (C, fiadas 6–7)"),
+    ("PL-12", "P2 L4", 1, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); CP-VT (B, D); recuo +9,55", "8 IP-01 (C) + 6 (B, vista C)"),
+    ("PL-06", "P2 L2", 1, f"CP-TS +{f(Z_CONS['P2']/1000,3)} (A); 2 CP-MEZ (A); CP-VT (B); recuo +9,55", "6 IP-01 (C) + 6 (B, vista G)"),
+    ("PL-07", "P2 L1 canto", 1, "CP-VB +8,645 (A); 2 CP-MEZ (A); recuo A e D", "6 IP-01 (C) + 6 (B)"),
+    ("PL-08", "P2 L9 canto", 1, "CP-VB +8,645 (A); CP-VT (B); recuo A e B", "8 IP-01 (C) + 8 (D)"),
+    ("PF-01", "P3 L1", 1, "2 CP-VB +7,756 (B, D); 4 CP-MEZ (B, D); recuo +8,70", "6 IP-01 (C)"),
+    ("PF-02", "P4 L1", 1, "2 CP-VB +8,053 (B, D); 4 CP-MEZ (B, D); recuo +9,00", "6 IP-01 (C)"),
+    ("PF-03", "P5 L1", 1, "2 CP-VB +8,349 (B, D); 4 CP-MEZ (B, D); recuo +9,25", "6 IP-01 (C)"),
+    ("PF-05", "P3 L9", 1, "2 CP-VB +7,756 (B, D); recuo +8,70", "8 IP-01 (C)"),
+    ("PF-04", "P14 L9", 1, "2 CP-VB +8,053 (B, D); CP-I110 +8,190 (A); recuo +9,00", "8 IP-01 (C)"),
+    ("PF-06", "P5 L9", 1, "2 CP-VB +8,349 (B, D); recuo +9,25", "8 IP-01 (C)"),
 ]
 N_PIL = sum(m[2] for m in MARCAS)
 def marca_de(nome):
@@ -119,12 +125,13 @@ subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_pilar.py"],
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo=f"PILAR PRÉ-MOLDADO PL-01 (FAMÍLIA PL-01 A PF-03) 40×60 — {'PRÉ-TRACIONADO NA CABECEIRA' if PROT else 'CONCRETO ARMADO'} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                         desenho=f"ND-LET-PIL-{'P' if PROT else 'A'}01", folha="01/01", fase="PARA APROVAÇÃO — OPÇÃO " + ("B (PROTENDIDO)" if PROT else "A (ARMADO)"),
-                        marca="PL-01", qtd=6, peso=f(PESO, 1), volume=f(VOL, 2)))
+                        marca="PL-01", qtd=4, peso=f(PESO, 1), volume=f(VOL, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO PARA COMPARAÇÃO DE CUSTO (OPÇÕES A E B)")
 pr.revisao("01", "12/10/2026", "VISTAS DAS FACES A/B/C, ISOMÉTRICOS, PLANTA-CHAVE, COTAS EM CM, ESTRIBOS E COBRIMENTOS CONFORME NBR 6118")
 pr.revisao("02", "12/10/2026", "PILAR DESENHADO EM PÉ (POSIÇÃO DE MONTAGEM); CHAPARIA HACHURADA; DETALHE DE PROTENSÃO (FORÇA NO MACACO)")
 pr.revisao("03", "12/10/2026", "CONSOLOS CP-VT (DENTES DAS VIGAS DE TRAVAMENTO +6,25/+6,85) NAS FACES B E D; CORES DAS ARMADURAS")
 pr.revisao("04", "12/10/2026", "GEOMETRIA DO R01; CABEÇA RECUADA 40×30 ACIMA DE +8,40 (APROVADO); VT EM +7,50/+8,10")
+pr.revisao("05", "12/10/2026", "CONSOLOS SEM CHANFRO, FUNDO ALINHADO AO FUNDO DAS VIGAS (ALTURA = RECORTE DO DENTE)")
 Q = pr.quadro                     # (25, 10, 1179, 831)
 ESC = 20
 XC = Q[2] - 190                   # coluna de tabelas à direita
@@ -133,8 +140,8 @@ Y0 = 92                           # papel: base do cálice (z = 0) das vistas em
 # ------------------------------------------------------------------ identificação da peça (cabeçalho do desenho)
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
 pr.texto(Q[0] + 10, Q[3] - 24, "PL-01", "grande", "TITULO")
-pr.texto(Q[0] + 48, Q[3] - 24, f"PILAR PRÉ-MOLDADO  40 × 60 cm (cabeça 40 × 30)   ·   L = {L_TOT/10:.0f} cm (cálice 100 + 1000)   ·   {'C50 / 10 cord. Ø12,7' if PROT else 'C40'}   ·   6 peças", "titulo", "TITULO")
-pr.texto(Q[0] + 10, Q[3] - 14, f"POSIÇÃO: eixo A (P1), linhas 3 a 8   ·   PESO {f(PESO/10,2)} t   ·   VOLUME {f(VOL,2)} m³   ·   FACES: A = consolo (interna), B = lado de 40 (y+), C = placas (externa), D = lado de 40 (y−)   ·   desenhado em pé, como montado; demais marcas: tabela e planta-chave", "nota", "TEXTO")
+pr.texto(Q[0] + 48, Q[3] - 24, f"PILAR PRÉ-MOLDADO  40 × 60 cm (cabeça 40 × 30)   ·   L = {L_TOT/10:.0f} cm (cálice 100 + 1000)   ·   {'C50 / 10 cord. Ø12,7' if PROT else 'C40'}   ·   4 peças", "titulo", "TITULO")
+pr.texto(Q[0] + 10, Q[3] - 14, f"POSIÇÃO: eixo A (P1), linhas 5 a 8   ·   PESO {f(PESO/10,2)} t   ·   VOLUME {f(VOL,2)} m³   ·   FACES: A = consolo (interna), B = lado de 40 (y+), C = placas (externa), D = lado de 40 (y−)   ·   desenhado em pé, como montado; demais marcas: tabela e planta-chave", "nota", "TEXTO")
 
 # ------------------------------------------------------------------ PLANTA-CHAVE 1:750 (locação dos pilares e marcas) — canto superior esquerdo
 kp = pr.vista("PLANTA-CHAVE", (Q[0] + 487, Q[3] - 172), 750, titulo="PLANTA-CHAVE — LOCAÇÃO DOS PILARES 40×60",
@@ -155,17 +162,17 @@ def pil_kp(nome, x, y, bx, by, lado):
     if mk == "PL-01":
         kp.hachura(pts, "ANSI31", 0.3)
     if lado == 0:
-        kp.texto((Xm(x), Xm(y) - 2000), f"{nome} {mk}", "min", "TOP_CENTER")
+        kp.texto((Xm(x), Xm(y) - 2000), mk, "min", "TOP_CENTER")
     elif lado == 2:
-        kp.texto((Xm(x), Xm(y) + 2000), f"{nome} {mk}", "min", "BOTTOM_CENTER")
+        kp.texto((Xm(x), Xm(y) + 2000), mk, "min", "BOTTOM_CENTER")
     else:
         kp.texto((Xm(x) + lado * 700, Xm(y) + 500), f"{nome} {mk}", "min", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT")
 for i, y in enumerate(Y_LIN, 1):
     pil_kp(f"P1-L{i}", 0.0, y, 600, 400, 1)
     pil_kp(f"P2-L{i}", X_EIXO["E"], y, 600, 400, -1)
 for j, x in enumerate(X_FACH[1:-1]):
-    pil_kp(["P3", "P4", "P5"][j], x, 0.0, 400, 600, 0)
-    pil_kp(["P3", "P14", "P5"][j], x, Y_LIN[-1], 400, 600, 2)
+    pil_kp(["P3", "P4", "P5"][j] + "-L1", x, 0.0, 400, 600, 0)
+    pil_kp(["P3", "P14", "P5"][j] + "-L9", x, Y_LIN[-1], 400, 600, 2)
 for nome, y, bx, by in (("P8A", Y_LIN[1], 400, 600), ("P11", Y_LIN[3], 400, 400), ("P13", Y_P13, 600, 600)):
     xc_ = Xm(X_EIXO["C"])
     pts = [(xc_ - bx / 2, Xm(y) - by / 2), (xc_ + bx / 2, Xm(y) - by / 2), (xc_ + bx / 2, Xm(y) + by / 2), (xc_ - bx / 2, Xm(y) + by / 2)]
@@ -175,8 +182,6 @@ for nome, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
     kp.poli(pts, "VISTA", fechada=True); kp.texto((Xm(x), Xm(Y_LIN[1]) - 700), nome, "min", "TOP_CENTER")
 kp.cota_h([Xm(x) for x in X_FACH], Xm(-2.5), -6)
 kp.cota_v([Xm(y) for y in Y_LIN], Xm(42.0), 6)
-kp.poli([(Xm(46.4), Xm(70)), (Xm(46.4), Xm(75)), (Xm(45.6), Xm(73.5)), (Xm(46.4), Xm(75)), (Xm(47.2), Xm(73.5))], "VISTA")
-kp.texto((Xm(46.4), Xm(76.5)), "N (a confirmar)", "min", "BOTTOM_CENTER")
 
 # ------------------------------------------------------------------ vistas de fôrma 1:20 em pé — cotas em cm
 def chaves_lado(v, x_face, sg):
@@ -218,20 +223,19 @@ vA.chamada((B + VT["proj"], Z_VT), (10, 10), "CP-VT (faces B e D) +7,790")
 vA.cota_v([0, L_CAL, Z_VT, zc - CONS["h"], zc, z_rec, L_TOT], 0, -9)
 vA.cota_v([L_CAL, AL[1], AL[0], L_TOT], B, 9, total=False)
 vA.cota_h([0, B], 0, -8)
-vA.chamada((B / 2, zc - 225), (12, -12), "CP-TS 40×30×45/25")
+vA.chamada((B / 2, zc - 225), (8, -40), "CP-TS 40×30×44 (fundo = fundo da TS-01)")
 vA.chamada((B / 2 + 50, AL[0]), (10, -10), "AL-2 (2x)")
 vA.chamada((B / 2, zc + 350), (12, 12), "PN-1 Ø20")
 vA.chamada((B / 2 + 75, Z_PLACA_ABS[2]), (10, 10), "IP-01 (face C)")
 vA.chamada((B / 2, 400), (12, 14), "chaves 4×20")
-vA.texto((B / 2, L_TOT + 120), "FACE A", "sub", "BOTTOM_CENTER")
 vA.marcador_corte((-80, 5000), (B + 80, 5000), "A", lado=1)
 vA.marcador_corte((-80, zc - 125), (B + 80, zc - 125), "B", lado=1)
 
 # FACE B (y+, lado de 40): perfil com o consolo em projeção para a direita (face A) e IP-01 para a esquerda (face C)
-vB = pr.vista("FACE D", (Q[0] + 150, Y0), ESC, titulo="FACE D (LADO DE 40)", subtitulo="face B simétrica; consolo (A) à direita", unidade="cm")
+vB = pr.vista("FACE D", (Q[0] + 150, Y0), ESC, titulo="FACE D (LADO DE 40)", subtitulo="face B simétrica", unidade="cm")
 vB.poli([(0, 0), (H, 0), (H, z_rec), (H_CAB, z_rec), (H_CAB, L_TOT), (0, L_TOT)], "VISTA", True)
 vB.linha((0, L_CAL), (H, L_CAL), "EIXO")
-vB.chamada((H_CAB + 150, z_rec), (10, 14), f"recuo +{f(Z_REC['P1']/1000,2)}: cabeça 40×30 até +10,00")
+vB.chamada((H_CAB + 150, z_rec), (10, 30), f"recuo +{f(Z_REC['P1']/1000,2)}: cabeça 40×30 até +10,00")
 chaves_lado(vB, 0, -1); chaves_lado(vB, H, 1)
 c0, c1 = zc - CONS["h"], zc
 vB.poli([(H, c0), (H + CONS["proj"], c0 + CONS["h"] - CONS["hp"]), (H + CONS["proj"], c1 + CONS["proj"] * I_CAI), (H, c1)], "VISTA")
@@ -244,7 +248,7 @@ for z in AL:
     vB.poli([(H, z - 50), (H + 110, z - 50), (H + 150, z), (H + 110, z + 50), (H, z + 50)], "METALICA")
 vB.ret((H - VT["larg"]) / 2, Z_VT - VT["h"], VT["larg"], VT["h"], "VISTA"); vB.linha(((H - VT["larg"]) / 2, Z_VT - VT["hp"]), ((H + VT["larg"]) / 2, Z_VT - VT["hp"]), "VISTA")
 vB.chapa(H / 2 - 10, Z_VT, 20, 300); vB.chapa(H / 2 - 75, Z_VT, 150, 10)
-vB.chamada((H / 2, Z_VT - 150), (12, -12), "CP-VT 25×25×30/20 + PN-1 (dente da VT) +7,790")
+vB.chamada((H / 2, Z_VT - 150), (30, -62), "CP-VT 25×20×29 + PN-1 (dente da VT) +7,790")
 vB.cota_ord_v(ORD, 0, -9, y0=0, rotulos=ORD_R)
 vB.cota_v([0, L_CAL, c0, zc, z_rec, L_TOT], H + CONS["proj"], 9)
 vB.cota_h([0, H, H + CONS["proj"]], 0, -8, total=False)
@@ -253,11 +257,10 @@ nivel(vB, H + 700, zc, f"+{f(Z_CONS['P1']/1000,3)} assento", 1)
 nivel(vB, H_CAB, L_TOT, "+10,000", 1)
 nivel(vB, H, z_rec, f"+{f(Z_REC['P1']/1000,3)} recuo", 1)
 vB.cota_h([0, H_CAB, H], L_TOT, 8, total=False)
-vB.chamada((H + 150, zc - 250), (12, -30), "consolo CP-TS, topo a 3 %")
+vB.chamada((H + 150, zc - 250), (12, -30), "consolo CP-TS, topo a 3 %, fundo alinhado ao da viga")
 vB.chamada((H + PINO["x"], zc + 300), (12, 10), "PN-1 Ø20 L=70")
 vB.chamada((-9.5, Z_PLACA_ABS[4]), (-10, 10), "IP-01 (8x)")
 vB.chamada((H + 150, AL[1]), (10, 10), "AL-2")
-vB.texto((H / 2, L_TOT + 120), "FACE D", "sub", "BOTTOM_CENTER")
 vB.texto((H / 2, L_TOT / 2 - 150), "CG", "min", "MIDDLE_CENTER"); vB.circulo((H / 2, L_TOT / 2 - 150), 40, "COTA")
 vB.marcador_detalhe((H + 100, zc - 100), 400, 1, ang=-30, dist=8)
 vB.marcador_detalhe((H / 2, L_CAL - 150), 380, 2, ang=-20, dist=8)
@@ -279,7 +282,6 @@ vC.cota_ord_v([0, L_CAL] + Z_PLACA_ABS + [L_TOT], B, 9, y0=0, rotulos=[f"{z/10:g
 vC.cota_v([L_CAL, Z_PLACA_ABS[0], Z_PLACA_ABS[1]], 0, -9, total=False)
 vC.cota_h([0, B / 2 - 75, B / 2 + 75, B], 0, -8)
 vC.chamada((B / 2 + 75, Z_PLACA_ABS[5]), (-8, 12), "IP-01 150×150×9,5")
-vC.texto((B / 2, L_TOT + 120), "FACE C", "sub", "BOTTOM_CENTER")
 
 # ------------------------------------------------------------------ ELEVAÇÃO DE ARMAÇÃO 1:20 em pé (lado de 60 visível, como a face B)
 va = pr.vista("ARMAÇÃO", (Q[0] + 375, Y0), ESC, titulo="ARMAÇÃO", subtitulo="igual nas 11 marcas", unidade="cm")
@@ -488,7 +490,7 @@ if PROT:
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=10, y=250, forca=SIG_PI * 98.7 / 1000, isol=0)], 60)
     y = tc["y_base"]
 ins = [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo), a 175 mm da face", 3, "CP-TS (face A) e 2 CP-VT (faces B e D)"],
-       ["CP-VT", "Consolo 25×25×30/20 p/ dente da VT 25×60 (+7,790)", 2, "faces B e D (canto: 1)"],
+       ["CP-VT", "Consolo 25×20×29 sem chanfro p/ dente da VT 25×60 (+7,790)", 2, "faces B e D (canto: 1)"],
        ["IP-01", "Chapa A36 150×150×9,5 + 2 pinos Ø12,5 c/ cabeça (p/ CM-01)", 8, "face C, c/1250 a partir do piso"],
        ["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700), carga 40 kN", 2, "face A: 3200 do topo; 2300 da base"],
        ["NEO-1", "Neoprene 300×150×10 c/ furo Ø30 (montagem)", 1, "sobre o consolo"]]
@@ -499,7 +501,7 @@ qd = [["MARCA", "PL-01", "SEÇÃO", "40 × 60 (cabeça 40 × 30)"],
       ["VOLUME", f"{f(VOL, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
       ["AÇO CA-50", f"{f(kg, 0)} kg", "TAXA", f"{f(LONG['n'] * 3.14 / 2400 * 100, 2)} %"],
       ["PROTENSÃO", "10 cord. Ø12,7 — 138,2 kN/cord. (1382 kN)" if PROT else "—", "CG", f"{L_TOT / 2 / 1000:.2f} m da base".replace(".", ",")],
-      ["QUANTIDADE", "6 (família: 29)", "COBRIMENTO", "3,0 cm (CAA II)"]]
+      ["QUANTIDADE", f"4 (família: {N_PIL})", "COBRIMENTO", "3,0 cm (CAA II)"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
 mem = [["ELU, vento lado 60 (λu)", "1,22" if PROT else "1,03"], ["ELU, vento lado 40 (λu)", "1,38" if PROT else "1,08"],
        ["Fachada, vento lado 40 (λu)", "1,30" if PROT else "1,01"], ["Armadura mínima (0,4 %)", f"{f(LONG['n'] * 3.14, 1)} ≥ 9,6 cm²"],
@@ -513,7 +515,7 @@ notas = [("Concreto C50; cordoalhas CP-190 RB Ø12,7 na grade da cabeceira (pass
          "Cobrimento nominal 3,0 cm aos estribos (NBR 6118:2023 Tab. 7.2, CAA II); espaçadores plásticos a cada 100 cm nas 4 faces.",
          f"Estribos N2 Ø8 fechados com ganchos de 135° (8 cm), c/15 no trecho corrente e c/10 nos 150 cm junto ao topo e no cálice; "
          "2 grampos N3 Ø8 por estribo nas linhas a 8,4 cm do eixo (NBR 6118:2023 18.4.3).",
-         "Consolos CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela. Consolos CP-VT (2 Ø12,5 tirante + 2 estribos Ø8) nas faces B e D em +7,790 para os dentes das vigas de travamento VT 25×60 (+7,50/+8,10, ND-LET-VT01).",
+         "Consolos sem chanfro: altura = recorte do dente da viga − neoprene, para o fundo do consolo ficar alinhado com o fundo da viga (CP-TS 44, CP-MEZ 44, CP-VB 35, CP-VT 29 cm). CP-TS (topo a 3 % subindo para a ponta), CP-VB e CP-MEZ com a mesma armadura N4/N5/N6 (NBR 9062:2017 7.3); posição e face por marca na tabela. Consolos CP-VT (2 Ø12,5 tirante + 2 estribos Ø8) nas faces B e D em +7,790 para os dentes das vigas de travamento VT 25×60 (+7,50/+8,10, ND-LET-VT01).",
          "Pino PN-1 Ø20 CA-50 (resiste 82 kN ≥ Hd 40 kN): concretado no consolo; tubo TB-1 Ø50×3,0 da viga (furo 44), grauteado numa ponta só de cada viga.",
          f"CABEÇA RECUADA: acima de +{f(Z_REC['P1']/1000,2)} (PL-01 a PL-04; +{f(Z_REC['P2']/1000,2)} em PL-05 a PL-08; fachada: topo da VB) o pilar segue só com os 30 cm do lado das placas (40×30) até +10,00. N1A param no recuo com gancho; N7 (4 Ø16) ancoram 60 cm no corpo; N8 Ø8 c/10 na cabeça; 2 N9 Ø12,5 a 45° no canto reentrante. Fôrma: tampa de 30 cm na face A acima do recuo." + (" Cordoalhas da face A cortadas rente no degrau e seladas." if PROT else ""),
          "Faces: A = consolo (interna), B e D = lados de 40, C = placas (externa). Pilar concretado deitado com a face A para cima e a face C no fundo da fôrma.",

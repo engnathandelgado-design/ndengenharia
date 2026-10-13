@@ -92,15 +92,15 @@ p.add_text(f"{G['marca']} em pé", font_size=13, position="upper_left", color="#
 p.add_text("projeto da ND Engenharia", font_size=9, position="lower_left", color="#888888")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-geral.png")
 
-c0 = G["consolos"][0]
-zc = c0["z"] / 1000
+c0 = G["consolos"][0] if G["consolos"] else None
+zc = c0["z"] / 1000 if c0 else L - 0.9
 p = pv.Plotter(off_screen=True, window_size=(1400, 1130), lighting="three lights"); p.set_background("white")
 labs = cena(p, zc - 1.0, zc + 0.9, chaves=False)
 rot(p, [l[0] for l in labs], [l[1] for l in labs])
 p.enable_parallel_projection()
 p.camera_position = [(H / 2 + 4.0, -3.4, zc + 2.3), (0, 0, zc - 0.1), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.3)
-p.add_text(f"Detalhe — consolos do {G['marca']}", font_size=15, position="upper_left", color="#111111")
+p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} do {G['marca']}", font_size=15, position="upper_left", color="#111111")
 p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-consolo.png")
 print("ok")

@@ -4,16 +4,20 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha
 
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
-X_FACH = [("A", 0.0), ("B", 9.87), ("C", 20.05), ("D", 29.63), ("E", 40.10)]
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+from geometria import X_EIXO, Y_LIN as Y_LIN_R01
+from cob_comum import XT
+X_FACH = [(k, X_EIXO[k]) for k in "ABCDE"]
+MEIA = {"A": 0.30, "B": 0.20, "C": 0.20, "D": 0.20, "E": 0.30}
 B, H = 150, 900
 COB = 30
 MARCAS = []
 for k, ((na, xa), (nb, xb)) in enumerate(zip(X_FACH[:-1], X_FACH[1:]), 1):
-    L = round((xb - xa) * 1000 - 500)                                     # 25 cm de folga da face de cada pilar
-    MARCAS.append((f"VB-0{k}", f"{na}–{nb}, fachadas 1 e 9", 2, L))
-L = MARCAS[1][3]                                                            # VB-02 desenhada (9,68 m)
-PASSO_T = 1579
-TERCAS = [round(255 + PASSO_T * k) for k in range(7) if 255 + PASSO_T * k < L - 200]
+    x0 = round((xa + MEIA[na] + 0.025) * 1000)                            # ponta a 25 mm da face do pilar
+    L = round((xb - MEIA[nb] - 0.025) * 1000) - x0
+    MARCAS.append((f"VB-0{k}", f"{na}–{nb}, fachadas 1 e 9", 2, L, x0))
+L, X0VB = MARCAS[1][3], MARCAS[1][4]                                         # VB-02 desenhada
+TERCAS = [x - X0VB + 42 for x in XT if X0VB + 150 < x + 42 < X0VB + L - 150]   # eixo da terça (alma + 42) a partir da ponta
 PESO = 0.15 * 0.90 * 25 * L / 1000
 V = 0.15 * 0.90 * L / 1000
 # cargas: peso próprio 3,4 + telha/terças/vento (5 m de tributária) ≈ 1,6 kN/m → M ≈ 59 kN·m; vento de sucção simétrico
@@ -31,18 +35,18 @@ pr.texto(Q[0] + 10, Q[3] - 14, f"fachadas 1 e 9, entre os pilares de fachada; ap
 # planta-chave
 kp = pr.vista("PLANTA-CHAVE", (Q[0] + 545, Q[3] - 118), 1000, titulo="PLANTA-CHAVE", subtitulo="VB nas fachadas 1 e 9", unidade="cm")
 M = lambda v: v * 1000
-Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
+Y_LIN = Y_LIN_R01
 for y in Y_LIN:
     kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
 for _, x in X_FACH:
-    kp.linha((M(x), M(-2)), (M(x), M(79)), "EIXO")
+    kp.linha((M(x), M(-2)), (M(x), M(81)), "EIXO")
 for i, y in enumerate(Y_LIN, 1):
     kp.texto((M(-3.5), M(y)), str(i), "min", "MIDDLE_RIGHT")
 for j, (n, x) in enumerate(X_FACH):
-    kp.texto((M(x), M(80)), n, "min", "BOTTOM_CENTER")
-for mk, _, _, Lm in MARCAS:
+    kp.texto((M(x), M(82)), n, "min", "BOTTOM_CENTER")
+for mk, _, _, Lm, _x0 in MARCAS:
     k = int(mk[-1]) - 1
-    for y in (0.0, 76.81):
+    for y in (0.0, Y_LIN[-1]):
         kp.ret(M(X_FACH[k][1]) + 250, M(y) - 150, Lm, 300, "CORTADO")
         kp.texto((M((X_FACH[k][1] + X_FACH[k + 1][1]) / 2), M(y) + (600 if y == 0 else -600)), mk, "min", "BOTTOM_CENTER" if y == 0 else "TOP_CENTER")
 
@@ -113,11 +117,11 @@ d1.cota_h([0, 150, 300, LD], 0, -12, total=False); d1.cota_v([0, 450, H], LD, 10
 d1.chamada((150, 300), (14, 12), "TB-1 Ø50×3,0 L=450 soldado na CH-A1 300×150×12,5")
 d1.chamada((COB, COB + 200), (12, 10), "N1/N2 com dobra de 20 cm nas pontas (ancoragem)")
 d1.chamada((400, COB + 100), (12, 14), "N4 c/10 nos 150 cm")
-d1.chamada((140, -27), (24, -22), "NEO-1 e consolo CP-VB 30×40×35/20 (ver prancha do pilar); assento = fundo da viga")
+d1.chamada((140, -27), (24, -22), "NEO-1 e consolo CP-VB 30×40×35, sem chanfro (ver prancha do pilar); assento = fundo da viga")
 
 # tabelas
 y = Q[3] - 6
-y = pr.tabela(XC, y, "MARCAS — VIGAS DE BORDA 15×90", ["MARCA", "POSIÇÃO", "QT", "L (cm)", "PESO (t)"], [[m, p, q, f"{Lm/10:.0f}", f(0.15 * 0.9 * 25 * Lm / 1000 / 10, 2)] for m, p, q, Lm in MARCAS], [18, 70, 10, 24, 24])
+y = pr.tabela(XC, y, "MARCAS — VIGAS DE BORDA 15×90", ["MARCA", "POSIÇÃO", "QT", "L (cm)", "PESO (t)"], [[m, p, q, f"{Lm/10:.0f}", f(0.15 * 0.9 * 25 * Lm / 1000 / 10, 2)] for m, p, q, Lm, _x in MARCAS], [18, 70, 10, 24, 24])
 Lb = round((L - 2 * COB) / 10)
 barras = [dict(pos="N1", diam=12.5, qtd=3, comp=Lb + 40, forma=[(0, 20), (0, 0), (Lb, 0), (Lb, 20)], trechos=["20", f"{Lb}", "20"]),
           dict(pos="N2", diam=12.5, qtd=3, comp=Lb + 40, forma=[(0, 0), (0, 20), (Lb, 20), (Lb, 0)], trechos=["20", f"{Lb}", "20"]),

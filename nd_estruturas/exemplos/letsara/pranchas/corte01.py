@@ -92,12 +92,13 @@ def ts(R, x0):
     R.linha(a2, b2, "METALICA")
 
 
-def consolo(R, face, lado, z_seat, proj=300, alt=450, alt_ponta=250):
-    """Consolo com topo a 3% passando por z_seat no centro do apoio (a 150+25+... da face)."""
+def consolo(R, face, lado, z_seat, proj=300, alt=440, inc=I):
+    """Consolo sem chanfro (h = dente da viga − neoprene; fundo alinhado ao da viga), topo com inclinação inc passando
+    por z_seat no centro do apoio."""
     xa, xb = face, face + lado * proj
     xm = face + lado * (proj - 125)
-    zt = lambda x: z_seat + I * (x - xm)
-    pts = [(xa, zt(xa)), (xb, zt(xb)), (xb, zt(xb) - alt_ponta), (xa, zt(xa) - alt)]
+    zt = lambda x: z_seat + inc * (x - xm)
+    pts = [(xa, zt(xa)), (xb, zt(xb)), (xb, zt(xb) - alt), (xa, zt(xa) - alt)]
     R.poli(pts, "CORTADO", True)
     R.hach(pts)
 
@@ -107,7 +108,7 @@ def pilar(R, x, larg, z_top, nome=None):
     R.poli(pts, "CORTADO", True)
 
 
-REC = (8400.0, 9550.0)                   # recuo da cabeça dos pilares laterais (eixo A / eixo E) — ND-LET-LOC01, a validar
+REC = (8400.0, 9550.0)                   # recuo da cabeça dos pilares laterais (eixo A / eixo E) — ND-LET-LOC01, aprovado
 
 
 def pilar_rec(R, x, lado, z_rec):
@@ -133,10 +134,10 @@ def estrutura(R, eixo):
             topo = zm - 250                                  # laje alveolar h20 + capa 5
             for a, b in faces:
                 xa, xb = a + 25, b - 25
-                cont = [(xa + LN, topo - 700), (xb - LN, topo - 700), (xb - LN, topo - 425), (xb, topo - 425), (xb, topo), (xa, topo),
-                        (xa, topo - 425), (xa + LN, topo - 425)]
-                R.poli(cont, "CORTADO", True)
-                consolo(R, a, 1, topo - 425 - 10, proj=300, alt=500); consolo(R, b, -1, topo - 425 - 10, proj=300, alt=500)
+                cont = [(xa + LN, topo - 900), (xb - LN, topo - 900), (xb - LN, topo - 450), (xb, topo - 450), (xb, topo), (xa, topo),
+                        (xa, topo - 450), (xa + LN, topo - 450)]                                  # VM I90, dente 45 × 30
+                R.poli(cont, "VISTA", True)
+                consolo(R, a, 1, topo - 450 - 10, proj=300, alt=440, inc=0); consolo(R, b, -1, topo - 450 - 10, proj=300, alt=440, inc=0)
             R.ret(300, zm - 250, 38900, 200, "VISTA")
             R.ret(300, zm - 50, 38900, 50, "VISTA")
     else:
@@ -159,8 +160,9 @@ def nivel(v, x, z, txt, lado=1):
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="CORTES TRANSVERSAIS DA ESTRUTURA (EIXOS 2 E 3) E APOIOS DA COBERTURA",
-                        desenho="ND-LET-CT01", folha="01/01", fase="PARA ANÁLISE", rev="01"))
+                        desenho="ND-LET-CT01", folha="01/01", fase="PARA APROVAÇÃO", rev="02"))
 pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); cabeça dos pilares laterais recuada; placas 15 cm por fora")
+pr.revisao("02", pr.dados["data"], "CONSOLOS SEM CHANFRO (FUNDO ALINHADO À VIGA); VM I90 COM DENTE 45×30; LAJE 8 Ø12,7")
 z_tel = lambda x: zf(x) + (H + 12.5 + 330) * c
 for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330), "CORTE 3-3"))):
     v = pr.vista(nome, org, 50, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
@@ -176,8 +178,7 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
     nivel(v, 600, zf(475) + HD * c - 10, f"consolo {f((zf(475) + HD * c - 10) / 1000)}")
     nivel(v, 300, Z_TOP_PIL, f"platibanda {f(Z_TOP_PIL / 1000)}", -1)
     nivel(v, 38900, zf(39025) + HD * c - 10, f"consolo {f((zf(39025) + HD * c - 10) / 1000)}", -1)
-    nivel(v, 39800, Z_TOP_PIL, f"platibanda {f(Z_TOP_PIL / 1000)}")
-    nivel(v, 39800, z_tel(39175), f"telha {f(z_tel(39175) / 1000)}")
+    nivel(v, 39800, Z_TOP_PIL, f"platibanda {f(Z_TOP_PIL / 1000)} (telha {f(z_tel(39175) / 1000)})")
     nivel(v, 19100, zf(19325) + HD * c - 10, f"consolo {f((zf(19325) + HD * c - 10) / 1000)}", -1)
     nivel(v, 20400, zf(20175) + HD * c - 10, f"consolo {f((zf(20175) + HD * c - 10) / 1000)}")
     if eixo == 3:
@@ -207,22 +208,21 @@ for k, (nome, org, jan, eixo, txt) in enumerate((
     v.poli([(jan[0], jan[1]), (jan[2], jan[1]), (jan[2], jan[3]), (jan[0], jan[3])], "CARIMBO_FINO", True)
     if k == 0:
         zs = zf(475) + HD * c - 10
-        v.cota_h([300, 325, 475, 625], zs, -16, total=False)
+        v.cota_h([300, 475, 600], zs - 440, -8, total=False)
+        v.cota_v([zs - 440, zs], 600, 6, total=False)
         v.cota_v([zs, zs + 10, zf(325) + 900], 1600, 8, total=False)
         nivel(v, -800, zs, f"{f(zs / 1000)}")
-        nivel(v, -800, Z_TOP_PIL, f"{f(Z_TOP_PIL / 1000)}")
-        nivel(v, -800, z_tel(325), f"telha {f(z_tel(325) / 1000)}")
-        v.chamada((475, zs + 200), (10, 18), "pino PN-1 Ø25 + neoprene 10")
+        nivel(v, 800, Z_TOP_PIL, f"{f(Z_TOP_PIL / 1000)}")
+        nivel(v, 800, z_tel(800) + 40, f"telha {f(z_tel(325) / 1000)}")
+        v.chamada((475, zs + 200), (10, 18), "pino PN-1 Ø20 + neoprene 10")
         v.chamada((450, zs - 300), (12, -14), "consolo CP-TS (3 Ø16), topo a 3%")
         v.chamada((-400, 9200), (-6, 18), "placa")
     elif k == 1:
         ze, zd = zf(19325) + HD * c - 10, zf(20175) + HD * c - 10
-        v.cota_h([19200, 19475, 19550, 19950, 20025, 20300], ze - 350, -12, total=False)
-        nivel(v, 18700, ze, f"{f(ze / 1000)}", 1)
-        nivel(v, 20800, zd, f"{f(zd / 1000)}", -1)
+        v.cota_h([19200, 19550, 19950, 20300], ze - 440, -8, total=False)
         nivel(v, 20800, Z_I110, f"{f(Z_I110 / 1000)}", -1)
         v.chamada((19750, 9300), (10, 24), "diafragma da I110 na linha da TS")
-        v.chamada((19300, ze - 200), (-10, -20), "CV-TS 350")
+        v.chamada((19300, ze - 200), (-10, -20), f"CV-TS 35 × 44, sem chanfro; assentos {f(ze / 1000)} / {f(zd / 1000)}")
         v.chamada((19400, zf(19200) + 1300), (-14, 14), "terças acima do topo da I110")
     else:
         zs = zf(39025) + HD * c - 10
@@ -235,17 +235,17 @@ for k, (nome, org, jan, eixo, txt) in enumerate((
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 niv = [["Consolo P1 (lado baixo)", f((zf(475) + HD * c - 10) / 1000)], ["Consolo centro, lado esq.", f((zf(19325) + HD * c - 10) / 1000)],
        ["Consolo centro, lado dir.", f((zf(20175) + HD * c - 10) / 1000)], ["Consolo P2 (lado alto)", f((zf(39025) + HD * c - 10) / 1000)],
-       ["Topo / fundo da I110", f"{f(Z_I110 / 1000)} / {f((Z_I110 - 1100) / 1000)}"], ["Assento da I110 no pilar central", f((Z_I110 - 1100 + 440) / 1000)],
+       ["Topo / fundo da I110", f"{f(Z_I110 / 1000)} / {f((Z_I110 - 1100) / 1000)}"], ["Assento da I110 (CP-I110)", f((Z_I110 - 690) / 1000)],
        ["Telha junto ao P1 / ao P2", f"{f(z_tel(325) / 1000)} / {f(z_tel(39175) / 1000)}"], ["Platibanda (todas)", f(Z_TOP_PIL / 1000)],
        ["Pisos do mezanino", f"{f(Z_MEZ[0] / 1000)} / {f(Z_MEZ[1] / 1000)}"]]
 y = pr.tabela(x0, y, "NÍVEIS (m)", ["ELEMENTO", "NÍVEL"], niv, [110, 70])
 notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações (pinos, folgas e terças conferidos em 28 apoios).",
          "Cobertura baixada 0,62 m para ficar escondida: telha junto ao P2 em " + f(z_tel(39200) / 1000) + ", " + f"{(Z_TOP_PIL - z_tel(39200)):.0f}" + " mm abaixo da platibanda +10,000 (pedido: 100 mm).",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), dentes de 450 × 300 nas duas pontas; terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
-         "Geometria do R01 (79,35 × 39,50 m). Cabeça dos pilares laterais recuada acima do topo da TS-01 (+8,40 no eixo A, +9,55 no eixo E): só os 30 cm externos sobem até +10,00 — rufo reto, sem contornar pilares (a validar, ND-LET-LOC01).",
-         "LAJE h20 + 5 (pedido): com 500 kgf/m² em 9,75 m e 7 Ø12,7 por painel NÃO atende na seção genérica — ELU 209 > 192 kN·m por painel, descompressão só até 9,05 m. Desenhada para análise; confirmar na tabela do fabricante ou voltar à h26,5 + 5.",
-         "Vigas do mezanino I70 (mesma fôrma, 10 Ø12,7): atendem à flexão com a laje h20; dente de 425 em verificação por MEF. Ganham 20 cm de pé-direito sobre a I90.",
-         "Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA ANÁLISE, NÃO EXECUTAR."]
+         "Geometria do R01 (79,35 × 39,50 m). Cabeça dos pilares laterais recuada acima do topo da TS-01 (+8,40 no eixo A, +9,55 no eixo E): só os 30 cm externos sobem até +10,00 — rufo reto, sem contornar pilares (aprovado, ND-LET-LOC01).",
+         "Laje alveolar h20 + 5 em 9,45 m com 500 kgf/m² e 8 Ø12,7 por painel: MRd 215 ≥ 192 kN·m, ELS-D ok (ND-LET-LA01); confirmar na tabela do fabricante.",
+         "Vigas do mezanino VM I90 com dentes Gerber 45 × 30 nos consolos CP-MEZ (ND-LET-VM01). Todos os consolos sem chanfro, com h = dente da viga − neoprene (CP-TS/CV-TS/CP-MEZ 44, CP-I110 41 cm): fundo do consolo alinhado ao fundo da viga.",
+         "Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CT01")

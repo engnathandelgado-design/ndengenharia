@@ -5,8 +5,10 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha
 
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
-Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
-X_FACH = [0.0, 9.87, 20.05, 29.63, 40.10]
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+from geometria import Y_LIN, X_FACH, X_EIXO
+Y2 = Y_LIN[1]
+LARG = X_EIXO["E"]
 M = lambda v: v * 1000
 
 
@@ -15,61 +17,74 @@ def notas_padrao(pr, XC, y, extra):
 
 
 # ================================================================== LA-01
+def paineis_mez():
+    """Painéis de um nível do mezanino: [(x0 mm, largura mm, marca)], quantidades nos 2 níveis, L_P (mm)."""
+    L_P, B_P = round((Y2 - 0.20) * 1000), 1250                          # apoio 10 cm na mesa de cada VM (eixo ± 10 cm)
+    N, B2, x_ini = 30, 700, 300                                          # 30 LA-01 + 2 LA-02 de 70 cm (pontas A e E)
+    pn = [(x_ini, B2, "LA-02")] + [(x_ini + B2 + k * B_P, B_P, "LA-01") for k in range(N)] + [(x_ini + B2 + N * B_P, B2, "LA-02")]
+    PIL = [M(x) for x in X_FACH[1:4]]                                    # P3/P4/P5 (L1) e P8/P8A/P8B (L2): 40 em x → recorte nas pontas
+    rec = lambda x0, b: any(x0 < xp + 225 and x0 + b > xp - 225 for xp in PIL)
+    pn = [(x0, b, (mk + "R") if rec(x0, b) else mk) for x0, b, mk in pn]
+    qt = {}
+    for _, b, mk in pn:
+        qt[mk] = qt.get(mk, 0) + 2
+    return pn, qt, L_P
+
+
 def lajes():
-    L_P, B_P, H_P = 9850, 1250, 200                                     # painel: 985 × 125 × 20 (apoio 10 cm nas mesas das VM)
-    N = 31
+    paineis, qt, L_P = paineis_mez()
+    B_P, B2, H_P, N = 1250, 700, 200, 30
+    PESO1 = 1.25 * L_P / 1000 * 2.65
     pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                            conteudo="LAJES ALVEOLARES LA-01 / LA-02 (h20 + capa 5) DO MEZANINO — PLANTA DE LAJES, SEÇÃO, APOIO E CHAVETAS",
-                            desenho="ND-LET-LA01", folha="01/01", fase="PARA APROVAÇÃO", marca="LA-01", qtd=2 * N, peso=f(1.25 * 9.85 * 2.65, 1), volume=f(0.125 * 9.85, 2)))
+                            conteudo="LAJES ALVEOLARES DO MEZANINO (h20 + CAPA 5) — PLANTA DE LAJES, SEÇÃO, APOIO E CHAVETAS",
+                            desenho="ND-LET-LA01", folha="01/01", fase="PARA APROVAÇÃO", marca="LA-01", qtd=qt.get("LA-01", 0), peso=f(PESO1, 1), volume=f(0.125 * L_P / 1000, 2), rev="01"))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
+    pr.revisao("01", "12/10/2026", "GEOMETRIA DO R01 (VÃO 9,65 m); 8 Ø12,7; LA-02 70 cm NAS PONTAS; RECORTES NOS PILARES")
     Q = pr.quadro
     XC = Q[2] - 190
-    pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 520, Q[3] - 4, "CARIMBO")
+    pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
     pr.texto(Q[0] + 10, Q[3] - 24, "LA-01", "grande", "TITULO")
-    pr.texto(Q[0] + 62, Q[3] - 24, f"LAJE ALVEOLAR h20 + CAPA 5 — LA-01 (125 × {L_P/10:.0f} cm) · LA-02 (75 × {L_P/10:.0f})", "titulo", "TITULO")
-    pr.texto(Q[0] + 10, Q[3] - 14, f"mezanino, níveis +3,15 e +6,55; vão 9,65 m entre as vigas VM; {2*N} LA-01 + 2 LA-02   ·   PESO LA-01 {f(1.25*9.85*2.65/10, 2)} t   ·   fabricante a confirmar (tabela de carga)", "nota", "TEXTO")
-    # planta de lajes 1:100 (um nível; o outro é igual)
-    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 175), 100, titulo="PLANTA DE LAJES — NÍVEIS +3,15 E +6,55 (IGUAIS)", subtitulo="painéis de A para E; LA-02 (75 cm) junto ao eixo E; capa 5 cm com tela Q138", unidade="cm")
+    pr.texto(Q[0] + 62, Q[3] - 24, f"LAJE ALVEOLAR h20 + CAPA 5 — LA-01 (125 × {L_P/10:.0f} cm) · LA-01R · LA-02 (70 × {L_P/10:.0f} cm)", "titulo", "TITULO")
+    pr.texto(Q[0] + 10, Q[3] - 14, f"mezanino, níveis +3,15 e +6,55; vão 9,65 m entre as vigas VM (linhas 1 e 2); {sum(qt.values())} painéis (2 níveis)   ·   PESO LA-01 {f(PESO1/10, 2)} t   ·   8 cord. Ø12,7 (seção genérica — confirmar com o fabricante)", "nota", "TEXTO")
+    v = pr.vista("PLANTA", (Q[0] + 40, Q[3] - 165), 100, titulo="PLANTA DE LAJES — NÍVEIS +3,15 E +6,55 (IGUAIS)", subtitulo="painéis de A para E; LA-02 (70 cm) nas pontas; R = recorte nas pontas junto aos pilares; capa 5 cm com tela Q138", unidade="cm")
     for x in X_FACH:
-        v.eixo((M(x), -1500), (M(x), M(10.05) + 1500), 500)
-        v.circulo((M(x), M(10.05) + 2300), 500, "VISTA"); v.texto((M(x), M(10.05) + 2300), "ABCDE"[X_FACH.index(x)], "nota", "MIDDLE_CENTER")
-    for k, y in ((1, 0.0), (2, 10.05)):
-        v.eixo((-1500, M(y)), (M(40.1) + 1500, M(y)), 500)
+        v.eixo((M(x), -1500), (M(x), M(Y2) + 1500), 500)
+        v.circulo((M(x), M(Y2) + 2300), 500, "VISTA"); v.texto((M(x), M(Y2) + 2300), "ABCDE"[X_FACH.index(x)], "nota", "MIDDLE_CENTER")
+    for k, y in ((1, 0.0), (2, Y2)):
+        v.eixo((-1500, M(y)), (M(LARG) + 1500, M(y)), 500)
         v.circulo((-2300, M(y)), 500, "VISTA"); v.texto((-2300, M(y)), str(k), "nota", "MIDDLE_CENTER")
-    for y in (0.0, 10.05):
-        v.ret(300, M(y) - 200, M(40.1) - 600, 400, "VISTA")
-    for k in range(N):
-        x0 = 300 + k * B_P
-        v.ret(x0, 100, B_P - 10, L_P, "VISTA")
-        if k % 4 == 0:
-            v.texto((x0 + B_P / 2, M(5.0)), f"LA-01 ({k + 1})", "min", "MIDDLE_CENTER", rot=90)
-    x0 = 300 + N * B_P
-    v.ret(x0, 100, 740, L_P, "CORTADO"); v.texto((x0 + 370, M(5.0)), "LA-02 (75)", "min", "MIDDLE_CENTER", rot=90)
-    for x, bx, by in ((0, 600, 400), (9870, 400, 600), (20050, 400, 600), (29630, 400, 600), (40100, 600, 400)):
-        for y in (0.0, 10.05):
+    for y in (0.0, Y2):
+        v.ret(300, M(y) - 200, M(LARG) - 600, 400, "VISTA")
+    for i, (x0, b, mk) in enumerate(paineis):
+        v.ret(x0, 100, b - 10, L_P, "VISTA" if mk == "LA-01" else "CORTADO")
+        if mk != "LA-01" or i % 4 == 1:
+            v.texto((x0 + b / 2, M(Y2 / 2)), mk, "min", "MIDDLE_CENTER", rot=90)
+    for x, bx, by in [(0, 600, 400)] + [(M(xx), 400, 600) for xx in X_FACH[1:4]] + [(M(LARG), 600, 400)]:
+        for y in (0.0, Y2):
             v.ret(x - bx / 2, M(y) - by / 2, bx, by, "CORTADO")
     v.cota_h([M(x) for x in X_FACH], -2000, -8)
-    v.cota_h([300, 300 + B_P, 300 + 2 * B_P], M(10.05) + 300, 8, total=False)
-    v.cota_v([0, 100, 100 + L_P, M(10.05)], M(40.1) + 1500, 8, total=False)
-    v.chamada((M(5.0), 100), (10, -14), "apoio 10 cm sobre a mesa da VM (faixa de neoprene 10 × 3 mm)")
-    v.marcador_detalhe((300 + 3 * B_P, 100), 600, 1, ang=-45, dist=8)
+    v.cota_h([300, 300 + B2, 300 + B2 + B_P], M(Y2) + 300, 8, total=False)
+    v.cota_v([0, 100, 100 + L_P, M(Y2)], M(LARG) + 1500, 8, total=False)
+    v.chamada((M(6.5), 100), (10, -14), "apoio 10 cm sobre a mesa da VM (faixa de neoprene 10 × 3 mm)")
+    v.chamada((M(X_FACH[1]) + 200, 300), (8, 18), "recorte 45 × 20 cm na ponta (pilar 40 × 60)")
+    v.marcador_detalhe((300 + B2 + 3 * B_P, 100), 600, 1, ang=-45, dist=8)
     # seção do painel 1:10 (mm? concreto → cm)
     s = pr.vista("SEÇÃO DO PAINEL", (Q[0] + 60, Q[3] - 300), 10, titulo="SEÇÃO DO PAINEL LA-01", subtitulo="alveolar h20 (5 alvéolos) + capa 5; geometria do fabricante a confirmar", unidade="cm")
     s.ret(0, 0, B_P, H_P, "CORTADO")
     for k in range(5):
         cx = 125 + k * 250
         s.circulo((cx, 100), 70, "VISTA")
-    for k in range(7):
-        s.ponto_barra((125 + k * 166.7, 35), 12.7)
+    for k in range(8):
+        s.ponto_barra((100 + k * 150, 35), 12.7)
     s.hachura([(0, 200), (B_P, 200), (B_P, 250), (0, 250)], "AR-CONC", 0.02); s.linha((0, 250), (B_P, 250), "VISTA")
     s.linha((20, 230), (B_P - 20, 230), "ARMADURA")
     s.poli([(0, 200), (-30, 150), (-30, 60), (0, 40)], "VISTA"); s.poli([(B_P, 200), (B_P + 30, 150), (B_P + 30, 60), (B_P, 40)], "VISTA")
     s.cota_h([0, B_P], 0, -8); s.cota_v([0, 35, 200, 250], B_P + 30, 10, total=False)
-    s.chamada((125 + 3 * 166.7, 35), (14, -12), "7 cord. Ø12,7 (genérico — confirmar com o fabricante)")
+    s.chamada((550, 35), (14, -12), "8 cord. Ø12,7 (genérico — confirmar com o fabricante)")
     s.chamada((B_P / 2, 230), (14, 14), "capa 5 cm C25 com tela Q138")
     s.chamada((B_P + 30, 105), (12, 6), "chaveta lateral grauteada (graute fluido ≥ 30 MPa)")
     # detalhe apoio 1:10
-    d = pr.vista("DETALHE 1", (Q[0] + 330, Q[3] - 300), 10, titulo="DETALHE 1 — APOIO NA VIGA VM", subtitulo="laje sobre a mesa superior da I70; capa monolítica", unidade="cm")
+    d = pr.vista("DETALHE 1", (Q[0] + 345, Q[3] - 300), 10, titulo="DETALHE 1 — APOIO NA VIGA VM", subtitulo="laje sobre a mesa superior da VM I90; capa monolítica com o 2º estágio", unidade="cm")
     d.poli([(-200, -120), (200, -120), (200, 0), (-200, 0)], "CORTADO"); d.hachura([(-200, -120), (200, -120), (200, 0), (-200, 0)], "AR-CONC", 0.03)
     d.poli([(-75, -120), (-75, -500), (75, -500), (75, -120)], "VISTA")
     for sg in (-1, 1):
@@ -79,19 +94,17 @@ def lajes():
     d.hachura([(-100, 0), (100, 0), (100, 200), (-100, 200)], "AR-CONC", 0.02)
     d.poli([(-250, 230), (250, 230)], "ARMADURA"); d.poli([(-400, 20), (400, 20)], "ARMADURA")
     d.cota_h([-200, -100, 100, 200], -120, -10, total=False); d.cota_v([-120, 0, 200, 250], 200, 10, total=False)
-    d.chamada((150, -2), (12, -14), "neoprene 10 × 3 mm (faixa)"); d.chamada((0, 100), (18, 22), "preenchimento entre painéis (graute) + N1 2 Ø10 passantes")
-    d.chamada((250, 230), (10, 12), "tela Q138 na capa; armadura negativa 2 Ø10 c/ painel sobre o apoio"); d.chamada((-75, -300), (-12, -10), "VM I70 (ND-LET-VM01)")
+    d.chamada((150, -2), (12, -14), "neoprene 10 × 3 mm (faixa)"); d.chamada((0, 100), (-30, 26), "preenchimento entre painéis (graute) + N1 2 Ø10 passantes")
+    d.chamada((250, 230), (10, 12), "tela Q138 na capa; armadura negativa 2 Ø10 c/ painel sobre o apoio"); d.chamada((-75, -300), (-12, -10), "VM I90 (ND-LET-VM01)")
     # tabelas
     y = Q[3] - 6
-    y = pr.tabela(XC, y, "MARCAS — LAJES ALVEOLARES", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "NÍVEIS"],
-                  [["LA-01", f"125 × {L_P/10:.0f} × 20, 7 Ø12,7 (genérico)", 2 * N, f(1.25 * 9.85 * 2.65 / 10, 2), "+3,15 e +6,55"],
-                   ["LA-02", f"75 × {L_P/10:.0f} × 20 (recorte de fábrica)", 2, f(0.75 * 9.85 * 2.65 / 10, 2), "+3,15 e +6,55 (junto ao eixo E)"]], [18, 80, 14, 20, 56])
-    qd = [["VÃO", "965 cm (entre mesas)", "APOIO", "10 cm + neoprene"], ["SOBRECARGA", "500 kgf/m² + revest. 100", "CAPA", "5 cm C25, tela Q138"],
-          ["h TOTAL", "25 cm", "ESCORAMENTO", "nenhum"], ["PAINÉIS", f"{2*N} LA-01 + 2 LA-02", "CONTRAFLECHA", "fabricante (≤ L/300)"]]
+    y = pr.tabela(XC, y, "MARCAS — LAJES ALVEOLARES (2 NÍVEIS)", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "OBS."],
+                  [[mk, f"{(B_P if mk.startswith('LA-01') else B2)/10:.0f} × {L_P/10:.0f} × 20, 8 Ø12,7", qt[mk], f((B_P if mk.startswith('LA-01') else B2) / 1000 * L_P / 1000 * 2.65 / 10, 2),
+                    "recorte 45 × 20 nas 2 pontas" if mk.endswith("R") else ("corte longitudinal de fábrica" if mk.startswith("LA-02") else "-")] for mk in sorted(qt)], [18, 70, 12, 20, 62])
+    qd = [["VÃO", f"{L_P/10 - 10:.0f} cm (entre centros de apoio)", "APOIO", "10 cm + neoprene"], ["SOBRECARGA", "500 kgf/m² + revest. 100", "CAPA", "5 cm C25, tela Q138"],
+          ["h TOTAL", "25 cm", "ESCORAMENTO", "nenhum"], ["PAINÉIS", f"{sum(qt.values())} (2 níveis)", "CONTRAFLECHA", "fabricante (≤ L/300)"]]
     y = pr.tabela(XC, y - 4, "QUADRO DAS LAJES", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
-    mem = [["ELU seção genérica 7 Ø12,7", "209 > 192 kN·m — NÃO PASSA"], ["Descompressão (ELS-D)", "só até 9,05 m"], ["Alternativas", "tabela do fabricante com 9 Ø12,7 ou h26,5 + 5"]]
-    y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (ND-LET-MC02)", ["VERIFICAÇÃO", "RESULTADO"], mem, [70, 112])
-    notas_padrao(pr, XC, y - 4, ["! A laje alveolar h20 + 5 em 9,65 m com 500 kgf/m² não passou na seção genérica: o fabricante deve apresentar a tabela de carga do painel (ou adotar h26,5 + 5). Não fabricar antes.",
+    notas_padrao(pr, XC, y - 4, ["Laje alveolar h20 + 5 no vão do R01 (9,35 m de cálculo) com 500 kgf/m²: na seção genérica 7 Ø12,7 não passa (ELU no limite e descompressão); com 8 Ø12,7 passa (MRd 215 ≥ Md 192 kN·m por painel; ELS-D comprimido −0,9 MPa). O fabricante confirma pela tabela de carga do painel dele antes de fabricar.",
                                  "Painéis apoiados 10 cm sobre a mesa superior das VM, com faixa de neoprene; chavetas grauteadas e capa de 5 cm (C25, tela Q138) concretadas após a montagem de todo o nível.",
                                  "Armadura negativa sobre os apoios: 2 Ø10 por painel, L = 200 cm, dentro da capa; preenchimento dos alvéolos nas pontas (20 cm) para evitar graute nos vazios.",
                                  "Içamento por garras ou balancim do fabricante; estocar sobre 2 calços a 30 cm das pontas, máximo 6 painéis por pilha."])

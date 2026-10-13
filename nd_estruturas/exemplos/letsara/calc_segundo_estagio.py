@@ -36,7 +36,7 @@ A1, y1, I1 = poli_props(I90)
 W1_inf, W1_sup = I1 / y1, I1 / (h - y1)
 # laje alveolar h20 de um lado só (apoio 10 cm na mesa); enchimento sobre os 30 cm restantes da mesa, altura 20; capa 5 cm
 h_laje, apoio, h_capa = 0.20, 0.10, 0.05
-L = 9.27                                             # vão entre apoios (VM-02: 9,53 − 2 × 0,13)
+L = 9.12                                             # vão entre apoios (VM-02: 9,38 − 2 × 0,13; geometria do R01)
 a_cont = L                                           # biapoiada: a = L (NBR 6118:2023 14.6.2.2)
 bf = b + 0.10 * a_cont                               # largura colaborante da capa: mesa + 0,10a do lado da laje (só um lado)
 fck1, fck2 = 50.0, 25.0                              # pré-moldado C50; capa/enchimento C25
@@ -54,7 +54,7 @@ h_tot = h + h_laje + h_capa
 Wh_inf, Wh_sup_pre, Wh_topo = I_h / y_h, I_h / (h - y_h), I_h / (h_tot - y_h)
 
 # ---------------------------------------------------------------- cargas (kN/m) — laje de um lado, tributária 5,0 m
-trib = 10.05 / 2
+trib = 9.65 / 2
 pp_laje, capa_kNm2, rev, q = 2.80, 0.05 * 25, 1.0, 5.0
 g1 = A1 * 25 + (pp_laje + capa_kNm2) * trib          # fase 1: viga + laje + capa fresca (seção pré-moldada)
 g2 = rev * trib                                       # fase 2: revestimento (seção composta)

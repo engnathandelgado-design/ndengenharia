@@ -143,7 +143,8 @@ class Prancha:
         return v
 
     def tabela(self, x, y_topo, titulo, cab, linhas, larg, h_lin=6.0, destaque_ultima=False):
-        if not MEMORIA_NA_PRANCHA and titulo.upper().startswith(("MEMÓRIA", "VERIFICAÇ")):
+        self.__dict__.setdefault("_tabs", []).append(dict(titulo=titulo, cab=list(cab), linhas=[[str(c) for c in l] for l in linhas]))
+        if not MEMORIA_NA_PRANCHA and titulo.upper().startswith(("MEMÓRIA", "VERIFICAÇ", "TRANSITÓRIAS", "CHECAGEM")):
             return y_topo + 4          # prancha de detalhamento para o cliente: a memória fica no documento MC, não na prancha
         W = sum(larg)
         y = y_topo
@@ -167,6 +168,7 @@ class Prancha:
         return y
 
     def tabela_aco(self, x, y_topo, barras, perda=0.10, aco="CA-50"):
+        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp")} for b in barras]))
         """barras: dict(pos='N1', diam=16, qtd=8, comp=250 cm). Relação + resumo (NBR 7480 + perdas)."""
         linhas, resumo = [], {}
         for b in barras:
@@ -253,6 +255,7 @@ class Prancha:
         self.blocos_livres.append((x0, yb, x1, y1, titulo or caminho))
 
     def tabela_croqui(self, x, y_topo, barras, perda=0.10, aco="CA-50", h_lin=13.0):
+        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp")} for b in barras]))
         """Relação do aço com croqui de dobramento (padrão de mercado BIM). barras: dict(pos, diam, qtd, comp (cm),
         forma=[(x,y) cm ...] polilinha da barra, trechos=['84','14',...] rótulos na ordem dos segmentos)."""
         larg = [13, 13, 14, 20, 66, 20, 20]
@@ -496,7 +499,7 @@ class Prancha:
             for j in range(i + 1, len(textos)):
                 rj = textos[j][0]
                 if min(ri[2], rj[2]) > max(ri[0], rj[0]) and min(ri[3], rj[3]) > max(ri[1], rj[1]):
-                    av.append(("AVISO", f"textos sobrepostos: '{textos[i][1][:28]}' x '{textos[j][1][:28]}'"))
+                    av.append(("AVISO", f"textos sobrepostos: '{textos[i][1][:28]}' x '{textos[j][1][:28]}' @({ri[0]:.0f},{ri[1]:.0f})"))
         for r, txt, dono in textos:
             for a, b, d2, lay in segs:
                 if dono is not None and d2 == dono:
@@ -511,6 +514,13 @@ class Prancha:
             v._finalizar()
         self._moldura_carimbo()
         avisos = self.verificar()
+        import os, json as _json
+        if os.environ.get("AVISOS_LOG"):
+            with open(os.environ["AVISOS_LOG"], "a", encoding="utf-8") as fh:
+                fh.write(_json.dumps({"folha": os.path.basename(base), "avisos": avisos}, ensure_ascii=False) + "\n")
+        with open(base + ".tabelas.json", "w", encoding="utf-8") as fh:
+            _json.dump(dict(folha=os.path.basename(base), dados=getattr(self, "dados", {}), tabelas=self.__dict__.get("_tabs", []),
+                            aco=self.__dict__.get("_aco", [])), fh, ensure_ascii=False, indent=1, default=str)
         self.doc.saveas(base + ".dxf")
         _exportar_pdf(self.doc, base + ".pdf", self.W, self.H, self.cor)
         try:

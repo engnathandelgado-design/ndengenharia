@@ -44,7 +44,7 @@ va.chamada((LN + 900, HD + 55), (10, -30), "N8 tirante do dente (ver detalhe 4)"
 va.cota_h([0, LN, zona, L - zona, L - LN, L], 0, -14)
 pr.posicoes_desenho.update({"N1", "N3", "N4", "N6", "N7", "N8", "N9", "N10", "N11", "C1"})
 va.marcador_corte((L / 2 + 1500, -120), (L / 2 + 1500 + DX, H + 120), "D", lado=1)
-va.marcador_corte((LN + 600, -120), (LN + 600 + DX, H + 120), "E", lado=1)
+va.marcador_corte((LN + 750, -40), (LN + 750 + DX, H + 120), "E", lado=1)
 va.marcador_detalhe((LN + 300, 450), 900, 4, ang=60, dist=6)
 
 # ------------------------------------------------------------------ DETALHE 4 — armação do dente (1:10)

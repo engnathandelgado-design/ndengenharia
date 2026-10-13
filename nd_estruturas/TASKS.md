@@ -13,7 +13,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
-- Letsara: propagar a geometria do R01 às pranchas que ainda têm a antiga (pilares PL/PC/PM com recuo da cabeça após validação, I110 com vãos 20,15/24,78/24,78 m — reverificar flexão e dente —, VM, VB, lajes, MON02, conexões seções 4/5, modelo global).
+- Letsara: definir com o cliente o limite de deslocamento do ELS (9,3 mm passa H/500, não passa H/1700); função dos pilares P6/P7 do anexo; escolha da opção de pilar (A armado × B protendido).
+- Letsara: atualizar `checar_conexoes.py` seções 4/5 para a geometria do R01 (ainda com 20,05/39,625 e PC 50×50).
 
 - Letsara: resolver cobertura acima da platibanda no lado alto (consolo +9,28 + I90 + terça = +10,47 > +10,00) e completar o modelo BIM (P9, P10, P12, P6/P7, V201, contraventamento) quando o projeto fechar.
 - `bim`: gerar o ModeloBIM direto das peças do `prefabricados` (DEC-008) quando o objeto peça existir; incluir dente Gerber, chanfros e insertos na geometria.
@@ -40,6 +41,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- Letsara 12/10/2026: consolos sem chanfro alinhados ao fundo das vigas, I110/laje reverificadas no R01, pórtico 3D ELU/ELS com diafragma e terças de oitão, 32 pranchas sem sobreposição, quantitativos xlsx e DXF 3D.
 
 - Letsara: cobertura no padrão das referências (X Ø16 de nó a nó com esticador, correntes com tirantes rígidos e diagonais de ancoragem, MF na alma), COB01/COB02 rev 02; LOC01, MON01 e CT01 refeitas com a geometria do R01 e a proposta de recuo da cabeça dos pilares; TS-01 com 19,15 m.
 

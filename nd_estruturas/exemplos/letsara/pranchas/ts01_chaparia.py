@@ -37,7 +37,7 @@ v.cota_h([-100, -75, -4, 4, 75, 100], -100, -8, total=False)
 v.cota_h([-100, 100], 100, 8)
 v.cota_v([-100, -75, -50, 50, 75, 100], 100, 8, total=False)
 v.chamada((4, 80), (10, 16), "ST-1 8×220×290 soldado em cima (fábrica) — ND-LET-COB01")
-v.chamada((-75, -75), (4, -16), "4 pinos Ø16 c/ cabeça Ø32, L 112")
+v.chamada((-75, -75), (4, -32), "4 pinos Ø16 c/ cabeça Ø32, L 112")
 v.texto((-100, -260), "chapa 200×200×12,5 ASTM A36", "nota")
 
 # ------------------------------------------------------------------ CH-T2 (1:5)
@@ -56,8 +56,8 @@ v.cota_v([-190, -150, -50, 50, 150, 190], 150, 8, total=False)
 v.linha((0, -230), (0, 230), "EIXO")
 v.chamada((0, 215), (-6, 8), "eixo da terça / ST-1 soldado em cima")
 v.chamada((140, 140), (10, 8), "orelha 90×80×9,5")
-v.chamada((100, 0), (16, -26), "6 pinos Ø16 c/ cabeça, L 112")
-v.chamada((-120, -170), (-6, -14), "2 grampos U Ø10 c/ gancho 90°, encostados nos pinos")
+v.chamada((100, 0), (16, -40), "6 pinos Ø16 c/ cabeça, L 112")
+v.chamada((-120, -170), (6, -26), "2 grampos U Ø10 c/ gancho 90°, encostados nos pinos")
 v.texto((-150, -340), "chapa 300×380×12,5 + 4 orelhas", "nota")
 
 v = pr.vista("CH-T2 — VISTA", (330, 505), 5, titulo="CH-T2 — VISTA LATERAL", subtitulo="orelhas paralelas ao tirante (≈73°)")
@@ -69,10 +69,10 @@ furo(v, (-140, 12.5 + 70), 16)
 v.cota_v([12.5, 47.5, 82.5, 92.5], 205, 8, total=False)
 v.cota_h([-190, -185, -95, 95, 185, 190], 0, -8, total=False)
 v.chamada((140, 47.5), (8, 12), "furo Ø16 a 35")
-v.chamada((-140, 82.5), (-8, 12), "furo Ø16 a 70")
+v.chamada((-140, 82.5), (8, 22), "furo Ø16 a 70")
 
 # ------------------------------------------------------------------ CH-A1 (1:5)
-v = pr.vista("CH-A1", (470, 505), 5, titulo="CH-A1 — PLANTA", subtitulo="2 por peça (fundo do dente)")
+v = pr.vista("CH-A1", (470, 505), 5, titulo="CH-A1 — PLANTA", subtitulo="2 por peça")
 v.ret(-75, -150, 150, 300, "METALICA")
 furo(v, (0, 0), 52)
 for y in (-120, 120):
@@ -84,7 +84,7 @@ v.chamada((26, 0), (12, 4), "furo Ø52 (TB-1)")
 v.chamada((45, 120), (10, 10), "4 grapas Ø10 L=200")
 
 # ------------------------------------------------------------------ CH-MF, CH-MF2, OR-1 (1:5)
-v = pr.vista("CH-MF", (565, 505), 5, titulo="CH-MF — PLANTA", subtitulo="11 por peça (fundo da viga)")
+v = pr.vista("CH-MF", (590, 505), 5, titulo="CH-MF — PLANTA", subtitulo="11 por peça")
 v.ret(-75, -180, 150, 360, "METALICA")
 v.ret(-150, -4, 300, 8, "OCULTA")                                       # OR-1 soldada por baixo (ver COB01)
 for y in (-100, 100):
@@ -92,7 +92,7 @@ for y in (-100, 100):
 v.cota_v([-180, -150, -100, 100, 150, 180], 75, 8, total=False)
 v.cota_h([-75, 75], -180, -8)
 v.chamada((-75, -170), (-6, -14), "OR-1 8×300×100 soldada por baixo (fábrica)")
-v.chamada((0, -100), (10, -10), "2 pinos Ø12,5 c/ cabeça, L 90")
+v.chamada((0, -100), (10, -26), "2 pinos Ø12,5 c/ cabeça, L 90")
 
 v = pr.vista("CH-MF2", (75, 330), 5, titulo="CH-MF2", subtitulo="lateral do dente · 4 por peça")
 v.ret(-60, -45, 120, 90, "METALICA")
@@ -147,12 +147,12 @@ for d in (-50, 50):
 v.cota_v([0, 700, 850], 50, 10, total=False)
 v.chamada((0, 850), (8, 6), "cordoalha de 1,90 m")
 
-v = pr.vista("PN-1", (580, 230), 10, titulo="PN-1 / PN-2", subtitulo="pino no consolo (interface)")
-v.ret(-12.5, 0, 25, 700, "METALICA")
+v = pr.vista("PN-1", (580, 230), 10, titulo="PN-1", subtitulo="pino no consolo (interface)")
+v.ret(-10, 0, 20, 700, "METALICA")
 v.linha((-80, 300), (80, 300), "EIXO")
-v.cota_v([0, 300, 700], 12.5, 8, total=False)
-v.chamada((12.5, 150), (8, 4), "Ø25 CA-50 no consolo")
-v.chamada((12.5, 550), (8, 4), "entra no TB-1, grauteado")
+v.cota_v([0, 300, 700], 10, 8, total=False)
+v.chamada((10, 150), (8, 4), "Ø20 CA-50 no consolo")
+v.chamada((10, 550), (8, 4), "entra no TB-1, grauteado")
 
 v = pr.vista("NEO-1", (75, 210), 5, titulo="NEO-1", subtitulo="neoprene 10 mm, 60 Shore A")
 v.ret(-75, -150, 150, 300, "VISTA")
@@ -187,7 +187,7 @@ lista = [["CH-T1", "200×200×12,5 + 4 pinos Ø16", 6, 84, "4,6", "386"],
          ["OR-1", "chapa 8×300×100 (soldada, fábrica)", 11, 154, "1,9", "293"],
          ["MF-1", f"L 50×5 L={Lmf} (montagem)", 26, 364, "4,8", "1747"],
          ["NEO-1", "neoprene 300×150×10", 2, 28, "-", "-"],
-         ["PN-1/2", "pino Ø25 L=700 (no consolo)", 2, 28, "2,7", "76"]]
+         ["PN-1", "pino Ø20 CA-50 L=700 (no consolo)", 2, 28, "1,7", "48"]]
 y = pr.tabela(x0, y, "LISTA DE CHAPARIA — TS-01", ["MARCA", "DESCRIÇÃO", "/PEÇA", "OBRA", "kg/un", "kg obra"], lista,
               [16, 78, 16, 18, 22, 30])
 ct1 = CB["CT1"]

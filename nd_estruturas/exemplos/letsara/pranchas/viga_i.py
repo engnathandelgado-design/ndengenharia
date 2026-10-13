@@ -5,8 +5,11 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha, MASSA_ACO
 
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
-Y_LIN = [0.0, 10.05, 19.705, 29.36, 38.865, 48.445, 58.025, 67.605, 76.81]
-X_FACH = [0.0, 9.87, 20.05, 29.63, 40.10]
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13
+I1J = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/i110_r01.json"))
+LGJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
+XC = X_EIXO["C"]
 
 
 def sec_pts(b, h, ts, ti, m, bw):
@@ -73,7 +76,7 @@ def prancha_viga(P):
     for s in P.get("alcas", []):
         ve.poli([(s - 60, H), (s - 60, H + 100), (s, H + 140), (s + 60, H + 100), (s + 60, H)], "METALICA")
     for s, z_topo in P.get("consolos", []):                                             # consolos CV-TS (I110): vistos de lado
-        ve.ret(s - 500, z_topo - 450, 1000, 450, "OCULTA")
+        ve.ret(s - 500, z_topo - 440, 1000, 440, "OCULTA")
         ve.linha((s - 500, 0), (s - 500, H), "OCULTA"); ve.linha((s + 500, 0), (s + 500, H), "OCULTA")
     xs_cota = [0] + ([LN] if HD else []) + [P["x_mac"], L - P["x_mac"]] + ([L - LN] if HD else []) + [L]
     ve.cota_h(sorted(set(xs_cota)), 0 if not HD else 0, -10)
@@ -111,7 +114,7 @@ def prancha_viga(P):
     vp.cota_v([-B / 2, B / 2], L, 10)
     if P.get("consolos"):
         vp.cota_v([-B / 2 - 350, -B / 2], 0, -10, total=False)
-        vp.chamada((P["consolos"][1][0], B / 2 + 175), (8, 12), "CV-TS 100 × 35 × 45/25 com PN-1 Ø20 — assento +8,489 (lado A) / +8,514 (lado E)")
+        vp.chamada((P["consolos"][1][0], B / 2 + 175), (8, 12), "CV-TS 100 × 35 × 44 com PN-1 Ø20 — assento +8,480 (lado A) / +8,505 (lado E)")
 
     # ------------------------------------------------------------ CORTES 1:10
     pts = sec_pts(B, H, P["ts"], P["ti"], P["m"], P["bw"])
@@ -130,12 +133,16 @@ def prancha_viga(P):
     cob = 30
     e = [(-P["bw"] / 2 + cob, P["ti"] - 20), (P["bw"] / 2 - cob, P["ti"] - 20), (P["bw"] / 2 - cob, H - cob), (-P["bw"] / 2 + cob, H - cob)]
     va.poli(e, "ARM_TRANSV", fechada=True)
+    N3n, N3d, N3t = P.get("n3", (2, 10.0, "porta-estribos (mesa superior)"))
+    xs3 = (-B / 2 + cob + 10, B / 2 - cob - 10) if N3n == 2 else tuple(-B / 2 + cob + 10 + k * (B - 2 * cob - 20) / (N3n - 1) for k in range(N3n))
+    for x in xs3:
+        va.ponto_barra((x, H - cob - 5 - N3d / 2), N3d)
     for x in (-B / 2 + cob, B / 2 - cob):
-        va.ponto_barra((x, H - cob - 5), 10); va.ponto_barra((x, cob + 5), 10)
+        va.ponto_barra((x, cob + 5), 10)
     for yy in P.get("pele", []):
         va.ponto_barra((-P["bw"] / 2 + cob, yy), 8); va.ponto_barra((P["bw"] / 2 - cob, yy), 8)
     va.chamada((P["bw"] / 2 - cob, H / 2), (12, 10), f"N2 estribo Ø{P['est'][0]:g} c/{P['est'][1]//10} (c/{P['est'][2]//10} nos {P['est'][3]/1000:g} m das pontas)")
-    va.chamada((B / 2 - cob, H - cob - 5), (12, 8), "N3 — 2 Ø10 porta-estribos (mesa superior)")
+    va.chamada((xs3[-1], H - cob - 5), (12, 8), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     va.chamada((P["cord"][0][1][-1], P["cord"][0][0]), (14, -12), f"C1 — {n_cord} cord. Ø12,7 (ver tabela)")
     if P.get("pele"):
         va.chamada((P["bw"] / 2 - cob, P["pele"][0]), (12, -8), "N4 pele 2 Ø8 por face")
@@ -244,7 +251,7 @@ def prancha_viga(P):
     for y, xs, isol in P["cord"]:
         varm.linha((0, y), (L, y), "ARM_PROT")
     varm.linha((cob, H - cob - 5), (L - cob, H - cob - 5), "ARMADURA")
-    varm.chamada((L / 2, H - cob - 5), (10, 12), "N3 — 2 Ø10 porta-estribos")
+    varm.chamada((L / 2, H - cob - 5), (10, 12), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     if SEG:
         xs9e = list(range(100, L - 60, 150))
         for x in xs9e:
@@ -261,7 +268,7 @@ def prancha_viga(P):
     nE = len(xs_e)
     C_E = round((2 * (P["bw"] - 2 * cob + H - 2 * cob) + 160) / 10)
     barras = [dict(pos="N2", diam=d_est, qtd=nE, comp=C_E, forma=[(0, 0), (9, 0), (9, 60), (0, 60), (0, 0), (2, 2)], trechos=[f"{(P['bw']-2*cob)/10:g}", f"{(H-2*cob)/10:g}", "", ""]),
-              dict(pos="N3", diam=10.0, qtd=2, comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"])]
+              dict(pos="N3", diam=N3d, qtd=N3n, comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"])]
     if P.get("pele"):
         barras.append(dict(pos="N4", diam=8.0, qtd=2 * len(P["pele"]), comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"]))
     if SEG:
@@ -298,23 +305,26 @@ def prancha_viga(P):
 
 # ================================================================== I110 — V405 / V406 / V407
 def dados_i110():
-    L = 23140
-    z_esq, z_dir = 8489, 8514
-    # consolos CV-TS nas linhas 5 e 6 (dentro da V406: L4 → P13); topo do consolo medido do fundo da viga (+7,78)
-    consolos = [(round((Y_LIN[k] - Y_LIN[3]) * 1000 + 275), 8489 - 7780) for k in (4, 5)]
+    L = round(I1J["V406"]["L_peca"] * 1000)
+    y0 = Y_LIN[3] + 0.20 + 0.075                                    # ponta da V406 (face do P11 + 75)
+    zA = round((LGJ["Z0_TS"] + 0.03 * (XC - 0.425) + 0.45 - 0.01) * 1000)
+    # consolos CV-TS nas linhas 5 e 6 (dentro da V406); topo do consolo medido do fundo da viga (+7,78)
+    consolos = [(round((Y_LIN[k] - y0) * 1000), zA - 7780) for k in (4, 5)]
+    Lm = {k: I1J[k]["L_peca"] for k in ("V405", "V406", "V407")}
     return dict(
         marca="V406", qtd=1, familia="VIGAS CENTRAIS I110 (EIXO C)", desenho="ND-LET-I110", h=1100, b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
         x_mac=1400, dente=(660, 350), pino_x=175, tb=(60.3, 600), tb_nome="TB-2 tubo Ø60,3×3,6 L=600", pino_d=25,
+        n3=(4, 20.0, "CA-50 na mesa superior (compressão; x/d 0,32)"),
         cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-150, -100, -50, 0, 50, 100, 150], 0),
               (160, [-150, -100, -50, 0, 50, 100, 150], 2000), (210, [-50, 0, 50], 2000)],
         n_isol=10, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[400, 600, 800],
-        est=(8.0, 150, 100, 2000), Vd=448, alcas=[2500, L - 2500], tercas=[],
+        est=(8.0, 150, 100, 2000), Vd=round(I1J["V406"]["linhas"]["Vd_kN"]), alcas=[2500, L - 2500], tercas=[],
         consolos=consolos, anc=1468, tir="4 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
-        titulo="VIGA CENTRAL I110 PROTENDIDA — V406 (L = 2314 cm) · V405 · V407", subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8; V405 vai até o P14 (linha 9)",
-        kp_sub="V405/406/407 no eixo C", kp_pecas=[(20.05, 10.05, 20.05, 29.36, "V407"), (20.05, 29.36, 20.05, 53.05, "V406"), (20.05, 53.05, 20.05, 76.81, "V405")],
-        marcas=[["V407", "eixo C, L2 → L4 (PC-01 / PC-01)", 1, "1876", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 18.76 / 10, 1)],
-                ["V406", "eixo C, L4 → P13 (PC-01 / PC-02)", 1, "2314", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 23.14 / 10, 1)],
-                ["V405", "eixo C, P13 → L9 (PC-02 / PF-04 = P14)", 1, "2321", f(area_I(400, 1100, 220, 250, 80, 150) * 25 * 23.21 / 10, 1)]],
+        titulo=f"VIGA CENTRAL I110 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","), subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8; V405 vai até o P14 (linha 9)",
+        kp_sub="V405/406/407 no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
+        marcas=[["V407", "C: PC-01 → PC-02; CV-TS L3", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V407'] / 10, 1)],
+                ["V406", "C: PC-02 → PC-03; CV-TS L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V406'] / 10, 1)],
+                ["V405", "C: PC-03 → PF-04; CV-TS L7, L8", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V405'] / 10, 1)]],
         barras_ponta=[dict(pos="N5", diam=20.0, qtd=4, comp=165, forma=[(0, 15), (0, 0), (150, 0)], trechos=["15", "150"]),
                       dict(pos="N6", diam=16.0, qtd=3, comp=round((2 * (90 + 1040) + 160) / 10), forma=[(0, 0), (9, 0), (9, 104), (0, 104), (0, 0), (2, 2)], trechos=["9", "104", "", ""]),
                       dict(pos="N7", diam=10.0, qtd=3, comp=round((2 * (340 + 1250) + 140) / 10), forma=[(0, 0), (125, 0), (125, 34), (0, 34), (0, 0), (2, 2)], trechos=["125", "34", "", ""]),
@@ -325,13 +335,13 @@ def dados_i110():
                   ["PN-1", "Pino Ø20 CA-50 L=700 nos consolos CV-TS (2 por linha)", 10, "consolos (linhas 3, 5, 6, 7, 8)"],
                   ["NEO-2", "Neoprene 300×250×30 fretado (apoio nos PC)", 2, "sobre os consolos CP-I110"]],
         memoria=[["ELU flexão (V406)", "MRd ≥ Md — ver ND-LET-MC02"], ["ELS-F / ELS-D (CAA II)", "atende (protensão limitada)"],
-                 ["Dente 66 × 35 (MEF não linear)", "Vu ≥ 1,06 Vd = 475 kN"], ["Estribo mínimo (ρsw)", "Ø8 c/15 = 6,7 ≥ 2,4 cm²/m"],
+                 ["Dente 66 × 35 (MEF não linear)", "Vu 475 ≥ Vd 452 kN"], ["Estribo mínimo (ρsw)", "Ø8 c/15 = 6,7 ≥ 2,4 cm²/m"],
                  ["Pele (h > 60 cm)", "2 Ø8 por face a cada 20 cm"], ["Içamento (2 pontos a 2,5 m)", "σt ≤ fctk,j — sem fissura"]],
-        notas=["Concreto C50; cordoalhas CP-190 RB Ø12,7 em 4 linhas (y = 60, 110, 160 e 210 mm): 10 isoladas 200 cm nas pontas (linhas 160 e 210). σpi = 1400 MPa; liberar com fckj ≥ 35 MPa.",
+        notas=["Concreto C50; cordoalhas CP-190 RB Ø12,7 em 4 linhas (y = 60, 110, 160 e 210 mm): 10 isoladas 200 cm nas pontas (linhas 160 e 210). σpi = 1400 MPa; liberar com fckj ≥ 35 MPa. N3 = 4 Ø20 CA-50 na mesa superior (armadura de compressão do ELU com os vãos do R01: x/d 0,32 ≤ 0,45; MRd 3035 ≥ Md 2684 kN·m).",
                "Dentes Gerber 66 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6), verificados por MEF não linear; maciço de 140 cm nas pontas.",
-               "Consolos CV-TS dos dois lados nas linhas 3, 5, 6, 7 e 8 (maciço de 100 cm na alma): topo a 3 %, pino PN-1 Ø20, assento +8,489 (lado A) e +8,514 (lado E).",
+               "Consolos CV-TS dos dois lados nas linhas 3, 5, 6, 7 e 8 (maciço de 100 cm na alma), sem chanfro, 44 cm de altura (fundo alinhado ao da TS-01): topo a 3 %, pino PN-1 Ø20, assentos +8,480 (lado A) e +8,505 (lado E).",
                "Apoio nos pilares centrais PC: neoprene NEO-2 300×250×30 fretado e pino PN-2 Ø25 no consolo CP-I110; graute só numa ponta de cada viga.",
-               "V405 (P13 → linha 9) apoia na ponta sobre o consolo CP-I110 do pilar de fachada P14 (PF-04), face voltada ao pavilhão, assento +8,190.",
+               "V405 (P13 → linha 9) apoia na ponta sobre o consolo CP-I110 do pilar de fachada P14 (PF-04), face voltada ao pavilhão, assento +8,190. Consolos CP-I110 com 41 cm (fundo alinhado ao da I110) e tirante 3 Ø20.",
                "Içar pelas 2 alças AL-3 (2 laços cada); estocar sobre 2 calços nas alças; não virar a peça."])
 
 
@@ -340,20 +350,19 @@ SEG_VM = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsar
 
 
 def dados_vm():
-    L = 9530
+    L1 = round((X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)            # VM-01: A–B e D–E (face 30 do pilar lateral / 20 do P3, P8)
+    L = round((X_EIXO["C"] - 0.20 - (X_EIXO["B"] + 0.20) - 0.10) * 1000)  # VM-02: B–C e C–D (faces de 20 dos dois lados)
     return dict(
-        fmt="A1", marca="VM-02", qtd=4, familia="VIGAS DO MEZANINO I90 (LINHAS 1 E 2, NÍVEIS +3,15 E +6,55)", desenho="ND-LET-VM01", h=900, b=400, ts=120, ti=150, m=80, bw=150, L=L, esc=20,
+        fmt="A1", marca="VM-02", qtd=8, familia="VIGAS DO MEZANINO I90", desenho="ND-LET-VM01", h=900, b=400, ts=120, ti=150, m=80, bw=150, L=L, esc=20,
         x_mac=1200, dente=(450, 300), pino_x=150, tb=(50, 450), tb_nome="TB-1 tubo Ø50×3,0 L=450", pino_d=20,
         cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-50, 50], 0)],
         sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[400, 600],
         est=(8.0, 200, 100, 1500), Vd=383, alcas=[1900, L - 1900], tercas=[], consolos=[],
         anc=1122, tir="3 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
-        titulo="VIGA DO MEZANINO I90 PROTENDIDA — VM-02 (L = 953 cm) · VM-01 · VM-03 · VM-04", subtitulo="linhas 1 e 2, níveis +3,15 e +6,55; dentes Gerber 45 × 30 nos consolos CP-MEZ; laje alveolar h20 + 5 sobre a mesa",
-        kp_sub="VM nas linhas 1 e 2", kp_pecas=[(0.0, 0.0, 9.87, 0.0, "VM-01"), (9.87, 10.05, 20.05, 10.05, "VM-02"), (20.05, 0.0, 29.63, 0.0, "VM-03"), (29.63, 10.05, 40.10, 10.05, "VM-04")],
-        marcas=[["VM-01", "A–B, linhas 1 e 2, 2 níveis", 4, "922", f(area_I(400, 900, 120, 150, 80, 150) * 25 * 9.22 / 10, 1)],
-                ["VM-02", "B–C, linhas 1 e 2, 2 níveis", 4, "953", f(area_I(400, 900, 120, 150, 80, 150) * 25 * 9.53 / 10, 1)],
-                ["VM-03", "C–D, linhas 1 e 2, 2 níveis", 4, "893", f(area_I(400, 900, 120, 150, 80, 150) * 25 * 8.93 / 10, 1)],
-                ["VM-04", "D–E, linhas 1 e 2, 2 níveis", 4, "982", f(area_I(400, 900, 120, 150, 80, 150) * 25 * 9.82 / 10, 1)]],
+        titulo=f"VIGA DO MEZANINO I90 PROTENDIDA — VM-02 (L = {L/10:g} cm) · VM-01", subtitulo="linhas 1 e 2, níveis +3,15 e +6,55; dentes Gerber 45 × 30 nos consolos CP-MEZ (44 cm, fundo alinhado); laje alveolar h20 + 5 sobre a mesa",
+        kp_sub="VM nas linhas 1 e 2", kp_pecas=[(0.0, 0.0, X_EIXO["B"], 0.0, "VM-01"), (X_EIXO["B"], Y_LIN[1], XC, Y_LIN[1], "VM-02"), (XC, 0.0, X_EIXO["D"], 0.0, "VM-02"), (X_EIXO["D"], Y_LIN[1], X_EIXO["E"], Y_LIN[1], "VM-01")],
+        marcas=[["VM-01", "A–B e D–E, linhas 1 e 2, 2 níveis", 8, f"{L1/10:g}".replace(".", ","), f(area_I(400, 900, 120, 150, 80, 150) * 25 * L1 / 1e4, 1)],
+                ["VM-02", "B–C e C–D, linhas 1 e 2, 2 níveis", 8, f"{L/10:g}".replace(".", ","), f(area_I(400, 900, 120, 150, 80, 150) * 25 * L / 1e4, 1)]],
         barras_ponta=[dict(pos="N5", diam=20.0, qtd=3, comp=127, forma=[(0, 15), (0, 0), (112, 0)], trechos=["15", "112"]),
                       dict(pos="N6", diam=16.0, qtd=3, comp=round((2 * (90 + 840) + 160) / 10), forma=[(0, 0), (9, 0), (9, 84), (0, 84), (0, 0), (2, 2)], trechos=["9", "84", "", ""]),
                       dict(pos="N7", diam=10.0, qtd=3, comp=round((2 * (340 + 1200) + 140) / 10), forma=[(0, 0), (120, 0), (120, 34), (0, 34), (0, 0), (2, 2)], trechos=["120", "34", "", ""]),

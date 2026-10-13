@@ -1,0 +1,148 @@
+<title>Letsara · pórtico ELU/ELS</title>
+<style>
+/* layout: régua de controles + viewport 3D à esquerda; leitura dos resultados à direita (empilha no celular) */
+:root{
+  --bg:#f3f4f2; --panel:#ffffff; --fg:#1c2321; --muted:#5d6764; --line:#d5dad7;
+  --accent:#b4531f; --ref:#8d989a; --ok:#2f7d4f; --warn:#b07a12; --bad:#b3362c;
+  --g0:#3b6e8f; --g1:#7a5aa6; --g2:#2f7d4f; --g3:#b4531f; --g4:#8a6d3b; --g5:#c0392b; --g6:#46808a; --g7:#6c7a2b;
+  --f-disp:"IBM Plex Sans Condensed","Arial Narrow",sans-serif; --f-body:"IBM Plex Sans",system-ui,sans-serif; --f-num:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141918;--panel:#1c2321;--fg:#e4e8e6;--muted:#9aa5a1;--line:#2e3735;--accent:#e07a43;--ref:#56605f;--ok:#5fb37f;--warn:#d9a640;--bad:#e2685d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141918;--panel:#1c2321;--fg:#e4e8e6;--muted:#9aa5a1;--line:#2e3735;--accent:#e07a43;--ref:#56605f;--ok:#5fb37f;--warn:#d9a640;--bad:#e2685d;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);padding-inline:16px;padding-block:16px 32px}
+h1{font-family:var(--f-disp);font-weight:600;font-size:1.6rem;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:.25rem 0 1rem;max-width:70ch}
+.grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;min-width:0}
+.ctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px}
+label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;gap:6px;align-items:center}
+select,input[type=range]{accent-color:var(--accent)}
+select{font:inherit;padding:4px 6px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:4px}
+#vp{width:100%;aspect-ratio:16/10;max-width:100%;border-radius:4px;background:var(--bg);touch-action:none}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.78rem;color:var(--muted);margin-top:8px}
+.leg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px}
+.ramp{height:8px;border-radius:4px;background:linear-gradient(90deg,#2b6cb0,#2f9e74,#e2b33a,#d0482b);flex:1;min-width:120px}
+table{border-collapse:collapse;width:100%;font-size:.82rem}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:500;text-transform:uppercase;font-size:.7rem;letter-spacing:.04em}
+td.n{font-family:var(--f-num);font-variant-numeric:tabular-nums;text-align:right}
+.pill{display:inline-block;padding:1px 7px;border-radius:9px;font-size:.72rem;font-weight:600}
+.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.bad{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.warn{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+h2{font-family:var(--f-disp);font-size:1.05rem;margin:0 0 8px}
+.scroll{overflow-x:auto}
+.big{font-family:var(--f-num);font-size:1.6rem}
+.kv{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 10px}
+.kv div{display:flex;flex-direction:column}
+.kv span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.note{font-size:.8rem;color:var(--muted);max-width:70ch;line-height:1.45}
+.foot{margin-top:18px;font-size:.75rem;color:var(--muted)}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<h1>Letsara — pórtico 3D, deformadas ELU e ELS</h1>
+<p class="sub">Modelo global do pavilhão com a geometria do R01 (79,35 × 39,50 m): pilares engastados no cálice, vigas pré-moldadas articuladas, contraventamento em X só de tração, todas as terças (inclusive nos vãos de oitão sobre a VB) e lajes do mezanino como diafragma rígido (planos verdes). Escolha a combinação e a escala da deformada; a cor mostra o deslocamento horizontal.</p>
+<div class="grid">
+  <div class="card">
+    <div class="ctl">
+      <label for="cb">Combinação <select id="cb"></select></label>
+      <label for="sc">Escala <input id="sc" type="range" min="10" max="400" step="10" value="120"> <b id="scv" style="font-family:var(--f-num)">×120</b></label>
+      <label for="und"><input id="und" type="checkbox" checked> estrutura indeformada</label>
+    </div>
+    <canvas id="vp"></canvas>
+    <div class="leg" id="leg"></div>
+    <div class="leg"><span>0 mm</span><span class="ramp"></span><span id="rmax">—</span></div>
+  </div>
+  <div class="card">
+    <h2 id="tt">—</h2>
+    <div class="kv" id="kv"></div>
+    <p class="note" id="nt"></p>
+    <h2 style="margin-top:14px">Combinações</h2>
+    <div class="scroll"><table id="tc"><thead><tr><th>Combinação</th><th>Desl. máx (mm)</th><th>Pilar</th><th>γz / limite</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+<div class="grid" style="margin-top:16px">
+  <div class="card">
+    <h2>Base dos pilares — ELU (flexão composta oblíqua, NBR 6118:2023 17.2.5.2)</h2>
+    <div class="scroll"><table id="tp"><thead><tr><th>Pilar</th><th>Seção</th><th>Armadura</th><th>Comb.</th><th>Nd (kN)</th><th>Mx/MRx</th><th>My/MRy</th><th>Uso</th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="card">
+    <h2>Forças nas ligações (kN, tração +)</h2>
+    <div class="scroll"><table id="tf"><thead><tr><th>Peça</th><th>Compressão</th><th>Tração</th></tr></thead><tbody></tbody></table></div>
+    <p class="note" id="mg"></p>
+  </div>
+</div>
+<div class="card" style="margin-top:16px">
+  <h2>Configuração: modelo 3D × pórtico de cálculo</h2>
+  <div class="scroll"><table id="tcf"><thead><tr><th>Elemento</th><th>No modelo 3D</th><th>No pórtico</th></tr></thead><tbody></tbody></table></div>
+</div>
+<p class="foot">projeto da ND Engenharia · modelo OpenSeesPy (modelo_global_r01.py) · ELU com 0,8·Ecs·Ic e P-Δ; ELS com Ecs·Ic</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const D = /*DATA*/null;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const N = D.P.length / 3, nomes = Object.keys(D.comb);
+const cb = document.getElementById("cb"), sc = document.getElementById("sc");
+nomes.forEach(n => { const o = document.createElement("option"); o.value = o.textContent = n; cb.appendChild(o); });
+const cv = document.getElementById("vp");
+const rnd = new THREE.WebGLRenderer({canvas: cv, antialias: true, alpha: true});
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(35, 1.6, 0.5, 2000);
+cam.up.set(0, 0, 1); cam.position.set(-38, -52, 42);
+const ctr = new THREE.OrbitControls(cam, cv); ctr.target.set(19.75, 39.7, 4); ctr.update();
+const grpCol = ["--g0","--g1","--g2","--g3","--g4","--g5","--g6","--g7"];
+function ramp(t){ const c=[[43,108,176],[47,158,116],[226,179,58],[208,72,43]]; t=Math.max(0,Math.min(1,t))*3; const i=Math.min(2,Math.floor(t)), f=t-i; return c[i].map((v,k)=>(v+(c[i+1][k]-v)*f)/255); }
+let undef, defo, lajes = [];
+function linhas(segs, pos, cores, opac){
+  const g = new THREE.BufferGeometry(), p = [], c = [];
+  segs.forEach(([a,b,col]) => { p.push(pos[3*a],pos[3*a+1],pos[3*a+2],pos[3*b],pos[3*b+1],pos[3*b+2]); c.push(...col(a),...col(b)); });
+  g.setAttribute("position", new THREE.Float32BufferAttribute(p,3)); g.setAttribute("color", new THREE.Float32BufferAttribute(c,3));
+  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({vertexColors:true, transparent:opac<1, opacity:opac}));
+}
+const segs = [];
+D.pil.forEach(ns => { for (let k=0;k<ns.length-1;k++) segs.push([ns[k],ns[k+1],-1]); });
+D.bars.forEach(([a,b,g]) => segs.push([a,b,g]));
+function draw(){
+  const c = D.comb[cb.value], s = +sc.value / 1000;
+  document.getElementById("scv").textContent = "×" + sc.value;
+  if (undef) scene.remove(undef); if (defo) scene.remove(defo);
+  const ref = new THREE.Color(css("--ref"));
+  undef = linhas(segs.map(([a,b]) => [a,b,()=>[ref.r,ref.g,ref.b]]), D.P, null, .55);
+  undef.visible = document.getElementById("und").checked; scene.add(undef);
+  const pos = D.P.map((v,i) => v + c.d[i]*s);
+  const mag = i => Math.hypot(c.d[3*i], c.d[3*i+1]);
+  const mx = Math.max(...Array.from({length:N},(_,i)=>mag(i))) || 1;
+  defo = linhas(segs.map(([a,b]) => [a,b,i=>ramp(mag(i)/mx)]), pos, null, 1); scene.add(defo);
+  lajes.forEach(m => scene.remove(m)); lajes = [];
+  D.diaf.forEach(q => { const g = new THREE.BufferGeometry(), p = [];
+    [0,1,2,0,2,3].forEach(k => p.push(pos[3*q[k]], pos[3*q[k]+1], pos[3*q[k]+2]));
+    g.setAttribute("position", new THREE.Float32BufferAttribute(p,3));
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color: css("--g2") || "#2f9e74", transparent:true, opacity:.28, side:THREE.DoubleSide, depthWrite:false}));
+    scene.add(m); lajes.push(m); });
+  document.getElementById("rmax").textContent = mx.toFixed(1) + " mm";
+  document.getElementById("tt").textContent = cb.value;
+  const kv = [["Desl. horizontal máx", c.dmax.toFixed(1)+" mm"], ["Pilar", c.pilar]];
+  if (c.tipo === "ELU") kv.push(["γz (aprox.)", c.gz]); else kv.push(["H/1700", c.lim+" mm"], ["H/500", "20,0 mm"]);
+  document.getElementById("kv").innerHTML = kv.map(([k,v])=>`<div><span>${k}</span><b class="big">${v}</b></div>`).join("");
+  document.getElementById("nt").textContent = c.tipo === "ELU"
+    ? "ELU: rigidez dos pilares 0,8·Ecs·Ic com P-Δ. γz < 1,10: estrutura de nós fixos para a análise global; os efeitos locais de 2ª ordem dos pilares estão no método geral."
+    : (c.ok ? "Atende H/1700." : "Combinação frequente (ψ1 vento 0,3). Passa em H/500 e H/300 (galpão), mas não em H/1700 da tabela 13.3 da NBR 6118, que é para edifícios. A escolha do limite precisa ser definida antes da emissão para obra.");
+  render();
+}
+function render(){ const w = cv.clientWidth, h = cv.clientHeight; if (cv.width!==w*devicePixelRatio){rnd.setPixelRatio(devicePixelRatio); rnd.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();} rnd.render(scene,cam); }
+ctr.addEventListener("change", render); window.addEventListener("resize", ()=>{cv.width=0; render();});
+cb.onchange = sc.oninput = document.getElementById("und").onchange = draw;
+document.getElementById("leg").innerHTML = '<span><i style="background:var(--ref)"></i>indeformada</span>' + D.grupos.map((g,k)=>`<span>${g}</span>`).join(" · ");
+const tb = document.querySelector("#tc tbody");
+tb.innerHTML = nomes.map(n => { const c = D.comb[n]; const st = c.tipo==="ELU" ? `γz ${c.gz}` : `<span class="pill ${c.dmax<=c.lim?'ok':'warn'}">${c.dmax<=c.lim?'≤':'>'} H/1700</span>`;
+  return `<tr><td>${n}</td><td class="n">${c.dmax.toFixed(1)}</td><td>${c.pilar}</td><td>${st}</td></tr>`; }).join("");
+document.querySelector("#tcf tbody").innerHTML = D.conf.map(r => `<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("");
+document.querySelector("#tp tbody").innerHTML = D.ver.map(([p,v]) => `<tr><td>${p}</td><td>${v.secao}</td><td>${v.armadura}</td><td>${v.comb.replace(/^ELU-(\d).*/,"ELU-$1")}</td><td class="n">${v.N.toFixed(0)}</td><td class="n">${v.Mx.toFixed(0)}/${v.MRx.toFixed(0)}</td><td class="n">${v.My.toFixed(0)}/${v.MRy.toFixed(0)}</td><td><span class="pill ${v.uso<=1?'ok':'bad'}">${v.uso.toFixed(2)}</span></td></tr>`).join("");
+const f0 = D.comb[nomes[0]].forcas, env = {};
+nomes.forEach(n => Object.entries(D.comb[n].forcas).forEach(([g,[a,b]]) => { env[g] = env[g] || [0,0]; env[g][0]=Math.min(env[g][0],a); env[g][1]=Math.max(env[g][1],b); }));
+document.querySelector("#tf tbody").innerHTML = Object.entries(env).map(([g,[a,b]]) => `<tr><td>${g}</td><td class="n">${a.toFixed(1)}</td><td class="n">${b.toFixed(1)}</td></tr>`).join("");
+if (D.mg) document.getElementById("mg").textContent = `Método geral (NBR 6118 15.8.3.2) no pilar mais solicitado, ${D.mg.pilar} (${D.mg.comb}): λu = ${D.mg.lambda_u} ≥ 1,0, com não linearidade física, geométrica e fluência φef 0,5.`;
+draw();
+</script>

@@ -45,7 +45,7 @@ NIVEIS_MEZ, H_LAJE = [3.15, 6.55], 0.20 + 0.05
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
 I110 = PerfilI(h=1.10, b=0.40, tw=0.15, tf=0.25, nome="I110")
 I70 = PerfilI(h=0.70, b=0.40, tw=0.15, tf=0.15, nome="I70")
-VB = PerfilRetangular(0.15, 0.70, "VB 15x70")
+VB = PerfilRetangular(0.15, 0.90, "VB 15x90")
 TERCA = PerfilRetangular(0.085, 0.30, "Ue300x85x25x3,00 (envelope)")
 LAJE = PerfilRetangular(1.24, H_LAJE, "LA h20+5")
 TELHA = PerfilRetangular(1.00, 0.03, "telha 0,5 + PIR 30")
@@ -53,176 +53,158 @@ H_PLACA, E_PLACA, N_FIADAS = 1.25, 0.10, 8
 PLACA = PerfilRetangular(E_PLACA, H_PLACA, "Placa e=10 h=125")
 
 
+CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
+hC = lambda t: CONS[t]["h_total_m"]
+sys.path.insert(0, "/home/claude/letsara/pranchas")
+import fechamento as FCH
+from lajes_placas import paineis_mez
+PAINEIS_MEZ = paineis_mez()[0]                                                   # placas: mesma fonte das pranchas PP (vistas do R01)
+
+
 def montar() -> ModeloBIM:
     m = ModeloBIM("Letsara — Pavilhão pré-moldado", obra="Obra Letsara (Marques Engenharia e Construções)")
+    ass_ts = lambda x_pino: zf(x_pino) + H_DENTE * C3 - 0.01               # topo do consolo que recebe a TS-01
+    z_vb = lambda x: zf(x)                                                  # fundo da VB (sem dente) = topo do CP-VB
+    rec_vb = lambda x: math.ceil((z_vb(x) + 0.90) / 0.05) * 0.05           # recuo da cabeça dos pilares de fachada: topo da VB 15×90
 
-    # 1. pilares laterais (60 na direção X) com consolos CP-TS para os dentes da TS-01
+    # 1. pilares laterais (60 em x) com cabeça recuada 40×30 e consolos CP-TS (fundo alinhado ao da TS-01)
     for i, y in enumerate(Y_LIN, start=1):
-        m.pilar(f"P1-L{i}", 0.0, y, 0.60, 0.40, Z_CALICE, REC[0], obs="60 na direção X; cabeça 40×30 recuada acima de +8,40")
-        m.pilar(f"P1-L{i} cabeça", -0.15, y, 0.30, 0.40, REC[0], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe)")
-        m.pilar(f"P2-L{i}", LARG, y, 0.60, 0.40, Z_CALICE, REC[1], obs="60 na direção X; cabeça 40×30 recuada acima de +9,55")
-        m.pilar(f"P2-L{i} cabeça", LARG + 0.15, y, 0.30, 0.40, REC[1], TOPO_PLAT, obs="cabeça recuada (só a parte externa sobe)")
-        if 2 <= i <= 8:
-            for x_ap, xc in ((0.475, 0.45), (LARG - 0.475, LARG - 0.45)):
-                m.bloco("consolo", f"CP-TS L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.30, 0.40, 0.45, "Consolos")
-
-    # pilares das fachadas frente e fundo, centrais e do mezanino
+        canto = i in (1, 9)
+        for lado, x0, sg in (("P1", 0.0, 1), ("P2", LARG, -1)):
+            zr = rec_vb(x0) if canto else REC[0 if sg > 0 else 1]
+            nome = f"{lado}{'C' if canto else ''}-L{i}"
+            m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, zr, obs=f"40×60; cabeça recuada acima de +{zr:.2f}".replace(".", ","))
+            if canto:      # canto: só o quarto externo (30 × 30) sobe
+                m.pilar(nome + " cabeça", x0 - sg * 0.15, y + (-0.05 if i == 1 else 0.05), 0.30, 0.30, zr, TOPO_PLAT, obs="cabeça recuada nas duas faces internas")
+            else:
+                m.pilar(nome + " cabeça", x0 - sg * 0.15, y, 0.30, 0.40, zr, TOPO_PLAT, obs="cabeça recuada 40×30")
+            if not canto:
+                xp = 0.475 if sg > 0 else LARG - 0.475
+                m.bloco("consolo", f"CP-TS L{i}", (x0 + sg * 0.45, y, ass_ts(xp)), 0.30, 0.40, hC("CP-TS"), "Consolos")
+    # pilares das fachadas 1 e 9 (60 ⊥ fachada) com cabeça recuada acima da VB
     for j, x in enumerate(X_FACH[1:-1]):
-        m.pilar(["P3", "P4", "P5"][j], x, 0.0, 0.40, 0.60, Z_CALICE, TOPO_PLAT, obs="60 ⊥ fachada")
-        m.pilar(["P3", "P14", "P5"][j], x, COMP, 0.40, 0.60, Z_CALICE, TOPO_PLAT, obs="60 ⊥ fachada")
+        for nome, y, sg in ((["P3", "P4", "P5"][j], 0.0, 1), (["P3", "P14", "P5"][j], COMP, -1)):
+            zr = rec_vb(x)
+            m.pilar(f"{nome}-L{1 if sg > 0 else 9}", x, y, 0.40, 0.60, Z_CALICE, zr, obs="60 ⊥ fachada; cabeça recuada acima da VB")
+            m.pilar(f"{nome}-L{1 if sg > 0 else 9} cabeça", x, y - sg * 0.15, 0.40, 0.30, zr, TOPO_PLAT, obs="cabeça 40×30")
+    # centrais (R01): P8A 40×60, P11 40×40, P13 60×60 — topo +8,88 (topo da I110)
     for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.60, 0.60))):
         m.pilar(marca, X_C, y, bx, by, Z_CALICE, Z_I110_TOPO, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I110 / TS-01")
     for marca, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
-        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino")
+        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino 40×60")
+    # pilares dos portões (linha 4): P9, P12 40×40 e P10 25×25, topo +7,50 (parede da vista C só até +7,50; a TS-01 passa por cima)
+    for nome, x, b_ in (("P9", 9.87, 0.40), ("P10", 15.195, 0.25), ("P10", 24.305, 0.25), ("P12", 29.63, 0.40)):
+        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, b_, Z_CALICE, 7.50, obs="parede dos portões (vista C), topo +7,50")
 
-    # 2. vigas centrais I110 (dentes nas pontas) e consolos CV-TS nas linhas das TS-01
+    # 2. vigas centrais I110 (comprimentos do R01) e consolos CP-I110 / CV-TS
     zc = Z_I110_TOPO - H_I110 / 2
+    meia = {Y_LIN[1]: 0.30, Y_LIN[3]: 0.20, Y_P13: 0.30, Y_LIN[8]: 0.30}
+    z_ass_i110 = Z_I110_TOPO - H_I110 + (H_I110 - 0.66) - 0.03
     for marca, ya, yb in I110_TRECHOS:
-        m.linear("viga", marca, I110, (X_C, ya + 0.275, zc), (X_C, yb - 0.275, zc), "Vigas centrais I110",
-                 obs="protendida, 24 cord. Ø12,7 (10 isoladas nas pontas); dente 660")
-    # consolo CP-I110 na face interna do P14 (linha 9, eixo C) para a ponta da V405
-    m.bloco("consolo", "CP-I110 (P14)", (X_C, COMP - 0.30 - 0.20, 8.19 - 0.01), 0.40, 0.40, 0.50, "Consolos")
+        y0, y1 = ya + meia[ya] + 0.075, yb - meia[yb] - 0.075
+        m.linear("viga", marca, I110, (X_C, y0, zc), (X_C, y1, zc), "Vigas centrais I110",
+                 obs=f"L = {y1 - y0:.3f} m; protendida 24 cord. Ø12,7 + 4 Ø20 na mesa superior; dente 660")
+        for yy, sg in ((ya, 1), (yb, -1)):
+            m.bloco("consolo", f"CP-I110 {marca}", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110), 0.50, 0.40, hC("CP-I110"), "Consolos")
     for i in range(2, 9):
         y = Y_LIN[i - 1]
-        if any(abs(y - yy) < 0.01 for _, yy in CENTRAIS):
-            for xc, x_ap in ((X_C - 0.375, PONTAS[0][1] - 0.15), (X_C + 0.375, PONTAS[1][0] + 0.15)):
-                m.bloco("consolo", f"CP-TS central L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.35, 0.40, 0.45, "Consolos")
-        else:
-            for xc, x_ap in ((X_C - 0.375, PONTAS[0][1] - 0.15), (X_C + 0.375, PONTAS[1][0] + 0.15)):
-                m.bloco("consolo", f"CV-TS L{i}", (xc, y, zf(x_ap) + H_DENTE * C3 - 0.01), 0.35, 0.40, 0.45, "Consolos")
+        tipo = "CP-TS" if any(abs(y - yy) < 0.01 for _, yy in CENTRAIS) else "CV-TS"
+        for xc, x_ap in ((X_C - 0.20 - 0.175, PONTAS[0][1] - 0.15), (X_C + 0.20 + 0.175, PONTAS[1][0] + 0.15)):
+            m.bloco("consolo", f"{tipo} L{i} (eixo C)", (xc, y, ass_ts(x_ap)), 0.35, 0.40, hC(tipo), "Consolos")
 
-    # 3. TS-01: corpo I90 inclinado + dentes (blocos) nas pontas
+    # 3. TS-01: corpo I90 inclinado + dentes nas pontas
     for i in range(2, 9):
         y = Y_LIN[i - 1]
         for lado, (xa, xb) in zip("ab", PONTAS):
             a, b = xa + L_DENTE, xb - L_DENTE
             m.linear("viga", f"TS-01 L{i}{lado}", I90, (a, y, zf(a) + H_TS / 2), (b, y, zf(b) + H_TS / 2),
-                     "Vigas I90 de cobertura", obs="inclinada 3 %, dentes 450×300")
+                     "Vigas I90 de cobertura", obs="inclinada 3 %, dentes 450×300, L 19,15 m")
             for xd in (xa + L_DENTE / 2, xb - L_DENTE / 2):
-                m.bloco("viga", f"dente TS-01 L{i}{lado}", (xd, y, zf(xd) + H_TS), L_DENTE, 0.40, H_TS - H_DENTE,
-                        "Vigas I90 de cobertura")
+                m.bloco("viga", f"dente TS-01 L{i}{lado}", (xd, y, zf(xd) + H_TS), L_DENTE, 0.40, H_TS - H_DENTE, "Vigas I90 de cobertura")
 
-    # vigas de borda das fachadas 1 e 9 (acompanham o caimento)
+    # vigas de borda VB 15×90 das fachadas 1 e 9 (sem dente, sobre CP-VB; acompanham o caimento)
     for y in (0.0, COMP):
         for xa, xb in itertools.pairwise(X_FACH):
-            a, b = xa + 0.25, xb - 0.25
-            m.linear("viga", "VB-01", VB, (a, y, zf(a) + 0.35), (b, y, zf(b) + 0.35), "Vigas de borda")
+            a, b = xa + (0.30 if xa == 0 else 0.20) + 0.025, xb - (0.30 if xb == LARG else 0.20) - 0.025
+            m.linear("viga", "VB", VB, (a, y, zf(a) + 0.45), (b, y, zf(b) + 0.45), "Vigas de borda")
+            for xx, sg in ((xa, 1), (xb, -1)):
+                xc = xx + sg * ((0.30 if xx in (0.0, LARG) else 0.20) + 0.15)
+                m.bloco("consolo", "CP-VB 30×40×35", (xc, y, zf(xx) - 0.01), 0.30, 0.40, 0.35, "Consolos")
 
-    # 4. terças Ue 300 nas posições da TS-01 e telha
+    # 4. terças Ue 300 e telha
     for xa, _ in PONTAS:
         for s in LG["s_tercas"]:
             x = xa + s * C3 - 0.027
-            zt = zf(x) + H_TS + 0.0125 + TERCA.h / 2
+            zt = zf(x) + H_TS + 0.010 + TERCA.h / 2
             for k in range(len(Y_LIN) - 1):
-                m.linear("terca", "Ue300", TERCA, (x, Y_LIN[k] + 0.005, zt), (x, Y_LIN[k + 1] - 0.005, zt),
-                         "Terças metálicas", material="aco")
+                m.linear("terca", "Ue300", TERCA, (x, Y_LIN[k] + 0.01, zt), (x, Y_LIN[k + 1] - 0.01, zt), "Terças metálicas", material="aco")
     for k in range(int(COMP // 1.0)):
         y = 0.5 + k * 1.0
-        z0, z1 = zf(0.30) + H_TS + 0.0125 + 0.30 + 0.015, zf(LARG - 0.30) + H_TS + 0.0125 + 0.30 + 0.015
-        m.linear("placa", "telha", TELHA, (0.30, y, z0), (LARG - 0.30, y, z1), "Telhas", material="aco")
+        z0, z1 = zf(0.18) + H_TS + 0.010 + 0.30 + 0.015, zf(LARG - 0.18) + H_TS + 0.010 + 0.30 + 0.015
+        m.linear("placa", "telha", TELHA, (0.18, y, z0), (LARG - 0.18, y, z1), "Telhas", material="aco")
 
-    # 5. mezanino (linhas 1–2): vigas I70 com dentes e laje alveolar h20 + 5
+    # 5. mezanino (linhas 1–2): VM I90 com dentes nos CP-MEZ (fundo alinhado) e laje alveolar h20 + capa 5
+    faces = [(0.30, X_EIXO["B"] - 0.20), (X_EIXO["B"] + 0.20, X_C - 0.20), (X_C + 0.20, X_EIXO["D"] - 0.20), (X_EIXO["D"] + 0.20, LARG - 0.30)]
     for nivel in NIVEIS_MEZ:
         zv = nivel - H_LAJE - I90.h / 2
+        z_as = nivel - H_LAJE - 0.45 - 0.01
         for y in (Y_LIN[0], Y_LIN[1]):
-            for xa, xb in itertools.pairwise(X_FACH):
-                m.linear("viga", f"VM {nivel:+.2f}", I90, (xa + 0.325, y, zv), (xb - 0.325, y, zv),
-                         "Vigas de mezanino", obs="I90 protendida com dentes Gerber 45×30 (MEF FS 1,14), capa como 2º estágio")
-        for k in range(int((LARG - 0.60) // 1.25)):
-            x = 0.925 + k * 1.25
-            m.linear("laje", f"LA {nivel:+.2f}", LAJE, (x, Y_LIN[0] + 0.20, nivel - H_LAJE / 2),
-                     (x, Y_LIN[1] - 0.20, nivel - H_LAJE / 2), "Laje alveolar")
+            for fa, fb in faces:
+                m.linear("viga", f"VM {nivel:+.2f}", I90, (fa + 0.05, y, zv), (fb - 0.05, y, zv), "Vigas de mezanino",
+                         obs=f"I90 protendida, dentes 45×30, L = {fb - fa - 0.10:.2f} m; 2º estágio N9")
+                for xx, sg in ((fa, 1), (fb, -1)):
+                    m.bloco("consolo", "CP-MEZ 40×30×44", (xx + sg * 0.15, y, z_as), 0.30, 0.40, hC("CP-MEZ"), "Consolos")
+                    m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xx + sg * 0.15, y, z_as + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
+        for x0, b_, mk in PAINEIS_MEZ:                              # mesma paginação da ND-LET-LA01 (30 LA-01 + 2 LA-02 por nível)
+            x = (x0 + b_ / 2) / 1000
+            perf = LAJE if b_ == 1250 else PerfilRetangular(0.70, H_LAJE, "Laje alveolar 70")
+            m.linear("laje", f"{mk} {nivel:+.2f}", perf, (x, Y_LIN[0] + 0.10, nivel - H_LAJE / 2), (x, Y_LIN[1] - 0.10, nivel - H_LAJE / 2), "Laje alveolar")
 
-    # 6. placas de fechamento conforme a locação do R01 (vistas A–J): perímetro (eixos A/E nas linhas 4–9 inteiros,
-    #    linhas 1–4 só as 2 fiadas de cima = docas), fachada 9 inteira, fachada 1 só nas extremidades (A–B e D–E),
-    #    parede da linha 2 inteira e parede da linha 3 com 4 portões (placas só acima de +6,10)
-    E_PL, Z_VERGA = 0.15, 7.50                                          # VT/VV 25×60 de +7,50 a +8,10
-    def fiadas(z0=0.0):
-        z = z0
-        while z + 1.0 < TOPO_PLAT:
-            yield z + H_PLACA / 2
-            z += H_PLACA
-    X_L3, YP = X_L4, Y_LIN[LINHA_PORTOES]                                   # parede dos portões: linha 4 do R01
-    for x, nome in ((-0.30 - E_PL / 2 - 0.05, "CM eixo A"), (LARG + 0.30 + E_PL / 2 + 0.05, "CM eixo E")):
-        for i in range(len(Y_LIN) - 1):
-            z0 = 0.0 if i >= 3 else 7.50                                   # linhas 1–4: docas, só as 2 fiadas de cima
-            for z in fiadas(z0):
-                m.linear("placa", nome, PLACA, (x, Y_LIN[i], z), (x, Y_LIN[i + 1], z), "Placas de fechamento")
-    for z in fiadas():
-        for xa, xb in itertools.pairwise(X_FACH):                            # fachada linha 9 inteira
-            m.linear("placa", "CM linha 9", PLACA, (xa - 0.40 if xa == 0 else xa, COMP + 0.30 + E_PL / 2, z), (xb + 0.40 if xb == LARG else xb, COMP + 0.30 + E_PL / 2, z), "Placas de fechamento")
-        for xa, xb in ((-0.40, X_EIXO["B"]), (X_EIXO["D"], LARG + 0.40)):                 # fachada linha 1: só A–B e D–E (vistas H e J)
-            m.linear("placa", "CM linha 1", PLACA, (xa, -0.30 - E_PL / 2, z), (xb, -0.30 - E_PL / 2, z), "Placas de fechamento")
-        for xa, xb in itertools.pairwise(X_L2):                              # parede da linha 2 (vistas G/I)
-            m.linear("placa", "CM linha 2", PLACA, (xa, Y_LIN[1] + 0.20 + E_PL / 2, z), (xb, Y_LIN[1] + 0.20 + E_PL / 2, z), "Placas de fechamento")
-    for k, (xa, xb) in enumerate(itertools.pairwise(X_L3)):                 # parede da linha 4 (vista C): portões nas 4 bays centrais
-        gate = 1 <= k <= 4
-        for z in fiadas(Z_VERGA if gate else 0.0):
-            m.linear("placa", "CM linha 4" + (" (sobre o portão)" if gate else ""), PLACA, (xa, YP + 0.20 + E_PL / 2, z), (xb, YP + 0.20 + E_PL / 2, z), "Placas de fechamento")
-    # pilares dos portões (linha 4) e do anexo (linha 2)
-    for nome, x, b in (("P9", 9.87, 0.40), ("P10", 15.195, 0.25), ("P10", 24.305, 0.25), ("P12", 29.63, 0.40)):
-        m.pilar(nome, x, YP, b, b, Z_CALICE, 8.10, obs="pilar dos portões (R01), topo a confirmar")
-    m.pilar("P6", 36.175, Y_LIN[1], 0.25, 0.40, Z_CALICE, 8.10, obs="anexo (R01), a confirmar")
-    # vigas de travamento VT e vergas VV 25×60 (+5,50 a +6,10), atrás das placas
+    # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
+    PL = PerfilRetangular(0.15, 1.25, "Placa 125×15 protendida")
+    o_ext, o_c = 0.30 + 0.025 + 0.075, 0.20 + 0.025 + 0.075
+    pos = {"A": ("x", COMP + o_ext), "I": ("x", -o_ext), "G": ("x", Y_LIN[1] + o_ext), "C": ("x", Y_LIN[LINHA_PORTOES] + o_c),
+           "B": ("y", -o_ext), "E": ("y", -o_ext), "H": ("y", -o_ext), "D": ("y", LARG + o_ext), "F": ("y", LARG + o_ext), "J": ("y", LARG + o_ext)}
+    for V, (pecas, ca1, _) in FCH.DADOS.items():
+        ax, c = pos[V]
+        for pc in pecas:
+            s0, s1, z = pc["s0"] / 1000, pc["s1"] / 1000, (pc["z0"] + pc["z1"]) / 2000
+            p0, p1 = ((s0, c, z), (s1, c, z)) if ax == "x" else ((c, s0, z), (c, s1, z))
+            m.linear("placa", f"{pc['id']} (vista {V})", PL, p0, p1, "Placas de fechamento", obs=f"L = {pc['L']} mm; apoio: {pc['apoio']}")
+    # vigas de travamento VT 25×60 (+7,50/+8,10) nos eixos A e E, linhas 2 a 9 (vistas B, D, E, F), com consolos CP-VT
     VT = PerfilRetangular(0.25, 0.60, "VT 25x60")
     for i in range(1, 8):
         for x in (0.0, LARG):
-            m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, Y_LIN[i] + 0.20, Z_VERGA + 0.30), (x, Y_LIN[i + 1] - 0.20, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
-    for xs, y in ((X_L2, Y_LIN[1]), (X_L3, YP)):
-        for k, (xa, xb) in enumerate(itertools.pairwise(xs)):
-            nome = "VV (verga do portão)" if (y == YP and 1 <= k <= 4) else "VT"
-            m.linear("viga", nome, VT, (xa + 0.20, y, Z_VERGA + 0.30), (xb - 0.20, y, Z_VERGA + 0.30), "Vigas de travamento VT/VV")
+            ya, yb = Y_LIN[i] + 0.20 + 0.025, Y_LIN[i + 1] - 0.20 - 0.025
+            m.linear("viga", f"VT L{i+1}-L{i+2}", VT, (x, ya, 7.80), (x, yb, 7.80), "Vigas de travamento VT", obs="dentes 30×20; fundo +7,50")
+            for yy, sg in ((Y_LIN[i], 1), (Y_LIN[i + 1], -1)):
+                m.bloco("consolo", "CP-VT 25×20×29", (x, yy + sg * (0.20 + 0.10), 7.79), 0.25, 0.20, hC("CP-VT"), "Consolos")
 
-    # 7. insertos metálicos e conexões (para conferir no 3D o que está nas pranchas)
-    INS = "Insertos metálicos"
-    PIN = "Pinos, tubos e neoprenes"
-    for i in range(2, 9):                                                   # TS-01: TB-1 + PN-1 + NEO-1 em cada ponta (28 apoios)
+    # 7. insertos e ligações (conferência no 3D)
+    INS, PIN = "Insertos metálicos", "Pinos, tubos e neoprenes"
+    for i in range(2, 9):
         y = Y_LIN[i - 1]
         for xp in LG["X_PINO"]:
-            z_as = zf(xp) + H_DENTE * C3 - 0.01
+            z_as = ass_ts(xp)
             m.bloco("inserto", "PN-1 pino Ø20 L=700", (xp, y, z_as + 0.40), 0.02, 0.02, 0.70, PIN)
-            m.bloco("inserto", "TB-1 tubo Ø50×3,0 L=450 (no dente)", (xp, y, z_as + 0.45), 0.05, 0.05, 0.45, PIN)
             m.bloco("inserto", "NEO-1 300×150×10", (xp, y, z_as + 0.01), 0.30, 0.15, 0.01, PIN)
-            m.bloco("inserto", "CH-A1 300×150×12,5 (fundo do dente)", (xp, y, z_as + 0.0225), 0.30, 0.15, 0.0125, INS)
-    for i in range(2, 9):                                                   # CH-T1/T2 no topo e CH-MF no fundo das TS-01; AL-1
-        y = Y_LIN[i - 1]
         for xa, _ in PONTAS:
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027
-                no = k % 2 == 0
-                m.bloco("inserto", "CH-T2 300×200×12,5 (nó do contraventamento)" if no else "CH-T1 150×150×12,5", (x, y, zf(x) + H_TS + 0.0125),
-                        0.30 if no else 0.15, 0.20 if no else 0.15, 0.0125, INS)
-                if 0 < k < len(LG["s_tercas"]) - 1:
-                    m.bloco("inserto", "CH-MF 150×360×12,5 (mão-francesa, fundo)", (x, y, zf(x)), 0.15, 0.36, 0.0125, INS)
-            for s_ in LG["alcas"]:
-                x = xa + s_ * C3
-                m.bloco("inserto", "AL-1 alça cordoalha Ø12,7", (x, y, zf(x) + H_TS + 0.14), 0.12, 0.02, 0.14, INS)
-    for i, y in enumerate(Y_LIN, start=1):                                  # IP-01 nas faces externas dos pilares laterais (8 fiadas)
-        for k in range(N_FIADAS):
-            z = 1.25 * (k + 1) - 0.10
-            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (-0.30 - 0.00475, y, z + 0.075), 0.0095, 0.15, 0.15, INS)
-            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (LARG + 0.30 + 0.00475, y, z + 0.075), 0.0095, 0.15, 0.15, INS)
-    for x in X_FACH[1:-1]:                                                  # IP-01 nos pilares de fachada (faces y− / y+)
-        for k in range(N_FIADAS):
-            z = 1.25 * (k + 1) - 0.10
-            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (x, -0.30 - 0.00475, z + 0.075), 0.15, 0.0095, 0.15, INS)
-            m.bloco("inserto", "IP-01 150×150×9,5 + 2 pinos Ø12,5", (x, COMP + 0.30 + 0.00475, z + 0.075), 0.15, 0.0095, 0.15, INS)
-    # consolos CP-VB (fachadas) e CP-MEZ (linhas 1–2, dois níveis) com pinos
-    for y in (0.0, COMP):
-        for x in X_FACH:
-            for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
-                xc = x + sg * (0.20 + 0.15)
-                m.bloco("consolo", "CP-VB 30×40×35/20", (xc, y, zf(x) - 0.01), 0.30, 0.40, 0.35, "Consolos")
-                m.bloco("inserto", "PN-1 pino Ø20 (VB-01)", (xc, y, zf(x) + 0.39), 0.02, 0.02, 0.70, PIN)
-    for nivel in NIVEIS_MEZ:
-        z_as = nivel - H_LAJE - 0.45                                        # VM I90 com dente 45: assento = nível − laje − capa − dente
-        for y in (Y_LIN[0], Y_LIN[1]):
-            for x in X_FACH:
-                for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
-                    xc = x + sg * (0.30 + 0.15)
-                    m.bloco("consolo", "CP-MEZ 30×40×35/20", (xc, y, z_as - 0.01), 0.30, 0.40, 0.35, "Consolos")
-                    m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xc, y, z_as + 0.39), 0.02, 0.02, 0.70, PIN)
-                    m.bloco("inserto", "NEO 300×150×10", (xc, y, z_as + 0.01), 0.15, 0.30, 0.01, PIN)
+                no_ = k % 2 == 0
+                m.bloco("inserto", "CH-T2 300×380×12,5 (nó do X)" if no_ else "CH-T1 200×200×12,5", (x, y, zf(x) + H_TS + 0.0125),
+                        0.30 if no_ else 0.20, 0.38 if no_ else 0.20, 0.0125, INS)
+                m.bloco("inserto", "CH-MF 150×360×12,5", (x, y, zf(x)), 0.15, 0.36, 0.0125, INS)
+    for V, (pecas, ca1, _) in FCH.DADOS.items():                            # IP-01: uma por ponta de placa, na face do pilar
+        ax, c = pos[V]
+        for pc in pecas:
+            for s in (pc["s0"] / 1000 + 0.05, pc["s1"] / 1000 - 0.05):
+                z = pc["z1"] / 1000 - 0.175
+                pt = (s, c, z) if ax == "x" else (c, s, z)
+                m.bloco("inserto", "IP-01 150×150×9,5 + CL-1", pt, 0.15, 0.15, 0.15, INS)
+        for (s, z0) in ca1:
+            pt = (s / 1000, c, z0 / 1000) if ax == "x" else (c, s / 1000, z0 / 1000)
+            m.bloco("inserto", "CA-1 consolo metálico", pt, 0.20, 0.20, 0.016, INS)
 
     # 8. piso e fundações (indicativos): piso de concreto 15 cm e blocos de fundação com cálice sob cada pilar
     m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(LARG + 1.0, 0.15), (LARG / 2, -0.5, -0.075), (LARG / 2, COMP + 0.5, -0.075), "Piso e fundações")
@@ -235,8 +217,10 @@ def montar() -> ModeloBIM:
     pl = LG["platibanda"]
     m.pendente(f"Cobertura escondida: telha junto ao P2 em +{pl['telha_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00; "
                f"junto ao P1 em +{pl['telha_P1']:.3f}.")
-    m.pendente("! Laje alveolar h20 + 5 com 500 kgf/m² em 9,75 m NÃO passa com 7 Ø12,7 (seção genérica): ELU 209 > 192 kN·m "
-               "por painel; descompressão só até 9,05 m. Confirmar com a tabela do fabricante ou manter h26,5 + 5.")
+    m.pendente("Laje alveolar h20 + 5 do mezanino (9,35 m, 500 kgf/m²) com 8 Ø12,7: MRd 215 ≥ 192 kN·m por painel; ELS-D ok (−0,91 MPa). Confirmar com a tabela do fabricante.")
+    m.pendente("! Pórtico global (OpenSeesPy, P-Δ): ELU ok (γz 1,035); ELS frequente 9,3 mm em x — passa H/500 (17 mm), não passa H/1700 (5,9 mm). Definir o limite com o cliente.")
+    m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
+    m.pendente("Consolos sem chanfro com h = altura da viga − dente − neoprene (fundos alinhados): CP-TS/CV-TS/CP-MEZ 44, CP-I110 41, CP-VB 35, CP-VT 29 cm; nenhum precisou de mísula (NBR 9062:2017 7.3).")
     m.pendente("Vigas do mezanino em I90 com dentes 45×30 (dente da I70 reprovado no MEF): assentos CP-MEZ +2,45 / +5,85; pé-direito livre sob a viga = nível − 1,15 m.")
     m.pendente("Geometria do R01: 79,35 m entre os eixos 1 e 9 e 39,50 m entre A e E; TS-01 com 19,15 m. Pilares laterais com a cabeça recuada (40×30) acima de +8,40 (A) / +9,55 (E) (aprovado).")
     m.pendente("Terças, laje, consolos e dentes como envelope; contraventamento em X (nó a nó), correntes e mãos-francesas nas pranchas COB01/COB02, não modelados no 3D.")
@@ -261,9 +245,9 @@ if __name__ == "__main__":
         import base64, io
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
-                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A) — cabeça recuada 40×30"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B) — cabeça recuada 40×30"), ("ND-LET-PC01", "pilares centrais (a revisar com o R01)"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-TS01-COB-rev02", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento e travamento, ST-1, mão-francesa) e COB02 (X nó a nó, correntes, tirantes, diagonais)"),
-                 ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 a VM-04"),
+                 ("ND-LET-PIL-A01", "pilar PL-01 armado (opção A) — cabeça recuada 40×30"), ("ND-LET-PIL-P01", "pilar PL-01 protendido (opção B) — cabeça recuada 40×30"), ("ND-LET-PC01", "pilar central PC-01 (P8A)"), ("ND-LET-PC02", "pilar central PC-02 (P11)"), ("ND-LET-PC03", "pilar central PC-03 (P13)"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilares dos portões PG-01 (P9, P12)"), ("ND-LET-PG02", "pilares dos portões PG-02 (P10)"), ("ND-LET-TS01-COB-rev02", "TS-01 fôrma, armação, chaparia; cobertura metálica COB01 (enterçamento e travamento, ST-1, mão-francesa) e COB02 (X nó a nó, correntes, tirantes, diagonais)"),
+                 ("ND-LET-I110", "vigas centrais I110 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
                  ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
                  ("ND-LET-PP-HJ", "placas das vistas H e J"), ("ND-LET-PP-G", "placas da vista G"), ("ND-LET-PP-EF", "placas das vistas E e F"),
