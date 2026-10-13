@@ -21,6 +21,47 @@ def area_I(b, h, ts, ti, m, bw):
     return (b * ts + b * ti + bw * (h - ts - ti) + 2 * 0.5 * (b - bw) / 2 * m * 2) / 1e6     # m²
 
 
+def armacao_i(P, L, cob=30):
+    """Armação passiva da viga I (por marca, comprimento L em mm): estribos N2 da alma, N3 mesa superior, N4 pele,
+    N9/N10 salientes (2º estágio), N11 estribo da mesa inferior (envolve as cordoalhas), N12 2 Ø10 nos cantos da mesa inferior,
+    N13 estribo da mesa superior (envolve o N3), N5–N8 dos dentes. geo = forma em escala (cm) para a prancha de armaduras."""
+    H, B, bw, ts, ti = P["h"], P["b"], P["bw"], P["ts"], P["ti"]
+    d_est, s1, s2, zona = P["est"]
+    HD, LN = (P["dente"] or (0, 0))
+    xs_e = list(range(50, zona, s2)) + list(range(zona, L - zona, s1)) + list(range(L - zona, L - 40, s2))
+    if HD:                                                   # no trecho do dente valem os estribos N8 do dente
+        xs_e = [x for x in xs_e if LN + 40 <= x <= L - LN - 40]
+    N3n, N3d, _ = P.get("n3", (2, 10.0, ""))
+    a2, b2 = (bw - 2 * cob) / 10, (H - 2 * cob) / 10
+    Ll = round((L - 2 * cob) / 10)
+    Lc = L - 2 * LN                                          # corpo (entre as faces dos dentes): mesa inferior, N12 e cordoalhas
+    n_fl_i = round(Lc / 250) + 1
+    n_fl = round(L / 250) + 1
+    Ll12 = round((Lc - 2 * cob) / 10)
+    af, bfi, bfs = (B - 2 * cob) / 10, (ti - 2 * cob) / 10, (ts - 2 * cob) / 10
+    barras = [dict(pos="N2", diam=d_est, qtd=len(xs_e), comp=round(2 * (a2 + b2) + 16), forma=[(0, 0), (9, 0), (9, 60), (0, 60), (0, 0), (2, 2)], trechos=[f"{a2:g}", f"{b2:g}", "", ""], geo=dict(k="E", a=a2, b=b2)),
+              dict(pos="N3", diam=N3d, qtd=N3n, comp=Ll, trechos=[f"{Ll}"], geo=dict(k="R", a=Ll))]
+    if P.get("pele"):
+        barras.append(dict(pos="N4", diam=8.0, qtd=2 * len(P["pele"]), comp=Ll, trechos=[f"{Ll}"], geo=dict(k="R", a=Ll)))
+    if P.get("seg"):
+        n9 = len(range(100, L - 60, 150))
+        barras.append(dict(pos="N9", diam=8.0, qtd=n9, comp=round((2 * (600 + 170) + (bw - 2 * cob)) / 10), forma=[(0, 0), (0, 77), (9, 77), (9, 0)], trechos=["77", "9", "77"],
+                           geo=dict(k="U", a=77, b=9, g=0)))
+        barras.append(dict(pos="N10", diam=10.0, qtd=2, comp=round((L - 200) / 10), trechos=[f"{round((L-200)/10)}"], geo=dict(k="R", a=round((L - 200) / 10))))
+    barras += [dict(pos="N11", diam=6.3, qtd=n_fl_i, comp=round(2 * (af + bfi) + 14), forma=[(0, 0), (34, 0), (34, 9), (0, 9), (0, 0), (1.5, 1.5)], trechos=[f"{af:g}", f"{bfi:g}", "", ""], geo=dict(k="E", a=af, b=bfi)),
+               dict(pos="N12", diam=10.0, qtd=2, comp=Ll12, trechos=[f"{Ll12}"], geo=dict(k="R", a=Ll12)),
+               dict(pos="N13", diam=6.3, qtd=n_fl, comp=round(2 * (af + bfs) + 14), forma=[(0, 0), (34, 0), (34, 6), (0, 6), (0, 0), (1.5, 1.5)], trechos=[f"{af:g}", f"{bfs:g}", "", ""], geo=dict(k="E", a=af, b=bfs))]
+    for b in P["barras_ponta"]:
+        b = dict(b)
+        fm = b["forma"]
+        if b["pos"] == "N5":
+            b["geo"] = dict(k="L", a=fm[2][0], g=fm[0][1])
+        else:
+            b["geo"] = dict(k="E", a=fm[2][0], b=fm[2][1])
+        barras.append(b)
+    return xs_e, barras
+
+
 def prancha_viga(P):
     H, B, L = P["h"], P["b"], P["L"]
     HD, LN = (P["dente"] or (0, 0))
@@ -131,8 +172,13 @@ def prancha_viga(P):
         return v
     va = corte("CORTE A-A", (Q[0] + 60, YR), "seção corrente")
     cob = 30
-    e = [(-P["bw"] / 2 + cob, P["ti"] - 20), (P["bw"] / 2 - cob, P["ti"] - 20), (P["bw"] / 2 - cob, H - cob), (-P["bw"] / 2 + cob, H - cob)]
+    e = [(-P["bw"] / 2 + cob, cob), (P["bw"] / 2 - cob, cob), (P["bw"] / 2 - cob, H - cob), (-P["bw"] / 2 + cob, H - cob)]
     va.poli(e, "ARM_TRANSV", fechada=True)
+    va.poli([(-B / 2 + cob, cob), (B / 2 - cob, cob), (B / 2 - cob, P["ti"] - cob), (-B / 2 + cob, P["ti"] - cob)], "ARM_TRANSV", fechada=True)          # N11
+    va.poli([(-B / 2 + cob, H - P["ts"] + cob), (B / 2 - cob, H - P["ts"] + cob), (B / 2 - cob, H - cob), (-B / 2 + cob, H - cob)], "ARM_TRANSV", fechada=True)  # N13
+    va.chamada((B / 2 - cob, P["ti"] - cob), (16, 7), "N11 Ø6,3 c/25 (mesa inf.)")
+    va.chamada((B / 2 - cob, H - P["ts"] + cob), (12, -3), "N13 Ø6,3 c/25 (mesa sup.)")
+    va.chamada((-B / 2 + cob, cob + 5), (-5, 27), "N12 — 2 Ø10")
     N3n, N3d, N3t = P.get("n3", (2, 10.0, "porta-estribos (mesa superior)"))
     xs3 = (-B / 2 + cob + 10, B / 2 - cob - 10) if N3n == 2 else tuple(-B / 2 + cob + 10 + k * (B - 2 * cob - 20) / (N3n - 1) for k in range(N3n))
     for x in xs3:
@@ -145,7 +191,7 @@ def prancha_viga(P):
     va.chamada((xs3[-1], H - cob - 5), (12, 8), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     va.chamada((P["cord"][0][1][-1], P["cord"][0][0]), (14, -12), f"C1 — {n_cord} cord. Ø12,7 (ver tabela)")
     if P.get("pele"):
-        va.chamada((P["bw"] / 2 - cob, P["pele"][0]), (12, -8), "N4 pele 2 Ø8 por face")
+        va.chamada((-P["bw"] / 2 + cob, P["pele"][0]), (-14, -4), "N4 pele 2 Ø8 por face")
     va.cota_v([0] + [y for y, _, _ in P["cord"]], -B / 2, -12, total=False)
     va.cota_h(sorted(set(x for _, xs, _ in P["cord"] for x in xs)), 0, -24, total=False)
     vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 270), YR), "maciço da ponta (TB e CH-A)", macico=True)
@@ -245,11 +291,11 @@ def prancha_viga(P):
     else:
         varm.ret(0, 0, L, H, "VISTA")
     d_est, s1, s2, zona = P["est"]
-    xs_e = list(range(50, zona, s2)) + list(range(zona, L - zona, s1)) + list(range(L - zona, L - 40, s2))
+    xs_e, _ = armacao_i(P, L)
     for x in xs_e:
         varm.linha((x, cob if x > LN and x < L - LN or not HD else H - HD + cob), (x, H - cob), "ARM_TRANSV")
     for y, xs, isol in P["cord"]:
-        varm.linha((0, y), (L, y), "ARM_PROT")
+        varm.linha((LN, y), (L - LN, y), "ARM_PROT")
     varm.linha((cob, H - cob - 5), (L - cob, H - cob - 5), "ARMADURA")
     varm.chamada((L / 2, H - cob - 5), (10, 12), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     if SEG:
@@ -265,17 +311,7 @@ def prancha_viga(P):
     # ------------------------------------------------------------ coluna direita
     y = Q[3] - 6
     y = pr.tabela(XC, y, f"MARCAS — {P['familia']}", ["MARCA", "POSIÇÃO", "QT", "L (cm)", "PESO (t)"], P["marcas"], [18, 70, 10, 24, 24], h_lin=6.0)
-    nE = len(xs_e)
-    C_E = round((2 * (P["bw"] - 2 * cob + H - 2 * cob) + 160) / 10)
-    barras = [dict(pos="N2", diam=d_est, qtd=nE, comp=C_E, forma=[(0, 0), (9, 0), (9, 60), (0, 60), (0, 0), (2, 2)], trechos=[f"{(P['bw']-2*cob)/10:g}", f"{(H-2*cob)/10:g}", "", ""]),
-              dict(pos="N3", diam=N3d, qtd=N3n, comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"])]
-    if P.get("pele"):
-        barras.append(dict(pos="N4", diam=8.0, qtd=2 * len(P["pele"]), comp=round((L - 2 * cob) / 10), trechos=[f"{round((L-2*cob)/10)}"]))
-    if SEG:
-        n9 = len(range(100, L - 60, 150))
-        barras.append(dict(pos="N9", diam=8.0, qtd=n9, comp=round((2 * (600 + 170) + (P["bw"] - 2 * cob)) / 10), forma=[(0, 0), (0, 77), (9, 77), (9, 0)], trechos=["77", "9", "77"]))
-        barras.append(dict(pos="N10", diam=10.0, qtd=2, comp=round((L - 200) / 10), trechos=[f"{round((L-200)/10)}"]))
-    barras += P["barras_ponta"]
+    _, barras = armacao_i(P, L, cob)
     ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
     y = ta["y_base"]
     cords = []
@@ -293,7 +329,7 @@ def prancha_viga(P):
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
-    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()):
+    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()) + ("N11", "N12", "N13"):
         pr.posicoes_desenho.add(pos)
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
     print(P["desenho"], len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")
@@ -317,7 +353,7 @@ def dados_i110():
         n3=(4, 20.0, "CA-50 na mesa superior (compressão; x/d 0,32)"),
         cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-150, -100, -50, 0, 50, 100, 150], 0),
               (160, [-150, -100, -50, 0, 50, 100, 150], 2000), (210, [-50, 0, 50], 2000)],
-        n_isol=10, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[400, 600, 800],
+        n_isol=10, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[500, 650, 800],
         est=(8.0, 150, 100, 2000), Vd=round(I1J["V406"]["linhas"]["Vd_kN"]), alcas=[2500, L - 2500], tercas=[],
         consolos=consolos, anc=1468, tir="4 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
         titulo=f"VIGA CENTRAL I110 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","), subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8; V405 vai até o P14 (linha 9)",
@@ -356,7 +392,7 @@ def dados_vm():
         fmt="A1", marca="VM-02", qtd=8, familia="VIGAS DO MEZANINO I90", desenho="ND-LET-VM01", h=900, b=400, ts=120, ti=150, m=80, bw=150, L=L, esc=20,
         x_mac=1200, dente=(450, 300), pino_x=150, tb=(50, 450), tb_nome="TB-1 tubo Ø50×3,0 L=450", pino_d=20,
         cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-50, 50], 0)],
-        sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[400, 600],
+        sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[500, 650],
         est=(8.0, 200, 100, 1500), Vd=383, alcas=[1900, L - 1900], tercas=[], consolos=[],
         anc=1122, tir="3 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
         titulo=f"VIGA DO MEZANINO I90 PROTENDIDA — VM-02 (L = {L/10:g} cm) · VM-01", subtitulo="linhas 1 e 2, níveis +3,15 e +6,55; dentes Gerber 45 × 30 nos consolos CP-MEZ (44 cm, fundo alinhado); laje alveolar h20 + 5 sobre a mesa",

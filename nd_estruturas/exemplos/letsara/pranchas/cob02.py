@@ -11,6 +11,7 @@ from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_
 pr = Prancha("A1", cabecalho("ND-LET-COB02", "05/05", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
 pr.revisao("01", pr.dados["data"], "desdobrada da COB01; correntes no meio da alma; diagonais no ST-1")
 pr.revisao("02", pr.dados["data"], "X de nó a nó com esticador (sem CH-X); tirantes rígidos L 51; detalhes no padrão de referência")
+pr.revisao("03", pr.dados["data"], "X só nos vãos 2-3 e 7-8; correntes Ø10 (furo Ø12)")
 cx, cr = CB["contraventamento"], CB["correntes"]
 K = 1                                       # vão típico: eixos 2–3
 VAO = VAOS[K]
@@ -20,7 +21,7 @@ Z0T = 10                                     # fundo da terça acima do concreto
 
 # ------------------------------------------------------------------ PLANTA DO VÃO TÍPICO 1:100 (papel: horizontal = x da obra)
 v = pr.vista("PLANTA", (64, 436), 100, titulo="PLANTA DE TRAVAMENTO — VÃO ENTRE OS EIXOS 2 E 3 (TÍPICO DOS VÃOS COM X)",
-             subtitulo="vãos 2-3, 4-5, 5-6 e 7-8 com X; nos demais vãos tudo igual, sem o X e sem os furos X das terças")
+             subtitulo="vãos 2-3 e 7-8 com X; nos demais vãos tudo igual, sem o X e sem os furos X das terças")
 for y in (0, VAO):
     v.ret(X0E, y - 200, LTS, 400, "VISTA"); v.ret(X0D, y - 200, LTS, 400, "VISTA")
     v.ret(-300, y - 200, 600, 400, "CORTADO"); v.ret(X_E - 300, y - 200, 600, 400, "CORTADO"); v.ret(X_C - 200, y - 300, 400, 600, "CORTADO")
@@ -55,7 +56,7 @@ v.cota_h([0, X_C, X_E], -900, -16, total=False)
 v.chamada(((NOS_D[5] + NOS_D[6]) / 2, VAO * 0.25), (40, -24), f"X Ø16 + esticador, L ≈ {f(cx['L_diag_m'],2)} m (det. 4 e 5)")
 v.chamada((XT[25], q[2] + (VAO - q[2]) * 0.3), (16, -4), "tirante rígido L 51×51×3,2 (det. 6)")
 v.chamada(((XT[24] + XT[25]) / 2, q[2] + (VAO - q[2]) * 0.5), (16, 12), "diagonal de ancoragem Ø16 (det. 6 e 7)")
-v.chamada(((XT[20] + XT[21]) / 2, q[0]), (50, -18), "corrente flexível Ø12,5 (det. 6)")
+v.chamada(((XT[20] + XT[21]) / 2, q[0]), (50, -18), "corrente flexível Ø10 (det. 6)")
 v.chamada((XT[25] + 200, VAO - 300), (16, 20), "MF = mão-francesa (ND-LET-COB01 det. 2)")
 v.marcador_detalhe((NOS[3], 0), 450, 4, ang=60, dist=10)
 v.marcador_detalhe((XT[1], q[0]), 450, 6, ang=-110, dist=8)
@@ -131,7 +132,7 @@ d6.linha((PASSO, 40), (0 + 40, -350 + 20), "ARMADURA")
 d6.ret(PASSO - 30, 40, 30, 30, "METALICA")
 d6.cota_h([0, 43, PASSO - 40, PASSO], -350, -10, total=False)
 d6.chamada(((43 + PASSO - 40) / 2, 25), (4, 24), f"tirante rígido L 51×51×3,2, L = {PASSO - 83}")
-d6.chamada((PASSO + 200, 0), (6, 16), "corrente Ø12,5")
+d6.chamada((PASSO + 200, 0), (6, 16), "corrente Ø10")
 d6.chamada((PASSO - 15, 55), (-30, 12), "calço biselado")
 d6.chamada((PASSO * 0.5, -150), (4, -14), "diagonal Ø16 → ST-1 (det. 7)")
 d6.chamada((3, -300), (4, -10), "1ª terça")
@@ -142,12 +143,12 @@ c6 = pr.vista("CORTE D-D", (250, 160), 5, titulo="CORTE D-D", subtitulo="clipe d
 u = [(85, 275), (85, 300), (0, 300), (0, 0), (85, 0), (85, 25)]
 c6.poli(u, "METALICA")
 c6.chapa(-3, Z_COR - 50, 3, 100, 0.2); c6.chapa(-35, Z_COR - 50, 32, 3, 0.2)                # clipe L 32×32×3 (aba na alma e aba saliente)
-c6.circulo((0, Z_COR), 7, "METALICA")
+c6.circulo((0, Z_COR), 6, "METALICA")
 c6.ret(-30, Z_COR + 15, 25, 25, "OCULTA")
 c6.circulo((0, Z_DIAG), 9, "METALICA")
 c6.cota_v([0, Z_COR - 50, Z_COR, Z_COR + 50, Z_DIAG, 300], 85, 10, total=False)
 c6.chamada((-3, Z_COR + 30), (24, 30), "clipe L 32×32×3 L 100, furo oval 11×23")
-c6.chamada((0, Z_COR), (24, -12), "furo Ø14 (corrente / M12)")
+c6.chamada((0, Z_COR), (24, -12), "furo Ø12 (corrente M10)")
 c6.chamada((0, Z_DIAG), (14, 8), "furo Ø18 (diagonal, só marcas D)")
 
 # ------------------------------------------------------------------ DETALHE 7 — DIAGONAL DE ANCORAGEM NO ST-1 (planta 1:10)
@@ -169,20 +170,18 @@ d8 = pr.vista("DETALHE 8", (540, 180), 5, titulo="DETALHE 8 — CRUZAMENTO DO X"
 d8.ret(-400, 0, 800, H_TERCA, "METALICA"); d8.linha((-400, 25), (400, 25), "OCULTA"); d8.linha((-400, 275), (400, 275), "OCULTA")
 for z in Z_X:
     d8.circulo((0, z), 9, "METALICA"); d8.circulo((0, z), 8, "ARMADURA")
-d8.linha((-400, Z_COR), (-60, Z_COR), "OCULTA"); d8.linha((60, Z_COR), (400, Z_COR), "OCULTA"); d8.circulo((0, Z_COR), 7, "METALICA")
+d8.linha((-400, Z_COR), (-60, Z_COR), "OCULTA"); d8.linha((60, Z_COR), (400, Z_COR), "OCULTA"); d8.circulo((0, Z_COR), 6, "METALICA")
 d8.cota_v([0, Z_X[0], Z_X[1], Z_COR, H_TERCA], 400, 10, total=False)
 d8.chamada((0, Z_X[0]), (-20, -14), "X '/' (orelha baixa): furo Ø18 a 35 do fundo")
 d8.chamada((0, Z_X[1]), (-20, 14), "X '\\' (orelha alta): furo Ø18 a 75 do fundo")
-d8.chamada((0, Z_COR), (20, 12), "corrente L/2 (Ø14, 150)")
+d8.chamada((0, Z_COR), (20, 12), "corrente L/2 (Ø12, 150)")
 
 # ------------------------------------------------------------------ LISTA DE MATERIAIS DO TRAVAMENTO
 x0, y = pr.quadro[2] - 196, pr.quadro[3] - 6
-W = dict(r12=0.963, r16=1.578, L51=2.46)
+W = dict(r10=0.617, r16=1.578, L51=2.46)
 lin = []
 n_half = 2
-# contraventamento X por vão
-for k in VAOS_X:
-    pass
+D_COR = cr["flexivel"]["d_mm"]                                   # corrente flexível (calc_cobertura_metalica.py)
 xs = {}
 for k in VAOS_X:
     Lx = round(math.hypot(2 * PASSO - 2 * ORE["s"], VAOS[k] - 2 * ORE["y"]))
@@ -207,14 +206,15 @@ for (nome, Lr), ks in sorted(dd.items()):
     lin.append([f"D{pos}", f"{n}", "Ø16 A36", f"{Lr}", f"{n * Lr / 1000 * W['r16']:,.0f}".replace(",", "."), f"diagonal {nome}, vãos {', '.join(f'{k+1}-{k+2}' for k in ks)}"]); pos += 1
 n_cf = 3 * 10 * n_half * 8
 L_cf = PASSO + 2 * 40
-lin.append(["C1", f"{n_cf}", "Ø12,5 A36", f"{L_cf}", f"{n_cf * L_cf / 1000 * W['r12']:,.0f}".replace(",", "."), "corrente flexível (rosca M12 40 nas pontas)"])
+lin.append(["C1", f"{n_cf}", f"Ø{D_COR:g} A36", f"{L_cf}", f"{n_cf * L_cf / 1000 * W['r10']:,.0f}".replace(",", "."), f"corrente flexível (rosca M{D_COR:g} 40 nas pontas)"])
 n_tr = 3 * 2 * n_half * 8
 lin.append(["R1", f"{n_tr}", "L 51×51×3,2", f"{PASSO - 83}", f"{n_tr * (PASSO - 83) / 1000 * W['L51']:,.0f}".replace(",", "."), "tirante rígido (2 furos oval 11×23)"])
 lin.append(["CL", f"{2 * n_tr}", "L 32×32×3", "100", "-", "clipe do tirante rígido"])
-lin.append(["OR", f"{4 * 7 * 2 * 7}", f"CH {ORE['t']:g}×{ORE['larg']}", f"{ORE['h_baixo']}/{ORE['h_alto']}", "-", "orelhas soldadas nas CH-T2 (fábrica)"])
+lin.append(["OR", f"{4 * 7 * 2 * 7}", f"CH {ORE['t']:g}×{ORE['larg']}", f"{ORE['h_baixo']}/{ORE['h_alto']}", "-", "CH-T2 de todas as TS-01; sem uso L4 a L6"])
 lin.append(["CB", f"{4 * 2 * n_half * 8 * 2}", "CH 6,3×50×50", "-", "-", "calço biselado das diagonais"])
 y = pr.tabela(x0, y, "LISTA DE MATERIAIS — TRAVAMENTO DA COBERTURA", ["POS.", "QT", "PERFIL", "COMP. (mm)", "kg", "DESCRIÇÃO"], lin, [12, 12, 28, 26, 16, 102])
-notas = ["Lógica do travamento: terças apoiadas de viga a viga; 3 linhas de correntes por vão (L/4, L/2, 3L/4), contínuas na meia água; nas duas pontas de cada meia água, tirantes rígidos no 1º espaço e diagonais Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça; X Ø16 de nó a nó das vigas a cada 2 espaços de terças, com as terças dos nós como escoras.",
+notas = ["Lógica do travamento: terças apoiadas de viga a viga; 3 linhas de correntes Ø10 por vão (L/4, L/2, 3L/4), contínuas na meia água; nas duas pontas de cada meia água, tirantes rígidos no 1º espaço e diagonais Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça; X Ø16 de nó a nó das vigas a cada 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões), com as terças dos nós como escoras.",
+         "CH-T2 mantida em todas as TS-01 (marca única, mesma fôrma e insertos); orelhas sem uso nas linhas 4 a 6.",
          "X: orelhas soldadas na CH-T2 (4 por nó, peça única simétrica), perpendiculares ao tirante, furo Ø18 a 45 (orelha baixa) e 85 mm (alta) do concreto; as duas diagonais cruzam-se no meio do vão, passando pelos furos Ø18 da terça intermediária (marca X), sem porca.",
          "Esticador a 9,0 m da ponta (trecho A); tensionar após o aperto de todas as terças e MF, até eliminar a flecha visível da barra, sem empenar a terça. Porca + contraporca em todas as pontas.",
          "Diagonais de ancoragem: calço biselado de chapa 6,3 na alma da 2ª terça e no ST-1, porca + contraporca. Tirante rígido preso por clipes L 32×32×3 parafusados (M10, furo oval para ajuste); a corrente flexível passa pelo clipe e pela alma da 2ª terça.",

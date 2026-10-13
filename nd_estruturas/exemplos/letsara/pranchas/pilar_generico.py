@@ -300,28 +300,43 @@ def prancha_pilar(P):
     L_N1 = round((L_TOT - 80) / 10)
     EXT_B, EXT_H = B - 2 * COB, H - 2 * COB
     L_N1A = round((z_rec - 30 - 40) / 10 + 15)
-    barras = ([dict(pos="N1", diam=D1, qtd=len(xy_sobe), comp=L_N1, trechos=[f"{L_N1}"])] if xy_sobe else []) + \
-             ([dict(pos="N1A", diam=D1, qtd=len(xy_para), comp=L_N1A, forma=[(0, 0), (85, 0), (85, 8)], trechos=[f"{L_N1A - 15}", "15"])] if xy_para else []) + \
-             ([dict(pos="N13", diam=16.0, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - 600)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - 600)) / 10)}"])] if xy_cab else []) + \
-             ([dict(pos="N14", diam=8.0, qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""])] if z_cab else []) + [
-              dict(pos="N2", diam=P.get("d_est", 8.0), qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""])]
+    barras = ([dict(pos="N1", diam=D1, qtd=len(xy_sobe), comp=L_N1, trechos=[f"{L_N1}"], geo=dict(k="R", a=L_N1))] if xy_sobe else []) + \
+             ([dict(pos="N1A", diam=D1, qtd=len(xy_para), comp=L_N1A, forma=[(0, 0), (85, 0), (85, 8)], trechos=[f"{L_N1A - 15}", "15"], geo=dict(k="L", a=L_N1A - 15, g=15))] if xy_para else []) + \
+             ([dict(pos="N13", diam=16.0, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - 600)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - 600)) / 10)}"], geo=dict(k="R", a=round((L_TOT - 40 - (z_rec - 600)) / 10)))] if xy_cab else []) + \
+             ([dict(pos="N14", diam=8.0, qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""], geo=dict(k="E", a=(HH - 60) / 10, b=(HB - 60) / 10))] if z_cab else []) + [
+              dict(pos="N2", diam=P.get("d_est", 8.0), qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""], geo=dict(k="E", a=EXT_H / 10, b=EXT_B / 10))]
     if P["grampos"]:
-        barras.append(dict(pos="N3", diam=8.0, qtd=len(P["grampos"]) * n_est, comp=round((EXT_H + 160) / 10), forma=[(0, 6), (0, 0), (EXT_H / 10, 0), (EXT_H / 10, 6)], trechos=["8", f"{EXT_H/10:g}", "8"]))
-    grupos = {}
+        barras.append(dict(pos="N3", diam=8.0, qtd=len(P["grampos"]) * n_est, comp=round((EXT_B + 160) / 10), forma=[(0, 6), (0, 0), (EXT_B / 10, 0), (EXT_B / 10, 6)], trechos=["8", f"{EXT_B/10:g}", "8"], geo=dict(k="G", a=EXT_B / 10, g=8)))
+    grupos, arm_cons = {}, []
     for c in cons:
         PWc = (H if c["face"] in "AC" else B)
-        grupos.setdefault((c["n_tir"], c["d_tir"], c["proj"], PWc), []).append(c)
-    nomes_pos = [("N4", "N5", "N6"), ("N7", "N8", "N9"), ("N10", "N11", "N12")]
-    for k, ((nt, dt, proj, PWc), cs) in enumerate(grupos.items()):
+        grupos.setdefault((c["n_tir"], c["d_tir"], c["proj"], PWc, c["larg"], c["h"]), []).append(c)
+    nomes_pos = [("N4", "N5", "N6"), ("N7", "N8", "N9"), ("N10", "N11", "N12"), ("N15", "N16", "N17")]
+    for k, ((nt, dt, proj, PWc, lg, hc), cs) in enumerate(grupos.items()):
         pa, pb, pc = nomes_pos[k]
         n_cons = len(cs)
         tipos = "/".join(sorted(set(c["tipo"] for c in cs)))
-        barras += [dict(pos=pa, diam=dt, qtd=nt * n_cons, comp=round((2 * (PWc + proj - 80) + 300) / 10), forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", f"{(PWc + proj - 80)/10:.0f}", "34", "", "15"]),
-                   dict(pos=pb, diam=10.0, qtd=2 * n_cons, comp=round((2 * (340 + PWc + proj - 80) + 160) / 10), forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=[f"{(PWc + proj - 80)/10:.0f}", "34", "", ""]),
-                   dict(pos=pc, diam=8.0, qtd=len(range(60, proj - 40, 80)) * n_cons, comp=round((2 * (340 + 400) + 160) / 10), forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "40", "", ""])]
+        lgu, wu, hu = round((PWc + proj - 80) / 10), round((lg - 60) / 10), round((hc - 60) / 10)       # perna do U, largura útil e altura útil (cm)
+        barras += [dict(pos=pa, diam=dt, qtd=nt * n_cons, comp=2 * lgu + wu + 30, forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", f"{lgu}", f"{wu}", "", "15"],
+                        geo=dict(k="U", a=lgu, b=wu, g=15)),
+                   dict(pos=pb, diam=10.0, qtd=2 * n_cons, comp=2 * (lgu + wu) + 16, forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=[f"{lgu}", f"{wu}", "", ""],
+                        geo=dict(k="E", a=lgu, b=wu)),
+                   dict(pos=pc, diam=8.0, qtd=len(range(60, proj - 40, 80)) * n_cons, comp=2 * (wu + hu) + 16, forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=[f"{wu}", f"{hu}", "", ""],
+                        geo=dict(k="E", a=wu, b=hu))]
+        arm_cons.append(dict(pos=(pa, pb, pc), tipos=tipos, n=n_cons, nt=nt, dt=dt, proj=proj, PW=PWc, larg=lg, h=hc, n6=len(range(60, proj - 40, 80)),
+                             faces=[(c["face"], c["z"], c["tipo"]) for c in cs], incl=cs[0].get("incl", 0.03)))
         pr.posicoes_desenho.update({pa, pb, pc})
         if k > 0:
             va.chamada((W, cs[0]["z"] - 150), (10, -16), f"{pa}/{pb}/{pc} — {tipos} ({nt} Ø{dt:g} tirante)".replace(".", ","))
+    area_f = (2 * (B + H) * z_rec + 2 * (HB + HH) * (L_TOT - z_rec) + B * H + (B * H - HB * HH) +
+              sum(2 * c["proj"] * c["h"] + c["larg"] * c["h"] + c["larg"] * c["proj"] - c["larg"] * c["h"] for c in cons)) / 1e6
+    json.dump(dict(marca=P["marca"], qtd=P["qtd"], desenho=P["desenho"], posicao=P["posicao"], B=B, H=H, L_TOT=L_TOT, L_CAL=L_CAL, Z_TOP=Z_TOP, COB=COB,
+                   rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, grampos=P["grampos"],
+                   z_est=z_est, z_cab=z_cab, est=EST, d_est=P.get("d_est", 8.0), cons=[dict(face=c["face"], z=c["z"], tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c.get("incl", 0.03)) for c in cons],
+                   arm_cons=arm_cons, barras=barras, V=V, area_forma=area_f, al=AL, n_ip=sum(len(i["z"]) for i in P.get("ip01", []))),
+              open(f"/home/claude/letsara/pranchas/arm/{P['marca']}.json", "w"), ensure_ascii=False, indent=1)
+    if P.get("so_arm"):
+        return
     ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
     y = ta["y_base"]
     y = pr.tabela(XC, y - 4, f"INSERTOS POR PILAR ({P['marca']}) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [14, 100, 10, 58])
@@ -448,7 +463,7 @@ def dados_pg2():
                 [["IP-01", "Chapa 150×150×9,5 + 2 pinos Ø12,5", 6, "face B"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 4 Ø16 retos (cantos); estribos N2 Ø6,3 c/15 (c/10 nas pontas), ganchos 135°.",
                  "Pilar de fechamento entre o portão e as placas da vista C; topo +7,50."],
-                ip01=[dict(face="B", z=IP_C)], d1=16.0, zoom=2.4)
+                ip01=[dict(face="B", z=IP_C)], d1=16.0, zoom=2.4) | dict(d_est=6.3)
 
 
 DADOS = dict(pc1=dados_pc1, pc2=dados_pc2, pc3=dados_pc3, pm=dados_pm, pg1=dados_pg1, pg2=dados_pg2)

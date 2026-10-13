@@ -78,7 +78,7 @@ N7 = dict(n=4, d=16.0, lb=600, y=-H / 2 + H_CAB - COB - 8 - 8, xs=(-XB, -50, 50,
 C_N8 = round((2 * (B - 2 * COB + H_CAB - 2 * COB) + 2 * EST["gancho"]) / 10)
 EXT_B, EXT_H = B - 2 * COB, H - 2 * COB                                                # 340 × 540 externos
 C_EST = round((2 * (EXT_B + EXT_H) + 2 * EST["gancho"]) / 10)                         # cm
-C_GR = round((EXT_H + 2 * EST["gancho"]) / 10)                                        # grampo Ø8 no sentido de 60
+C_GR = round((EXT_B + 2 * EST["gancho"]) / 10)                                        # grampo Ø8 no sentido de 40 (atravessa a seção entre as faces B e D)
 Y_GR = (-84, 84)
 VOL = (0.24 * z_rec + B * H_CAB / 1e6 * (L_TOT - z_rec)) / 1000
 PESO = VOL * 25
@@ -446,10 +446,10 @@ barras = [dict(pos="N1", diam=20.0, qtd=len(SOBE), comp=L_N1, trechos=[f"{L_N1}"
           dict(pos="N8", diam=8.0, qtd=n_cab, comp=C_N8, forma=[(0, 0), (34, 0), (34, 24), (0, 24), (0, 0), (2, 2)], trechos=["34", "24", "34", "24"]),
           dict(pos="N9", diam=12.5, qtd=2, comp=60, trechos=["60"]),
           dict(pos="N2", diam=8.0, qtd=n_est, comp=C_EST, forma=[(0, 0), (34, 0), (34, 54), (0, 54), (0, 0), (2, 2)], trechos=["34", "54", "34", "54"]),
-          dict(pos="N3", diam=8.0, qtd=2 * n_est, comp=C_GR, forma=[(0, 6), (0, 0), (54, 0), (54, 6)], trechos=["8", "54", "8"]),
-          dict(pos="N4", diam=16.0, qtd=3, comp=234, forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", "85", "34", "85", "15"]),
-          dict(pos="N5", diam=10.0, qtd=2, comp=round((2 * (340 + 700) + 160) / 10), forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=["70", "34", "70", "34"]),
-          dict(pos="N6", diam=8.0, qtd=3, comp=round((2 * (340 + 400) + 160) / 10), forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "40", "34", "40"])]
+          dict(pos="N3", diam=8.0, qtd=2 * n_est, comp=C_GR, forma=[(0, 6), (0, 0), (34, 0), (34, 6)], trechos=["8", "34", "8"]),
+          dict(pos="N4", diam=16.0, qtd=3, comp=228, forma=[(0, 15), (0, 0), (85, 0), (85, 34), (0, 34), (0, 49)], trechos=["15", "82", "34", "82", "15"]),
+          dict(pos="N5", diam=10.0, qtd=2, comp=248, forma=[(0, 0), (70, 0), (70, 34), (0, 34), (0, 0), (2, 2)], trechos=["82", "34", "82", "34"]),
+          dict(pos="N6", diam=8.0, qtd=3, comp=160, forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=["34", "38", "34", "38"])]
 ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
 y = ta["y_base"]
 if PROT:

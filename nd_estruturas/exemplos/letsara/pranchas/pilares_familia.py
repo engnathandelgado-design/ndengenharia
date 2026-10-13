@@ -132,6 +132,6 @@ def dados(mk):
 
 
 if __name__ == "__main__":
-    alvo = sys.argv[1:] or [m[0] for m in MARCAS if m[0] != "PL-01"]
+    alvo = sys.argv[1:] or [m[0] for m in MARCAS]
     for mk in alvo:
         G.prancha_pilar(dados(mk))

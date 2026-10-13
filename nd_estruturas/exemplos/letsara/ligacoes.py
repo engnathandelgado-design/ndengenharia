@@ -129,7 +129,7 @@ paineis = [round(TS["x0"] if False else 0.325 + s, 3) for s in TS["no_contrav"]]
 # terça intermediária: uma passa a 45 mm e a outra a 85 mm acima do concreto (furos Ø18 na alma dessa terça, a 35 e 75 mm
 # do fundo dela, que fica 10 mm acima do concreto).
 CT2 = dict(y_orelha=0.140, s_orelha=0.140, z_baixo=0.045, z_alto=0.085, mesa_terca=0.085, d_tir=0.016, z_fundo_terca=0.010)
-VAOS = [(1, 2), (3, 4), (4, 5), (6, 7)]            # vãos contraventados entre linhas com TS-01 (fachadas: VB)
+VAOS = [(1, 2), (6, 7)]                            # vãos contraventados (2-3 e 7-8, vizinhos aos oitões); CH-T2 mantida em todas as TS-01 (marca única)
 tir = []
 N_SUB = 1
 for (ia, ib) in VAOS:

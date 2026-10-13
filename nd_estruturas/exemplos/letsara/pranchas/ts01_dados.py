@@ -40,6 +40,38 @@ assert R.ok and TR["desforma_montagem"]["ok"] and TR["estoque_transporte"]["ok"]
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 
 
+DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["TS-01"]
+AD = DT["calculo"]["adotado"]
+ANC = AD["ancoragem_tirante_mm"]
+
+
+def armacao_ts01():
+    """Armação passiva da TS-01 (cm na relação; geo = forma em escala para a prancha de armaduras)."""
+    X_SUS = [LN + 40 + k * 60 for k in range(AD["n_sus"])]
+    zona = 1500
+    ini = LN + 40 + AD["n_sus"] * 60 + 100
+    x_est = sorted(set(list(range(ini, zona + 1, 150)) + list(range(zona + 250, L - zona, 250)) + list(range(L - ini, L - zona - 1, -150))))
+    n1 = len(x_est)
+    cN1, cN3, cN6 = round((2 * (90 + 840) + 140) / 10), round((2 * (340 + 70) + 140) / 10), round((2 * (340 + 840) + 140) / 10)
+    n3 = round(L / 250) + 1
+    LN8 = round((LN + ANC) / 10)
+    barras = [dict(pos="N1", diam=6.3, qtd=n1, comp=cN1, forma=[(0, 0), (9, 0), (9, 84), (0, 84), (0, 0), (1.5, 1.5)], trechos=["9", "84", "9", "84"], geo=dict(k="E", a=9, b=84)),
+              dict(pos="N2", diam=12.5, qtd=4, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"], geo=dict(k="R", a=round((L - 60) / 10))),
+              dict(pos="N3", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)], trechos=["34", "7", "34", "7"], geo=dict(k="E", a=34, b=7)),
+              dict(pos="N4", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)], trechos=["34", "7", "34", "7"], geo=dict(k="E", a=34, b=7)),
+              dict(pos="N5", diam=10.0, qtd=2, comp=round((L - 2 * LN - 60) / 10), trechos=[f"{(L - 2 * LN - 60) / 10:.0f}"], geo=dict(k="R", a=round((L - 2 * LN - 60) / 10))),
+              dict(pos="N6", diam=8.0, qtd=14, comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)], trechos=["34", "84", "34", "84"], geo=dict(k="E", a=34, b=84)),
+              dict(pos="N7", diam=10.0, qtd=8, comp=94, forma=[(0, 6), (0, 0), (34, 0), (34, 6)], trechos=["6", "34", "6"], geo=dict(k="G", a=34, g=6)),
+              dict(pos="N8", diam=AD["d_tir"], qtd=2 * AD["n_tir"] // 2, comp=2 * LN8 + 30,
+                   forma=[(LN8, 0), (0, 0), (0, 30), (LN8, 30)], trechos=[f"{LN8}", "30", f"{LN8}"], geo=dict(k="U", a=LN8, b=30, g=0)),
+              dict(pos="N9", diam=AD["d_sus"], qtd=2 * AD["n_sus"], comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)], trechos=["34", "84", "34", "84"], geo=dict(k="E", a=34, b=84)),
+              dict(pos="N10", diam=10.0, qtd=2 * AD["n_cost"], comp=round((2 * (750 + 340) + 140) / 10),
+                   forma=[(0, 0), (75, 0), (75, 34), (0, 34), (0, 0), (1.5, 1.5)], trechos=["75", "34", "75", "34"], geo=dict(k="E", a=75, b=34)),
+              dict(pos="N11", diam=10.0, qtd=4, comp=round((2 * (340 + 390) + 140) / 10),
+                   forma=[(0, 0), (34, 0), (34, 39), (0, 39), (0, 0), (1.5, 1.5)], trechos=["34", "39", "34", "39"], geo=dict(k="E", a=34, b=39))]
+    return x_est, X_SUS, barras
+
+
 def tipo_terca(s):
     return "CH-T2" if any(abs(s - n) < 1 for n in P["nos"]) else "CH-T1"
 

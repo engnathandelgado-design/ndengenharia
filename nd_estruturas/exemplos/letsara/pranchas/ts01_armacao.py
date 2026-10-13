@@ -1,7 +1,7 @@
 """ND-LET-TS01-2 — TS-01: armação passiva e protensão (A1), com croquis de dobramento."""
 import json
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, DX, HD, LN, sec, F_cord, Ap, f, peso, V
+from ts01_dados import P, L, H, DX, HD, LN, sec, F_cord, Ap, f, peso, V, armacao_ts01
 
 DT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["TS-01"]
 AD = DT["calculo"]["adotado"]
@@ -131,32 +131,7 @@ d3.chamada((0, 117), (16, 26), "furo livre Ø17 da grade")
 
 # ------------------------------------------------------------------ coluna direita
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
-cN1, cN3, cN6 = round((2 * (90 + 840) + 140) / 10), round((2 * (340 + 70) + 140) / 10), round((2 * (340 + 840) + 140) / 10)
-n3 = round(L / 250) + 1
-barras = [dict(pos="N1", diam=6.3, qtd=n1, comp=cN1, forma=[(0, 0), (9, 0), (9, 84), (0, 84), (0, 0), (1.5, 1.5)],
-               trechos=["9", "84", "9", "84"]),
-          dict(pos="N2", diam=12.5, qtd=4, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"]),
-          dict(pos="N3", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)],
-               trechos=["34", "7", "34", "7"]),
-          dict(pos="N4", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)],
-               trechos=["34", "7", "34", "7"]),
-          dict(pos="N5", diam=10.0, qtd=2, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"]),
-          dict(pos="N6", diam=8.0, qtd=14, comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)],
-               trechos=["34", "84", "34", "84"]),
-          dict(pos="N7", diam=10.0, qtd=8, comp=94, forma=[(0, 6), (0, 0), (34, 0), (34, 6)], trechos=["6", "34", "6"]),
-          dict(pos="N8", diam=AD["d_tir"], qtd=2 * AD["n_tir"] // 2, comp=round(2 * (LN + ANC) / 10 + 30),
-               forma=[(round((LN + ANC) / 10), 0), (0, 0), (0, 30), (round((LN + ANC) / 10), 30)],
-               trechos=[f"{(LN + ANC) / 10:.0f}", "30", f"{(LN + ANC) / 10:.0f}"]),
-          dict(pos="N9", diam=AD["d_sus"], qtd=2 * AD["n_sus"], comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)],
-               trechos=["34", "84", "34", "84"]),
-          dict(pos="N10", diam=10.0, qtd=2 * AD["n_cost"], comp=round((2 * (750 + 340) + 140) / 10),
-               forma=[(0, 0), (75, 0), (75, 34), (0, 34), (0, 0), (1.5, 1.5)], trechos=["75", "34", "75", "34"]),
-          dict(pos="N11", diam=10.0, qtd=4, comp=round((2 * (340 + 390) + 140) / 10),
-               forma=[(0, 0), (34, 0), (34, 39), (0, 39), (0, 0), (1.5, 1.5)], trechos=["34", "39", "34", "39"])]
-for b in barras:
-    if b["pos"] in ("N3", "N4", "N2", "N5"):
-        pass
-barras[2]["trechos"] = barras[3]["trechos"] = ["34", "7", "34", "7"]
+_, _, barras = armacao_ts01()
 ta = pr.tabela_croqui(x0, y, barras, h_lin=11.0)
 tc = pr.tabela_cordoalhas(x0, ta["y_base"] - 4, [dict(pos="C1", diam=12.7, qtd=P["n_cord"], y=P["y_cord"],
                                                       forca=F_cord, isol=0)], P["L_pista"])

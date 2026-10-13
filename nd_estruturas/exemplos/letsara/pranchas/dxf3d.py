@@ -6,7 +6,7 @@ from nd_estruturas.bim import ler_malha_ifc
 
 ifc, saida = sys.argv[1], sys.argv[2]
 malha = ler_malha_ifc(ifc)
-doc = ezdxf.new("R2018", setup=True)
+doc = ezdxf.new("R2010", setup=True)
 doc.units = ezdxf.units.M
 msp = doc.modelspace()
 CORES = {"Pilares": 8, "Consolos": 9, "Vigas centrais I110": 5, "Vigas I90 de cobertura": 5, "Vigas de borda": 4, "Vigas de travamento VT": 4,
@@ -21,10 +21,9 @@ for grupo, pecas in malha.items():
         v, f = p["v"], p["f"]
         pts = [tuple(v[i:i + 3]) for i in range(0, len(v), 3)] if v and not isinstance(v[0], (list, tuple)) else [tuple(x) for x in v]
         fs = [tuple(f[i:i + 3]) for i in range(0, len(f), 3)] if f and not isinstance(f[0], (list, tuple)) else [tuple(x) for x in f]
-        m = msp.add_mesh(dxfattribs={"layer": lay})
-        with m.edit_data() as md:
-            md.vertices = pts
-            md.faces = fs
+        pf = msp.add_polyface(dxfattribs={"layer": lay})          # POLYFACE: lido por qualquer versão do AutoCAD
+        pf.append_faces([[pts[i] for i in fc] for fc in fs], dxfattribs={"layer": lay})
+        pf.optimize()
         n += 1
 msp.add_text("LETSARA — MODELO 3D — PROJETO DA ND ENGENHARIA", dxfattribs={"layer": "0", "height": 1.0}).set_placement((0, -6, 0))
 doc.saveas(saida)

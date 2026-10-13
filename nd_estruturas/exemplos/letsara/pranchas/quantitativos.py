@@ -8,7 +8,7 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev00.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev02.xlsx")
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 Z0 = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))["Z0_TS"]
@@ -67,7 +67,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in tab("PIL-A01", "MARCAS")["linhas"
             n = int(m.group(1)) if m.group(1) else (len(m.group(3).split(",")) if m.group(3) else 1)
             vc += n * VOLC[m.group(2)]
     vol = 0.24 * (1.0 + zr) + cab * (10.0 - zr) + vc
-    folha_mk = "PIL-A01" if mk == "PL-01" else mk.replace("-", "")
+    folha_mk = mk.replace("-", "")
     pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     q = quadro(f_)
@@ -98,11 +98,13 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     aco.append((f"Pilar {p_[1]}", p_[9], p_[5], kg_diam(folha_mk), "consolos e cabeça da marca"))
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     aco.append((f"Pilar {quadro(f_)['MARCA']}", f"ND-LET-{f_}", int(quadro(f_)["QUANTIDADE"].split()[0]), kg_diam(f_), ""))
-aco.append(("TS-01", "ND-LET-TS01-2", 14, kg_diam("TS01-2"), ""))
-aco.append(("I110 (V405/V406/V407)", "ND-LET-I110", 3, kg_diam("I110"), "relação da V406 (a mais longa) aplicada às 3"))
-aco.append(("VM-01 / VM-02", "ND-LET-VM01", 16, kg_diam("VM01"), "relação da VM-02 aplicada às 16"))
-aco.append(("VB-01 a VB-04", "ND-LET-VB01", 8, kg_diam("VB01"), "relação da VB-02 aplicada às 8"))
-aco.append(("VT-01 a VT-04", "ND-LET-VT01", 14, kg_diam("VT01"), "relação da VT-01 (a mais longa) aplicada às 14"))
+import armaduras_vigas as AV
+for k_, (fam_, fn_) in enumerate(AV.SPECS, 1):
+    for m_ in fn_()["marcas"]:
+        kd_ = {d: 0.0 for d in DIAMS}
+        for b_ in m_["barras"]:
+            kd_[float(b_["diam"])] += b_["qtd"] * b_["comp"] / 100 * KGM[float(b_["diam"])] * 1.10
+        aco.append((f"{fam_} {m_['marca']}" if fam_ != m_["marca"] else fam_, f"ND-LET-AR-VIG-{k_:02d}", m_["qtd"], kd_, "tabela de ferros da marca"))
 pp_kg = {d: 0.0 for d in DIAMS}
 n_pp = 0
 for tp, n, n2, tela, kgpl, kgt in tab("PP00", "AÇO PASSIVO")["linhas"]:
@@ -187,7 +189,7 @@ def total(ws, r, rot, cols, r0, r1, ncol):
         ws.cell(r, c, f"=SUM({L}{r0}:{L}{r1})").number_format = "#,##0.00"
 
 
-RODAPE = "PROJETO DA ND ENGENHARIA — quantitativos extraídos das pranchas rev. vigentes (12/10/2026). Números em azul vêm das pranchas; em preto, fórmulas."
+RODAPE = "PROJETO DA ND ENGENHARIA — quantitativos extraídos das pranchas rev. vigentes (13/10/2026). Números em azul vêm das pranchas; em preto, fórmulas."
 
 # 1. pré-moldados
 ws = wb.active; ws.title = "Pré-moldados"
@@ -279,7 +281,7 @@ linha(ws, r, ["Graute chavetas", "chavetas das lajes alveolares", "=2*31*9.45*0.
 # 0. resumo
 ws = wb.create_sheet("Resumo", 0)
 ws["A1"] = "LETSARA — PAVILHÃO COM MEZANINO — RESUMO DE QUANTITATIVOS"; ws["A1"].font = FT
-ws["A2"] = "MARQUES ENGENHARIA E CONSTRUÇÕES · ND ENGENHARIA E ASSESSORIA LTDA · 12/10/2026 · PARA APROVAÇÃO"; ws["A2"].font = Font(name="Arial", size=8, italic=True)
+ws["A2"] = "MARQUES ENGENHARIA E CONSTRUÇÕES · ND ENGENHARIA E ASSESSORIA LTDA · 13/10/2026 · PARA APROVAÇÃO"; ws["A2"].font = Font(name="Arial", size=8, italic=True)
 for j, (c, w) in enumerate(zip(["ITEM", "QUANTIDADE", "UN", "FONTE"], [48, 16, 8, 40]), 1):
     x = ws.cell(4, j, c); x.font = FB; x.fill = CAB; x.border = BOR
     ws.column_dimensions[get_column_letter(j)].width = w

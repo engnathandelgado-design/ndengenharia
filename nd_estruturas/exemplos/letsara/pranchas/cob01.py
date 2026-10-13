@@ -17,6 +17,7 @@ N_LIN, N_T = 9, 26
 pr = Prancha("A1", cabecalho("ND-LET-COB01", "04/05", "COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO E TRAVAMENTO, SUPORTE ST-1 E MÃO-FRANCESA"))
 pr.revisao("01", pr.dados["data"], "furos centrados na alma; suporte ST-1 + CH-T1; mão-francesa na OR-1; planta completa")
 pr.revisao("02", pr.dados["data"], "geometria do R01 (79,35 m; TS-01 19,15 m); X de nó a nó; correntes e MF no padrão de referência")
+pr.revisao("03", pr.dados["data"], "X só nos vãos 2-3 e 7-8; correntes Ø10; escora c/ borda")
 c1, mf = CB["CT1"], CB["MF1"]
 
 # ------------------------------------------------------------------ PLANTA DE ENTERÇAMENTO E TRAVAMENTO 1:175 (papel: horizontal = y da obra)
@@ -84,11 +85,11 @@ v.cota_v([X0D, X0D + LTS], YLmm[0] - 900, -24, total=False)
 v.cota_v([0, X_C, X_E], YLmm[0] - 900, -36, total=False)
 RX = YLmm[8] - 300
 v.chamada(M(YLmm[8] - 2500, XT[24] + 40), (16, 8), "terça Ue 300×85×25×3,00 (alma na face +x do ST-1)")
-v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[18] + XT[19]) / 2), (18, 4), "corrente flexível Ø12,5 (L/4, L/2, 3L/4)")
+v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[18] + XT[19]) / 2), (18, 4), "corrente flexível Ø10 (L/4, L/2, 3L/4)")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[0] + XT[1]) / 2), (14, -14), "tirante rígido L 51×51×3,2 no 1º espaço")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.15, (XT[24] + XT[25]) / 2), (24, 12), "diagonal de ancoragem Ø16")
 _ym = (YLmm[6] + YLmm[7]) / 2
-v.chamada(M(_ym, (NOS_D[4] + NOS_D[5]) / 2), (66, -6), "X Ø16 c/ esticador, de nó a nó das vigas")
+v.chamada(M(_ym, (NOS_D[4] + NOS_D[5]) / 2), (66, -6), "X Ø16 c/ esticador (vãos 2-3 e 7-8)")
 v.chamada(M(YLmm[8] - 700, XT[14] + 200), (16, -6), "MF = mão-francesa (det. 2)")
 v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I110 (eixo C)")
 v.marcador_detalhe(M(YLmm[5], XT[20]), 600, 1, ang=60, dist=8)
@@ -212,11 +213,11 @@ s5 = pr.vista("SEÇÃO DA TERÇA", (455, 48), E5, titulo="DETALHE 3 — TERÇA: 
 u = [(B_TERCA, H_TERCA - 25), (B_TERCA, H_TERCA), (0, H_TERCA), (0, 0), (B_TERCA, 0), (B_TERCA, 25)]
 s5.poli(u, "METALICA")
 for z, cam in ((Z_FURO[0], "METALICA"), (Z_FURO[1], "METALICA"), (Z_COR, "OCULTA"), (Z_MF, "OCULTA"), (Z_DIAG, "OCULTA"), (Z_X[0], "OCULTA"), (Z_X[1], "OCULTA")):
-    s5.circulo((0, z), 7 if z in (Z_FURO + (Z_COR, Z_MF)) else 9, cam)
+    s5.circulo((0, z), 6 if z == Z_COR else 7 if z in (Z_FURO + (Z_MF,)) else 9, cam)
 s5.cota_v([0, Z_X[0], Z_X[1], Z_COR, Z_DIAG, H_TERCA], -10, -10, total=False)
 s5.cota_v([0, Z_MF, Z_FURO[0], Z_FURO[1], H_TERCA], B_TERCA, 10, total=False)
 s5.chamada((0, Z_FURO[1]), (30, 6), "pontas: 2 Ø14 a 100 e 200")
-s5.chamada((0, Z_COR), (30, 6), "correntes Ø14")
+s5.chamada((0, Z_COR), (30, 6), "correntes Ø12")
 s5.chamada((0, Z_DIAG), (30, 4), "diagonal Ø18 (marcas D)")
 s5.chamada((0, Z_X[1]), (30, -4), "cruzamento do X 2 Ø18 (marcas X)")
 s5.chamada((0, Z_MF), (30, -14), "mão-francesa Ø14")
@@ -230,7 +231,7 @@ for x in (E_FURO, LT - E_FURO):
         t20.circulo((x, z), 7, "METALICA")
 for x in (Y_MF - FOLGA, LT - Y_MF + FOLGA):
     t20.circulo((x, Z_MF), 7, "METALICA")
-t20.circulo((560, Z_COR), 7, "METALICA"); t20.circulo((560, Z_DIAG), 9, "METALICA")
+t20.circulo((560, Z_COR), 6, "METALICA"); t20.circulo((560, Z_DIAG), 9, "METALICA")
 t20.cota_h([0, E_FURO, 560, Y_MF - FOLGA], 0, -10, total=False); t20.cota_h([LT - Y_MF + FOLGA, LT - E_FURO, LT], 0, -10, total=False)
 t20.texto((LT / 2, H_TERCA + 60), "L (ver tabela)", "nota", "BOTTOM_CENTER")
 t20.chamada((560, Z_COR), (8, 18), "correntes a a/4−10, a/2−10, 3a/4−10")
@@ -251,7 +252,8 @@ y = pr.tabela(x0, y, f"TERÇAS Ue 300×85×25×3,00 ZAR 345 ({PESO_UE} kg/m) —
 n_sup = N_LIN * N_T
 n_m12_st = N_T * (7 * 4 + 2 * 2)
 n_mf = N_T * (7 * 2 + 2)
-lm = [["CH-T1", f"chapa {IT1['t']:g}×{IT1['lx']}×{IT1['ly']} A36 + 4 pinos Ø16 c/ cabeça hef 100", f"{7*2*6}", "topo da TS-01 (CH-T2 nos 7 nós)"],
+lm = [["CH-T1", f"chapa {IT1['t']:g}×{IT1['lx']}×{IT1['ly']} A36 + 4 pinos Ø16 c/ cabeça hef 100", f"{7*2*6}", "topo da TS-01, terças fora dos nós"],
+      ["CH-T2", f"chapa 12,5×300×380 A36 + 6 pinos Ø16 + 4 orelhas", f"{7*2*7}", "nós do X, todas as TS-01"],
       ["ST-1", f"chapa {ST1['t']:g}×{ST1['larg']}×{ST1['h']} A36 + 2 enrij. 8×90×90; 4 Ø14 (+1 Ø18 nas pontas)", f"{n_sup}", "soldado na CH-T1/T2 (fábrica)"],
       ["CH-MF", f"chapa {IM1['t']:g}×{IM1['lx']}×{IM1['ly']} A36 + 2 pinos Ø12,5 c/ cabeça hef 80", f"{7*2*13}", "fundo da TS-01, em cada terça"],
       ["OR-1", f"chapa {CHMF['t']:g}×{CHMF['l']}×{CHMF['h']} A36, 2 furos Ø14", f"{n_sup}", "soldada na CH-MF (fábrica)"],
@@ -260,6 +262,7 @@ lm = [["CH-T1", f"chapa {IT1['t']:g}×{IT1['lx']}×{IT1['ly']} A36 + 4 pinos Ø1
 y = pr.tabela(x0, y - 4, "LISTA DE MATERIAIS — LIGAÇÕES TERÇA × VIGA", ["MARCA", "DESCRIÇÃO", "QT", "ONDE"], lm, [18, 106, 14, 58])
 notas = [f"Terças simplesmente apoiadas de viga a viga: L = vão entre eixos − {2*FOLGA} mm (folga de {FOLGA} mm de cada ponta ao eixo do suporte). Todas com a alma na face +x do ST-1. Marca = comprimento (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais de ancoragem), X = terça intermediária dos painéis do contraventamento. Furos: diag. Ø18 em a/4, a/2 ± 60 e 3a/4; X 2 Ø18 em a/2 (esquema de furação).",
          "Furação toda de fábrica (d + 2 mm): proibido furar a terça galvanizada na obra sem retoque com tinta rica em zinco.",
+         "CH-T2 mantida em todas as TS-01 (marca única, mesma fôrma e insertos); orelhas sem uso nas linhas 4 a 6 (X só nos vãos 2-3 e 7-8).",
          "CH-T1 (CH-T2 nos nós do X) e CH-MF são os insertos embutidos na fôrma da TS-01 (ND-LET-TS01); o ST-1 e a OR-1 são soldados a eles na fábrica de pré-moldados, com gabarito, antes do transporte (filete 6 mm, E7018). Conferir posição ±5 mm.",
          "Montagem: terça com o fundo 10 mm acima do concreto, 2 M12 8.8 por ponta (aperto com chave). Depois as MF (M12 na OR-1 e na alma da terça), depois correntes, tirantes rígidos e diagonais; por último o X, tensionado no esticador até tirar a flecha da barra.",
          "Mão-francesa MF-1 em toda terça, dos dois lados da viga nas linhas 2 a 8 e de um lado nas linhas 1 e 9: L 50×5 a 45°, com a aba encostada na alma da terça e na OR-1 (mesmo plano).",

@@ -1,5 +1,9 @@
 """Letsara — cobertura metálica: terças Ue, correntes, cantoneira CT-1, mão-francesa, chapas CH-T/CH-MF e chumbadores.
 
+Rev. 13/10/2026: esforços da terça-escora e do X lidos do modelo global R01 (modelo_global_r01.json, envoltória por vão;
+rodar modelo_global_r01.py antes); X só nos vãos 2-3 e 7-8; correntes Ø10; terça-escora verificada vão a vão com a sucção
+do vento 0° (faixa do oitão com Cpe médio de borda).
+
 Normas: NBR 14762:2010 (perfis formados a frio, MRD), NBR 8800:2008 (ligações, laminados), NBR 8681:2003 e
 NBR 8800 Tabela 1 (combinações), NBR 6123:1988 (vento), ACI 318-19 cap. 17 (chumbadores), AISI S100-16 (forças
 de travamento por correntes em perfis C). Unidades kN, m (perfis em mm).
@@ -22,7 +26,8 @@ s = LG["passo_tercas"]   # espaçamento entre terças (ao longo da água)
 g, q = 0.25, 0.25    # kN/m² — telha 0,5 + PIR 30 (0,07), terça (0,07), instalações (0,10); sobrecarga NBR 8800 Anexo B
 q0 = 0.874           # kN/m² — V0 45 m/s, S2 cat. III classe C, S3 0,95 (rodada 2)
 cp = dict(geral=-1.0, borda=-1.6)    # Cpe −0,8 / −1,4 (faixa de borda, NBR 6123 tab. 6 — conferir) com Cpi +0,2
-N_escora_k = 27.5    # kN — terça escora do contraventamento (modelo global, vento longitudinal)
+MG = json.loads((AQUI / "modelo_global_r01.json").read_text(encoding="utf-8"))
+ELU = {k: v for k, v in MG["combinacoes"].items() if v["tipo"] == "ELU"}
 u = PerfilUe(300, 85, 25, 3.0, "ZAR345")
 cM = u.criticos("M")
 cN = u.criticos("N", L_dist_ref=cM["L_dist"])
@@ -53,17 +58,57 @@ R["terca"] = dict(L_m=L, s_m=s, Lb_suc_mm=round(Lb), MRd_grav=M_grav, MRd_suc=M_
                   flecha_gq_mm=round(delta((g + q) * s), 1), flecha_vento_mm=round(delta((abs(cp["geral"]) * q0 - g) * s), 1),
                   flecha_lim_mm=round(L * 1000 / 180, 1))
 
-# terça escora (nós do contraventamento): compressão + flexão por sucção (vento longitudinal como principal)
-Nd = 1.4 * N_escora_k
-NRd = u.NcRd(L * 1000, Lb, Lb, crit=cN)
-w_suc = (1.4 * abs(cp["geral"]) * q0 - g) * s
-Md = w_suc * L ** 2 / 8
-amp = 1 / (1 - Nd / NRd["Nex"])
-inter = Nd / NRd["NcRd"] + Md * amp / M_suc["MRd"]
-assert all(c["suc"]["uso"] <= 1 and c["grav"]["uso"] <= 1 for c in casos.values()) and inter <= 1, (casos, inter)
-R["terca_escora"] = dict(Nd=round(Nd, 1), NcRd=round(NRd["NcRd"], 1), modo_N=NRd["modo"], Md=round(Md, 2), amplificacao=round(amp, 3),
-                         MRd=round(M_suc["MRd"], 2), interacao=round(inter, 3), ok=inter <= 1.0,
-                         nota="vento como ação principal; NBR 14762:2010 item 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0")
+# terça escora: compressão N (modelo global R01, por vão e por linha de terça) + flexão por sucção do MESMO vento, terça a
+# terça. Vento é uma ação só: em cada combinação ELU com o vento como principal (ELU-1, 90°; ELU-2, 0°) o N daquela linha
+# vem do modelo (γ 1,4 no vento; G 1,3 no N, a favor da segurança) e o M da sucção com γ 1,4 e g favorável (1,0).
+# Telhado de uma água, θ ≈ 1,7° (NBR 6123:1988 tabela 6, menor θ tabelado). Zonas locais (Cpe médio de borda −1,4 + Cpi +0,2
+# = −1,6), tomadas como envoltória e aplicadas nos dois ângulos (a favor da segurança):
+#   - faixa do oitão: vãos 1-2 e 8-9 (terça inteira dentro de y = min(h; 0,15 b) da fachada — tomada inteira);
+#   - faixas de beiral: terças a até y = min(h; 0,15 b) dos eixos A e E (linhas de beiral), em todos os vãos;
+# demais terças: Ce −0,8 + Cpi +0,2 = −1,0.
+from geometria import X_EIXO
+H_COB = 9.9                                          # m — altura da cobertura (beiral alto)
+B_MENOR = X_EIXO["E"]                                # m — menor dimensão em planta
+Y_LOC = min(H_COB, 0.15 * B_MENOR)                   # largura das faixas locais (5,93 m)
+VAO_FAIXA_OITAO = ("1-2", "8-9")
+COMB_VENTO = {"ELU-1 vento x": "90°", "ELU-2 vento y": "0°"}
+esc_vaos, esc_linhas = [], []
+for iv, Lv in enumerate(VAOS_Y):
+    nome = f"{iv+1}-{iv+2}"
+    Lb_v = Lv / (N_LIN + 1) * 1000
+    NR = u.NcRd(Lv * 1000, Lb_v, Lb_v, crit=u.criticos("N", L_dist_ref=cM["L_dist"]))
+    MR = u.MRd(Lb_v, Cb=1.0, crit=cM)
+    pior = None
+    for comb, ang_v in COMB_VENTO.items():
+        for xs_, (nmin, _) in MG["combinacoes"][comb]["por_vao"]["terça-escora por linha"].get(nome, {}).items():
+            x_ = float(xs_)
+            beiral = x_ <= Y_LOC or x_ >= B_MENOR - Y_LOC
+            zona = "borda" if (nome in VAO_FAIXA_OITAO or beiral) else "geral"
+            Nd_l = max(0.0, -nmin)
+            w_l = (1.4 * abs(cp[zona]) * q0 - g) * s
+            Md_l = w_l * Lv ** 2 / 8
+            amp_l = 1 / (1 - Nd_l / NR["Nex"])
+            it = Nd_l / NR["NcRd"] + Md_l * amp_l / MR["MRd"]
+            reg_ = dict(vao=nome, x_m=x_, faixa=" + ".join(f_ for f_, c_ in (("oitão", nome in VAO_FAIXA_OITAO), ("beiral", beiral)) if c_) or "interna",
+                        vento=ang_v, cp=cp[zona], L_m=Lv, Nd=round(Nd_l, 1), NcRd=round(NR["NcRd"], 1), modo_N=NR["modo"], Md=round(Md_l, 2),
+                        MRd=round(MR["MRd"], 2), amplificacao=round(amp_l, 3), interacao=round(it, 3))
+            esc_linhas.append(reg_)
+            if pior is None or it > pior["interacao"]:
+                pior = reg_
+    esc_vaos.append(pior)
+gov = max(esc_linhas, key=lambda e: e["interacao"])
+Nd = max(e["Nd"] for e in esc_linhas)                     # maior compressão de escora (ligações CT-1 / CH-T2)
+bei = [e for e in esc_linhas if "beiral" in e["faixa"]]
+gov_bei = max(bei, key=lambda e: e["interacao"])
+assert all(c["suc"]["uso"] <= 1 and c["grav"]["uso"] <= 1 for c in casos.values()) and gov["interacao"] <= 1, (casos, gov)
+R["terca_escora"] = dict(Nd=gov["Nd"], NcRd=gov["NcRd"], modo_N=gov["modo_N"], Md=gov["Md"], amplificacao=gov["amplificacao"],
+                         MRd=gov["MRd"], interacao=gov["interacao"], ok=gov["interacao"] <= 1.0, vao_governante=gov["vao"],
+                         linha_governante_x_m=gov["x_m"], faixa_governante=gov["faixa"], vento_governante=gov["vento"], Nd_max=Nd,
+                         faixa_beiral=dict(y_m=round(Y_LOC, 2), Nd_max=max(e["Nd"] for e in bei), governante=gov_bei),
+                         por_vao=esc_vaos, fonte="modelo_global_r01.json (ELU-1 e ELU-2, por vão e por linha de terça)",
+                         nota="N e M do mesmo vento (0° ou 90°), γ 1,4; faixas locais de oitão e de beiral (y = min(h; 0,15 b)) com Cpe médio −1,4 "
+                              "+ Cpi +0,2 em envoltória; demais Ce −0,8 + Cpi +0,2 (NBR 6123:1988 tabela 6); NBR 14762:2010 item 9.9 — "
+                              "Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0")
 
 # ------------------------------------------------------------------ correntes (AISI S100-16 D3.2.1(a) — perfil C, carga uniforme)
 d_terca = u.bw
@@ -75,7 +120,8 @@ for nome, wq, incl in (("sucção", (1.4 * abs(cp["geral"]) * q0 - g) * s, 0.0),
     PL = 1.5 * (u.m_ct / d_terca) * W + incl * W           # torção do perfil C + componente do caimento de 3%
     casos_c[nome] = dict(W_kN=round(W, 2), PL_por_terca_kN=round(PL, 3), F_acumulada_kN=round(PL * n_run, 2))
 Fc = max(v["F_acumulada_kN"] for v in casos_c.values())
-cf = barra_redonda_tracao_Rd(12.0)        # Ø12,5 rosqueada M12 — área da rosca pela barra Ø12
+D_COR = 10.0                               # corrente flexível Ø10 A36, rosca M10 (rev. 13/10/2026; antes Ø12,5)
+cf = barra_redonda_tracao_Rd(D_COR)
 # tirante rígido (1º espaço de terças junto a cada ancoragem): L 51×51×3,2 (A36), A 3,13 cm², rz 1,00 cm
 A_L51, rz_L51 = 313.0, 10.0
 cr, lam0_cr, esb_cr = compressao_laminado_Rd(A_L51, rz_L51, s * 1000, fy=250)
@@ -85,9 +131,10 @@ d_q = math.hypot(s, L / 4); d_m = math.hypot(s, L / 2)
 T_q, T_m = Fc * d_q / s, Fc / 2 * d_m / s
 T_diag, diag_len = max(T_q, T_m), (d_q if T_q >= T_m else d_m)
 td = barra_redonda_tracao_Rd(16.0)
-R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø14 no meio da alma (150 do fundo)", casos=casos_c,
+R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (150 do fundo)", casos=casos_c,
                       F_max_kN=Fc,
-                      flexivel=dict(barra="Ø12,5 A36, roscas M12, porca + contraporca e arruela dos 2 lados de cada terça", NtRd=round(cf, 1), uso=round(Fc / cf, 3)),
+                      flexivel=dict(barra="Ø10 A36, roscas M10, porca + contraporca e arruela dos 2 lados de cada terça", d_mm=D_COR, furo="Ø12",
+                                    NtRd=round(cf, 1), uso=round(Fc / cf, 3)),
                       rigida=dict(perfil="L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma", L_mm=round(s * 1000), NcRd=round(cr, 1),
                                   esbeltez=round(esb_cr), uso=round(Fc / cr, 3), onde="1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"),
                       diagonal=dict(barra="Ø16 A36, rosca M16", comp_L4_m=round(d_q, 2), comp_L2_m=round(d_m, 2), Td_L4=round(T_q, 1), Td_L2=round(T_m, 1),
@@ -97,24 +144,22 @@ R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø1
 # ------------------------------------------------------------------ contraventamento em X (padrão das coberturas de referência)
 # Treliça no plano da cobertura: cordas = vigas TS-01 das duas linhas do vão; montantes = terças dos nós (escoras, a cada
 # 2 espaços de terças); diagonais em X Ø16 A36 de nó a nó (CH-T2 de uma viga à CH-T2 da outra), cada uma com esticador.
-mg = json.loads((AQUI / "modelo_global.json").read_text(encoding="utf-8"))
-F_contr_k = max(v["forca_max_kN"]["contravento"] for v in mg.values())          # diagonal do modelo global (4,0 × 9,65 m)
+T_X_d = max(c["forcas_barras"].get("X Ø16", [0.0, 0.0])[1] for c in ELU.values())      # tração de cálculo na diagonal (modelo R01)
 P_X = 2 * s
-V_k = F_contr_k * math.sin(math.atan(9.65 / 4.0))                                 # cortante do painel (componente y)
-V_d = 1.4 * V_k
 amostra = LG["contraventamento"]["amostra"][0]
 L_X = amostra["comp_m"]
 ang = math.radians(amostra["ang_eixo_viga"])
-T_X = V_d / math.sin(ang)
+T_X = T_X_d
+V_d = T_X * math.sin(ang)                                                          # cortante do painel (componente y)
 t16 = barra_redonda_tracao_Rd(16.0)
 Fx_no = 2 * T_X * math.cos(ang)                                                    # 2 diagonais no mesmo nó (painéis vizinhos)
 Fy_no = 2 * T_X * math.sin(ang)
 R["contraventamento"] = dict(painel_x_m=round(P_X, 3), subpaineis=1, L_diag_m=L_X, ang_graus=amostra["ang_eixo_viga"],
-                             F_modelo_global_k=round(F_contr_k, 1), V_painel_d=round(V_d, 1), T_diag_d=round(T_X, 2),
+                             vaos=["2-3", "7-8"], fonte="modelo_global_r01.json (máx. ELU)", V_painel_d=round(V_d, 1), T_diag_d=round(T_X, 2),
                              NtRd_16=round(t16, 1), uso_diag=round(T_X / t16, 3),
                              no=dict(Fx_kN=round(Fx_no, 2), Fy_kN=round(Fy_no, 2)),
                              barra="Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
-                             nota="X de nó a nó das vigas, abrangendo 2 espaços de terças; terças dos nós trabalham como escoras")
+                             nota="X de nó a nó das vigas, abrangendo 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões); terças dos nós trabalham como escoras")
 
 # ------------------------------------------------------------------ cantoneira CT-1 e parafusos
 Vsuc_end = casos["geral"]["w_suc_kNm"] * L / 2      # reação de arrancamento por terça

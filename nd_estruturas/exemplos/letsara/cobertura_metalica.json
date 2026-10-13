@@ -99,19 +99,166 @@
   "flecha_lim_mm": 56.0
  },
  "terca_escora": {
-  "Nd": 38.5,
+  "Nd": 5.6,
   "NcRd": 152.4,
   "modo_N": "local-global",
-  "Md": 19.2,
-  "amplificacao": 1.11,
+  "Md": 33.67,
+  "amplificacao": 1.015,
   "MRd": 36.35,
-  "interacao": 0.839,
+  "interacao": 0.977,
   "ok": 1.0,
-  "nota": "vento como ação principal; NBR 14762:2010 item 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0"
+  "vao_governante": "2-3",
+  "linha_governante_x_m": 35.82,
+  "faixa_governante": "beiral",
+  "vento_governante": "90°",
+  "Nd_max": 20.1,
+  "faixa_beiral": {
+   "y_m": 5.92,
+   "Nd_max": 9.7,
+   "governante": {
+    "vao": "2-3",
+    "x_m": 35.82,
+    "faixa": "beiral",
+    "vento": "90°",
+    "cp": -1.6,
+    "L_m": 10.075,
+    "Nd": 5.6,
+    "NcRd": 152.4,
+    "modo_N": "local-global",
+    "Md": 33.67,
+    "MRd": 36.35,
+    "amplificacao": 1.015,
+    "interacao": 0.977
+   }
+  },
+  "por_vao": [
+   {
+    "vao": "1-2",
+    "x_m": 0.0,
+    "faixa": "oitão + beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 9.65,
+    "Nd": 9.7,
+    "NcRd": 158.6,
+    "modo_N": "local-global",
+    "Md": 30.89,
+    "MRd": 36.85,
+    "amplificacao": 1.023,
+    "interacao": 0.919
+   },
+   {
+    "vao": "2-3",
+    "x_m": 35.82,
+    "faixa": "beiral",
+    "vento": "90°",
+    "cp": -1.6,
+    "L_m": 10.075,
+    "Nd": 5.6,
+    "NcRd": 152.4,
+    "modo_N": "local-global",
+    "Md": 33.67,
+    "MRd": 36.35,
+    "amplificacao": 1.015,
+    "interacao": 0.977
+   },
+   {
+    "vao": "3-4",
+    "x_m": 0.0,
+    "faixa": "beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 10.075,
+    "Nd": 1.4,
+    "NcRd": 152.4,
+    "modo_N": "local-global",
+    "Md": 33.67,
+    "MRd": 36.35,
+    "amplificacao": 1.003,
+    "interacao": 0.938
+   },
+   {
+    "vao": "4-5",
+    "x_m": 0.0,
+    "faixa": "beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 9.925,
+    "Nd": 1.0,
+    "NcRd": 154.6,
+    "modo_N": "local-global",
+    "Md": 32.68,
+    "MRd": 36.65,
+    "amplificacao": 1.002,
+    "interacao": 0.9
+   },
+   {
+    "vao": "5-6",
+    "x_m": 0.0,
+    "faixa": "beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 10.0,
+    "Nd": 0.6,
+    "NcRd": 153.5,
+    "modo_N": "local-global",
+    "Md": 33.17,
+    "MRd": 36.5,
+    "amplificacao": 1.002,
+    "interacao": 0.914
+   },
+   {
+    "vao": "6-7",
+    "x_m": 39.5,
+    "faixa": "beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 10.0,
+    "Nd": 0.7,
+    "NcRd": 153.5,
+    "modo_N": "local-global",
+    "Md": 33.17,
+    "MRd": 36.5,
+    "amplificacao": 1.002,
+    "interacao": 0.915
+   },
+   {
+    "vao": "7-8",
+    "x_m": 39.5,
+    "faixa": "beiral",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 10.0,
+    "Nd": 1.4,
+    "NcRd": 153.5,
+    "modo_N": "local-global",
+    "Md": 33.17,
+    "MRd": 36.5,
+    "amplificacao": 1.004,
+    "interacao": 0.922
+   },
+   {
+    "vao": "8-9",
+    "x_m": 19.75,
+    "faixa": "oitão",
+    "vento": "0°",
+    "cp": -1.6,
+    "L_m": 9.625,
+    "Nd": 9.5,
+    "NcRd": 158.9,
+    "modo_N": "local-global",
+    "Md": 30.73,
+    "MRd": 36.85,
+    "amplificacao": 1.023,
+    "interacao": 0.913
+   }
+  ],
+  "fonte": "modelo_global_r01.json (ELU-1 e ELU-2, por vão e por linha de terça)",
+  "nota": "N e M do mesmo vento (0° ou 90°), γ 1,4; faixas locais de oitão e de beiral (y = min(h; 0,15 b)) com Cpe médio −1,4 + Cpi +0,2 em envoltória; demais Ce −0,8 + Cpi +0,2 (NBR 6123:1988 tabela 6); NBR 14762:2010 item 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0"
  },
  "correntes": {
   "linhas_por_vao": 3,
-  "posicao": "a L/4, L/2 e 3L/4, furo Ø14 no meio da alma (150 do fundo)",
+  "posicao": "a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (150 do fundo)",
   "casos": {
    "sucção": {
     "W_kN": 3.81,
@@ -126,9 +273,11 @@
   },
   "F_max_kN": 8.62,
   "flexivel": {
-   "barra": "Ø12,5 A36, roscas M12, porca + contraporca e arruela dos 2 lados de cada terça",
-   "NtRd": 25.1,
-   "uso": 0.343
+   "barra": "Ø10 A36, roscas M10, porca + contraporca e arruela dos 2 lados de cada terça",
+   "d_mm": 10.0,
+   "furo": "Ø12",
+   "NtRd": 17.5,
+   "uso": 0.494
   },
   "rigida": {
    "perfil": "L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma",
@@ -155,36 +304,40 @@
   "subpaineis": 1,
   "L_diag_m": 10.195,
   "ang_graus": 73.9,
-  "F_modelo_global_k": 9.3,
-  "V_painel_d": 12.0,
-  "T_diag_d": 12.52,
+  "vaos": [
+   "2-3",
+   "7-8"
+  ],
+  "fonte": "modelo_global_r01.json (máx. ELU)",
+  "V_painel_d": 6.8,
+  "T_diag_d": 7.1,
   "NtRd_16": 44.7,
-  "uso_diag": 0.28,
+  "uso_diag": 0.159,
   "no": {
-   "Fx_kN": 6.94,
-   "Fy_kN": 24.06
+   "Fx_kN": 3.94,
+   "Fy_kN": 13.64
   },
   "barra": "Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
-  "nota": "X de nó a nó das vigas, abrangendo 2 espaços de terças; terças dos nós trabalham como escoras"
+  "nota": "X de nó a nó das vigas, abrangendo 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões); terças dos nós trabalham como escoras"
  },
  "CT1": {
   "perfil": "L 102×102×9,5 (A36) L=200",
   "reacao_suc_kN": 7.62,
   "reacao_grav_kN": 5.58,
   "M12_alma": {
-   "Fd": 19.62,
+   "Fd": 10.75,
    "corte_Rd": 26.8,
    "contato_alma_Rd": 20.8,
-   "uso": 0.945,
+   "uso": 0.518,
    "furo": "Ø14 (padrão)",
    "parafuso": "M12 8.8, arruela lisa e porca"
   },
   "M16_chapa": {
    "Td": 9.53,
-   "Vd": 19.25,
+   "Vd": 10.05,
    "Ft_Rd": 89.4,
    "Fv_Rd": 47.7,
-   "interacao": 0.174,
+   "interacao": 0.056,
    "parafuso": "M16 8.8 na luva soldada da CH-T, furo Ø18 na aba"
   },
   "aba": {
@@ -195,7 +348,7 @@
   "contato_aba": 87.8,
   "rasgamento_alma": {
    "e_mm": 45,
-   "Fd": 19.25,
+   "Fd": 10.05,
    "Rd": 40.0,
    "nota": "NBR 14762:2010 10.3.1 — t·e·fu/1,45, furo a 45 mm da ponta da terça"
   }
@@ -228,14 +381,14 @@
   "CH-T2": {
    "pinos": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
    "Nu": 15.2,
-   "Vu": 62.9,
+   "Vu": 34.0,
    "phiNn": 88.0,
    "modoN": "cone",
    "phiVn_sem_grampo": 14.1,
    "grampos": "2 grampos U Ø10 CA-50 envolvendo os pinos, pernas de 300 na mesa (ancoragem da cortante)",
    "phiVn": 99.0,
    "modoV": "borda",
-   "interacao": 0.636
+   "interacao": 0.343
   },
   "CH-MF": {
    "pinos": "2 Ø12,5 c/ cabeça, hef 80",

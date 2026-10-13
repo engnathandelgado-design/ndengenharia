@@ -589,7 +589,7 @@
   "peca_b": "terça Ue 300 (alma 3,0)",
   "inserto_b": "M12 8.8",
   "verificacao": "2 M12 por ponta: corte / contato na alma",
-  "valor": "uso 0.94",
+  "valor": "uso 0.52",
   "ok": true,
   "obs": "contato na alma de 3,0 mm governa (αe = 0,183t + 1,53)"
  },
@@ -644,7 +644,7 @@
   "peca_b": "terça / mão-francesa",
   "inserto_b": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.64 ≤ 1,2",
+  "valor": "0.34 ≤ 1,2",
   "ok": true,
   "obs": ""
  },
@@ -666,9 +666,9 @@
   "peca_b": "CH-T2 (viga da linha i) / CH-T2 (linha i+1)",
   "inserto_b": "orelhas 9,5 com furo Ø18",
   "verificacao": "tração na diagonal (NBR 8800:2008 6.3.3)",
-  "valor": "12.52 ≤ 44.7 kN",
+  "valor": "7.1 ≤ 44.7 kN",
   "ok": true,
-  "obs": "Vd 12.0 kN por painel; 96 diagonais (48 por meia água × 2)"
+  "obs": "Vd 6.8 kN por painel; 48 diagonais (24 por meia água × 2)"
  },
  {
   "grupo": "contraventamento",
@@ -694,14 +694,14 @@
  },
  {
   "grupo": "contraventamento",
-  "peca_a": "terça escora (nó do X)",
+  "peca_a": "terça escora (todas as linhas de terças)",
   "inserto_a": "Ue 300×85×25×3,00",
-  "peca_b": "CH-T2",
+  "peca_b": "CH-T1/T2",
   "inserto_b": "2 M12 por ponta",
-  "verificacao": "N + M (NBR 14762:2010 9.9)",
-  "valor": "0.84 ≤ 1",
+  "verificacao": "N + M (NBR 14762:2010 9.9), vento 0°",
+  "valor": "0.98 ≤ 1",
   "ok": true,
-  "obs": ""
+  "obs": "governa vão 2-3, x = 35.82 m (faixa beiral, vento 90°): Nd 5.6 kN; Nd máx. 20.1 kN"
  },
  {
   "grupo": "contraventamento",
@@ -710,18 +710,18 @@
   "peca_b": "2 diagonais + terça escora",
   "inserto_b": "orelhas",
   "verificacao": "interação tração × corte (ACI 318-19 cap. 17)",
-  "valor": "0.64 ≤ 1,2",
+  "valor": "0.34 ≤ 1,2",
   "ok": true,
-  "obs": "nó: x 6.94 kN, y 24.06 kN"
+  "obs": "nó: x 3.94 kN, y 13.64 kN"
  },
  {
   "grupo": "correntes",
-  "peca_a": "corrente flexível Ø12,5 M12",
-  "inserto_a": "furo Ø14 no meio da alma",
+  "peca_a": "corrente flexível Ø10 M10",
+  "inserto_a": "furo Ø12 no meio da alma",
   "peca_b": "terças",
   "inserto_b": "porca + contraporca dos 2 lados",
   "verificacao": "tração acumulada (13 terças)",
-  "valor": "8.62 ≤ 25.1 kN",
+  "valor": "8.62 ≤ 17.5 kN",
   "ok": true,
   "obs": ""
  },
@@ -842,9 +842,9 @@
   "peca_b": "laje alveolar h20 + enchimento + capa C25",
   "inserto_b": "tela Q138 + negativas Ø10 c/25",
   "verificacao": "interface pré-moldado × capa (NBR 9062:2017 6.3.5)",
-  "valor": "τsd 0.787 ≤ τRd 1.425 MPa",
+  "valor": "τsd 0.746 ≤ τRd 1.425 MPa",
   "ok": true,
-  "obs": "As 6.7 ≥ 6.51 cm²/m; fase 1 na seção pré-moldada, fase 2 na composta (I × 2.23)"
+  "obs": "As 6.7 ≥ 6.51 cm²/m; fase 1 na seção pré-moldada, fase 2 na composta (I × 2.22)"
  },
  {
   "grupo": "VM × laje (2º estágio)",

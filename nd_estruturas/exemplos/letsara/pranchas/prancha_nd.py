@@ -103,6 +103,10 @@ class Prancha:
         doc.header["$PSLTSCALE"] = 0
         doc.header["$LWDISPLAY"] = 1
         self.doc, self.msp = doc, doc.modelspace()
+        for nome, padrao, desc in (("ACAD_ISO02W100", [15.0, 12.0, -3.0], "ISO dashed __ __ __"),
+                                   ("ACAD_ISO10W100", [18.0, 12.0, -3.0, 0.0, -3.0], "ISO dash dot __ . __ .")):
+            if nome not in doc.linetypes:                                 # sem a definição o AutoCAD recusa abrir o DXF
+                doc.linetypes.add(nome, pattern=padrao, description=desc)
         doc.styles.new("ND", dxfattribs={"font": fonte, "width": 1.0})
         for n, (c, lw, lt) in CAMADAS.items():
             doc.layers.add(n, color=c, lineweight=lw, linetype=lt)
@@ -168,7 +172,7 @@ class Prancha:
         return y
 
     def tabela_aco(self, x, y_topo, barras, perda=0.10, aco="CA-50"):
-        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp")} for b in barras]))
+        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp", "forma", "trechos", "esp", "obs") if k in b} for b in barras]))
         """barras: dict(pos='N1', diam=16, qtd=8, comp=250 cm). Relação + resumo (NBR 7480 + perdas)."""
         linhas, resumo = [], {}
         for b in barras:
@@ -255,7 +259,7 @@ class Prancha:
         self.blocos_livres.append((x0, yb, x1, y1, titulo or caminho))
 
     def tabela_croqui(self, x, y_topo, barras, perda=0.10, aco="CA-50", h_lin=13.0):
-        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp")} for b in barras]))
+        self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp", "forma", "trechos", "esp", "obs") if k in b} for b in barras]))
         """Relação do aço com croqui de dobramento (padrão de mercado BIM). barras: dict(pos, diam, qtd, comp (cm),
         forma=[(x,y) cm ...] polilinha da barra, trechos=['84','14',...] rótulos na ordem dos segmentos)."""
         larg = [13, 13, 14, 20, 66, 20, 20]

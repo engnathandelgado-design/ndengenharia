@@ -2,7 +2,7 @@
 
 Sistema (pré-moldado): pilares engastados no cálice (barras 3D elásticas, cabeça recuada 40×30 acima do recuo); vigas TS-01,
 I110, VT, VB e VM articuladas (pino + neoprene) = barras de treliça; terças como escoras entre as vigas nos nós do
-contraventamento e em todas as 26 linhas de terças (como no modelo 3D), inclusive nos vãos de oitão (L1–L2 e L8–L9, apoiadas na VB 15×90 modelada como viga articulada nos pilares); X Ø16 nos vãos 2-3, 4-5, 5-6, 7-8 (só tração: as diagonais comprimidas foram retiradas, A ≈ 0); mezanino
+contraventamento e em todas as 26 linhas de terças (como no modelo 3D), inclusive nos vãos de oitão (L1–L2 e L8–L9, apoiadas na VB 15×90 modelada como viga articulada nos pilares); X Ø16 só nos vãos 2-3 e 7-8 (rev. 13/10/2026: retirados os X dos vãos 4-5 e 5-6 — esforço no X praticamente igual; só tração: as diagonais comprimidas foram retiradas, A ≈ 0); mezanino
 (laje alveolar + capa) como diafragma rígido nos níveis +3,15 e +6,55.
 
 Rigidez: ELU com 0,8·Ecs·Ic nos pilares (NBR 6118:2023 15.7.3, análise global com não linearidade física aproximada) e
@@ -40,7 +40,7 @@ Z_VT = 7.80
 Z_I110 = 8.88 - 1.10 + 0.44 - 0.03
 NOS = LG["nos_contraventamento_x_esq"]
 NOS_D = [round(x - 0.325 + (LARG - 0.325 - (19.475 - 0.325)), 3) for x in NOS]
-VAOS_X = [(1, 2), (3, 4), (4, 5), (6, 7)]
+VAOS_X = [(1, 2), (6, 7)]               # X só nos vãos 2-3 e 7-8 (vizinhos aos oitões)
 MID = [round((a + b) / 2, 3) for a, b in zip(NOS[:-1], NOS[1:])]          # terças intermediárias (entre os nós do X)
 MID_D = [round((a + b) / 2, 3) for a, b in zip(NOS_D[:-1], NOS_D[1:])]
 TRIB = [(Y_LIN[min(i + 1, 8)] - Y_LIN[max(i - 1, 0)]) / 2 for i in range(9)]
@@ -48,6 +48,7 @@ XF = [X_EIXO[k] for k in "ABCDE"]
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
 
 nos, tag, pil, bar = {}, [0], [], []
+POR_VAO = {}                                    # esforços das terças-escora e do X por vão (última análise)
 
 
 def no(x, y, z):
@@ -320,23 +321,35 @@ def rodar(nome, fatores, fator_EI, pdelta=True):
         base[p["nome"]] = dict(bx=p["bx"], by=p["by"], N=round(r[2], 1), Vx=round(-r[0], 1), Vy=round(-r[1], 1), Mx=round(-r[3], 1), My=round(-r[4], 1),
                                topo_mm=[round(topo[0] * 1000, 1), round(topo[1] * 1000, 1)], H=p["zs"][-1])
     forcas = {}
+    POR_VAO.clear()
     for b in bar:
         f = ops.basicForce(b["tag"])[0]
         g = forcas.setdefault(b["grupo"], [0.0, 0.0])
         g[0] = min(g[0], f); g[1] = max(g[1], f)
+        if b["grupo"] in ("terça-escora", "X Ø16"):            # envoltória por vão (linha i a i+1) para a verificação das terças
+            ym = (ops.nodeCoord(b["n1"])[1] + ops.nodeCoord(b["n2"])[1]) / 2
+            iv = max(k for k in range(8) if Y_LIN[k] <= ym + 1e-6)
+            gv = POR_VAO.setdefault(b["grupo"], {}).setdefault(f"{iv+1}-{iv+2}", [0.0, 0.0])
+            gv[0] = min(gv[0], round(f, 2)); gv[1] = max(gv[1], round(f, 2))
+            if b["grupo"] == "terça-escora":                    # por linha de terça (x da terça, m) — faixas de beiral
+                xm = round((ops.nodeCoord(b["n1"])[0] + ops.nodeCoord(b["n2"])[0]) / 2, 2)
+                gl = POR_VAO.setdefault("terça-escora por linha", {}).setdefault(f"{iv+1}-{iv+2}", {}).setdefault(f"{xm:.2f}", [0.0, 0.0])
+                gl[0] = min(gl[0], round(f, 2)); gl[1] = max(gl[1], round(f, 2))
     return ok == 0, d, base, forcas
 
 
 res = dict(combinacoes={}, nos=None, barras=None, pilares=None)
 for nome, (tipo, fat) in COMB.items():
     okP, dP, baseP, fP = rodar(nome, fat, 0.8 if tipo == "ELU" else 1.0, True)
+    pvP = {g: dict(sorted(v.items())) for g, v in POR_VAO.items()}
     if tipo == "ELU":
         ok1, d1, _, _ = rodar(nome, fat, 0.8, False)
     dmax = max(math.hypot(v[0], v[1]) for v in dP.values()) * 1000
     pmax = max(baseP, key=lambda k: math.hypot(*baseP[k]["topo_mm"]))
     item = dict(tipo=tipo, convergiu=okP, desl_max_mm=round(dmax, 1), pilar_desl_max=pmax,
                 deslocamentos={str(n): [round(c * 1000, 2) for c in v] for n, v in dP.items()},
-                base=baseP, forcas_barras={k: [round(v[0], 1), round(v[1], 1)] for k, v in fP.items()})
+                base=baseP, forcas_barras={k: [round(v[0], 1), round(v[1], 1)] for k, v in fP.items()},
+                por_vao=pvP)
     if tipo == "ELU":
         dl = max(math.hypot(v[0], v[1]) for v in d1.values()) * 1000
         item["gama_z_aprox"] = round(dmax / dl, 3) if dl > 0.05 else None
