@@ -21,5 +21,8 @@ dev = ["pytest>=8", "ruff>=0.5", "jax-fdm>=0.14", "ifcopenshell>=0.8"]
 [tool.setuptools]
 packages = ["nd_estruturas"]
 
+[tool.setuptools.package-data]
+nd_estruturas = ["dados/*.csv"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

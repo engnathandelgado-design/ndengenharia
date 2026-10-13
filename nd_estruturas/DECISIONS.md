@@ -195,3 +195,7 @@ O dente de 42,5 cm da I70 foi reprovado no MEF não linear (Vu < 1,06 Vd). Prime
 ## DEC-015 — Ligações de aço em kN e cm, como o Manual Gerdau (2026-10-13)
 
 O módulo `ligacoes_aco.py` usa kN, cm e kN/cm² (exceção à DEC-002), porque todas as fórmulas, tabelas e exemplos do Manual Gerdau "Ligações para Estruturas de Aço" (NBR 8800:2024) estão nessas unidades e os testes reproduzem as tabelas sem conversão. A conversão para kN/m fica na borda (quem chama). Só ligações parafusadas (regra da ND: sem solda de campo). LCHE, LCHS, ligações rígidas, emendas de pilar e bases ficam para depois da leitura das págs. 79–340 do manual (arquivo de 11,3 MB acima do limite de download).
+
+## DEC-016 — Perfis laminados: compressão por área efetiva e σr = 0,3·fy (2026-10-13)
+
+`metalica_laminada.py` calcula NcRd com λ0 = √(Ag·fy/Ne) e NcRd = χ·Aef·fy/γa1, com larguras efetivas (c1/c2 da forma AISC 360-16 E7, σ = χ·fy), porque é o que reproduz a TCPA Gerdau (NBR 8800:2024) com desvio ≤ 0,05 % nas almas esbeltas; o método Q da 2008 fica como `metodo="2008"`. Diferente da TCPA, as mesas esbeltas também são reduzidas (HP 310×79: até 0,9 % a menos, a favor da segurança). σr padrão = 0,3·fy (Nota D.2.5-e da 2024, bate com a tabela de bitolas); as TVPA da Gerdau foram geradas com σr = 70 MPa, por isso `tvpa(..., sigma_r=70)` reproduz a tabela. Unidades: entrada/saída em kN, m, kN·m (DEC-002); propriedades de seção nas unidades do catálogo. Numeração exata de alguns itens da 2024 (Cb, interação, anexo de flambagem local) ainda a conferir no texto da norma.

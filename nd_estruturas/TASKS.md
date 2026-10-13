@@ -44,6 +44,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] 2026-10-13 — `metalica_laminada`: perfis W/HP Gerdau pela NBR 8800:2024 (MRd, VRd, NcRd, NtRd, interação, flecha, TVPA), 57 testes contra a Tabela de Vãos e Cargas e o manual de galpões. Falta: conferir numeração de itens da 2024 no texto da norma; `package-data` do CSV no pyproject para instalação não editável.
+
 - Letsara 12/10/2026: consolos sem chanfro alinhados ao fundo das vigas, I110/laje reverificadas no R01, pórtico 3D ELU/ELS com diafragma e terças de oitão, 32 pranchas sem sobreposição, quantitativos xlsx e DXF 3D.
 
 - Letsara: cobertura no padrão das referências (X Ø16 de nó a nó com esticador, correntes com tirantes rígidos e diagonais de ancoragem, MF na alma), COB01/COB02 rev 02; LOC01, MON01 e CT01 refeitas com a geometria do R01 e a proposta de recuo da cabeça dos pilares; TS-01 com 19,15 m.

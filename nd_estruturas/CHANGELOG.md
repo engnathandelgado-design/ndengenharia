@@ -4,6 +4,7 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Adiciona `metalica_laminada.py` (perfis W/HP Gerdau, NBR 8800:2024): catálogo `dados/perfis_w_gerdau.csv` (110 perfis), MRd (FLT com Cb, FLM, FLA), MRd em y, VRd com/sem enrijecedor, NcRd (χ, área efetiva da 2024 e método Q de 2008), NtRd, interação N+M, flecha biapoiada e `tvpa` (Tabela de Vãos e Cargas); validado contra bitolas, TVPA, TCPA e manual de galpões (57 testes).
 - Adiciona `ligacoes_aco.py`: parafusos A325 (tração, corte 0,45 Ab fub na rosca, contato/rasgamento, interação, deslizamento crítico), elementos de ligação (tração, cisalhamento, bloco de cisalhamento), disposições construtivas, dupla cantoneira parafusada LCPP e emenda por talas; validado nas tabelas 1–4 e na LCPP do Manual Gerdau (22 testes).
 
 ### Adicionado
