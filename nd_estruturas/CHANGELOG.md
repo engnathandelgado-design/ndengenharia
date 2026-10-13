@@ -4,6 +4,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Adiciona `ligacoes_aco.py`: parafusos A325 (tração, corte 0,45 Ab fub na rosca, contato/rasgamento, interação, deslizamento crítico), elementos de ligação (tração, cisalhamento, bloco de cisalhamento), disposições construtivas, dupla cantoneira parafusada LCPP e emenda por talas; validado nas tabelas 1–4 e na LCPP do Manual Gerdau (22 testes).
+
 ### Adicionado
 
 - Letsara (13/10/2026): prancha própria para cada marca da família 40×60 (PL-02 a PL-12, PF-01 a PF-06) com cabeça recuada, consolos e insertos da marca (`pilares_familia.py`, `familia_pl.py`); `pilar_generico` com cabeça recuada (vistas, corte C-C, N1A/N13/N14, isométrico); quantitativos por marca; PDF em 3 volumes.

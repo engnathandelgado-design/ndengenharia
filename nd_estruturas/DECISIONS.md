@@ -191,3 +191,7 @@ Cada sessão com o Claude começa de uma base conhecida, sem reexplicar o projet
 ## DEC-014 — Vigas do mezanino VM sem dente Gerber (2026-10-12)
 
 O dente de 42,5 cm da I70 foi reprovado no MEF não linear (Vu < 1,06 Vd). Primeira versão adotou I70 sem dente (apoio direto); o cliente exige dentes Gerber nas vigas do mezanino, então as VM passam a I90 com dente 45×30 (MEF: Vu 436 ≥ 1,06 Vd, FS 1,14), 9 cord. Ø12,7, assentos CP-MEZ +2,45 e +5,85. Consequência: pé-direito livre sob a viga = nível − 1,15 m (2,00 m no +3,15) — avisado ao cliente.
+
+## DEC-015 — Ligações de aço em kN e cm, como o Manual Gerdau (2026-10-13)
+
+O módulo `ligacoes_aco.py` usa kN, cm e kN/cm² (exceção à DEC-002), porque todas as fórmulas, tabelas e exemplos do Manual Gerdau "Ligações para Estruturas de Aço" (NBR 8800:2024) estão nessas unidades e os testes reproduzem as tabelas sem conversão. A conversão para kN/m fica na borda (quem chama). Só ligações parafusadas (regra da ND: sem solda de campo). LCHE, LCHS, ligações rígidas, emendas de pilar e bases ficam para depois da leitura das págs. 79–340 do manual (arquivo de 11,3 MB acima do limite de download).

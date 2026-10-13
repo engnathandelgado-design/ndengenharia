@@ -28,6 +28,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Depois
 
+- Ligações Gerdau caps. 5–13 (LCHS, LCHE completa, LMPA, LT, emendas de pilar, bases PBR/PBE): ler o PDF completo (dividir em partes < 10 MB) e implementar com os exemplos do manual.
+
 - [ ] Passar o `formfinding` pelo Protocol do motor de análise (hoje chama o OpenSeesPy direto) e tirar Ecs/fctk do registro de normas.
 - [ ] Vento NBR 6123:2023 no pórtico do barracão Vitalle (opção 2): confirmar Cpi com portão aberto e V0 do local.
 - [ ] Vento NBR 6123:2023 e desaprumo automáticos.
