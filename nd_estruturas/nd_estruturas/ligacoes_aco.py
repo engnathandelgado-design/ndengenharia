@@ -618,7 +618,7 @@ class LMPA:
         Md = min((Ts - Nd / 2) * braco, (Ci + Nd / 2) * braco) / 100
         if self.caso == 1 and self.diam == "3/4":
             # caso 1 com Ø 3/4": a tabela Gerdau (pág. 125) dá ~4,6% menos que o modelo e a hipótese do manual não foi
-            # identificada; reduz 5% para não ficar contra a segurança (DEC-017)
+            # identificada; reduz 5% para não ficar contra a segurança (DEC-018)
             Md *= 0.95
             r["aviso"] = "LMPA caso 1 Ø3/4\": Md reduzido 5% (tabela Gerdau pág. 125 menor que o modelo; conferir)"
         r.update({"TS": TS, "CI": CI})

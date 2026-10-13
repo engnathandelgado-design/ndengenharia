@@ -213,7 +213,7 @@ def test_lmpa_tabela_caso1_12_parafusos_1pol_pag126(perfil, linhas):
 
 
 def test_lmpa_tabela_caso1_12_parafusos_3_4_pag125():
-    """pág. 125 (12 Ø 3/4", tc 25): manual 544 kN·m; modelo puro dá 569 (+4,6%); com a redução de 5% (DEC-017) fica
+    """pág. 125 (12 Ø 3/4", tc 25): manual 544 kN·m; modelo puro dá 569 (+4,6%); com a redução de 5% (DEC-018) fica
     a favor da segurança e dentro de 2% da tabela."""
     lig = LMPA("W 610 x 101,0", "3/4", 2.5, 1, e1=3.5, e2=6.0, e3=7.5, e4=3.5, e5=3.5)
     Md = lig.Md_Rd(0, 277)

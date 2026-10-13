@@ -28,7 +28,9 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Depois
 
-- Ligações Gerdau caps. 5–13 (LCHS, LCHE completa, LMPA, LT, emendas de pilar, bases PBR/PBE): ler o PDF completo (dividir em partes < 10 MB) e implementar com os exemplos do manual.
+- Bases Gerdau pendências (DEC-017): identificar o modo de falha das PBR com placa pouco maior que o perfil (85 de 273 linhas; hoje coberto pelo limite tabelado); PBE com chumbadores tracionados a até 2,7 %; extrair as geometrias de todas as tabelas PBE (hoje 4 de 107); barra de cisalhamento (o manual não traz); conferir no texto da NBR 8800:2024 os itens 6.6.5, 6.7.1.5 e 6.7.2 (base "tipo 2").
+- Ligação de viga metálica em consolo de pilar de concreto pré-moldado (manual 12.2.2/12.2.3: σc = fck/1,96·√(A2/A1), placa com m = t²/5·fy/γa1, chumbador com Ftd ≥ 20 kN, torção na montagem): implementar para os insertos/consolos da ND.
+- Ligações Gerdau pendências: LMPA caso 1 com 3/4" (pág. 125, +4,6%, hipótese do manual não encontrada); LCHS págs. 93 e 99 (tabela acima do contato na chapa); Nd das LCPP (Drucker, raio R da cantoneira); conferir na NBR 8800:2024 as fórmulas do pilar suporte (hoje 2008/AISC J10).
 
 - [ ] Passar o `formfinding` pelo Protocol do motor de análise (hoje chama o OpenSeesPy direto) e tirar Ecs/fctk do registro de normas.
 - [ ] Vento NBR 6123:2023 no pórtico do barracão Vitalle (opção 2): confirmar Cpi com portão aberto e V0 do local.
@@ -43,6 +45,10 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] 2026-10-13 — `bases_aco`: emendas EP1/EP2 (seleção, com aviso de solda) e emenda parafusada por talas, bases rotuladas PBR e engastadas PBE pelo Manual Gerdau (caps. 9–11), 114 testes contra exemplos e tabelas; dados PBR em `dados/pbr_gerdau.csv` (273 linhas).
+
+- [x] 2026-10-13 — `ligacoes_aco`: LCHE, LCHS, LMPA, LT/LMTS e recortes da LCPP pelo Manual Gerdau (caps. 3–8), 58 testes novos contra exemplos e tabelas.
 
 - [x] 2026-10-13 — `metalica_laminada`: perfis W/HP Gerdau pela NBR 8800:2024 (MRd, VRd, NcRd, NtRd, interação, flecha, TVPA), 57 testes contra a Tabela de Vãos e Cargas e o manual de galpões. Falta: conferir numeração de itens da 2024 no texto da norma; `package-data` do CSV no pyproject para instalação não editável.
 

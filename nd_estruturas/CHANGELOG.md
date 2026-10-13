@@ -4,8 +4,11 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Adiciona `bases_aco.py` (Manual Gerdau caps. 9–11, kN/cm): seleção EP1/EP2 (detalhe soldado do manual, com aviso da regra ND) e `EmendaPilarParafusada` por talas; base rotulada PBR (concreto 10.4, placa AISC DG1 m/n/λn', solda de filete, limite das tabelas em `dados/pbr_gerdau.csv`); base engastada PBE (bloco de tensões DG1, placa comprimida/tracionada, chumbadores, pilar 5.5.1.2, `Md_max`); 114 testes, desvio ≤ 2 % (PBE com chumbadores tracionados até 2,7 %, DEC-017).
+
 - Adiciona `metalica_laminada.py` (perfis W/HP Gerdau, NBR 8800:2024): catálogo `dados/perfis_w_gerdau.csv` (110 perfis), MRd (FLT com Cb, FLM, FLA), MRd em y, VRd com/sem enrijecedor, NcRd (χ, área efetiva da 2024 e método Q de 2008), NtRd, interação N+M, flecha biapoiada e `tvpa` (Tabela de Vãos e Cargas); validado contra bitolas, TVPA, TCPA e manual de galpões (57 testes).
 - Adiciona `ligacoes_aco.py`: parafusos A325 (tração, corte 0,45 Ab fub na rosca, contato/rasgamento, interação, deslizamento crítico), elementos de ligação (tração, cisalhamento, bloco de cisalhamento), disposições construtivas, dupla cantoneira parafusada LCPP e emenda por talas; validado nas tabelas 1–4 e na LCPP do Manual Gerdau (22 testes).
+- Estende `ligacoes_aco.py` com o Manual Gerdau caps. 3–8: LCPP com 1 ou 2 recortes (cisalhamento, bloco da alma, flexão e flambagem local da alma recortada), LCHE (todas as verificações, flexão da chapa, Nd por Drucker, solda, rotação), LCHS/shear tab (coeficiente c, casos 1 e 2), LMPA (alavanca, flexão da chapa, tração+corte, FLM, casos 1 e 2, disposições), LT/LMTS (alavanca nos T, parafusos, alma, bloco) e verificação do pilar suporte (mesa, alma, painel, enrijecedor); 58 testes novos contra exemplos e tabelas (desvio ≤ 2%, 1 xfail documentado na LMPA caso 1 com 3/4").
 
 ### Adicionado
 
