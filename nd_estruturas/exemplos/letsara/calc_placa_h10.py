@@ -1,4 +1,5 @@
 """Letsara — estudo da placa de fechamento protendida com 10 cm (125 × 10), comparada com a atual (125 × 15).
+Cordoalhas alinhadas nas 2 faces (mesmas posições da PP00: 15,6 / 46,9 / 78,1 / 109,4 cm), cobrimento 2,0 cm (Nathan, 13/10/2026).
 Mesmo esquema da calc_placas.py: placa horizontal entre pilares, isostática para vento fora do plano, cordoalhas
 pré-tracionadas simétricas (metade em cada face, vento nos 2 sentidos). Gera placa_h10.json.
 Normas: NBR 6118:2023 (13.4 protensão limitada p/ pré-tração em CAA II; 17.3 ELS; 17.2 ELU), NBR 9062:2017
@@ -21,7 +22,7 @@ fct_f = 1.5 * fctk_inf                     # NBR 6118:2023 17.3.1 — seção re
 fctk_j = 0.7 * 0.3 * fckj ** (2 / 3)
 Ec = 0.85 * 5600 * math.sqrt(fck)
 
-def placa(h, diam, n_face, cob=0.030, zona=1.6):
+def placa(h, diam, n_face, cob=0.020, zona=1.6):
     A = b * h; W = b * h ** 2 / 6; I = b * h ** 3 / 12; pp = 25 * A
     Ap1 = CORD[diam]; phi = float(diam.replace(",", ".")) / 1000
     dc = cob + phi / 2                                   # eixo da cordoalha à face
@@ -60,7 +61,7 @@ def placa(h, diam, n_face, cob=0.030, zona=1.6):
                         flecha=flecha <= L_vao * 1000 / 250, transit=all(v <= fctk_j for v in t.values()),
                         comp_lib=comp_lib >= -0.7 * fckj))
 
-R = {"atual_h15_8x9,5_borda": placa(0.15, "9,5", 4)}
+R = {"atual_h15_8x9,5_borda": placa(0.15, "9,5", 4, cob=0.035)}
 for z, c in ZONAS.items():
     for diam in ("9,5", "12,7"):
         for nf in range(2, 8):
