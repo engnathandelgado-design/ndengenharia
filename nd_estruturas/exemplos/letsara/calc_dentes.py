@@ -17,13 +17,11 @@ SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: n
 
 # geometria (mm) — mesma fôrma I: largura 400, alma 150, chanfros 80
 VIGAS = {
-    "TS-01": dict(Vd=138.0, Hd=40.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=150,
-                  cord=[dict(y=75, n=6)], estribo=(6.3, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0], d_tir=16.0, d_sus=12.5),
-    # I110: dente de 660 (60% da altura) e 10 cordoalhas isoladas por 2 m nas pontas — com as 24 aderentes
-    # junto ao dente a protensão fissura o topo da extremidade e o MEF não sustenta a carga (ver memória MC02)
-    "I110": dict(Vd=448.0, Hd=72.0, H=1100, ti=250, ts=220, hd=660, ln=350, a_apoio=175, x_mac=1400, l_apoio=250,
-                 cord=[dict(y=75, n=7), dict(y=117, n=7), dict(y=159, n=7, isol=2000), dict(y=201, n=3, isol=2000)], estribo=(8.0, 150),
-                 sup=4 * AREA[12.5], inf=2 * AREA[12.5], d_tir=20.0, d_sus=16.0),
+    # rev03: TS-01 sem dente (apoio direto no assento do pilar e no topo da viga central).
+    # I130 (rev03, antes I110): dente de 780 (60% da altura), 14 das 26 cordoalhas (linhas 140 e 180) isoladas por 2 m nas pontas
+    "I130": dict(Vd=472.0, Hd=76.0, H=1300, ti=250, ts=220, hd=780, ln=350, a_apoio=175, x_mac=1400, l_apoio=250,
+                 cord=[dict(y=60, n=6), dict(y=100, n=6), dict(y=140, n=7, isol=2000), dict(y=180, n=7, isol=2000)], estribo=(8.0, 150),
+                 sup=4 * AREA[12.5], inf=2 * AREA[12.5], d_tir=20.0, d_sus=16.0, Ls=3600.0, xP=1600.0, rampa_fim=True, robusto=True),
     "MEZ-I90": dict(Vd=383.0, Hd=65.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=200,
                     cord=[dict(y=75, n=7), dict(y=117, n=1)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],
                     d_tir=20.0, d_sus=16.0),
@@ -32,8 +30,8 @@ VIGAS = {
                     cord=[dict(y=75, n=7), dict(y=117, n=3)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],
                     d_tir=20.0, d_sus=16.0),
 }
-NOTAS_H = {"MEZ-I70": "Hd = 0,16 Vd + diafragma", "TS-01": "Hd = 1,4 × 28 kN (tirante do pórtico no modelo global) ≥ 0,16 Vd",
-           "I110": "Hd = 0,16 Vd (neoprene) ≥ 1,4 × 36,6 kN do modelo global",
+NOTAS_H = {"MEZ-I70": "Hd = 0,16 Vd + diafragma",
+           "I130": "Hd = 0,16 Vd (neoprene) ≥ 1,4 × 23 kN do modelo global (rev03)",
            "MEZ-I90": "Hd = 0,16 Vd + diafragma"}
 
 
@@ -56,14 +54,15 @@ def armaduras(v, r):
                         area_total=2 * AREA[10.0]))
     de, se = v["estribo"]
     x = ln + 40 + n * s_sus + se
-    while x < 3000:
+    Ls = v.get("Ls", 3000.0)
+    while x < Ls:
         arm.append(dict(tipo="v", nome="estribo", pos=x, ini=40, fim=H - 40, area_total=2 * AREA[de]))
         x += se
     # reforço só do modelo no trecho além da carga (apoio da extremidade do segmento), para a ruptura ficar no dente
-    for xx in range(2250, 3000, 75):
+    for xx in range(int(Ls - 750), int(Ls), 75):
         arm.append(dict(tipo="v", nome="modelo", pos=xx, ini=40, fim=H - 40, area_total=2 * AREA[12.5]))
-    arm.append(dict(tipo="h", nome="longitudinal_sup", pos=H - 45, ini=25, fim=3000, area_total=v["sup"]))
-    arm.append(dict(tipo="h", nome="longitudinal_inf", pos=40, ini=ln + 25, fim=3000, area_total=v["inf"]))
+    arm.append(dict(tipo="h", nome="longitudinal_sup", pos=H - 45, ini=25, fim=Ls, area_total=v["sup"]))
+    arm.append(dict(tipo="h", nome="longitudinal_inf", pos=40, ini=ln + 25, fim=Ls, area_total=v["inf"]))
     return arm
 
 
@@ -76,7 +75,7 @@ for nome, v in VIGAS.items():
     if not SO_DADOS and (not SO or nome in SO):
         g = dict(H=v["H"], b=400, bw=150, ti=v["ti"], mi=80, ts=v["ts"], ms=80, hd=v["hd"], ln=v["ln"], a_apoio=v["a_apoio"],
                  x_mac=v["x_mac"], l_apoio=v["l_apoio"])
-        m = analisar(g, armaduras(v, r), v["cord"], v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=3000.0, xP=1300.0, passos=500,
+        m = analisar(g, armaduras(v, r), v["cord"], v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=v.get("Ls", 3000.0), xP=v.get("xP", 1300.0), passos=500, rampa_fim=v.get("rampa_fim", False), robusto=v.get("robusto", False),
                      saida_png=str(AQUI / f"mef_dente_{nome}.png"), titulo=f"Dente Gerber {nome}")
         m["ok"] = m["Vu_kN"] >= 1.06 * v["Vd"]          # validação: o modelo superestima a flexão em ~6% (tests)
         res[nome]["mef"] = m
@@ -84,9 +83,7 @@ for nome, v in VIGAS.items():
 
 # consolos que recebem os dentes (topo inclinado 3% quando recebe TS-01)
 res["consolos"] = [
-    consolo("CP-TS pilar lateral (recebe TS-01)", 138, 40, 400, 450, a=175 + 25),
-    consolo("CV-TS na I110 (recebe TS-01, cada lado)", 138, 40, 400, 450, a=75 + 150),
-    consolo("CP-I110 pilar central (recebe I110)", 448, 72, 500, 600, a=200 + 25, diam=20.0),
+    consolo("CP-I130 pilar central (recebe I130)", 472, 76, 500, 490, a=200 + 25, diam=20.0),
     consolo("CP-MEZ pilar (recebe viga do mezanino)", 383, 65, 400, 550, a=175 + 25, diam=20.0),
 ]
 prev = {}

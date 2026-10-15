@@ -8,10 +8,12 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev02.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev03.xlsx")
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
-Z0 = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))["Z0_TS"]
+LGQ = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
+Z0 = LGQ["Z0_TS"]
+REC_Q = tuple(LGQ["REC"])
 def num(s):
     s = str(s).strip()
     if "," in s:
@@ -59,7 +61,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in tab("PIL-A01", "MARCAS")["linhas"
     elif canto:
         zr = rec_vb(0.0 if pos.startswith("P1") else 39.50); cab = 0.30 * 0.30
     else:
-        zr = 8.40 if pos.startswith("P1") else 9.55; cab = 0.40 * 0.30
+        zr = REC_Q[0] if pos.startswith("P1") else REC_Q[1]; cab = 0.40 * 0.30
     vc = 0.0
     for parte in cons.split(";"):
         m = re.search(r"(?:(\d+) )?(CP-[A-Z0-9]+)[^()]*(?:\(([^)]*)\))?", parte.strip())
@@ -74,10 +76,10 @@ for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", ""), num(q["COMPRIMENTO"].split()[0]) / 100,
                   int(q["QUANTIDADE"].split()[0]), num(q["VOLUME"].split()[0]), num(q["PESO"].split()[0]), q["CONCRETO"], f"ND-LET-{f_}"))
 q = quadro("TS01-1")
-pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, dentes 45×30, linhas 2–8 (2 por linha)", "I90", 19.159, int(q["QUANTIDADE"]),
+pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 2–8 (2 por linha)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
               num(q["VOLUME"].split()[0]), round(num(q["VOLUME"].split()[0]) * 2.5, 2), "C50", "ND-LET-TS01"))
-for mk, pos, qt, L, p in tab("I110", "MARCAS")["linhas"]:
-    pecas.append(("Vigas de cobertura", mk, pos, "I110", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I110"))
+for mk, pos, qt, L, p in tab("I130", "MARCAS")["linhas"]:
+    pecas.append(("Vigas de cobertura", mk, pos, "I130", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I130"))
 for mk, pos, qt, L, p in tab("VB01", "MARCAS")["linhas"]:
     pecas.append(("Vigas de borda", mk, pos, "15×90", num(L) / 100, int(qt), round(0.15 * 0.90 * num(L) / 100, 3), num(p), "C40", "ND-LET-VB01"))
 for mk, pos, qt, L, p in tab("VT01", "MARCAS")["linhas"]:
@@ -89,7 +91,7 @@ for mk, desc, qt, p, obs in tab("LA01", "MARCAS")["linhas"]:
 for tp, L, qt, p, vis in tab("PP00", "TIPOS")["linhas"]:
     if not tp:
         continue
-    pecas.append(("Placas de fechamento", tp, f"placa protendida, vistas {vis}", "125×15", num(L) / 100, int(qt), round(1.25 * 0.15 * num(L) / 100, 3), num(p), "C40", "ND-LET-PP00"))
+    pecas.append(("Placas de fechamento", tp, f"placa protendida, vistas {vis}", "125×10", num(L) / 100, int(qt), round(1.25 * 0.10 * num(L) / 100, 3), num(p), "C40", "ND-LET-PP00"))
 
 # ------------------------------------------------------------------ aço CA-50 (relações das pranchas)
 aco = []     # (peça, prancha, qtd, {diam: kg/peça}, obs)
@@ -118,10 +120,10 @@ cord = []    # (peça, Ø, n por peça, L m, qtd, obs)
 def soma_cord(f_):
     t = tab(f_, "CORDOALHAS")
     n = sum(int(l[2]) for l in t["linhas"]); return n, num(t["linhas"][0][1])
-for nome, f_, L, qt in (("TS-01", "TS01-2", 19.16, 14), ("I110 (média)", "I110", 22.95, 3), ("VM-01/02", "VM01", 9.33, 16), ("PL protendido (opção B)", "PIL-P01", 11.0, 0)):
+for nome, f_, L, qt in (("TS-01", "TS01-2", LGQ["L_TS"], 14), ("I130 (média)", "I130", 22.95, 3), ("VM-01/02", "VM01", 9.33, 16), ("PL protendido (opção B)", "PIL-P01", 11.0, 0)):
     n, d = soma_cord(f_)
     cord.append((nome, d, n, L, qt, "opção B não adotada (qtd 0)" if qt == 0 else ""))
-n, d = 8, 9.5
+n, d = 8, 12.7
 L_pp = sum(p[4] * p[5] for p in pecas if p[0] == "Placas de fechamento") / n_pp
 cord.append(("Placas PP (média)", d, n, round(L_pp, 3), n_pp, ""))
 cord.append(("Lajes alveolares LA", 12.7, 8, 9.45, sum(p[5] for p in pecas if p[1].startswith("LA")), "fornecimento do fabricante da laje"))
@@ -131,7 +133,7 @@ KGC = {9.5: 0.432, 12.7: 0.792}
 terc = [l for l in tab("COB01", "TERÇAS")["linhas"] if l[0]]
 lig_cob = tab("COB01", "LISTA DE MATERIAIS")["linhas"]
 trav = tab("COB02", "LISTA DE MATERIAIS")["linhas"]
-chap_ts = {l[0]: l for l in tab("TS01-3", "LISTA DE CHAPARIA")["linhas"]}
+chap_ts = {l[0]: l for l in tab("TS01-3", "LISTA DE PEÇAS")["linhas"]}
 KG_UN = {k: num(v[4]) for k, v in chap_ts.items() if v[4] not in ("-", "")}
 
 ins = []     # (prancha, peça, marca, descrição, qt por peça, peças)
@@ -146,8 +148,8 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
-add_ins("I110", "I110", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8); add_ins("VT01", "VT", 14)
-for k in ("CH-T1", "CH-T2", "CH-A1", "CH-MF", "CH-MF2", "TB-1", "AL-1", "NEO-1", "PN-1"):
+add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8); add_ins("VT01", "VT", 14)
+for k in ("ES-1", "ES-2", "ES-3", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
 for l in tab("PP00", "INSERTOS E PEÇAS")["linhas"]:
@@ -245,12 +247,12 @@ ws = wb.create_sheet("Cobertura metálica")
 r = folha(ws, "COBERTURA METÁLICA — TERÇAS, LIGAÇÕES E TRAVAMENTOS (parafusados)", RODAPE, ["MARCA", "DESCRIÇÃO", "QTD", "kg/un", "kg TOTAL", "ORIGEM"], [12, 70, 8, 9, 12, 18])
 r0 = r
 for m_, L, vaos, fur, qt, kg in terc:
-    linha(ws, r, [m_, f"terça Ue 300×85×25×3,00 ZAR 345, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
+    linha(ws, r, [m_, f"terça Ue 300×85×25×2,65 ZAR 345, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
           {4: "0.0", 5: "#,##0"}, entrada=(3, 4)); r += 1
 for m_, desc, qt, onde in lig_cob:
-    if m_ in ("CH-T1", "CH-MF"):
-        continue                                              # embutidos nas vigas: aba Insertos
-    kgu = {"ST-1": KG_UN.get("ST-1", 5.0), "OR-1": KG_UN.get("OR-1", 1.9), "MF-1": KG_UN.get("MF-1", 4.8), "M12 8.8": 0.12}.get(m_, 0)
+    if m_ in ("ES-1", "ES-3"):
+        continue                                              # esperas embutidas nas vigas: aba Insertos
+    kgu = {"ST-1P": KG_UN.get("ST-1P", 7.4), "ST-1V": 7.4, "CMF-1": KG_UN.get("CMF-1", 0.6), "MF-1": KG_UN.get("MF-1", 4.6), "M12 8.8": 0.12, "M16": 0.08}.get(m_, 0)
     linha(ws, r, [m_, f"{desc} — {onde}", int(qt), kgu, f"=C{r}*D{r}", "ND-LET-COB01"], {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
 for l in trav:
     q = int(l[1]); kg = l[4]

@@ -4,6 +4,9 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Letsara rev03: TS-01 sem dentes (apoio no recuo dos pilares e no topo da I130, 8 cordoalhas com 2 isoladas), cobertura rebaixada para o pacote TP40 + lã 40 + zipada + painéis solares (folga 151 mm à platibanda), terças Ue 300×2,65 c/1,20 m, I110 → I130, placas de fechamento 10 cm com 8 Ø12,7, VT do eixo A a +6,25 e todas as ligações metálicas parafusadas (esperas de barra roscada, trilhos e buchas, sem solda); pranchas TS01-1/2/3, I130, COB01/02, CT01, LOC01, MON01, PP00/PP-x, VT01, VB01, pilares e armaduras regeneradas.
+- `mef_dente.analisar`: opções `rampa_fim` (transferência gradual da protensão no corte artificial do modelo) e `robusto` (Newton modificado / line search quando a carga para de convergir); padrão inalterado.
+
 - Adiciona `bases_aco.py` (Manual Gerdau caps. 9–11, kN/cm): seleção EP1/EP2 (detalhe soldado do manual, com aviso da regra ND) e `EmendaPilarParafusada` por talas; base rotulada PBR (concreto 10.4, placa AISC DG1 m/n/λn', solda de filete, limite das tabelas em `dados/pbr_gerdau.csv`); base engastada PBE (bloco de tensões DG1, placa comprimida/tracionada, chumbadores, pilar 5.5.1.2, `Md_max`); 114 testes, desvio ≤ 2 % (PBE com chumbadores tracionados até 2,7 %, DEC-017).
 
 - Adiciona `metalica_laminada.py` (perfis W/HP Gerdau, NBR 8800:2024): catálogo `dados/perfis_w_gerdau.csv` (110 perfis), MRd (FLT com Cb, FLM, FLA), MRd em y, VRd com/sem enrijecedor, NcRd (χ, área efetiva da 2024 e método Q de 2008), NtRd, interação N+M, flecha biapoiada e `tvpa` (Tabela de Vãos e Cargas); validado contra bitolas, TVPA, TCPA e manual de galpões (57 testes).

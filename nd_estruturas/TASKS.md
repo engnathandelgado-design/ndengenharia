@@ -13,6 +13,10 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Letsara: confirmar com o fornecedor o peso dos painéis solares (0,15 kN/m²) e a capacidade do trilho TR-1 / bucha BR-1 (≥ 12,4 kN por ponto); confirmar com a fábrica a cabeceira de 1105 kN da placa e a furação nova da grade da TS-01.
+- [ ] Letsara: ELS-F do pórtico em x (9,9 mm > H/1700) — definir o limite com o cliente; pé-direito do mezanino superior e vista E aberta só até +6,25.
+- [ ] Letsara: planilha de custo dos pilares com as quantidades da rev03 e o preço do C50.
+
 - Letsara: definir com o cliente o limite de deslocamento do ELS (9,3 mm passa H/500, não passa H/1700); função dos pilares P6/P7 do anexo; escolha da opção de pilar (A armado × B protendido).
 - Letsara: atualizar `checar_conexoes.py` seções 4/5 para a geometria do R01 (ainda com 20,05/39,625 e PC 50×50).
 
@@ -45,6 +49,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] 2026-10-14 — Letsara rev03 (DEC-019): TS-01 sem dente, cobertura rebaixada com painéis solares, terças c/1,20 m, I130, placas 10 cm, ligações sem solda; cálculos (ligacoes, modelo global, cobertura, I130, dentes, consolos, placas) e pranchas regenerados.
 
 - [x] 2026-10-13 — `bases_aco`: emendas EP1/EP2 (seleção, com aviso de solda) e emenda parafusada por talas, bases rotuladas PBR e engastadas PBE pelo Manual Gerdau (caps. 9–11), 114 testes contra exemplos e tabelas; dados PBR em `dados/pbr_gerdau.csv` (273 linhas).
 

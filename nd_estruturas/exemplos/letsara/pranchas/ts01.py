@@ -173,7 +173,7 @@ notas = [f"Concreto C{P['fck']}; liberar as cordoalhas, desformar e içar só co
          f"Cordoalhas CP-190 RB Ø12,7 aderentes, nos furos do cabeçote REV05 (linha inferior a {P['y_cord']} mm do fundo da fôrma, passo 50 mm); σpi = {P['sig_pi']} MPa; liberação gradual e simétrica.",
          f"Pista de {P['L_pista']} m: até 3 peças por linha; conferir alongamento medido × teórico (±7%).",
          f"Içamento, estocagem e transporte somente pelas alças AL-1, a {f(P['a_alca']/1000,1)} m das pontas, com balancim e cabos verticais; calços nos mesmos pontos.",
-         "Apoio: neoprene fretado 300×150×10 sobre o consolo do pilar e sobre a viga I110; pino Ø25 grauteado no TB-1 (transmite a força horizontal de tirante).",
+         "Apoio: neoprene fretado 300×150×10 sobre o consolo do pilar e sobre a viga I130; pino Ø25 grauteado no TB-1 (transmite a força horizontal de tirante).",
          "Terças Ue 300×85×25×3,00: suporte ST-1 soldado na CH-T1 (2 M12 por ponta de terça) e mão-francesa L 50×5 na OR-1 do fundo (ND-LET-COB01).",
          "CH-T1 alinhadas com o eixo das terças; tolerância ±5 mm.",
          "Cobrimento 30 mm (CAA II). Tolerâncias de fabricação NBR 9062. Medidas em mm. Não medir no desenho.",

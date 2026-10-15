@@ -1,5 +1,5 @@
 """Prancha genérica de viga pré-moldada protendida de seção I (fôrma, armação, insertos) — padrão ND.
-Usada por I110 (V405/406/407) e VM (mezanino). Cotas de concreto em cm, chaparia em mm. Rodar: python viga_i.py i110 | vm"""
+Usada por I130 (V405/406/407) e VM (mezanino). Cotas de concreto em cm, chaparia em mm. Rodar: python viga_i.py i110 | vm"""
 import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha, MASSA_ACO
@@ -76,6 +76,8 @@ def prancha_viga(P):
                             conteudo=P["titulo"] + " — FÔRMA, ARMAÇÃO E INSERTOS", desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
                             marca=P["marca"], qtd=P["qtd"], peso=f(peso, 1), volume=f(V, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
+    for rv in P.get("revs", []):
+        pr.revisao(*rv)
     Q = pr.quadro
     XC = Q[2] - 190
     # cabeçalho
@@ -111,17 +113,23 @@ def prancha_viga(P):
     ve.linha((LN if HD else 0, P["ti"]), (L - (LN if HD else 0), P["ti"]), "OCULTA"); ve.linha((LN if HD else 0, H - P["ts"]), (L - (LN if HD else 0), H - P["ts"]), "OCULTA")
     for x in (P["pino_x"], L - P["pino_x"]):                                           # tubo TB na ponta (oculto)
         ve.ret(x - P["tb"][0] / 2, H - HD if HD else 0, P["tb"][0], P["tb"][1], "OCULTA")
-        ve.chapa(x - 150, (H - HD if HD else 0) - 12.5, 300, 12.5)                      # CH-A no fundo
+        if P.get("cha", True):
+            ve.chapa(x - 150, (H - HD if HD else 0) - 12.5, 300, 12.5)                  # CH-A no fundo
     for s in P.get("tercas", []):
         ve.chapa(s - 75, H, 150, 12.5)
+    for s0 in P.get("pinos_topo", []):                                                 # apoios das TS-01 no topo: NEO-3 + PN-5
+        for dn in (-115, 115):
+            ve.ret(s0 - 150, H, 300, 10, "VISTA")
+        for ds in (-100, 100):
+            ve.ret(s0 + ds - 10, H - 300, 20, 600, "METALICA")
     for s in P.get("alcas", []):
         ve.poli([(s - 60, H), (s - 60, H + 100), (s, H + 140), (s + 60, H + 100), (s + 60, H)], "METALICA")
-    for s, z_topo in P.get("consolos", []):                                             # consolos CV-TS (I110): vistos de lado
+    for s, z_topo in P.get("consolos", []):                                             # consolos CV-TS (I130): vistos de lado
         ve.ret(s - 500, z_topo - 440, 1000, 440, "OCULTA")
         ve.linha((s - 500, 0), (s - 500, H), "OCULTA"); ve.linha((s + 500, 0), (s + 500, H), "OCULTA")
     xs_cota = [0] + ([LN] if HD else []) + [P["x_mac"], L - P["x_mac"]] + ([L - LN] if HD else []) + [L]
     ve.cota_h(sorted(set(xs_cota)), 0 if not HD else 0, -10)
-    ords = sorted(set([0, P["pino_x"]] + list(P.get("tercas", [])) + [s for s, _ in P.get("consolos", [])] + list(P.get("alcas", [])) + [L - P["pino_x"], L]))
+    ords = sorted(set([0, P["pino_x"]] + list(P.get("tercas", [])) + [s for s, _ in P.get("consolos", [])] + list(P.get("pinos_topo", [])) + list(P.get("alcas", [])) + [L - P["pino_x"], L]))
     ve.cota_ord(ords, H + (140 if P.get("alcas") else 0), 14, x0=0)
     ve.cota_v([0, H - HD, H] if HD else [0, H], L, 10, total=False)
     ve.chamada((P["pino_x"], H - HD + P["tb"][1] / 2 if HD else P["tb"][1] / 2), (12, 16), f"{P['tb_nome']} (2x)")
@@ -129,6 +137,8 @@ def prancha_viga(P):
         ve.chamada((LN / 2, H - HD / 2), (-8, -16), f"dente {HD/10:g} × {LN/10:g} cm")
     if P.get("tercas"):
         ve.chamada((P["tercas"][2], H + 12), (8, 12), "CH-T1 150×150×12,5 (terças)")
+    if P.get("pinos_topo"):
+        ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 16), "apoio das TS-01 no topo: 2 NEO-3 100×300×10 + 4 pinos PN-5 Ø20 por linha")
     if P.get("consolos"):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
     ve.marcador_corte((L / 2, -22 * ESC), (L / 2, H + 24 * ESC), "A", lado=1)
@@ -152,6 +162,13 @@ def prancha_viga(P):
         vp.circulo((s, -B / 2 - 175), 10, "VISTA"); vp.circulo((s, B / 2 + 175), 10, "VISTA")
     for s in P.get("alcas", []):
         vp.linha((s, -60), (s, 60), "METALICA")
+    for s0 in P.get("pinos_topo", []):
+        for dn in (-115, 115):
+            vp.ret(s0 - 150, dn - 50, 300, 100, "OCULTA")
+            for ds in (-100, 100):
+                vp.circulo((s0 + ds, dn), 10, "METALICA")
+    if P.get("pinos_topo"):
+        vp.chamada((P["pinos_topo"][0] + 100, 115), (8, 14), "PN-5 Ø20 a ±10 do eixo da linha, ±11,5 do eixo da viga")
     vp.cota_v([-B / 2, B / 2], L, 10)
     if P.get("consolos"):
         vp.cota_v([-B / 2 - 350, -B / 2], 0, -10, total=False)
@@ -193,14 +210,21 @@ def prancha_viga(P):
     if P.get("pele"):
         va.chamada((-P["bw"] / 2 + cob, P["pele"][0]), (-14, -4), "N4 pele 2 Ø8 por face")
     va.cota_v([0] + [y for y, _, _ in P["cord"]], -B / 2, -12, total=False)
-    va.cota_h(sorted(set(x for _, xs, _ in P["cord"] for x in xs)), 0, -24, total=False)
+    _sets = []
+    for _, xs, _ in P["cord"]:
+        if tuple(xs) not in _sets:
+            _sets.append(tuple(xs))
+    for k_, xs_ in enumerate(_sets):
+        va.cota_h(list(xs_), 0, -24 - 8 * k_, total=False)
     vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 270), YR), "maciço da ponta (TB e CH-A)", macico=True)
     vb.chapa(-P["tb"][0] / 2, 0, P["tb"][0], H - HD if HD else H * 0.6)
-    vb.chapa(-150, -12.5, 300, 12.5)
-    for x in (-120, 120):
-        vb.poli([(x, 0), (x, 180), (x + (25 if x < 0 else -25), 200)], "METALICA")
+    if P.get("cha", True):
+        vb.chapa(-150, -12.5, 300, 12.5)
+        for x in (-120, 120):
+            vb.poli([(x, 0), (x, 180), (x + (25 if x < 0 else -25), 200)], "METALICA")
     vb.chamada((-P["tb"][0] / 2, (H - HD) * 0.9 if HD else H * 0.55), (-12, 14), P["tb_nome"])
-    vb.chamada((150, -6), (14, -10), "CH-A 300×150×12,5 + 2 grapas Ø12,5")
+    if P.get("cha", True):
+        vb.chamada((150, -6), (14, -10), "CH-A 300×150×12,5 + 2 grapas Ø12,5")
     vb.chamada((-B / 2 + cob, H - cob - 5), (-8, 14), "N2 c/" + f"{P['est'][2]//10}")
 
     # ------------------------------------------------------------ DETALHE 1 — ponta (1:10) com armação
@@ -211,8 +235,9 @@ def prancha_viga(P):
         d1.poli([(0, H - HD), (LN, H - HD), (LN, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True)
         d1.interrupcao((LD, 0), (LD, H))
         d1.chapa(P["pino_x"] - P["tb"][0] / 2, H - HD, P["tb"][0], P["tb"][1])
-        d1.chapa(P["pino_x"] - 150, H - HD - 12.5, 300, 12.5)
-        d1.chapa(P["pino_x"] - 125, H - HD - 22.5, 250, 10)                                   # neoprene
+        if P.get("cha", True):
+            d1.chapa(P["pino_x"] - 150, H - HD - 12.5, 300, 12.5)
+        d1.ret(P["pino_x"] - 125, H - HD - 30, 250, 30, "VISTA")                              # neoprene
         y_t = H - HD + 55
         d1.poli([(cob, y_t - 150), (cob, y_t), (P["anc"], y_t)], "ARMADURA")                   # N5 tirante
         d1.chamada((P["anc"] * 0.6, y_t), (10, 12), f"N5 tirante — {P['tir']} (ancoragem {P['anc']/10:.0f} cm) c/ dobra")
@@ -326,7 +351,6 @@ def prancha_viga(P):
           ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "PROTENSÃO", f"{n_cord} cord. Ø12,7 — {f(F_cord, 1)} kN/cord."],
           ["DENTE", f"{HD/10:g} × {LN/10:g} cm" if HD else "sem dente (apoio direto)", "COBRIMENTO", "3,0 cm (CAA II)"]]
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
-    y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
     for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()) + ("N11", "N12", "N13"):
@@ -339,45 +363,49 @@ def prancha_viga(P):
     return pr
 
 
-# ================================================================== I110 — V405 / V406 / V407
+# ================================================================== I130 — V405 / V406 / V407
 def dados_i110():
     L = round(I1J["V406"]["L_peca"] * 1000)
     y0 = Y_LIN[3] + 0.20 + 0.075                                    # ponta da V406 (face do P11 + 75)
-    zA = round((LGJ["Z0_TS"] + 0.03 * (XC - 0.425) + 0.45 - 0.01) * 1000)
-    # consolos CV-TS nas linhas 5 e 6 (dentro da V406); topo do consolo medido do fundo da viga (+7,78)
-    consolos = [(round((Y_LIN[k] - y0) * 1000), zA - 7780) for k in (4, 5)]
+    pinos = [round((Y_LIN[k] - y0) * 1000) for k in (4, 5)]          # TS-01 das linhas 5 e 6 apoiadas no topo (rev03)
     Lm = {k: I1J[k]["L_peca"] for k in ("V405", "V406", "V407")}
+    DTI = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["I130"]["calculo"]["adotado"]
+    anc = DTI["ancoragem_tirante_mm"]
+    zt, za = LGJ["Z_TOPO_I130"], LGJ["Z_ASS_I130"]
+    Fz = lambda z: f"{z:.3f}".replace(".", ",")
+    A = area_I(400, 1300, 220, 250, 80, 150)
+    c6, c7 = [-125, -75, -25, 25, 75, 125], [-150, -100, -50, 0, 50, 100, 150]
     return dict(
-        marca="V406", qtd=1, familia="VIGAS CENTRAIS I110 (EIXO C)", desenho="ND-LET-I110", h=1100, b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
-        x_mac=1400, dente=(660, 350), pino_x=175, tb=(60.3, 600), tb_nome="TB-2 tubo Ø60,3×3,6 L=600", pino_d=25,
-        n3=(4, 20.0, "CA-50 na mesa superior (compressão; x/d 0,32)"),
-        cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-150, -100, -50, 0, 50, 100, 150], 0),
-              (160, [-150, -100, -50, 0, 50, 100, 150], 2000), (210, [-50, 0, 50], 2000)],
-        n_isol=10, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[500, 650, 800],
+        revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA")],
+        marca="V406", qtd=1, familia="VIGAS CENTRAIS I130 (EIXO C)", desenho="ND-LET-I130", h=1300, b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
+        x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
+        n3=(4, 20.0, "CA-50 na mesa superior (compressão no ELU e tração no ato junto às pontas)"),
+        cord=[(60, c6, 0), (100, c6, 0), (140, c7, 2000), (180, c7, 2000)],
+        n_isol=14, isol_mm=2000, sig_pi=1400, L_pista=60, fck=50, fckj=40, pele=[500, 650, 800, 950],
         est=(8.0, 150, 100, 2000), Vd=round(I1J["V406"]["linhas"]["Vd_kN"]), alcas=[2500, L - 2500], tercas=[],
-        consolos=consolos, anc=1468, tir="4 Ø20", n_sus=3, sus="3 estribos Ø16 fechados", n_cost=3, cost="3 estribos Ø10", n_v=3,
-        titulo=f"VIGA CENTRAL I110 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","), subtitulo="eixo C, entre P11 (linha 4) e P13; dentes Gerber 66 × 35; consolos CV-TS para as TS-01 nas linhas 3, 5, 6, 7 e 8; V405 vai até o P14 (linha 9)",
+        consolos=[], pinos_topo=pinos, anc=anc, tir=DTI["tirante"].split(" (")[0], n_sus=DTI["n_sus"], sus=DTI["suspensao"].split(" (")[0],
+        n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
+        titulo=f"VIGA CENTRAL I130 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","),
+        subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I130 (assento +{Fz(za)}); TS-01 apoiadas no topo (+{Fz(zt)}, a 3 %) nas linhas 3, 5, 6, 7 e 8",
         kp_sub="V405/406/407 no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
-        marcas=[["V407", "C: PC-01 → PC-02; CV-TS L3", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V407'] / 10, 1)],
-                ["V406", "C: PC-02 → PC-03; CV-TS L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V406'] / 10, 1)],
-                ["V405", "C: PC-03 → PF-04; CV-TS L7, L8", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(area_I(400, 1100, 220, 250, 80, 150) * 25 * Lm['V405'] / 10, 1)]],
-        barras_ponta=[dict(pos="N5", diam=20.0, qtd=4, comp=165, forma=[(0, 15), (0, 0), (150, 0)], trechos=["15", "150"]),
-                      dict(pos="N6", diam=16.0, qtd=3, comp=round((2 * (90 + 1040) + 160) / 10), forma=[(0, 0), (9, 0), (9, 104), (0, 104), (0, 0), (2, 2)], trechos=["9", "104", "", ""]),
-                      dict(pos="N7", diam=10.0, qtd=3, comp=round((2 * (340 + 1250) + 140) / 10), forma=[(0, 0), (125, 0), (125, 34), (0, 34), (0, 0), (2, 2)], trechos=["125", "34", "", ""]),
-                      dict(pos="N8", diam=10.0, qtd=3, comp=round((2 * (340 + 600) + 140) / 10), forma=[(0, 0), (34, 0), (34, 60), (0, 60), (0, 0), (2, 2)], trechos=["34", "60", "", ""])],
-        insertos=[["TB-2", "Tubo Ø60,3×3,6 L=600 a prumo, soldado na CH-A2", 2, "pontas, a 175 da face"],
-                  ["CH-A2", "Chapa 350×300×12,5 + 4 grapas Ø12,5 (fundo do dente)", 2, "fundo dos dentes"],
+        marcas=[["V407", "C: PC-01 → PC-02; TS-01 na L3 (16 cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V407'] / 10, 1)],
+                ["V406", "C: PC-02 → PC-03; TS-01 nas L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V406'] / 10, 1)],
+                ["V405", "C: PC-03 → PF-04; TS-01 nas L7, L8", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V405'] / 10, 1)]],
+        barras_ponta=[dict(pos="N5", diam=20.0, qtd=DTI["n_tir"], comp=round(anc / 10) + 18, forma=[(0, 15), (0, 0), (round(anc / 10) + 3, 0)], trechos=["15", f"{round(anc / 10) + 3}"]),
+                      dict(pos="N6", diam=16.0, qtd=DTI["n_sus"], comp=round((2 * (90 + 1240) + 160) / 10), forma=[(0, 0), (9, 0), (9, 124), (0, 124), (0, 0), (2, 2)], trechos=["9", "124", "", ""]),
+                      dict(pos="N7", diam=10.0, qtd=DTI["n_cost"], comp=round((2 * (340 + 1250) + 140) / 10), forma=[(0, 0), (125, 0), (125, 34), (0, 34), (0, 0), (2, 2)], trechos=["125", "34", "", ""]),
+                      dict(pos="N8", diam=10.0, qtd=DTI["n_v"], comp=round((2 * (340 + 720) + 140) / 10), forma=[(0, 0), (34, 0), (34, 72), (0, 72), (0, 0), (2, 2)], trechos=["34", "72", "", ""])],
+        insertos=[["TB-2", "Tubo Ø60,3×3,6 L=780, passante, sem solda", 2, "pontas, a 175 da face"],
                   ["AL-3", "2 laços de cordoalha Ø12,7 (4 pernas) por alça", 2, "a 250 cm das pontas"],
-                  ["PN-1", "Pino Ø20 CA-50 L=700 nos consolos CV-TS (2 por linha)", 10, "consolos (linhas 3, 5, 6, 7, 8)"],
-                  ["NEO-2", "Neoprene 300×250×30 fretado (apoio nos PC)", 2, "sobre os consolos CP-I110"]],
-        memoria=[["ELU flexão (V406)", "MRd ≥ Md — ver ND-LET-MC02"], ["ELS-F / ELS-D (CAA II)", "atende (protensão limitada)"],
-                 ["Dente 66 × 35 (MEF não linear)", "Vu 475 ≥ Vd 452 kN"], ["Estribo mínimo (ρsw)", "Ø8 c/15 = 6,7 ≥ 2,4 cm²/m"],
-                 ["Pele (h > 60 cm)", "2 Ø8 por face a cada 20 cm"], ["Içamento (2 pontos a 2,5 m)", "σt ≤ fctk,j — sem fissura"]],
-        notas=["Concreto C50; cordoalhas CP-190 RB Ø12,7 em 4 linhas (y = 60, 110, 160 e 210 mm): 10 isoladas 200 cm nas pontas (linhas 160 e 210). σpi = 1400 MPa; liberar com fckj ≥ 35 MPa. N3 = 4 Ø20 CA-50 na mesa superior (armadura de compressão do ELU com os vãos do R01: x/d 0,32 ≤ 0,45; MRd 3035 ≥ Md 2684 kN·m).",
-               "Dentes Gerber 66 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6), verificados por MEF não linear; maciço de 140 cm nas pontas.",
-               "Consolos CV-TS dos dois lados nas linhas 3, 5, 6, 7 e 8 (maciço de 100 cm na alma), sem chanfro, 44 cm de altura (fundo alinhado ao da TS-01): topo a 3 %, pino PN-1 Ø20, assentos +8,480 (lado A) e +8,505 (lado E).",
-               "Apoio nos pilares centrais PC: neoprene NEO-2 300×250×30 fretado e pino PN-2 Ø25 no consolo CP-I110; graute só numa ponta de cada viga.",
-               "V405 (P13 → linha 9) apoia na ponta sobre o consolo CP-I110 do pilar de fachada P14 (PF-04), face voltada ao pavilhão, assento +8,190. Consolos CP-I110 com 41 cm (fundo alinhado ao da I110) e tirante 3 Ø20.",
+                  ["PN-5", "Pino Ø20 CA-50 L=600 (300 na viga), apoio das TS-01", 4 * len(pinos), "topo, ±100 da linha, ±115 do eixo"],
+                  ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30 (assento das TS-01)", 2 * len(pinos), "topo, nas linhas"],
+                  ["NEO-2", "Neoprene 300×250×30 fretado (apoio nos PC)", 2, "sobre os consolos CP-I130"]],
+        memoria=[],
+        notas=["Concreto C50; 26 cordoalhas CP-190 RB Ø12,7 em 4 linhas: 6 em y = 6 e 6 em y = 10 cm (aderentes), 7 em y = 14 e 7 em y = 18 cm (isoladas 200 cm nas pontas). σpi = 1400 MPa; liberar com fckj ≥ 40 MPa. V407 (vão menor): 16 cordoalhas, 4 por linha, linhas de 14 e 18 isoladas.",
+               "N3 = 4 Ø20 CA-50 na mesa superior: compressão do ELU (x/d ≤ 0,45) e tração no ato junto às pontas (NBR 6118:2023 17.2.4.3.2 b).",
+               "Dentes Gerber 78 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6); maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
+               f"TS-01 apoiadas direto no topo da viga (rev03, sem consolos CV-TS): topo a +{Fz(zt)} no eixo C, neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01.",
+               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×250×30 fretado e pino PN-2 Ø25 no consolo CP-I130 (assento +{Fz(za)}); graute só numa ponta de cada viga. V405 vai até o consolo do P14 (PF-04).",
                "Içar pelas 2 alças AL-3 (2 laços cada); estocar sobre 2 calços nas alças; não virar a peça."])
 
 
@@ -390,7 +418,8 @@ def dados_vm():
     L = round((X_EIXO["C"] - 0.20 - (X_EIXO["B"] + 0.20) - 0.10) * 1000)  # VM-02: B–C e C–D (faces de 20 dos dois lados)
     return dict(
         fmt="A1", marca="VM-02", qtd=8, familia="VIGAS DO MEZANINO I90", desenho="ND-LET-VM01", h=900, b=400, ts=120, ti=150, m=80, bw=150, L=L, esc=20,
-        x_mac=1200, dente=(450, 300), pino_x=150, tb=(50, 450), tb_nome="TB-1 tubo Ø50×3,0 L=450", pino_d=20,
+        x_mac=1200, dente=(450, 300), pino_x=150, tb=(50, 450), tb_nome="TB-1 tubo Ø50×3,0 L=450", pino_d=20, cha=False,
+        revs=[("03", "14/10/2026", "SEM SOLDA: TB-1 PASSANTE, SEM CHAPA CH-A1")],
         cord=[(60, [-150, -100, -50, 0, 50, 100, 150], 0), (110, [-50, 50], 0)],
         sig_pi=1400, L_pista=60, fck=50, fckj=35, pele=[500, 650],
         est=(8.0, 200, 100, 1500), Vd=383, alcas=[1900, L - 1900], tercas=[], consolos=[],
@@ -403,8 +432,7 @@ def dados_vm():
                       dict(pos="N6", diam=16.0, qtd=3, comp=round((2 * (90 + 840) + 160) / 10), forma=[(0, 0), (9, 0), (9, 84), (0, 84), (0, 0), (2, 2)], trechos=["9", "84", "", ""]),
                       dict(pos="N7", diam=10.0, qtd=3, comp=round((2 * (340 + 1200) + 140) / 10), forma=[(0, 0), (120, 0), (120, 34), (0, 34), (0, 0), (2, 2)], trechos=["120", "34", "", ""]),
                       dict(pos="N8", diam=10.0, qtd=3, comp=round((2 * (340 + 390) + 140) / 10), forma=[(0, 0), (34, 0), (34, 39), (0, 39), (0, 0), (2, 2)], trechos=["34", "39", "", ""])],
-        insertos=[["TB-1", "Tubo Ø50×3,0 L=450 a prumo, soldado na CH-A1", 2, "pontas, a 150 da face"],
-                  ["CH-A1", "Chapa 300×150×12,5 + 2 grapas Ø12,5 (fundo)", 2, "fundo das pontas"],
+        insertos=[["TB-1", "Tubo Ø50×3,0 L=450 a prumo, passante, sem solda", 2, "pontas, a 150 da face"],
                   ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 190 cm das pontas"],
                   ["NEO-1", "Neoprene 300×150×10 (furo Ø30)", 2, "sobre os consolos CP-MEZ"]],
         seg=SEG_VM,

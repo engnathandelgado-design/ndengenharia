@@ -1,23 +1,23 @@
 {
  "secao": {
   "b_m": 1.25,
-  "h_m": 0.15,
-  "A_m2": 0.1875,
-  "pp_kNm": 4.69,
+  "h_m": 0.1,
+  "A_m2": 0.125,
+  "pp_kNm": 3.12,
   "L_max_m": 10.165,
-  "peso_t": 4.86,
+  "peso_t": 3.24,
   "fck": 40.0,
   "fckj": 25.0,
   "Ec_MPa": 30105
  },
  "protensao": {
-  "cordoalhas": "8 Ø9,5 CP-190 RB (4 por face, eixo a 4 cm das faces)",
-  "Ap_mm2": 444.0,
+  "cordoalhas": "8 Ø12,7 CP-190 RB (4 por face, alinhadas, eixo a 2,6 cm das faces)",
+  "Ap_mm2": 789.6,
   "sig_pi_MPa": 1400.0,
-  "F_macaco_kN": 77.7,
-  "P0_kN": 578.1,
-  "Pinf_kN": 497.3,
-  "sig_cp_inf_MPa": -2.65,
+  "F_macaco_kN": 138.2,
+  "P0_kN": 1028.1,
+  "Pinf_kN": 884.4,
+  "sig_cp_inf_MPa": -7.07,
   "along_pista_60m_mm": 431
  },
  "vento": {
@@ -26,31 +26,50 @@
   "p_k": 1.398,
   "M_k": 22.18,
   "M_d": 31.05,
-  "MRd": 34.52,
-  "uso_ELU": 0.9,
-  "sig_vento_MPa": 4.73,
-  "sig_ELS_F": -1.23,
-  "sig_rara": 2.08,
-  "fct_f": 2.95,
+  "MRd": 37.56,
+  "uso_ELU": 0.827,
+  "sig_vento_MPa": 10.65,
+  "sig_ELS_F": -3.88,
+  "sig_rara": 3.57,
+  "fct_f": 3.68,
   "ok_ELS_F": true,
   "ok_rara": true,
-  "flecha_mm": 22.2,
-  "lim_mm": 40.3
+  "flecha_mm": 74.8,
+  "flecha_freq_mm": 22.4,
+  "lim_mm": 40.3,
+  "ok_flecha": true
  },
  "transitorias": {
   "fctk_j": 1.8,
-  "sig_desforma": -2.21,
-  "sig_icamento": -2.74,
-  "sig_estocagem": -0.87,
+  "sig_desforma": -6.92,
+  "sig_icamento": -7.88,
+  "sig_estocagem": -4.91,
   "ok": true,
-  "F_alca_kN": 35.8
+  "F_alca_kN": 23.8
  },
  "fixacoes": {
   "R_vento_ponta_d": 12.33,
   "Fv_M16_Rd": 37.2,
-  "R_consolo_CA1_k": 70.8,
-  "R_consolo_CA1_d": 99.2,
-  "solda_CA1_Rd": 482.8,
+  "Ft_M16_Rd": 89.3,
+  "CL1": {
+   "peca": "L 102×102×12,5 A36 L=150",
+   "M_kNm": 0.616,
+   "MRd_kNm": 0.888,
+   "uso": 0.694,
+   "trilho": "TR-1 tipo HTA-CE 40/22 (ou equivalente): carga de cálculo ≥ 12,4 kN por ponto (catálogo)",
+   "bucha": "BR-1 bucha M16 com barra transversal, hef ≥ 70 (catálogo, ≥ 12,4 kN)"
+  },
+  "R_consolo_CA1_k": 47.2,
+  "R_consolo_CA1_d": 66.1,
+  "CA1": {
+   "peca": "L 152×102×19 A572-50 L=300 + 2 M20 8.8 em luvas IB-1",
+   "M_kNm": 3.04,
+   "MRd_kNm": 5.66,
+   "uso_aba": 0.537,
+   "T_parafuso": 41.3,
+   "V_parafuso": 33.1,
+   "interacao_M20": 0.412
+  },
   "ok": true
  }
 }

@@ -12,19 +12,19 @@ import json, math
 from pathlib import Path
 
 AQ = Path(__file__).parent
-I110 = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))
+I130 = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))
 DT = json.loads((AQ / "dentes.json").read_text(encoding="utf-8"))
 fyd = 500 / 1.15
 BAR = {16: 2.011, 20: 3.142, 12.5: 1.227, 10: 0.785}
 
 # tipo: (onde, b, proj, a (face → eixo do pino), h_viga, h_dente, neoprene, Vd, fck do pilar/viga que recebe)
 CONS = {
-    "CP-TS":  ("pilares PL (eixos A/E) e P8A/P11 — apoio da TS-01", 0.40, 0.30, 0.175, 0.90, 0.45, 0.010, DT["TS-01"]["Vd"], 40),
-    "CV-TS":  ("I110 (linhas 3, 5, 6, 7, 8) — apoio da TS-01 (b = apoio da TS, maciço de 100 cm)", 0.40, 0.35, 0.200, 0.90, 0.45, 0.010, DT["TS-01"]["Vd"], 50),
-    "CP-I110": ("P8A, P11, P13, P14 — apoio da I110", 0.50, 0.40, 0.200, 1.10, 0.66, 0.030, max(v["linhas"]["Vd_kN"] for v in I110.values()), 40),
+    # rev03: TS-01 sem dente (apoio direto no recuo do pilar e no topo da I130) — sem CP-TS e sem CV-TS
+    "CP-I130": ("P8A, P11, P13, P14 — apoio da I130 (dente 78 × 35)", 0.50, 0.40, 0.200, 1.30, 0.78, 0.030, max(v["linhas"]["Vd_kN"] for v in I130.values()), 40),
     "CP-MEZ": ("PL linha 1/2, P3/P4/P5, P8/P8B — apoio da VM I90", 0.40, 0.30, 0.150, 0.90, 0.45, 0.010, 383.0, 40),
     "CP-VT":  ("pilares laterais e de portão — apoio da VT/VV 25×60", 0.25, 0.20, 0.10, 0.60, 0.30, 0.010, 49.0, 40),
-    "CP-VB":  ("pilares das fachadas 1 e 9 — apoio da VB 15×90 (sem dente: consolo de 35 cm sem chanfro)", 0.30, 0.30, 0.150, 0.70, 0.35, 0.0, 35.0, 40),
+    # VB: terças do vão de oitão a cada 1,20 m (rev03: cobertura com painéis) + peso próprio → Vd ≈ 1,4 × 7,0 kN/m × 9,87/2 = 48 kN
+    "CP-VB":  ("pilares das fachadas 1 e 9 — apoio da VB 15×90 (sem dente: consolo de 35 cm sem chanfro)", 0.30, 0.30, 0.150, 0.70, 0.35, 0.0, 48.0, 40),
 }
 res = {}
 for nome, (onde, b, proj, a, hv, hd, neo, Vd, fck) in CONS.items():

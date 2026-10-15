@@ -1,13 +1,13 @@
 """Letsara — modelo global 3D (OpenSeesPy) com a geometria do R01: deformadas e esforços em ELU e ELS.
 
 Sistema (pré-moldado): pilares engastados no cálice (barras 3D elásticas, cabeça recuada 40×30 acima do recuo); vigas TS-01,
-I110, VT, VB e VM articuladas (pino + neoprene) = barras de treliça; terças como escoras entre as vigas nos nós do
+I130, VT, VB e VM articuladas (pino + neoprene) = barras de treliça; terças como escoras entre as vigas nos nós do
 contraventamento e em todas as 26 linhas de terças (como no modelo 3D), inclusive nos vãos de oitão (L1–L2 e L8–L9, apoiadas na VB 15×90 modelada como viga articulada nos pilares); X Ø16 só nos vãos 2-3 e 7-8 (rev. 13/10/2026: retirados os X dos vãos 4-5 e 5-6 — esforço no X praticamente igual; só tração: as diagonais comprimidas foram retiradas, A ≈ 0); mezanino
 (laje alveolar + capa) como diafragma rígido nos níveis +3,15 e +6,55.
 
 Rigidez: ELU com 0,8·Ecs·Ic nos pilares (NBR 6118:2023 15.7.3, análise global com não linearidade física aproximada) e
 P-Δ; ELS com Ecs·Ic (estádio I), também com P-Δ.
-Ações: G (peso das peças, telha/terças/instalações 0,25 kN/m², mezanino 2,8 + 1,25 + 1,0 kN/m²), Qc (cobertura 0,25 kN/m²),
+Ações: G (peso das peças, cobertura rev03: zipada + lã + TP40 + painéis solares + instalações 0,41 kN/m² + terças, mezanino 2,8 + 1,25 + 1,0 kN/m²), Qc (cobertura 0,25 kN/m²),
 Qm (mezanino 5 kN/m²), vento NBR 6123 (V0 45 m/s, S2 cat. III classe C variando com a altura, S3 0,95; Cpe +0,7/−0,5).
 Combinações (NBR 8681:2003): ELU γg 1,3 (pré-moldado), γq 1,4, ψ0 vento 0,6, ψ0 mezanino 0,7, ψ0 cobertura 0,5;
 ELS frequente com ψ1 vento 0,3 e ψ1 mezanino 0,6. Limite de deslocamento horizontal do topo: H/1700 (NBR 6118:2023
@@ -33,13 +33,15 @@ C40 = Concreto(40)
 LARG, COMP, XC = X_EIXO["E"], Y_LIN[-1], X_EIXO["C"]
 Z0, I = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + I * x
-ASS = lambda x: zf(x) + 0.45 - 0.01
-REC = (8.40, 9.55)
+REC = tuple(LG["REC"])                    # assento da TS-01 no recuo dos pilares P1 / P2 (rev03, sem dente)
+Z_TOP_C = LG["Z_TOPO_I130"]                  # topo da I130 e dos pilares P8A/P11/P13 (TS-01 apoiada no topo)
 Z_MEZ = (3.15, 6.55)
-Z_VT = 7.80
-Z_I110 = 8.88 - 1.10 + 0.44 - 0.03
+Z_VT = (6.55, 7.80)                        # rev03: VT do eixo A rebaixada (+6,25/+6,85); eixo E mantida
+Z_I130 = LG["Z_ASS_I130"]                 # assento da I130 nos consolos CP-I130 (rev03)
 NOS = LG["nos_contraventamento_x_esq"]
-NOS_D = [round(x - 0.325 + (LARG - 0.325 - (19.475 - 0.325)), 3) for x in NOS]
+NOS_D = [round(x + (2 * XC - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"], 3) for x in NOS]
+G_COB = LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]   # + terça Ue 300×85×25×3,00 (12,5 kg/m)
+Q_COB = LG["cargas_cob"]["sobrecarga"]
 VAOS_X = [(1, 2), (6, 7)]               # X só nos vãos 2-3 e 7-8 (vizinhos aos oitões)
 MID = [round((a + b) / 2, 3) for a, b in zip(NOS[:-1], NOS[1:])]          # terças intermediárias (entre os nós do X)
 MID_D = [round((a + b) / 2, 3) for a, b in zip(NOS_D[:-1], NOS_D[1:])]
@@ -103,50 +105,52 @@ def montar(fator_EI=1.0, pdelta=True):
     for i, y in enumerate(Y_LIN):
         canto = i in (0, 8)
         for nome, x0, k in (("P1", 0.0, 0), ("P2", LARG, 1)):
-            zs = [ASS(0.475 if k == 0 else LARG - 0.475), Z_VT] + (list(Z_MEZ) if i <= 1 else [])
+            zs = [REC[k], Z_VT[k]] + (list(Z_MEZ) if i <= 1 else [])
             zr = REC[k] if not canto else math.ceil((zf(x0) + 0.90) / 0.05) * 0.05
             pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))
     for j, x in enumerate(XF[1:4]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", COMP)):
-            zs = [zf(x) - 0.01] + (list(Z_MEZ) if y == 0 else []) + ([Z_I110] if "P14" in nome else [])
+            zs = [zf(x) - 0.01] + (list(Z_MEZ) if y == 0 else []) + ([Z_I130] if "P14" in nome else [])
             pilar(nome, x, y, 0.40, 0.60, 10.0, zs, rec=math.ceil((zf(x) + 0.90) / 0.05) * 0.05, cab=(0.40, 0.30))
-    pilar("P8A", XC, Y_LIN[1], 0.40, 0.60, 8.88, [ASS(19.325), Z_I110] + list(Z_MEZ))
-    pilar("P11", XC, Y_LIN[3], 0.40, 0.40, 8.88, [ASS(19.325), Z_I110])
-    pilar("P13", XC, Y_P13, 0.60, 0.60, 8.88, [Z_I110])
+    pilar("P8A", XC, Y_LIN[1], 0.40, 0.60, Z_TOP_C, [Z_I130] + list(Z_MEZ))
+    pilar("P11", XC, Y_LIN[3], 0.40, 0.40, Z_TOP_C, [Z_I130])
+    pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I130])
     for nome, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
         pilar(nome, x, Y_LIN[1], 0.40, 0.60, Z_MEZ[1], list(Z_MEZ))
     for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
         pilar(nome, x, Y_LIN[LINHA_PORTOES], b, b, 7.50)
 
-    # ---------------- TS-01 (linhas 2 a 8) com nós nos pontos do contraventamento; apoio central no pilar (L2, L4) ou na I110
+    # ---------------- TS-01 (linhas 2 a 8) com nós nos pontos do contraventamento; apoio central no pilar (L2, L4) ou na I130
     lin_cen = {}
     for i in range(1, 8):
         y = Y_LIN[i]
-        nA = at(f"P1-L{i+1}", ASS(0.475)); nE = at(f"P2-L{i+1}", ASS(LARG - 0.475))
-        if i in (1, 3):
-            nc = at("P8A" if i == 1 else "P11", ASS(19.325))
+        nA = at(f"P1-L{i+1}", REC[0]); nE = at(f"P2-L{i+1}", REC[1])
+        if i == 1:                               # rev03: linha 2 com furo oblongo no topo do P8A (desliza em x): o mezanino já trava P1-L2/P8A/P2-L2
+            nc = no_livre(XC, y, Z_TOP_C)
+        elif i == 3:
+            nc = at("P11", Z_TOP_C)
         else:
-            nc = no_livre(XC, y, Z_I110)
+            nc = no_livre(XC, y, Z_TOP_C)            # TS-01 apoiada no topo da I130 (rev03)
         lin_cen[i] = nc
-        cadeia = [nA] + [no_livre(x, y, zf(x) + 0.9) for x in sorted(NOS[1:-1] + MID)] + [nc]
-        cadeia_d = [nc] + [no_livre(x, y, zf(x) + 0.9) for x in sorted(NOS_D[1:-1] + MID_D)] + [nE]
+        cadeia = [nA] + [no_livre(x, y, zf(x) + 0.45) for x in sorted(NOS[1:-1] + MID)] + [nc]
+        cadeia_d = [nc] + [no_livre(x, y, zf(x) + 0.45) for x in sorted(NOS_D[1:-1] + MID_D)] + [nE]
         for c in (cadeia, cadeia_d):
             for a, b in zip(c[:-1], c[1:]):
                 barra(a, b, 0.2225, "TS-01")
-    # I110: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14
-    ch = [at("P8A", Z_I110), lin_cen[2], at("P11", Z_I110), lin_cen[4], lin_cen[5], at("P13", Z_I110), lin_cen[6], lin_cen[7], at("P14-L9", Z_I110)]
+    # I130: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14
+    ch = [at("P8A", Z_I130), lin_cen[2], at("P11", Z_I130), lin_cen[4], lin_cen[5], at("P13", Z_I130), lin_cen[6], lin_cen[7], at("P14-L9", Z_I130)]
     for a, b in zip(ch[:-1], ch[1:]):
-        barra(a, b, 0.302, "I110")
+        barra(a, b, 0.333, "I130")
     # terças-escora entre linhas nos nós do contraventamento (todos os vãos internos) e X nos vãos contraventados
     def no_linha(x, i):
         y = Y_LIN[i]
         if abs(x) < 1e-6:
-            return at(f"P1-L{i+1}", ASS(0.475))
+            return at(f"P1-L{i+1}", REC[0])
         if abs(x - LARG) < 1e-6:
-            return at(f"P2-L{i+1}", ASS(LARG - 0.475))
+            return at(f"P2-L{i+1}", REC[1])
         if abs(x - XC) < 1e-6:
             return lin_cen[i]
-        return nos[(round(x, 3), round(y, 3), round(zf(x) + 0.9, 3))]
+        return nos[(round(x, 3), round(y, 3), round(zf(x) + 0.45, 3))]
     xs_no = [0.0] + NOS[1:-1] + [XC] + NOS_D[1:-1] + [LARG]
     xs_t = sorted(xs_no + MID + MID_D)                                   # todas as 26 linhas de terças
     for i in range(1, 7):
@@ -159,9 +163,9 @@ def montar(fator_EI=1.0, pdelta=True):
             barra(no_linha(b, ia), no_linha(a, ib), 2.01e-4, "X Ø16", mat=10)
     # VT 25×60 nos eixos A e E (linhas 2 a 9), VB nas fachadas 1 e 9
     for i in range(1, 8):
-        for nome in ("P1", "P2"):
-            a = at(f"{nome}-L{i+1}", Z_VT)
-            b = at(f"{nome}{'C' if i + 1 == 8 else ''}-L{i+2}", Z_VT) if i + 1 == 8 else at(f"{nome}-L{i+2}", Z_VT)
+        for nome, zv in (("P1", Z_VT[0]), ("P2", Z_VT[1])):
+            a = at(f"{nome}-L{i+1}", zv)
+            b = at(f"{nome}{'C' if i + 1 == 8 else ''}-L{i+2}", zv) if i + 1 == 8 else at(f"{nome}-L{i+2}", zv)
             barra(a, b, 0.15, "VT")
     # VB 15×90 das fachadas 1 e 9: viga (flexão no plano horizontal) articulada nos pilares, com nós nas terças do vão de
     # oitão (L1–L2 e L8–L9), que apoiam no topo da VB e levam o vento da fachada para a cobertura (escoras como nos vãos internos)
@@ -227,38 +231,38 @@ def cargas_basicas():
             P = p["bx"] * p["by"] * 25 * (zb - za)
             add("G", p["ns"][k], [0, 0, -P / 2, 0, 0, 0]); add("G", p["ns"][k + 1], [0, 0, -P / 2, 0, 0, 0])
     # TS-01: reação por apoio
-    L_TS = 19.15
+    L_TS = LG["L_TS"]
     for i in range(1, 8):
-        g = (0.2225 * 25 + 0.25 * TRIB[i]) * L_TS / 2
-        q = 0.25 * TRIB[i] * L_TS / 2
-        for n in (at(f"P1-L{i+1}", ASS(0.475)), at(f"P2-L{i+1}", ASS(LARG - 0.475))):
+        g = (0.2225 * 25 + G_COB * TRIB[i]) * L_TS / 2
+        q = Q_COB * TRIB[i] * L_TS / 2
+        for n in (at(f"P1-L{i+1}", REC[0]), at(f"P2-L{i+1}", REC[1])):
             add("G", n, [0, 0, -g, 0, 0, 0]); add("Qc", n, [0, 0, -q, 0, 0, 0])
         if i in (1, 3):
-            n = at("P8A" if i == 1 else "P11", ASS(19.325))
+            n = at("P8A" if i == 1 else "P11", Z_TOP_C)
             add("G", n, [0, 0, -2 * g, 0, 0, 0]); add("Qc", n, [0, 0, -2 * q, 0, 0, 0])
-    # I110: reações (peso próprio + 2 TS por linha) nos pilares de apoio — vigas biapoiadas
+    # I130: reações (peso próprio + 2 TS por linha) nos pilares de apoio — vigas biapoiadas
     apo = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13), ("P14-L9", COMP)]
     for (na, ya), (nb, yb) in zip(apo[:-1], apo[1:]):
         L = yb - ya
-        Ra_g = Rb_g = 0.302 * 25 * L / 2
+        Ra_g = Rb_g = 0.333 * 25 * L / 2
         Ra_q = Rb_q = 0.0
         for i in range(1, 8):
             y = Y_LIN[i]
             if ya < y < yb:
-                g = 2 * (0.2225 * 25 + 0.25 * TRIB[i]) * L_TS / 2
-                q = 2 * 0.25 * TRIB[i] * L_TS / 2
+                g = 2 * (0.2225 * 25 + G_COB * TRIB[i]) * L_TS / 2
+                q = 2 * Q_COB * TRIB[i] * L_TS / 2
                 Ra_g += g * (yb - y) / L; Rb_g += g * (y - ya) / L
                 Ra_q += q * (yb - y) / L; Rb_q += q * (y - ya) / L
         for nome, Rg, Rq in ((na, Ra_g, Ra_q), (nb, Rb_g, Rb_q)):
-            n = at(nome, Z_I110)
+            n = at(nome, Z_I130)
             add("G", n, [0, 0, -Rg, 0, 0, 0]); add("Qc", n, [0, 0, -Rq, 0, 0, 0])
     # VT e VB (peso), mezanino (VM + laje + capa + revestimento; sobrecarga) — reações nos pilares
     for i in range(1, 8):
         P = 0.15 * 25 * (Y_LIN[i + 1] - Y_LIN[i]) / 2
-        for nome in ("P1", "P2"):
+        for nome, zv in (("P1", Z_VT[0]), ("P2", Z_VT[1])):
             for ii in (i, i + 1):
                 nm = f"{nome}{'C' if ii == 8 else ''}-L{ii+1}"
-                add("G", at(nm, Z_VT), [0, 0, -P, 0, 0, 0])
+                add("G", at(nm, zv), [0, 0, -P, 0, 0, 0])
     gm, qm = 2.8 + 1.25 + 1.0, 5.0
     for z in Z_MEZ:
         for row, y in ((("P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1"), 0.0), (("P1-L2", "P8", "P8A", "P8B", "P2-L2"), Y_LIN[1])):

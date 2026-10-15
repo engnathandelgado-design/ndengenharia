@@ -1,19 +1,19 @@
-"""ND-LET-TS01-3 — TS-01: chaparia e insertos concretados na peça + peças de ligação da montagem (A1). Rev. 01."""
+"""ND-LET-TS01-3 — TS-01: esperas e insertos concretados + peças de ligação da cobertura (A1). Rev. 03: tudo parafusado,
+sem solda (esperas de barra roscada M16 concretadas na viga; peças da montagem dobradas/cortadas e furadas)."""
 import json
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, HD, LN, PASSO_T, f, peso, V
+from ts01_dados import P, L, H, f, peso, V
 
-LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="TS-01 — CHAPARIA, CHUMBADORES E PEÇAS DE LIGAÇÃO DA MONTAGEM",
-                        desenho="ND-LET-TS01-3", folha="03/04", fase="PARA APROVAÇÃO"))
-pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1 DETALHADA, TB-1 NO DENTE")
-pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T (SEM LUVAS NEM CT-1); OR-1 VIRA CHAPA SOLDADA NA CH-MF")
-pr.revisao("03", "12/10/2026", "GEOMETRIA DO R01 (L 19,15 m); CH-T2 COM 4 ORELHAS DO X NÓ A NÓ (COB02 DET. 4)")
-pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.0f} cm (entre pontas, a prumo) · 14 PEÇAS",
-                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   dentes Gerber 45 × 30 nas duas pontas   ·   caimento 3 %", 560)
-ch = CB["chumbadores"]
+                        conteudo="TS-01 — ESPERAS, INSERTOS E PEÇAS DE LIGAÇÃO DA COBERTURA (SEM SOLDA)",
+                        desenho="ND-LET-TS01-3", folha="03/03", fase="PARA APROVAÇÃO"))
+pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1, TB-1 NO DENTE")
+pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T; OR-1 SOLDADA NA CH-MF")
+pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1; SEM DENTES")
+pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
+                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
+nt, nn = len(P["tercas"]), len(P["nos"])
 
 
 def furo(v, c, d):
@@ -22,189 +22,169 @@ def furo(v, c, d):
     v.linha((c[0], c[1] - d * 0.8), (c[0], c[1] + d * 0.8), "EIXO")
 
 
-def pino(v, c, d=16):
-    v.circulo(c, d / 2, "OCULTA")
-    v.circulo(c, d, "OCULTA")
+def oblongo(v, c, d, comp, horiz=True):
+    a = (comp - d) / 2
+    if horiz:
+        v.poli([(c[0] - a, c[1] - d / 2), (c[0] + a, c[1] - d / 2)], "METALICA"); v.poli([(c[0] - a, c[1] + d / 2), (c[0] + a, c[1] + d / 2)], "METALICA")
+        v.circulo((c[0] - a, c[1]), d / 2, "METALICA"); v.circulo((c[0] + a, c[1]), d / 2, "METALICA")
+    else:
+        v.poli([(c[0] - d / 2, c[1] - a), (c[0] - d / 2, c[1] + a)], "METALICA"); v.poli([(c[0] + d / 2, c[1] - a), (c[0] + d / 2, c[1] + a)], "METALICA")
+        v.circulo((c[0], c[1] - a), d / 2, "METALICA"); v.circulo((c[0], c[1] + a), d / 2, "METALICA")
 
 
-# ------------------------------------------------------------------ CH-T1 (1:5)
-v = pr.vista("CH-T1", (75, 500), 5, titulo="CH-T1 — PLANTA", subtitulo="6 por peça · 84 na obra")
-v.ret(-100, -100, 200, 200, "METALICA")
-v.ret(-4, -110, 8, 220, "OCULTA")                                       # ST-1 soldado em cima (ver COB01)
-for c in ((-75, -75), (-75, 75), (75, -75), (75, 75)):
-    pino(v, c)
-v.cota_h([-100, -75, -4, 4, 75, 100], -100, -8, total=False)
-v.cota_h([-100, 100], 100, 8)
-v.cota_v([-100, -75, -50, 50, 75, 100], 100, 8, total=False)
-v.chamada((4, 80), (10, 16), "ST-1 8×220×290 soldado em cima (fábrica) — ND-LET-COB01")
-v.chamada((-75, -75), (4, -32), "4 pinos Ø16 c/ cabeça Ø32, L 112")
-v.texto((-100, -260), "chapa 200×200×12,5 ASTM A36", "nota")
+def barra_roscada(v, x, y0, hef, sai, gancho=True, cabeca=False):
+    v.ret(x - 8, y0 - hef, 16, hef + sai, "METALICA")
+    for k in range(int(sai / 8)):
+        yy = y0 + 4 + 8 * k
+        v.linha((x - 8, yy), (x + 8, yy + 4), "METALICA")
+    if gancho:
+        v.poli([(x - 8, y0 - hef), (x - 8, y0 - hef - 20), (x + 52, y0 - hef - 20), (x + 52, y0 - hef + 4)], "METALICA")
+    if cabeca:
+        v.chapa(x - 20, y0 - hef - 6, 40, 6, 0.25)
+        v.ret(x - 13, y0 - hef - 20, 26, 14, "METALICA")
+    v.linha((x - 40, y0), (x + 40, y0), "VISTA")
 
-# ------------------------------------------------------------------ CH-T2 (1:5)
-v = pr.vista("CH-T2", (205, 495), 5, titulo="CH-T2 — PLANTA", subtitulo="7 por peça · 98 na obra")
-v.ret(-150, -190, 300, 380, "METALICA")
-v.ret(-4, -110, 8, 220, "OCULTA")                                       # ST-1 soldado em cima
-for so, yo in ((140, 140), (-140, 140), (140, -140), (-140, -140)):
-    v.ret(so - 4.75, yo - 45, 9.5, 90, "METALICA")
-for sx in (-100, 100):
-    for yy in (-150, 0, 150):
-        pino(v, (sx, yy))
-v.poli([(-120, -170), (-120, 170), (120, 170), (120, -170)], "ARMADURA")
-v.cota_h([-150, -140, -100, 0, 100, 140, 150], -190, -8, total=False)
-v.cota_h([-150, 150], 190, 8)
-v.cota_v([-190, -150, -50, 50, 150, 190], 150, 8, total=False)
-v.linha((0, -230), (0, 230), "EIXO")
-v.chamada((0, 215), (-6, 8), "eixo da terça / ST-1 soldado em cima")
-v.chamada((140, 140), (10, 8), "orelha 90×80×9,5")
-v.chamada((100, 0), (16, -40), "6 pinos Ø16 c/ cabeça, L 112")
-v.chamada((-120, -170), (6, -26), "2 grampos U Ø10 c/ gancho 90°, encostados nos pinos")
-v.texto((-150, -340), "chapa 300×380×12,5 + 4 orelhas", "nota")
 
-v = pr.vista("CH-T2 — VISTA", (330, 505), 5, titulo="CH-T2 — VISTA LATERAL", subtitulo="orelhas paralelas ao tirante (≈73°)")
-v.ret(-190, 0, 380, 12.5, "METALICA")
-for yo in (-140, 140):
-    v.ret(yo - 45, 12.5, 90, 80, "METALICA")
-furo(v, (140, 12.5 + 35), 16)
-furo(v, (-140, 12.5 + 70), 16)
-v.cota_v([12.5, 47.5, 82.5, 92.5], 205, 8, total=False)
-v.cota_h([-190, -185, -95, 95, 185, 190], 0, -8, total=False)
-v.chamada((140, 47.5), (8, 12), "furo Ø16 a 35")
-v.chamada((-140, 82.5), (8, 22), "furo Ø16 a 70")
+# ------------------------------------------------------------------ ESPERAS (1:5)
+v = pr.vista("ES-1", (90, 470), 5, titulo="ES-1 — ESPERA DO ST-1P", subtitulo=f"2 por terça · {2*nt} por peça · {2*nt*14} na obra")
+barra_roscada(v, 0, 0, 150, 120)
+v.cota_v([-170, -150, 0, 120], 40, 10, total=False)
+v.chamada((0, 60), (10, 14), "barra roscada M16 A36 (rosca laminada) — 120 rosqueados")
+v.chamada((40, -170), (10, -6), "gancho 90°, 60")
+v.chamada((-40, 0), (-4, -16), "face superior da TS-01")
 
-# ------------------------------------------------------------------ CH-A1 (1:5)
-v = pr.vista("CH-A1", (470, 505), 5, titulo="CH-A1 — PLANTA", subtitulo="2 por peça")
-v.ret(-75, -150, 150, 300, "METALICA")
-furo(v, (0, 0), 52)
-for y in (-120, 120):
-    for x in (-45, 45):
-        v.circulo((x, y), 5, "OCULTA")
-v.cota_h([-75, -45, 45, 75], -150, -8)
-v.cota_v([-150, -120, 120, 150], 75, 8)
-v.chamada((26, 0), (12, 4), "furo Ø52 (TB-1)")
-v.chamada((45, 120), (10, 10), "4 grapas Ø10 L=200")
+v = pr.vista("ES-2", (225, 470), 5, titulo="ES-2 — ESPERA DA ORELHA OR-X", subtitulo=f"4 por nó do X · {4*nn} por peça · {4*nn*14} na obra")
+barra_roscada(v, 0, 0, 110, 50)
+v.poli([(-40, -30), (-40, -90), (40, -90), (40, -30)], "ARM_TRANSV")
+v.cota_v([-130, -110, 0, 50], 40, 10, total=False)
+v.chamada((0, 30), (10, 14), "barra roscada M16 A36 — 50 rosqueados")
+v.chamada((40, -60), (12, -14), "grampo U Ø10 CA-50, pernas 300")
 
-# ------------------------------------------------------------------ CH-MF, CH-MF2, OR-1 (1:5)
-v = pr.vista("CH-MF", (590, 505), 5, titulo="CH-MF — PLANTA", subtitulo="11 por peça")
-v.ret(-75, -180, 150, 360, "METALICA")
-v.ret(-150, -4, 300, 8, "OCULTA")                                       # OR-1 soldada por baixo (ver COB01)
-for y in (-100, 100):
-    pino(v, (0, y), 12.5)
-v.cota_v([-180, -150, -100, 100, 150, 180], 75, 8, total=False)
-v.cota_h([-75, 75], -180, -8)
-v.chamada((-75, -170), (-6, -14), "OR-1 8×300×100 soldada por baixo (fábrica)")
-v.chamada((0, -100), (10, -26), "2 pinos Ø12,5 c/ cabeça, L 90")
+v = pr.vista("ES-3", (375, 440), 5, titulo="ES-3 — ESPERA DA MÃO-FRANCESA", subtitulo=f"horizontal, faces B e D · {2*nt} por peça")
+v.ret(-110, -8, 170, 16, "METALICA")
+for k in range(7):
+    v.linha((4 + 8 * k, -8), (8 + 8 * k, 8), "METALICA")
+v.chapa(-116, -20, 6, 40, 0.25)
+v.ret(-110, -13, 14, 26, "METALICA")
+v.linha((0, -40), (0, 40), "VISTA")
+v.cota_h([-116, -110, 0, 60], -20, -10, total=False)
+v.chamada((30, 8), (6, 14), "barra roscada M16 A36 — 60 para fora da face")
+v.chamada((-113, 20), (-8, 12), "porca M16 + arruela 40×40×6 (ancoragem)")
+v.chamada((0, -40), (6, -10), "face lateral da mesa inferior (h = 100 do fundo)")
 
-v = pr.vista("CH-MF2", (75, 330), 5, titulo="CH-MF2", subtitulo="lateral do dente · 4 por peça")
-v.ret(-60, -45, 120, 90, "METALICA")
-furo(v, (0, 0), 18)
-for x in (-40, 40):
-    pino(v, (x, 0), 12.5)
-v.cota_h([-60, -40, 0, 40, 60], -45, -8, total=False)
-v.cota_v([-45, 45], 60, 8)
-v.chamada((0, 0), (8, 16), "luva M16")
+# ------------------------------------------------------------------ TB-3, PN-3, PN-5, NEO-3, NEO-4 (1:10)
+v = pr.vista("TB-3", (480, 455), 10, titulo="TB-3", subtitulo="tubo dos pinos · 4 por peça")
+v.ret(-25, -450, 50, 900, "METALICA")
+v.cota_v([-450, 450], 25, 8)
+v.cota_h([-25, 25], 450, 6)
+v.chamada((25, 0), (6, 6), "tubo Ø50,8×2,0 L=900, passante")
+v.chamada((25, -440), (6, -6), "graute ≥ 40 MPa")
 
-v = pr.vista("OR-1", (170, 330), 5, titulo="OR-1 — ORELHA DA MÃO-FRANCESA", subtitulo="chapa 8×300×100 soldada na CH-MF (fábrica)")
-v.ret(-150, -100, 300, 100, "METALICA")
-v.ret(-150, 0, 300, 12.5, "METALICA")
-for x in (-100, 100):
-    furo(v, (x, -50), 14)
-v.cota_h([-150, -100, 100, 150], -100, -8, total=False)
-v.cota_v([-100, -50, 0, 12.5], 150, 8, total=False)
-v.chamada((100, -50), (8, -12), "2 furos Ø14 — M12 da mão-francesa (um de cada lado da viga)")
-v.chamada((0, 6), (10, 10), "CH-MF (fundo da viga); filete 6 mm nos 2 lados")
+v = pr.vista("PN-3", (590, 455), 10, titulo="PN-3 / PN-5", subtitulo="pinos nos pilares / na I130")
+v.ret(-12.5, -300, 25, 600, "METALICA")
+v.ret(60 - 10, -300, 20, 600, "METALICA")
+v.linha((-60, 0), (100, 0), "EIXO")
+v.cota_v([-300, 0, 300], -12.5, -8, total=False)
+v.chamada((0, 150), (-8, 10), "PN-3 Ø25 L=600 (P1/P2)")
+v.chamada((0, -150), (-8, -10), "PN-5 Ø20 L=600 (I130/centro)")
+v.chamada((-60, 0), (-6, 4), "topo do apoio")
 
-# ------------------------------------------------------------------ CT-1 (1:5)
-v = pr.vista("ST-1", (300, 345), 5, titulo="ST-1 — SUPORTE DA TERÇA", subtitulo="chapa 8×220×290 soldada na CH-T1/CH-T2 · 13 por viga")
-v.ret(-110, 0, 220, 290, "METALICA")
+v = pr.vista("NEO-4", (110, 290), 5, titulo="NEO-4 / NEO-3", subtitulo="neoprene 10 mm, 60 Shore A")
+v.ret(-100, -150, 200, 300, "VISTA")
+for yy in (-100, 100):
+    furo(v, (0, yy), 35)
+v.ret(160, -150, 100, 300, "VISTA")
+for yy in (-100, 100):
+    furo(v, (210, yy), 30)
+v.cota_h([-100, 0, 100], -150, -8, total=False)
+v.cota_h([160, 260], -150, -8)
+v.cota_v([-150, -100, 100, 150], 260, 8, total=False)
+v.chamada((0, 0), (4, 40), "NEO-4 200×300 (pilar lateral)")
+v.chamada((210, 0), (10, 50), "NEO-3 100×300 (I130 / centro)")
+
+# ------------------------------------------------------------------ ST-1P (1:5)
+st = CB["ST1P"]
+v = pr.vista("ST-1P", (250, 280), 5, titulo="ST-1P — SUPORTE DA TERÇA", subtitulo=f"chapa dobrada 9,5 A36 · 1 por terça · {nt*14} na obra")
+v.chapa(-110, 0, 220, 9.5)
+v.chapa(-110, 9.5, 9.5, 280.5)
+v.texto((-100, 320), "perfil da dobra", "nota")
+v2 = pr.vista("ST-1P FRENTE", (330, 280), 5, titulo="ST-1P — ABA VERTICAL", subtitulo="furos das terças")
+v2.ret(-110, 0, 220, 290, "METALICA")
 for yy in (-50, 50):
     for zz in (110, 210):
-        furo(v, (yy, zz), 14)
-furo(v, (0, 255), 18)
-v.cota_h([-110, -50, 50, 110], 0, -8, total=False)
-v.cota_v([0, 110, 210, 255, 290], 110, 8, total=False)
-v.chamada((50, 210), (10, 14), "4 furos Ø14 — 2 M12 por terça (furos a 60 da ponta da terça)")
-v.chamada((0, 255), (-14, 10), "furo Ø18 só nos ST-1 de borda (diagonal Ø16)")
-v2 = pr.vista("ST-1 PLANTA", (300, 255), 5, titulo="ST-1 — PLANTA", subtitulo="enrijecedores 8×90×90 nos 2 lados, na face oposta às terças")
-v2.ret(-110, 0, 220, 8, "METALICA")
-for yy in (-45, 45):
-    v2.ret(yy - 4, -90, 8, 90, "METALICA")
-v2.cota_h([-110, -45, 45, 110], -90, -8, total=False)
-v2.cota_v([-90, 0, 8], 110, 8, total=False)
-v2.chamada((45, -45), (10, 10), "enrijecedor 8×90×90 (2x)")
+        furo(v2, (yy, zz), 14)
+v2.cota_h([-110, -50, 50, 110], 0, -8, total=False)
+v2.cota_v([0, 110, 210, 290], 110, 8, total=False)
+v2.chamada((50, 210), (10, 18), "4 furos Ø14: 2 M12 8.8 por terça")
+v3 = pr.vista("ST-1P PLANTA", (440, 290), 5, titulo="ST-1P — ABA HORIZONTAL", subtitulo="furos oblongos (ajuste ±11)")
+v3.ret(0, -110, 150, 220, "METALICA")
+for yy in (-60, 60):
+    oblongo(v3, (75, yy), 18, 40, horiz=True)
+v3.cota_v([-110, -60, 60, 110], 150, 8, total=False)
+v3.cota_h([0, 75, 150], -110, -8, total=False)
+v3.chamada((75, 60), (8, 24), "2 oblongos 18 × 40 (ES-1)")
 
-# ------------------------------------------------------------------ TB-1, AL-1, PN-1, NEO-1, MF-1
-v = pr.vista("TB-1", (420, 300), 10, titulo="TB-1", subtitulo="2 por peça (no dente)")
-v.ret(-25, 0, 50, H - HD, "METALICA")
-v.cota_v([0, H - HD], 25, 8)
-v.cota_h([-25, 25], H - HD, 6)
-v.chamada((25, 225), (8, 6), "tubo Ø50×3,0 L=450")
-v.chamada((0, 0), (8, -8), "soldado na CH-A1")
-
-v = pr.vista("AL-1", (505, 200), 10, titulo="AL-1", subtitulo="4 por peça · cordoalha Ø12,7")
-v.poli([(-50, 0), (-50, 810), (0, 850), (50, 810), (50, 0)], "ARMADURA")
-for d in (-50, 50):
-    v.linha((d, 0), (d - 40, -80), "ARMADURA"); v.linha((d, 0), (d + 40, -80), "ARMADURA")
-v.cota_v([0, 700, 850], 50, 10, total=False)
-v.chamada((0, 850), (8, 6), "cordoalha de 1,90 m")
-
-v = pr.vista("PN-1", (580, 230), 10, titulo="PN-1", subtitulo="pino no consolo (interface)")
-v.ret(-10, 0, 20, 700, "METALICA")
-v.linha((-80, 300), (80, 300), "EIXO")
-v.cota_v([0, 300, 700], 10, 8, total=False)
-v.chamada((10, 150), (8, 4), "Ø20 CA-50 no consolo")
-v.chamada((10, 550), (8, 4), "entra no TB-1, grauteado")
-
-v = pr.vista("NEO-1", (75, 210), 5, titulo="NEO-1", subtitulo="neoprene 10 mm, 60 Shore A")
-v.ret(-75, -150, 150, 300, "VISTA")
-furo(v, (0, 0), 40)
-v.cota_h([-75, 75], -150, -8)
-v.cota_v([-150, 150], 75, 8)
+# ------------------------------------------------------------------ OR-X, CMF-1, MF-1 (1:5 e 1:10)
+v = pr.vista("OR-X", (600, 300), 2.5, titulo="OR-X — ORELHA DO X", subtitulo="L 102×76×6,3 A36, L = 80 · vãos 2-3 e 7-8")
+v.ret(0, 0, 76, 6.3, "METALICA")
+v.ret(0, 0, 6.3, 102, "METALICA")
+furo(v, (45, 3), 18)
+v.circulo((3, 45), 9, "METALICA"); v.circulo((3, 85), 9, "METALICA")
+v.cota_v([0, 45, 85, 102], -10, -8, total=False)
+v.cota_h([0, 45, 76], 0, -14, total=False)
+v.chamada((3, 85), (-10, 14), "2 furos Ø18 (diagonal a 45 ou 85)")
+v.chamada((45, 6), (6, -20), "furo Ø18 na ES-2")
 
 mf = CB["MF1"]
 Lmf = round(mf["comp_m"] * 1000)
-v = pr.vista("MF-1", (150, 110), 10, titulo="MF-1 — MÃO-FRANCESA", subtitulo=f"L 50×5, L = {Lmf} · 2 por terça")
+v = pr.vista("CMF-1", (90, 125), 2.5, titulo="CMF-1 — CLIPE DA MÃO-FRANCESA", subtitulo=f"L 76×76×6,3 A36, L = 80 · 2 por terça")
+v.ret(0, 0, 76, 6.3, "METALICA")
+v.ret(0, 0, 6.3, 76, "METALICA")
+furo(v, (40, 3), 18)
+v.circulo((3, 40), 7, "METALICA")
+v.cota_h([0, 40, 76], 0, -14, total=False)
+v.cota_v([0, 40, 76], -10, -8, total=False)
+v.chamada((40, 6), (10, 24), "furo Ø18 na ES-3 (porca M16)")
+v.chamada((3, 40), (-6, 20), "furo Ø14: M12 na MF-1")
+
+v = pr.vista("MF-1", (215, 110), 10, titulo="MF-1 — MÃO-FRANCESA", subtitulo=f"L 50×5 A36, L = {Lmf} · 2 por terça · {mf['angulo']}")
 v.linha((0, 0), (Lmf, 0), "METALICA"); v.linha((0, 50), (Lmf, 50), "METALICA")
 v.linha((0, 0), (0, 50), "METALICA"); v.linha((Lmf, 0), (Lmf, 50), "METALICA")
 furo(v, (30, 25), 14); furo(v, (Lmf - 30, 25), 14)
 v.cota_h([0, 30, Lmf - 30, Lmf], 0, -8, total=False)
-v.chamada((30, 25), (-4, 12), "M12 na OR-1 (chapa soldada)")
-v.chamada((Lmf - 30, 25), (4, 12), "M12 na mesa inferior da terça")
+v.chamada((30, 25), (-4, 14), "M12 8.8 no CMF-1")
+v.chamada((Lmf - 30, 25), (-30, 24), "M12 8.8 na alma da terça (a 40 do fundo)")
 
 # ------------------------------------------------------------------ ISO da ponta
-pr.imagem(330, 32, 640, 175, "/home/claude/letsara/pranchas/ISO-TS01-ponta-crop.png", "ISOMÉTRICO — LIGAÇÕES NA PONTA",
-          "dente Gerber, terças, ST-1, mão-francesa no fundo e contraventamento")
+pr.imagem(400, 40, 640, 210, "/home/claude/letsara/pranchas/ISO-TS01-ponta-crop.png", "ISOMÉTRICO — LIGAÇÕES DA COBERTURA",
+          "terça, ST-1P, mão-francesa e contraventamento — tudo parafusado")
 
 # ------------------------------------------------------------------ tabelas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
-lista = [["CH-T1", "200×200×12,5 + 4 pinos Ø16", 6, 84, "4,6", "386"],
-         ["CH-T2", "300×380×12,5 + 4 orelhas + 6 pinos + 2 U", 7, 98, "14,3", "1401"],
-         ["CH-A1", "300×150×12,5 + 4 grapas", 2, 28, "5,2", "146"],
-         ["CH-MF", "150×360×12,5 + 2 pinos Ø12,5", 11, 154, "5,7", "878"],
-         ["CH-MF2", "120×90×9,5 + luva + 2 pinos", 4, 56, "1,3", "73"],
-         ["TB-1", "tubo Ø50×3,0 L=450", 2, 28, "1,6", "45"],
-         ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 56, "1,5", "84"],
-         ["ST-1", "chapa 8×220×290 + 2 enrij. (soldado, fábrica)", 13, 182, "5,0", "910"],
-         ["OR-1", "chapa 8×300×100 (soldada, fábrica)", 11, 154, "1,9", "293"],
-         ["MF-1", f"L 50×5 L={Lmf} (montagem)", 26, 364, "4,8", "1747"],
-         ["NEO-1", "neoprene 300×150×10", 2, 28, "-", "-"],
-         ["PN-1", "pino Ø20 CA-50 L=700 (no consolo)", 2, 28, "1,7", "48"]]
-y = pr.tabela(x0, y, "LISTA DE CHAPARIA — TS-01", ["MARCA", "DESCRIÇÃO", "/PEÇA", "OBRA", "kg/un", "kg obra"], lista,
-              [16, 78, 16, 18, 22, 30])
-ct1 = CB["CT1"]
-cal = [["Pinos CH-T1 (4 Ø16)", f"Nd {f(ch['CH-T1']['Nu'],1)} / Vd {f(ch['CH-T1']['Vu'],1)} kN", f"{f(ch['CH-T1']['interacao'],2)}"],
-       ["Pinos CH-T2 + 2 U Ø10", f"Nd {f(ch['CH-T2']['Nu'],1)} / Vd {f(ch['CH-T2']['Vu'],1)} kN", f"{f(ch['CH-T2']['interacao'],2)}"],
-       ["Pinos CH-MF (2 Ø12,5)", f"Nd {f(ch['CH-MF']['Nu'],1)} / Vd {f(ch['CH-MF']['Vu'],1)} kN", f"{f(ch['CH-MF']['interacao'],2)}"],
-       ["M12 na alma da terça (3,00)", f"{f(ct1['M12_alma']['Fd'],1)} ≤ {f(min(ct1['M12_alma']['corte_Rd'], ct1['M12_alma']['contato_alma_Rd']),1)} kN", f"{f(ct1['M12_alma']['uso'],2)}"],
-       ["Solda ST-1 × CH-T (filete 6, 2 lados)", f"V {f(ct1['M16_chapa']['Vd'],1)} kN ≤ 2×220×0,7×6×0,6×485/1,35 /1000 = 232 kN", "0,08"],
-       ["Rasgamento da alma (furo a 60 da ponta)", f"{f(ct1['rasgamento_alma']['Fd'],1)} ≤ {f(ct1['rasgamento_alma']['Rd'],1)} kN", f"{f(ct1['rasgamento_alma']['Fd']/ct1['rasgamento_alma']['Rd'],2)}"],
-       ["Mão-francesa MF-1", f"{f(mf['Nd_kN'],1)} ≤ {f(mf['NcRd'],1)} kN (λ = {mf['esbeltez']})", f"{f(mf['uso'],2)}"]]
-y = pr.tabela(x0, y - 4, "VERIFICAÇÕES (ELU)", ["ITEM", "SOLICITAÇÃO × RESISTÊNCIA", "USO"], cal, [62, 98, 20])
-notas = ["Chaparia ASTM A36; pinos com cabeça (stud) fu ≥ 450 MPa soldados por arco. ST-1 e OR-1 soldados às chapas embutidas na fábrica de pré-moldados, com gabarito, após a desforma (ND-LET-COB01, detalhes 1 e 2).",
-         "Soldas de filete 5 mm contínuas, E70XX; grapas Ø10 CA-50 com 2 filetes de 40 mm.",
-         "Parafusos (montagem): M12 8.8 (terça × ST-1, 2 por ponta; mão-francesa × OR-1 e × terça); furos padrão d + 2 mm; arruelas lisas e de pressão.",
-         "CH-T2 é uma só peça para todos os nós: simétrica por rotação de 180°.",
-         "Chumbadores pelo ACI 318-19 cap. 17 (cone, arrancamento, aço, borda, pryout), concreto fissurado C50. Grampos U da CH-T2 encostados nos pinos (≤ 25 mm), pernas de 300 com gancho de 90°.",
-         "Proteção: galvanização a fogo ou fundo epóxi após a desforma, retocado após a montagem.",
+k = lambda kgm, Lm: f(kgm * Lm, 1)
+lista = [["ES-1", "barra roscada M16 L=330 c/ gancho", 2 * nt, 2 * nt * 14, k(1.58, 0.33)],
+         ["ES-2", "barra roscada M16 L=220 c/ gancho + U Ø10", 4 * nn, 4 * nn * 14, k(1.58, 0.22)],
+         ["ES-3", "barra roscada M16 L=170 + porca + arruela", 2 * nt, 2 * nt * 14, k(1.58, 0.17)],
+         ["TB-3", "tubo Ø50,8×2,0 L=900", 4, 56, k(2.41, 0.90)],
+         ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 56, "1,5"],
+         ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * 14, "7,4"],
+         ["ST-1V", "igual ao ST-1P, 2 oblongos no eixo (VB)", "-", 4 * nt, "7,4"],
+         ["OR-X", "L 102×76×6,3 L=80", "-", 4 * nn * 4, "0,7"],
+         ["CMF-1", "L 76×76×6,3 L=80", "-", 2 * nt * 14, "0,6"],
+         ["MF-1", f"L 50×5 L={Lmf}", "-", 2 * nt * 14, k(3.77, Lmf / 1000)],
+         ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 28, "2,3"],
+         ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 28, "1,5"],
+         ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", 14, "-"],
+         ["NEO-3", "neoprene 100×300×10, 2 furos Ø30", "-", 14, "-"]]
+y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
+              [16, 92, 18, 22, 32])
+notas = ["Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
+         "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
+         "Mão-francesa MF-1 em todas as terças, dos dois lados da viga: CMF-1 na espera ES-3 (porca M16) e MF-1 parafusada no CMF-1 e na alma da terça.",
+         "OR-X só nos nós dos vãos contraventados (2-3 e 7-8); as esperas ES-2 existem em todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",
+         "Pinos PN-3/PN-5 concretados no pilar / na I130, passando pelo neoprene e pelos tubos TB-3, grauteados após o alinhamento das vigas.",
+         "Proteção: esperas, barras e peças galvanizadas a fogo (NBR 6323); retocar com tinta rica em zinco após a montagem.",
+         "Cálculo das esperas pelo ACI 318-19 cap. 17 (C50, concreto fissurado) e das peças pela NBR 8800:2024 — memória de cálculo em separado.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-TS01-3")

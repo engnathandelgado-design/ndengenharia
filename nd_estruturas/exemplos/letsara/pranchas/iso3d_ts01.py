@@ -2,9 +2,9 @@
 import json, math, numpy as np, pyvista as pv
 pv.OFF_SCREEN = True
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
-L, H, MAC, HD, LN = LG["L_TS"], 0.90, 1.20, 0.45, 0.30
+L, H, MAC = LG["L_TS"], 0.90, 1.20
 TERCAS = LG["s_tercas"]
-NOS = [TERCAS[k] for k in range(0, 13, 2)]
+NOS = [TERCAS[k] for k in range(0, len(TERCAS), 2)]
 ALCAS = LG["alcas"]
 SEC = [(-0.20, 0), (0.20, 0), (0.20, 0.15), (0.075, 0.23), (0.075, 0.70), (0.20, 0.78), (0.20, 0.90),
        (-0.20, 0.90), (-0.20, 0.78), (-0.075, 0.70), (-0.075, 0.23), (-0.20, 0.15)]
@@ -32,41 +32,33 @@ def cena(p, x_ini=0, x_fim=L):
     conc = dict(color="#c9c9c4", smooth_shading=False, show_edges=True, edge_color="#7a7a7a", line_width=0.6)
     aco = dict(color="#d9822b", show_edges=True, edge_color="#6b3d10", line_width=0.4)
     rb = [(-0.2, 0), (0.2, 0), (0.2, H), (-0.2, H)]
-    nib = [(-0.2, HD), (0.2, HD), (0.2, H), (-0.2, H)]
     if x_ini < MAC:
-        p.add_mesh(extrude(nib, 0.0, LN, skew=False), **conc)
-        p.add_mesh(extrude(rb, LN, MAC, skew=False), **conc)
+        p.add_mesh(extrude(rb, 0.0, MAC, skew=False), **conc)
     p.add_mesh(extrude(SEC, max(MAC, x_ini), min(L - MAC, x_fim), skew=False), **conc)
     if x_fim > L - MAC:
-        p.add_mesh(extrude(rb, L - MAC, L - LN, skew=False), **conc)
-        p.add_mesh(extrude(nib, L - LN, L, skew=False), **conc)
-    for s in TERCAS[1:-1]:                                     # CH-MF no fundo (plano da terça)
-        if x_ini <= s <= x_fim:
-            p.add_mesh(box(s - 0.027 - 0.075, -0.18, -0.0125, 0.15, 0.36, 0.0125), **aco)
-    lab_pts, labs = [], []
-    for k, s in enumerate(TERCAS):
+        p.add_mesh(extrude(rb, L - MAC, L, skew=False), **conc)
+    for s in TERCAS:
         if not (x_ini <= s <= x_fim):
             continue
-        no = any(abs(s - n) < 1e-6 for n in NOS)
-        w = 0.30 if no else 0.20
-        p.add_mesh(box(s - w / 2, -0.06 if not no else -0.10, H, w, 0.12 if not no else 0.20, 0.0125), **aco)
+        for yy in (-0.06, 0.06):                                  # ES-1 (ST-1P)
+            p.add_mesh(pv.Cylinder(center=(s - 0.075, yy, H + 0.06), direction=(0, 0, 1), radius=0.008, height=0.12), **aco)
+        for sg in (-1, 1):                                        # ES-3 (mão-francesa), lateral, 100 do fundo
+            p.add_mesh(pv.Cylinder(center=(s - 0.025, sg * 0.23, 0.10), direction=(0, 1, 0), radius=0.008, height=0.06), **aco)
+        if any(abs(s - n) < 1e-6 for n in NOS):                   # ES-2 (OR-X)
+            for so in (-0.14, 0.14):
+                for yy in (-0.14, 0.14):
+                    p.add_mesh(pv.Cylinder(center=(s + so, yy, H + 0.025), direction=(0, 0, 1), radius=0.008, height=0.05), **aco)
     for s in ALCAS:
         if x_ini <= s <= x_fim:
             t = np.linspace(0, math.pi, 30)
             pts = np.c_[s + 0.06 * np.cos(t), 0 * t, H + 0.14 * np.sin(t)]
             p.add_mesh(pv.Spline(pts, 60).tube(radius=0.009), color="#8a8a8a")
-    for s in (0.15, L - 0.15):
+    for s, neo in ((0.14, 0.20), (L - 0.0775, 0.10)):              # TB-3 (2 por ponta) + neoprene
         if x_ini <= s <= x_fim:
-            p.add_mesh(pv.Cylinder(center=(s + 0.0135, 0, (H + HD) / 2), direction=(0.03, 0, 1), radius=0.025, height=H - HD + 0.02),
-                       color="#5a5a5a", opacity=0.55)
-            p.add_mesh(box(s - 0.075, -0.15, HD - 0.0125, 0.15, 0.30, 0.0125), **aco)
-            p.add_mesh(box(s - 0.075, -0.15, HD - 0.0225, 0.15, 0.30, 0.010), color="#202020")
-            p.add_mesh(pv.Cylinder(center=(s, 0, HD - 0.10), direction=(0, 0, 1), radius=0.0125, height=0.16), color="#444444")
-            # consolo do pilar (topo no fundo do dente − neoprene), folga de 25 mm até a face do dente
-            xs_ = -0.025 if s < L / 2 else L + 0.025
-            dx_ = 0.30 if s < L / 2 else -0.30
-            p.add_mesh(pv.Box(bounds=(min(xs_, xs_ + dx_), max(xs_, xs_ + dx_), -0.2, 0.2, HD - 0.46, HD - 0.0225)),
-                       color="#b9b4a8", opacity=0.45)
+            for yy in (-0.10, 0.10):
+                p.add_mesh(pv.Cylinder(center=(s + 0.0135, yy, H / 2), direction=(0.03, 0, 1), radius=0.025, height=H + 0.01),
+                           color="#5a5a5a", opacity=0.55)
+            p.add_mesh(box(s - neo / 2, -0.15, -0.010, neo, 0.30, 0.010), color="#202020")
 
 
 def rot(p, pts, labs):
@@ -77,38 +69,51 @@ def rot(p, pts, labs):
 # 1) geral
 p = pv.Plotter(off_screen=True, window_size=(2400, 900)); p.set_background("white")
 cena(p)
-rot(p, [(ALCAS[0], 0, H + 0.14), (ALCAS[1], 0, H + 0.14), (TERCAS[3], 0, H + 0.0125), (NOS[2], 0, H + 0.0125),
-        (TERCAS[9] - 0.027, 0.18, -0.0125), (L - 0.15, 0.2, HD), (0.15, 0.2, 0.70)],
-    ["AL-1 (4 alças de cordoalha)", "AL-1", "CH-T1 + ST-1 (terça)", "CH-T2 (terça + contraventamento)",
-     "CH-MF no fundo (mão-francesa)", "dente + CH-A1 + neoprene + pino", "dente Gerber / ponta a prumo"])
+rot(p, [(ALCAS[0], 0, H + 0.14), (TERCAS[3] - 0.075, 0.06, H + 0.12), (NOS[2] + 0.14, 0.14, H + 0.05),
+        (TERCAS[9] - 0.025, 0.26, 0.10), (L - 0.0775, 0.2, 0.0), (0.14, 0.2, 0.0)],
+    ["AL-1 (4 alças de cordoalha)", "ES-1: 2 esperas M16 do ST-1P (terça)", "ES-2: esperas das orelhas OR-X (nó do X)",
+     "ES-3: esperas M16 da mão-francesa", "apoio no topo da I130: NEO-3 + 2 TB-3", "apoio no pilar: NEO-4 + 2 TB-3 (sem dente)"])
 p.enable_parallel_projection()
 p.camera_position = [(L * 0.5 - 8, -14, 9), (L * 0.5, 0, 0.45), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(2.3)
-p.add_text(f"TS-01 — viga I90 de cobertura com dentes Gerber · {L*1000:.0f} mm · 11,6 t · 14 peças".replace(",", ".").replace(".6 t", ",6 t"), font_size=16, position="upper_left", color="#111111")
+p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · 12,0 t · 14 peças".replace(".", ","), font_size=16, position="upper_left", color="#111111")
 p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-geral.png")
-# 2) ponta com terça, cantoneira, mão-francesa e contraventamento
+from PIL import Image, ImageChops
+im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-geral.png").convert("RGB")
+bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()
+im.crop((max(bb[0] - 20, 0), max(bb[1] - 20, 0), min(bb[2] + 20, im.width), min(bb[3] + 20, im.height))).save("/home/claude/letsara/pranchas/ISO-TS01-geral-crop.png")
+print("ok")
+
+# 2) ponta: terças, ST-1P, mão-francesa (CMF-1 + MF-1) e X (OR-X) — tudo parafusado
 p = pv.Plotter(off_screen=True, window_size=(1500, 1200)); p.set_background("white")
-cena(p, 0, 3.6)
+cena(p, 0, 3.0)
 for s in (TERCAS[0], TERCAS[1], TERCAS[2]):
     for sg in (1, -1):
-        p.add_mesh(box(s - 0.0425, 0.04 if sg > 0 else -1.6, H + 0.0125, 0.085, 1.56, 0.30), color="#9fb6cc", show_edges=True, edge_color="#446666")
-        p.add_mesh(box(s - 0.11, -0.06, H + 0.0125, 0.065, 0.12, 0.10), color="#4f6f93")
-        if s < LN:                                    # 1ª terça: mão-francesa na CH-MF2, face lateral do dente
-            pts = np.array([(s, sg * 0.21, HD + 0.075), (s, sg * 0.60, H + 0.0125)])
-        else:                                         # demais: CH-MF no fundo da viga, 45°
-            pts = np.array([(s - 0.027, sg * 0.15, -0.0125), (s, sg * 1.07, H + 0.0125)])
+        p.add_mesh(box(s - 0.0425, 0.005 if sg > 0 else -1.6, H + 0.010, 0.085, 1.595, 0.30), color="#9fb6cc", show_edges=True, edge_color="#446666")
+        pts = np.array([(s - 0.025, sg * 0.26, 0.10), (s - 0.025, sg * 1.07, H + 0.05)])
         p.add_mesh(pv.Line(*pts).tube(radius=0.012), color="#2f4f6f")
+        p.add_mesh(box(s - 0.065, sg * 0.23 - 0.003, 0.06, 0.08, 0.006, 0.076), color="#4f6f93")
+    p.add_mesh(box(s - 0.15, -0.11, H, 0.15, 0.22, 0.0095), color="#4f6f93")
+    p.add_mesh(box(s - 0.0525, -0.11, H, 0.0095, 0.22, 0.29), color="#4f6f93")
+for so in (0.14, -0.14):
+    for yy in (0.14, -0.14):
+        p.add_mesh(box(TERCAS[0] + so - 0.04, yy - 0.003, H, 0.08, 0.006, 0.102), color="#b03a2e")
 for sg in (1, -1):
-    p.add_mesh(pv.Line((NOS[0], sg * 0.12, H + 0.02), (NOS[1], sg * 1.6, H + 0.02)).tube(radius=0.007), color="#b03a2e")
-rot(p, [(TERCAS[1], 0.8, H + 0.32), (TERCAS[1] - 0.08, -0.03, H + 0.11), (TERCAS[1] - 0.01, 0.6, 0.45),
-        (1.2, 0.85, H + 0.03), (0.15, 0.2, HD - 0.2), (TERCAS[1] - 0.027, -0.15, -0.0125), (0.3, -0.2, 0.2)],
-    ["terça Ue 300×85×25×3,00", "suporte ST-1 soldado na CH-T1 (2 M12 por terça)", "mão-francesa L50×5 (do fundo da viga até a terça)",
-     "contraventamento Ø12,5 A36 (CH-T2)", "consolo + neoprene + pino PN-1", "CH-MF + orelha OR-1 (chapa soldada)", "dente Gerber"])
+    p.add_mesh(pv.Line((TERCAS[0] + 0.14, sg * 0.14, H + 0.045), (TERCAS[2] - 0.14, sg * 1.6, H + 0.045)).tube(radius=0.008), color="#b03a2e")
+p.add_mesh(pv.Box(bounds=(-0.30, -0.025, -0.2, 0.2, -0.7, H + 0.9)), color="#b9b4a8", opacity=0.45)
+p.add_mesh(pv.Box(bounds=(-0.025, 0.30, -0.2, 0.2, -0.7, -0.010)), color="#b9b4a8", opacity=0.45)
+rot(p, [(TERCAS[1], 0.8, H + 0.32), (TERCAS[1] - 0.08, 0.0, H + 0.30), (TERCAS[1] - 0.025, 0.7, 0.55),
+        (1.2, 0.85, H + 0.05), (0.14, 0.2, -0.01), (TERCAS[1] - 0.03, 0.23, 0.08), (-0.15, 0.2, H + 0.4)],
+    ["terça Ue 300×85×25×2,65", "ST-1P (chapa dobrada) nas esperas ES-1", "mão-francesa MF-1 L50×5",
+     "X Ø16 nas orelhas OR-X (ES-2)", "assento do pilar: NEO-4 + 2 PN-3", "CMF-1 na espera ES-3", "cabeça do pilar"])
 p.enable_parallel_projection()
-p.camera_position = [(-3.2, -5.4, 1.6), (1.5, 0, 0.45), (0, 0, 1)]
-p.reset_camera(); p.camera.zoom(1.1)
-p.add_text("Detalhe A — ponta, apoio, terças e contraventamento", font_size=15, position="upper_left", color="#111111")
+p.camera_position = [(-3.2, -5.4, 2.4), (1.3, 0, 0.55), (0, 0, 1)]
+p.reset_camera(); p.camera.zoom(1.15)
+p.add_text("Ponta da TS-01: apoio, terças, ST-1P, mão-francesa e X — sem solda", font_size=15, position="upper_left", color="#111111")
 p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-ponta.png")
-print("ok")
+im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-ponta.png").convert("RGB")
+bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()
+im.crop((max(bb[0] - 20, 0), max(bb[1] - 20, 0), min(bb[2] + 20, im.width), min(bb[3] + 20, im.height))).save("/home/claude/letsara/pranchas/ISO-TS01-ponta-crop.png")
+print("ok2")

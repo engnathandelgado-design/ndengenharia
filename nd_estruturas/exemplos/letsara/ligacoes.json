@@ -3,39 +3,94 @@
  "erros": 0,
  "platibanda": {
   "platibanda": 10.0,
-  "telha_P2": 9.878,
-  "telha_P1": 8.711,
-  "folga_P2_mm": 122,
+  "pacote_m": 1.47,
+  "pacote": {
+   "tp40": 0.04,
+   "espacador_la": 0.04,
+   "zipada": 0.07,
+   "painel_solar": 0.11
+  },
+  "topo_painel_P2": 9.849,
+  "topo_painel_P1": 8.665,
+  "folga_P2_mm": 151,
   "ok": true
  },
- "Z0_TS": 7.46,
- "L_TS": 19.159,
- "passo_tercas": 1.554,
+ "Z0_TS": 7.195,
+ "L_TS": 19.696,
+ "passo_tercas": 1.199,
  "s_tercas": [
   0.255,
-  1.809,
-  3.363,
-  4.917,
-  6.471,
-  8.025,
-  9.579,
-  11.133,
-  12.687,
-  14.241,
-  15.795,
-  17.349,
-  18.903
+  1.454,
+  2.653,
+  3.852,
+  5.051,
+  6.25,
+  7.449,
+  8.648,
+  9.847,
+  11.046,
+  12.245,
+  13.444,
+  14.643,
+  15.842,
+  17.041,
+  18.24,
+  19.439
  ],
- "X_PINO": [
-  0.475,
-  19.325,
-  20.175,
-  39.025
+ "X_PONTA_ESQ": 0.025,
+ "X_PONTA_CEN": 19.7125,
+ "apoios_ts": {
+  "P1": {
+   "x_neo": 0.165,
+   "z": 7.19,
+   "comp_apoio": 0.275
+  },
+  "P2": {
+   "x_neo": 39.335,
+   "z": 8.3651,
+   "comp_apoio": 0.275
+  },
+  "centro_esq": {
+   "x_neo": 19.634999999999998,
+   "z": 7.7741,
+   "comp_apoio": 0.1625
+  },
+  "centro_dir": {
+   "x_neo": 19.865000000000002,
+   "z": 7.781
+  }
+ },
+ "REC": [
+  7.19,
+  8.366
  ],
- "TB1_s_fabricacao": [
-  0.1635,
-  19.0225
- ],
+ "Z_TOPO_I130": 7.778,
+ "Z_ASS_I130": 6.968,
+ "H_I130": 1.3,
+ "HD_I130": 0.78,
+ "cargas_cob": {
+  "zipada_065": 0.065,
+  "la_rocha_40": 0.025,
+  "tp40_050": 0.048,
+  "espacadores_fixacoes": 0.02,
+  "paineis_solares": 0.15,
+  "instalacoes": 0.1,
+  "sobrecarga": 0.25,
+  "g_total_sem_terca": 0.408,
+  "g_favoravel_sucao": 0.158
+ },
+ "NEO_EXT": {
+  "x": 0.2,
+  "y": 0.3,
+  "e": 0.01,
+  "xc": 0.165
+ },
+ "NEO_CEN": {
+  "x": 0.1,
+  "y": 0.3,
+  "e": 0.01,
+  "xc": 19.634999999999998
+ },
  "contraventamento": {
   "chapa": {
    "y_orelha": 0.14,
@@ -46,15 +101,15 @@
    "d_tir": 0.016,
    "z_fundo_terca": 0.01
   },
-  "n_tirantes": 24,
+  "n_tirantes": 32,
   "subpaineis": 1,
   "amostra": [
    {
     "vao": "L2-L3",
     "painel": 1,
     "diagonal": "/",
-    "comp_m": 10.195,
-    "ang_eixo_viga": 73.9,
+    "comp_m": 10.021,
+    "ang_eixo_viga": 77.8,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 5.037,
@@ -65,8 +120,8 @@
     "vao": "L2-L3",
     "painel": 1,
     "diagonal": "\\",
-    "comp_m": 10.195,
-    "ang_eixo_viga": 73.9,
+    "comp_m": 10.021,
+    "ang_eixo_viga": 77.8,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 5.037,
@@ -77,8 +132,8 @@
     "vao": "L2-L3",
     "painel": 2,
     "diagonal": "/",
-    "comp_m": 10.195,
-    "ang_eixo_viga": 73.9,
+    "comp_m": 10.021,
+    "ang_eixo_viga": 77.8,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 5.037,
@@ -89,8 +144,8 @@
     "vao": "L2-L3",
     "painel": 2,
     "diagonal": "\\",
-    "comp_m": 10.195,
-    "ang_eixo_viga": 73.9,
+    "comp_m": 10.021,
+    "ang_eixo_viga": 77.8,
     "folga_terca_no_mm": 55,
     "furo_terca_interm": {
      "y_m": 5.038,
@@ -100,7 +155,7 @@
   ],
   "borda_furo_fundo_terca_mm": 26,
   "folga_min_terca_mm": 55,
-  "comp_max_m": 10.195,
+  "comp_max_m": 10.021,
   "folga_cruzamento_mm": 24.000000000000007,
   "ok": true
  },
@@ -108,579 +163,348 @@
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L2",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 esq",
-   "inserto": "TB-1.1",
-   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 74,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 dir",
-   "inserto": "TB-1.0",
-   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L2",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 75,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L2 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L2",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L3",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 esq",
-   "inserto": "TB-1.1",
-   "com": "I110 (consolo CV-TS) L3",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 24,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 dir",
-   "inserto": "TB-1.0",
-   "com": "I110 (consolo CV-TS) L3",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L3 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L3",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L4",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 esq",
-   "inserto": "TB-1.1",
-   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 74,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 dir",
-   "inserto": "TB-1.0",
-   "com": "pilar central P8A/P11 40×60 (consolo CP-TS) L4",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 75,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L4 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L4",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L5",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 esq",
-   "inserto": "TB-1.1",
-   "com": "I110 (consolo CV-TS) L5",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 24,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 dir",
-   "inserto": "TB-1.0",
-   "com": "I110 (consolo CV-TS) L5",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L5 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L5",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L6",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 esq",
-   "inserto": "TB-1.1",
-   "com": "I110 (consolo CV-TS) L6",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 24,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 dir",
-   "inserto": "TB-1.0",
-   "com": "I110 (consolo CV-TS) L6",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L6 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L6",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L7",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 esq",
-   "inserto": "TB-1.1",
-   "com": "I110 (consolo CV-TS) L7",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 24,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 dir",
-   "inserto": "TB-1.0",
-   "com": "I110 (consolo CV-TS) L7",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L7 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L7",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 esq",
-   "inserto": "TB-1.0",
-   "com": "P1 L8",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 25,
-   "z_assento": 7.914
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 esq",
-   "inserto": "TB-1.1",
-   "com": "I110 (consolo CV-TS) L8",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 24,
-   "z_assento": 8.48
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 dir",
-   "inserto": "TB-1.0",
-   "com": "I110 (consolo CV-TS) L8",
-   "tipo": "PN-1 Ø20 no consolo",
-   "dist_mm": 0.1,
-   "dz_mm": 0.5,
-   "ok": true,
-   "folga_ponta_mm": 75,
-   "folga_consolo_mm": 25,
-   "z_assento": 8.505
+   "ponta": "ext",
+   "folga_mm": 25,
+   "apoio_mm": 275,
+   "ok": true
   },
   {
    "ligacao": "apoio",
    "peca": "TS-01 L8 dir",
-   "inserto": "TB-1.1",
-   "com": "P2 L8",
-   "tipo": "PN-1 Ø20 no consolo CP-TS",
-   "dist_mm": 0.5,
-   "dz_mm": -0.0,
-   "ok": true,
-   "folga_ponta_mm": 25,
-   "folga_consolo_mm": 24,
-   "z_assento": 9.071
+   "ponta": "cen",
+   "folga_mm": 38,
+   "apoio_mm": 162,
+   "ok": true
   }
  ],
  "tercas": [
   {
    "ligacao": "terças",
    "peca": "TS-01 L2 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L3 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L4 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L5 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L6 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L7 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L8 esq",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (esq)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L2 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L3 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L4 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L5 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L6 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L7 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   },
   {
    "ligacao": "terças",
    "peca": "TS-01 L8 dir",
-   "inserto": "CH-T1/T2",
    "com": "linha de terças (dir)",
-   "tipo": "Ue 300×85×25×3,00",
    "dist_mm": 0.0,
-   "dz_mm": 0.0,
    "ok": true
   }
  ],
- "berco_I110": [
-  {
-   "linha": 3,
-   "consolo_esq": 8.48,
-   "consolo_dir": 8.505,
-   "desnivel_mm": 25.0,
-   "topo_I110": 8.88,
-   "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 77,
-   "ok": true
-  },
-  {
-   "linha": 5,
-   "consolo_esq": 8.48,
-   "consolo_dir": 8.505,
-   "desnivel_mm": 25.0,
-   "topo_I110": 8.88,
-   "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 77,
-   "ok": true
-  },
-  {
-   "linha": 6,
-   "consolo_esq": 8.48,
-   "consolo_dir": 8.505,
-   "desnivel_mm": 25.0,
-   "topo_I110": 8.88,
-   "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 77,
-   "ok": true
-  },
-  {
-   "linha": 7,
-   "consolo_esq": 8.48,
-   "consolo_dir": 8.505,
-   "desnivel_mm": 25.0,
-   "topo_I110": 8.88,
-   "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 77,
-   "ok": true
-  },
-  {
-   "linha": 8,
-   "consolo_esq": 8.48,
-   "consolo_dir": 8.505,
-   "desnivel_mm": 25.0,
-   "topo_I110": 8.88,
-   "fundo_I110": 7.78,
-   "folga_topo_I110_tercas_mm": 77,
-   "ok": true
-  }
- ],
+ "berco_I130": [],
  "nos_contraventamento_x_esq": [
-  0.58,
-  3.688,
-  6.796,
-  9.904,
-  13.012,
-  16.12,
-  19.228
+  0.28,
+  2.677,
+  5.074,
+  7.471,
+  9.868,
+  12.264,
+  14.661,
+  17.058,
+  19.455
  ],
  "alcas": [
   2.1,
-  7.4,
-  11.759,
-  17.059
+  7.6,
+  12.096,
+  17.596
  ],
  "estoque": [
   2.1,
-  17.059
+  17.596
  ]
 }

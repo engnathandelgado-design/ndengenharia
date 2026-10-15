@@ -25,10 +25,11 @@ YL = Y_LIN
 YLmm = [round(y * 1000) for y in YL]
 VAOS = [YLmm[i + 1] - YLmm[i] for i in range(8)]
 X_C, X_E = round(X_EIXO["C"] * 1000), round(X_EIXO["E"] * 1000)
-LTS = round(LG["L_TS"] * 1000 * (1 / (1 + 0.03 ** 2)) ** 0.5)          # projeção horizontal da TS-01 (19 150)
-X0E, X0D = 325, X_E - 325 - LTS                                          # pontas das vigas TS-01 (esq / dir)
+LTS = round(LG["L_TS"] * 1000 * (1 / (1 + 0.03 ** 2)) ** 0.5)          # projeção horizontal da TS-01
+X0E = round(LG["X_PONTA_ESQ"] * 1000); X0D = X_E - X0E - LTS            # pontas das vigas TS-01 (esq / dir) — rev03 sem dentes
 ST = LG["s_tercas"]
-XT = [round(X0E + s * 1000 - 27) for s in ST] + [round(X0D + s * 1000 - 27) for s in ST]   # 26 linhas de terças
+XT = [round(X0E + s * 1000 - 27) for s in ST] + [round(X0D + s * 1000 - 27) for s in ST]   # linhas de terças (2 meias águas)
+NT = len(ST)                             # terças por meia água (17 na rev03, passo ~1,20 m)
 PASSO = round(LG["passo_tercas"] * 1000)
 NOS = [round(x * 1000 - 27) for x in LG["nos_contraventamento_x_esq"]]
 NOS_D = [n - X0E + X0D for n in NOS]
@@ -39,10 +40,10 @@ Z_COR = 150                              # corrente Ø10 (rosca M10, furo Ø12) 
 Z_MF, Y_MF = 40, 1070                    # furo da mão-francesa na alma: 40 do fundo, a 1070 do eixo da viga
 Z_DIAG = 245                             # diagonal de ancoragem: furo Ø18 na alma da 2ª terça (245 do fundo) e no ST-1 (255 do concreto)
 Z_X = (35, 75)                           # cruzamento do X: furos Ø18 na alma da terça intermediária (do fundo da terça)
-H_TERCA, B_TERCA, PESO_UE = 300, 85, 11.8
-IDX_PONTA = {0, 12, 13, 25}              # 1ª terça de cada ponta de meia água
-IDX_2A = {1, 11, 14, 24}                 # 2ª terça (recebe as diagonais de ancoragem)
-IDX_X = {1, 3, 5, 7, 9, 11, 14, 16, 18, 20, 22, 24}   # intermediárias dos painéis do X (cruzamento)
+H_TERCA, B_TERCA, PESO_UE = 300, 85, 10.6       # Ue 300×85×25×2,65 ZAR 345 (rev03)
+IDX_PONTA = {0, NT - 1, NT, 2 * NT - 1}                 # 1ª terça de cada ponta de meia água
+IDX_2A = {1, NT - 2, NT + 1, 2 * NT - 2}                 # 2ª terça (recebe as diagonais de ancoragem)
+IDX_X = set(range(1, NT - 1, 2)) | set(range(NT + 1, 2 * NT - 1, 2))   # intermediárias dos painéis do X (cruzamento)
 L_TERCA = [v - 2 * FOLGA for v in VAOS]
 _comp = sorted(set(L_TERCA), reverse=True)
 BASE = {L: f"T{i+1}" for i, L in enumerate(_comp)}
@@ -57,7 +58,7 @@ def marca(k, i):
 def lista_marcas():
     q = {}
     for k in range(8):
-        for i in range(26):
+        for i in range(2 * NT):
             m = marca(k, i)
             q.setdefault(m, dict(L=L_TERCA[k], qt=0, vaos=set()))
             q[m]["qt"] += 1

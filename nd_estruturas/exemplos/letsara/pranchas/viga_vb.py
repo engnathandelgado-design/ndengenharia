@@ -20,11 +20,13 @@ L, X0VB = MARCAS[1][3], MARCAS[1][4]                                         # V
 TERCAS = [x - X0VB + 42 for x in XT if X0VB + 150 < x + 42 < X0VB + L - 150]   # eixo da terça (alma + 42) a partir da ponta
 PESO = 0.15 * 0.90 * 25 * L / 1000
 V = 0.15 * 0.90 * L / 1000
-# cargas: peso próprio 3,4 + telha/terças/vento (5 m de tributária) ≈ 1,6 kN/m → M ≈ 59 kN·m; vento de sucção simétrico
+# cargas (rev03): pp 3,4 + terças do vão de oitão c/1,20 m [(0,495 + 0,25) kN/m² × 9,63/2 = 3,6 kN/m] = 7,0 kN/m → Md = 1,4·7,0·9,4²/8 = 108 kN·m
+# As = 108/(0,9·0,85·43,5) = 3,2 cm² ≤ 3 Ø12,5 (3,7); Vd = 46 kN (CP-VB calculado para 48 kN); vento de sucção simétrico (N2 = N1)
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="VIGAS DE BORDA VB-01 A VB-04 (15×90, C40) — FACHADAS 1 E 9 — FÔRMA, ARMAÇÃO E INSERTOS",
                         desenho="ND-LET-VB01", folha="01/01", fase="PARA APROVAÇÃO", marca="VB-02", qtd=2, peso=f(PESO, 1), volume=f(V, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
+pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m: ESPERAS ES-1/ES-3 (SEM SOLDA); TB-1 SEM CHAPA; CARGAS COM PAINÉIS SOLARES")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
@@ -52,20 +54,22 @@ for mk, _, _, Lm, _x0 in MARCAS:
 
 # ELEVAÇÃO 1:20 (cm)
 ESC = 20
-ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 175), ESC, titulo="ELEVAÇÃO DE FÔRMA — VB-02", subtitulo="face interna; CH-T1 no topo nos passos das terças", unidade="cm")
+ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 175), ESC, titulo="ELEVAÇÃO DE FÔRMA — VB-02", subtitulo="face interna; esperas ES-1V no topo nos passos das terças", unidade="cm")
 ve.ret(0, 0, L, H, "VISTA")
 for x in (150, L - 150):
     ve.ret(x - 25, 0, 50, 450, "OCULTA")
-    ve.chapa(x - 150, -12.5, 300, 12.5)
 for s in TERCAS:
-    ve.chapa(s - 75, H, 150, 12.5)
+    for dx in (45, 105):
+        ve.ret(s - dx - 8, H, 16, 120, "METALICA")
+    ve.circulo((s - 25, 100), 8, "METALICA")
 for s in (1500, L - 1500):
     ve.poli([(s - 60, H), (s - 60, H + 100), (s, H + 140), (s + 60, H + 100), (s + 60, H)], "METALICA")
 ve.cota_ord([0, 150] + TERCAS + [L - 150, L], H + 140, 14, x0=0)
 ve.cota_h([0, 150, L - 150, L], 0, -10)
 ve.cota_v([0, H], L, 10)
-ve.chamada((150, 225), (14, 16), "TB-1 tubo Ø50×3,0 L=450 + CH-A1 (2x)")
-ve.chamada((TERCAS[2], H + 12), (10, 12), f"CH-T1 150×150×12,5 — {len(TERCAS)}x (terças Ue 300)")
+ve.chamada((150, 225), (14, 16), "TB-1 tubo Ø50×3,0 L=450, passante (2x)")
+ve.chamada((TERCAS[2] - 45, H + 120), (10, 12), f"ES-1V: 2 esperas M16 no eixo da VB por terça — {len(TERCAS)} terças (ST-1V parafusado)")
+ve.chamada((TERCAS[3] - 25, 100), (10, -12), "ES-3 (mão-francesa), face interna")
 ve.chamada((1500, H + 140), (10, 10), "AL-1 alça (2x)")
 ve.marcador_corte((L / 2, -22 * ESC), (L / 2, H + 24 * ESC), "A", lado=1)
 ve.marcador_detalhe((400, H / 2), 700, 1, ang=-120, dist=8)
@@ -95,26 +99,27 @@ for x in (-B / 2 + COB + 10, 0, B / 2 - COB - 10):
     ca.ponto_barra((x, COB + 10), 12.5); ca.ponto_barra((x, H - COB - 10), 12.5)
 for y in (300, 600):
     ca.ponto_barra((-B / 2 + COB + 6, y), 8); ca.ponto_barra((B / 2 - COB - 6, y), 8)
-ca.chapa(-75, H, 150, 12.5)
-for yy in (-50, 50):
-    ca.linha((yy, H), (yy, H - 100), "METALICA"); ca.chapa(yy - 12, H - 108, 24, 8)
+ca.ret(-8, H - 150, 16, 270, "METALICA")
+ca.poli([(-8, H - 150), (-8, H - 170), (52, H - 170)], "METALICA")
+ca.ret(B / 2 - 110, 92, 170, 16, "METALICA")
 ca.cota_h([-B / 2, B / 2], 0, -10); ca.cota_v([0, 300, 600, H], B / 2, 10)
 ca.chamada((B / 2 - COB - 10, H - COB - 10), (14, 10), "N2 — 3 Ø12,5")
 ca.chamada((B / 2 - COB - 10, COB + 10), (14, -10), "N1 — 3 Ø12,5")
 ca.chamada((B / 2 - COB - 6, 600), (14, 0), "N3 — 2 Ø8 por face")
 ca.chamada((B / 2 - COB, 450), (14, -14), "N4 Ø6,3 c/15")
-ca.chamada((75, H + 6), (14, 14), "CH-T1 150×150×12,5 + 2 pinos Ø12,5 c/ cabeça L=100")
+ca.chamada((0, H + 60), (14, 14), "ES-1V M16 hef 150 + gancho, saliência 120 (no eixo)")
+ca.chamada((B / 2 + 30, 100), (14, -8), "ES-3 M16 hef 110, sai 60")
 
 d1 = pr.vista("DETALHE 1", (Q[0] + 230, YR), 10, titulo="DETALHE 1 — PONTA E APOIO NO CONSOLO CP-VB", subtitulo="pino PN-1 Ø20 no TB-1; neoprene 300×150×10", unidade="cm")
 LD = 1400
 d1.poli([(0, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True); d1.interrupcao((LD, 0), (LD, H))
-d1.chapa(150 - 25, 0, 50, 450); d1.chapa(0, -12.5, 300, 12.5); d1.chapa(25, -22.5, 250, 10)
+d1.chapa(150 - 25, 0, 50, 450); d1.ret(25, -10, 250, 10, "VISTA")
 for x in (50, 150, 250, 350, 450, 550, 650, 750):
     d1.linha((x, COB), (x, H - COB), "ARM_TRANSV")
 d1.poli([(COB, COB + 200), (COB, COB), (LD, COB)], "ARMADURA"); d1.poli([(COB, H - COB - 200), (COB, H - COB), (LD, H - COB)], "ARMADURA")
 d1.ret(-25, -32, 300, 10, "OCULTA")
 d1.cota_h([0, 150, 300, LD], 0, -12, total=False); d1.cota_v([0, 450, H], LD, 10, total=False)
-d1.chamada((150, 300), (14, 12), "TB-1 Ø50×3,0 L=450 soldado na CH-A1 300×150×12,5")
+d1.chamada((150, 300), (14, 12), "TB-1 Ø50×3,0 L=450 passante (sem chapa, sem solda)")
 d1.chamada((COB, COB + 200), (12, 10), "N1/N2 com dobra de 20 cm nas pontas (ancoragem)")
 d1.chamada((400, COB + 100), (12, 14), "N4 c/10 nos 150 cm")
 d1.chamada((140, -27), (24, -22), "NEO-1 e consolo CP-VB 30×40×35, sem chanfro (ver prancha do pilar); assento = fundo da viga")
@@ -129,20 +134,18 @@ barras = [dict(pos="N1", diam=12.5, qtd=3, comp=Lb + 40, forma=[(0, 20), (0, 0),
           dict(pos="N4", diam=6.3, qtd=len(xs_e), comp=round((2 * (90 + 840) + 120) / 10), forma=[(0, 0), (9, 0), (9, 84), (0, 84), (0, 0), (2, 2)], trechos=["9", "84", "", ""])]
 ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
 y = ta["y_base"]
-ins = [["TB-1", "Tubo Ø50×3,0 L=450 a prumo, soldado na CH-A1", 2, "a 150 das pontas"], ["CH-A1", "Chapa 300×150×12,5 + 2 grapas Ø12,5 (fundo)", 2, "fundo das pontas"],
-       ["CH-T1", "Chapa 150×150×12,5 + 2 pinos Ø12,5 c/ cabeça (terças)", len(TERCAS), "topo, c/157,9 (passo das terças)"], ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
+ins = [["TB-1", "Tubo Ø50×3,0 L=450 a prumo, passante, sem solda", 2, "a 150 das pontas"],
+       ["ES-1V", "2 barras roscadas M16 L=330 c/ gancho (ST-1V das terças)", 2 * len(TERCAS), "topo, no eixo, a 45 e 105 da face da terça"],
+       ["ES-3", "Barra roscada M16 L=170 horizontal + porca/arruela (MF)", len(TERCAS), "face interna, 100 do fundo"], ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
        ["NEO-1", "Neoprene 300×150×10 (furo Ø30)", 2, "sobre os consolos CP-VB"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 90 cm"], ["COMPRIMENTO", f"{L/10:.0f} cm", "CONCRETO", "C40"], ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
       ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "2 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
-mem = [["Md (g + q, 5 m tributários)", "≈ 59 kN·m"], ["As necessária / adotada", "1,8 / 3,7 cm² (3 Ø12,5)"], ["As mínima (0,15 %)", "2,0 cm² ≤ 3,7"],
-       ["Sucção do vento (uplift)", "simétrica: N2 = N1"], ["Cortante (Vd 35 kN)", "Ø6,3 c/15 ≥ mínimo"], ["Pele (h > 60)", "2 Ø8 / face"]]
-y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], mem, [70, 112])
 notas = ["Concreto C40, aço CA-50; cobrimento 3,0 cm (CAA II). Barras N1/N2 com dobra de 20 cm nas pontas.",
-         "Topo da VB alinhado com o topo das TS-01 (H = 90): as terças do primeiro vão apoiam na VB pelas CH-T1 e cantoneiras CT-1 (ND-LET-COB01).",
+         "Topo da VB alinhado com o topo das TS-01 (H = 90): as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V; mão-francesa MF-1 no CMF-1 da espera ES-3 (face interna) — ND-LET-COB01. Nenhuma solda.",
          "Apoio nos consolos CP-VB dos pilares de fachada e de canto: NEO-1 e pino PN-1 Ø20 no TB-1; graute só numa ponta.",
-         "Placas de fechamento CM-01 por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos IP-01).",
+         "Placas de fechamento por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos trilhos IP-01).",
          "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 y = pr.legenda_armadura(XC, y - 4, False)

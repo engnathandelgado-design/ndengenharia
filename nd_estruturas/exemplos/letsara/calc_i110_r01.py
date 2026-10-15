@@ -1,7 +1,7 @@
-"""Letsara — reverificação das vigas centrais I110 (V407, V406, V405) com a geometria do R01.
+"""Letsara — reverificação das vigas centrais I130 (V407, V406, V405) com a geometria do R01.
 
 Vãos (eixo a eixo): V407 L2→L4 20,15 m; V406 L4→P13 24,775 m; V405 P13→L9 24,775 m. Cargas: peso próprio, TS-01
-(2 por linha, nos consolos CV-TS) como cargas concentradas convertidas em carga uniforme equivalente pelo momento máximo
+(2 por linha, apoiadas no topo da I130 — rev03, sem consolos CV-TS) como cargas concentradas convertidas em carga uniforme equivalente pelo momento máximo
 (NBR 6118:2023 — verificação de flexão no meio do vão; cortante pelas reações reais). Unidades kN, m.
 """
 import json, math, sys
@@ -11,12 +11,17 @@ from nd_estruturas.prefabricados import Concreto, Carregamento, secao_I, verific
 from geometria import Y_LIN, Y_P13
 
 AQ = Path(__file__).parent
-sec = secao_I(1.10, bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
+# rev03: com a cobertura nova (painéis solares) a I130 não atende nos vãos de 24 m (ato/ELS-D/ELU com x/d > 0,45) →
+# seção I130 (h = 1,30 m, mesmas mesas e alma, mesma fôrma com 20 cm a mais de alma), C50, liberação com fckj 35 MPa
+H_I = 1.30
+sec = secao_I(H_I, bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
 C = Concreto(50)
 TRIB = 10.075
-L_TS = 19.15
-g_ts = (0.2225 * 25 + 0.25 * TRIB) * L_TS / 2          # reação de 1 TS-01 (peso + telha/terças/instalações)
-q_ts = 0.25 * TRIB * L_TS / 2
+LG = json.loads((Path(__file__).parent / "ligacoes.json").read_text(encoding="utf-8"))
+L_TS = LG["L_TS"]
+G_COB = LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]     # rev03: zipada + lã + TP40 + painéis + instalações + terças
+g_ts = (0.2225 * 25 + G_COB * TRIB) * L_TS / 2          # reação de 1 TS-01 (apoiada no topo da I130, rev03)
+q_ts = LG["cargas_cob"]["sobrecarga"] * TRIB * L_TS / 2
 P_g, P_q = 2 * g_ts, 2 * q_ts                          # duas TS por linha
 VIGAS = {"V407": (Y_LIN[1], Y_LIN[3], [Y_LIN[2]]), "V406": (Y_LIN[3], Y_P13, [Y_LIN[4], Y_LIN[5]]),
          "V405": (Y_P13, Y_LIN[8], [Y_LIN[6], Y_LIN[7]])}
@@ -40,8 +45,8 @@ for nome, (ya, yb, cargas) in VIGAS.items():
     g2e, qe = 8 * Mg2 / L ** 2, 8 * Mq / L ** 2
     car = Carregamento(sec.A * 25, g2e, qe, w=0.0, psi1=0.4, psi2=0.0)
     out = {}
-    for n in (24, 26, 28):
-        r = verificar_viga_pretracionada(sec, L, car, C, n, y_cord=0.1225, fckj=35)
+    for n in range(16, 34, 2):
+        r = verificar_viga_pretracionada(sec, L, car, C, n, y_cord=0.1231, fckj=40)   # 6@60, 6@100, 7@140, 7@180 (26); fckj 40
         out[n] = r
         if r.ok:
             break
@@ -61,7 +66,7 @@ for k, v in res.items():
 # (NBR 6118:2023 14.6.4.3: x/d ≤ 0,45 para fck ≤ 50 MPa; bloco retangular λ = 0,8, αc = 0,85; aço CA-50 fyd 434,8 MPa;
 #  cordoalha CP-190 com σpd do resultado acima). Largura b(y) da seção I medida do topo.
 def b_topo(y):
-    h, ts, ms, bs, bw = 1.10, 0.22, 0.08, 0.40, 0.15
+    h, ts, ms, bs, bw = H_I, 0.22, 0.08, 0.40, 0.15
     if y <= ts:
         return bs
     if y <= ts + ms:
@@ -69,7 +74,7 @@ def b_topo(y):
     return bw
 
 
-def mrd_com_As_sup(n_cord, As_sup_cm2, sig_pd=1478.0, d_p=1.10 - 0.1225, d_s=0.05):
+def mrd_com_As_sup(n_cord, As_sup_cm2, sig_pd=1478.0, d_p=H_I - 0.1231, d_s=0.05):
     fcd = 50 / 1.4 * 1000
     Fp = n_cord * 98.7e-6 * sig_pd * 1000
     Fs = As_sup_cm2 * 1e-4 * 434.8e3

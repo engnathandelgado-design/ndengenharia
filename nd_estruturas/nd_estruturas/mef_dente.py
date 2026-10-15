@@ -52,7 +52,7 @@ def _espessura(x, y, g):
     return b
 
 
-def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, passos=400, sig_pe=1150.0, du=0.05,
+def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, passos=400, sig_pe=1150.0, du=0.05, rampa_fim=False, robusto=False,
              lt=760.0, saida_png=None, titulo=""):
     """g: geometria (H, b, bw, ti, mi, ts, ms, hd, ln, a_apoio, x_mac, l_apoio).
     arm: lista de barras dict(tipo='h'|'v', pos (y para 'h', x para 'v'), ini, fim, area_total mm²).
@@ -122,6 +122,8 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
             if a in tag and b2 in tag:
                 xm = (xs[i] + xs[i + 1]) / 2
                 f = min(1.0, (xm - x0) / lt)
+                if rampa_fim:                                  # corte artificial do modelo: transferência gradual também no fim
+                    f = min(f, (Ls - xm) / lt)
                 mt[0] += 1
                 ops.uniaxialMaterial("InitStrainMaterial", mt[0], 3, f * eps_pe)
                 e += 1
@@ -184,7 +186,7 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
     lim = None
     # elementos monitorados para o critério de deformação (fora das placas de carga e de apoio)
     perto = lambda xc, yc: (abs(xc - xP) < 200 and yc > H - 200) or (abs(xc - g["a_apoio"]) < 200 and abs(yc - y_dente) < 200) \
-        or (xc > Ls - 300 and yc < 200)
+        or ((xc > Ls - lt - 100 and yc < 300) if rampa_fim else (xc > Ls - 300 and yc < 200))
     mon_c = [e_ for e_, xc, yc in elem_c if not perto(xc, yc)]
     mon_s = [e_ for e_, nome, tipo in barras if tipo != "p"]
     eps_ini = {e_: ops.basicDeformation(e_)[0] / malha for e_, nome, tipo in barras if tipo == "p"}
@@ -198,6 +200,15 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
                 if ok_sub:
                     r = 0
                     break
+            if r != 0 and robusto:                          # último recurso: Newton modificado / line search, tolerância 1e-4
+                for alg in (("ModifiedNewton", "-initial"), ("NewtonLineSearch",)):
+                    ops.algorithm(*alg); ops.test("NormDispIncr", 1e-4, 300)
+                    ops.integrator("DisplacementControl", ctrl, 2, -du / 10)
+                    if all(ops.analyze(1) == 0 for _ in range(10)):
+                        r = 0
+                    ops.algorithm("KrylovNewton"); ops.test("NormDispIncr", 1e-5, 60)
+                    if r == 0:
+                        break
             ops.integrator("DisplacementControl", ctrl, 2, -du)
             if r != 0:
                 break

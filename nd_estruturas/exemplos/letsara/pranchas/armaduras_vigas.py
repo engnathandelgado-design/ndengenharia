@@ -20,55 +20,52 @@ def zonas_txt(xs, pos, d, extra=""):
 
 # ================================================================== especificações por família
 def spec_ts01():
+    """TS-01 rev03: sem dentes; N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais) nas pontas; 8 cordoalhas (C2 isoladas)."""
     import ts01_dados as T
-    L, H, DX, HD, LN, P = T.L, T.H, T.DX, T.HD, T.LN, T.P
+    L, H, DX, P = T.L, T.H, T.DX, T.P
     sk = lambda h: h * DX / H
-    x_est, X_SUS, barras = T.armacao_ts01()
-    AD, ANC = T.AD, T.ANC
-    cont = [(LN, 0), (L - LN, 0), (L - LN + sk(HD), HD), (L + sk(HD), HD), (L + DX, H), (DX, H), (sk(HD), HD), (LN + sk(HD), HD)]
+    x_est, _, barras = T.armacao_ts01()
+    X_N6 = [40, 90, 190, 240, 290, 340, 390, 440]
+    cont = [(0, 0), (L, 0), (L + DX, H), (DX, H)]
     ents = [([(x + sk(40), 40), (x + sk(H - 40), H - 40)], "ARM_TRANSV") for x in x_est]
-    ents += [([(x + sk(40), 40), (x + sk(H - 40), H - 40)], "ARM_TRANSV") for xs_ in (X_SUS, [L - x for x in X_SUS]) for x in xs_]
-    ents += [([(30, H - 45), (L - 30, H - 45)], "ARMADURA"), ([(LN + 30, 40), (L - LN - 30, 40)], "ARMADURA"),
-             ([(LN, P["y_cord"]), (L - LN, P["y_cord"])], "ARM_PROT")]
-    for x0_, sg in ((0, 1), (L, -1)):
-        ents.append(([(x0_ + sg * 30, HD + 55), (x0_ + sg * (LN + ANC), HD + 55)], "ARMADURA"))
-    zs = [(X_SUS[0], X_SUS[-1], f"{AD['n_sus']} N9")] + zonas_txt(x_est, "N1", 6.3) + [(L - X_SUS[-1], L - X_SUS[0], f"{AD['n_sus']} N9")]
+    ents += [([(x + sk(30), 30), (x + sk(H - 30), H - 30)], "ARM_TRANSV") for xs_ in (X_N6, [L - x for x in X_N6]) for x in xs_]
+    ents += [([(30, H - 45), (L - 30, H - 45)], "ARMADURA"), ([(30, 40), (L - 30, 40)], "ARMADURA"),
+             ([(0, P["y1"]), (L, P["y1"])], "ARM_PROT"), ([(0, P["y2"]), (L, P["y2"])], "ARM_PROT")]
+    zs = [(X_N6[0], X_N6[-1], "8 N6")] + zonas_txt(x_est, "N1", 6.3) + [(L - X_N6[-1], L - X_N6[0], "8 N6")]
     sec = [(x * 1000, y * 1000) for x, y in T.sec.pts]
+    prot = [(x, P["y1"]) for x in P["x_cord"]] + [(x, P["y2"]) for x in P["x_cord2"]]
     S1 = dict(nome="SEÇÃO S.1", sub="corrente", esc=10, contorno=[sec],
               ents=[([(-45, 30), (45, 30), (45, H - 30), (-45, H - 30)], "ARM_TRANSV", True),
                     ([(-170, H - 30), (170, H - 30), (170, H - 100), (-170, H - 100)], "ARM_TRANSV", True),
-                    ([(-170, 30), (170, 30), (170, 100), (-170, 100)], "ARM_TRANSV", True)],
+                    ([(-170, 30), (170, 30), (170, 130), (-170, 130)], "ARM_TRANSV", True)],
               discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)] + [(x, 40, 10) for x in (-165, 165)],
-              prot=[(x, P["y_cord"]) for x in P["x_cord"]],
-              bolhas=[("N1", (45, 450), (8, 0)), ("N2", (160, H - 45), (8, 6)), ("N3", (-170, H - 65), (-8, 4)), ("N4", (-170, 65), (-8, -4)), ("N5", (165, 40), (8, -6))],
-              formas=["N1", "N3", "N4"], prot_txt=f"C1 — {P['n_cord']} cord. Ø12,7")
-    S2 = dict(nome="SEÇÃO S.2", sub="maciço junto ao dente", esc=10, contorno=[[(-200, 0), (200, 0), (200, H), (-200, H)]],
-              ents=[([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARM_TRANSV", True)] +
-                   [([(-120, yy + 60), (-170, yy + 60), (-170, yy), (170, yy), (170, yy + 60), (120, yy + 60)], "ARM_TRANSV", False) for yy in (250, 450, 650)],
-              discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)], prot=[(x, P["y_cord"]) for x in P["x_cord"]],
-              bolhas=[("N6", (170, 560), (8, 4)), ("N7", (-170, 250), (-8, -4)), ("N2", (-160, H - 45), (-8, 6))], formas=["N6", "N7"])
-    XF = LN + ANC + 300
-    d_ = HD - 55
-    det = [([(XF, 0), (LN, 0), (LN + sk(HD), HD), (sk(HD), HD), (DX, H), (XF + DX, H)], "VISTA", False),
-           ([(30, HD + 55), (LN + ANC, HD + 55)], "ARMADURA", False), ([(LN, P["y_cord"]), (XF, P["y_cord"])], "ARM_PROT", False)]
-    det += [([(x, 40), (x, H - 40)], "ARM_TRANSV", False) for x in X_SUS]
-    ycs = [HD + 55 + (k + 1) * (2 / 3 * d_) / (AD["n_cost"] + 1) for k in range(AD["n_cost"])]
-    det += [([(30, yk), (LN + 450, yk)], "ARM_TRANSV", False) for yk in ycs]
-    det += [([(x, HD + 30), (x, H - 30)], "ARM_TRANSV", False) for x in (75, 225)]
-    D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub="as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
-              bolhas=[("N8", (LN + 600, HD + 55), (6, 8)), ("N9", (X_SUS[-1], 250), (8, -4)), ("N10", (LN + 300, ycs[0]), (10, 8)), ("N11", (75, H - 100), (-13, 9))],
-              formas=["N8", "N9", "N10", "N11"])
-    V, area = T.V, (2 * (T.sec.A * 0 + 1) * 0)                       # área de fôrma calculada abaixo
+              prot=prot,
+              bolhas=[("N1", (45, 450), (8, 0)), ("N2", (160, H - 45), (8, 6)), ("N3", (-170, H - 65), (-8, 4)), ("N4", (-170, 80), (-8, -4)), ("N5", (165, 40), (8, -6))],
+              formas=["N1", "N3", "N4"], prot_txt=f"C1/C2 — {P['n_cord']} cord. Ø12,7")
+    S2 = dict(nome="SEÇÃO S.2", sub="maciço da ponta (tubos TB-3 a y = ±10)", esc=10, contorno=[[(-200, 0), (200, 0), (200, H), (-200, H)]],
+              ents=[([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARM_TRANSV", True),
+                    ([(-125, 0), (-75, 0), (-75, H), (-125, H)], "OCULTA", True), ([(75, 0), (125, 0), (125, H), (75, H)], "OCULTA", True)],
+              discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)], prot=prot,
+              bolhas=[("N6", (170, 560), (8, 4)), ("N2", (-160, H - 45), (-8, 6))], formas=["N6"])
+    det = [([(1600, 0), (0, 0), (DX, H), (1600 + DX, H)], "VISTA", False),
+           ([(0, P["y1"]), (1600, P["y1"])], "ARM_PROT", False), ([(0, P["y2"]), (1600, P["y2"])], "ARM_PROT", False)]
+    det += [([(x + sk(30), 30), (x + sk(H - 30), H - 30)], "ARM_TRANSV", False) for x in X_N6]
+    det += [([(30, yy), (780, yy)], "ARM_TRANSV", False) for yy in (35, 125)] + [([(30, 80), (630, 80)], "ARM_TRANSV", False)]
+    det += [([(115, 0), (115 + DX, H)], "OCULTA", False), ([(165, 0), (165 + DX, H)], "OCULTA", False)]
+    D1 = dict(nome="DETALHE D1 — PONTA (APOIO DIRETO)", sub="as duas pontas iguais (TB-3 a 14 e 7,75 cm da ponta)", esc=10, contorno=[], ents=det, discos=[], prot=[],
+              bolhas=[("N6", (290 + sk(500), 500), (8, 8)), ("N7", (400, 80), (10, -6)), ("N8", (600, 125), (8, 10))],
+              formas=["N6", "N7", "N8"])
+    V = T.V
     per = sum(math.dist(a, b) for a, b in zip(sec, sec[1:] + sec[:1])) / 1000
     area = per * L / 1000 - 0.40 * L / 1000 + 2 * 0.40 * 0.90               # laterais + fundo (topo livre) + topos
     cord = (P["n_cord"], P["n_cord"] * L / 1000)
-    return dict(fam="TS-01", titulo="VIGA DE COBERTURA TS-01 (I90 PROTENDIDA)", forma="ND-LET-TS01-1 / TS01-2", fck=50, L=L, H=H, esc=40,
-                contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 + 1500, "S.1"), (LN + 750, "S.2")], dets=[(LN + 300, "D1")],
-                longas=[("N2", 30), ("N5", LN + 30)], blocos=[S1, S2, D1],
+    return dict(fam="TS-01", titulo="VIGA DE COBERTURA TS-01 (I90 PROTENDIDA, SEM DENTES)", forma="ND-LET-TS01-1 / TS01-2", fck=50, L=L, H=H, esc=40,
+                contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 + 1500, "S.1"), (600, "S.2")], dets=[(350, "D1")],
+                longas=[("N2", 30), ("N5", 30)], blocos=[S1, S2, D1],
                 marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord)],
-                notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7 aderentes (y = {P['y_cord']} mm), σpi = {P['sig_pi']} MPa.",
-                       "N9 (suspensão) fechados, envolvendo as cordoalhas e o N2, o mais perto possível da face do dente; N8 (tirante) em U horizontal com a curva na ponta, junto à CH-A1; N10 envolve o N8.",
-                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 entre estribos, sem cortar armadura."])
+                notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm e 3 a 10 cm; as 2 de 10 cm em x = ±4 isoladas 3,00 m nas pontas; σpi = {P['sig_pi']} MPa.",
+                       "Sem dentes: N6 (estribos verticais do maciço, fora da faixa dos tubos TB-3), N7 (grampos U horizontais) e N8 (estribos horizontais da mesa inferior) nas duas pontas.",
+                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2/ES-3 entre estribos, sem cortar armadura."])
 
 
 def spec_i(qual):
@@ -144,7 +141,7 @@ def spec_i(qual):
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
             marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(n_cord, n_cord * Lm / 1000)))
-        fam, tit, forma = "I110", "VIGAS CENTRAIS I110 PROTENDIDAS — V405, V406, V407", "ND-LET-I110"
+        fam, tit, forma = "I130", "VIGAS CENTRAIS I130 PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
         for mk, Lm in (("VM-01", L1), ("VM-02", L)):
@@ -259,7 +256,7 @@ def spec_vt():
                        "Dentes Gerber 30 × 20 nos consolos CP-VT: N5 tirante 2 Ø12,5 por ponta, N6 suspensão 2 estribos Ø8, N7 3 estribos Ø6,3 no dente (NBR 9062:2017 7.4)."])
 
 
-SPECS = [("TS-01", spec_ts01), ("I110", lambda: spec_i("i110")), ("VM", lambda: spec_i("vm")), ("VB", spec_vb), ("VT", spec_vt)]
+SPECS = [("TS-01", spec_ts01), ("I130", lambda: spec_i("i110")), ("VM", lambda: spec_i("vm")), ("VB", spec_vb), ("VT", spec_vt)]
 
 
 # ================================================================== desenho

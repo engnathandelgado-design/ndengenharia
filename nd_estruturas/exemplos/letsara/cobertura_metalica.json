@@ -1,166 +1,166 @@
 {
  "perfil": {
-  "nome": "Ue 300×85×25×3,00",
+  "nome": "Ue 300×85×25×2,65",
   "aco": "ZAR345",
-  "A_mm2": 1524,
-  "Ix_cm4": 2004.2,
-  "W_cm3": 133.6,
-  "peso_kNm": 0.117,
-  "m_ct_mm": 34.8,
+  "A_mm2": 1350,
+  "Ix_cm4": 1780.9,
+  "W_cm3": 118.7,
+  "peso_kNm": 0.104,
+  "m_ct_mm": 35.0,
   "assinatura_M": {
-   "local": 1.647,
+   "local": 1.285,
    "L_local": 169.0,
-   "dist": 1.42,
-   "L_dist": 679.0
+   "dist": 1.224,
+   "L_dist": 741.0
   },
   "assinatura_N": {
-   "local": 0.305,
+   "local": 0.238,
    "L_local": 220.0,
-   "dist": 0.472,
-   "obs": "sem mínimo distinto: curva em L = 679 mm"
+   "dist": 0.407,
+   "obs": "sem mínimo distinto: curva em L = 741 mm"
   }
  },
  "terca": {
   "L_m": 10.075,
-  "s_m": 1.554,
+  "s_m": 1.199,
   "Lb_suc_mm": 2519,
   "MRd_grav": {
-   "MRd": 36.850171664240094,
+   "MRd": 31.16981042979493,
    "modo": "distorcional",
-   "My": 46.09773505,
+   "My": 40.96015439394251,
    "Me": Infinity,
    "lam0": 0.0,
    "chi": 1.0,
-   "lam_l": 0.7792457546258477,
-   "lam_dist": 0.839042301704153,
-   "MRe": 46.09773505,
-   "MRl": 45.97214047253453,
-   "MRdist": 40.535188830664104
+   "lam_l": 0.882305797936118,
+   "lam_dist": 0.903858791871384,
+   "MRe": 40.96015439394251,
+   "MRl": 37.768887522601595,
+   "MRdist": 34.286791472774425
   },
   "MRd_suc": {
-   "MRd": 36.351125158185155,
-   "modo": "global (FLT)",
-   "My": 46.09773505,
-   "Me": 58.640521077994634,
-   "lam0": 0.8866268587623425,
-   "chi": 0.8674230443346626,
-   "lam_l": 0.725754809781552,
-   "lam_dist": 0.839042301704153,
-   "MRe": 39.986237674003675,
-   "MRl": 39.986237674003675,
-   "MRdist": 40.535188830664104
+   "MRd": 31.16981042979493,
+   "modo": "distorcional",
+   "My": 40.96015439394251,
+   "Me": 52.29824000569892,
+   "lam0": 0.8849877425914954,
+   "chi": 0.8683191242859137,
+   "lam_l": 0.8221646811348069,
+   "lam_dist": 0.903858791871384,
+   "MRe": 35.56648539396399,
+   "MRl": 34.30023536340555,
+   "MRdist": 34.286791472774425
   },
   "casos": {
    "geral": {
-    "w_grav_kNm": 1.107,
-    "w_suc_kNm": 1.513,
+    "w_grav_kNm": 1.25,
+    "w_suc_kNm": 1.174,
     "grav": {
-     "Msd": 14.05,
-     "MRd": 36.85,
+     "Msd": 15.86,
+     "MRd": 31.17,
      "modo": "distorcional",
-     "uso": 0.381
+     "uso": 0.509
     },
     "suc": {
-     "Msd": 19.2,
-     "MRd": 36.35,
-     "modo": "global (FLT)",
-     "uso": 0.528
+     "Msd": 14.89,
+     "MRd": 31.17,
+     "modo": "distorcional",
+     "uso": 0.478
     },
     "V": {
-     "Vsd": 7.62,
-     "VRd": 75.6,
-     "uso": 0.101
+     "Vsd": 6.3,
+     "VRd": 52.0,
+     "uso": 0.121
     }
    },
    "borda": {
-    "w_grav_kNm": 1.107,
-    "w_suc_kNm": 2.654,
+    "w_grav_kNm": 1.25,
+    "w_suc_kNm": 2.054,
     "grav": {
-     "Msd": 14.05,
-     "MRd": 36.85,
+     "Msd": 15.86,
+     "MRd": 31.17,
      "modo": "distorcional",
-     "uso": 0.381
+     "uso": 0.509
     },
     "suc": {
-     "Msd": 33.67,
-     "MRd": 36.35,
-     "modo": "global (FLT)",
-     "uso": 0.926
+     "Msd": 26.06,
+     "MRd": 31.17,
+     "modo": "distorcional",
+     "uso": 0.836
     },
     "V": {
-     "Vsd": 13.37,
-     "VRd": 75.6,
-     "uso": 0.177
+     "Vsd": 10.35,
+     "VRd": 52.0,
+     "uso": 0.199
     }
    }
   },
-  "flecha_gq_mm": 26.0,
-  "flecha_vento_mm": 32.5,
+  "flecha_gq_mm": 33.6,
+  "flecha_vento_mm": 28.4,
   "flecha_lim_mm": 56.0
  },
  "terca_escora": {
-  "Nd": 5.6,
-  "NcRd": 152.4,
+  "Nd": 21.2,
+  "NcRd": 128.9,
   "modo_N": "local-global",
-  "Md": 33.67,
-  "amplificacao": 1.015,
-  "MRd": 36.35,
+  "Md": 23.91,
+  "amplificacao": 1.059,
+  "MRd": 31.17,
   "interacao": 0.977,
   "ok": 1.0,
-  "vao_governante": "2-3",
-  "linha_governante_x_m": 35.82,
-  "faixa_governante": "beiral",
-  "vento_governante": "90°",
-  "Nd_max": 20.1,
+  "vao_governante": "1-2",
+  "linha_governante_x_m": 19.75,
+  "faixa_governante": "oitão",
+  "vento_governante": "0°",
+  "Nd_max": 21.2,
   "faixa_beiral": {
    "y_m": 5.92,
-   "Nd_max": 9.7,
+   "Nd_max": 7.5,
    "governante": {
     "vao": "2-3",
-    "x_m": 35.82,
+    "x_m": 2.68,
     "faixa": "beiral",
     "vento": "90°",
     "cp": -1.6,
     "L_m": 10.075,
-    "Nd": 5.6,
-    "NcRd": 152.4,
+    "Nd": 7.3,
+    "NcRd": 123.9,
     "modo_N": "local-global",
-    "Md": 33.67,
-    "MRd": 36.35,
-    "amplificacao": 1.015,
-    "interacao": 0.977
+    "Md": 26.06,
+    "MRd": 31.17,
+    "amplificacao": 1.021,
+    "interacao": 0.913
    }
   },
   "por_vao": [
    {
     "vao": "1-2",
-    "x_m": 0.0,
-    "faixa": "oitão + beiral",
+    "x_m": 19.75,
+    "faixa": "oitão",
     "vento": "0°",
     "cp": -1.6,
     "L_m": 9.65,
-    "Nd": 9.7,
-    "NcRd": 158.6,
+    "Nd": 21.2,
+    "NcRd": 128.9,
     "modo_N": "local-global",
-    "Md": 30.89,
-    "MRd": 36.85,
-    "amplificacao": 1.023,
-    "interacao": 0.919
+    "Md": 23.91,
+    "MRd": 31.17,
+    "amplificacao": 1.059,
+    "interacao": 0.977
    },
    {
     "vao": "2-3",
-    "x_m": 35.82,
+    "x_m": 2.68,
     "faixa": "beiral",
     "vento": "90°",
     "cp": -1.6,
     "L_m": 10.075,
-    "Nd": 5.6,
-    "NcRd": 152.4,
+    "Nd": 7.3,
+    "NcRd": 123.9,
     "modo_N": "local-global",
-    "Md": 33.67,
-    "MRd": 36.35,
-    "amplificacao": 1.015,
-    "interacao": 0.977
+    "Md": 26.06,
+    "MRd": 31.17,
+    "amplificacao": 1.021,
+    "interacao": 0.913
    },
    {
     "vao": "3-4",
@@ -169,13 +169,13 @@
     "vento": "0°",
     "cp": -1.6,
     "L_m": 10.075,
-    "Nd": 1.4,
-    "NcRd": 152.4,
+    "Nd": 1.2,
+    "NcRd": 123.9,
     "modo_N": "local-global",
-    "Md": 33.67,
-    "MRd": 36.35,
-    "amplificacao": 1.003,
-    "interacao": 0.938
+    "Md": 26.06,
+    "MRd": 31.17,
+    "amplificacao": 1.004,
+    "interacao": 0.849
    },
    {
     "vao": "4-5",
@@ -184,73 +184,73 @@
     "vento": "0°",
     "cp": -1.6,
     "L_m": 9.925,
-    "Nd": 1.0,
-    "NcRd": 154.6,
+    "Nd": 0.9,
+    "NcRd": 125.7,
     "modo_N": "local-global",
-    "Md": 32.68,
-    "MRd": 36.65,
-    "amplificacao": 1.002,
-    "interacao": 0.9
+    "Md": 25.29,
+    "MRd": 31.17,
+    "amplificacao": 1.003,
+    "interacao": 0.821
    },
    {
     "vao": "5-6",
-    "x_m": 0.0,
+    "x_m": 35.62,
     "faixa": "beiral",
-    "vento": "0°",
+    "vento": "90°",
     "cp": -1.6,
     "L_m": 10.0,
     "Nd": 0.6,
-    "NcRd": 153.5,
+    "NcRd": 124.8,
     "modo_N": "local-global",
-    "Md": 33.17,
-    "MRd": 36.5,
+    "Md": 25.67,
+    "MRd": 31.17,
     "amplificacao": 1.002,
-    "interacao": 0.914
+    "interacao": 0.829
    },
    {
     "vao": "6-7",
-    "x_m": 39.5,
+    "x_m": 35.62,
     "faixa": "beiral",
-    "vento": "0°",
+    "vento": "90°",
     "cp": -1.6,
     "L_m": 10.0,
-    "Nd": 0.7,
-    "NcRd": 153.5,
+    "Nd": 0.6,
+    "NcRd": 124.8,
     "modo_N": "local-global",
-    "Md": 33.17,
-    "MRd": 36.5,
+    "Md": 25.67,
+    "MRd": 31.17,
     "amplificacao": 1.002,
-    "interacao": 0.915
+    "interacao": 0.829
    },
    {
     "vao": "7-8",
-    "x_m": 39.5,
+    "x_m": 5.07,
     "faixa": "beiral",
     "vento": "0°",
     "cp": -1.6,
     "L_m": 10.0,
-    "Nd": 1.4,
-    "NcRd": 153.5,
+    "Nd": 1.0,
+    "NcRd": 124.8,
     "modo_N": "local-global",
-    "Md": 33.17,
-    "MRd": 36.5,
-    "amplificacao": 1.004,
-    "interacao": 0.922
+    "Md": 25.67,
+    "MRd": 31.17,
+    "amplificacao": 1.003,
+    "interacao": 0.834
    },
    {
     "vao": "8-9",
-    "x_m": 19.75,
-    "faixa": "oitão",
+    "x_m": 39.5,
+    "faixa": "oitão + beiral",
     "vento": "0°",
     "cp": -1.6,
     "L_m": 9.625,
-    "Nd": 9.5,
-    "NcRd": 158.9,
+    "Nd": 3.0,
+    "NcRd": 129.2,
     "modo_N": "local-global",
-    "Md": 30.73,
-    "MRd": 36.85,
-    "amplificacao": 1.023,
-    "interacao": 0.913
+    "Md": 23.78,
+    "MRd": 31.17,
+    "amplificacao": 1.008,
+    "interacao": 0.792
    }
   ],
   "fonte": "modelo_global_r01.json (ELU-1 e ELU-2, por vão e por linha de terça)",
@@ -261,142 +261,139 @@
   "posicao": "a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (150 do fundo)",
   "casos": {
    "sucção": {
-    "W_kN": 3.81,
-    "PL_por_terca_kN": 0.663,
-    "F_acumulada_kN": 8.62
+    "W_kN": 2.96,
+    "PL_por_terca_kN": 0.518,
+    "F_acumulada_kN": 8.8
    },
    "gravidade": {
-    "W_kN": 2.79,
-    "PL_por_terca_kN": 0.569,
-    "F_acumulada_kN": 7.4
+    "W_kN": 3.15,
+    "PL_por_terca_kN": 0.646,
+    "F_acumulada_kN": 10.98
    }
   },
-  "F_max_kN": 8.62,
+  "F_max_kN": 10.98,
   "flexivel": {
    "barra": "Ø10 A36, roscas M10, porca + contraporca e arruela dos 2 lados de cada terça",
    "d_mm": 10.0,
    "furo": "Ø12",
    "NtRd": 17.5,
-   "uso": 0.494
+   "uso": 0.629
   },
   "rigida": {
    "perfil": "L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma",
-   "L_mm": 1554,
-   "NcRd": 20.4,
-   "esbeltez": 155,
-   "uso": 0.423,
+   "L_mm": 1199,
+   "NcRd": 33.2,
+   "esbeltez": 120,
+   "uso": 0.331,
    "onde": "1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"
   },
   "diagonal": {
    "barra": "Ø16 A36, rosca M16",
-   "comp_L4_m": 2.96,
-   "comp_L2_m": 5.27,
-   "Td_L4": 16.4,
-   "Td_L2": 14.6,
-   "Td": 16.4,
+   "comp_L4_m": 2.79,
+   "comp_L2_m": 5.18,
+   "Td_L4": 25.5,
+   "Td_L2": 23.7,
+   "Td": 25.5,
    "NtRd": 44.7,
-   "uso": 0.367,
+   "uso": 0.572,
    "liga": "do nó da corrente na 2ª terça (L/4, L/2, 3L/4) ao furo Ø18 do ST-1 da 1ª terça, na viga"
   }
  },
  "contraventamento": {
-  "painel_x_m": 3.108,
+  "painel_x_m": 2.398,
   "subpaineis": 1,
-  "L_diag_m": 10.195,
-  "ang_graus": 73.9,
+  "L_diag_m": 10.021,
+  "ang_graus": 77.8,
   "vaos": [
    "2-3",
    "7-8"
   ],
   "fonte": "modelo_global_r01.json (máx. ELU)",
-  "V_painel_d": 6.8,
-  "T_diag_d": 7.1,
+  "V_painel_d": 9.2,
+  "T_diag_d": 9.4,
   "NtRd_16": 44.7,
-  "uso_diag": 0.159,
+  "uso_diag": 0.21,
   "no": {
-   "Fx_kN": 3.94,
-   "Fy_kN": 13.64
+   "Fx_kN": 3.97,
+   "Fy_kN": 18.38
   },
   "barra": "Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
   "nota": "X de nó a nó das vigas, abrangendo 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões); terças dos nós trabalham como escoras"
  },
- "CT1": {
-  "perfil": "L 102×102×9,5 (A36) L=200",
-  "reacao_suc_kN": 7.62,
-  "reacao_grav_kN": 5.58,
+ "ST1P": {
+  "peca": "chapa dobrada 9,5 × 220 (aba vertical 290, aba horizontal 150) A36 galvanizada",
+  "reacao_suc_kN": 5.91,
+  "reacao_grav_kN": 6.3,
   "M12_alma": {
-   "Fd": 10.75,
+   "Fd": 11.0,
    "corte_Rd": 26.8,
-   "contato_alma_Rd": 20.8,
-   "uso": 0.518,
-   "furo": "Ø14 (padrão)",
-   "parafuso": "M12 8.8, arruela lisa e porca"
-  },
-  "M16_chapa": {
-   "Td": 9.53,
-   "Vd": 10.05,
-   "Ft_Rd": 89.4,
-   "Fv_Rd": 47.7,
-   "interacao": 0.056,
-   "parafuso": "M16 8.8 na luva soldada da CH-T, furo Ø18 na aba"
+   "contato_alma_Rd": 17.8,
+   "uso": 0.619
   },
   "aba": {
-   "Md_kNm": 0.347,
-   "MRd_kNm": 1.026,
-   "uso": 0.338
+   "Md_kNm": 0.425,
+   "MRd_kNm": 1.128,
+   "uso": 0.377
   },
-  "contato_aba": 87.8,
+  "esperas": {
+   "barra": "2 barras roscadas M16 A36 (fu 400) com gancho, hef 150, saliência 120",
+   "Td": 7.39,
+   "Vd": 10.6,
+   "Ft_Rd": 44.7,
+   "Fv_Rd": 23.8,
+   "interacao": 0.225
+  },
   "rasgamento_alma": {
    "e_mm": 45,
-   "Fd": 10.05,
-   "Rd": 40.0,
-   "nota": "NBR 14762:2010 10.3.1 — t·e·fu/1,45, furo a 45 mm da ponta da terça"
+   "Fd": 10.6,
+   "Rd": 35.4
   }
  },
  "MF1": {
   "perfil": "L 50×5 (A36)",
-  "comp_m": 1.31,
-  "angulo": "45°",
-  "e_torcao_mm": 77.3,
-  "T_apoio_kNm": 0.589,
-  "H_kN": 1.96,
-  "Nd_kN": 2.86,
-  "NcRd": 42.4,
-  "esbeltez": 134,
-  "uso": 0.067,
-  "parafusos": "M12 8.8 na alma da terça (furo Ø14 a 40 mm do fundo; aba da MF encostada na alma) e M12 na orelha OR-1",
-  "contato_alma_terca_Rd": 20.8
+  "comp_m": 1.22,
+  "angulo": "44°",
+  "e_torcao_mm": 77.5,
+  "T_apoio_kNm": 0.458,
+  "H_kN": 1.53,
+  "Nd_kN": 2.14,
+  "NcRd": 48.2,
+  "esbeltez": 124,
+  "uso": 0.044,
+  "parafusos": "M12 8.8 na alma da terça (furo Ø14 a 40 mm do fundo) e porca M16 na espera da viga (furo Ø18 na aba da MF)",
+  "contato_alma_terca_Rd": 17.8,
+  "espera": {
+   "barra": "barra roscada M16 A36 horizontal, hef 110 na mesa inferior (a 100 do fundo), porca + arruela 40×40×6 na ponta, saliência 60",
+   "Vd": 2.14,
+   "Fv_Rd": 23.8,
+   "uso": 0.09
+  }
  },
  "chumbadores": {
-  "CH-T1": {
-   "pinos": "4 Ø16 c/ cabeça, hef 100, nos cantos (grade 150×150)",
-   "Nu": 15.2,
-   "Vu": 8.6,
-   "phiNn": 94.0,
+  "ST-1P": {
+   "esperas": "2 M16 com gancho, hef 150 (s 120)",
+   "Nu": 14.8,
+   "Vu": 11.0,
+   "phiNn": 71.7,
    "modoN": "cone",
-   "phiVn": 23.4,
+   "phiVn": 43.9,
    "modoV": "borda",
-   "interacao": 0.368
+   "interacao": 0.38
   },
-  "CH-T2": {
-   "pinos": "6 Ø16 c/ cabeça, hef 100 (2 × 3, s 200 × 150)",
-   "Nu": 15.2,
-   "Vu": 34.0,
-   "phiNn": 88.0,
-   "modoN": "cone",
-   "phiVn_sem_grampo": 14.1,
-   "grampos": "2 grampos U Ø10 CA-50 envolvendo os pinos, pernas de 300 na mesa (ancoragem da cortante)",
-   "phiVn": 99.0,
-   "modoV": "borda",
-   "interacao": 0.343
+  "OR-X": {
+   "esperas": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10",
+   "Vu": 18.8,
+   "phiVn": 35.3,
+   "modoV": "aco",
+   "uso": 0.533
   },
-  "CH-MF": {
-   "pinos": "2 Ø12,5 c/ cabeça, hef 80",
-   "Nu": 4.15,
-   "Vu": 3.93,
-   "phiNn": 56.1,
-   "phiVn": 15.2,
-   "interacao": 0.258
+  "MF-espera": {
+   "esperas": "1 M16 horizontal por lado, hef 110, a 100 do fundo",
+   "Nu": 1.53,
+   "Vu": 1.49,
+   "phiNn": 30.5,
+   "phiVn": 17.5,
+   "interacao": 0.085
   }
  }
 }
