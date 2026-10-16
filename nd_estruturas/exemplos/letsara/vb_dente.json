@@ -1,4 +1,83 @@
 {
+ "adotado": {
+  "b": 0.15,
+  "h": 0.6,
+  "hd": 0.3,
+  "recorte": 0.3,
+  "consolo_h": 0.29,
+  "ok": true,
+  "pp": 2.25,
+  "g": 4.63,
+  "q": 1.2,
+  "Md": 90.8,
+  "Vd": 38.5,
+  "Md_neg": 66.7,
+  "R_up_d": 28.3,
+  "d": 0.538,
+  "As_inf": 5.42,
+  "inf": "3 Ø16 (2 camadas)",
+  "As_sup": 4.27,
+  "sup": "6 Ø10",
+  "x_d": 0.11,
+  "VRd2": 522.6,
+  "Asw_cm2m": 2.11,
+  "flecha_mm": 24.0,
+  "flecha_lim": 37.7,
+  "sigma_s": 193,
+  "sigma_lim": 280,
+  "L_bf": 62.9,
+  "Lh_bf2": 251,
+  "FS_lebelle": 54.9,
+  "dente": {
+   "h": 0.3,
+   "d": 0.25,
+   "a_d": 0.64,
+   "As": 1.2,
+   "tirante": "1 alça Ø10 (1,57 cm²)",
+   "tau": 1.13,
+   "tau_u": 6.48,
+   "a2_cm": 6.0,
+   "ok": true
+  },
+  "consolo": {
+   "h": 0.29,
+   "d": 0.24,
+   "a_d": 0.56,
+   "As": 1.15,
+   "tirante": "1 alça Ø10 (1,57 cm²)",
+   "tau": 1.18,
+   "tau_u": 6.48,
+   "a2_cm": 8.5,
+   "ok": true
+  },
+  "suspensao": "2 estribos Ø10 (2 ramos) ≥ 0,97 cm²",
+  "neoprene": {
+   "nome": "100×100×10",
+   "sigma": 2.75,
+   "sigma_g": 2.22,
+   "lim_Nmin": 2.0,
+   "ok": true,
+   "detalhe": {
+    "pressao": true,
+    "Nmin": true,
+    "distorcao": true,
+    "deslizamento": true,
+    "levantamento": true,
+    "estabilidade": true
+   }
+  },
+  "pino": {
+   "R_up_d": 28.3,
+   "cap_PN1_d": 53.3,
+   "ok": true
+  },
+  "V_m3": 0.824,
+  "peso_t": 2.06,
+  "kg_aco": 136.8,
+  "custo_indice": 2715,
+  "fundo_rel_topo": -0.6,
+  "ganho_altura_livre_m": 0.66
+ },
  "melhor": {
   "b": 0.15,
   "h": 0.55,
@@ -68,7 +147,7 @@
   },
   "pino": {
    "R_up_d": 29.2,
-   "cap_PN1_d": 34.1,
+   "cap_PN1_d": 53.3,
    "ok": true
   },
   "V_m3": 0.758,
@@ -148,7 +227,7 @@
    },
    "pino": {
     "R_up_d": 29.2,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.758,
@@ -227,7 +306,7 @@
    },
    "pino": {
     "R_up_d": 30.0,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.687,
@@ -306,7 +385,7 @@
    },
    "pino": {
     "R_up_d": 28.3,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.824,
@@ -385,7 +464,7 @@
    },
    "pino": {
     "R_up_d": 27.4,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.895,
@@ -464,7 +543,7 @@
    },
    "pino": {
     "R_up_d": 26.5,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.962,
@@ -543,7 +622,7 @@
    },
    "pino": {
     "R_up_d": 27.1,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 0.916,
@@ -622,7 +701,7 @@
    },
    "pino": {
     "R_up_d": 25.6,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.033,
@@ -701,7 +780,7 @@
    },
    "pino": {
     "R_up_d": 25.9,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.01,
@@ -780,7 +859,7 @@
    },
    "pino": {
     "R_up_d": 24.7,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.099,
@@ -859,7 +938,7 @@
    },
    "pino": {
     "R_up_d": 23.9,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.17,
@@ -938,7 +1017,7 @@
    },
    "pino": {
     "R_up_d": 24.7,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.099,
@@ -1017,7 +1096,7 @@
    },
    "pino": {
     "R_up_d": 23.0,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.237,
@@ -1096,7 +1175,7 @@
    },
    "pino": {
     "R_up_d": 23.6,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.194,
@@ -1175,7 +1254,7 @@
    },
    "pino": {
     "R_up_d": 22.4,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.282,
@@ -1254,7 +1333,7 @@
    },
    "pino": {
     "R_up_d": 21.2,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.377,
@@ -1333,7 +1412,7 @@
    },
    "pino": {
     "R_up_d": 20.0,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.466,
@@ -1412,7 +1491,7 @@
    },
    "pino": {
     "R_up_d": 18.8,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.56,
@@ -1491,7 +1570,7 @@
    },
    "pino": {
     "R_up_d": 17.7,
-    "cap_PN1_d": 34.1,
+    "cap_PN1_d": 53.3,
     "ok": true
    },
    "V_m3": 1.649,
@@ -1571,7 +1650,7 @@
   },
   "pino": {
    "R_up_d": 23.0,
-   "cap_PN1_d": 34.1,
+   "cap_PN1_d": 53.3,
    "ok": true
   },
   "V_m3": 1.245,

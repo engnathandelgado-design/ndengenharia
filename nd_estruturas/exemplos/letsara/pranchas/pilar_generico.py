@@ -72,7 +72,7 @@ def prancha_pilar(P):
                             conteudo=P["conteudo"], desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
                             marca=P["marca"], qtd=P["qtd"], peso=f(PESO, 1), volume=f(V, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
-    pr.revisao("04", "16/10/2026", "NBR 9062: SEM CP-VT; CONSOLOS COM ALÇAS; NEOPRENES REVISTOS; CP-MEZ P/ DENTE DA VM MEIO VASO; PL 14 Ø20")
+    pr.revisao("04", "16/10/2026", "NBR 9062: SEM CP-VT; CONSOLOS COM ALÇAS; NEOPRENES REVISTOS; CP-MEZ P/ DENTE DA VM; CP-VB 15×27×29 P/ DENTE DA VB; PL 14 Ø20")
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -296,7 +296,7 @@ def prancha_pilar(P):
         d1.chamada((-PW + 300, zc0 - 55), (-4, 12), f"N4 — {c0['tir']} U ({(PW + proj - 80)/10:.0f} + 15)")
         d1.chamada((-200, zc0 - 250), (-6, -12), "N5 — 2 Ø10 (costura)")
         d1.chamada((140, zc0 - 300), (14, -24), f"N6 — {len(range(60, proj - 40, 80))} Ø8")
-        d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} CA-50 L={c0['pino_L']/10:g}")
+        d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L={c0['pino_L']/10:g}")
         d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
         d1.chamada((-COB - 18, 1350), (-8, 8), "N1 / N2 c/10")
 

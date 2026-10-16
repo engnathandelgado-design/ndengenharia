@@ -34,7 +34,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); corte 1-1 refeito; recuo dos pilares acima da viga (a validar)")
 pr.revisao("02", pr.dados["data"], "RECUO APROVADO; CONSOLOS SEM CHANFRO (h 44); P6/P7 FORA DO PROJETO")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES NO RECUO E NO TOPO DA I130; COBERTURA REBAIXADA; I130; PLACAS 10 cm")
-pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; PILARES LATERAIS 14 Ø20")
+pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; PILARES LATERAIS 14 Ø20; VB 15×60 COM DENTE")
 
 # ------------------------------------------------------------------ PLANTA 1:200 (horizontal = y da obra, vertical = x)
 v = pr.vista("PLANTA", (62, 330), 200, titulo="PLANTA DE LOCAÇÃO DE PILARES E VIGAS DE COBERTURA", subtitulo="eixos e ordenadas do R01; contraventamento da cobertura em X")
@@ -126,7 +126,7 @@ Z1 = 6800
 
 def det_lateral(nome, org, x_eixo, lado, z_rec, z0, titulo):
     """Detalhe 1:25 em coordenadas locais (x a partir do eixo do pilar); níveis pela TS real."""
-    d = pr.vista(nome, org, 25, titulo=titulo, subtitulo="TS-01 apoiada no recuo (assento); cabeça 40×30; placas por fora até +10,00")
+    d = pr.vista(nome, org, 25, titulo=titulo, subtitulo="TS-01 no recuo; cabeça 40×30; placas até +10,00")
     z = lambda v_: v_ - z0
     zfl = lambda xl: zf(x_eixo + xl)                               # fundo da TS no x local
     xe, xi = -lado * 300, lado * 300
@@ -168,7 +168,7 @@ def det_lateral(nome, org, x_eixo, lado, z_rec, z0, titulo):
 
 
 det_lateral("DETALHE 1", (414, 100), 0, 1, REC["A"], Z1, "DETALHE 1 — PILAR P1 (EIXO A, LADO BAIXO)")
-det_lateral("DETALHE 3", (585, 140), Ly, -1, REC["E"], 7900, "DETALHE 3 — PILAR P2 (EIXO E, LADO ALTO)")
+det_lateral("DETALHE 3", (582, 154), Ly, -1, REC["E"], 7900, "DETALHE 3 — PILAR P2 (EIXO E, LADO ALTO)")
 
 # ------------------------------------------------------------------ DETALHE 2 — APOIO CENTRAL NA I130 (1:25)
 d2 = pr.vista("DETALHE 2", (735, 160), 25, titulo="DETALHE 2 — APOIO CENTRAL NO TOPO DA I130", subtitulo="duas TS-01 sem dente, NEO-3 + 2 PN-5 Ø20 cada")
@@ -200,7 +200,7 @@ vg = [["TS-01", "I90", "14", f(LTS / 1000), "cobertura, linhas 2 a 8 (2 por linh
       ["V407", "I130", "1", f(LG["H_I130"] * 0 + (YL[3] - YL[1] - 550) / 1000), "eixo C, linha 2 → linha 4"],
       ["V406", "I130", "1", f((Y_P13 * 1000 - YL[3] - 550) / 1000), "eixo C, linha 4 → P13"],
       ["V405", "I130", "1", f((YL[8] - Y_P13 * 1000 - 550) / 1000), "eixo C, P13 → linha 9"],
-      ["VB-01..04", "15×90", "8", "9,32–9,43", "bordas das fachadas 1 e 9 (ND-LET-VB01)"]]
+      ["VB-01..04", "15×60", "8", "9,32–9,43", "bordas das fachadas 1 e 9, com dente (ND-LET-VB01)"]]
 y = pr.tabela(x0, y - 4, "VIGAS DE COBERTURA", ["MARCA", "SEÇÃO", "QT", "L (m)", "POSIÇÃO"], vg, [22, 18, 10, 20, 110])
 pr.notas(x0, y - 4, [
     "Geometria do R01 (locação de pilares): 79,35 m entre os eixos 1 e 9; 39,50 m entre os eixos A e E. Água única de 3 %, subindo de A para E; cobertura escondida pela platibanda +10,00 (placas por fora dos pilares).",

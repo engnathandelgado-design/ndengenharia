@@ -35,7 +35,7 @@ def cons_marca(txt, lado="P1"):
                 for za in G.Z_MEZ_ASS:
                     c = G.MEZ(fc, za); c["incl"] = 0; out.append(c)
             elif tipo == "CP-VB":
-                c = G.consolo(fc, num(z), "CP-VB", 300, 300, H_C["CP-VB"], H_C["CP-VB"], ("PN-1", 20, 700, 300, 150), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0.03; out.append(c)
+                c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0.03; out.append(c)
             elif tipo == "CP-I130":
                 c = G.I130(fc); c["incl"] = 0; out.append(c)
     return out
@@ -105,9 +105,12 @@ def dados(mk):
     ins = []
     if n_pn1:
         ins.append(["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", n_pn1, ", ".join(sorted(set(c["tipo"] for c in cons if c["pino_nome"] == "PN-1")))])
+    n_pn6 = sum(1 for c in cons if c["pino_nome"] == "PN-6")
+    if n_pn6:
+        ins.append(["PN-6", "Barra roscada Ø20 A36 L=700 (300 no consolo)", n_pn6, "CP-VB"])
     if n_pn2:
         ins.append(["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo)", n_pn2, "CP-I130"])
-    for tipo, nm, desc in (("CP-MEZ", "NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)"), ("CP-VB", "NEO-6", "Neoprene 100×100×10 c/ furo Ø30"),
+    for tipo, nm, desc in (("CP-MEZ", "NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)"), ("CP-VB", "NEO-6", "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)"),
                            ("CP-I130", "NEO-2", "Neoprene 300×200×31 fretado (2 × 10 + 2 × 2,5, chapas inox 2 mm)")):
         n = sum(1 for c in cons if c["tipo"] == tipo)
         if n:
@@ -131,7 +134,7 @@ def dados(mk):
                f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","), "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
-                G.NOTA_CONS.replace("CP-I130 41 cm", "CP-I130 41, CP-VB 35 cm") + " " + ", ".join(tipos) + " nesta marca.",
+                G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca.",
                 f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
                 (" O degrau do recuo é o ASSENTO DA TS-01 (rev03, viga sem dente): topo inclinado 3 % (sobe para dentro), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
                 "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face A para cima.",

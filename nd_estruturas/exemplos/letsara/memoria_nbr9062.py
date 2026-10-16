@@ -133,6 +133,31 @@ lin = [["Verificação (VM-02, h = %g cm)" % (H / 10), "valor", "limite / resist
        ["Excentricidade lateral da protensão", f"{f(r['excentricidade_lateral_protensao_m'] * 1000)} mm", "2 cordoalhas na aba equilibram a seção T", "ok"]]
 E += [tab(lin, [52, 42, 66, 18])]
 
+# 5b VB com dente
+VBJ = json.loads((AQ / "vb_dente.json").read_text(encoding="utf-8"))
+va = VBJ["adotado"]
+E += [Paragraph("5b. Vigas de borda VB das fachadas 1 e 9 — 15 × 60 com dente Gerber", T2),
+      P("Topo fixo (apoio das terças do vão de oitão); dente para esconder o consolo CP-VB e ganhar altura livre embaixo (pedido do Nathan, 16/10/2026). "
+        "Varredura de b 15/20 e h 90 a 40 de 5 em 5 cm (calc_vb_dente.py): passa até h 50 (h 45 reprova na flecha). Adotada a 15 × 60 (escolha do Nathan). "
+        "Cargas: peso próprio + terças com painéis solares 0,495 kN/m² e sobrecarga 0,25 kN/m² na faixa de 4,82 m; sucção da faixa de borda cp −1,6 com γ 1,4 e peso favorável; "
+        "tração do modelo global ELU-1 vento x 95,8 kN. Flexão no plano horizontal do modelo global ≤ 2,2 kN·m (desprezível).")]
+lin = [["Varredura (b × h × dente)", "arm. inferior", "flecha (mm)", "consolo h", "índice de custo"]]
+for r_ in sorted(VBJ["ranking"], key=lambda x: (x["b"], -x["h"]))[:9]:
+    lin.append([f"{r_['b']*100:.0f} × {r_['h']*100:.0f} × {r_['hd']*100:.0f}", r_["inf"], f"{f(r_['flecha_mm'])} / {f(r_['flecha_lim'])}", f"{f(r_['consolo_h']*100, 0)} cm", r_["custo_indice"]])
+E += [tab(lin, [46, 40, 30, 24, 28])]
+lin = [["Verificação (VB 15 × 60)", "valor", "limite / resistência", "situação"],
+       ["Flexão ELU + tração (NBR 6118 17.2)", f"Md {f(va['Md'])} kN·m; As {f(va['As_inf'], 2)} cm²", f"{va['inf']}; x/d {f(va['x_d'], 2)}", ok(True)],
+       ["Sucção (momento negativo)", f"Md {f(va['Md_neg'])} kN·m; As {f(va['As_sup'], 2)} cm²", va["sup"], ok(True)],
+       ["Cortante (17.4.2.2, Vc = 0)", f"Vd {f(va['Vd'])} kN", f"VRd2 {f(va['VRd2'])}; Asw {f(va['Asw_cm2m'], 2)} cm²/m", ok(va["Vd"] <= va["VRd2"])],
+       ["Flecha diferida (9062 Tab. 8)", f"{f(va['flecha_mm'])} mm", f"L/250 = {f(va['flecha_lim'])}", ok(va["flecha_mm"] <= va["flecha_lim"])],
+       ["Fissuração (6118 Tab. 17.2)", f"σs {va['sigma_s']} MPa", f"≤ {va['sigma_lim']}", ok(va["sigma_s"] <= va["sigma_lim"])],
+       ["Estabilidade lateral 6.1", f"L/bf {f(va['L_bf'])}", f"FS Lebelle {f(va['FS_lebelle'])} ≥ 2,5", ok(va["FS_lebelle"] >= 2.5)],
+       ["Dente 30 × 27 (7.4 → 7.3, γn 1,1)", f"τ {f(va['dente']['tau'], 2)} MPa; a/d {f(va['dente']['a_d'], 2)}", f"{va['dente']['tirante']}; τu {f(va['dente']['tau_u'], 2)}", ok(va["dente"]["ok"])],
+       ["Suspensão junto ao recorte", va["suspensao"], "fyd ≤ 435 MPa", ok(True)],
+       ["Levantamento no apoio (sucção)", f"{f(va['R_up_d'])} kN", f"PN-1 Ø20 roscado com porca: {f(va['pino']['cap_PN1_d'])} kN", ok(va["pino"]["ok"])],
+       ["NEO-6 100 × 100 × 10", f"σ {f(va['neoprene']['sigma'], 2)} MPa; σg/A' {f(va['neoprene']['sigma_g'], 2)}", f"≤ 7,0; ≥ {f(va['neoprene']['lim_Nmin'], 2)}", ok(va["neoprene"]["ok"])]]
+E += [tab(lin, [52, 46, 60, 18])]
+
 # 6 cálices, transitórias, flechas
 c = N9["calices"]
 E += [Paragraph("6. Cálices (7.7, Tab. 15), transitórias (5.3.2, 6.1) e flechas (5.4.3.4)", T2),

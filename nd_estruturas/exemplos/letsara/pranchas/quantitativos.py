@@ -82,7 +82,7 @@ pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas
 for mk, pos, qt, L, p in tab("I130", "MARCAS")["linhas"]:
     pecas.append(("Vigas de cobertura", mk, pos, "I130", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I130"))
 for mk, pos, qt, L, p in tab("VB01", "MARCAS")["linhas"]:
-    pecas.append(("Vigas de borda", mk, pos, "15×90", num(L) / 100, int(qt), round(0.15 * 0.90 * num(L) / 100, 3), num(p), "C40", "ND-LET-VB01"))
+    pecas.append(("Vigas de borda", mk, pos, "15×60 c/ dente", num(L) / 100, int(qt), round(num(p) / 2.5, 3), num(p), "C40", "ND-LET-VB01"))
 VMP_H = round(json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["premissas"]["h_pm"] * 100)
 for mk, pos, qt, L, p in tab("VM01", "MARCAS")["linhas"]:
     pecas.append(("Mezanino", mk, pos, f"meio vaso 40×{VMP_H:g} c/ dente", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C40", "ND-LET-VM01"))

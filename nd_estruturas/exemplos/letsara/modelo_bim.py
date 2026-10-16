@@ -47,7 +47,8 @@ NIVEIS_MEZ, H_LAJE = [3.15, 6.55], 0.20 + 0.05
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
 I130 = PerfilI(h=1.30, b=0.40, tw=0.15, tf=0.25, nome="I130")
 I70 = PerfilI(h=0.70, b=0.40, tw=0.15, tf=0.15, nome="I70")
-VB = PerfilRetangular(0.15, 0.90, "VB 15x90")
+VB = PerfilRetangular(0.15, 0.60, "VB 15x60")
+VB_N = PerfilRetangular(0.15, 0.30, "VB nariz do dente")
 TERCA = PerfilRetangular(0.085, 0.30, "Ue300x85x25x2,65 (envelope)")
 LAJE = PerfilRetangular(1.24, H_LAJE, "LA h20+5")
 TELHA = PerfilRetangular(1.00, sum(LG["platibanda"]["pacote"].values()), "TP40 + lã 40 + zipada + painéis solares")
@@ -66,8 +67,8 @@ PAINEIS_MEZ = paineis_mez()[0]                                                  
 def montar() -> ModeloBIM:
     m = ModeloBIM("Letsara — Pavilhão pré-moldado", obra="Obra Letsara (Marques Engenharia e Construções)")
     ass_ts = lambda x_pino: zf(x_pino) + H_DENTE * C3 - 0.01               # topo do consolo que recebe a TS-01
-    z_vb = lambda x: zf(x)                                                  # fundo da VB (sem dente) = topo do CP-VB
-    rec_vb = lambda x: math.ceil((z_vb(x) + 0.90) / 0.05) * 0.05           # recuo da cabeça dos pilares de fachada: topo da VB 15×90
+    z_vb = lambda x: zf(x) + 0.30                                           # rev04: fundo da VB 15×60 (topo = zf + 0,90, linha das terças)
+    rec_vb = lambda x: math.ceil((z_vb(x) + 0.60) / 0.05) * 0.05           # recuo da cabeça dos pilares de fachada: topo da VB
 
     # 1. pilares laterais (60 em x) com cabeça recuada 40×30 e consolos CP-TS (fundo alinhado ao da TS-01)
     for i, y in enumerate(Y_LIN, start=1):
@@ -113,14 +114,22 @@ def montar() -> ModeloBIM:
             m.linear("viga", f"TS-01 L{i}{lado}", I90, (xa, y, zf(xa) + H_TS / 2), (xb, y, zf(xb) + H_TS / 2),
                      "Vigas I90 de cobertura", obs=f"inclinada 3 %, sem dentes, L {LG['L_TS']:.2f} m; 8 cord. Ø12,7")
 
-    # vigas de borda VB 15×90 das fachadas 1 e 9 (sem dente, sobre CP-VB; acompanham o caimento)
+    # vigas de borda VB 15×60 das fachadas 1 e 9, rev04: dente Gerber 30 × 27 nas pontas sobre o CP-VB 15 × 27 × 29 escondido
+    #   (fundo do consolo = fundo da VB); NEO-6 100×100×10 e PN-6 Ø20 roscado com porca (anti-levantamento); folga 2,5 cm
+    LNV = 0.27
     for y in (0.0, COMP):
         for xa, xb in itertools.pairwise(X_FACH):
-            a, b = xa + (0.30 if xa == 0 else 0.20) + 0.025, xb - (0.30 if xb == LARG else 0.20) - 0.025
-            m.linear("viga", "VB", VB, (a, y, zf(a) + 0.45), (b, y, zf(b) + 0.45), "Vigas de borda")
-            for xx, sg in ((xa, 1), (xb, -1)):
-                xc = xx + sg * ((0.30 if xx in (0.0, LARG) else 0.20) + 0.15)
-                m.bloco("consolo", "CP-VB 30×40×35", (xc, y, zf(xx) - 0.01), 0.30, 0.40, 0.35, "Consolos")
+            fa, fb = xa + (0.30 if xa == 0 else 0.20), xb - (0.30 if xb == LARG else 0.20)       # faces dos pilares
+            a, b = fa + 0.025, fb - 0.025
+            m.linear("viga", "VB", VB, (a + LNV, y, z_vb(a + LNV) + 0.30), (b - LNV, y, z_vb(b - LNV) + 0.30), "Vigas de borda",
+                     obs=f"15×60 com dente 30 × 27, L = {b - a:.3f} m")
+            for x0_, x1_ in ((a, a + LNV), (b - LNV, b)):
+                m.linear("viga", "VB nariz", VB_N, (x0_, y, z_vb(x0_) + 0.45), (x1_, y, z_vb(x1_) + 0.45), "Vigas de borda", obs="nariz do dente Gerber")
+            for xf, sg in ((fa, 1), (fb, -1)):
+                zt = z_vb(xf) + 0.29
+                m.bloco("consolo", "CP-VB 15×27×29", (xf + sg * 0.135, y, zt), 0.27, 0.15, 0.29, "Consolos")
+                m.bloco("inserto", "NEO-6 100×100×10", (xf + sg * 0.135, y, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "PN-6 Ø20 roscado + porca", (xf + sg * 0.135, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
 
     # 4. terças Ue 300 e telha
     for xa, _ in PONTAS:

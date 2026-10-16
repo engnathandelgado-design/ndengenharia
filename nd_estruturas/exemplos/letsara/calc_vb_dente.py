@@ -33,6 +33,7 @@ TRIB = 9.63 / 2                       # faixa de cobertura que apoia na VB (vão
 G_TERCA, Q_COB = 0.495, 0.25          # kN/m² (rev03, com painéis solares) e sobrecarga de cobertura
 G_FAV, CP_SUC, Q0 = 0.158 + 0.087, -1.6, 0.874   # sucção: telha+isolamento+fixações+terça; faixa de borda; kN/m²
 N_TRACAO = 95.8                       # kN, ELU-1 vento x (modelo_global_r04)
+ADOTADO = (0.15, 0.60, 0.30)          # rev04: VB 15 × 60, dente 30 (Nathan, 16/10/2026)
 PRECO = dict(concreto=1800.0, aco=9.0)
 AREA = {10.0: 0.785, 12.5: 1.227, 16.0: 2.011, 20.0: 3.142}
 
@@ -171,7 +172,7 @@ def variante(b, h, hd):
         if r["ok"]:
             n_ok = r
             break
-    pino = dict(R_up_d=round(R_up, 1), cap_PN1_d=round(1.57 * 25 / 1.15, 1), ok=R_up <= 1.57 * 25 / 1.15)
+    pino = dict(R_up_d=round(R_up, 1), cap_PN1_d=round(2.45 * 25 / 1.15, 1), ok=R_up <= 2.45 * 25 / 1.15)   # PN-1 Ø20 roscado ASTM A36 (área útil da rosca 2,45 cm²)
     ok = all([bi, bs, ok_x, Vd <= VRd2, flecha <= L * 1000 / 250, ok_w, crit or FS >= 2.5, den["ok"], con["ok"], sus, n_ok, pino["ok"]])
     V = b * h * L - 2 * b * (h - hd) * LN
     kg = (bi["As"] + bs["As"]) * 1e-4 * L * 7850 * 1.1 + Asw * 1e-4 * 2 * (b + h) * L * 7850 * 1.3 + 2 * (den["As"] + As_sus) * 1e-4 * 1.2 * 7850 + 0.0158 * h * L * 2 * 2 / 0.3 * 0 \
@@ -208,6 +209,7 @@ if __name__ == "__main__":
         else:
             print(f"b{b*100:.0f} h{h*100:.0f}: não passa")
     ref = variante(0.15, 0.90, 0.55)
+    adot = variante(*ADOTADO)
     res.sort(key=lambda s: s["custo_indice"])
-    (AQ / "vb_dente.json").write_text(json.dumps(dict(melhor=res[0] if res else None, ranking=res, referencia_15x90=ref), indent=1, ensure_ascii=False, default=str),
+    (AQ / "vb_dente.json").write_text(json.dumps(dict(adotado=adot, melhor=res[0] if res else None, ranking=res, referencia_15x90=ref), indent=1, ensure_ascii=False, default=str),
                                      encoding="utf-8")

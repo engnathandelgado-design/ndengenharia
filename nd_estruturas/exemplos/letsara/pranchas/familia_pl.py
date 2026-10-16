@@ -10,7 +10,7 @@ f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 zf = lambda x: LG["Z0_TS"] * 1000 + 0.03 * x
 # rev03: TS-01 sem dente, apoiada no recuo (assento) do pilar lateral; CP-VB = fundo da TS-01 na posição (topo da VB = linha das terças)
 REC = {"P1": round(LG["REC"][0] * 1000), "P2": round(LG["REC"][1] * 1000)}
-VB = lambda x: f(zf(x * 1000) / 1000, 3)
+VB = lambda x: f((zf(x * 1000) + 590) / 1000, 3)       # rev04: VB 15×60 com dente 30 — assento do CP-VB = fundo da VB (zf + 0,30) + recorte 0,30 − neoprene 0,01
 RV = lambda x: f(math.ceil((zf(x * 1000) / 1000 + 0.90) / 0.05) * 0.05, 2)       # recuo das fachadas = topo da VB (5 cm)
 R1, R2 = f(REC["P1"] / 1000, 2), f(REC["P2"] / 1000, 2)
 XE = X_EIXO["E"]

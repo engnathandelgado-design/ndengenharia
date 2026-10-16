@@ -163,40 +163,56 @@ def _area_I(pts, B, H, L):
 
 
 def spec_vb():
+    """VB 15 × 60 com dente Gerber 30 × 27 (rev04, calc_vb_dente.py) — mesmas posições da fôrma ND-LET-VB01."""
     from geometria import X_EIXO
     MEIA = {"A": 0.30, "B": 0.20, "C": 0.20, "D": 0.20, "E": 0.30}
     XF = [(k, X_EIXO[k]) for k in "ABCDE"]
-    B, H = 150, 900
+    B, H, HD, LN = 150, 600, 300, 270
+    REC = H - HD
+    XN, XS = [50, 200], [LN + 40, LN + 90]
+    he, hn = round((H - 2 * COB) / 10), round((HD - 2 * COB) / 10)
 
     def barras_vb(L):
         Lb = round((L - 2 * COB) / 10)
-        xs_e = list(range(50, 1500, 100)) + list(range(1500, L - 1500, 150)) + list(range(L - 1500, L - 40, 100))
-        return xs_e, [dict(pos="N1", diam=12.5, qtd=3, comp=Lb + 40, geo=dict(k="C", a=Lb, g=20, dir=1)),
-                      dict(pos="N2", diam=12.5, qtd=3, comp=Lb + 40, geo=dict(k="C", a=Lb, g=20, dir=-1)),
-                      dict(pos="N3", diam=8.0, qtd=4, comp=Lb, geo=dict(k="R", a=Lb)),
-                      dict(pos="N4", diam=6.3, qtd=len(xs_e), comp=round((2 * (90 + 840) + 120) / 10), geo=dict(k="E", a=9, b=84))]
+        L1 = round((L - 2 * LN - 2 * COB) / 10)
+        xs_e = list(range(LN + 150, 1500, 100)) + list(range(1500, L - 1500, 150)) + list(range(L - 1500, L - LN - 140, 100))
+        return xs_e, [dict(pos="N1", diam=16.0, qtd=3, comp=L1 + 40, geo=dict(k="C", a=L1, g=20, dir=1)),
+                      dict(pos="N2", diam=10.0, qtd=6, comp=Lb + 40, geo=dict(k="C", a=Lb, g=20, dir=-1)),
+                      dict(pos="N3", diam=6.3, qtd=len(xs_e), comp=2 * (he + 9) + 12, geo=dict(k="E", a=9, b=he)),
+                      dict(pos="N4", diam=6.3, qtd=4, comp=2 * (hn + 9) + 12, geo=dict(k="E", a=9, b=hn)),
+                      dict(pos="N5", diam=10.0, qtd=2, comp=2 * 70 + 8, geo=dict(k="U", a=70, b=8)),
+                      dict(pos="N6", diam=10.0, qtd=4, comp=2 * (he + 8) + 16, geo=dict(k="E", a=8, b=he)),
+                      dict(pos="N7", diam=6.3, qtd=4, comp=2 * 55 + 8, geo=dict(k="U", a=55, b=8))]
     marcas = []
     for k, ((na, xa), (nb, xb)) in enumerate(zip(XF[:-1], XF[1:]), 1):
         x0 = round((xa + MEIA[na] + 0.025) * 1000)
         Lm = round((xb - MEIA[nb] - 0.025) * 1000) - x0
         _, bm = barras_vb(Lm)
-        marcas.append(dict(marca=f"VB-0{k}", qtd=2, L=Lm, barras=bm, V=B * H * Lm / 1e9, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
+        V = (B * H * Lm - 2 * B * REC * LN) / 1e9
+        marcas.append(dict(marca=f"VB-0{k}", qtd=2, L=Lm, barras=bm, V=V, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
     L = marcas[1]["L"]
     xs_e, _ = barras_vb(L)
+    cont = [(0, REC), (LN, REC), (LN, 0), (L - LN, 0), (L - LN, REC), (L, REC), (L, H), (0, H)]
     ents = [([(x, COB), (x, H - COB)], "ARM_TRANSV") for x in xs_e]
-    ents += [([(COB, COB + 210), (COB, COB + 10), (L - COB, COB + 10), (L - COB, COB + 210)], "ARMADURA"),
-             ([(COB, H - COB - 210), (COB, H - COB - 10), (L - COB, H - COB - 10), (L - COB, H - COB - 210)], "ARMADURA")]
-    ents += [([(COB, y), (L - COB, y)], "ARMADURA") for y in (300, 600)]
+    for x0, sg in ((0, 1), (L, -1)):
+        ents += [([(x0 + sg * x, REC + COB), (x0 + sg * x, H - COB)], "ARM_TRANSV") for x in XN]
+        ents += [([(x0 + sg * x, COB), (x0 + sg * x, H - COB)], "ARMADURA") for x in XS]
+        ents += [([(x0 + sg * COB, REC + COB + 20), (x0 + sg * (LN + 430), REC + COB + 20)], "ARMADURA")]
+        ents += [([(x0 + sg * COB, REC + COB + 20 + k * 70), (x0 + sg * (LN + 300), REC + COB + 20 + k * 70)], "ARM_TRANSV") for k in (1, 2)]
+    ents += [([(LN + COB, COB + 200), (LN + COB, COB + 10), (L - LN - COB, COB + 10), (L - LN - COB, COB + 200)], "ARMADURA"),
+             ([(COB, H - COB - 200), (COB, H - COB - 10), (L - COB, H - COB - 10), (L - COB, H - COB - 200)], "ARMADURA")]
+    xi = -B / 2 + COB + 6.3 + 8
     S1 = dict(nome="SEÇÃO S.1", sub="corrente", esc=10, contorno=[[(-B / 2, 0), (B / 2, 0), (B / 2, H), (-B / 2, H)]],
               ents=[([(-B / 2 + COB, COB), (B / 2 - COB, COB), (B / 2 - COB, H - COB), (-B / 2 + COB, H - COB)], "ARM_TRANSV", True)],
-              discos=[(x, y, 12.5) for x in (-B / 2 + COB + 10, 0, B / 2 - COB - 10) for y in (COB + 10, H - COB - 10)] + [(x, y, 8) for x in (-B / 2 + COB + 6, B / 2 - COB - 6) for y in (300, 600)],
-              prot=[], bolhas=[("N1", (B / 2 - COB - 10, COB + 10), (10, 7)), ("N2", (B / 2 - COB - 10, H - COB - 10), (8, 4)), ("N3", (-B / 2 + COB + 6, 600), (-8, 0)), ("N4", (B / 2 - COB, 450), (8, 0))],
-              formas=["N4"])
-    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-04 (15 × 90, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep="VB-02",
-                contorno=[[(0, 0), (L, 0), (L, H), (0, H)]], ents=ents, zonas=zonas_txt(xs_e, "N4", 6.3), cortes=[(L / 2, "S.1")], dets=[],
-                longas=[("N2", COB), ("N1", COB), ("N3", COB)], blocos=[S1], marcas=marcas,
-                notas=["Concreto C40, aço CA-50. N1/N2 com dobra de 20 cm nas pontas (ancoragem no apoio); sucção do vento: armadura simétrica.",
-                       "Apoio nos consolos CP-VB com NEO-6 100×100×10 e pino PN-1 Ø20 no TB-1 (ver fôrma ND-LET-VB01)."])
+              discos=[(xi, COB + 14.3, 16), (-xi, COB + 14.3, 16), (xi, COB + 50.3, 16)] +
+                     [(x, y, 10) for x in (-B / 2 + COB + 11.3, 0, B / 2 - COB - 11.3) for y in (H - COB - 11.3, H - COB - 41.3)],
+              prot=[], bolhas=[("N1", (-xi, COB + 14.3), (10, -6)), ("N2", (B / 2 - COB - 11.3, H - COB - 11.3), (8, 4)), ("N3", (B / 2 - COB, 300), (8, 0))],
+              formas=["N3", "N4", "N6", "N5", "N7"])
+    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-04 (15 × 60 COM DENTE, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep="VB-02",
+                contorno=[cont], ents=ents, zonas=zonas_txt(xs_e, "N3", 6.3), cortes=[(L / 2, "S.1")], dets=[],
+                longas=[("N2", COB), ("N1", COB)], blocos=[S1], marcas=marcas,
+                notas=["Concreto C40, aço CA-50. N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas; sucção do vento: N2 6 Ø10.",
+                       "Dente Gerber 30 × 27 (NBR 9062:2017 7.4): N4 estribos do nariz, N5 alça-tirante, N6 suspensão, N7 costura. Apoio no CP-VB com NEO-6 e PN-6 Ø20 roscado com porca (ver ND-LET-VB01)."])
 
 
 def armacao_vm(L, P, DA):
