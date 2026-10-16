@@ -11,7 +11,7 @@ import numpy as np
 
 E_ACO, NU, G_ACO = 200_000.0, 0.3, 77_000.0
 GAMA = dict(flexao=1.10, compressao=1.20, cortante=1.10, tracao_esc=1.10)   # NBR 14762:2010 Tabela 2 (γ)
-ACOS = {"ZAR345": (345.0, 430.0), "USI-SAC300": (300.0, 400.0), "A1011-SS33": (230.0, 360.0), "A36": (250.0, 400.0)}
+ACOS = {"ZAR345": (345.0, 430.0), "METSEC400": (400.0, 480.0), "USI-SAC300": (300.0, 400.0), "A1011-SS33": (230.0, 360.0), "A36": (250.0, 400.0)}
 
 
 # ------------------------------------------------------------------ faixas finitas (núcleo aberto, correção p/ numpy 2)
@@ -198,13 +198,17 @@ class PerfilZ(PerfilUe):
     Flexão em torno do eixo geométrico x (horizontal): a telha trava a mesa superior (AISI S100 / prática corrente para Z).
     FLT da seção ponto-simétrica: Me = 0,5·Cb·r0·√(Ney·Nez) (NBR 14762:2010 9.8.2.2 c). CT = CG (m_ct = 0)."""
 
-    def __init__(self, bw, bf, D, t, aco="ZAR345", ang=45.0):
+    def __init__(self, bw, bf, D, t, aco="ZAR345", ang=45.0, bf_inf=None, D_inf=None):
+        """bf, D = mesa e enrijecedor superiores; bf_inf, D_inf = inferiores (Z de abas desiguais, para transpasse).
+        Sem bf_inf/D_inf, abas iguais."""
         self.bw, self.bf, self.D, self.t, self.aco, self.ang = bw, bf, D, t, aco, ang
+        self.bf_inf, self.D_inf = (bf_inf or bf), (D_inf or D)
         self.fy, self.fu = ACOS[aco]
         h, b, d = bw - t, bf - t / 2, D - t / 2
+        b1, d1 = self.bf_inf - t / 2, self.D_inf - t / 2
         c, sn = math.cos(math.radians(ang)), math.sin(math.radians(ang))
         # mesa inferior para a esquerda, superior para a direita; enrijecedores voltados para dentro da seção
-        self.pts = [(-b + d * c, d * sn), (-b, 0), (0, 0), (0, h), (b, h), (b - d * c, h - d * sn)]
+        self.pts = [(-b1 + d1 * c, d1 * sn), (-b1, 0), (0, 0), (0, h), (b, h), (b - d * c, h - d * sn)]
         self.p = props_parede_fina(self.pts, t)
         self.h_lm = h
         self.W = self.p["Ix"] / (h / 2 + t / 2)
@@ -213,6 +217,8 @@ class PerfilZ(PerfilUe):
 
     @property
     def nome(self):
+        if (self.bf_inf, self.D_inf) != (self.bf, self.D):
+            return f"Z {self.bw:g}×{self.bf:g}/{self.bf_inf:g}×{self.t:.2f}".replace(".", ",")
         return f"Z{self.ang:.0f} {self.bw:g}×{self.bf:g}×{self.D:g}×{self.t:.2f}".replace(".", ",")
 
     def Ne_flt(self, Lb, Cb=1.0, Kz=1.0):

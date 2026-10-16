@@ -10,7 +10,7 @@ Sem mão-francesa: apoio por cantoneira com 2 parafusos M12 na alma (braço z en
 T = R·e (e = carga no meio da mesa até o centro de torção). NBR 14762:2010 (MRD, 9.9), NBR 8800:2008 Anexo C (L/180).
 Mesmos carregamentos de calc_cobertura_metalica.py (q0 0,874; Cp −1,0 geral e −1,6 nas faixas; escora Nd do modelo R01).
 """
-import json, math, sys
+import json, math, os, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from nd_estruturas.metalica_fria import PerfilUe, PerfilZ, pressao_contato_fino_Rd, parafuso_corte_Rd
@@ -43,6 +43,21 @@ Z_AREA = {
                           312: {1.95: 9.76, 2.30: 11.50, 2.70: 13.49},
                           350: {1.95: 10.94, 2.30: 12.89, 2.70: 15.14}}),
 }
+
+# voestalpine Meincol / METSEC (catálogo "Purlins" 2019, p. 6-7): aço fy 400 MPa (fu 480 adotado — conferir), Z275.
+# Z de abas desiguais (superior/inferior) com enrijecedores Lt/Lb inclinados (45° adotado — conferir); C com lábio L.
+# série: (aba sup, aba inf, Lt, Lb) ; {t: kg/m}
+METSEC_Z = {232: ((65, 60, 14, 16), {1.75: 5.09, 1.95: 5.66, 2.30: 6.63, 2.70: 7.73}),
+            262: ((65, 60, 14, 16), {1.75: 5.50, 1.95: 6.11, 2.30: 7.17, 2.70: 8.37, 3.00: 9.25}),
+            302: ((90, 82, 19, 21), {1.75: 6.84, 1.95: 7.60, 2.30: 8.92, 2.70: 10.42, 3.00: 11.54}),
+            342: ((90, 82, 19, 21), {1.95: 8.21, 2.30: 9.65, 2.70: 11.27, 3.00: 12.48}),
+            402: ((100, 92, 20, 22), {2.30: 11.13, 2.70: 13.01, 3.00: 14.41})}
+METSEC_C = {232: ((65, 13), {1.75: 5.11, 1.95: 5.67, 2.30: 6.65, 2.70: 7.75}),
+            262: ((65, 13), {1.75: 5.52, 1.95: 6.13, 2.30: 7.19, 2.70: 8.39, 3.00: 9.28}),
+            302: ((88, 18), {1.75: 6.84, 1.95: 7.60, 2.30: 8.92, 2.70: 10.42, 3.00: 11.54}),
+            342: ((88, 18), {1.95: 8.21, 2.30: 9.65, 2.70: 11.27, 3.00: 12.48}),
+            402: ((95, 22), {2.30: 11.13, 2.70: 13.01, 3.00: 14.41})}
+FAMILIAS = os.environ.get("ND_FAMILIAS", "todas")      # "metsec" roda só a Meincol e reaproveita o JSON anterior
 
 
 def z_aba(bw, t, A_cm2, aco):
@@ -90,19 +105,34 @@ def verifica(u, esquema, n_lin):
     F = math.hypot(R * e / z, R / 2)
     Rb = min(pressao_contato_fino_Rd(12, u.t, u.fu), parafuso_corte_Rd(12, "8.8"))
     uso_a = F / Rb
-    usos = dict(gravidade=uso_g, succao=uso_s, escora=uso_e, cortante=uso_v, flecha=uso_f, apoio_2M12=uso_a)
+    usos = dict(gravidade=uso_g, succao=uso_s, cortante=uso_v, flecha=uso_f, apoio_2M12=uso_a)
     gov = max(usos, key=usos.get)
+    # a escora (Nd máx. do modelo com a sucção de borda, envoltória) vale só para as terças dos nós do X e do oitão:
+    # informada à parte; a verificação linha a linha fica em calc_cobertura_metalica.py
+    usos["escora_envoltoria"] = uso_e
     # peso por linha: contínua soma o transpasse de 0,2 L em cada apoio interno
     n_int = len(VAOS_Y) - 1
     comp = COMP_TOTAL + (0.2 * L * n_int if esquema == "continua" else 0.0)
-    kg_linha = u.p["A"] * 7.85e-3 * comp
-    return dict(perfil=u.nome, aco=u.aco, kg_m=round(u.p["A"] * 7.85e-3, 2), esquema=esquema, correntes=n_lin,
+    kgm = getattr(u, "kg_cat", None) or u.p["A"] * 7.85e-3      # massa do catálogo quando houver
+    kg_linha = kgm * comp
+    return dict(perfil=u.nome, aco=u.aco, kg_m=round(kgm, 2), esquema=esquema, correntes=n_lin,
                 usos={k: round(v, 3) for k, v in usos.items()}, governa=gov, uso_max=round(usos[gov], 3),
                 modo_succao=MRs["modo"], flecha_mm=round(fl, 1), T_apoio_kNm=round(R * e, 3), F_parafuso_kN=round(F, 2),
                 peso_total_t=round(kg_linha * N_TERCAS / 1000, 2), ok=bool(usos[gov] <= 1.0))
 
 
 def candidatos():
+    if FAMILIAS in ("todas", "metsec"):
+        for bw, ((bs, bi, lt, lb), ts) in METSEC_Z.items():
+            for t, kg in ts.items():
+                u = PerfilZ(bw, bs, lt, t, "METSEC400", 45.0, bi, lb); u.kg_cat = kg
+                yield "Z Metsec", u
+        for bw, ((b, l), ts) in METSEC_C.items():
+            for t, kg in ts.items():
+                u = PerfilUe(bw, b, l, t, "METSEC400"); u.kg_cat = kg
+                yield "C Metsec", u
+    if FAMILIAS == "metsec":
+        return
     for fam, (aco, ts, secs) in UE.items():
         for (bw, bf, D) in secs:
             for t in ts:
@@ -114,6 +144,14 @@ def candidatos():
 
 
 res = []
+if FAMILIAS == "metsec":
+    _ant = json.loads((AQUI / "estudo_tercas_sem_mf.json").read_text(encoding="utf-8"))["todos"]
+    for r in _ant:
+        if "Metsec" not in r["familia"]:
+            r["usos"].setdefault("escora_envoltoria", r["usos"].pop("escora", None))
+            u_ = {k: v for k, v in r["usos"].items() if k != "escora_envoltoria"}
+            r["governa"] = max(u_, key=u_.get); r["uso_max"] = u_[r["governa"]]; r["ok"] = r["uso_max"] <= 1.0
+            res.append(r)
 for i, (fam, u) in enumerate(candidatos()):
     print(i, u.nome, flush=True)
     for esq in ("biapoiada", "continua"):
@@ -137,4 +175,4 @@ if __name__ == "__main__":
     print("ATUAL", atual["perfil"], atual["usos"], atual["peso_total_t"])
     for r in out["melhores"]:
         print(f'{r["familia"]:14s} {r["esquema"]:9s} {r["correntes"]}L  {r["perfil"]:26s} {r["kg_m"]:5.2f} kg/m  '
-              f'{r["peso_total_t"]:5.2f} t  {r["governa"]:10s} {r["uso_max"]:.2f}  fl {r["flecha_mm"]} mm  F {r["F_parafuso_kN"]} kN')
+              f'{r["peso_total_t"]:5.2f} t  {r["governa"]:10s} {r["uso_max"]:.2f}  esc {r["usos"]["escora_envoltoria"]:.2f}  fl {r["flecha_mm"]} mm  F {r["F_parafuso_kN"]} kN')
