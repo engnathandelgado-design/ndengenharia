@@ -99,7 +99,7 @@ def verifica(u, esquema, n_lin):
     return dict(perfil=u.nome, aco=u.aco, kg_m=round(u.p["A"] * 7.85e-3, 2), esquema=esquema, correntes=n_lin,
                 usos={k: round(v, 3) for k, v in usos.items()}, governa=gov, uso_max=round(usos[gov], 3),
                 modo_succao=MRs["modo"], flecha_mm=round(fl, 1), T_apoio_kNm=round(R * e, 3), F_parafuso_kN=round(F, 2),
-                peso_total_t=round(kg_linha * N_TERCAS / 1000, 2), ok=usos[gov] <= 1.0)
+                peso_total_t=round(kg_linha * N_TERCAS / 1000, 2), ok=bool(usos[gov] <= 1.0))
 
 
 def candidatos():
@@ -132,7 +132,7 @@ for r in res:
 atual = next(r for r in res if r["perfil"].startswith("Ue 300×85×25×2,65") and r["esquema"] == "biapoiada" and r["correntes"] == 3)
 out = dict(dados=dict(L_m=L, s_m=s, Nd_escora=ND_ESC, linhas_tercas=N_TERCAS, comp_linha_m=COMP_TOTAL),
            atual=atual, melhores=sorted(melhores.values(), key=lambda r: r["peso_total_t"]), todos=res)
-(AQUI / "estudo_tercas_sem_mf.json").write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
+(AQUI / "estudo_tercas_sem_mf.json").write_text(json.dumps(out, indent=1, ensure_ascii=False, default=lambda o: o.item()), encoding="utf-8")
 if __name__ == "__main__":
     print("ATUAL", atual["perfil"], atual["usos"], atual["peso_total_t"])
     for r in out["melhores"]:
