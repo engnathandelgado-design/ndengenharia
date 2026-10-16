@@ -55,7 +55,7 @@ FOLGA = 0.03                                              # folga viga x face do
 PAD = (0.15, 0.30, 0.010)                                 # neoprene a (vão) x b x h — NEO-5 150 × 300 × 10 (σk ≤ 7 MPa, 7.2.1.6)
 X_PAD = 0.111 + PAD[0] / 2                                # rev04 com dente Gerber 35 × 35 (calc_vm_dente.py): centro do neoprene a
                                                           # 18,6 cm da face do pilar — a2 ≥ c + 3,5Ø (alças Ø16) no dente e no consolo
-DENTE = dict(hd=0.35, ln=0.35, recorte=0.30, consolo_h=0.29, consolo_proj=0.35, macico=1.00)
+DENTE = dict(hd=0.50, ln=0.35, recorte=0.30, consolo_h=0.29, consolo_proj=0.35, macico=1.00)
 VAOS = {"VM-01": 9.37, "VM-02": 9.48}                     # entre faces de pilar (A–B: P1 60 / P3 40; B–C: 40 / 40)
 
 Y_LINHAS = (0.050, 0.120, 0.190)                         # linhas de cordoalhas: folga para os grampos N7 Ø12,5 do apoio a y = 85 mm
@@ -365,7 +365,7 @@ def negativa(L, g2, q2, h=0.65):
                 Rsec_kNm_rad=round(Rsec), Led_m=round(Led, 3), norma="NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)")
 
 
-H_PM, N_INF, N_SUP = 0.65, 10, 2                          # adotado (varredura: h 0,55–0,70 x 6–10 cordoalhas, ver DEC-020)
+H_PM, N_INF, N_SUP = 0.80, 8, 2                           # rev04 adotado: meio vaso h 80 com dente 50 × 35 (MEF Vu 484 kN ≥ 1,06·γn·Vd) — DEC-020
 
 if __name__ == "__main__":
     import sys

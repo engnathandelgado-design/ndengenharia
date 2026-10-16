@@ -4,6 +4,9 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Letsara rev04 (NBR 9062:2017, DEC-020): `modelo_global_r04.py` (sem VT, Anexo A, desaprumo, γz da 5.1.2.12, Tab. 7, variante com placas), `calc_nbr9062.py` (aparelhos 7.2.1.6, consolos 7.3, apoio sem recorte 7.5, cintamento 6.2.3, cálices 7.7, estabilidade lateral 6.1 com Lebelle, folgas, flechas, incêndio) e memória MC05; VM em meio vaso com dente (`calc_vm_meio_vaso.py`, `calc_vm_dente.py`, `mef_vm_dente.py`); pilares 14 Ø20; pranchas VM01 (nova), AR-VIG-03, LA01, MON02, PP/CM01 (junta 20 mm, sem VT), pilares, I130, VB01, TS01-1; listas em PDF único (tubos em barras de 6 m) e 3D com meio vaso, 2º estágio, alças e folgas.
+- `pilar_metodo_geral`: parâmetro `camadas` (arranjo real das barras); `mef_dente`: largura da mesa inferior `bi` (seções T / meio vaso).
+
 - Letsara rev03: TS-01 sem dentes (apoio no recuo dos pilares e no topo da I130, 8 cordoalhas com 2 isoladas), cobertura rebaixada para o pacote TP40 + lã 40 + zipada + painéis solares (folga 151 mm à platibanda), terças Ue 300×2,65 c/1,20 m, I110 → I130, placas de fechamento 10 cm com 8 Ø12,7, VT do eixo A a +6,25 e todas as ligações metálicas parafusadas (esperas de barra roscada, trilhos e buchas, sem solda); pranchas TS01-1/2/3, I130, COB01/02, CT01, LOC01, MON01, PP00/PP-x, VT01, VB01, pilares e armaduras regeneradas.
 - `mef_dente.analisar`: opções `rampa_fim` (transferência gradual da protensão no corte artificial do modelo) e `robusto` (Newton modificado / line search quando a carga para de convergir); padrão inalterado.
 

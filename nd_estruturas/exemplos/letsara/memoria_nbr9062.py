@@ -110,12 +110,14 @@ for r in VMD["ranking"][:8]:
     lin.append([f"{r['bw']*100:.0f} × {r['h']*100:.0f} × {r['hd']*100:.0f}", r["n_cord"], f"{f(r['dente']['tau'], 2)} / {r['dente']['tirante']}",
                 f"{f(r['consolo']['h'] * 100, 0)} cm / {r['consolo']['tirante']}", r["custo_indice"]])
 lin.append(["sem dente 25 × 65 (consolo 45 abaixo da viga)", 12, "—", "45 cm", VMD["sem_dente"]["custo_indice"]])
-E += [tab(lin, [50, 18, 46, 40, 24]), P("Varredura de alma e altura de 5 em 5 cm (calc_vm_dente.py), a pedido do Nathan; a solução com dente foi confirmada pelo MEF não linear:")]
-lin = [["MEF (h_dente)", "Fd = γn·Vd (kN)", "Vu (kN) critério", "pico (kN)", "Vu / Fd", "situação"]]
+E += [tab(lin, [50, 18, 46, 40, 24]), P("Varredura de alma e altura de 5 em 5 cm (calc_vm_dente.py), a pedido do Nathan, com o dente e o consolo tratados como consolos (7.3/7.4). O cálculo analítico aprova h 65 a 75, mas o MEF não linear da ponta (quina do recorte, transferência da protensão) reprova h 65 e h 75; a menor altura aprovada no MEF foi adotada:")]
+FD = N9["dente_VM"]["Fd_kN"]
+lin = [["MEF h / dente (mm)", "Vu (kN) e critério", "pico (kN)", f"Vu / (1,06·Fd), Fd = 1,1·Vd = {f(FD)} kN", "situação"]]
 for k, d in MEF.items():
     m = d["mef"]
-    lin.append([k.replace("_", " / "), f(m["Vd_kN"]), f"{f(m['Vu_kN'])} ({m['limite'].get('criterio', '')})", f(m.get("V_pico_kN", 0)), f(m["FS"], 2), ok(m["ok"])])
-E += [tab(lin, [30, 26, 46, 22, 20, 20])]
+    lim_ = (m["limite"] or {}).get("criterio", "pico da curva")
+    lin.append([k.replace("_", " / ").replace("inf4x16", "+ 4 Ø16 inf."), f"{f(m['Vu_kN'])} ({lim_})", f(m.get("V_pico_kN", 0)), f(m["Vu_kN"] / (1.06 * FD), 2), ok(m["Vu_kN"] >= 1.06 * FD)])
+E += [tab(lin, [34, 48, 22, 50, 20])]
 r = VM["VM-02"]
 lin = [["Verificação (VM-02, h = %g cm)" % (H / 10), "valor", "limite / resistência", "situação"],
        ["ELU fase 1 (peça isolada)", f"Md {f(r['ELU']['M1d'])} kN·m", f"MRd {f(r['ELU']['MRd1'])} · x/d {f(r['ELU']['xd1'], 2)}", ok(r["ok"]["ELU_F1"])],

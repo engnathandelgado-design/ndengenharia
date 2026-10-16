@@ -14,7 +14,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 ## Próximas
 
 - [ ] Letsara: confirmar com o fornecedor o peso dos painéis solares (0,15 kN/m²) e a capacidade do trilho TR-1 / bucha BR-1 (≥ 12,4 kN por ponto); confirmar com a fábrica a cabeceira de 1105 kN da placa e a furação nova da grade da TS-01.
-- [ ] Letsara: ELS-F do pórtico em x (9,9 mm > H/1700) — definir o limite com o cliente; pé-direito do mezanino superior e vista E aberta só até +6,25.
+- [ ] Letsara rev04: fábrica comprovar controle de pré-fabricado (12.1.2) para o cobrimento de 2 cm das placas; TRRF do Corpo de Bombeiros; catálogo TR-2/BR-2 (≥ 40 kN) da CT-1; colarinho dos cálices no projeto de fundações.
 - [ ] Letsara: planilha de custo dos pilares com as quantidades da rev03 e o preço do C50.
 
 - Letsara: definir com o cliente o limite de deslocamento do ELS (9,3 mm passa H/500, não passa H/1700); função dos pilares P6/P7 do anexo; escolha da opção de pilar (A armado × B protendido).
@@ -49,6 +49,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] 2026-10-16 — Letsara rev04 (DEC-020): reanálise pela NBR 9062:2017 — sem VT, Tab. 7, pilares 14 Ø20, VM meio vaso com dente (MEF), consolos/neoprenes/folgas revistos, memória MC05, pranchas e listas em PDF único, 3D.
 
 - [x] 2026-10-14 — Letsara rev03 (DEC-019): TS-01 sem dente, cobertura rebaixada com painéis solares, terças c/1,20 m, I130, placas 10 cm, ligações sem solda; cálculos (ligacoes, modelo global, cobertura, I130, dentes, consolos, placas) e pranchas regenerados.
 

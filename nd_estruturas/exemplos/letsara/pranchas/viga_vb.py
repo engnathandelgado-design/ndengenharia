@@ -27,6 +27,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         desenho="ND-LET-VB01", folha="01/01", fase="PARA APROVAÇÃO", marca="VB-02", qtd=2, peso=f(PESO, 1), volume=f(V, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m: ESPERAS ES-1/ES-3 (SEM SOLDA); TB-1 SEM CHAPA; CARGAS COM PAINÉIS SOLARES")
+pr.revisao("04", "16/10/2026", "NBR 9062: NEOPRENE NEO-6 100×100×10 (PRESSÃO MÍNIMA E NÃO LEVANTAMENTO)")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
@@ -110,10 +111,10 @@ ca.chamada((B / 2 - COB, 450), (14, -14), "N4 Ø6,3 c/15")
 ca.chamada((0, H + 60), (14, 14), "ES-1V M16 hef 150 + gancho, saliência 120 (no eixo)")
 ca.chamada((B / 2 + 30, 100), (14, -8), "ES-3 M16 hef 110, sai 60")
 
-d1 = pr.vista("DETALHE 1", (Q[0] + 230, YR), 10, titulo="DETALHE 1 — PONTA E APOIO NO CONSOLO CP-VB", subtitulo="pino PN-1 Ø20 no TB-1; neoprene 300×150×10", unidade="cm")
+d1 = pr.vista("DETALHE 1", (Q[0] + 230, YR), 10, titulo="DETALHE 1 — PONTA E APOIO NO CONSOLO CP-VB", subtitulo="pino PN-1 Ø20 no TB-1; neoprene NEO-6 100×100×10", unidade="cm")
 LD = 1400
 d1.poli([(0, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True); d1.interrupcao((LD, 0), (LD, H))
-d1.chapa(150 - 25, 0, 50, 450); d1.ret(25, -10, 250, 10, "VISTA")
+d1.chapa(150 - 25, 0, 50, 450); d1.ret(100, -10, 100, 10, "VISTA")
 for x in (50, 150, 250, 350, 450, 550, 650, 750):
     d1.linha((x, COB), (x, H - COB), "ARM_TRANSV")
 d1.poli([(COB, COB + 200), (COB, COB), (LD, COB)], "ARMADURA"); d1.poli([(COB, H - COB - 200), (COB, H - COB), (LD, H - COB)], "ARMADURA")
@@ -122,7 +123,7 @@ d1.cota_h([0, 150, 300, LD], 0, -12, total=False); d1.cota_v([0, 450, H], LD, 10
 d1.chamada((150, 300), (14, 12), "TB-1 Ø50×3,0 L=450 passante (sem chapa, sem solda)")
 d1.chamada((COB, COB + 200), (12, 10), "N1/N2 com dobra de 20 cm nas pontas (ancoragem)")
 d1.chamada((400, COB + 100), (12, 14), "N4 c/10 nos 150 cm")
-d1.chamada((140, -27), (24, -22), "NEO-1 e consolo CP-VB 30×40×35, sem chanfro (ver prancha do pilar); assento = fundo da viga")
+d1.chamada((140, -27), (24, -22), "NEO-6 100×100×10 e consolo CP-VB 30×30×35, sem chanfro (ver prancha do pilar); assento = fundo da viga")
 
 # tabelas
 y = Q[3] - 6
@@ -137,14 +138,14 @@ y = ta["y_base"]
 ins = [["TB-1", "Tubo Ø50×3,0 L=450 a prumo, passante, sem solda", 2, "a 150 das pontas"],
        ["ES-1V", "2 barras roscadas M16 L=330 c/ gancho (ST-1V das terças)", 2 * len(TERCAS), "topo, no eixo, a 45 e 105 da face da terça"],
        ["ES-3", "Barra roscada M16 L=170 horizontal + porca/arruela (MF)", len(TERCAS), "face interna, 100 do fundo"], ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
-       ["NEO-1", "Neoprene 300×150×10 (furo Ø30)", 2, "sobre os consolos CP-VB"]]
+       ["NEO-6", "Neoprene 100×100×10 (furo Ø30)", 2, "sobre os consolos CP-VB"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 90 cm"], ["COMPRIMENTO", f"{L/10:.0f} cm", "CONCRETO", "C40"], ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
       ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "2 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40, aço CA-50; cobrimento 3,0 cm (CAA II). Barras N1/N2 com dobra de 20 cm nas pontas.",
          "Topo da VB alinhado com o topo das TS-01 (H = 90): as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V; mão-francesa MF-1 no CMF-1 da espera ES-3 (face interna) — ND-LET-COB01. Nenhuma solda.",
-         "Apoio nos consolos CP-VB dos pilares de fachada e de canto: NEO-1 e pino PN-1 Ø20 no TB-1; graute só numa ponta.",
+         "Apoio nos consolos CP-VB dos pilares de fachada e de canto: NEO-6 100×100×10 (o 300×150 não tinha a pressão mínima da NBR 9062:2017 7.2.1.6.21: risco de deslizar e levantar) e pino PN-1 Ø20 no TB-1; graute só numa ponta.",
          "Placas de fechamento por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos trilhos IP-01).",
          "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

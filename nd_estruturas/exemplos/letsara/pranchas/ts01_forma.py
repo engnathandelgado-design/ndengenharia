@@ -12,6 +12,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", "12/10/2026", "DENTES GERBER, MÃO-FRANCESA NO FUNDO, CHUMBADORES CALCULADOS")
 pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01; ORELHAS DO X NA CH-T2")
 pr.revisao("03", "14/10/2026", "SEM DENTES (APOIO DIRETO), TERÇAS c/1,20 m, ESPERAS ROSCADAS (SEM SOLDA), 8 CORDOALHAS")
+pr.revisao("04", "16/10/2026", "NBR 9062: TOLERÂNCIA DE COMPRIMENTO ±10 mm (FOLGA CENTRAL 19 mm); ESTABILIDADE LATERAL")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
@@ -286,7 +287,8 @@ mn = [["Desforma / içamento", "4 alças AL-1 + 2 balancins", f"{f(ALCA_Fd,1)} k
       ["Estoque / transporte", f"2 calços a {EST[0]/10:.0f} cm das pontas", f"{f(peso/2,1)} kN por calço"],
       ["Liberação", f"fckj ≥ {P['fckj']} MPa", "—"]]
 y = pr.tabela(x0, y - 4, "MANUSEIO", ["FASE", "APOIO", "CARGA"], mn, [50, 70, 60])
-notas = [f"Fabricar a peça reta com {f(L/10,1)} cm de fundo; cabeceiras inclinadas 3 % (topo deslocado {f(DX/10,1)} cm) para ficarem a prumo na montagem.",
+notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab. 2 da NBR 9062:2017 — 5.2.1.2): necessária para a folga de 19 mm entre as pontas das duas TS-01 sobre a I130; seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm. Estabilidade lateral no içamento: L/bf 49 ≤ 50 (6.1).",
+         f"Fabricar a peça reta com {f(L/10,1)} cm de fundo; cabeceiras inclinadas 3 % (topo deslocado {f(DX/10,1)} cm) para ficarem a prumo na montagem.",
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo, lado do pilar P1/P2) com o plano do fundo.",
          "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), sempre com 2 pinos grauteados nos tubos TB-3.",
          "Cordoalhas: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); as 2 de 10 cm em x = ±4 isoladas com bainha nos 3,00 m de cada ponta (folha 02).",

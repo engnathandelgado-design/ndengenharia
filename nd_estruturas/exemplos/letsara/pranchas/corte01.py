@@ -138,13 +138,15 @@ def estrutura(R, eixo):
             pilar(R, xm, 400, Z_MEZ[1])
         faces = [(300, 9670), (10070, 19550), (19950, 29430), (29830, 39200)]
         for zm in Z_MEZ:
-            topo = zm - 250                                  # laje alveolar h20 + capa 5
+            topo = zm - 260                                  # rev04: laje h20 + capa 5 + fita 1; topo da VM = apoio da laje
+            _P = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["premissas"]
+            HV, RC = round(_P["h_pm"] * 1000), round(_P["dente"]["recorte"] * 1000)
             for a, b in faces:
-                xa, xb = a + 25, b - 25
-                cont = [(xa + 300, topo - 900), (xb - 300, topo - 900), (xb - 300, topo - 450), (xb, topo - 450), (xb, topo), (xa, topo),
-                        (xa, topo - 450), (xa + 300, topo - 450)]                                  # VM I90, dente 45 × 30
+                xa, xb = a + 30, b - 30
+                cont = [(xa + 350, topo - HV), (xb - 350, topo - HV), (xb - 350, topo - HV + RC), (xb, topo - HV + RC), (xb, topo), (xa, topo),
+                        (xa, topo - HV + RC), (xa + 350, topo - HV + RC)]                         # VM meio vaso com dente (rev04)
                 R.poli(cont, "VISTA", True)
-                consolo(R, a, 1, topo - 450 - 10, proj=300, alt=440, inc=0); consolo(R, b, -1, topo - 450 - 10, proj=300, alt=440, inc=0)
+                consolo(R, a, 1, topo - HV + RC - 10, proj=350, alt=RC - 10, inc=0); consolo(R, b, -1, topo - HV + RC - 10, proj=350, alt=RC - 10, inc=0)
             R.ret(300, zm - 250, 38900, 200, "VISTA")
             R.ret(300, zm - 50, 38900, 50, "VISTA")
     else:
@@ -171,6 +173,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); cabeça dos pilares laterais recuada; placas 15 cm por fora")
 pr.revisao("02", pr.dados["data"], "CONSOLOS SEM CHANFRO (FUNDO ALINHADO À VIGA); VM I90 COM DENTE 45×30; LAJE 8 Ø12,7")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (APOIO NO RECUO E NO TOPO DA I130); PACOTE COM PAINÉIS; COBERTURA REBAIXADA; PLACAS 10 cm")
+pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; MEZANINO EM MEIO VASO COM DENTE")
 z_tel = lambda x: zf(x) + (H + 10 + 300 + sum(PAC.values()) * 1000) * c       # topo dos painéis solares
 for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330), "CORTE 3-3"))):
     v = pr.vista(nome, org, 50, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
@@ -201,7 +204,7 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
         v.chamada((XC, Z_TOP_C - 650), (10, -30), "I130 (h 130): TS-01 apoiadas no topo (NEO-3 + 2 PN-5 por viga)")
     else:
         v.chamada((XC, 5000), (10, 10), "P8A 40×60 (40 em x): TS-01 apoiadas no topo")
-        v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "vigas do mezanino I90 com dentes + laje alveolar h20 + capa 5")
+        v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "vigas do mezanino em meio vaso com dente + laje h20 + capa 5")
 
 # detalhes ampliados 1:20
 for k, (nome, org, jan, eixo, txt) in enumerate((
@@ -236,13 +239,13 @@ x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 niv = [["Assento da TS-01 no P1 (recuo)", f(REC[0] / 1000)], ["Assento da TS-01 no P2 (recuo)", f(REC[1] / 1000)],
        ["Topo da I130 / pilares centrais", f(Z_TOP_C / 1000)], ["Fundo da I130", f((Z_TOP_C - H_I130) / 1000)], ["Assento da I130 (CP-I130)", f(Z_ASS_I130 / 1000)],
        ["Topo dos painéis junto ao P1 / ao P2", f"{f(z_tel(X0[0]) / 1000)} / {f(z_tel(39475) / 1000)}"], ["Platibanda (todas)", f(Z_TOP_PIL / 1000)],
-       ["VT eixo A / eixo E (fundo)", "+6,250 / +7,500"], ["Pisos do mezanino", f"{f(Z_MEZ[0] / 1000)} / {f(Z_MEZ[1] / 1000)}"]]
+       ["Pisos do mezanino", f"{f(Z_MEZ[0] / 1000)} / {f(Z_MEZ[1] / 1000)}"]]
 y = pr.tabela(x0, y, "NÍVEIS (m)", ["ELEMENTO", "NÍVEL"], niv, [110, 70])
 notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações.",
          f"Cobertura rebaixada (rev03) para o pacote TP40 + lã 40 + zipada 70 + painéis solares: topo dos painéis junto ao P2 em {f(z_tel(39475) / 1000)}, {(Z_TOP_PIL - z_tel(39475)):.0f} mm abaixo da platibanda +10,000 (pedido: ≥ 150 mm).",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), sem dentes: apoio de 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e de 16,25 cm no topo da I130 / pilar central (NEO-3 + 2 PN-5 Ø20); terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
          "Cabeça dos pilares laterais recuada acima do assento da TS-01: só os 30 cm externos sobem até +10,00 (consolos externos pela cabeça).",
-         "Vigas centrais I130 (h 130) com dentes 78 × 35 nos consolos CP-I130; vigas do mezanino VM I90 com dentes 45 × 30 nos consolos CP-MEZ.",
+         "Vigas centrais I130 (h 130) com dentes 78 × 35 nos consolos CP-I130; vigas do mezanino VM em meio vaso com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev04, ND-LET-VM01).",
          f"Pé-direito (rev03): fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C); no mezanino superior (+6,55), fundo das terças entre as linhas 1 e 2 de {f((REC[0] + 900 + 10) / 1000)} (eixo A) a {f((Z_TOP_C + 10) / 1000)} (eixo C) — conferir o uso do piso superior. Portões da linha 4 livres até +7,40.",
          "Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)

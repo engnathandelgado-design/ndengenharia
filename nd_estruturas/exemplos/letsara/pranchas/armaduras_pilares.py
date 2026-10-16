@@ -203,6 +203,7 @@ def folha(num, total, marcas):
                             conteudo=f"ARMADURAS — PRÉ-MOLDADOS — PILARES {', '.join(marcas)} — SEÇÕES E LISTA DO AÇO",
                             desenho=f"ND-LET-AR-PIL-{num:02d}", folha=f"{num:02d}/{total:02d}", fase="PARA APROVAÇÃO"))
     pr.revisao("00", "13/10/2026", "EMISSÃO INICIAL — PADRÃO DE ARMADURAS")
+    pr.revisao("04", "16/10/2026", "NBR 9062: PILARES LATERAIS 14 Ø20 (MÉTODO GERAL)")
     A = Arm(pr)
     Q = pr.quadro
     X0, Y0 = Q[0], Q[1]

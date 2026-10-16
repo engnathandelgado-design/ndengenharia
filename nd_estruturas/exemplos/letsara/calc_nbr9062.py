@@ -212,11 +212,12 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5):
                 ok=ok, ok_geral=all(ok.values()), norma="NBR 9062:2017 7.3.2 a 7.3.9")
 
 
+HD_VM = VM["premissas"]["dente"]["hd"]
 CON = [
     consolo("CP-I130", "P8A, P11, P13, P14 — I130 (dente 78 × 35), NEO-2 200×300", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
             max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1),       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
-    consolo("CP-MEZ", "pilares das linhas 1 e 2 — dente 35 × 35 da VM meio vaso, NEO-5 150×300; h = recorte − neoprene (fundo alinhado)", 0.40, 0.35, 0.29, 0.186, 0.15, 0.30, m["cortante"]["Vd"], 1.2),
-    consolo("DENTE VM", "nariz do dente Gerber da VM (ponta maciça 40 × 65), h 35, LN 35 — 7.4 = consolo 7.3", 0.40, 0.35, 0.35, 0.194, 0.15, 0.30, m["cortante"]["Vd"], 1.2),
+    consolo("CP-MEZ", "pilares das linhas 1 e 2 — dente 35 × 35 da VM meio vaso, NEO-5 150×300; h = recorte − neoprene (fundo alinhado)", 0.40, 0.35, 0.29, 0.186, 0.15, 0.30, m["cortante"]["Vd"], 1.1),
+    consolo("DENTE VM", f"nariz do dente Gerber da VM (ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f}), h {HD_VM*100:.0f}, LN 35 — 7.4 = consolo 7.3", 0.40, 0.35, HD_VM, 0.194, 0.15, 0.30, m["cortante"]["Vd"], 1.1),
     consolo("CP-VB", "pilares das fachadas 1 e 9 — VB 15×90, NEO-6 100×100", 0.30, 0.30, 0.35, 0.15, 0.10, 0.10, 48.0, 1.1),
 ]
 OUT["consolos"] = CON
@@ -247,12 +248,13 @@ def sem_recorte(nome, Fd, prov):
 
 OUT["apoios_sem_recorte"] = [
     sem_recorte("TS-01 (pontas)", TS.R.linhas["Vd_kN"], "Asd: 3 grampos N7 Ø10 por ponta = 6 ramos = 4,71 cm²; Ash/Asv: N6 8 Ø8 + N8 2 Ø10 por ponta"),
-    sem_recorte("VM meio vaso (pontas)", m["cortante"]["Vd"], "Asd: 3 grampos verticais N7 Ø20 por ponta (perna inferior a 85 mm do fundo, entre as colunas de cordoalhas, 110 cm) = 9,42 cm² + 8 cordoalhas ativas na transferência (≥ 0,64 cm² equivalentes, σp ≥ 35 MPa a 20 cm da ponta); Ash/Asv: N2 Ø8 c/10 (2 ramos) nos 150 cm + N8 3 estribos horizontais Ø10"),
+    # VM rev04: apoio por dente Gerber (item dente_VM), não sem recorte
 ]
-MV = json.loads((AQ / "mef_vm_dente_350.json").read_text(encoding="utf-8")) if (AQ / "mef_vm_dente_350.json").exists() else None
-OUT["dente_VM"] = dict(geometria="dente 35 × 35 (nariz), recorte 30, ponta maciça 40 × 65 em 1,00 m", Fd_kN=round(1.2 * m["cortante"]["Vd"], 1),
-                       MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["ok"] if MV else None),
-                       suspensao=f"{math.ceil(1.2 * m['cortante']['Vd'] / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
+_mf = AQ / f"mef_vm_dente_{round(VM['premissas']['h_pm'] * 1000)}_{round(VM['premissas']['dente']['hd'] * 1000)}{VM['premissas'].get('mef_suf', '')}.json"
+MV = json.loads(_mf.read_text(encoding="utf-8")) if _mf.exists() else None
+OUT["dente_VM"] = dict(geometria=f"dente {HD_VM*100:.0f} × 35 (nariz), recorte 30, ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f} em 1,00 m", Fd_kN=round(1.1 * m["cortante"]["Vd"], 1),
+                       MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["Vu_kN"] >= 1.06 * 1.1 * m["cortante"]["Vd"] if MV else None),
+                       suspensao=f"{math.ceil(1.1 * m['cortante']['Vd'] / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
                        norma="NBR 9062:2017 7.4 + MEF não linear (mef_vm_dente.py)")
 d130 = DT["I130"]
 OUT["dente_I130"] = dict(MEF_Vu_kN=d130.get("mef", {}).get("Vu_kN", 639.3), Vd_kN=d130.get("calculo", {}).get("Vd_kN", 472), FS=1.35,

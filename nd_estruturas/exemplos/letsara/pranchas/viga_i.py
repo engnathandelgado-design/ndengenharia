@@ -376,7 +376,7 @@ def dados_i110():
     A = area_I(400, 1300, 220, 250, 80, 150)
     c6, c7 = [-125, -75, -25, 25, 75, 125], [-150, -100, -50, 0, 50, 100, 150]
     return dict(
-        revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA")],
+        revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA"), ("04", "16/10/2026", "NBR 9062: NEO-2 300×200×31 FRETADO (a2 DO CONSOLO); TOLERÂNCIAS E IÇAMENTO")],
         marca="V406", qtd=1, familia="VIGAS CENTRAIS I130 (EIXO C)", desenho="ND-LET-I130", h=1300, b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
         n3=(4, 20.0, "CA-50 na mesa superior (compressão no ELU e tração no ato junto às pontas)"),
@@ -399,13 +399,13 @@ def dados_i110():
                   ["AL-3", "2 laços de cordoalha Ø12,7 (4 pernas) por alça", 2, "a 250 cm das pontas"],
                   ["PN-5", "Pino Ø20 CA-50 L=600 (300 na viga), apoio das TS-01", 4 * len(pinos), "topo, ±100 da linha, ±115 do eixo"],
                   ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30 (assento das TS-01)", 2 * len(pinos), "topo, nas linhas"],
-                  ["NEO-2", "Neoprene 300×250×30 fretado (apoio nos PC)", 2, "sobre os consolos CP-I130"]],
+                  ["NEO-2", "Neoprene 300×200×31 fretado, chapas inox (apoio nos PC)", 2, "sobre os consolos CP-I130"]],
         memoria=[],
         notas=["Concreto C50; 26 cordoalhas CP-190 RB Ø12,7 em 4 linhas: 6 em y = 6 e 6 em y = 10 cm (aderentes), 7 em y = 14 e 7 em y = 18 cm (isoladas 200 cm nas pontas). σpi = 1400 MPa; liberar com fckj ≥ 40 MPa. V407 (vão menor): 16 cordoalhas, 4 por linha, linhas de 14 e 18 isoladas.",
                "N3 = 4 Ø20 CA-50 na mesa superior: compressão do ELU (x/d ≤ 0,45) e tração no ato junto às pontas (NBR 6118:2023 17.2.4.3.2 b).",
                "Dentes Gerber 78 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6); maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
                f"TS-01 apoiadas direto no topo da viga (rev03, sem consolos CV-TS): topo a +{Fz(zt)} no eixo C, neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01.",
-               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×250×30 fretado e pino PN-2 Ø25 no consolo CP-I130 (assento +{Fz(za)}); graute só numa ponta de cada viga. V405 vai até o consolo do P14 (PF-04).",
+               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 (assento +{Fz(za)}); graute só numa ponta de cada viga. V405 vai até o consolo do P14 (PF-04).",
                "Içar pelas 2 alças AL-3 (2 laços cada); estocar sobre 2 calços nas alças; não virar a peça."])
 
 

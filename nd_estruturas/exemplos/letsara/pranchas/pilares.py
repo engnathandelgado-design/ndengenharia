@@ -55,9 +55,11 @@ if PROT:
     CORD = [(x, y) for y in (-250, 250) for x in (-100, -50, 0, 50, 100)]
     SIG_PI = 1400
 else:
-    LONG = dict(pos="N1", n=20, d=20.0, desc="5 Ø20 por face de 40 e 7 Ø20 por face de 60 (cantos comuns)",
+    # rev04: 14 Ø20 (5 por face de 40 + 2 intermediárias por face de 60) — método geral com as barras reais (λu 1,23 ≥ 1,0;
+    # 20 Ø20 dava λu 1,62): modelo_global_r04 + pilar_metodo_geral(camadas=...), NBR 6118:2023 15.8.3.2
+    LONG = dict(pos="N1", n=14, d=20.0, desc="5 Ø20 por face de 40 e 4 Ø20 por face de 60 (cantos comuns)",
                 xy=[(x, -YB) for x in (-XB, -76, 0, 76, XB)] + [(x, YB) for x in (-XB, -76, 0, 76, XB)] +
-                   [(-XB, y) for y in (-168, -84, 0, 84, 168)] + [(XB, y) for y in (-168, -84, 0, 84, 168)])
+                   [(-XB, y) for y in (-84, 84)] + [(XB, y) for y in (-84, 84)])
     CORD = []
 # estribos: s ≤ min(200; b = 400; 12 Ø = 240) = 200 mm (18.4.3) → c/15 corrente; c/10 nos 1,5 m das pontas e no cálice
 # grampos: barra a mais de 20 Øt = 160 mm de um canto de estribo precisa de estribo suplementar (18.4.3) → N3 nas linhas y = ±84

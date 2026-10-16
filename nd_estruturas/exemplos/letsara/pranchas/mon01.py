@@ -31,6 +31,7 @@ pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("01", "12/10/2026", "geometria do R01 (79,35 × 39,50 m); corte 1-1 com I130 em corte e recuo dos pilares")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (RECUO E TOPO DA I130); I130; COBERTURA REBAIXADA")
 pr.revisao("02", "12/10/2026", "MARCAS DOS PILARES POR LINHA; VB-01 A VB-04 15×90; PILARES DOS PORTÕES; CONSOLOS SEM CHANFRO")
+pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; NEOPRENES E CONSOLOS REVISTOS; MEZANINO MEIO VASO")
 Q = pr.quadro
 
 # ------------------------------------------------------------------ PLANTA DE MONTAGEM 1:200 (x = comprimento 1–9, y = largura A–E)
@@ -156,14 +157,13 @@ for mk in ("V407", "V406", "V405"):
     pecas.append([mk, f"Viga I130 central, L {f(Lm, 2)} m", "1", f(PESO["I130"](Lm), 1), f"consolos CP-I130 (+{f(LG['Z_ASS_I130'])})"])
 for mk, pos, qt, Lmm, _x in VBM:
     pecas.append([mk, f"Viga de borda 15×90, L {Lmm/10:.0f} cm ({pos.split(',')[0]})", str(qt), f(PESO["VB"](Lmm / 1000), 1), "consolos CP-VB"])
-pecas.append(["VT", "Viga de travamento 25×60 (ND-LET-VT01)", "14", "—", "CP-VT: +6,54 (A) / +7,79 (E)"])
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — COBERTURA", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [26, 72, 14, 18, 70], h_lin=6.0)
 seq = ["Locar os cálices (±10 mm), nivelar o fundo com calços; conferir prumo das paredes do cálice.",
        "Pilares linha a linha, 1 → 9: içar na horizontal pelas 2 AL-2, levantar à vertical, descer no cálice, aprumar (10 mm/10 m) com cunhas, grautear (fck ≥ 30 MPa) e só soltar após 24 h.",
        "Mezanino (linhas 1–2): vigas VM e lajes do +3,15, depois do +6,55 — ver ND-LET-MON02.",
        "Vigas centrais I130 V407, V406 e V405 nos consolos dos PC: neoprene 300×250×30 fretado; pino grauteado numa ponta só.",
        "TS-01 L2 a L8, dois vãos por linha: neoprene NEO-4 no recuo dos pilares laterais (2 PN-3 Ø25) e NEO-3 no topo da I130 / P8A / P11 (2 PN-5 Ø20); grautear os tubos TB-3 (na linha 2, sobre o P8A, mastique: ponta livre em x).",
-       "VB-01 a VB-04 das fachadas nos consolos CP-VB; VT nos CP-VT; travar as TS-01 com as terças e correntes da linha montada antes de soltar a próxima (ND-LET-COB01).",
+       "VB-01 a VB-04 das fachadas nos consolos CP-VB (sem vigas de travamento: não há ponte rolante); travar as TS-01 com as terças e correntes da linha montada antes de soltar a próxima (ND-LET-COB01).",
        "Terças, correntes, mãos-francesas e contraventamento (tudo parafusado); TP40, lã, zipada e painéis solares; placas de fechamento por último."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 notas = ["Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; prumo 10 mm em 10 m; consolo ±10 mm; folga de ponta 25 mm e de dente 25 mm já previstas.",

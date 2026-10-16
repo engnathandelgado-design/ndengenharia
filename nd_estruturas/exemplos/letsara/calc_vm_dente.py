@@ -18,7 +18,7 @@ FOLGA, LN, PROJ, A_PAD, B_PAD = 0.03, 0.35, 0.35, 0.15, 0.30
 X_PAD = 0.111 + A_PAD / 2                     # centro do neoprene a 18,6 cm da face do pilar
 A_CONS = X_PAD
 A_DENTE = FOLGA + LN - X_PAD
-FYD, GN = 500 / 1.15, 1.2
+FYD, GN = 500 / 1.15, 1.1                    # γn 1,1: pré-moldado com permanente preponderante (g 31 > q 26 kN/m) — NBR 9062:2017 7.3.1.1
 PRECO = dict(concreto=1800.0, cordoalha=15.0, aco=9.0)   # R$/m³ instalado na fábrica (fôrma+produção) e R$/kg (índice de comparação)
 
 

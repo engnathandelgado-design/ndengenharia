@@ -19,7 +19,7 @@ AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 PL = json.load(open(AQ + "placas.json"))
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: round(v * 1000)
-H_PL, E_PL, JUNTA, FOLGA = 1250, 100, 10, 25           # altura e espessura da placa, junta vertical, folga placa × pilar (mm)
+H_PL, E_PL, JUNTA, FOLGA = 1250, 100, 20, 25           # rev04: junta vertical 20 mm (tex ±5 de projeto + tloc ±10 + Δ — NBR 9062:2017 3.1/5.2.2)
 Z_TOPO = 10000
 Z_VT0, Z_VT1, Z_ASS_VT = 7500, 8100, 7790              # VT 25×60 do eixo E atrás da fiada +7,50/+8,75; dente 30×20 → assento do CP-VT
 Z_VT_A = (6250, 6850, 6540)                             # rev03: VT do eixo A rebaixada (CP-VT abaixo do recuo +7,19), atrás da fiada +6,25/+7,50
@@ -46,16 +46,16 @@ VISTAS = {
     "A": dict(titulo="VISTA A — FACHADA DA LINHA 9 (vista de fora)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: True, nomes_pil=["P1C", "P3", "P14", "P5", "P2C"]),
     "B": dict(titulo="VISTA B — LATERAL DO EIXO A, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
-              fiadas=lambda k, b: True, vt=VT_LADO["A"]),
+              fiadas=lambda k, b: True),
     "C": dict(titulo="VISTA C — PAREDE INTERNA DA LINHA 4 (PORTÕES)",
               pil=eixos_transv(X_L4, ["A", "", "", "C", "", "", "E"], [600, 400, 250, 400, 250, 400, 600]), ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: k <= (4 if b == 0 else 5), portoes=[1, 4], nomes_pil=["P1", "P9", "P10", "P11", "P10", "P12", "P2"]),
     "D": dict(titulo="VISTA D — LATERAL DO EIXO E, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
-              fiadas=lambda k, b: True, vt=VT_LADO["E"]),
-    "E": dict(titulo="VISTA E — LATERAL DO EIXO A, LINHAS 2 A 4 (aberta até +6,25)", pil=eixos_lat(1, 3), ini=M(Y_LIN[1]) + JUNTA // 2, fim=M(Y_LIN[3]) - JUNTA // 2,
-              fiadas=lambda k, b: k >= 5, vt=VT_LADO["A"]),
+              fiadas=lambda k, b: True),
+    "E": dict(titulo="VISTA E — LATERAL DO EIXO A, LINHAS 2 A 4 (aberta até +7,50)", pil=eixos_lat(1, 3), ini=M(Y_LIN[1]) + JUNTA // 2, fim=M(Y_LIN[3]) - JUNTA // 2,
+              fiadas=lambda k, b: k >= 6),
     "F": dict(titulo="VISTA F — LATERAL DO EIXO E, LINHAS 2 A 4 (aberta até +7,50)", pil=eixos_lat(1, 3), ini=M(Y_LIN[1]) + JUNTA // 2, fim=M(Y_LIN[3]) - JUNTA // 2,
-              fiadas=lambda k, b: k >= 6, vt=VT_LADO["E"]),
+              fiadas=lambda k, b: k >= 6),
     "G": dict(titulo="VISTA G — PAREDE INTERNA DA LINHA 2 (face do pavilhão)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: k <= (4 if b == 0 else 5), nomes_pil=["P1B", "P8", "P8A", "P8B", "P2B"]),
     "H": dict(titulo="VISTA H — LATERAL DO ANEXO, EIXO A, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
@@ -226,6 +226,7 @@ def prancha_vista(Vs, desenho, folha):
     pr = carimbo(desenho, f"PLACAS DE FECHAMENTO PROTENDIDAS — VISTA{'S' if len(Vs) > 1 else ''} {nome}: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA", folha)
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL — CONFORME AS VISTAS DO FECHAMENTO DO R01")
     pr.revisao("03", "14/10/2026", "PLACA 125 × 10 (8 Ø12,7); LIGAÇÕES PARAFUSADAS (TRILHO + BUCHA), SEM SOLDA; VT DO EIXO A A +6,25")
+    pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; JUNTA VERTICAL 20 mm")
     Q = pr.quadro
     XC = Q[2] - 190
     pesos = sum(peso_t(p["L"]) for p in lista)
@@ -271,7 +272,7 @@ def prancha_vista(Vs, desenho, folha):
     if any(V in Vs for V in ("H", "J", "I")):
         notas.append("Faixas hachuradas: esquadrias do anexo (R01), sem placa, de +1,25 a +2,50 e de +5,00 a +6,25; placa acima de cada faixa apoiada em 2 CA-1." + (" Porta: 180 × 250 (a confirmar)." if "I" in Vs else ""))
     if any(V in Vs for V in ("E", "F")):
-        notas.append("E (eixo A): aberta até +6,25 — a VT do eixo A foi rebaixada para +6,25/+6,85 (rev03) e fica atrás da fiada +6,25/+7,50; as 3 fiadas de cima apoiam em consolos CA-1. F (eixo E): aberta até +7,50, VT atrás da fiada +7,50/+8,75 (ND-LET-VT01).")
+        notas.append("E (eixo A) e F (eixo E): abertas até +7,50; as 2 fiadas de cima apoiam em 2 consolos CA-1 parafusados nos pilares e vencem o vão entre eles (rev04: sem vigas de travamento — não há ponte rolante; estabilidade pela cobertura e pelos pilares engastados, NBR 9062:2017 5.1.2.1).")
     notas.append("Cotas de concreto em cm, níveis em m. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.")
     pr.notas(XC, y - 4, notas, 190)
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{desenho}")
@@ -287,6 +288,7 @@ def prancha_tipo():
     pr = carimbo("ND-LET-PP00", "PLACA DE FECHAMENTO PROTENDIDA 125 × 10 — FÔRMA, PROTENSÃO, INSERTOS, ALÇAS, LIGAÇÕES E TIPOS (PRODUÇÃO)", "01/01")
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     pr.revisao("03", "14/10/2026", "PLACA 10 cm, 8 Ø12,7 ALINHADAS (COB. 2,0); LIGAÇÕES PARAFUSADAS SEM SOLDA")
+    pr.revisao("04", "16/10/2026", "NBR 9062: JUNTA 20 mm, TOLERÂNCIAS, ESTABILIDADE NO IÇAMENTO")
     Q = pr.quadro
     XC = Q[2] - 190
     Ls = sorted(TIPOS)
@@ -338,7 +340,7 @@ def prancha_tipo():
     d1.chamada((30, 13), (-6, 14), "bucha M16 (rosca interna), hef 70")
     d1.chamada((66, 40), (8, 10), "barra transversal Ø8 L=80 (ancoragem)")
     # ---- detalhe 2: ligação placa × pilar (planta, 1:5 mm) — sem solda
-    d2 = pr.vista("DETALHE 2", (Q[0] + 330, Q[3] - 300), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA)", subtitulo="pilar com lado de 40 na parede; junta 10 no eixo; folga 25; parafusada, sem solda", unidade="mm")
+    d2 = pr.vista("DETALHE 2", (Q[0] + 330, Q[3] - 300), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA)", subtitulo="pilar com lado de 40 na parede; junta 20 no eixo; folga 25; parafusada, sem solda", unidade="mm")
     pil = [(-200, 0), (200, 0), (200, 450), (-200, 450)]
     d2.poli(pil, "CORTADO", fechada=True); d2.hachura(pil, "AR-CONC", 0.03)
     for sg in (-1, 1):
@@ -356,7 +358,7 @@ def prancha_tipo():
     d2.chamada((260, -FOLGA + 6), (16, -18), "CL-1 L 102×102×12,5 L=150; furo oblongo 18×40 horizontal na aba da placa")
     d2.chamada((-260, -FOLGA - 40), (-16, -14), "M16 8.8 na bucha BR-1 da placa")
     d2.chamada((-400, -FOLGA - 60), (-10, -24), "placa 10 cm")
-    d2.chamada((0, -FOLGA - 50), (8, -30), "junta 10 mm: tarucel + selante PU")
+    d2.chamada((0, -FOLGA - 50), (8, -30), "junta 20 mm: tarucel Ø25 + selante PU (±25 %)")
     # ---- detalhe 4: consolo metálico CA-1 (corte vertical, 1:5 mm) — sem solda
     d4 = pr.vista("DETALHE 4", (Q[0] + 330, Q[1] + 115), 5, titulo="DETALHE 4 — CONSOLO METÁLICO CA-1", subtitulo="apoio da 1ª placa de pacote suspenso (vistas E, F, H, I, J); parafusado", unidade="mm")
     d4.ret(0, -350, 400, 750, "VISTA")
@@ -406,12 +408,13 @@ def prancha_tipo():
     y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/placa", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, [
-        f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (face interna e externa; pré-moldado com controle rigoroso, NBR 9062:2017 — confirmar a CAA do local).",
+        f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
         f"Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
         "Produção deitada, face interna para cima (buchas BR-1 presas na fôrma com gabarito); basculamento e montagem pelas alças AL-P do topo; estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
         "Montagem: 1ª placa de cada pano na viga baldrame ou em 2 consolos CA-1 (parafusados); as demais encaixadas na de baixo com tira de elastômero 10 mm; CL-1 parafusada nas duas pontas (trilho TR-1 + BR-1) antes de soltar o guindaste. Nenhuma solda.",
         f"Trilho TR-1 (pilar) e bucha BR-1 (placa): carga de cálculo ≥ {f(P['fixacoes']['R_vento_ponta_d'] + 0.05)} kN por ponto, em tração e em cortante (conferir no catálogo do fornecedor).",
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",
+        "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±5 mm (de projeto, para a junta de 20 mm), espessura −5/+10 mm, planicidade ±L/1000, insertos ±15 mm; montagem: prumo H/300 ≤ 25 mm, nível ±10 mm. Içamento na vertical pelas alças do topo: estabilidade lateral verificada (6.1).",
         "Cotas de concreto em cm, metálicas em mm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP00")
     print("PP00", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
@@ -423,6 +426,7 @@ def prancha_cm():
     pr.revisao("01", "12/10/2026", "LOCAÇÃO E VISTAS CONFORME R01 (A–J)")
     pr.revisao("02", "12/10/2026", "GEOMETRIA DA LOCAÇÃO DO R01; H/J LATERAIS DO ANEXO; E/F ABERTAS ATÉ +7,50; 2 PORTÕES; PRANCHAS POR VISTA")
     pr.revisao("03", "14/10/2026", "PLACAS 125 × 10; LIGAÇÕES SEM SOLDA; VT DO EIXO A A +6,25; PORTÕES ATÉ +7,40")
+    pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; E E F ABERTAS ATÉ +7,50; JUNTA VERTICAL 20 mm")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("CM", f"PLACAS PROTENDIDAS 125 × 10 — {N_TOT} PEÇAS · {len(TIPO)} TIPOS · 10 VISTAS · {f(PESO_TOT, 0)} t",
@@ -487,11 +491,11 @@ def prancha_cm():
     y = pr.tabela(XC, y - 4, "TIPOS × VISTAS", ["TIPO", "L (cm)", "QT", "VISTA: QUANTIDADE"], tab, [16, 22, 14, 138], h_lin=5.0)
     pr.notas(XC, y - 4, [
         "Geometria pela PLANTA BAIXA - LOCAÇÃO DE PILARES do R01: eixos A–E a 9,87 / 9,88 / 9,88 / 9,87 m; linhas 1–9 a 9,65 / 10,075 / 10,075 / 9,925 / 10,00 / 10,00 / 10,00 / 9,625 m (79,35 m entre eixos).",
-        "Vistas como no R01: B e D (linhas 4–9) fechadas, 8 fiadas; E (eixo A, linhas 2–4) só as 3 fiadas de cima (VT a +6,25, rev03) e F (eixo E) só as 2 de cima; H, J (anexo) e I (fachada da linha 1) com faixas de esquadria de +1,25 a +2,50 e de +5,00 a +6,25 e porta na I; A (linha 9) fechada.",
+        "Vistas como no R01: B e D (linhas 4–9) fechadas, 8 fiadas; E (eixo A) e F (eixo E), linhas 2–4, só as 2 fiadas de cima (rev04, sem VT); H, J (anexo) e I (fachada da linha 1) com faixas de esquadria de +1,25 a +2,50 e de +5,00 a +6,25 e porta na I; A (linha 9) fechada.",
         "Paredes internas C (linha 4) e G (linha 2) com placas até +7,50 (vão A–B até +6,25: a TS-01 desce a +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve — confirmar com o cliente.",
         "Linha 4: 2 portões (P9–P10 e P10–P12), livres até +7,40 (topo do PG-01), sob a TS-01; o trecho P10–P11–P10 é fechado.",
-        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 10 mm no eixo dos pilares; ligações parafusadas (trilho TR-1 + bucha BR-1 + CL-1) e consolos CA-1 parafusados, sem solda: ND-LET-PP00.",
-        "VT 25×60 (linhas 2–9): eixo A de +6,25 a +6,85 (atrás da fiada +6,25/+7,50) e eixo E de +7,50 a +8,10 (atrás da fiada +7,50/+8,75): ND-LET-VT01.",
+        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); ligações parafusadas (trilho TR-1 + bucha BR-1 + CL-1) e consolos CA-1 parafusados, sem solda: ND-LET-PP00.",
+        "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (CL-1 com furo oblongo) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
         "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CM01")
     print("CM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
@@ -606,7 +610,7 @@ if __name__ == "__main__":
         prancha_cm()
     if not so or "pp00" in so:
         prancha_tipo()
-    if not so or "vt" in so:
+    if "vt" in so:                                       # rev04: VT retiradas (sem ponte rolante)
         prancha_vt()
     for k, (Vs, des) in enumerate(PRANCHAS_VISTA, 1):
         if not so or des.split("-")[-1].lower() in so:

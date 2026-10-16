@@ -196,7 +196,107 @@ def spec_vb():
                 contorno=[[(0, 0), (L, 0), (L, H), (0, H)]], ents=ents, zonas=zonas_txt(xs_e, "N4", 6.3), cortes=[(L / 2, "S.1")], dets=[],
                 longas=[("N2", COB), ("N1", COB), ("N3", COB)], blocos=[S1], marcas=marcas,
                 notas=["Concreto C40, aço CA-50. N1/N2 com dobra de 20 cm nas pontas (ancoragem no apoio); sucção do vento: armadura simétrica.",
-                       "Apoio nos consolos CP-VB com NEO-1 e pino PN-1 Ø20 no TB-1 (ver fôrma ND-LET-VB01)."])
+                       "Apoio nos consolos CP-VB com NEO-6 100×100×10 e pino PN-1 Ø20 no TB-1 (ver fôrma ND-LET-VB01)."])
+
+
+def armacao_vm(L, P, DA):
+    """VM meio vaso rev04 (mm): N2 estribo fechado da alma, N9 alças U saindo 20 cm (2º estágio), N9A alças curtas no nariz,
+    N3/N4/N5/N12 longitudinais, N13 estribo da aba, N11 estribos da ponta maciça (40 de largura) e dente Gerber (NBR 9062:2017 7.4):
+    N6 tirante em alças horizontais, N7 suspensão, N8 costura horizontal, N10 estribos verticais do nariz (MEF: mef_vm_dente)."""
+    H, HD, LN, MAC = round(P["h_pm"] * 1000), round(P["dente"]["hd"] * 1000), round(P["dente"]["ln"] * 1000), round(P["dente"]["macico"] * 1000)
+    REC = H - HD
+    ext = lambda a, b: round(2 * (a + b) + 16)
+    xs_mac = [x for x in range(LN + 40, MAC, 100)] + [L - x for x in range(LN + 40, MAC, 100)]
+    xs_e = [x for x in list(range(MAC, 1500, 100)) + list(range(1500, L - 1500, 150)) + list(range(L - 1500, L - MAC + 1, 100))]
+    xs_9 = list(range(75, L - 60, 150))
+    n9a = sum(1 for x in xs_9 if x < LN or x > L - LN)
+    a9, b9 = (H - 35 + 200) / 10, 17
+    a9a = (HD - 35 + 200) / 10
+    Ll = round((L - 2 * COB) / 10)
+    L12 = round((L - 2 * LN - 2 * COB) / 10)
+    nt, dt, anc = DA["n_tir"], DA["d_tir"], DA["ancoragem_tirante_mm"]
+    ns, ds, nc, dc, nv = DA["n_sus"], DA["d_sus"], DA["n_cost"], DA["d_cost"], max(2, DA["n_v"])
+    bh = (H - 2 * COB) / 10
+    barras = [dict(pos="N2", diam=8.0, qtd=len(xs_e), comp=ext(20, bh), geo=dict(k="E", a=20, b=bh)),
+              dict(pos="N3", diam=12.5, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
+              dict(pos="N4", diam=10.0, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
+              dict(pos="N5", diam=10.0, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
+              dict(pos="N6", diam=dt, qtd=nt // 2 * 2, comp=round(2 * (LN + anc) / 10 + 34), geo=dict(k="U", a=round((LN + anc) / 10), b=34)),
+              dict(pos="N7", diam=ds, qtd=2 * ns, comp=ext(34, bh), geo=dict(k="E", a=34, b=bh)),
+              dict(pos="N8", diam=dc, qtd=2 * nc, comp=ext(round((LN + 450) / 10), 34), geo=dict(k="E", a=round((LN + 450) / 10), b=34)),
+              dict(pos="N9", diam=10.0, qtd=len(xs_9) - n9a, comp=round(2 * a9 + b9), geo=dict(k="U", a=a9, b=b9)),
+              dict(pos="N9A", diam=10.0, qtd=n9a, comp=round(2 * a9a + 34), geo=dict(k="U", a=a9a, b=34)),
+              dict(pos="N10", diam=10.0, qtd=2 * nv, comp=ext(34, (HD - 2 * COB) / 10), geo=dict(k="E", a=34, b=(HD - 2 * COB) / 10)),
+              dict(pos="N11", diam=8.0, qtd=len(xs_mac), comp=ext(34, (H - REC - 2 * COB) / 10 + REC / 10 * 0), geo=dict(k="E", a=34, b=bh)),
+              dict(pos="N12", diam=10.0, qtd=2, comp=L12, geo=dict(k="R", a=L12)),
+              dict(pos="N13", diam=8.0, qtd=round(L / 150) + 1, comp=ext(18, 15), geo=dict(k="E", a=18, b=15))]
+    for b in barras:
+        b["comp"] = round(b["comp"])
+    return xs_e, xs_mac, xs_9, barras
+
+
+def spec_vm():
+    """VM meio vaso rev04 (alma 25 + aba 15 × 20, dente Gerber nas pontas maciças)."""
+    AQ_ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
+    VMJ = json.load(open(AQ_ + "vm_meio_vaso.json"))
+    P = VMJ["premissas"]
+    H, HD, LN, MAC = round(P["h_pm"] * 1000), round(P["dente"]["hd"] * 1000), round(P["dente"]["ln"] * 1000), round(P["dente"]["macico"] * 1000)
+    REC = H - HD
+    MV = json.load(open(AQ_ + f"mef_vm_dente_{H}_{HD}.json"))
+    DA = MV["calculo"]["adotado"]
+    marcas = []
+    for mk in ("VM-01", "VM-02"):
+        Lm = round(VMJ[mk]["L_peca"] * 1000)
+        _, _, _, bm = armacao_vm(Lm, P, DA)
+        V = VMJ[mk]["secao"]["volume_m3"] + 2 * (0.40 * H / 1e6 - VMJ[mk]["secao"]["A"]) * MAC / 1000 - 2 * 0.40 * REC * LN / 1e9
+        per = 2 * H + 400 + 250 / 1000 * 0
+        marcas.append(dict(marca=mk, qtd=8, L=Lm, barras=bm, V=V, area=(2 * H + 250 + 200) * Lm / 1e6, cord=(len(VMJ[mk]["pos_cordoalhas_mm"]), len(VMJ[mk]["pos_cordoalhas_mm"]) * Lm / 1000)))
+    L = marcas[1]["L"]
+    xs_e, xs_mac, xs_9, barras = armacao_vm(L, P, DA)
+    cont = [(0, REC), (LN, REC), (LN, 0), (L - LN, 0), (L - LN, REC), (L, REC), (L, H), (0, H)]
+    ents = [([(x, COB), (x, H - COB)], "ARM_TRANSV") for x in xs_e + xs_mac]
+    ents += [([(x, (REC if (x < LN or x > L - LN) else 0) + 35), (x, H + 200)], "ARM_TRANSV") for x in xs_9]
+    ents += [([(COB, H - COB - 10), (L - COB, H - COB - 10)], "ARMADURA"), ([(LN + COB, 85), (L - LN - COB, 85)], "ARMADURA"),
+             ([(COB, H / 2), (L - COB, H / 2)], "ARMADURA")]
+    for y in sorted({c[1] for c in VMJ["VM-02"]["pos_cordoalhas_mm"]}):
+        ents.append(([(LN if y < REC else 0, y), (L - LN if y < REC else L, y)], "ARM_PROT"))
+    for x0_, sg in ((0, 1), (L, -1)):
+        ents.append(([(x0_ + sg * COB, REC + 55), (x0_ + sg * (LN + DA["ancoragem_tirante_mm"]), REC + 55)], "ARMADURA"))
+        for k in range(DA["n_sus"]):
+            xx = x0_ + sg * (LN + 40 + k * 50)
+            ents.append(([(xx, COB), (xx, H - COB)], "ARM_TRANSV"))
+    zs = [(xs_mac[0], max(x for x in xs_mac if x < L / 2), f"{sum(1 for x in xs_mac if x < L / 2)} N11")] + zonas_txt(xs_e, "N2", 8.0) + \
+         [(min(x for x in xs_mac if x > L / 2), xs_mac[-1], f"{sum(1 for x in xs_mac if x > L / 2)} N11")]
+    sec = [(0, 0), (250, 0), (250, H - 200), (400, H - 200), (400, H), (0, H)]
+    prot = [tuple(c) for c in VMJ["VM-02"]["pos_cordoalhas_mm"]]
+    S1 = dict(nome="SEÇÃO S.1", sub="corrente (meio vaso); alças N9 para o 2º estágio", esc=10, contorno=[sec],
+              ents=[([(COB, COB), (250 - COB, COB), (250 - COB, H - COB), (COB, H - COB)], "ARM_TRANSV", True),
+                    ([(200, H - 200 + COB), (400 - COB, H - 200 + COB), (400 - COB, H - COB), (200, H - COB)], "ARM_TRANSV", True),
+                    ([(40, H + 200), (40, 35), (210, 35), (210, H + 200)], "ARM_TRANSV", False)],
+              discos=[(x, H - COB - 10, 12.5) for x in (40, 210)] + [(x, y, 10) for x in (365,) for y in (H - 200 + 40, H - 40)] + [(x, H / 2, 10) for x in (35, 215)] + [(x, 85, 10) for x in (75, 175)],
+              prot=prot, bolhas=[("N2", (250 - COB, H / 2 - 80), (10, -4)), ("N9", (210, H + 150), (10, 4)), ("N13", (400 - COB, H - 100), (8, 2)),
+                                 ("N3", (40, H - COB - 10), (-10, 4)), ("N4", (365, H - 40), (10, 6)), ("N5", (35, H / 2), (-10, 0)), ("N12", (75, 85), (-14, -4))],
+              formas=["N2", "N9", "N13"], prot_txt=f"{len(prot)} cord. Ø12,7")
+    S2 = dict(nome="SEÇÃO S.2", sub="ponta maciça 40 (nariz e recorte)", esc=10, contorno=[[(0, REC), (400, REC), (400, H), (0, H)]],
+              ents=[([(COB, REC + COB), (400 - COB, REC + COB), (400 - COB, H - COB), (COB, H - COB)], "ARM_TRANSV", True)],
+              discos=[(x, REC + 55, DA["d_tir"]) for x in (45, 125, 275, 355)] + [(x, H - COB - 10, 12.5) for x in (40, 210)], prot=[tuple(c) for c in prot if c[1] > REC],
+              bolhas=[("N10", (400 - COB, REC + HD / 2), (10, 0)), ("N6", (355, REC + 55), (10, -6))], formas=["N10"])
+    det = [([(0, REC), (LN, REC), (LN, 0), (1600, 0)], "VISTA", False), ([(1600, H), (0, H), (0, REC)], "VISTA", False),
+           ([(COB, REC + 55), (min(LN + DA["ancoragem_tirante_mm"], 1600), REC + 55)], "ARMADURA", False)]
+    det += [([(LN + 40 + k * 50, COB), (LN + 40 + k * 50, H - COB)], "ARM_TRANSV", False) for k in range(DA["n_sus"])]
+    det += [([(COB, REC + 120 + k * (HD - 160) / max(DA["n_cost"] - 1, 1)), (LN + 450, REC + 120 + k * (HD - 160) / max(DA["n_cost"] - 1, 1))], "ARM_TRANSV", False) for k in range(DA["n_cost"])]
+    det += [([(60 + k * (LN - 120) / max(DA["n_v"] - 1, 1), REC + COB), (60 + k * (LN - 120) / max(DA["n_v"] - 1, 1), H - COB)], "ARM_TRANSV", False) for k in range(max(2, DA["n_v"]))]
+    det += [([(LN if y < REC else 0, y), (1600, y)], "ARM_PROT", False) for y in sorted({c[1] for c in prot})]
+    D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}, recorte {REC/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
+              bolhas=[("N6", (LN + 300, REC + 55), (4, -8)), ("N7", (LN + 40, H / 2), (10, -10)), ("N8", (LN + 300, REC + 120), (8, 8)), ("N10", (60, H - 80), (-14, 10))],
+              formas=["N6", "N7", "N8"], corte_x=1600)
+    return dict(fam="VM", titulo=f"VIGAS DO MEZANINO VM-01 / VM-02 (MEIO VASO 40 × {H/10:g} PROTENDIDO, DENTE GERBER)", forma="ND-LET-VM01", fck=40, L=L, H=H, esc=25, rep="VM-02",
+                contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 - 700, "S.1"), (600, "S.2")], dets=[(LN / 2, "D1")],
+                longas=[("N3", COB), ("N4", COB), ("N5", COB), ("N12", LN + COB)], blocos=[S1, S2, D1], marcas=marcas,
+                notas=["Concreto C40, aço CA-50; liberar a protensão com fcj ≥ 32 MPa. Cobrimento 2,5 cm (estribos) e 3,0 cm (cordoalhas) — pré-moldado, CAA II.",
+                       "N9 / N9A: alças da alma saindo 20 cm acima da peça em toda a viga (2º estágio por quem faz a capa); não cortar nem dobrar na fábrica.",
+                       f"Dente Gerber {HD/10:g} × {LN/10:g} (NBR 9062:2017 7.4, verificado por MEF não linear): N6 tirante em alças horizontais, N7 suspensão concentrada junto ao recorte (fyd ≤ 435 MPa), N8 costura, N10 estribos do nariz; N11 nos 100 cm das pontas maciças.",
+                       "Negativa de continuidade (N11 6 Ø16 pelas bainhas do pilar e N12 8 Ø12,5 na capa) é armadura de OBRA, não entra nesta lista (ND-LET-VM01)."])
 
 
 def spec_vt():
@@ -256,7 +356,7 @@ def spec_vt():
                        "Dentes Gerber 30 × 20 nos consolos CP-VT: N5 tirante 2 Ø12,5 por ponta, N6 suspensão 2 estribos Ø8, N7 3 estribos Ø6,3 no dente (NBR 9062:2017 7.4)."])
 
 
-SPECS = [("TS-01", spec_ts01), ("I130", lambda: spec_i("i110")), ("VM", lambda: spec_i("vm")), ("VB", spec_vb), ("VT", spec_vt)]
+SPECS = [("TS-01", spec_ts01), ("I130", lambda: spec_i("i110")), ("VM", spec_vm), ("VB", spec_vb)]          # rev04: sem VT
 
 
 # ================================================================== desenho
@@ -305,6 +405,7 @@ def folha(num, total, S):
                             conteudo=f"ARMADURAS — PRÉ-MOLDADOS — {S['titulo']} — SEÇÕES E LISTA DO AÇO",
                             desenho=f"ND-LET-AR-VIG-{num:02d}", folha=f"{num:02d}/{total:02d}", fase="PARA APROVAÇÃO"))
     pr.revisao("00", "13/10/2026", "EMISSÃO INICIAL — PADRÃO DE ARMADURAS")
+    pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; VM EM MEIO VASO COM DENTE")
     A = Arm(pr)
     Q = pr.quadro
     rep = next(m for m in S["marcas"] if m["marca"] == S.get("rep", S["marcas"][0]["marca"]))

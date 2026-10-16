@@ -34,6 +34,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); corte 1-1 refeito; recuo dos pilares acima da viga (a validar)")
 pr.revisao("02", pr.dados["data"], "RECUO APROVADO; CONSOLOS SEM CHANFRO (h 44); P6/P7 FORA DO PROJETO")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES NO RECUO E NO TOPO DA I130; COBERTURA REBAIXADA; I130; PLACAS 10 cm")
+pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; PILARES LATERAIS 14 Ø20")
 
 # ------------------------------------------------------------------ PLANTA 1:200 (horizontal = y da obra, vertical = x)
 v = pr.vista("PLANTA", (62, 330), 200, titulo="PLANTA DE LOCAÇÃO DE PILARES E VIGAS DE COBERTURA", subtitulo="eixos e ordenadas do R01; contraventamento da cobertura em X")

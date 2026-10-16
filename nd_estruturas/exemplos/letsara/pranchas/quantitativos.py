@@ -8,7 +8,7 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev03.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev04.xlsx")
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 LGQ = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
@@ -53,7 +53,8 @@ pecas = []   # (grupo, marca, descrição, seção, L m, qtd, vol unit, peso uni
 # família 40×60 (PL / PF): volume = corpo do cálice (−1,00) ao recuo + cabeça até +10,00 + consolos da marca
 VOLC = {k: v["b_m"] * v["proj_m"] * v["h_total_m"] for k, v in CONS.items()}
 rec_vb = lambda x: math.ceil((Z0 + 0.03 * x + 0.90) / 0.05) * 0.05
-for mk, pos, qt, cons, _ins in [l[:5] for l in tab("PIL-A01", "MARCAS")["linhas"]]:
+from familia_pl import MARCAS as _MARCAS_PL                      # rev04: direto da família (a PIL-A01 não é mais emitida)
+for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:
     qt = int(qt)
     canto = "canto" in pos
     if mk.startswith("PF"):
@@ -82,10 +83,9 @@ for mk, pos, qt, L, p in tab("I130", "MARCAS")["linhas"]:
     pecas.append(("Vigas de cobertura", mk, pos, "I130", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I130"))
 for mk, pos, qt, L, p in tab("VB01", "MARCAS")["linhas"]:
     pecas.append(("Vigas de borda", mk, pos, "15×90", num(L) / 100, int(qt), round(0.15 * 0.90 * num(L) / 100, 3), num(p), "C40", "ND-LET-VB01"))
-for mk, pos, qt, L, p in tab("VT01", "MARCAS")["linhas"]:
-    pecas.append(("Vigas de travamento", mk, f"eixos A e E, {pos}", "25×60", num(L) / 100, int(qt), round(0.25 * 0.60 * num(L) / 100, 3), num(p), "C40", "ND-LET-VT01"))
+VMP_H = round(json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["premissas"]["h_pm"] * 100)
 for mk, pos, qt, L, p in tab("VM01", "MARCAS")["linhas"]:
-    pecas.append(("Mezanino", mk, pos, "I90", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-VM01"))
+    pecas.append(("Mezanino", mk, pos, f"meio vaso 40×{VMP_H:g} c/ dente", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C40", "ND-LET-VM01"))
 for mk, desc, qt, p, obs in tab("LA01", "MARCAS")["linhas"]:
     pecas.append(("Mezanino", mk, f"laje alveolar {desc}; {obs}".replace("; -", ""), "h20 + capa 5", 9.45, int(qt), round(num(p) / 2.5, 3), num(p), "fabricante", "ND-LET-LA01"))
 for tp, L, qt, p, vis in tab("PP00", "TIPOS")["linhas"]:
@@ -148,7 +148,7 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
-add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8); add_ins("VT01", "VT", 14)
+add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8)
 for k in ("ES-1", "ES-2", "ES-3", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
@@ -314,3 +314,110 @@ for t in ["Não inclui: fundações (blocos, cálices, estacas), piso, telhas e 
 SAIDA.parent.mkdir(parents=True, exist_ok=True)
 wb.save(SAIDA)
 print("ok", SAIDA, len(pecas), "marcas;", sum(p[5] for p in pecas), "peças")
+
+
+# ================================================================== rev04: LISTAS EM PDF ÚNICO (preferência: pranchas num PDF, listas em outro)
+# tubos: comprados em barras de 6 m da usina — soma dos comprimentos de corte por bitola ÷ 6 m (arredondado para cima)
+def listas_pdf(caminho):
+    from reportlab.lib.pagesizes import A4, landscape
+    from reportlab.lib import colors
+    from reportlab.lib.units import mm
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, PageBreak
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    for nome, arq in (("DV", "DejaVuSans.ttf"), ("DVB", "DejaVuSans-Bold.ttf")):
+        for base in ("/usr/share/fonts/truetype/dejavu/", "/usr/share/fonts/dejavu/"):
+            if Path(base + arq).exists():
+                pdfmetrics.registerFont(TTFont(nome, base + arq)); break
+    ss = getSampleStyleSheet()
+    Nn = ParagraphStyle("n", parent=ss["Normal"], fontName="DV", fontSize=7.6, leading=9.6)
+    T1 = ParagraphStyle("t1", parent=Nn, fontName="DVB", fontSize=12, leading=15, spaceAfter=4)
+    T2 = ParagraphStyle("t2", parent=Nn, fontName="DVB", fontSize=9.5, leading=12, spaceBefore=6, spaceAfter=3)
+    Pp = lambda t: Paragraph(str(t), Nn)
+    fm = lambda v, d=1: f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+    def tb(lin, larg, tot=False):
+        t = Table([[Pp(c) for c in l] for l in lin], colWidths=[w * mm for w in larg], repeatRows=1)
+        st = [("GRID", (0, 0), (-1, -1), 0.3, colors.grey), ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#d9e1ea")), ("VALIGN", (0, 0), (-1, -1), "MIDDLE")]
+        if tot:
+            st.append(("BACKGROUND", (0, -1), (-1, -1), colors.HexColor("#eef2f6")))
+        t.setStyle(TableStyle(st)); return t
+
+    def rodape(c, d):
+        c.saveState(); c.setFont("DV", 7)
+        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev04 — projeto da ND Engenharia — para aprovação")
+        c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
+
+    doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
+                            title="Letsara — listas de materiais rev04", author="ND Engenharia")
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev04, 16/10/2026)", T1),
+         Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
+            "Rev04 (NBR 9062:2017): sem vigas de travamento; VM do mezanino em meio vaso com dente Gerber; pilares laterais 14 Ø20; neoprenes e consolos revistos.")]
+    # 1 peças
+    E.append(Paragraph("1. Peças pré-moldadas", T2))
+    lin = [["GRUPO", "MARCA", "POSIÇÃO / DESCRIÇÃO", "SEÇÃO", "L (m)", "QT", "VOL. UNIT (m³)", "VOL. TOTAL (m³)", "PESO UNIT (t)", "CONCRETO", "PRANCHA"]]
+    vt = pt = qt_ = 0
+    for g, mk, pos, sec, L, q, v, p, c, fl in pecas:
+        lin.append([g, mk, pos[:90], sec, fm(L, 2), q, fm(v, 3), fm(v * q, 2), fm(p, 2), c, fl]); vt += v * q; pt += p * q; qt_ += q
+    lin.append(["TOTAL", "", "", "", "", qt_, "", fm(vt, 1), f"{fm(pt, 0)} t", "", ""])
+    E.append(tb(lin, [24, 14, 78, 26, 12, 9, 18, 18, 16, 16, 30], tot=True))
+    # 2 aço
+    E += [PageBreak(), Paragraph("2. Aço CA-50 por peça e bitola (kg, +10 %)", T2)]
+    ds = sorted({d for _, _, _, kd, _ in aco for d, v in kd.items() if v > 0})
+    lin = [["PEÇA", "PRANCHA", "QT"] + [f"Ø{str(d).replace('.0', '').replace('.', ',')}" for d in ds] + ["kg/peça", "kg total"]]
+    tot = {d: 0.0 for d in ds}
+    for pe, fl, q, kd, _ in aco:
+        if not q:
+            continue
+        kp = sum(kd.get(d, 0) for d in ds)
+        lin.append([pe, fl, q] + [fm(kd.get(d, 0) * q, 0) if kd.get(d, 0) else "—" for d in ds] + [fm(kp, 1), fm(kp * q, 0)])
+        for d in ds:
+            tot[d] += kd.get(d, 0) * q
+    lin.append(["TOTAL", "", ""] + [fm(tot[d], 0) for d in ds] + ["", fm(sum(tot.values()), 0)])
+    E.append(tb(lin, [42, 30, 10] + [17] * len(ds) + [18, 20], tot=True))
+    # 3 cordoalhas
+    E.append(Paragraph("3. Cordoalhas CP-190 RB", T2))
+    lin = [["PEÇA", "Ø (mm)", "CORD./PEÇA", "L (m)", "PEÇAS", "COMPR. TOTAL (m)", "kg", "OBS."]]
+    tk = 0
+    for pe, d, n, L, q, ob in cord:
+        if not q:
+            continue
+        m_ = n * L * q; kg = m_ * KGC.get(float(d), 0.792); tk += kg
+        lin.append([pe, fm(d, 1), n, fm(L, 2), q, fm(m_, 0), fm(kg, 0), ob])
+    lin.append(["TOTAL", "", "", "", "", "", fm(tk, 0), "comprimento de pista e pontas de ancoragem: conferir com a fábrica"])
+    E.append(tb(lin, [50, 14, 20, 16, 14, 26, 20, 100], tot=True))
+    # 4 insertos e chaparia (com tubos em barras de 6 m)
+    E += [PageBreak(), Paragraph("4. Insertos, chaparia e aparelhos de apoio (por tipo)", T2)]
+    agg = {}
+    for fl, pe, mk, desc, q, n in ins:
+        k = (mk, desc)
+        a = agg.setdefault(k, [0, set()]); a[0] += q * n; a[1].add(fl.replace("ND-LET-", ""))
+    lin = [["MARCA", "DESCRIÇÃO", "QT TOTAL", "PRANCHAS"]]
+    tubos = {}
+    for (mk, desc), (q, fls) in sorted(agg.items()):
+        lin.append([mk, desc, q, ", ".join(sorted(fls))[:60]])
+        mt = re.search(r"[Tt]ubo (Ø[\d,]+×[\d,]+).*?L ?= ?(\d+)", desc)
+        if mt:
+            t = tubos.setdefault(mt.group(1), [0.0, 0]); t[0] += q * int(mt.group(2)) / 1000; t[1] += q
+    E.append(tb(lin, [22, 150, 22, 66]))
+    E.append(Paragraph("4.1 Tubos — compra em barras de 6 m", T2))
+    lin = [["TUBO", "PEÇAS", "COMPR. TOTAL (m)", "BARRAS DE 6 m (com perda de corte)"]]
+    for tu, (m_, q) in sorted(tubos.items()):
+        cortes = max(1, int(6000 // max(1, round(m_ * 1000 / q))))
+        lin.append([tu, q, fm(m_, 2), f"{math.ceil(q / cortes)} barras ({cortes} cortes por barra; {fm(m_ / 6, 1)} barras pela soma)"])
+    E.append(tb(lin, [40, 20, 34, 120]))
+    # 5 cobertura metálica
+    E += [PageBreak(), Paragraph("5. Cobertura metálica — terças, ligações e travamento (tudo parafusado)", T2)]
+    t_ = tab("COB01", "TERÇAS")
+    E.append(tb([t_["cab"]] + t_["linhas"], [18, 20, 30, 90, 14, 20]))
+    E.append(Spacer(1, 4))
+    E.append(tb([["MARCA", "DESCRIÇÃO", "QT", "ONDE"]] + lig_cob, [20, 150, 16, 70]))
+    E.append(Spacer(1, 4))
+    t2 = tab("COB02", "LISTA DE MATERIAIS")
+    E.append(tb([t2["cab"]] + t2["linhas"], [16, 14, 30, 30, 16, 150]))
+    doc.build(E, onFirstPage=rodape, onLaterPages=rodape)
+    return caminho
+
+
+print("ok", listas_pdf(SAIDA.with_name(SAIDA.name.replace("QUANTITATIVOS", "LISTAS").replace(".xlsx", ".pdf"))))
