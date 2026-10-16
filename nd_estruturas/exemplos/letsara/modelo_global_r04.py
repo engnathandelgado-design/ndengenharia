@@ -434,7 +434,7 @@ res["pilares"] = [dict(nome=p["nome"], ns=p["ns"], cab=bool(p.get("zs"))) for p 
 # NBR 6118:2023 17.2.4 (bloco retangular 0,85 fcd, λ 0,8, εcu 3,5‰, CA-50) e 17.2.5.2 (verificação simplificada da
 # flexão oblíqua: (Mx/MRx)^α + (My/MRy)^α ≤ 1, α = 1,2). Momentos de 1ª + 2ª ordem global (P-Δ) do modelo; os efeitos
 # locais de 2ª ordem dos pilares em balanço foram verificados pelo método geral nas pranchas dos pilares (λu).
-ARM = {"PL": (0.40, 0.60, 5, 7, 20.0), "P8A": (0.40, 0.60, 5, 7, 20.0), "P11": (0.40, 0.40, 4, 4, 20.0), "P13": (0.60, 0.60, 6, 6, 20.0),
+ARM = {"PL": (0.40, 0.60, 5, 4, 20.0), "P8A": (0.40, 0.60, 5, 7, 20.0), "P11": (0.40, 0.40, 4, 4, 20.0), "P13": (0.60, 0.60, 6, 6, 20.0),   # rev04: PL com 14 Ø20
        "PM": (0.40, 0.60, 3, 4, 20.0), "PG": (0.40, 0.40, 3, 3, 16.0), "P10": (0.25, 0.25, 2, 2, 16.0)}
 
 
@@ -508,7 +508,13 @@ from nd_estruturas.prefabricados import pilar_metodo_geral
 crit = max(verif, key=lambda k: verif[k]["uso"])
 bc = res["combinacoes"][verif[crit]["comb"]]["base"][crit]
 w_eq = 2 * (abs(bc["My"]) / res["combinacoes"][verif[crit]["comb"]]["gama_z_aprox"]) / bc["H"] ** 2
-mg = pilar_metodo_geral(0.40, 0.60, bc["H"], 21.99, bc["N"], w_eq, C40, phi_ef=0.5)
+gzc = res["combinacoes"][verif[crit]["comb"]]["gama_z_9062"]
+V_, M_ = abs(bc["Vx"]) / gzc, abs(bc["My"]) / gzc                     # 1ª ordem: separa carga distribuída e força no topo
+w_eq = max(2 * (V_ * bc["H"] - M_) / bc["H"] ** 2, 0.0)
+F_top = V_ - w_eq * bc["H"]
+_c, _yf = 0.048, 0.30 - 0.048
+CAM = [(-_yf, 5, 3.142), (_yf, 5, 3.142), (-0.084, 2, 3.142), (0.084, 2, 3.142)]   # 14 Ø20 reais (direção de 60)
+mg = pilar_metodo_geral(0.40, 0.60, bc["H"], 0.0, bc["N"], w_eq, C40, Hd_top=F_top, phi_ef=0.5, camadas=CAM)
 res["metodo_geral"] = dict(pilar=crit, comb=verif[crit]["comb"], Nd=bc["N"], w_eq_kNm=round(w_eq, 2), **mg)
 print("método geral", res["metodo_geral"])
 (AQ / SAIDA).write_text(json.dumps(res, ensure_ascii=False), encoding="utf-8")

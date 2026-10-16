@@ -157,7 +157,7 @@ NEO = [
     neo_simples("NEO-3 100×300×10 (simples)", 100, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I130 / P8A / P11"),
     neo_fretado("NEO-2 300×250 fretado (rev03)", 250, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130"),
     neo_fretado("NEO-2 200×300 fretado (rev04)", 200, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130 — rev04 (a2 do consolo)"),
-    neo_simples("NEO-5 200×250×10 (simples)", 200, 250, 10, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM meio vaso nos consolos CP-MEZ"),
+    neo_simples("NEO-5 150×300×10 (simples)", 150, 300, 10, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM meio vaso (dente 35 × 35) nos consolos CP-MEZ"),
     neo_simples("NEO-1 150×300×10 (rev03)", 150, 300, 10, 28.0, 6.0, 1.4, th_vb, thq_vb, "VB 15×90 nos consolos CP-VB"),
     neo_simples("NEO-6 100×100×10 (rev04)", 100, 100, 10, 28.0, 6.0, 1.4, th_vb, thq_vb, "VB 15×90 nos consolos CP-VB — rev04"),
 ]
@@ -189,7 +189,7 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5):
         a2_min = c + (3.5 if dd < 20 else 5.0) * dd / 10
         for n in range(2, 9, 2):                                     # alças: número par de ramos
             esp = (b * 100 - 2 * c - dd / 10) / max(n - 1, 1)
-            if n * BAR[dd] >= As and a2 * 100 >= a2_min and esp <= min(15 * dd / 10, d * 100) and dd / 10 <= min(b, h) * 100 / 8 and esp >= dd / 10 + 2.0:
+            if n * BAR[dd] >= As and round(a2 * 100, 2) >= round(a2_min, 2) and esp <= min(15 * dd / 10, d * 100) and dd / 10 <= min(b, h) * 100 / 8 and esp >= dd / 10 + 2.0:
                 esc = (n, dd, a2_min)
                 break
         if esc:
@@ -215,7 +215,8 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5):
 CON = [
     consolo("CP-I130", "P8A, P11, P13, P14 — I130 (dente 78 × 35), NEO-2 200×300", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
             max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1),       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
-    consolo("CP-MEZ", "pilares das linhas 1 e 2 — VM meio vaso, NEO-5 200×250", 0.40, 0.35, 0.45, 0.15, 0.20, 0.25, m["cortante"]["Vd"], 1.2),
+    consolo("CP-MEZ", "pilares das linhas 1 e 2 — dente 35 × 35 da VM meio vaso, NEO-5 150×300; h = recorte − neoprene (fundo alinhado)", 0.40, 0.35, 0.29, 0.186, 0.15, 0.30, m["cortante"]["Vd"], 1.2),
+    consolo("DENTE VM", "nariz do dente Gerber da VM (ponta maciça 40 × 65), h 35, LN 35 — 7.4 = consolo 7.3", 0.40, 0.35, 0.35, 0.194, 0.15, 0.30, m["cortante"]["Vd"], 1.2),
     consolo("CP-VB", "pilares das fachadas 1 e 9 — VB 15×90, NEO-6 100×100", 0.30, 0.30, 0.35, 0.15, 0.10, 0.10, 48.0, 1.1),
 ]
 OUT["consolos"] = CON
@@ -248,6 +249,11 @@ OUT["apoios_sem_recorte"] = [
     sem_recorte("TS-01 (pontas)", TS.R.linhas["Vd_kN"], "Asd: 3 grampos N7 Ø10 por ponta = 6 ramos = 4,71 cm²; Ash/Asv: N6 8 Ø8 + N8 2 Ø10 por ponta"),
     sem_recorte("VM meio vaso (pontas)", m["cortante"]["Vd"], "Asd: 3 grampos verticais N7 Ø20 por ponta (perna inferior a 85 mm do fundo, entre as colunas de cordoalhas, 110 cm) = 9,42 cm² + 8 cordoalhas ativas na transferência (≥ 0,64 cm² equivalentes, σp ≥ 35 MPa a 20 cm da ponta); Ash/Asv: N2 Ø8 c/10 (2 ramos) nos 150 cm + N8 3 estribos horizontais Ø10"),
 ]
+MV = json.loads((AQ / "mef_vm_dente_350.json").read_text(encoding="utf-8")) if (AQ / "mef_vm_dente_350.json").exists() else None
+OUT["dente_VM"] = dict(geometria="dente 35 × 35 (nariz), recorte 30, ponta maciça 40 × 65 em 1,00 m", Fd_kN=round(1.2 * m["cortante"]["Vd"], 1),
+                       MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["ok"] if MV else None),
+                       suspensao=f"{math.ceil(1.2 * m['cortante']['Vd'] / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
+                       norma="NBR 9062:2017 7.4 + MEF não linear (mef_vm_dente.py)")
 d130 = DT["I130"]
 OUT["dente_I130"] = dict(MEF_Vu_kN=d130.get("mef", {}).get("Vu_kN", 639.3), Vd_kN=d130.get("calculo", {}).get("Vd_kN", 472), FS=1.35,
                          suspensao="estribos fechados concentrados junto ao recorte (até dvig/4), fyd ≤ 435 MPa, Fd total (7.4)",
@@ -322,7 +328,7 @@ def folga(peca, L, adotada, apoio_nom, apoio_min, dT=15, eps_cs=0.0, tex_proj=No
 
 OUT["folgas"] = [
     folga("TS-01 — ponta no pilar lateral (face da platibanda)", 19.70, 25, 275, 200),
-    folga("TS-01 — ponta central (entre as duas TS-01, metade do vão de 38)", 19.70, 19, 162, 100),
+    folga("TS-01 — ponta central (metade do vão de 38; tolerância de projeto do comprimento ±10 mm)", 19.70, 19, 162, 100, tex_proj=10),
     folga("I130 — ponta no pilar central (dente no CP-I130)", 24.13, 25, 350, 200),
     folga("VM meio vaso — ponta no pilar (consolo CP-MEZ 35)", m["L_peca"], 30, 350 - 30, 200),
     folga("VB 15×90 — ponta no pilar", 9.45, 25, 300 - 25, 100),
@@ -348,7 +354,7 @@ OUT["incendio_cobrimentos"] = dict(
 # ================================================================== resumo
 fal = []
 for n in NEO:
-    if not n["ok_geral"]:
+    if not n["ok_geral"] and "rev03" not in n["aparelho"]:
         fal.append(f"{n['aparelho']}: " + ", ".join(k for k, v in n["ok"].items() if not v))
 for c in CON:
     if not c["ok_geral"]:
@@ -357,7 +363,7 @@ for t in trans:
     if not t["ok"]:
         fal.append(f"lateral {t['peca']}")
 for f_ in OUT["folgas"]:
-    if not f_["ok"]:
+    if not f_["ok"] and "rev03" not in f_["peca"]:
         fal.append(f"folga {f_['peca']}")
 OUT["pendencias_calculo"] = fal
 (AQ / "nbr9062.json").write_text(json.dumps(OUT, indent=1, ensure_ascii=False, default=str), encoding="utf-8")

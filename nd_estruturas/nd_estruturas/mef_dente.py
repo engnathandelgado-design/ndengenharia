@@ -41,10 +41,11 @@ def _espessura(x, y, g):
     if x <= g["x_mac"]:
         return g["b"]
     ti, mi, ts, ms, H, b, bw = g["ti"], g["mi"], g["ts"], g["ms"], g["H"], g["b"], g["bw"]
+    bi = g.get("bi", b)                      # mesa inferior (meio vaso / T: bi = bw)
     if y <= ti:
-        return b
+        return bi
     if y <= ti + mi:
-        return b - (b - bw) * (y - ti) / mi
+        return bi - (bi - bw) * (y - ti) / mi
     if y <= H - ts - ms:
         return bw
     if y <= H - ts:

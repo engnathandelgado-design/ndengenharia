@@ -8,6 +8,9 @@ concretado com a capa por quem executa a capa; estribos da alma saem em alças (
 Peça: tratada como PRÉ-MOLDADA (NBR 9062:2017 3.8 / 12.1.1) -> γc 1,4 e γs 1,15 (8.1), até a fábrica comprovar o controle
 de pré-fabricado (12.1.2); 2º estágio e capa moldados no local: γc 1,4. Sem escoramento (padrão ND, 11.6). Apoio sem recorte (7.5) em consolo CP-MEZ na face do pilar.
 
+Apoio (rev04, pedido do Nathan): dente Gerber 35 × 35 na ponta maciça (40 × 65 em 1,00 m), fundo do consolo CP-MEZ alinhado
+ao fundo da viga — escolha em calc_vm_dente.py (varredura de alma e altura de 5 em 5 cm, solução mais econômica).
+
 Fases (5.2.1.4 e 11.3):
   F0 ato da protensão (fckj 28 MPa), saque, içamento (βa 1,3, 5.3.2.2) e estocagem;
   F1 montagem: só a peça pré-moldada leva peso próprio + laje + capa e 2º estágio frescos + 1 kN/m² de montagem;
@@ -49,8 +52,10 @@ X_PONTA_LAJE = B_TOT - APOIO_LAJE                         # ponta da laje a 30 c
 VAO_LAJE = 9.65 - 2 * (B_TOT / 2 - APOIO_LAJE)            # laje de ponta a ponta = 9,45 m (VM centradas nos eixos)
 TRIB = VAO_LAJE / 2
 FOLGA = 0.03                                              # folga viga x face do pilar (tloc ±1 cm + tex ±1,5 cm + Δ) — 3.1 e 5.2.2
-PAD = (0.20, 0.25, 0.010)                                 # neoprene a (vão) x b x h — NEO-5 (σk ≤ 7 MPa, 7.2.1.6)
-X_PAD = 0.05 + PAD[0] / 2                                 # centro do neoprene a 15 cm da face do pilar (consolo 35: a2 = 10 cm)
+PAD = (0.15, 0.30, 0.010)                                 # neoprene a (vão) x b x h — NEO-5 150 × 300 × 10 (σk ≤ 7 MPa, 7.2.1.6)
+X_PAD = 0.111 + PAD[0] / 2                                # rev04 com dente Gerber 35 × 35 (calc_vm_dente.py): centro do neoprene a
+                                                          # 18,6 cm da face do pilar — a2 ≥ c + 3,5Ø (alças Ø16) no dente e no consolo
+DENTE = dict(hd=0.35, ln=0.35, recorte=0.30, consolo_h=0.29, consolo_proj=0.35, macico=1.00)
 VAOS = {"VM-01": 9.37, "VM-02": 9.48}                     # entre faces de pilar (A–B: P1 60 / P3 40; B–C: 40 / 40)
 
 Y_LINHAS = (0.050, 0.120, 0.190)                         # linhas de cordoalhas: folga para os grampos N7 Ø12,5 do apoio a y = 85 mm
@@ -77,13 +82,15 @@ def props(rects, n=None):
 def cordoalhas(n, h, n_top=0):
     """Grade 50 mm na alma (4 por linha a 50/100/150/200 mm da face externa), linhas a 50, 120 e 190 mm do fundo;
     n_top cordoalhas superiores na alma a 50 mm do topo (controle do ato da protensão)."""
-    xs = [0.050, 0.100, 0.150, 0.200]
+    xs = [round(0.050 + 0.050 * k, 3) for k in range(int(round((B_ALMA - 0.100) / 0.050)) + 1)]
     pos = []
     for y in Y_LINHAS:
-        for x in (xs if n - len(pos) >= 4 else ([0.075, 0.175] if n - len(pos) == 2 else xs[: n - len(pos)])):
+        for x in (xs if n - len(pos) >= len(xs) else ([round(B_ALMA / 2 - 0.05, 3), round(B_ALMA / 2 + 0.05, 3)] if n - len(pos) == 2 else xs[: n - len(pos)])):
             if len(pos) < n:
                 pos.append((x, y))
-    return pos + [(x, h - 0.050) for x in (0.075, 0.175)[:n_top]]
+    # superiores na ABA (x = B_ALMA + 0,05 e + 0,10): a resultante de todas as cordoalhas fica no centroide em x da seção T
+    # (sem flecha lateral pela protensão) e o eixo da viga fica livre para o tubo TB-1 do pino do dente
+    return pos + [(round(x, 3), h - 0.050) for x in (B_ALMA + 0.05, B_ALMA + 0.10)[:n_top]]
 
 
 def sigma_p(eps):
@@ -136,6 +143,16 @@ def MRd(rects_fcd, cords, barras, h_tot, eps_p_pre):
     yC /= C
     dmax = h_tot - min([y for _, y in cords] + [y for _, y in barras])
     return C * (yC - yT), x, x / dmax
+
+
+def larguras(b_alma):
+    """Muda a largura da alma (passo de 5 cm): recalcula a largura total, a ponta da laje e o vão da laje."""
+    global B_ALMA, B_TOT, X_PONTA_LAJE, VAO_LAJE, TRIB
+    B_ALMA = b_alma
+    B_TOT = B_ALMA + B_ABA
+    X_PONTA_LAJE = B_TOT - APOIO_LAJE
+    VAO_LAJE = 9.65 - 2 * (B_TOT / 2 - APOIO_LAJE)
+    TRIB = VAO_LAJE / 2
 
 
 def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
@@ -218,7 +235,8 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     lim_final = L / 250                                    # Tab. 9: final solidarizada L ≤ 15 m
 
     # ---- cortante (NBR 6118:2023 17.4.2.2, modelo I) na seção composta, Vd no apoio com continuidade (1,25 wL/2 no apoio interno)
-    Vd = (1.3 * g1 + 1.4 * g2 + 1.4 * q2) * L / 2 * (1.25 if cont else 1.0)
+    # fase 1 biapoiada (peça isolada); fase 2 contínua: reação no 1º apoio interno = 1,25 × biapoiada (a favor da segurança)
+    Vd = 1.3 * g1 * L / 2 + (1.4 * g2 + 1.4 * q2) * L / 2 * (1.25 if cont else 1.0)
     d_c = htot - yp
     bw = B_ALMA
     VRd2 = 0.27 * (1 - FCK / 250) * FCD * bw * d_c
@@ -286,6 +304,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     # estabilidade lateral (6.1): L/bf ≤ 50 e L·h/bf² ≤ 500, bf = largura comprimida = 40 (topo)
     lat = (Lp / B_TOT, Lp * h / B_TOT ** 2)
 
+    x_res = sum(x for x, _ in pos) / n
     ok_ct = H_ct_d <= 2 * 37.2                              # CT-1: 2 M16 8.8 ao corte (Fv,Rd 37,2 kN cada)
     ok = dict(ELU_F1=MR1 >= M1d and xd1 <= 0.45, ELU_F2=MR2 >= M2d and xd2 <= 0.45, ELS_F=sF <= fctf, ELS_D=sD <= 0.0,
               ato=s_ato_topo <= 1.2 * fctmj and s_ato_base >= -0.7 * fcj and s_ato_meio_b >= -0.7 * fcj,
@@ -314,27 +333,35 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
         negativa=negativa(L, g2, q2, h),
         icamento=dict(a_alca_m=a_ic, sig_topo_balanco=round(s_ic_t_bal, 2), sig_base_vao=round(s_ic_b_vao, 2), lim_t=round(1.2 * fctmj, 2), F_alca_ruptura_kN=round(F_alca, 1),
                       lateral_L_bf=round(lat[0], 1), lateral_Lh_bf2=round(lat[1], 1)),
+        excentricidade_lateral_protensao_m=round(x_res - xc, 4),
         ok=ok, ok_geral=all(ok.values()),
     )
 
 
 def negativa(L, g2, q2, h=0.65):
     """Continuidade (F2) nos apoios B, C, D: 4 vãos iguais, só cargas após a solidarização (rev + sobrecarga).
-    M- máx no 1º apoio interno = 0,107 wL² (permanente) e 0,121 wL² (sobrecarga alternada). Tipologia 1 da NBR 9062:2017
-    5.1.2.10 (bainha corrugada grauteada no pilar + junta vertical grauteada + elastômero), ≥ 50 % da negativa atravessando o
-    pilar (N11: 4 Ø16 em 2 bainhas Ø50, a 12 cm acima do topo da peça) e o resto na capa (N12: 5 Ø12,5 a 3 cm do topo) numa
-    faixa ≤ 1,5 x 40 cm de cada lado (5.1.2.9)."""
+    M- máx no 1º apoio interno = 0,107 wL² (permanente) e 0,121 wL² (sobrecarga alternada) — ligação tratada como rígida
+    (a favor da segurança na negativa; a positiva foi dimensionada biapoiada). Tipologia 1 da NBR 9062:2017 5.1.2.10
+    (bainha corrugada grauteada + junta vertical grauteada entre o nariz do dente e o pilar + elastômero).
+    Seção crítica: face do pilar, onde só existe o NARIZ do dente (h 35, largura 40 maciça) + 2º estágio + capa; a compressão
+    fica no fundo do nariz e passa ao pilar pela junta grauteada (fck ≥ 30 MPa).
+    N11: 6 Ø16 em 2 bainhas Ø50 (3 em cada) no pilar, a 12 cm acima do topo da peça; N12: 8 Ø12,5 na capa a 3 cm do topo,
+    numa faixa ≤ 1,5 x 40 cm de cada lado do pilar (5.1.2.9), ≥ 50 % da negativa atravessando o pilar."""
+    hd = DENTE["hd"]
     Md = (1.4 * 0.107 * g2 + 1.4 * 0.121 * q2) * L ** 2
-    d1, d2 = h + 0.12, h + H_LAJE + H_CAPA - 0.03
-    A1, A2 = 4 * math.pi * 1.6 ** 2 / 4, 5 * math.pi * 1.25 ** 2 / 4
-    MRd_ = 0.9 * (A1 * d1 + A2 * d2) * 1e-4 * FYD_ALCA
-    x = (A1 + A2) * 1e-4 * FYD_ALCA / (0.85 * FCD * B_ALMA * 0.8)
+    d1, d2 = hd + 0.12, hd + H_LAJE + H_CAPA - 0.03
+    A1, A2 = 6 * math.pi * 1.6 ** 2 / 4, 8 * math.pi * 1.25 ** 2 / 4
+    T = (A1 + A2) * 1e-4 * FYD_ALCA
+    x = T / (0.85 * FCD * B_TOT * 0.8)
+    dm = (A1 * d1 + A2 * d2) / (A1 + A2)
+    MRd_ = T * (dm - 0.4 * x)
     phi = 0.016
     Led = 25 * phi + X_PAD
-    Rsec = 0.75 * (A1 + A2) * 1e-4 * ES * ((A1 * d1 + A2 * d2) / (A1 + A2)) ** 2 / Led
-    return dict(Md_kNm=round(Md, 1), MRd_kNm=round(MRd_, 1), d_pilar_m=round(d1, 3), d_capa_m=round(d2, 3), x_m=round(x, 3),
-                adotado="N11: 4 Ø16 em 2 bainhas corrugadas Ø50 no pilar (graute) + N12: 5 Ø12,5 na capa ao lado; L = 600 cm",
-                As_ef_cm2=round(A1 + A2, 2), frac_no_pilar=round(A1 / (A1 + A2), 2), ok=MRd_ >= Md and A1 / (A1 + A2) >= 0.5,
+    Rsec = 0.75 * (A1 + A2) * 1e-4 * ES * dm ** 2 / Led
+    return dict(Md_kNm=round(Md, 1), MRd_kNm=round(MRd_, 1), secao="face do pilar: nariz 40 × 35 + 2º estágio + capa", d_pilar_m=round(d1, 3),
+                d_capa_m=round(d2, 3), x_m=round(x, 3), x_d=round(x / dm, 3),
+                adotado="N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+                As_ef_cm2=round(A1 + A2, 2), frac_no_pilar=round(A1 / (A1 + A2), 2), ok=MRd_ >= Md and A1 / (A1 + A2) >= 0.5 and x / dm <= 0.45,
                 Rsec_kNm_rad=round(Rsec), Led_m=round(Led, 3), norma="NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)")
 
 
@@ -346,7 +373,8 @@ if __name__ == "__main__":
     out = {k: analisar(H_PM, N_INF, k, L, n_top=N_SUP) for k, L in VAOS.items()}
     out["premissas"] = dict(fck=FCK, fckj=FCKJ, fcj_icamento=FCKJ, fck_2estagio=FCK2, tipo="pré-moldado (NBR 9062:2017 12.1.1)",
                             gama_c=GC_PF, gama_s=GS_PF, folga_m=FOLGA, neoprene=PAD, trib_laje=round(TRIB, 3), sem_escoramento=True,
-                            Eci_MPa=round(ECI(FCK) / 1e3), Ecs_MPa=round(ECS(FCK) / 1e3), Eci_j_MPa=round(ECI(FCKJ) / 1e3))
+                            Eci_MPa=round(ECI(FCK) / 1e3), Ecs_MPa=round(ECS(FCK) / 1e3), Eci_j_MPa=round(ECI(FCKJ) / 1e3),
+                            h_pm=H_PM, n_inf=N_INF, n_sup=N_SUP, b_alma=B_ALMA, b_aba=B_ABA, h_aba=H_ABA, dente=DENTE, x_pad=X_PAD, pad=PAD)
     (AQ / "vm_meio_vaso.json").write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
     for k in VAOS:
         r = out[k]

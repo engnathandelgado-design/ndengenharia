@@ -35,15 +35,15 @@
      "ok": true
     }
    },
-   "uso_ELU_pilares": 0.522,
+   "uso_ELU_pilares": 0.695,
    "metodo_geral": {
     "pilar": "P1-L8",
     "comb": "ELU-1 vento x",
     "Nd": 230.4,
-    "w_eq_kNm": 7.56,
-    "lambda_u": 1.32,
+    "w_eq_kNm": 4.61,
+    "lambda_u": 1.23,
     "ok": true,
-    "topo_mm": 117.5
+    "topo_mm": 167.7
    }
   },
   "com_placas_ligadas": {
@@ -69,15 +69,15 @@
      "ok": true
     }
    },
-   "uso_ELU_pilares": 0.524,
+   "uso_ELU_pilares": 0.698,
    "metodo_geral": {
     "pilar": "P1-L8",
     "comb": "ELU-1 vento x",
     "Nd": 230.4,
-    "w_eq_kNm": 7.57,
-    "lambda_u": 1.32,
+    "w_eq_kNm": 4.65,
+    "lambda_u": 1.23,
     "ok": true,
-    "topo_mm": 117.7
+    "topo_mm": 168.2
    }
   },
   "contribuicao_fechamento": {
@@ -261,27 +261,27 @@
    "norma": "NBR 9062:2017 7.2.1.6.13 a 7.2.1.6.26"
   },
   {
-   "aparelho": "NEO-5 200×250×10 (simples)",
-   "uso": "VM meio vaso nos consolos CP-MEZ",
+   "aparelho": "NEO-5 150×300×10 (simples)",
+   "uso": "VM meio vaso (dente 35 × 35) nos consolos CP-MEZ",
    "tipo": "simples",
-   "a_mm": 200,
-   "b_mm": 250,
+   "a_mm": 150,
+   "b_mm": 300,
    "h_mm": 10,
-   "Ng_kN": 148.5,
-   "Nq_kN": 147.1,
-   "sigma_MPa": 5.91,
+   "Ng_kN": 147.4,
+   "Nq_kN": 145.9,
+   "sigma_MPa": 6.52,
    "lim_sigma": 7.0,
    "ah_mm": 1.6,
    "lim_ah_mm": 5.0,
-   "sigma_g_Al": 3.0,
-   "lim_Nmin": 1.8,
-   "Hk_kN": 8.2,
+   "sigma_g_Al": 3.31,
+   "lim_Nmin": 1.5,
+   "Hk_kN": 7.4,
    "uso_deslizamento": 0.18,
-   "theta_g": 0.0021,
+   "theta_g": 0.0022,
    "theta_q": 0.0012,
-   "lim_theta_g": 0.0049,
-   "lim_theta_gq": 0.0088,
-   "S": 5.56,
+   "lim_theta_g": 0.0078,
+   "lim_theta_gq": 0.0139,
+   "S": 5.0,
    "ok": {
     "pressao": true,
     "distorcao": true,
@@ -402,32 +402,68 @@
   },
   {
    "consolo": "CP-MEZ",
-   "onde": "pilares das linhas 1 e 2 — VM meio vaso, NEO-5 200×250",
+   "onde": "pilares das linhas 1 e 2 — dente 35 × 35 da VM meio vaso, NEO-5 150×300; h = recorte − neoprene (fundo alinhado)",
    "b_m": 0.4,
    "proj_m": 0.35,
-   "h_m": 0.45,
-   "d_m": 0.4,
-   "a_m": 0.15,
-   "a_d": 0.37,
-   "modelo": "consolo muito curto",
+   "h_m": 0.29,
+   "d_m": 0.24,
+   "a_m": 0.186,
+   "a_d": 0.78,
+   "modelo": "consolo curto",
    "gama_n": 1.2,
-   "Vd_kN": 440.5,
-   "Fd_kN": 528.6,
-   "Hd_kN": 84.6,
-   "Asv_cm2": 6.95,
-   "As_tir_cm2": 8.89,
-   "As_min_cm2": 5.12,
-   "tirante": "4 alças horizontais Ø12,5 (8 ramos, 9,82 cm²)",
-   "a2_cm": 10.0,
-   "a2_min_cm": 6.9,
-   "tau_wd_MPa": 3.3,
-   "tau_wu_MPa": 5.4,
-   "costura_cm2_m": 8.68,
-   "costura_total_cm2": 2.32,
-   "costura": "estribos horizontais Ø8 c/10 em 2/3 d",
-   "estribos_verticais_cm2": 2.7,
-   "fendilhamento_kN": 49.6,
-   "As_fend_cm2": 1.14,
+   "Vd_kN": 437.1,
+   "Fd_kN": 524.5,
+   "Hd_kN": 83.9,
+   "Asv_cm2": 10.56,
+   "As_tir_cm2": 12.49,
+   "As_min_cm2": 3.07,
+   "tirante": "4 alças horizontais Ø16 (8 ramos, 16,09 cm²)",
+   "a2_cm": 8.9,
+   "a2_min_cm": 8.1,
+   "tau_wd_MPa": 5.46,
+   "tau_wu_MPa": 6.48,
+   "costura_cm2_m": 17.59,
+   "costura_total_cm2": 2.81,
+   "costura": "Ø10 c/7,5",
+   "estribos_verticais_cm2": 1.74,
+   "fendilhamento_kN": 32.8,
+   "As_fend_cm2": 0.75,
+   "ok": {
+    "tirante": true,
+    "biela": true,
+    "a_d": true
+   },
+   "ok_geral": true,
+   "norma": "NBR 9062:2017 7.3.2 a 7.3.9"
+  },
+  {
+   "consolo": "DENTE VM",
+   "onde": "nariz do dente Gerber da VM (ponta maciça 40 × 65), h 35, LN 35 — 7.4 = consolo 7.3",
+   "b_m": 0.4,
+   "proj_m": 0.35,
+   "h_m": 0.35,
+   "d_m": 0.3,
+   "a_m": 0.194,
+   "a_d": 0.65,
+   "modelo": "consolo curto",
+   "gama_n": 1.2,
+   "Vd_kN": 437.1,
+   "Fd_kN": 524.5,
+   "Hd_kN": 83.9,
+   "Asv_cm2": 9.01,
+   "As_tir_cm2": 10.94,
+   "As_min_cm2": 3.84,
+   "tirante": "3 alças horizontais Ø16 (6 ramos, 12,07 cm²)",
+   "a2_cm": 8.1,
+   "a2_min_cm": 8.1,
+   "tau_wd_MPa": 4.37,
+   "tau_wu_MPa": 6.48,
+   "costura_cm2_m": 12.01,
+   "costura_total_cm2": 2.4,
+   "costura": "Ø10 c/7,5",
+   "estribos_verticais_cm2": 2.1,
+   "fendilhamento_kN": 32.8,
+   "As_fend_cm2": 0.75,
    "ok": {
     "tirante": true,
     "biela": true,
@@ -509,14 +545,22 @@
   },
   {
    "peca": "VM meio vaso (pontas)",
-   "Fd_kN": 440.5,
-   "Hd_kN": 70.5,
-   "Asd_cm2": 10.06,
-   "Ash_Asv_cm2": 1.27,
+   "Fd_kN": 437.1,
+   "Hd_kN": 69.9,
+   "Asd_cm2": 9.99,
+   "Ash_Asv_cm2": 1.26,
    "adotado": "Asd: 3 grampos verticais N7 Ø20 por ponta (perna inferior a 85 mm do fundo, entre as colunas de cordoalhas, 110 cm) = 9,42 cm² + 8 cordoalhas ativas na transferência (≥ 0,64 cm² equivalentes, σp ≥ 35 MPa a 20 cm da ponta); Ash/Asv: N2 Ø8 c/10 (2 ramos) nos 150 cm + N8 3 estribos horizontais Ø10",
    "norma": "NBR 9062:2017 7.5 (Fig. 24)"
   }
  ],
+ "dente_VM": {
+  "geometria": "dente 35 × 35 (nariz), recorte 30, ponta maciça 40 × 65 em 1,00 m",
+  "Fd_kN": 524.5,
+  "MEF_Vu_kN": null,
+  "ok_MEF": null,
+  "suspensao": "3 estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
+  "norma": "NBR 9062:2017 7.4 + MEF não linear (mef_vm_dente.py)"
+ },
  "dente_I130": {
   "MEF_Vu_kN": 639.3,
   "Vd_kN": 472,
@@ -642,11 +686,11 @@
   },
   {
    "peca": "VM meio vaso (piso, solidarizada)",
-   "final_mm": 6.1,
-   "lim_mm": 36.7,
+   "final_mm": 5.4,
+   "lim_mm": 36.4,
    "regra": "Tab. 9: L/250 (L ≤ 15 m)",
-   "montagem_mm": -0.0,
-   "lim_montagem_mm": 18.4
+   "montagem_mm": -0.2,
+   "lim_montagem_mm": 18.2
   }
  ],
  "folgas": [
@@ -664,17 +708,17 @@
    "ok": true
   },
   {
-   "peca": "TS-01 — ponta central (entre as duas TS-01, metade do vão de 38)",
+   "peca": "TS-01 — ponta central (metade do vão de 38; tolerância de projeto do comprimento ±10 mm)",
    "L_m": 19.7,
-   "tex_mm": 20,
+   "tex_mm": 10,
    "tloc_mm": 10,
    "Delta_mm": 3.0,
-   "folga_req_mm": 21.5,
+   "folga_req_mm": 16.5,
    "folga_adotada_mm": 19,
    "apoio_nominal_mm": 162,
-   "apoio_pior_mm": 140.5,
+   "apoio_pior_mm": 145.5,
    "apoio_min_mm": 100,
-   "ok": false
+   "ok": true
   },
   {
    "peca": "I130 — ponta no pilar central (dente no CP-I130)",
@@ -753,9 +797,5 @@
   "metalicos": "terças e ST-1P não são elementos de estabilidade do pórtico de concreto; pinos e cantoneiras de ligação ficam embutidos/grauteados",
   "TRRF": "confirmar o TRRF exigido pela IT do Corpo de Bombeiros (ocupação e área) — não informado"
  },
- "pendencias_calculo": [
-  "NEO-1 150×300×10 (rev03): Nmin, levantamento_g, levantamento_gq",
-  "folga TS-01 — ponta central (entre as duas TS-01, metade do vão de 38)",
-  "folga Placa 125×10 — junta vertical no eixo do pilar (rev03: 10 mm)"
- ]
+ "pendencias_calculo": []
 }

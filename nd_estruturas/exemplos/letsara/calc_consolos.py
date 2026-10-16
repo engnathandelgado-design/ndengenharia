@@ -1,61 +1,26 @@
-"""Letsara — consolos de apoio das vigas (NBR 9062:2017 item 7.3), com a regra de projeto pedida pelo Nathan (12/10/2026):
-
-    a altura do consolo é pelo menos a do recorte do dente da viga (altura da viga − altura do dente − neoprene), para que o
-    fundo do consolo fique alinhado com o fundo da viga (sem chanfro na ponta). Quando essa altura não basta (a/d > 1, biela ou
-    tirante acima do razoável para a largura), acrescenta-se uma mísula de concreto 45° abaixo do consolo.
-
-Modelo biela-tirante de consolo curto/muito curto: As,tir = Vd·a/(0,9·d·fyd) + Hd/fyd (Hd ≥ 0,2·Vd sem ligação que impeça o
-deslizamento — NBR 9062:2017 7.3.1, conferir); τwd = Vd/(b·d) ≤ τwu = min(0,27·αv2·fcd ; 6 MPa) (conferir 7.3.2.2).
-Unidades: kN, m, MPa.
+"""Letsara rev04 — consolos dos pilares pela NBR 9062:2017 7.3 (cálculo em calc_nbr9062.py, função consolo):
+γn (7.3.1.1), Hd = 0,16 Fd no elastômero (7.3.9), modelo por a/d (7.3.2.2), tirante 7.3.5 em ALÇAS HORIZONTAIS com
+a2 ≥ c + 3,5Ø (Ø < 20) / c + 5Ø (Ø ≥ 20) (7.3.3), biela 7.3.4, costura 7.3.6, estribos verticais 7.3.7.
+Regra ND: altura do consolo = recorte do dente da viga − neoprene, fundo do consolo alinhado ao fundo da viga.
+rev04: sem CP-VT (sem vigas de travamento); CP-MEZ recebe o dente 35 × 35 da VM meio vaso (h 29, projeção 35).
+Grava consolos.json no formato lido pelas pranchas dos pilares.
 """
-import json, math
+import json
 from pathlib import Path
 
 AQ = Path(__file__).parent
-I130 = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))
-DT = json.loads((AQ / "dentes.json").read_text(encoding="utf-8"))
-fyd = 500 / 1.15
-BAR = {16: 2.011, 20: 3.142, 12.5: 1.227, 10: 0.785}
-
-# tipo: (onde, b, proj, a (face → eixo do pino), h_viga, h_dente, neoprene, Vd, fck do pilar/viga que recebe)
-CONS = {
-    # rev03: TS-01 sem dente (apoio direto no recuo do pilar e no topo da I130) — sem CP-TS e sem CV-TS
-    "CP-I130": ("P8A, P11, P13, P14 — apoio da I130 (dente 78 × 35)", 0.50, 0.40, 0.200, 1.30, 0.78, 0.030, max(v["linhas"]["Vd_kN"] for v in I130.values()), 40),
-    "CP-MEZ": ("PL linha 1/2, P3/P4/P5, P8/P8B — apoio da VM I90", 0.40, 0.30, 0.150, 0.90, 0.45, 0.010, 383.0, 40),
-    "CP-VT":  ("pilares laterais e de portão — apoio da VT/VV 25×60", 0.25, 0.20, 0.10, 0.60, 0.30, 0.010, 49.0, 40),
-    # VB: terças do vão de oitão a cada 1,20 m (rev03: cobertura com painéis) + peso próprio → Vd ≈ 1,4 × 7,0 kN/m × 9,87/2 = 48 kN
-    "CP-VB":  ("pilares das fachadas 1 e 9 — apoio da VB 15×90 (sem dente: consolo de 35 cm sem chanfro)", 0.30, 0.30, 0.150, 0.70, 0.35, 0.0, 48.0, 40),
-}
+N9 = json.loads((AQ / "nbr9062.json").read_text(encoding="utf-8"))
+NEO = {"CP-I130": (300, 200, 30), "CP-MEZ": (300, 150, 10), "CP-VB": (100, 100, 10)}     # (b, a, h) mm — NEO-2 / NEO-5 / NEO-6
 res = {}
-for nome, (onde, b, proj, a, hv, hd, neo, Vd, fck) in CONS.items():
-    fcd = fck / 1.4
-    tau_wu = min(0.27 * (1 - fck / 250) * fcd, 6.0)
-    Hd = 0.2 * Vd
-    h0 = round(hv - hd - neo, 3)                       # altura que deixa o fundo do consolo alinhado com o fundo da viga
-    out = None
-    for misula in (0.0, 0.15, 0.25, 0.35):
-        h = h0 + misula
-        d = h - 0.05
-        ad = a / d
-        tau = Vd / (b * d) / 1000
-        As = (Vd * a / (0.9 * d) + Hd) / fyd * 10       # cm²
-        As = max(As, 0.04 * fcd / fyd * b * d * 1e4)   # NBR 9062:2017 7.3.3 — ρ,min = 0,04 fcd/fyd (conferir)
-        # bitolas: até 4 Ø16 em b ≤ 0,40; até 5 Ø16 em b = 0,50
-        nmax = 3 if b <= 0.30 else 4                 # acima disso usa mísula (prática ND: tirante em uma camada, até 4 barras)
-        esc = None
-        for dd in ((16, 20) if b >= 0.40 else (12.5, 16)):
-            n = max(2, math.ceil(As / BAR[dd]))
-            if n <= nmax:
-                esc = (n, dd)
-                break
-        ok = ad <= 1.0 and tau <= tau_wu and esc is not None
-        out = dict(onde=onde, b_m=b, proj_m=proj, a_m=a, h_recorte_viga_m=round(hv - hd, 3), h_consolo_m=round(h0, 3), misula_m=misula,
-                   h_total_m=round(h, 3), d_m=round(d, 3), a_d=round(ad, 2), tipo="muito curto" if ad <= 0.5 else "curto",
-                   Vd_kN=round(Vd, 1), Hd_kN=round(Hd, 1), tau_wd_MPa=round(tau, 2), tau_wu_MPa=round(tau_wu, 2),
-                   As_tir_cm2=round(As, 2), tirante=f"{esc[0]} Ø{esc[1]:g}".replace(".", ",") if esc else "-",
-                   As_ef_cm2=round(esc[0] * BAR[esc[1]], 2) if esc else 0, ok=ok)
-        if ok:
-            break
-    res[nome] = out
-    print(f"{nome:8s} h={out['h_consolo_m']} mísula={out['misula_m']} a/d={out['a_d']} τ={out['tau_wd_MPa']}/{out['tau_wu_MPa']} As={out['As_tir_cm2']} → {out['tirante']} ok={out['ok']}")
+for c in N9["consolos"]:
+    nome = c["consolo"]
+    if not nome.startswith("CP-"):
+        continue
+    res[nome] = dict(onde=c["onde"], b_m=c["b_m"], proj_m=c["proj_m"], a_m=c["a_m"], h_consolo_m=c["h_m"], misula_m=0.0, h_total_m=c["h_m"],
+                     d_m=c["d_m"], a_d=c["a_d"], tipo=c["modelo"], gama_n=c["gama_n"], Vd_kN=c["Vd_kN"], Fd_kN=c["Fd_kN"], Hd_kN=c["Hd_kN"],
+                     tau_wd_MPa=c["tau_wd_MPa"], tau_wu_MPa=c["tau_wu_MPa"], As_tir_cm2=c["As_tir_cm2"], tirante=c["tirante"],
+                     n_ramos=int(c["tirante"].split("(")[1].split()[0]), d_tir=float(c["tirante"].split("Ø")[1].split()[0].replace(",", ".")),
+                     a2_cm=c["a2_cm"], costura=c["costura"], estribos_verticais_cm2=c["estribos_verticais_cm2"], neoprene_mm=NEO[nome], ok=c["ok_geral"],
+                     norma=c["norma"])
+    print(f"{nome:8s} h={c['h_m']} a/d={c['a_d']} τ={c['tau_wd_MPa']}/{c['tau_wu_MPa']} As={c['As_tir_cm2']} → {c['tirante']} ok={c['ok_geral']}")
 (AQ / "consolos.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
