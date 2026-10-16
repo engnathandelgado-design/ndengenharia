@@ -196,7 +196,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     rects1 = [(x0, x1, y0, y1, FCD) for x0, x1, y0, y1 in R]
     MR1, x1, xd1 = MRd(rects1, [(AP1, y) for _, y in pos], [], h, eps_inf)
     # F2: seção composta, combinação última normal (γg 1,3 pré-moldado / 1,4 moldado local — usar 1,4 no rev + capa)
-    M2d = M(1.3 * g1 + 1.4 * g2 + 1.4 * q2)
+    M2d = M(1.4 * g1 + 1.4 * g2 + 1.4 * q2)                # combinação normal final (γg 1,4 em todas as permanentes — revisão independente)
     rects2 = rects1 + [(0.0, X_PONTA_LAJE, h, h + H_LAJE, FCD2), (0.0, bf, h + H_LAJE, htot, FCD2)]
     MR2, x2, xd2 = MRd(rects2, [(AP1, y) for _, y in pos], [], htot, eps_inf)
 
