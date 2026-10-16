@@ -228,7 +228,7 @@ def montar() -> ModeloBIM:
 
     pl = LG["platibanda"]
     m.pendente(f"Cobertura escondida (rev03): topo dos painéis solares junto ao P2 em +{pl['topo_painel_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00 (mínimo 150); junto ao P1 em +{pl['topo_painel_P1']:.3f}.")
-    m.pendente("! Pórtico global (OpenSeesPy, P-Δ): ELU ok; ELS frequente 9,9 mm em x — passa H/500 (17 mm), não passa H/1700 (5,9 mm). Definir o limite com o cliente.")
+    m.pendente("Pórtico global rev04 (OpenSeesPy, P-Δ, sem VT): ELU ok, γz até 1,09; ELS frequente 9,9 mm em x — passa NBR 9062:2017 Tab. 7 (H/400 e Hi/750; uso 40 %).")
     m.pendente("! Pé-direito: fundo da TS-01 em +7,19 junto ao eixo A (antes +7,46); mezanino superior (+6,55) com fundo das terças a +8,10 junto ao eixo A — conferir o uso.")
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
