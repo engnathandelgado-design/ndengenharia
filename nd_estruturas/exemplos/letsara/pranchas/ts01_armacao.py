@@ -11,7 +11,8 @@ pr.revisao("03", "14/10/2026", "SEM DENTES: ARMADURA DE APOIO DIRETO; 8 CORDOALH
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {f(L/10,1)} cm (entre pontas, a prumo) · 14 PEÇAS",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes   ·   caimento 3 %", 560)
 sk = lambda h: h * DX / H
-CONTORNO = [(0, 0), (L, 0), (L + DX, H), (DX, H)]
+LC, EC = P["cunha"]["L"], P["cunha"]["e"]            # rev04: cunhas no fundo das pontas (ver folha 01)
+CONTORNO = [(EC * DX / H, EC), (LC, 0), (L - LC, 0), (L - LC, EC), (L, 0), (L + DX, H), (DX, H)]
 TB = P["tb"]
 S_TB = [TB["s_ext"], L - TB["s_cen"]]
 ISO = P["isol"]["L"]
@@ -143,7 +144,7 @@ notas = [f"Concreto C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj
          f"Pista de {P['L_pista']} m: até 3 peças por linha; alongamento medido × teórico dentro de ±7 %. Cordoalhas por peça: {f(kg_cord,0)} kg.",
          "Sem dentes: N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais da mesa inferior) absorvem a reação de apoio e a transferência da protensão; estribos verticais fora da faixa dos tubos TB-3.",
          "As alças AL-1, os tubos TB-3 e as esperas ES-1/ES-2/ES-3 estão na folha 01; posicionar entre os estribos N1, sem cortar armadura.",
-         "Cobrimento 3,0 cm (CAA II). Dobramento conforme NBR 6118:2023 item 9.4.6. Medidas em cm.",
+         "Cobrimento 3,0 cm (CAA II), medido também nas cunhas das pontas: nos 30 cm de cada ponta os espaçadores do fundo são de 4,0 cm (face rebaixada até 9 mm); cordoalhas a 5,5 cm ficam com 3,9 cm na ponta. Dobramento conforme NBR 6118:2023 item 9.4.6. Medidas em cm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 yl = pr.legenda_armadura(x0, tc["y_base"] - 4, True)
 pr.notas(x0, yl - 4, notas, 180)

@@ -26,7 +26,8 @@ H_TS, H_TERCA, Z_TERCA = 0.90, 0.30, 0.010             # terça 10 mm acima do c
 X_PONTA_ESQ = 0.025                                     # ponta a 25 mm da face da cabeça do P1 (x = 0); assento 0 → 0,30
 X_PONTA_CEN = X_CEN - 0.0375                            # 75 mm entre as pontas das duas TS-01 sobre a I130 (b = 40)
 X_FIM = X_P2 - X_PONTA_ESQ                              # ponta da TS-01 direita (face da cabeça do P2)
-NEO_EXT = dict(x=0.200, y=0.300, e=0.010, xc=X_PONTA_ESQ + 0.140)        # neoprene no assento do pilar lateral
+NEO_EXT = dict(x=0.200, y=0.300, e=0.010, xc=X_PONTA_ESQ + 0.125)        # neoprene no assento do pilar lateral (rev04: centro a 12,5 cm da ponta)
+PINO_TS = 0.0775                                                         # rev04: pinos a 7,75 cm da ponta nos 4 apoios (TS-01 simétrica: uma marca serve aos dois lados)
 NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo da I130 / pilar central (x 19,585 → 19,685)
 H_PAC = H_TS + Z_TERCA + H_TERCA + sum(PACOTE.values())
 # cargas da cobertura (kN/m²) — rev03; pesos de catálogo usuais (conferir com os fornecedores da telha e dos painéis)
@@ -73,14 +74,28 @@ for it in inst:
     for ins in TS["insertos"]:
         glob[(it["nome"], ins["id"])] = (ins["tipo"], ts_global(it["x0"], it["y"], ins))
 
-# apoios sem dente: assento (topo inclinado 3 %) = fundo da viga − neoprene, sob o centro do neoprene
-assento = lambda x: round(z_fundo_viga(x) - NEO_EXT["e"], 4)
-apoios = dict(P1=dict(x_neo=NEO_EXT["xc"], z=assento(NEO_EXT["xc"]), comp_apoio=round(0.30 - X_PONTA_ESQ, 3)),
-              P2=dict(x_neo=X_P2 - NEO_EXT["xc"], z=assento(X_P2 - NEO_EXT["xc"]), comp_apoio=round(0.30 - X_PONTA_ESQ, 3)),
-              centro_esq=dict(x_neo=NEO_CEN["xc"], z=assento(NEO_CEN["xc"]), comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20), 4)),
-              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=assento(2 * X_CEN - NEO_CEN["xc"])))
-REC = (round(z_fundo_viga(0.15) - NEO_EXT["e"], 3), round(z_fundo_viga(X_P2 - 0.15) - NEO_EXT["e"], 3))   # recuo (assento) dos pilares P1 / P2 no eixo do assento
-Z_TOPO_I130 = round(z_fundo_viga(X_CEN) - NEO_CEN["e"], 3)          # topo da I130 e dos pilares P8A/P11/P13 no eixo C (topo inclinado 3 %)
+# rev04 (NBR 9062:2017 7.2.1.6: aparelho de apoio horizontal; face inclinada da peça → detalhe que deixe o aparelho horizontal):
+# cada ponta da TS-01 tem uma CUNHA rebaixada no fundo (fôrma com calço em cunha 3 %, 0 → 9 mm em 30 cm), que deixa a face de
+# apoio HORIZONTAL na posição montada; os assentos (recuo dos pilares, topo da I130 e dos pilares centrais) são horizontais.
+#   ponta baixa (lado A da peça): plano horizontal pelo fundo a 30 cm da ponta → cunha de 9 mm na ponta, 0 a 30 cm;
+#   ponta alta (lado E da peça): plano horizontal pelo fundo na ponta → 0 na ponta, 9 mm a 30 cm (degrau de 9 mm para o fundo).
+# As duas TS-01 da linha são a mesma marca; sobre a I130 a ponta alta da esquerda e a ponta baixa da direita ficam em níveis
+# diferentes → topo da I130 e dos pilares centrais em DOIS NÍVEIS (degrau no eixo C).
+CUNHA = 0.30
+DEGRAU_CUNHA = round(I * CUNHA, 4)
+face_baixa = lambda x_ponta: round(z_fundo_viga(x_ponta + CUNHA), 4)       # x_ponta = ponta baixa (menor x)
+face_alta = lambda x_ponta: round(z_fundo_viga(x_ponta), 4)                # x_ponta = ponta alta (maior x)
+X_PONTA_DIR = 2 * X_CEN - X_PONTA_CEN
+REC = (round(face_baixa(X_PONTA_ESQ) - NEO_EXT["e"], 3), round(face_alta(X_FIM) - NEO_EXT["e"], 3))   # recuo (assento horizontal) P1 / P2
+Z_TOPO_I130 = round(face_alta(X_PONTA_CEN) - NEO_CEN["e"], 3)               # topo da I130 / P8A / P11 / P13 — metade do lado A (x < C)
+Z_TOPO_I130_DIR = round(face_baixa(X_PONTA_DIR) - NEO_CEN["e"], 3)          # metade do lado E (x > C)
+DEGRAU_C = round(Z_TOPO_I130_DIR - Z_TOPO_I130, 4)
+apoios = dict(P1=dict(x_neo=NEO_EXT["xc"], z=REC[0], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
+              P2=dict(x_neo=X_P2 - NEO_EXT["xc"], z=REC[1], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
+              centro_esq=dict(x_neo=NEO_CEN["xc"], z=Z_TOPO_I130, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20), 4), assento="horizontal"),
+              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I130_DIR, assento="horizontal"))
+# conferência: neoprenes dentro do trecho da cunha nas duas pontas
+assert NEO_EXT["xc"] + NEO_EXT["x"] / 2 - X_PONTA_ESQ <= CUNHA and X_PONTA_CEN - (NEO_CEN["xc"] - NEO_CEN["x"] / 2) <= CUNHA
 H_I130, HD_I130, NEO_I130 = 1.30, 0.78, 0.03                       # viga central I130 (rev03): dente 78 × 35 nos consolos CP-I130
 Z_ASS_I130 = round(Z_TOPO_I130 - H_I130 + (H_I130 - HD_I130) - NEO_I130, 3)   # assento do consolo CP-I130 (fundo do dente − neoprene)
 rel, erros = [], 0
@@ -140,7 +155,7 @@ folga_plat = dict(platibanda=PLATIBANDA, pacote_m=round(H_PAC, 3), pacote=PACOTE
                   folga_P2_mm=round((PLATIBANDA - z_topo(X_FIM)) * 1000), ok=PLATIBANDA - z_topo(X_FIM) >= FOLGA_PLAT - 1e-6)
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"],
-           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN,
+           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_TOPO_I130_DIR=Z_TOPO_I130_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN,
            contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], borda_furo_fundo_terca_mm=furo_min,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=[r for r in rel if r["ligacao"] == "apoio"], tercas=[r for r in rel if r["ligacao"] == "terças"],

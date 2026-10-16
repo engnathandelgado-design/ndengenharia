@@ -19,7 +19,10 @@ mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
 TER, NOS, ALC, EST = P["tercas"], P["nos"], P["alcas"], P["estoque"]
 t3 = DX / H
 sk = lambda h: h * t3                      # ponta a prumo: deslocamento ao longo da peça na altura h
-CONTORNO = [(0, 0), (L, 0), (L + DX, H), (DX, H)]
+CUN = P["cunha"]                                       # rev04: cunha no fundo das pontas (NBR 9062:2017 7.2.1.6 — aparelho horizontal)
+LC, EC = CUN["L"], CUN["e"]
+# ponta baixa (s = 0, lado A da meia água): rebaixo de EC na ponta a 0 em LC; ponta alta (s = L): 0 na ponta a EC em L − LC (degrau)
+CONTORNO = [(sk(EC), EC), (LC, 0), (L - LC, 0), (L - LC, EC), (L, 0), (L + DX, H), (DX, H)]
 TB = P["tb"]
 S_TB = [TB["s_ext"], L - TB["s_cen"]]                 # tubos TB-3 (no fundo; a prumo na montagem)
 ES1 = lambda s: s - 75                                 # esperas do ST-1P: 75 mm antes do eixo da terça (aba horizontal)
@@ -101,7 +104,9 @@ ve.marcador_detalhe((ALC[1], H), 400, 2, ang=60, dist=6)
 # ------------------------------------------------------------------ VISTA INFERIOR 1:25
 vi = pr.vista("VISTA INFERIOR", (80, 540), 25, titulo="VISTA INFERIOR — TS-01", subtitulo="fundo da fôrma; COTAS EM CM", unidade="cm")
 vi.ret(0, -200, L, 400, "VISTA")
-for s0, (a, b) in ((S_TB[0], (40, 240)), (S_TB[1], (L - 127.5, L - 27.5))):
+for a, b in ((0, LC), (L - LC, L)):
+    vi.hachura([(a, -200), (b, -200), (b, 200), (a, 200)], "ANSI31", 0.25)
+for s0, (a, b) in ((S_TB[0], (25, 225)), (S_TB[1], (L - 127.5, L - 27.5))):
     vi.ret(a, -150, b - a, 300, "OCULTA")
     for yy in TB["y"]:
         vi.circulo((s0, yy), TB["d"] / 2, "METALICA")
@@ -110,10 +115,12 @@ for s in TER:
         vi.circulo((ES3(s), yy), 8, "METALICA")
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
-vi.chamada((S_TB[0], 100), (8, 16), "neoprene NEO-4 200×300×10 (no pilar)")
-vi.chamada((S_TB[1], 100), (-8, 16), "neoprene NEO-3 100×300×10 (na I130)")
+vi.chamada((LC / 2, 150), (10, 18), f"cunha: fundo rebaixado {EC} → 0 mm (ponta baixa)")
+vi.chamada((L - LC / 2, 150), (-10, 18), f"cunha: fundo rebaixado 0 → {EC} mm (ponta alta)")
+vi.chamada((S_TB[0], -100), (8, -16), "NEO-4 (pilar) ou NEO-3 (I130)")
+vi.chamada((S_TB[1], -100), (-8, -16), "NEO-3 (I130) ou NEO-4 (pilar)")
 vi.chamada((EST[0], -260), (30, -22), "calço de estoque/transporte (2x)")
-vi.cota_ord([0] + S_TB + [L], -200, -6, x0=0, rotulos=["0", vi.fmt(S_TB[0]), vi.fmt(S_TB[1]), vi.fmt(L)])
+vi.cota_ord([0, S_TB[0], LC, L - LC, S_TB[1], L], -200, -6, x0=0, rotulos=["0", vi.fmt(S_TB[0]), vi.fmt(LC), vi.fmt(L - LC), vi.fmt(S_TB[1]), vi.fmt(L)])
 vi.cota_v([-200, -100, 100, 200], 0, -8)
 
 # ------------------------------------------------------------------ ESQUEMAS DE IÇAMENTO E ESTOCAGEM 1:100
@@ -195,60 +202,91 @@ for yy in TB["y"]:
 cordoalhas(vb)
 vb.ret(-150, -10, 300, 10, "VISTA")
 vb.chamada((100, 500), (16, 10), "TB-3 tubo Ø50,8×2,0, L = 90 (passante, grauteado)")
-vb.chamada((-150, -5), (-14, -12), "neoprene NEO-4 300×200×10")
+vb.chamada((-150, -5), (-14, -12), "neoprene NEO-4 300×200×10 (face horizontal da cunha)")
 vb.chamada((-155, P["y1"]), (-16, 22), "cordoalhas fora da faixa dos tubos (|x| ≤ 4 e 15,5)")
 vb.cota_h([-200, -125, -75, 75, 125, 200], 0, -16, total=False)
 vb.cota_h([-200, 200], H, 10)
 vb.cota_v([-10, 0, H], 200, 12)
 
-# ------------------------------------------------------------------ DETALHE 1 — apoio no assento do pilar lateral (1:10)
-d1 = pr.vista("DETALHE 1", (630, 120), 20, titulo="DETALHE 1 — APOIO NO ASSENTO DO PILAR (P1/P2)",
-              subtitulo="posição montada; assento no recuo, topo a 3 %; COTAS EM CM", unidade="cm")
+# ------------------------------------------------------------------ DETALHES 1, 3 e 4 — apoios na POSIÇÃO MONTADA (1:20)
+# z = 0 na face de apoio horizontal da ponta; viga com caimento 3 %; pontas e tubos a prumo; assentos horizontais
+HV = H * (1 + 0.03 ** 2) ** 0.5
 LX = 1500
-d1.poli([(LX, 0), (25, 0), (25 + DX, H), (LX + DX, H)], "VISTA")
-d1.interrupcao((LX, 0), (LX + DX, H))
-for y in (yfi, yci, ycs, yfs):
-    d1.linha((25 + mac + sk(y), y), (LX + sk(y), y), "VISTA")
-d1.linha((25 + mac + sk(yfi), yfi), (25 + mac + sk(yci), yci), "VISTA"); d1.linha((25 + mac + sk(ycs), ycs), (25 + mac + sk(yfs), yfs), "VISTA")
-s0 = 25 + TB["s_ext"]
-for d in (-25, 25):
-    d1.linha((s0 + d, 0), (s0 + d + DX, H), "OCULTA")
-d1.ret(s0 - 100, -10, 200, 10, "VISTA")                                    # neoprene NEO-4
-d1.ret(s0 - 12.5, -300, 25, 600, "METALICA")                               # pino PN-3 Ø25 (300 no pilar)
-cab = [(-300, -700), (0, -700), (0, H + 300), (-300, H + 300)]             # cabeça 30 cm (sobe até a platibanda)
+PIN, NEOX = TB["s_ext"], 125                      # pino a 7,75 cm da ponta (os 4 apoios); centro do NEO-4 a 12,5 cm
+
+
+def viga_montada(v, x_ponta, sg, z_ponta_fundo, zface=0.0):
+    """Contorno da TS-01 montada: ponta em x_ponta, corpo para o lado sg (+1 direita, −1 esquerda); fundo da viga sem rebaixo
+    em z_fundo(x) = z_ponta_fundo + 0,03·(x − x_ponta); rebaixo horizontal em z = 0 entre a ponta e x_ponta + sg·LC."""
+    zf_ = lambda x: z_ponta_fundo + 0.03 * (x - x_ponta)
+    xe = x_ponta + sg * LX
+    xc = x_ponta + sg * LC
+    fundo = [(x_ponta, zface), (xc, zface)] + ([(xc, zf_(xc))] if abs(zf_(xc) - zface) > 0.5 else []) + [(xe, zf_(xe))]
+    pts = fundo + [(xe, zf_(xe) + HV), (x_ponta, zf_(x_ponta) + HV)]
+    v.poli(pts, "VISTA", fechada=True)
+    for y in (yfi, yci, ycs, yfs):
+        v.linha((x_ponta + sg * mac, zf_(x_ponta + sg * mac) + y), (xe, zf_(xe) + y), "VISTA")
+    v.interrupcao((xe, zf_(xe)), (xe, zf_(xe) + HV))
+    xt = x_ponta + sg * PIN
+    for d in (-25, 25):
+        v.linha((xt + d, zface), (xt + d, zf_(xt + d) + HV), "OCULTA")
+    return zf_, xt
+
+
+# DETALHE 1 — ponta baixa no pilar P1 (eixo A)
+d1 = pr.vista("DETALHE 1", (630, 120), 20, titulo="DETALHE 1 — APOIO NO PILAR P1 (PONTA BAIXA)",
+              subtitulo="posição montada; assento horizontal no recuo; cunha 9 → 0 mm; COTAS EM CM", unidade="cm")
+zf1, xt1 = viga_montada(d1, 25, 1, -EC)
+d1.chapa(25 + NEOX - 100, -10, 200, 10)                                      # NEO-4 horizontal
+d1.ret(xt1 - 12.5, -300, 25, 600, "METALICA")                               # PN-3
+cab = [(-300, -700), (0, -700), (0, H + 300), (-300, H + 300)]
 d1.poli(cab, "CORTADO", fechada=True); d1.hachura(cab, "AR-CONC", 0.03)
 d1.interrupcao((-300, H + 300), (0, H + 300))
-corpo = [(0, -700), (300, -700), (300, -10), (0, -10)]                     # assento (recuo) do corpo do pilar
+corpo = [(0, -700), (300, -700), (300, -10), (0, -10)]
 d1.poli(corpo, "CORTADO", fechada=True); d1.hachura(corpo, "AR-CONC", 0.03)
-d1.cota_h([0, s0, 300], -10, -24, total=False)
-d1.cota_v([-10, 0, H], LX + DX, 10, total=False)
+d1.cota_h([0, 25, xt1, 25 + LC], -10, -24, total=False)
+d1.cota_v([-10, 0], 300, 12, total=False)
 d1.chamada((12, 400), (-14, 12), "folga 2,5 (mastique)")
-d1.chamada((s0, 450), (16, 30), "TB-3 Ø50 a prumo, grauteado na montagem")
-d1.chamada((s0 + 60, -5), (26, -10), "NEO-4 200×300×10 c/ 2 furos Ø35")
-d1.chamada((s0, -200), (16, -16), "2 pinos PN-3 Ø25 CA-50 (pilar), y = ±10")
+d1.chamada((xt1, 450), (16, 30), "TB-3 Ø50 a prumo, grauteado")
+d1.chamada((25 + NEOX + 60, -5), (26, -12), "NEO-4 200×300×10 horizontal, centro a 12,5 da ponta")
+d1.chamada((xt1, -200), (34, -32), "2 PN-3 Ø25 a 10,25 da face da cabeça, y = ±10")
+d1.chamada((150, 2), (14, 16), f"cunha: face de apoio horizontal ({EC} mm na ponta)")
 d1.chamada((-150, 600), (-12, 8), "cabeça do pilar 40 × 30")
-d1.chamada((200, -400), (10, -10), "assento: apoio útil 27,5")
+d1.chamada((150, -600), (22, -6), f"assento HORIZONTAL +{f(LG['REC'][0], 3)}")
 
-# ------------------------------------------------------------------ DETALHE 3 — apoio no topo da I130 (1:10)
+# DETALHE 4 — ponta alta no pilar P2 (eixo E)
+d4 = pr.vista("DETALHE 4", (895, 285), 20, titulo="DETALHE 4 — APOIO NO PILAR P2 (PONTA ALTA)",
+              subtitulo="posição montada; assento horizontal; cunha 0 → 9 mm com degrau; COTAS EM CM", unidade="cm")
+zf4, xt4 = viga_montada(d4, -25, -1, 0)
+d4.chapa(-25 - NEOX - 100, -10, 200, 10)
+d4.ret(xt4 - 12.5, -300, 25, 600, "METALICA")
+cab = [(0, -700), (300, -700), (300, H + 300), (0, H + 300)]
+d4.poli(cab, "CORTADO", fechada=True); d4.hachura(cab, "AR-CONC", 0.03)
+d4.interrupcao((0, H + 300), (300, H + 300))
+corpo = [(-300, -700), (0, -700), (0, -10), (-300, -10)]
+d4.poli(corpo, "CORTADO", fechada=True); d4.hachura(corpo, "AR-CONC", 0.03)
+d4.cota_h([-25 - LC, xt4, -25, 0], -10, -24, total=False)
+d4.chamada((-25 - LC, -EC / 2), (-34, 10), f"degrau de {EC} mm no fim da cunha")
+d4.chamada((-25 - NEOX - 60, -5), (-24, -14), "NEO-4 200×300×10 horizontal")
+d4.chamada((-150, -500), (-34, -26), f"assento HORIZONTAL +{f(LG['REC'][1], 3)}")
+d4.chamada((xt4, 450), (-16, 26), "TB-3 a prumo / 2 PN-3 Ø25")
+
+# DETALHE 3 — topo da I130 / pilar central: ponta alta da TS-01 do lado A e ponta baixa da TS-01 do lado E
+DG = round(LG["DEGRAU_C"] * 1000)
 d3 = pr.vista("DETALHE 3", (850, 120), 20, titulo="DETALHE 3 — APOIO NO TOPO DA I130 / PILAR CENTRAL",
-              subtitulo="pontas das 2 TS-01 a 3,75 do eixo C; COTAS EM CM", unidade="cm")
-for sg in (-1, 1):
-    pe = sg * 37.5
-    pf = sg * 1200
-    d3.poli([(pf, 0), (pe, 0), (pe, H), (pf, H)], "VISTA")
-    sc = sg * (37.5 + TB["s_cen"])
-    for d in (-25, 25):
-        d3.linha((sc + d, 0), (sc + d, H), "OCULTA")
-    d3.ret(sc - 50, -10, 100, 10, "VISTA")
-    d3.ret(sc - 10, -300, 20, 600, "METALICA")
-d3.interrupcao((-1200, 0), (-1200, H)); d3.interrupcao((1200, 0), (1200, H))
-i130 = [(-200, -900), (200, -900), (200, -10), (-200, -10)]
+              subtitulo=f"posição montada; topo horizontal em 2 níveis (degrau {DG} mm no eixo C); COTAS EM CM", unidade="cm")
+zl, xl = viga_montada(d3, -37.5, -1, 0)                       # lado A: ponta alta
+zr, xr = viga_montada(d3, 37.5, 1, DG - EC, DG)               # lado E: ponta baixa (face de apoio em z = DG)
+d3.chapa(-37.5 - PIN - 50, -10, 100, 10); d3.chapa(37.5 + PIN - 50, DG - 10, 100, 10)
+d3.ret(xl - 10, -300, 20, 600, "METALICA"); d3.ret(xr - 10, DG - 300, 20, 600, "METALICA")
+i130 = [(-200, -900), (200, -900), (200, DG - 10), (0, DG - 10), (0, -10), (-200, -10)]
 d3.poli(i130, "CORTADO", fechada=True); d3.hachura(i130, "AR-CONC", 0.03)
 d3.linha((0, -1000), (0, H + 150), "EIXO")
 d3.cota_h([-115, 115], -10, -24, total=False)
-d3.chamada((115, -5), (18, -10), "NEO-3 100×300×10 c/ 2 furos Ø30")
-d3.chamada((-115, -200), (-16, -16), "2 pinos PN-5 Ø20 por TS-01 (na I130), y = ±10")
-d3.chamada((115, 450), (16, 20), "TB-3 Ø50 grauteado")
+d3.chamada((115, DG - 5), (18, -10), "NEO-3 100×300×10 c/ 2 furos Ø30 (horizontais)")
+d3.chamada((-115, -200), (-34, -38), "2 PN-5 Ø20 por TS-01, y = ±10")
+d3.chamada((100, DG - 10), (16, -24), f"topo +{f(LG['Z_TOPO_I130_DIR'], 3)} (lado E)")
+d3.chamada((-100, -10), (-40, -10), f"topo +{f(LG['Z_TOPO_I130'], 3)} (lado A)")
 d3.chamada((0, -500), (14, -6), "mesa superior da I130 (b 40)")
 
 # ------------------------------------------------------------------ DETALHE 2 — alça AL-1 (1:10)
@@ -272,7 +310,7 @@ pr.imagem(280, 240, 640, 488, "/home/claude/letsara/pranchas/ISO-TS01-geral-crop
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 nn = len(NOS)
 ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "ver planta"],
-       ["TB-3", "Tubo Ø50,8×2,0 L=900, passante, a prumo", 4, "2 por ponta, y = ±100"],
+       ["TB-3", "Tubo Ø50,8×2,0 L=900, passante, a prumo", 4, "a 77,5 das pontas, y = ±100"],
        ["ES-1", "Barra roscada M16 L=330, gancho, sai 120", 2 * len(TER), "2 por terça, y = ±60"],
        ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, "4 por nó do X"],
        ["ES-3", "Barra roscada M16 L=170, sai 60, porca + arruela", 2 * len(TER), "faces B e D, h = 100"]]
@@ -281,7 +319,8 @@ qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
       ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/9.81,2)} t)"],
       ["CONCRETO", f"C{P['fck']} / fckj {P['fckj']}", "PROTENSÃO", f"{P['n_cord']} cord. Ø12,7"],
-      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", "topo I130, 16,25 cm"]]
+      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", "topo I130, 16,25 cm"],
+      ["CUNHAS", f"{LC/10:.0f} cm, 0 → {EC} mm", "TUBOS TB-3", f"a {f(PIN/10, 2)} cm das 2 pontas"]]
 y = pr.tabela(x0, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 60])
 mn = [["Desforma / içamento", "4 alças AL-1 + 2 balancins", f"{f(ALCA_Fd,1)} kN por alça"],
       ["Estoque / transporte", f"2 calços a {EST[0]/10:.0f} cm das pontas", f"{f(peso/2,1)} kN por calço"],
@@ -290,7 +329,8 @@ y = pr.tabela(x0, y - 4, "MANUSEIO", ["FASE", "APOIO", "CARGA"], mn, [50, 70, 60
 notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab. 2 da NBR 9062:2017 — 5.2.1.2): necessária para a folga de 19 mm entre as pontas das duas TS-01 sobre a I130; seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm. Estabilidade lateral no içamento: L/bf 49 ≤ 50 (6.1).",
          f"Fabricar a peça reta com {f(L/10,1)} cm de fundo; cabeceiras inclinadas 3 % (topo deslocado {f(DX/10,1)} cm) para ficarem a prumo na montagem.",
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo, lado do pilar P1/P2) com o plano do fundo.",
-         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), sempre com 2 pinos grauteados nos tubos TB-3.",
+         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
+         f"CUNHAS no fundo das duas pontas (NBR 9062:2017 7.2.1.6 — aparelho de apoio horizontal): calço de aço em cunha 3 % fixado no fundo da fôrma, {LC/10:.0f} cm × 40 cm; ponta baixa rebaixo {EC} → 0 mm, ponta alta 0 → {EC} mm (degrau de {EC} mm). Na montagem a face de apoio fica horizontal sobre o neoprene e sobre o assento horizontal.",
          "Cordoalhas: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); as 2 de 10 cm em x = ±4 isoladas com bainha nos 3,00 m de cada ponta (folha 02).",
          "Esperas ES-1/ES-2/ES-3 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",

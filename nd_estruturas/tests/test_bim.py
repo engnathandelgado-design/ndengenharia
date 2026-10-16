@@ -74,3 +74,16 @@ def test_ponta_a_ponta_ifc_malha_visualizador(tmp_path):
     html = gravar_visualizador(malha, tmp_path / "v.html", "Teste", pendencias=m.pendencias,
                                quant=quantitativos(m)).read_text(encoding="utf-8")
     assert "projeto da ND Engenharia" in html and "Vigas I90" in html and "/*DATA*/" not in html
+
+
+def test_perfil_poligono_area_e_extrusao():
+    # trapézio 1 × (0,5 a 0,6): área = 0,55 m² (conta à mão, fórmula de Gauss)
+    from nd_estruturas.bim import ModeloBIM, PerfilPoligono
+    p = PerfilPoligono(((0, 0), (1, 0), (1, 0.6), (0, 0.5)))
+    assert abs(p.area - 0.55) < 1e-9
+    m = ModeloBIM("t")
+    pc = m.extrusao_y("viga", "VB", [(2, 1), (3, 1), (3, 1.6), (2, 1.5)], y=5.0, largura=0.15, grupo="Vigas")
+    assert abs(pc.comprimento - 0.15) < 1e-9 and abs(pc.volume - 0.55 * 0.15) < 1e-9
+    # eixos locais: X do perfil = X global, Y do perfil = Z global
+    mt = pc.matriz()
+    assert [round(mt[i][0], 6) for i in range(3)] == [1, 0, 0] and [round(mt[i][1], 6) for i in range(3)] == [0, 0, 1]

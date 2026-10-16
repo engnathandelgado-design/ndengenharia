@@ -88,7 +88,31 @@ class PerfilI:
         return 2 * self.b * self.tf + self.tw * (self.h - 2 * self.tf)
 
 
-Perfil = PerfilRetangular | PerfilI
+@dataclass(frozen=True)
+class PerfilPoligono:
+    """Perfil qualquer dado pelo contorno (u, v) em m, sentido qualquer, sem repetir o primeiro ponto.
+    Uso típico: elevação real de uma peça (pontas a prumo, dentes, cunhas) extrudada na largura."""
+
+    pontos: tuple
+    nome: str = ""
+
+    def __post_init__(self):
+        if len(self.pontos) < 3:
+            raise DadoInvalido("perfil poligonal precisa de pelo menos 3 pontos")
+        if self.area < 1e-8:
+            raise DadoInvalido(f"perfil poligonal '{self.nome}' com área nula")
+
+    @property
+    def rotulo(self) -> str:
+        return self.nome or "poligono"
+
+    @property
+    def area(self) -> float:  # m² (fórmula de Gauss)
+        p = self.pontos
+        return abs(sum(p[i][0] * p[(i + 1) % len(p)][1] - p[(i + 1) % len(p)][0] * p[i][1] for i in range(len(p)))) / 2
+
+
+Perfil = PerfilRetangular | PerfilI | PerfilPoligono
 
 
 # --------------------------------------------------------------------------- peças e modelo
@@ -167,6 +191,13 @@ class ModeloBIM:
         """Viga, terça, laje, placa: extrusão de p0 a p1 (centro do perfil), Y local perto de `cima`."""
         return self.add(Peca(tipo, grupo, marca, perfil, tuple(p0), tuple(p1), tuple(cima), material, obs))
 
+    def extrusao_y(self, tipo, marca, contorno_xz, y, largura, grupo, material="concreto", obs=""):
+        """Peça dada pela elevação real no plano XZ global (lista de (x, z) em m), extrudada na largura em torno de y.
+        Serve para vigas com pontas a prumo, dentes, cunhas e caimento (o contorno já está na posição montada)."""
+        x0, z0 = contorno_xz[0]
+        perfil = PerfilPoligono(tuple((round(x - x0, 6), round(z - z0, 6)) for x, z in contorno_xz), marca)
+        return self.add(Peca(tipo, grupo, marca, perfil, (x0, y + largura / 2, z0), (x0, y - largura / 2, z0), (0.0, 0.0, 1.0), material, obs))
+
     def bloco(self, tipo, marca, centro_topo, b_x, b_y, h, grupo):
         """Bloco vertical (consolo, inserto) com topo em centro_topo."""
         x, y, z = centro_topo
@@ -221,7 +252,11 @@ def gravar_ifc(modelo: ModeloBIM, caminho) -> Path:
 
     def perfil_ifc(p):
         if p not in perfis:
-            if isinstance(p, PerfilI):
+            if isinstance(p, PerfilPoligono):
+                pts = [f.create_entity("IfcCartesianPoint", Coordinates=(float(u), float(v))) for u, v in p.pontos]
+                curva = f.create_entity("IfcPolyline", Points=pts + [pts[0]])
+                perfis[p] = f.create_entity("IfcArbitraryClosedProfileDef", ProfileType="AREA", ProfileName=p.rotulo, OuterCurve=curva)
+            elif isinstance(p, PerfilI):
                 perfis[p] = f.create_entity("IfcIShapeProfileDef", ProfileType="AREA", ProfileName=p.rotulo,
                                             OverallWidth=p.b, OverallDepth=p.h, WebThickness=p.tw,
                                             FlangeThickness=p.tf)

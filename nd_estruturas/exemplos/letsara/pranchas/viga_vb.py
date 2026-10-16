@@ -22,15 +22,17 @@ MARCAS = []
 for k, ((na, xa), (nb, xb)) in enumerate(zip(X_FACH[:-1], X_FACH[1:]), 1):
     x0 = round((xa + MEIA[na] + 0.025) * 1000)                            # ponta a 25 mm da face do pilar
     L = round((xb - MEIA[nb] - 0.025) * 1000) - x0
-    MARCAS.append((f"VB-0{k}", f"{na}–{nb}, fachadas 1 e 9", 2, L, x0))
+    MARCAS.append((f"VB-0{k}", f"{na}–{nb}, fachada 1", 1, L, x0))
+for k, m_ in enumerate(list(MARCAS), 5):
+    MARCAS.append((f"VB-0{k}", m_[1].replace("fachada 1", "fachada 9 (espelho da " + m_[0] + ")"), 1, m_[3], m_[4]))
 L, X0VB = MARCAS[1][3], MARCAS[1][4]                                         # VB-02 desenhada
 TERCAS = [x - X0VB + 42 for x in XT if X0VB + 150 < x + 42 < X0VB + L - 150]   # eixo da terça (alma + 42) a partir da ponta
 V = (B * H * L - 2 * B * REC * LN) / 1e9
 PESO = V * 25
 # rev04: Md 90,8 kN·m + tração 95,8 kN → 3 Ø16 inf.; sucção Md− 66,7 kN·m → 6 Ø10 sup.; Vd 38,5 kN; levantamento 28,3 kN (PN-6 roscado)
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="VIGAS DE BORDA VB-01 A VB-04 (15×60 COM DENTE, C40) — FACHADAS 1 E 9 — FÔRMA, ARMAÇÃO E INSERTOS",
-                        desenho="ND-LET-VB01", folha="01/01", fase="PARA APROVAÇÃO", marca="VB-02", qtd=2, peso=f(PESO, 1), volume=f(V, 2)))
+                        conteudo="VIGAS DE BORDA VB-01 A VB-08 (15×60 COM DENTE, C40) — FACHADAS 1 E 9 — FÔRMA, ARMAÇÃO E INSERTOS",
+                        desenho="ND-LET-VB01", folha="01/01", fase="PARA APROVAÇÃO", marca="VB-02", qtd=1, peso=f(PESO, 1), volume=f(V, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m: ESPERAS ES-1/ES-3 (SEM SOLDA); TB-1 SEM CHAPA; CARGAS COM PAINÉIS SOLARES")
 pr.revisao("04", "16/10/2026", "VB 15×60 COM DENTE GERBER, CONSOLO CP-VB ESCONDIDO; NEO-6 100×100×10; PN-6 ANTI-LEVANTAMENTO")
@@ -38,7 +40,7 @@ Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
 pr.texto(Q[0] + 10, Q[3] - 24, "VB-02", "grande", "TITULO")
-pr.texto(Q[0] + 62, Q[3] - 24, f"VIGA DE BORDA 15 × 60 cm COM DENTE — VB-02 (L = {L/10:.0f} cm) · VB-01 · VB-03 · VB-04", "titulo", "TITULO")
+pr.texto(Q[0] + 62, Q[3] - 24, f"VIGA DE BORDA 15 × 60 cm COM DENTE — VB-02 (L = {L/10:.0f} cm) · VB-01 A VB-08 (VB-05 A VB-08 ESPELHADAS)", "titulo", "TITULO")
 pr.texto(Q[0] + 10, Q[3] - 14, f"fachadas 1 e 9, entre os pilares de fachada; dente 30 × 27 nos consolos CP-VB (escondidos) com pino PN-6 roscado   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   C40, CA-50", "nota", "TEXTO")
 
 # planta-chave
@@ -54,29 +56,40 @@ for i, y in enumerate(Y_LIN, 1):
 for j, (n, x) in enumerate(X_FACH):
     kp.texto((M(x), M(82)), n, "min", "BOTTOM_CENTER")
 for mk, _, _, Lm, _x0 in MARCAS:
-    k = int(mk[-1]) - 1
-    for y in (0.0, Y_LIN[-1]):
+    k = (int(mk[-1]) - 1) % 4
+    for y in ((0.0,) if int(mk[-1]) <= 4 else (Y_LIN[-1],)):
         kp.ret(M(X_FACH[k][1]) + 250, M(y) - 150, Lm, 300, "CORTADO")
         kp.texto((M((X_FACH[k][1] + X_FACH[k + 1][1]) / 2), M(y) + (600 if y == 0 else -600)), mk, "min", "BOTTOM_CENTER" if y == 0 else "TOP_CENTER")
 
 # ELEVAÇÃO 1:20 (cm)
 ESC = 20
-PERF = [(0, REC), (LN, REC), (LN, 0), (L - LN, 0), (L - LN, REC), (L, REC), (L, H), (0, H)]
-ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 175), ESC, titulo="ELEVAÇÃO DE FÔRMA — VB-02", subtitulo="face interna; dente Gerber nas duas pontas; esperas ES-1V no topo nos passos das terças", unidade="cm")
+import vb_geom as VG
+# rev04: peça fabricada reta; na montagem (caimento 3 %) as pontas, os recortes e os tubos ficam a prumo e as faces de apoio dos
+# dentes ficam horizontais (NBR 9062:2017 7.2.1.6) — no desenho da peça essas linhas aparecem inclinadas 3 %
+PERF = VG.peca(L)
+LU = PERF[5][0]                                                     # ponta alta, na face de apoio (u)
+Tm = lambda x, z: (x * VG.C + z * VG.S, -x * VG.S + z * VG.C)       # posição montada → peça
+ZB = lambda x: VG.I * x
+ZT = lambda x: VG.I * x + H / VG.C
+ZNL, ZNR = ZB(XP) + REC, ZB(L - XP) + REC
+TUBOS = [[Tm(x + d, zn) for d in (-25, 25)] + [Tm(x + d, ZT(x) - 60) for d in (25, -25)] for x, zn in ((XP, ZNL), (L - XP, ZNR))]
+NICHOS = [[Tm(x - 60, ZT(x) - 60), Tm(x + 60, ZT(x) - 60), Tm(x + 60, ZT(x)), Tm(x - 60, ZT(x))] for x in (XP, L - XP)]
+ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - 175), ESC, titulo="ELEVAÇÃO DE FÔRMA — VB-02", subtitulo="peça fabricada reta; ponta baixa à esquerda (lado A); dentes, pontas e tubos a prumo na montagem", unidade="cm")
 ve.poli(PERF, "VISTA", fechada=True)
-for x in (XP, L - XP):
-    ve.ret(x - 25, REC, 50, HD, "OCULTA")
-    ve.ret(x - 60, H - 60, 120, 60, "OCULTA")
+for tb_, ni_ in zip(TUBOS, NICHOS):
+    ve.poli(tb_, "OCULTA", fechada=True); ve.poli(ni_, "OCULTA", fechada=True)
 for s_ in TERCAS:
     for dx in (45, 105):
         ve.ret(s_ - dx - 8, H, 16, 120, "METALICA")
     ve.circulo((s_ - 25, 100), 8, "METALICA")
 for s_ in (1500, L - 1500):
     ve.poli([(s_ - 60, H), (s_ - 60, H + 100), (s_, H + 140), (s_ + 60, H + 100), (s_ + 60, H)], "METALICA")
-ve.cota_ord([0, XP] + TERCAS + [L - XP, L], H + 140, 14, x0=0)
-ve.cota_h([0, LN, 1500, L - 1500, L - LN, L], 0, -10)
-ve.cota_v([0, REC, H], L, 10)
-ve.chamada((XP, REC + 150), (14, -16), "TB-1 tubo Ø50×3,0 L=240 + nicho 12×12×6 no topo (2x)")
+ve.cota_ord([PERF[7][0], round(Tm(XP, ZT(XP))[0])] + TERCAS + [round(Tm(L - XP, ZT(L - XP))[0]), PERF[6][0]], H + 140, 14, x0=PERF[7][0])
+ve.cota_h([PERF[0][0], PERF[2][0], 1500, L - 1500, PERF[3][0], LU], 0, -10)
+ve.cota_v([0, PERF[4][1], H], PERF[6][0], 10)
+ve.chamada(Tm(XP, ZNL + 150), (14, -16), "TB-1 tubo Ø50×3,0 L=240 A PRUMO na montagem + nicho 12×12×6 (2x)")
+ve.chamada(PERF[1], (16, -22), "face de apoio do dente: HORIZONTAL na montagem (3 % na peça)")
+ve.chamada(PERF[7], (30, 30), "pontas e recortes a prumo na montagem")
 ve.chamada((TERCAS[2] - 45, H + 120), (10, 12), f"ES-1V: 2 esperas M16 no eixo da VB por terça — {len(TERCAS)} terças (ST-1V parafusado)")
 ve.chamada((TERCAS[3] - 25, 100), (10, -12), "ES-3 (mão-francesa), face interna")
 ve.chamada((1500, H + 140), (10, 10), "AL-1 alça (2x)")
@@ -134,35 +147,39 @@ ca.chamada((B / 2 - COB, 300), (14, -6), "N3 Ø6,3 c/15")
 ca.chamada((0, H + 60), (14, 14), "ES-1V M16 hef 150 + gancho, saliência 120 (no eixo)")
 ca.chamada((B / 2 + 30, 100), (14, -8), "ES-3 M16 hef 110, sai 60")
 
-d1 = pr.vista("DETALHE 1", (Q[0] + 300, YR - 10), 10, titulo="DETALHE 1 — DENTE NO CONSOLO CP-VB", subtitulo="consolo escondido, fundo alinhado; PN-6 roscado com porca (anti-levantamento)", unidade="cm")
+d1 = pr.vista("DETALHE 1", (Q[0] + 300, YR - 10), 10, titulo="DETALHE 1 — DENTE NO CONSOLO CP-VB (POSIÇÃO MONTADA)", subtitulo="ponta baixa; viga a 3 %; face de apoio e topo do consolo horizontais; PN-6 com porca", unidade="cm")
 LD = 1100
 FP = -25                                                            # face do pilar (folga 2,5 cm)
+Rp = lambda u, v: (u * VG.C - v * VG.S, u * VG.S + v * VG.C)       # peça → posição montada
+CT = ZNL - 10                                                       # topo horizontal do CP-VB
 d1.poli([(FP - 300, -150), (FP, -150), (FP, H + 150), (FP - 300, H + 150)], "VISTA", fechada=True)
 d1.interrupcao((FP - 300, -150), (FP - 300, H + 150))
-cons = [(FP, 0), (FP + 270, 0), (FP + 270, REC - 10), (FP, REC - 10)]
+cons = [(FP, CT - 290), (FP + 270, CT - 290), (FP + 270, CT), (FP, CT)]
 d1.poli(cons, "CORTADO", fechada=True); d1.hachura(cons, "AR-CONC", 0.03)
-d1.chapa(XP - 50, REC - 10, 100, 10)
-d1.poli([(0, REC), (LN, REC), (LN, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True); d1.interrupcao((LD, 0), (LD, H))
-d1.ret(XP - 25, REC, 50, HD - 60, "OCULTA"); d1.ret(XP - 60, H - 60, 120, 60, "OCULTA")
-d1.poli([(XP - 10, REC - 10 - 300), (XP - 10, H - 25), (XP + 10, H - 25), (XP + 10, REC - 10 - 300)], "METALICA")
-d1.chapa(XP - 30, H - 31, 60, 6)
+d1.chapa(XP - 50, CT, 100, 10)
+d1.poli([(0, ZNL), (LN, ZNL), (LN, ZB(LN)), (LD, ZB(LD)), (LD, ZT(LD)), (0, ZT(0))], "VISTA", fechada=True); d1.interrupcao((LD, ZB(LD)), (LD, ZT(LD)))
+d1.ret(XP - 25, ZNL, 50, ZT(XP) - 60 - ZNL, "OCULTA"); d1.ret(XP - 60, ZT(XP) - 60, 120, 60, "OCULTA")
+d1.poli([(XP - 10, CT - 300), (XP - 10, ZT(XP) - 25), (XP + 10, ZT(XP) - 25), (XP + 10, CT - 300)], "METALICA")
+d1.chapa(XP - 30, ZT(XP) - 31, 60, 6)
+pl = lambda pts, cam: d1.poli([Rp(u, v) for u, v in pts], cam)
 for x in XN:
-    d1.linha((x, REC + COB), (x, H - COB), "ARM_TRANSV")
+    pl([(x, REC + COB), (x, H - COB)], "ARM_TRANSV")
 for x in XS:
-    d1.linha((x, COB), (x, H - COB), "ARMADURA")
+    pl([(x, COB), (x, H - COB)], "ARMADURA")
 for x in range(LN + 150, LD, 100):
-    d1.linha((x, COB), (x, H - COB), "ARM_TRANSV")
-d1.poli([(COB, REC + COB + 20), (LD, REC + COB + 20)], "ARMADURA")
-d1.poli([(LN + COB, COB + 200), (LN + COB, COB + 10), (LD, COB + 10)], "ARMADURA")
-d1.poli([(COB, H - COB - 200), (COB, H - COB - 10), (LD, H - COB - 10)], "ARMADURA")
-d1.cota_h([FP, 0, XP, LN, LD], H + 150, 12, total=False); d1.cota_v([0, REC, H], LD, 10, total=False)
-d1.cota_h([FP, FP + 270], 0, -12, total=False)
-d1.chamada((XP, H - 30), (40, 48), "PN-6 Ø20 roscado A36 L=700 (300 no consolo) + porca, contraporca e arruela 60×60×6; nicho grauteado")
-d1.chamada((XP, REC - 5), (-40, 30), "NEO-6 100×100×10 (furo Ø30)")
-d1.chamada((FP + 200, 120), (60, -30), "CP-VB 15 × 27 × 29 (ver prancha do pilar), fundo = fundo da viga")
-d1.chamada((LN, REC + COB + 20), (14, 10), "N5 alça Ø10 (tirante)")
-d1.chamada((XS[0], 150), (70, -16), "N6 suspensão 2 Ø10")
-d1.chamada((LN + COB, COB + 100), (12, 14), "N1 com gancho de 20 cm no recorte")
+    pl([(x, COB), (x, H - COB)], "ARM_TRANSV")
+pl([(COB, REC + COB + 20), (LD, REC + COB + 20)], "ARMADURA")
+pl([(LN + COB, COB + 200), (LN + COB, COB + 10), (LD, COB + 10)], "ARMADURA")
+pl([(COB, H - COB - 200), (COB, H - COB - 10), (LD, H - COB - 10)], "ARMADURA")
+d1.cota_h([FP, 0, XP, LN, LD], ZT(LD) + 150, 12, total=False)
+d1.cota_v([CT - 290, CT, ZNL], FP + 270, -14, total=False)
+d1.cota_h([FP, FP + 270], CT - 290, -12, total=False)
+d1.chamada((XP, ZT(XP) - 30), (40, 48), "PN-6 Ø20 roscado A36 L=700 (300 no consolo) + porca, contraporca e arruela 60×60×6; nicho grauteado")
+d1.chamada((XP, CT + 5), (-40, 30), "NEO-6 100×100×10 (furo Ø30) horizontal")
+d1.chamada((FP + 200, CT - 170), (60, -30), "CP-VB 15 × 27 × 29, topo HORIZONTAL (ver prancha do pilar)")
+d1.chamada(Rp(LN, REC + COB + 20), (14, 10), "N5 alça Ø10 (tirante)")
+d1.chamada(Rp(XS[0], 150), (70, -16), "N6 suspensão 2 Ø10")
+d1.chamada(Rp(LN + COB, COB + 100), (12, 14), "N1 com gancho de 20 cm no recorte")
 
 # tabelas
 y = Q[3] - 6
@@ -186,12 +203,13 @@ ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 60 cm, dente 30"], ["COMPRIMENTO", f"{L/10:.0f} cm", "CONCRETO", "C40"], ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
-      ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "2 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
+      ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimento 3,0 cm (CAA II). N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas.",
          "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V; mão-francesa MF-1 no CMF-1 da espera ES-3 (face interna) — ND-LET-COB01. Nenhuma solda.",
-         "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte, com o fundo alinhado ao fundo da viga. Folga de 2,5 cm entre a ponta da viga e a face do pilar e entre a ponta do consolo e o recorte.",
+         "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). A ponta baixa vai sempre para o lado A. Folga de 2,5 cm entre a ponta da viga e a face do pilar e entre a ponta do consolo e o recorte.",
          "Sucção do vento na cobertura levanta a VB no apoio (28 kN de cálculo): pino PN-6 Ø20 roscado com porca, contraporca e arruela no nicho do topo do dente, apertado depois do neoprene assentado; graute do nicho só numa ponta (a outra livre para dilatar).",
+         "VB-05 a VB-08 (fachada 9) são o espelho das VB-01 a VB-04: mesma fôrma e armação, com as esperas ES-3 na outra face (face interna da fachada 9) — a ponta baixa continua no lado A.",
          "Placas de fechamento por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos trilhos IP-01).",
          "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

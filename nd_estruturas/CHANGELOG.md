@@ -4,6 +4,7 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Letsara (DEC-022): apoios horizontais das vigas inclinadas — cunhas nas pontas da TS-01, pinos simétricos, recuos e topo da I130/pilares centrais horizontais (2 níveis), VB com dentes nivelados e pontas a prumo, CP-VB por face, VB-05 a VB-08 espelhadas; BIM com `PerfilPoligono`/`extrusao_y`.
 - Letsara: `calc_vb_dente.py` — VB das fachadas 1 e 9 com dente Gerber e consolo escondido, varredura b 15/20 × h 90 a 40 (5 em 5 cm): passa até h 50; mais econômica 15 × 55; adotada 15 × 60 pelo Nathan (DEC-021): VB01, AR-VIG-04, CP-VB nos pilares de fachada (15 × 27 × 29, PN-6 roscado), MC05, BIM, listas e PDF único.
 - Letsara rev04 (NBR 9062:2017, DEC-020): `modelo_global_r04.py` (sem VT, Anexo A, desaprumo, γz da 5.1.2.12, Tab. 7, variante com placas), `calc_nbr9062.py` (aparelhos 7.2.1.6, consolos 7.3, apoio sem recorte 7.5, cintamento 6.2.3, cálices 7.7, estabilidade lateral 6.1 com Lebelle, folgas, flechas, incêndio) e memória MC05; VM em meio vaso com dente (`calc_vm_meio_vaso.py`, `calc_vm_dente.py`, `mef_vm_dente.py`); pilares 14 Ø20; pranchas VM01 (nova), AR-VIG-03, LA01, MON02, PP/CM01 (junta 20 mm, sem VT), pilares, I130, VB01, TS01-1; listas em PDF único (tubos em barras de 6 m) e 3D com meio vaso, 2º estágio, alças e folgas.
 - `pilar_metodo_geral`: parâmetro `camadas` (arranjo real das barras); `mef_dente`: largura da mesa inferior `bi` (seções T / meio vaso).

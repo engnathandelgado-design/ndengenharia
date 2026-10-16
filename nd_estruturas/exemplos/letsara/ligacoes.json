@@ -41,31 +41,40 @@
  "X_PONTA_CEN": 19.7125,
  "apoios_ts": {
   "P1": {
-   "x_neo": 0.165,
-   "z": 7.19,
-   "comp_apoio": 0.275
+   "x_neo": 0.15,
+   "z": 7.195,
+   "comp_apoio": 0.275,
+   "assento": "horizontal"
   },
   "P2": {
-   "x_neo": 39.335,
-   "z": 8.3651,
-   "comp_apoio": 0.275
+   "x_neo": 39.35,
+   "z": 8.369,
+   "comp_apoio": 0.275,
+   "assento": "horizontal"
   },
   "centro_esq": {
    "x_neo": 19.634999999999998,
-   "z": 7.7741,
-   "comp_apoio": 0.1625
+   "z": 7.776,
+   "comp_apoio": 0.1625,
+   "assento": "horizontal"
   },
   "centro_dir": {
    "x_neo": 19.865000000000002,
-   "z": 7.781
+   "z": 7.788,
+   "assento": "horizontal"
   }
  },
  "REC": [
-  7.19,
-  8.366
+  7.195,
+  8.369
  ],
- "Z_TOPO_I130": 7.778,
- "Z_ASS_I130": 6.968,
+ "Z_TOPO_I130": 7.776,
+ "Z_TOPO_I130_DIR": 7.788,
+ "DEGRAU_C": 0.012,
+ "CUNHA": 0.3,
+ "DEGRAU_CUNHA": 0.009,
+ "PINO_TS": 0.0775,
+ "Z_ASS_I130": 6.966,
  "H_I130": 1.3,
  "HD_I130": 0.78,
  "cargas_cob": {
@@ -83,7 +92,7 @@
   "x": 0.2,
   "y": 0.3,
   "e": 0.01,
-  "xc": 0.165
+  "xc": 0.15
  },
  "NEO_CEN": {
   "x": 0.1,

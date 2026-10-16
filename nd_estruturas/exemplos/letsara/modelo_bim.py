@@ -89,7 +89,9 @@ def montar() -> ModeloBIM:
             m.pilar(f"{nome}-L{1 if sg > 0 else 9} cabeça", x, y - sg * 0.15, 0.40, 0.30, zr, TOPO_PLAT, obs="cabeça 40×30")
     # centrais (R01): P8A 40×60, P11 40×40, P13 60×60 — topo +8,88 (topo da I130)
     for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.60, 0.60))):
-        m.pilar(marca, X_C, y, bx, by, Z_CALICE, Z_I130_TOPO, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01")
+        m.pilar(marca, X_C, y, bx, by, Z_CALICE, Z_I130_TOPO, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01; topo em 2 níveis")
+        if marca != "P13":                                     # rev04: metade do lado E 12 mm mais alta (assentos horizontais das TS-01)
+            m.bloco("pilar", f"{marca} degrau do topo", (X_C + bx / 4, y, LG["Z_TOPO_I130_DIR"]), bx / 2, by, LG["DEGRAU_C"], "Pilares")
     for marca, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
         m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino 40×60")
     # pilares dos portões (linha 4): P9, P12 40×40 e P10 25×25, topo +7,40 (rev03; a TS-01 passa por cima)
@@ -104,32 +106,48 @@ def montar() -> ModeloBIM:
         y0, y1 = ya + meia[ya] + 0.075, yb - meia[yb] - 0.075
         m.linear("viga", marca, I130, (X_C, y0, zc), (X_C, y1, zc), "Vigas centrais I130",
                  obs=f"L = {y1 - y0:.3f} m; protendida 26 cord. Ø12,7 (V407: 16) + 4 Ø20 na mesa superior; dente 780 × 350")
+        m.linear("viga", f"{marca} degrau do topo", PerfilRetangular(0.20, LG["DEGRAU_C"]), (X_C + 0.10, y0, Z_I130_TOPO + LG["DEGRAU_C"] / 2), (X_C + 0.10, y1, Z_I130_TOPO + LG["DEGRAU_C"] / 2),
+                 "Vigas centrais I130", obs="rev04: topo em 2 níveis — metade do lado E 12 mm acima (apoio horizontal das TS-01)")
         for yy, sg in ((ya, 1), (yb, -1)):
             m.bloco("consolo", f"CP-I130 {marca}", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110), 0.50, 0.40, hC("CP-I130"), "Consolos")
 
     # 3. TS-01: I90 inclinada, sem dentes (rev03)
+    # rev04: elevação real na posição montada — pontas a prumo, cunhas de 30 cm no fundo das pontas (face de apoio horizontal,
+    # NBR 9062:2017 7.2.1.6), mesas, alma e maciços de 50 cm; ponta baixa sempre no lado A (as 14 peças são a mesma marca)
+    CUN, HV, TI, TSUP, MAC = LG["CUNHA"], H_TS / C3, 0.15, 0.12, 0.50
+    zt = lambda x: zf(x) + HV
     for i in range(2, 9):
         y = Y_LIN[i - 1]
         for lado, (xa, xb) in zip("ab", PONTAS):
-            m.linear("viga", f"TS-01 L{i}{lado}", I90, (xa, y, zf(xa) + H_TS / 2), (xb, y, zf(xb) + H_TS / 2),
-                     "Vigas I90 de cobertura", obs=f"inclinada 3 %, sem dentes, L {LG['L_TS']:.2f} m; 8 cord. Ø12,7")
+            ob = f"inclinada 3 %, pontas a prumo, cunhas de apoio {CUN*100:.0f} cm; L {LG['L_TS']:.2f} m; 8 cord. Ø12,7"
+            za, zb_ = zf(xa + CUN), zf(xb)
+            m.extrusao_y("viga", f"TS-01 L{i}{lado} maciço A", [(xa, za), (xa + CUN, za), (xa + MAC, zf(xa + MAC)), (xa + MAC, zt(xa + MAC)), (xa, zt(xa))],
+                         y, 0.40, "Vigas I90 de cobertura", obs=ob)
+            m.extrusao_y("viga", f"TS-01 L{i}{lado} maciço E", [(xb - MAC, zf(xb - MAC)), (xb - CUN, zf(xb - CUN)), (xb - CUN, zb_), (xb, zb_), (xb, zt(xb)), (xb - MAC, zt(xb - MAC))],
+                         y, 0.40, "Vigas I90 de cobertura", obs=ob)
+            x0, x1 = xa + MAC, xb - MAC
+            m.extrusao_y("viga", f"TS-01 L{i}{lado} mesa inf.", [(x0, zf(x0)), (x1, zf(x1)), (x1, zf(x1) + TI), (x0, zf(x0) + TI)], y, 0.40, "Vigas I90 de cobertura", obs=ob)
+            m.extrusao_y("viga", f"TS-01 L{i}{lado} alma", [(x0, zf(x0) + TI), (x1, zf(x1) + TI), (x1, zt(x1) - TSUP), (x0, zt(x0) - TSUP)], y, 0.15, "Vigas I90 de cobertura", obs=ob)
+            m.extrusao_y("viga", f"TS-01 L{i}{lado} mesa sup.", [(x0, zt(x0) - TSUP), (x1, zt(x1) - TSUP), (x1, zt(x1)), (x0, zt(x0))], y, 0.40, "Vigas I90 de cobertura", obs=ob)
 
     # vigas de borda VB 15×60 das fachadas 1 e 9, rev04: dente Gerber 30 × 27 nas pontas sobre o CP-VB 15 × 27 × 29 escondido
     #   (fundo do consolo = fundo da VB); NEO-6 100×100×10 e PN-6 Ø20 roscado com porca (anti-levantamento); folga 2,5 cm
     LNV = 0.27
+    sys.path.insert(0, str(AQ / "pranchas"))
+    import vb_geom as VG
     for y in (0.0, COMP):
         for xa, xb in itertools.pairwise(X_FACH):
             fa, fb = xa + (0.30 if xa == 0 else 0.20), xb - (0.30 if xb == LARG else 0.20)       # faces dos pilares
             a, b = fa + 0.025, fb - 0.025
-            m.linear("viga", "VB", VB, (a + LNV, y, z_vb(a + LNV) + 0.30), (b - LNV, y, z_vb(b - LNV) + 0.30), "Vigas de borda",
-                     obs=f"15×60 com dente 30 × 27, L = {b - a:.3f} m")
-            for x0_, x1_ in ((a, a + LNV), (b - LNV, b)):
-                m.linear("viga", "VB nariz", VB_N, (x0_, y, z_vb(x0_) + 0.45), (x1_, y, z_vb(x1_) + 0.45), "Vigas de borda", obs="nariz do dente Gerber")
+            Lh = round((b - a) * 1000)
+            cont = [(a + u / 1000, z_vb(a) + v / 1000) for u, v in VG.montada(Lh)]       # pontas, recortes e tubos a prumo; dentes horizontais
+            m.extrusao_y("viga", "VB", cont, y, 0.15, "Vigas de borda", obs=f"15×60 com dente 30 × 27, L = {b - a:.3f} m; caimento 3 %, faces de apoio horizontais")
             for xf, sg in ((fa, 1), (fb, -1)):
-                zt = z_vb(xf) + 0.29
+                xb_ = xf + sg * 0.135                                                   # centro do apoio
+                zt = z_vb(xb_) + 0.29                                                   # topo HORIZONTAL do CP-VB = face do dente − neoprene
                 m.bloco("consolo", "CP-VB 15×27×29", (xf + sg * 0.135, y, zt), 0.27, 0.15, 0.29, "Consolos")
-                m.bloco("inserto", "NEO-6 100×100×10", (xf + sg * 0.135, y, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
-                m.bloco("inserto", "PN-6 Ø20 roscado + porca", (xf + sg * 0.135, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "NEO-6 100×100×10", (xb_, y, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "PN-6 Ø20 roscado + porca", (xb_, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
 
     # 4. terças Ue 300 e telha
     for xa, _ in PONTAS:
@@ -206,12 +224,14 @@ def montar() -> ModeloBIM:
     INS, PIN = "Insertos metálicos", "Pinos, tubos e neoprenes"
     for i in range(2, 9):
         y = Y_LIN[i - 1]
-        for xp, nome_, neo in ((LG["NEO_EXT"]["xc"], "2 PN-3 Ø25 + NEO-4", (0.20, 0.30)), (LG["NEO_CEN"]["xc"], "2 PN-5 Ø20 + NEO-3", (0.10, 0.30)),
-                               (2 * X_C - LG["NEO_CEN"]["xc"], "2 PN-5 Ø20 + NEO-3", (0.10, 0.30)), (LARG - LG["NEO_EXT"]["xc"], "2 PN-3 Ø25 + NEO-4", (0.20, 0.30))):
-            z_as = zf(xp) - 0.01
+        AP, PT = LG["apoios_ts"], LG["PINO_TS"]                 # rev04: assentos horizontais; pinos a 7,75 cm das 4 pontas
+        for (xn, z_as), xpin, nome_, neo, dpin in (((AP["P1"]["x_neo"], AP["P1"]["z"]), PONTAS[0][0] + PT, "2 PN-3 Ø25 + NEO-4", (0.20, 0.30), 0.025),
+                                                  ((AP["centro_esq"]["x_neo"], AP["centro_esq"]["z"]), PONTAS[0][1] - PT, "2 PN-5 Ø20 + NEO-3", (0.10, 0.30), 0.020),
+                                                  ((AP["centro_dir"]["x_neo"], AP["centro_dir"]["z"]), PONTAS[1][0] + PT, "2 PN-5 Ø20 + NEO-3", (0.10, 0.30), 0.020),
+                                                  ((AP["P2"]["x_neo"], AP["P2"]["z"]), PONTAS[1][1] - PT, "2 PN-3 Ø25 + NEO-4", (0.20, 0.30), 0.025)):
             for dy in (-0.10, 0.10):
-                m.bloco("inserto", nome_, (xp, y + dy, z_as + 0.30), 0.025, 0.025, 0.60, PIN)
-            m.bloco("inserto", nome_, (xp, y, z_as + 0.005), neo[0], neo[1], 0.01, PIN)
+                m.bloco("inserto", nome_, (xpin, y + dy, z_as + 0.31), dpin, dpin, 0.61, PIN)
+            m.bloco("inserto", nome_, (xn, y, z_as + 0.010), neo[0], neo[1], 0.01, PIN)
         for xa, _ in PONTAS:
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027

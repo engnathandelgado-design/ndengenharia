@@ -372,11 +372,12 @@ def dados_i110():
     DTI = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["I130"]["calculo"]["adotado"]
     anc = DTI["ancoragem_tirante_mm"]
     zt, za = LGJ["Z_TOPO_I130"], LGJ["Z_ASS_I130"]
+    ztd, dgc = LGJ["Z_TOPO_I130_DIR"], round(LGJ["DEGRAU_C"] * 1000)
     Fz = lambda z: f"{z:.3f}".replace(".", ",")
     A = area_I(400, 1300, 220, 250, 80, 150)
     c6, c7 = [-125, -75, -25, 25, 75, 125], [-150, -100, -50, 0, 50, 100, 150]
     return dict(
-        revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA"), ("04", "16/10/2026", "NBR 9062: NEO-2 300×200×31 FRETADO (a2 DO CONSOLO); TOLERÂNCIAS E IÇAMENTO")],
+        revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA"), ("04", "16/10/2026", "NBR 9062: NEO-2 FRETADO; TOPO HORIZONTAL EM 2 NÍVEIS (APOIO DAS TS-01); TOLERÂNCIAS")],
         marca="V406", qtd=1, familia="VIGAS CENTRAIS I130 (EIXO C)", desenho="ND-LET-I130", h=1300, b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
         n3=(4, 20.0, "CA-50 na mesa superior (compressão no ELU e tração no ato junto às pontas)"),
@@ -386,7 +387,7 @@ def dados_i110():
         consolos=[], pinos_topo=pinos, anc=anc, tir=DTI["tirante"].split(" (")[0], n_sus=DTI["n_sus"], sus=DTI["suspensao"].split(" (")[0],
         n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
         titulo=f"VIGA CENTRAL I130 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","),
-        subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I130 (assento +{Fz(za)}); TS-01 apoiadas no topo (+{Fz(zt)}, a 3 %) nas linhas 3, 5, 6, 7 e 8",
+        subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I130 (assento +{Fz(za)}); TS-01 apoiadas no topo horizontal em 2 níveis (+{Fz(zt)} lado A / +{Fz(ztd)} lado E) nas linhas 3, 5, 6, 7 e 8",
         kp_sub="V405/406/407 no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
         marcas=[["V407", "C: PC-01 → PC-02; TS-01 na L3 (16 cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V407'] / 10, 1)],
                 ["V406", "C: PC-02 → PC-03; TS-01 nas L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V406'] / 10, 1)],
@@ -404,7 +405,7 @@ def dados_i110():
         notas=["Concreto C50; 26 cordoalhas CP-190 RB Ø12,7 em 4 linhas: 6 em y = 6 e 6 em y = 10 cm (aderentes), 7 em y = 14 e 7 em y = 18 cm (isoladas 200 cm nas pontas). σpi = 1400 MPa; liberar com fckj ≥ 40 MPa. V407 (vão menor): 16 cordoalhas, 4 por linha, linhas de 14 e 18 isoladas.",
                "N3 = 4 Ø20 CA-50 na mesa superior: compressão do ELU (x/d ≤ 0,45) e tração no ato junto às pontas (NBR 6118:2023 17.2.4.3.2 b).",
                "Dentes Gerber 78 × 35 nas duas pontas, armadura N5/N6/N7/N8 (NBR 9062:2017 7.4 e PCI 5.6); maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
-               f"TS-01 apoiadas direto no topo da viga (rev03, sem consolos CV-TS): topo a +{Fz(zt)} no eixo C, neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01.",
+               f"TS-01 apoiadas direto no topo da viga (sem consolos CV-TS), neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01. TOPO HORIZONTAL EM 2 NÍVEIS ao longo de toda a viga (NBR 9062:2017 7.2.1.6, aparelho horizontal): metade do lado A em +{Fz(zt)} e metade do lado E {dgc} mm acima (+{Fz(ztd)}), degrau no eixo da viga feito com régua-guia no acabamento do topo; h = 130 cm na metade A e {f(130 + dgc / 10, 1)} cm na metade E. As pontas das TS-01 têm cunha no fundo e a face de apoio fica horizontal.",
                f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 (assento +{Fz(za)}); graute só numa ponta de cada viga. V405 vai até o consolo do P14 (PF-04).",
                "Içar pelas 2 alças AL-3 (2 laços cada); estocar sobre 2 calços nas alças; não virar a peça."])
 

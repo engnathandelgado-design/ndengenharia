@@ -35,7 +35,7 @@ def cons_marca(txt, lado="P1"):
                 for za in G.Z_MEZ_ASS:
                     c = G.MEZ(fc, za); c["incl"] = 0; out.append(c)
             elif tipo == "CP-VB":
-                c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0.03; out.append(c)
+                c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0; out.append(c)   # rev04: topo horizontal (NBR 9062 7.2.1.6)
             elif tipo == "CP-I130":
                 c = G.I130(fc); c["incl"] = 0; out.append(c)
     return out
@@ -123,8 +123,8 @@ def dados(mk):
     for ip in ips:
         ins.append(["IP-01", "Par de trilhos TR-1 HTA-CE 40/22 L=250 (sem solda)", len(ip["z"]), f"faces laterais junto à {ip['face']}, a 6 cm dela" + (f", {ip['obs']}" if ip["obs"] else "")])
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
-        ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 165 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
-        ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento da TS-01 (topo inclinado 3 %)"])
+        ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 102,5 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
+        ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
     ins.append(["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN", 2, "face A: 320 cm do topo e 230 cm da base"])
     tipos = sorted(set(c["tipo"] for c in cons))
     lin = "fachada " + ("1" if "L1" in pos else "9") if mk.startswith("PF") else ("eixo E" if lado_e else "eixo A")
@@ -136,13 +136,13 @@ def dados(mk):
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
                 G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca.",
                 f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
-                (" O degrau do recuo é o ASSENTO DA TS-01 (rev03, viga sem dente): topo inclinado 3 % (sobe para dentro), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
+                (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
                 "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face A para cima.",
                 "IP-01 (rev03, sem solda): par de trilhos TR-1 embutidos nas faces laterais, a 6 cm da face das placas, em cada fiada (125 cm a partir do piso), para as cantoneiras CL-1 parafusadas; onde houver consolo metálico CA-1 das placas (vistas E, F, H, I, J), 2 luvas roscadas IB-1 M20 na face das placas sob a fiada apoiada (ND-LET-PP00). Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"]) for ip in ips], grampos=(-84, 84), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL"):
-        P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(65, 265), x_pino=165, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25")
+        P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25")
     P.update(rec=dict(z=zr + 1000, d=d), sobe_w=-240, n13_inner=4, kp=KP, al=[11000 - 3200, 1000 + 2300],
              secao_txt=f"60 × 40 cm (A–C × B–D), cabeça {cab}", faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
     return P

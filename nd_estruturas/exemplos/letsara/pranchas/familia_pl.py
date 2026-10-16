@@ -10,7 +10,14 @@ f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 zf = lambda x: LG["Z0_TS"] * 1000 + 0.03 * x
 # rev03: TS-01 sem dente, apoiada no recuo (assento) do pilar lateral; CP-VB = fundo da TS-01 na posição (topo da VB = linha das terças)
 REC = {"P1": round(LG["REC"][0] * 1000), "P2": round(LG["REC"][1] * 1000)}
-VB = lambda x: f((zf(x * 1000) + 590) / 1000, 3)       # rev04: VB 15×60 com dente 30 — assento do CP-VB = fundo da VB (zf + 0,30) + recorte 0,30 − neoprene 0,01
+# rev04: VB 15×60 com dente 30 — assento HORIZONTAL do CP-VB = nariz do dente (fundo da VB zf + 0,30, recorte 0,30) − neoprene 0,01,
+# no centro do neoprene (a 13,5 cm da face do pilar); cada face tem o seu nível (a VB sobe 3 % de A para E)
+def VBz(x, sentido):
+    meia = 0.30 if x in (0.0, X_EIXO["E"]) else 0.20
+    return f((zf((x + sentido * (meia + 0.135)) * 1000) + 590) / 1000, 3)
+
+
+VB = lambda x: VBz(x, 1 if x == 0.0 else -1)                           # cantos: a VB está do lado de dentro
 RV = lambda x: f(math.ceil((zf(x * 1000) / 1000 + 0.90) / 0.05) * 0.05, 2)       # recuo das fachadas = topo da VB (5 cm)
 R1, R2 = f(REC["P1"] / 1000, 2), f(REC["P2"] / 1000, 2)
 XE = X_EIXO["E"]
@@ -27,12 +34,12 @@ MARCAS = [
     ("PL-06", "P2 L2", 1, f"2 CP-MEZ (A); recuo +{R2}", "6 IP-01 (C) + 6 (D, vista G)"),
     ("PL-07", "P2 L1 canto", 1, f"CP-VB +{VB(XE)} (A); 2 CP-MEZ (A); recuo A e D", "6 IP-01 (C) + 6 (B)"),
     ("PL-08", "P2 L9 canto", 1, f"CP-VB +{VB(XE)} (A); recuo A e B", "8 IP-01 (C) + 8 (D)"),
-    ("PF-01", "P3 L1", 1, f"2 CP-VB +{VB(9.87)} (B, D); 4 CP-MEZ (B, D); recuo +{RV(9.87)}", "6 IP-01 (C)"),
-    ("PF-02", "P4 L1", 1, f"2 CP-VB +{VB(19.75)} (B, D); 4 CP-MEZ (B, D); recuo +{RV(19.75)}", "6 IP-01 (C)"),
-    ("PF-03", "P5 L1", 1, f"2 CP-VB +{VB(29.63)} (B, D); 4 CP-MEZ (B, D); recuo +{RV(29.63)}", "6 IP-01 (C)"),
-    ("PF-05", "P3 L9", 1, f"2 CP-VB +{VB(9.87)} (B, D); recuo +{RV(9.87)}", "8 IP-01 (C)"),
-    ("PF-04", "P14 L9", 1, f"2 CP-VB +{VB(19.75)} (B, D); CP-I130 +{f(LG['Z_ASS_I130'], 3)} (A); recuo +{RV(19.75)}", "8 IP-01 (C)"),
-    ("PF-06", "P5 L9", 1, f"2 CP-VB +{VB(29.63)} (B, D); recuo +{RV(29.63)}", "8 IP-01 (C)"),
+    ("PF-01", "P3 L1", 1, f"CP-VB +{VBz(9.87, -1)} (B); CP-VB +{VBz(9.87, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(9.87)}", "6 IP-01 (C)"),
+    ("PF-02", "P4 L1", 1, f"CP-VB +{VBz(19.75, -1)} (B); CP-VB +{VBz(19.75, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(19.75)}", "6 IP-01 (C)"),
+    ("PF-03", "P5 L1", 1, f"CP-VB +{VBz(29.63, -1)} (B); CP-VB +{VBz(29.63, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(29.63)}", "6 IP-01 (C)"),
+    ("PF-05", "P3 L9", 1, f"CP-VB +{VBz(9.87, 1)} (B); CP-VB +{VBz(9.87, -1)} (D); recuo +{RV(9.87)}", "8 IP-01 (C)"),
+    ("PF-04", "P14 L9", 1, f"CP-VB +{VBz(19.75, 1)} (B); CP-VB +{VBz(19.75, -1)} (D); CP-I130 +{f(LG['Z_ASS_I130'], 3)} (A); recuo +{RV(19.75)}", "8 IP-01 (C)"),
+    ("PF-06", "P5 L9", 1, f"CP-VB +{VBz(29.63, 1)} (B); CP-VB +{VBz(29.63, -1)} (D); recuo +{RV(29.63)}", "8 IP-01 (C)"),
 ]
 
 

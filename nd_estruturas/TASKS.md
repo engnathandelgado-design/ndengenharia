@@ -49,6 +49,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+- Letsara: apoios horizontais e encaixes das vigas inclinadas (DEC-022).
 - Letsara: VB 15 × 60 com dente Gerber e CP-VB escondido (DEC-021).
 
 - [x] 2026-10-16 — Letsara rev04 (DEC-020): reanálise pela NBR 9062:2017 — sem VT, Tab. 7, pilares 14 Ø20, VM meio vaso com dente (MEF), consolos/neoprenes/folgas revistos, memória MC05, pranchas e listas em PDF único, 3D.

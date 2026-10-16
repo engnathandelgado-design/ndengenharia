@@ -189,10 +189,11 @@ def spec_vb():
         Lm = round((xb - MEIA[nb] - 0.025) * 1000) - x0
         _, bm = barras_vb(Lm)
         V = (B * H * Lm - 2 * B * REC * LN) / 1e9
-        marcas.append(dict(marca=f"VB-0{k}", qtd=2, L=Lm, barras=bm, V=V, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
+        marcas.append(dict(marca=f"VB-0{k}/0{k + 4}", qtd=2, L=Lm, barras=bm, V=V, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
     L = marcas[1]["L"]
     xs_e, _ = barras_vb(L)
-    cont = [(0, REC), (LN, REC), (LN, 0), (L - LN, 0), (L - LN, REC), (L, REC), (L, H), (0, H)]
+    import vb_geom as VG
+    cont = VG.peca(L)                          # rev04: pontas/recortes a prumo e faces de apoio horizontais na montagem
     ents = [([(x, COB), (x, H - COB)], "ARM_TRANSV") for x in xs_e]
     for x0, sg in ((0, 1), (L, -1)):
         ents += [([(x0 + sg * x, REC + COB), (x0 + sg * x, H - COB)], "ARM_TRANSV") for x in XN]
@@ -208,7 +209,7 @@ def spec_vb():
                      [(x, y, 10) for x in (-B / 2 + COB + 11.3, 0, B / 2 - COB - 11.3) for y in (H - COB - 11.3, H - COB - 41.3)],
               prot=[], bolhas=[("N1", (-xi, COB + 14.3), (10, -6)), ("N2", (B / 2 - COB - 11.3, H - COB - 11.3), (8, 4)), ("N3", (B / 2 - COB, 300), (8, 0))],
               formas=["N3", "N4", "N6", "N5", "N7"])
-    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-04 (15 × 60 COM DENTE, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep="VB-02",
+    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-08 (15 × 60 COM DENTE, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep="VB-02/06",
                 contorno=[cont], ents=ents, zonas=zonas_txt(xs_e, "N3", 6.3), cortes=[(L / 2, "S.1")], dets=[],
                 longas=[("N2", COB), ("N1", COB)], blocos=[S1], marcas=marcas,
                 notas=["Concreto C40, aço CA-50. N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas; sucção do vento: N2 6 Ø10.",
@@ -269,7 +270,8 @@ def spec_vm():
         marcas.append(dict(marca=mk, qtd=8, L=Lm, barras=bm, V=V, area=(2 * H + 250 + 200) * Lm / 1e6, cord=(len(VMJ[mk]["pos_cordoalhas_mm"]), len(VMJ[mk]["pos_cordoalhas_mm"]) * Lm / 1000)))
     L = marcas[1]["L"]
     xs_e, xs_mac, xs_9, barras = armacao_vm(L, P, DA)
-    cont = [(0, REC), (LN, REC), (LN, 0), (L - LN, 0), (L - LN, REC), (L, REC), (L, H), (0, H)]
+    import vb_geom as VG
+    cont = VG.peca(L)                          # rev04: pontas/recortes a prumo e faces de apoio horizontais na montagem
     ents = [([(x, COB), (x, H - COB)], "ARM_TRANSV") for x in xs_e + xs_mac]
     ents += [([(x, (REC if (x < LN or x > L - LN) else 0) + 35), (x, H + 200)], "ARM_TRANSV") for x in xs_9]
     ents += [([(COB, H - COB - 10), (L - COB, H - COB - 10)], "ARMADURA"), ([(LN + COB, 85), (L - LN - COB, 85)], "ARMADURA"),
