@@ -193,6 +193,45 @@ class PerfilUe:
         return V / GAMA["cortante"] / 1e3
 
 
+class PerfilZ(PerfilUe):
+    """Z enrijecido ponto-simétrico (enrijecedores de borda a `ang` graus, padrão 45°), bw×bf×D×t externos (mm).
+    Flexão em torno do eixo geométrico x (horizontal): a telha trava a mesa superior (AISI S100 / prática corrente para Z).
+    FLT da seção ponto-simétrica: Me = 0,5·Cb·r0·√(Ney·Nez) (NBR 14762:2010 9.8.2.2 c). CT = CG (m_ct = 0)."""
+
+    def __init__(self, bw, bf, D, t, aco="ZAR345", ang=45.0):
+        self.bw, self.bf, self.D, self.t, self.aco, self.ang = bw, bf, D, t, aco, ang
+        self.fy, self.fu = ACOS[aco]
+        h, b, d = bw - t, bf - t / 2, D - t / 2
+        c, sn = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        # mesa inferior para a esquerda, superior para a direita; enrijecedores voltados para dentro da seção
+        self.pts = [(-b + d * c, d * sn), (-b, 0), (0, 0), (0, h), (b, h), (b - d * c, h - d * sn)]
+        self.p = props_parede_fina(self.pts, t)
+        self.h_lm = h
+        self.W = self.p["Ix"] / (h / 2 + t / 2)
+        self.peso_kNm = self.p["A"] * 7850e-9 * 9.81
+        self.m_ct = 0.0
+
+    @property
+    def nome(self):
+        return f"Z{self.ang:.0f} {self.bw:g}×{self.bf:g}×{self.D:g}×{self.t:.2f}".replace(".", ",")
+
+    def Ne_flt(self, Lb, Cb=1.0, Kz=1.0):
+        p, r0 = self.p, self.r0()
+        Ney = math.pi ** 2 * E_ACO * p["Iy"] / Lb ** 2
+        Nez = (math.pi ** 2 * E_ACO * p["Cw"] / (Kz * Lb) ** 2 + G_ACO * p["J"]) / r0 ** 2
+        return 0.5 * Cb * r0 * math.sqrt(Ney * Nez)
+
+    def Ne_compressao(self, Lx, Ly, Lz):
+        """Ponto-simétrica: CT = CG; flexão nos eixos principais (I1, I2) e torção pura. Eixo menor travado em Ly."""
+        p, r0 = self.p, self.r0()
+        m, d = (p["Ix"] + p["Iy"]) / 2, math.sqrt(((p["Ix"] - p["Iy"]) / 2) ** 2 + p["Ixy"] ** 2)
+        I1, I2 = m + d, m - d
+        Nex = math.pi ** 2 * E_ACO * I1 / Lx ** 2
+        Ney = math.pi ** 2 * E_ACO * I2 / Ly ** 2
+        Nez = (math.pi ** 2 * E_ACO * p["Cw"] / Lz ** 2 + G_ACO * p["J"]) / r0 ** 2
+        return dict(Nex=Nex, Ney=Ney, Nez=Nez, Nexz=Nez, Ne=min(Nex, Ney, Nez))
+
+
 # ------------------------------------------------------------------ ligações parafusadas (chapas finas e laminados)
 AREA_PARAF = {10: 78.5, 12: 113.1, 16: 201.1, 20: 314.2}           # área bruta do fuste (mm²)
 FUB = {"A307": 415.0, "8.8": 800.0, "A325": 825.0}
