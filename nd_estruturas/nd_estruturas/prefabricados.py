@@ -437,13 +437,15 @@ def pressao_vento(V0, z=10.0, b=0.93, Fr=0.95, p=0.115, S1=1.0, S3=1.0):
 
 
 def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.0, Hd_top=0.0,
-                       phi_ef=1.0, c=0.045, n_el=10, ea_rad=None, cord=(), sig_pinf=0.0):
+                       phi_ef=1.0, c=0.045, n_el=10, ea_rad=None, cord=(), sig_pinf=0.0, camadas=None):
     """Pilar em balanço — não linearidade física (fibras, concreto 0,85fcd/γ e CA-50 de cálculo)
     e geométrica (corrotacional), fluência pelo alongamento do diagrama do concreto (1+φef),
     imperfeição global θ1 (NBR 6118 11.3.3.4.1). Carrega N fixo e cresce H/M até λ.
     Retorna o fator de carga último λu (passa se ≥ 1,0) e o deslocamento do topo em λ=1.
     cord: cordoalhas Ø12,7 pré-tracionadas [(y a partir do eixo, n), ...] com tensão após perdas sig_pinf (MPa):
     entram como fibras CP-190 com deformação inicial (pilar protendido centrado ou não).
+    camadas: [(y a partir do eixo, m; n barras; área de cada barra, cm²), ...] — arranjo real das barras na direção de h
+    (faces e barras laterais); quando dado, substitui As_face.
     """
     import openseespy.opensees as ops
     ops.wipe()
@@ -462,10 +464,17 @@ def pilar_metodo_geral(b, h, L, As_face, Nd, Hd_dist, conc: Concreto, Md_base=0.
     ops.uniaxialMaterial("Steel01", 2, FYD_CA50, ES, 0.001)
     ops.section("Fiber", 1)
     ops.patch("rect", 1, 20, 4, -h / 2, -b / 2, h / 2, b / 2)
-    As = As_face * 1e-4
-    nb = 4
-    for y in (-h / 2 + c, h / 2 - c):
-        ops.layer("straight", 2, nb, As / nb, y, -b / 2 + c, y, b / 2 - c)
+    if camadas:
+        for y, n, a1 in camadas:
+            if n == 1:
+                ops.fiber(y, 0.0, a1 * 1e-4, 2)
+            else:
+                ops.layer("straight", 2, n, a1 * 1e-4, y, -b / 2 + c, y, b / 2 - c)
+    else:
+        As = As_face * 1e-4
+        nb = 4
+        for y in (-h / 2 + c, h / 2 - c):
+            ops.layer("straight", 2, nb, As / nb, y, -b / 2 + c, y, b / 2 - c)
     for y, n in cord:
         ops.layer("straight", 4, n, CORD["12.7"], y, -b / 2 + 0.05, y, b / 2 - 0.05)
     ops.geomTransf("Corotational", 1)
