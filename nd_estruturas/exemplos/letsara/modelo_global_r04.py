@@ -61,6 +61,14 @@ Q_COB = LG["cargas_cob"]["sobrecarga"]
 VAOS_X = [(1, 2), (6, 7)]               # X só nos vãos 2-3 e 7-8 (vizinhos aos oitões)
 MID = [round((a + b) / 2, 3) for a, b in zip(NOS[:-1], NOS[1:])]          # terças intermediárias (entre os nós do X)
 MID_D = [round((a + b) / 2, 3) for a, b in zip(NOS_D[:-1], NOS_D[1:])]
+A_X = 2.01e-4                            # área da diagonal do X (Ø16); o estudo de contraventamento troca
+XS_X = None                              # nós do X ao longo de x (None = NOS: a cada 2 terças); o estudo troca
+
+
+def xs_contrav():
+    return XS_X if XS_X is not None else [0.0] + NOS[1:-1] + [XC] + NOS_D[1:-1] + [LARG]
+
+
 TRIB = [(Y_LIN[min(i + 1, 8)] - Y_LIN[max(i - 1, 0)]) / 2 for i in range(9)]
 XF = [X_EIXO[k] for k in "ABCDE"]
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
@@ -172,11 +180,14 @@ def montar(fator_EI=1.0, pdelta=True):
     for i in range(1, 7):
         for x in xs_t:
             barra(no_linha(x, i), no_linha(x, i + 1), 15.2e-4, "terça-escora", mat=11)
+    xs_x = xs_contrav()
     for (ia, ib) in VAOS_X:
-        for k in range(len(xs_no) - 1):
-            a, b = xs_no[k], xs_no[k + 1]
-            barra(no_linha(a, ia), no_linha(b, ib), 2.01e-4, "X Ø16", mat=10)
-            barra(no_linha(b, ia), no_linha(a, ib), 2.01e-4, "X Ø16", mat=10)
+        if ia == 0 or ib == 8:                          # vãos de oitão: X criado depois da VB (nós na VB)
+            continue
+        for k in range(len(xs_x) - 1):
+            a, b = xs_x[k], xs_x[k + 1]
+            barra(no_linha(a, ia), no_linha(b, ib), A_X, "X Ø16", mat=10)
+            barra(no_linha(b, ia), no_linha(a, ib), A_X, "X Ø16", mat=10)
     # VT 25×60 nos eixos A e E (linhas 2 a 9), VB nas fachadas 1 e 9
     if PLACAS:                                   # fiada +7,50/+8,75 com CL-1 de furo redondo nas duas pontas: tirante elástico
         # rigidez axial de um vão de placa = placa (E A / L) em série com 2 CL-1 (k_CL1 cada, flexão da aba 102 x 12,5 + parafuso)
@@ -227,6 +238,23 @@ def montar(fator_EI=1.0, pdelta=True):
             if alvo is None:                                 # terça sobre pilar de canto / P4: nó do pilar
                 alvo = at(nomes[[0.0, XF[1], XC, XF[3], LARG].index(min([0.0, XF[1], XC, XF[3], LARG], key=lambda xx: abs(xx - x)))], zf(x))
             barra(no_linha(x, i_in), alvo, 15.2e-4, "terça-escora", mat=11)
+    # X nos vãos de oitão (1-2 / 8-9): diagonal do nó da linha 2 (ou 8) ao nó da VB (orelha na VB) — estudo de contraventamento
+    def no_vb(il, x):
+        alvo = vb_no.get((il, round(x, 3)))
+        if alvo is None:
+            nomes_ = ["P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1"] if il == 0 else ["P1C-L9", "P3-L9", "P14-L9", "P5-L9", "P2C-L9"]
+            xs5 = [0.0, XF[1], XC, XF[3], LARG]
+            alvo = at(nomes_[xs5.index(min(xs5, key=lambda xx: abs(xx - x)))], zf(x))
+        return alvo
+    for (ia, ib) in VAOS_X:
+        if not (ia == 0 or ib == 8):
+            continue
+        for k in range(len(xs_x) - 1):
+            a, b = xs_x[k], xs_x[k + 1]
+            na, nb = (no_vb(0, a), no_linha(b, ib)) if ia == 0 else (no_linha(a, ia), no_vb(8, b))
+            na2, nb2 = (no_vb(0, b), no_linha(a, ib)) if ia == 0 else (no_linha(b, ia), no_vb(8, a))
+            barra(na, nb, A_X, "X Ø16", mat=10)
+            barra(na2, nb2, A_X, "X Ø16", mat=10)
     # mezanino: VM + diafragma
     for z in Z_MEZ:
         l1 = [at(n, z) for n in ("P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1")]
