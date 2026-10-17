@@ -1,0 +1,22 @@
+{
+ "vertical": {
+  "reacoes": 14334.0,
+  "cargas": 14335.0,
+  "dif_pct": -0.007
+ },
+ "horizontal_y": {
+  "reacoes": 278.8,
+  "vento": 278.8,
+  "dif_pct": 0.0
+ },
+ "terca_linha8": {
+  "M_apoio_L4": {
+   "integrado": 10.01,
+   "viga_continua": 9.27
+  },
+  "M_vao_4_5": {
+   "integrado": 3.83,
+   "viga_continua": 3.84
+  }
+ }
+}

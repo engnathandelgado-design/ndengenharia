@@ -543,6 +543,29 @@ def coletar(cfg):
         ap["Fz_up"] = max(ap["Fz_up"], f[2]); ap["Fz_down"] = min(ap["Fz_down"], f[2])
         ap["Fy"] = max(ap["Fy"], abs(f[1])); ap["Fx"] = max(ap["Fx"], abs(f[0])); ap["T"] = max(ap["T"], abs(f[4]))
     R["ST1P"] = {k: round(v, 2) for k, v in ap.items()}
+    # verificação de cada ST-1P (4 M12 8.8 na alma + 2 esperas M16 na viga), com os esforços do próprio modelo
+    apo = CB["terca"]["apoio"]; st = CB["ST1P"]
+    TRd, VbRd = min(apo["Ft_Rd"], apo["arrancamento_alma_Rd"]), apo["Vb_Rd"]
+    FtE, FvE = st["esperas"]["Ft_Rd"], st["esperas"]["Fv_Rd"]
+    e_t, z_p = 0.045, 0.195
+    pc_ = dict(it=0.0)
+    n_falha = 0
+    for c in CLEAT:
+        f = ops.eleResponse(c["tag"], "force")
+        Rz, Fy, Fx = f[2], f[1], f[0]
+        Tb = abs(Rz) * e_t / z_p / 2
+        Vb = math.sqrt(Rz ** 2 + Fy ** 2 + Fx ** 2) / 4
+        it_b = (Tb / TRd) ** 2 + (Vb / VbRd) ** 2
+        Te = max(-Rz, 0.0) * 1.25 / 2                         # arrancamento (Rz < 0: a terça puxa o ST-1P para cima)
+        Ve = math.hypot(Fy, Fx) / 2
+        it_e = (Te / FtE) ** 2 + (Ve / FvE) ** 2
+        it = max(it_b, it_e)
+        if it > 1.0:
+            n_falha += 1
+        if it > pc_["it"]:
+            pc_ = dict(it=round(it, 3), parafusos=round(it_b, 3), esperas=round(it_e, 3), linha=c["linha"], x=round(c["x"], 2), eixo=c["eixo"] + 1,
+                       Rz=round(Rz, 1), Fy=round(Fy, 1), Fx=round(Fx, 1))
+    R["ST1P_verif"] = dict(pior=pc_, n_reprovados=n_falha)
     # pilares
     base, uso = {}, {}
     for p in pil:
@@ -596,6 +619,8 @@ def envoltoria(res):
         if vs:
             env[g] = dict(max=max(v["max"] for v in vs), min=min(v["min"] for v in vs))
     env["ST1P"] = {k: max((r["ST1P"][k] for r in res.values()), key=abs) for k in ("Fz_up", "Fz_down", "Fy", "Fx", "T")}
+    env["ST1P_verif"] = max((r["ST1P_verif"]["pior"] for r in res.values()), key=lambda d: d["it"])
+    env["ST1P_reprovados_max"] = max(r["ST1P_verif"]["n_reprovados"] for r in res.values())
     env["TS01_M_lateral"] = max(r["grupos"]["TS-01"]["max"] for r in res.values())
     env["usos"] = dict(corrente=round(env["corrente"]["max"] / NT10, 3), diagonal=round(env["diagonal de ancoragem"]["max"] / NT16, 3),
                        tirante=round(-env["tirante rígido"]["min"] / NCR_L51, 3))
