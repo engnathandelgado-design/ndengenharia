@@ -1,0 +1,62 @@
+{
+ "sistema": "Kingspan Isoeste zipada dupla com lã de rocha (manual p. 28): TP-40 #0,65 + cartola #0,65 + lã FSR 32 + clipe #0,65 + zipada 455 #0,50",
+ "q0_kNm2": 0.874,
+ "g_fav_kNm2": 0.137,
+ "passo_tercas_m": 1.2633,
+ "zonas": {
+  "geral": {
+   "w_d_kNm2": 1.087,
+   "f_linha_kNm": 1.373,
+   "ligacoes": {
+    "clipe → cartola (PB 12-14 × 3/4\", 2 por clipe)": {
+     "F_kN": 0.312,
+     "Rd_kN": 0.547,
+     "uso": 0.57
+    },
+    "cartola → TP-40 (PB 1/4\"-14 × 7/8\" P01, a cada 2 ondas)": {
+     "F_kN": 0.673,
+     "Rd_kN": 0.627,
+     "uso": 1.07
+    },
+    "cartola → TP-40 (PB 1/4\"-14 × 7/8\" P01, em todas as ondas)": {
+     "F_kN": 0.336,
+     "Rd_kN": 0.627,
+     "uso": 0.54
+    },
+    "TP-40 → terça (PB 12-14 × 3/4\" P03, 4 por telha)": {
+     "F_kN": 0.336,
+     "Rd_kN": 2.581,
+     "uso": 0.13
+    }
+   }
+  },
+  "borda": {
+   "w_d_kNm2": 1.821,
+   "f_linha_kNm": 2.3,
+   "ligacoes": {
+    "clipe → cartola (PB 12-14 × 3/4\", 2 por clipe)": {
+     "F_kN": 0.523,
+     "Rd_kN": 0.547,
+     "uso": 0.96
+    },
+    "cartola → TP-40 (PB 1/4\"-14 × 7/8\" P01, a cada 2 ondas)": {
+     "F_kN": 1.127,
+     "Rd_kN": 0.627,
+     "uso": 1.8
+    },
+    "cartola → TP-40 (PB 1/4\"-14 × 7/8\" P01, em todas as ondas)": {
+     "F_kN": 0.564,
+     "Rd_kN": 0.627,
+     "uso": 0.9
+    },
+    "TP-40 → terça (PB 12-14 × 3/4\" P03, 4 por telha)": {
+     "F_kN": 0.564,
+     "Rd_kN": 2.581,
+     "uso": 0.22
+    }
+   }
+  }
+ },
+ "conclusao": "Com a costura da cartola a cada 2 ondas (padrão do manual) a sucção não passa nem na zona geral; com costura em TODAS as ondas passa nas duas zonas. Clipes com 2 parafusos na cartola passam (borda no limite). TP-40 na terça com folga. Confirmar com a Kingspan os valores de arrancamento dos parafusos na chapa #0,65 e a distribuição de clipes para o vento da obra.",
+ "ok_com_costura_em_todas_as_ondas": true
+}

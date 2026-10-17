@@ -13,6 +13,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Letsara (DEC-027): confirmar com a Kingspan arrancamento dos parafusos em #0,65, distribuição de clipes e junta de dilatação na água de 39,6 m.
+
 - [ ] Letsara rev06 (DEC-026): trocar as medidas de pré-dimensionamento do CS-1, NC-1 e cartola PT-1 pelas do catálogo 09 da Trejor (anexar o PDF e o DWG "Consoles 2a ETAPA" do e-mail de 05/02/2021) e recalcular `calc_fixacao_placas.py`; luvas TSA dos PT-1 da 1ª fiada no topo da viga baldrame (projeto de fundações); nas placas ao lado da porta da vista I, alinhar as TSA das peças de baixo com os pinos da peça de cima; CE-1 dos pilares do anexo (H/J/I) contadas em Z_PL[:6] (rever as fiadas reais com esquadria).
 - [ ] Letsara rev06: confirmar a intensidade de chuva da cidade (NBR 10844 tab. 5; adotado 200 mm/h) e a rede de drenagem das 9 descidas Ø200; desenhar os insertos IL-1 nas vistas dos pilares PG e a CL-P em detalhe próprio; conferir com a fábrica os insertos IT-P no fundo da TS-01A entre as cordoalhas; rodar os pilares da família 40×60 com os esforços do modelo integrado (uso 0,66).
 
@@ -53,6 +55,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] Letsara rev06c (DEC-027): cobertura Kingspan zipada dupla com lã de rocha — cargas, fixações à sucção, acabamentos (COB04) e IFC com camadas, cartolas e rufos.
 - [x] Letsara rev06c: fixação compatibilizada (parede 3, 2 abas, 2 dentes, M16 com porca soldada, prisioneiro, grampos Ø6,3) e pranchas de fabricação PP02–PP04 com isométricos explodidos, soldas, roscas e listas; PP01 com conjunto, tolerâncias e sequência.
 - [x] Letsara rev06b: projeto executivo da fixação das placas — ND-LET-PP01 (armação da ponta, NC-1 caixa, CS-1, CE-1 + N18, PT-1, PT-2), PP00, pilares, MC07, quantitativos, IFC e PDF único.
 - [x] Letsara rev06 (DEC-026): fixação das placas pelo sistema Trejor — estudo IFC dos 4 sistemas, cálculo (MEF de casca, dente Gerber, console NBR 8800, CE-1, PT-1, PT-2), memória MC07, PP00/PP-x/CM01, pilares com CE-1, listas e IFC.

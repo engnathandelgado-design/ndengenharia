@@ -13,7 +13,7 @@ from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_
 ST1 = dict(t=9.5, larg=220, h=290, aba=150)   # ST-1P: chapa dobrada 9,5 × 220 (ao longo da terça); aba vertical 290, horizontal 150
 Z_TERCA = 10
 N_LIN, N_T = 9, 2 * NT
-pr = Prancha("A0", cabecalho("ND-LET-COB01", "04/05", "COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO E TRAVAMENTO, APOIOS E EMENDAS POR TRANSPASSE"))
+pr = Prancha("A0", cabecalho("ND-LET-COB01", "01/04", "COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO E TRAVAMENTO, APOIOS E EMENDAS POR TRANSPASSE"))
 pr.revisao("01", pr.dados["data"], "furos centrados na alma; suporte ST-1 + CH-T1; mão-francesa na OR-1; planta completa")
 pr.revisao("02", pr.dados["data"], "geometria do R01 (79,35 m; TS-01 19,15 m); X de nó a nó; correntes e MF no padrão de referência")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m Ue 300×2,65; PACOTE TP40 + LÃ 40 + ZIPADA + PAINÉIS; ST-1P E MF PARAFUSADOS (SEM SOLDA)")
@@ -309,11 +309,11 @@ cc = LG["cargas_cob"]
 notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z275) contínuas nos 8 vãos pelo sistema de transpasse (METLAP): cada peça vence um vão e passa {A_TR} além do eixo de cada TS-01 (transpasse total {2*A_TR}); nas fachadas passa {EXT_F} além do eixo da VB. Marca = peça (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais), Xj / Yj = j-ésima terça dentro do painel do X de 8 espaços (X1..X7) ou de 7 espaços (Y1..Y6), com os 2 furos oblongos da tabela de furos do X.",
          f"Aba superior de 90 voltada para o lado A (sobre a aba vertical do ST-1P); aba inferior de 82 para o lado E. No transpasse os 2 perfis encaixam um no outro conforme o sistema METLAP do fabricante; furação de fábrica METSEC (E 55 / F 52) — conferir com a voestalpine Meincol antes do pedido.",
          f"Sem mão-francesa: em cada apoio 4 M12 8.8 atravessam o ST-1P (ou ST-1V) e as almas (2 colunas a ±{Y_COL} do eixo, furos a {Z_FURO[0]} e {Z_FURO[1]} do fundo); em cada ponta do transpasse 2 M12 8.8 pelas 2 almas, a {B_TR} da ponta.",
-         f"Pacote da cobertura sobre as terças: telha inferior TP40 0,50 + lã de rocha 40 mm + telha zipada 0,65 (trapézio 480 × 70) + painéis solares. Cargas permanentes {f(cc['g_total_sem_terca'],3)} kN/m² + terças; sobrecarga {f(cc['sobrecarga'],2)} kN/m².",
+         f"Cobertura Kingspan Isoeste zipada dupla com lã de rocha (manual de instalação, p. 28): 1º TP-40 STD 980 #0,65 na terça (PB 12-14 × 3/4\" P03, 4 por telha por terça); 2º perfil cartola #0,65 sobre cada terça, costurado na TP-40 com PB 1/4\"-14 × 7/8\" P01 EM TODAS AS ONDAS (o manual indica a cada 2 ondas: não passa na sucção desta obra); 3º lã de rocha FSR 32 40 mm; 4º clipe fixo/deslizante #0,65 na cartola (2 PB 12-14 × 3/4\"); 5º zipada 455 #0,50; painéis solares nas costuras da zipada. Cargas permanentes {f(cc['g_total_sem_terca'],3)} kN/m² + terças; sobrecarga {f(cc['sobrecarga'],2)} kN/m².",
          "Ligações todas parafusadas, sem solda na fábrica e na obra: ST-1P nas 2 esperas ES-1 da TS-01, com porca de nivelamento por baixo e porca + contraporca por cima; furos oblongos para o ajuste ao longo da viga.",
          "Furação toda de fábrica (d + 2 mm): proibido furar a terça galvanizada na obra sem retoque com tinta rica em zinco.",
          "Montagem: ST-1P nivelados em toda a linha → terças do vão 1-2 ao 8-9, cada peça encaixada na anterior no transpasse → 4 M12 por apoio e 2 M12 em cada ponta do transpasse (aperto final só com a linha inteira montada) → correntes, tirantes rígidos e diagonais → por último o X, tensionado no esticador até tirar a flecha.",
-         "Telhas, lã e painéis: fixação conforme o fornecedor (clipes da zipada na mesa superior da terça; trilhos dos painéis presos nas costuras da zipada, sem furar a telha).",
+         "Fixações da cobertura verificadas à sucção (NBR 6123, zona geral e faixa de borda; memória ND-LET-MC06): costura cartola × TP-40 em todas as ondas (uso 0,90 na borda); clipes com 2 parafusos (0,96 na borda); TP-40 × terça 0,22. Confirmar com a Kingspan os valores de arrancamento em chapa #0,65 e a distribuição de clipes; trilhos dos painéis nas costuras da zipada, sem furar a telha.",
          "Correntes, tirantes rígidos, diagonais e X: detalhes na ND-LET-COB02.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 190)

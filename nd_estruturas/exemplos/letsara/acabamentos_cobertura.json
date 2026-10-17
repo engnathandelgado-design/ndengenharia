@@ -1,0 +1,394 @@
+{
+ "sistema": "Kingspan Isoeste zipada dupla com lã de rocha (manual p. 28)",
+ "niveis": {
+  "zip_A": 8.494,
+  "zip_E": 9.67,
+  "calha_topo": 8.375,
+  "platibanda": 10.0,
+  "folga_zip_platibanda_E": 0.26
+ },
+ "rufos": [
+  {
+   "marca": "RF-2",
+   "borda": "A",
+   "desenv_mm": 560,
+   "comprimento_m": 75.8,
+   "pecas": 28,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo de fechamento placa → calha, entre pilares; aba vertical de 150 na placa com PAR Tapper a cada 500 + PU"
+  },
+  {
+   "marca": "RF-2C",
+   "borda": "A",
+   "desenv_mm": 290,
+   "comprimento_m": 5.4,
+   "pecas": 9,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "contra-rufo na face da cabeça dos P1 (pilares do eixo A), dentro da calha"
+  },
+  {
+   "marca": "PG-1",
+   "borda": "A",
+   "desenv_mm": 230,
+   "comprimento_m": 79.6,
+   "pecas": 29,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "perfil pingadeira sob a ponta da zipada, 100 mm dentro da calha (manual p. 42)"
+  },
+  {
+   "marca": "RF-3",
+   "borda": "E",
+   "desenv_mm": 890,
+   "comprimento_m": 75.8,
+   "pecas": 28,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo de topo liso sobre a ponta da zipada (aba de 150 + 60 de borda) até a placa, subindo por baixo da aba interna do RF-1 (85 de transpasse); apoiado na CR-1 (manual p. 40)"
+  },
+  {
+   "marca": "CR-1",
+   "borda": "E",
+   "desenv_mm": 90,
+   "comprimento_m": 75.8,
+   "pecas": 28,
+   "chapa": "#1,25 galv.",
+   "descricao": "cantoneira de apoio do RF-3, L 40 × 40 #1,25 galvanizada, na placa com PAR Tapper a cada 500"
+  },
+  {
+   "marca": "RF-3P",
+   "borda": "E",
+   "desenv_mm": 580,
+   "comprimento_m": 5.4,
+   "pecas": 9,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo de topo liso nos pilares P2: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
+  },
+  {
+   "marca": "RF-4",
+   "borda": "1/9",
+   "desenv_mm": 370,
+   "comprimento_m": 78.4,
+   "pecas": 29,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo de acabamento lateral, da placa até a última onda da zipada (manual p. 34/37)"
+  },
+  {
+   "marca": "RF-4C",
+   "borda": "1/9",
+   "desenv_mm": 110,
+   "comprimento_m": 80.3,
+   "pecas": 29,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "contra-rufo lateral na placa, paralelo à água (3 %): PAR Tapper a cada 500 + PU; no último trecho (eixo E) entra sob a aba do RF-1"
+  },
+  {
+   "marca": "RB-1/2",
+   "borda": "1/9",
+   "desenv_mm": 180,
+   "comprimento_m": 78.4,
+   "pecas": 29,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo de acabamento de borda sobre a última onda (RB-1 no início, RB-2 no fim da montagem)"
+  },
+  {
+   "marca": "RF-1",
+   "borda": "plat",
+   "desenv_mm": 380,
+   "comprimento_m": 229.5,
+   "pecas": 82,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo chapéu da platibanda sobre a placa de 10 cm, caimento 5 % para dentro, pingadeiras dos 2 lados (manual p. 46)"
+  },
+  {
+   "marca": "RF-1C",
+   "borda": "plat",
+   "desenv_mm": 720,
+   "comprimento_m": 10.8,
+   "pecas": 18,
+   "chapa": "#0,65 pré-pintado",
+   "descricao": "rufo chapéu sobre a cabeça do pilar + placa (largura 100 + 25 + 300), peça de 600 sobre cada cabeça"
+  }
+ ],
+ "acessorios": [
+  {
+   "item": "veda-onda + Z do veda-onda",
+   "uso": "ponta alta da zipada (eixo E), 1 por telha",
+   "qtd": 176
+  },
+  {
+   "item": "massa vedante (tubo 25 m)",
+   "uso": "veda-ondas, costuras e topo dos contra-rufos",
+   "qtd": 23
+  },
+  {
+   "item": "fita Tacky Tape 9,5 (rolo 12 m)",
+   "uso": "costura transversal dos rufos (transpasse 200)",
+   "qtd": 11
+  },
+  {
+   "item": "PAR Tapper 1/4\" × 2 3/4\" + bucha",
+   "uso": "rufos e contra-rufos no concreto, a cada 500",
+   "qtd": 966
+  },
+  {
+   "item": "PB 1/4\"-14 × 7/8\" P01",
+   "uso": "costuras dos rufos e da pingadeira",
+   "qtd": 1082
+  },
+  {
+   "item": "selante PU (sachê 600 ml)",
+   "uso": "topo dos contra-rufos e encontros com as cabeças",
+   "qtd": 15
+  },
+  {
+   "item": "base deslizante #0,80 + perfil cartola especial",
+   "uso": "bordas laterais (linhas 1 e 9), a cada terça",
+   "qtd": 64
+  }
+ ],
+ "n_zipadas": 176,
+ "perimetro_platibanda_m": 240.3,
+ "secoes": {
+  "RF-2": {
+   "borda": "A",
+   "pts": [
+    [
+     -0.325,
+     8.6745
+    ],
+    [
+     -0.325,
+     8.5245
+    ],
+    [
+     0.01,
+     8.4945
+    ],
+    [
+     0.01,
+     8.4345
+    ]
+   ],
+   "descricao": "rufo de fechamento placa → calha, entre pilares; aba vertical de 150 na placa com PAR Tapper a cada 500 + PU"
+  },
+  "RF-2C": {
+   "borda": "A",
+   "pts": [
+    [
+     0.0,
+     8.6745
+    ],
+    [
+     0.0,
+     8.4345
+    ],
+    [
+     0.03,
+     8.4145
+    ]
+   ],
+   "descricao": "contra-rufo na face da cabeça dos P1 (pilares do eixo A), dentro da calha"
+  },
+  "PG-1": {
+   "borda": "A",
+   "pts": [
+    [
+     0.37,
+     8.4965
+    ],
+    [
+     0.25,
+     8.4929
+    ],
+    [
+     0.235,
+     8.4545
+    ],
+    [
+     0.235,
+     8.3945
+    ]
+   ],
+   "descricao": "perfil pingadeira sob a ponta da zipada, 100 mm dentro da calha (manual p. 42)"
+  },
+  "RF-3": {
+   "borda": "E",
+   "pts": [
+    [
+     39.23,
+     9.6802
+    ],
+    [
+     39.23,
+     9.7502
+    ],
+    [
+     39.825,
+     9.7702
+    ],
+    [
+     39.825,
+     9.985
+    ]
+   ],
+   "descricao": "rufo de topo liso sobre a ponta da zipada (aba de 150 + 60 de borda) até a placa, subindo por baixo da aba interna do RF-1 (85 de transpasse); apoiado na CR-1 (manual p. 40)"
+  },
+  "CR-1": {
+   "borda": "E",
+   "pts": [
+    [
+     39.785,
+     9.7492
+    ],
+    [
+     39.825,
+     9.7492
+    ],
+    [
+     39.825,
+     9.7092
+    ]
+   ],
+   "descricao": "cantoneira de apoio do RF-3, L 40 × 40 #1,25 galvanizada, na placa com PAR Tapper a cada 500"
+  },
+  "RF-3P": {
+   "borda": "E",
+   "pts": [
+    [
+     39.23,
+     9.6802
+    ],
+    [
+     39.23,
+     9.7502
+    ],
+    [
+     39.5,
+     9.7552
+    ],
+    [
+     39.5,
+     9.985
+    ]
+   ],
+   "descricao": "rufo de topo liso nos pilares P2: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
+  },
+  "RF-4": {
+   "borda": "1/9",
+   "pts": [
+    [
+     0.0,
+     9.2695
+    ],
+    [
+     0.0,
+     9.1795
+    ],
+    [
+     0.235,
+     9.1615
+    ],
+    [
+     0.235,
+     9.1295
+    ]
+   ],
+   "descricao": "rufo de acabamento lateral, da placa até a última onda da zipada (manual p. 34/37)"
+  },
+  "RF-4C": {
+   "borda": "1/9",
+   "pts": [
+    [
+     0.0,
+     9.3195
+    ],
+    [
+     0.03,
+     9.2895
+    ],
+    [
+     0.03,
+     9.2295
+    ]
+   ],
+   "descricao": "contra-rufo lateral na placa, paralelo à água (3 %): PAR Tapper a cada 500 + PU; no último trecho (eixo E) entra sob a aba do RF-1"
+  },
+  "RB-1/2": {
+   "borda": "1/9",
+   "pts": [
+    [
+     0.155,
+     9.0795
+    ],
+    [
+     0.155,
+     9.1535
+    ],
+    [
+     0.255,
+     9.1535
+    ]
+   ],
+   "descricao": "rufo de acabamento de borda sobre a última onda (RB-1 no início, RB-2 no fim da montagem)"
+  },
+  "RF-1": {
+   "borda": "plat",
+   "pts": [
+    [
+     -0.035,
+     9.915
+    ],
+    [
+     -0.02,
+     9.93
+    ],
+    [
+     -0.02,
+     10.012
+    ],
+    [
+     0.12,
+     10.005
+    ],
+    [
+     0.12,
+     9.9
+    ],
+    [
+     0.135,
+     9.885
+    ]
+   ],
+   "descricao": "rufo chapéu da platibanda sobre a placa de 10 cm, caimento 5 % para dentro, pingadeiras dos 2 lados (manual p. 46)"
+  },
+  "RF-1C": {
+   "borda": "plat",
+   "pts": [
+    [
+     -0.035,
+     9.915
+    ],
+    [
+     -0.02,
+     9.93
+    ],
+    [
+     -0.02,
+     10.025
+    ],
+    [
+     0.445,
+     10.005
+    ],
+    [
+     0.445,
+     9.9
+    ],
+    [
+     0.46,
+     9.885
+    ]
+   ],
+   "descricao": "rufo chapéu sobre a cabeça do pilar + placa (largura 100 + 25 + 300), peça de 600 sobre cada cabeça"
+  }
+ }
+}

@@ -19,8 +19,9 @@ import math
 import sys
 from pathlib import Path
 
-from nd_estruturas.bim import (ModeloBIM, PerfilI, PerfilRetangular, gravar_ifc, gravar_visualizador,
+from nd_estruturas.bim import (ModeloBIM, PerfilI, PerfilRetangular, PerfilPoligono, Peca, gravar_ifc, gravar_visualizador,
                                ler_malha_ifc, quantitativos)
+import acabamentos_cob as AC
 
 AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
@@ -259,11 +260,59 @@ def montar() -> ModeloBIM:
                         suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
                     else:
                         suporte_st(m, "ST-1V (VB eixo 1)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.016, hef=0.150)
-    for k in range(int(COMP // 1.0)):
-        y = 0.5 + k * 1.0
-        xa_, xb_ = 0.25, LARG - 0.06                          # rev06: telha entra 150 na calha (eixo A); no eixo E sob o rufo RF-3
-        z0, z1 = zf(xa_) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2, zf(xb_) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2
-        m.linear("placa", "telha", TELHA, (xa_, y, z0), (xb_, y, z1), "Telhas", material="aco")
+    # rev06c: cobertura Kingspan zipada dupla com lã de rocha (manual p. 28) em camadas, cartolas sobre as terças e rufos (ND-LET-COB04)
+    xa_, xb_ = AC.X_TELHA_A, AC.X_TELHA_E
+    y0_, y1_ = AC.Y_TELHA_1, AC.Y_TELHA_9
+    nfx = math.ceil((y1_ - y0_) / 1.0)
+    bfx = (y1_ - y0_) / nfx
+    for nome_, dz0, dz1, grp_ in (("TP-40 STD #0,65", 0.0, 0.040, "Telhas"), ("lã de rocha FSR 32", 0.040, 0.080, "Telhas"),
+                                  ("zipada 455 #0,50", 0.080, 0.150, "Telhas"), ("painéis solares (envelope)", 0.150, 0.260, "Telhas")):
+        for k in range(nfx):
+            y = y0_ + (k + 0.5) * bfx
+            pz = (dz0 + dz1) / 2
+            m.linear("placa", nome_, PerfilRetangular(bfx - 0.002, dz1 - dz0, nome_), (xa_, y, AC.z_terca_topo(xa_) + pz), (xb_, y, AC.z_terca_topo(xb_) + pz), grp_, material="aco")
+    for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
+        xc_ = xt_ - 0.027 - 0.045                         # cartola centrada na aba superior (90) da terça
+        m.linear("placa", "perfil cartola #0,65", PerfilRetangular(0.12, 0.04, "cartola"), (xc_, y0_, AC.z_terca_topo(xc_) + 0.06), (xc_, y1_, AC.z_terca_topo(xc_) + 0.06), "Telhas", material="aco")
+    SEC = AC.secoes()
+
+    def chapa_contorno(pts, t=0.002):
+        """polilinha (u, v) → contorno fechado de chapa com espessura t (deslocada para a esquerda de cada trecho)."""
+        import numpy as _np
+        P = _np.array(pts, float)
+        n = []
+        for i in range(len(P) - 1):
+            d = P[i + 1] - P[i]; d /= _np.linalg.norm(d); n.append(_np.array((-d[1], d[0])))
+        off = [P[0] + t * n[0]] + [P[i] + t * (n[i - 1] + n[i]) / max(_np.linalg.norm(n[i - 1] + n[i]), 1e-9) for i in range(1, len(P) - 1)] + [P[-1] + t * n[-1]]
+        return [tuple(p) for p in P] + [tuple(p) for p in reversed(off)]
+
+    def rufo_y(mk, ya, yb, conv=lambda u, v: (u, v)):
+        cont = chapa_contorno([conv(u, v) for u, v in SEC[mk][1]])
+        m.extrusao_y("placa", f"{mk} rufo #0,65", cont, (ya + yb) / 2, yb - ya, "Rufos e acabamentos", material="aco", obs=SEC[mk][2])
+
+    def rufo_x(mk, xa, xb, za, zb, conv):
+        cont = chapa_contorno([conv(u, v) for u, v in SEC[mk][1]])
+        u0, v0 = cont[0]
+        perf = PerfilPoligono(tuple((round(u - u0, 6), round(v - v0, 6)) for u, v in cont), mk)
+        m.add(Peca("placa", "Rufos e acabamentos", f"{mk} rufo #0,65", perf, (xa, u0, za + v0), (xb, u0, zb + v0), (0.0, 0.0, 1.0), "aco", SEC[mk][2]))
+
+    PIL_Y = list(Y_LIN)
+    tre = [(PIL_Y[i] + 0.20, PIL_Y[i + 1] - 0.20) for i in range(len(PIL_Y) - 1)]
+    for ya, yb in tre:
+        rufo_y("RF-2", ya, yb); rufo_y("RF-3", ya, yb); rufo_y("CR-1", ya, yb)
+    for yp in PIL_Y:
+        rufo_y("RF-2C", yp - 0.30, yp + 0.30); rufo_y("RF-3P", yp - 0.30, yp + 0.30)
+        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
+        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
+    rufo_y("PG-1", y0_, y1_)
+    rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
+    rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
+    zl_ = AC.z_zip(LARG / 2) + AC.PAC["zipada"]
+    za_r, zb_r = AC.z_zip(xa_) + AC.PAC["zipada"], AC.z_zip(xb_) + AC.PAC["zipada"]
+    for yface, sg in ((AC.Y_PLACA_1, 1), (AC.Y_PLACA_9, -1)):
+        for mk in ("RF-4", "RF-4C", "RB-1/2"):
+            rufo_x(mk, xa_, xb_, za_r, zb_r, lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
+        rufo_x("RF-1", AC.X_PLACA_A - 0.10, AC.X_PLACA_E + 0.10, 0.0, 0.0, lambda u, v, yf=yface, s_=sg: (yf - s_ * 0.100 + s_ * u, v))
     # contraventamento em X Ø16 (rev06, DEC-024/025): vãos 4-5 a 8-9, nós nas terças 0, 8, 15 de cada meia água
     BAR16 = PerfilRetangular(0.016, 0.016, "Ø16")
     CT = LG["contraventamento"]["chapa"]
@@ -465,7 +514,7 @@ if __name__ == "__main__":
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
                  ] + [(f"ND-LET-AR-PIL-{k:02d}", f"armaduras dos pilares — folha {k} de 6 (padrão de armação)") for k in range(1, 7)] + [(f"ND-LET-AR-VIG-{k:02d}", f"armaduras das vigas — {t}") for k, t in enumerate(("TS-01", "I130", "VM", "VB"), 1)] + [] + [(f"ND-LET-{m.replace('-', '')}", f"pilar {m} (família 40×60)") for m in ("PL-01", "PL-02", "PL-03", "PL-04", "PL-05", "PL-06", "PL-07", "PL-08", "PL-09", "PL-10", "PL-11", "PL-12", "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06")] + [ ("ND-LET-PC01", "pilar central PC-01 (P8A)"), ("ND-LET-PC02", "pilar central PC-02 (P11)"), ("ND-LET-PC03", "pilar central PC-03 (P13)"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilar do portão PG-01 (P9)"), ("ND-LET-PG02", "pilar do portão PG-02 (P10a)"), ("ND-LET-PG03", "pilar do portão PG-03 (P12)"), ("ND-LET-PG04", "pilar do portão PG-04 (P10b)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"), ("ND-LET-COB03", "calha do eixo A, descidas e rufos"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilar do portão PG-01 (P9)"), ("ND-LET-PG02", "pilar do portão PG-02 (P10a)"), ("ND-LET-PG03", "pilar do portão PG-03 (P12)"), ("ND-LET-PG04", "pilar do portão PG-04 (P10b)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"), ("ND-LET-COB03", "calha do eixo A e descidas"), ("ND-LET-COB04", "acabamentos Kingspan: beirais, encostos, platibanda e rufos"),
                  ("ND-LET-I130", "vigas centrais I130 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02 (meio vaso) — fôrma"), ("ND-LET-VM02", "vigas do mezanino — 2º estágio, apoio e insertos"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
                  ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP01", "fixação das placas — armação da ponta, conjunto montado e sequência"), ("ND-LET-PP02", "nicho NC-1 — fabricação"), ("ND-LET-PP03", "console CS-1 — fabricação e parafusos"), ("ND-LET-PP04", "CE-1, PT-1, PT-2 e fixadores"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
@@ -478,14 +527,14 @@ if __name__ == "__main__":
                 continue
             doc = pymupdf.open(arq)
             for k, pg in enumerate(doc):
-                pix = pg.get_pixmap(dpi=int(1500 / pg.rect.width * 72))
-                img = pix.tobytes("jpeg", jpg_quality=60)
+                pix = pg.get_pixmap(dpi=int(1300 / pg.rect.width * 72))   # rev06c: 1300 px (página ≤ 16 MB)
+                img = pix.tobytes("jpeg", jpg_quality=55)
                 pranchas.append(dict(nome=nome + (f" ({k + 1}/{len(doc)})" if len(doc) > 1 else ""), desc=desc,
                                      img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
                         "Pavilhão pré-moldado 39,50 × 79,35 m · Marques Engenharia e Construções · cobertura escondida na platibanda · pranchas e conferência de insertos",
-                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Piso e fundações"), pranchas=pranchas, conexoes=cx,
+                        pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Rufos e acabamentos", "Piso e fundações"), pranchas=pranchas, conexoes=cx,
                         logo_cliente=AQ / "pranchas" / "logos" / "marques.jpg", cliente="Marques Engenharia e Construções")
     for g, d in q.items():
         print(f"{g:26s} {d['pecas']:4d} peças  {d['volume_m3']:8.1f} m³")

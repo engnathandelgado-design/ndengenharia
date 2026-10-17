@@ -31,10 +31,14 @@ PINO_TS = 0.0775                                                         # rev04
 NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo da I130 / pilar central (x 19,585 → 19,685)
 H_PAC = H_TS + Z_TERCA + H_TERCA + sum(PACOTE.values())
 # cargas da cobertura (kN/m²) — rev03; pesos de catálogo usuais (conferir com os fornecedores da telha e dos painéis)
-CARGAS_COB = dict(zipada_065=0.065, la_rocha_40=0.025, tp40_050=0.048, espacadores_fixacoes=0.020, paineis_solares=0.150,
+# rev06c (Nathan, 17/10/2026): sistema Kingspan Isoeste "zipada dupla com lã de rocha" (manual de instalação, p. 27–33):
+# 1º TP-40 STD 980 #0,65 fixada na terça (PB 12-14 × 3/4" P03, 4 por telha por terça); 2º perfil cartola #0,65 sobre cada terça
+# (costura PB 1/4"-14 × 7/8" P01 a cada 2 ondas); 3º lã de rocha FSR 32 (40 mm); 4º clipe fixo/deslizante #0,65 na cartola
+# (2 PB 12-14 × 3/4" por clipe); 5º zipada 455 #0,50. Pesos por m² de cobertura (aço 7850 kg/m³ × desenvolvimento).
+CARGAS_COB = dict(zipada_050=0.051, la_rocha_fsr32_40=0.013, tp40_065=0.062, cartola_clipes_fixacoes=0.011, paineis_solares=0.150,
                   instalacoes=0.100, sobrecarga=0.25)
 CARGAS_COB["g_total_sem_terca"] = round(sum(v for k, v in CARGAS_COB.items() if k != "sobrecarga"), 3)
-CARGAS_COB["g_favoravel_sucao"] = round(CARGAS_COB["zipada_065"] + CARGAS_COB["la_rocha_40"] + CARGAS_COB["tp40_050"] + CARGAS_COB["espacadores_fixacoes"], 3)
+CARGAS_COB["g_favoravel_sucao"] = round(CARGAS_COB["zipada_050"] + CARGAS_COB["la_rocha_fsr32_40"] + CARGAS_COB["tp40_065"] + CARGAS_COB["cartola_clipes_fixacoes"], 3)
 Z0_TS = math.floor((PLATIBANDA - FOLGA_PLAT - H_PAC / math.cos(math.atan(I)) - I * X_FIM) * 200) / 200     # arredonda para baixo (5 mm)
 
 

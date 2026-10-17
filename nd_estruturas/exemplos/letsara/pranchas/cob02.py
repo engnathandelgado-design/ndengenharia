@@ -8,7 +8,7 @@ from prancha_nd import Prancha
 from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, FOLGA, Z_COR, Z_DIAG, Z_X, NOS_X, NOS_X_D, ORE_S, ORE_Y, PAINEL_X, furos_x,
                        H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, A_TR, IDX_2A, NT, marca, cabecalho, CB, LG, f)
 
-pr = Prancha("A1", cabecalho("ND-LET-COB02", "05/05", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
+pr = Prancha("A1", cabecalho("ND-LET-COB02", "02/04", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
 pr.revisao("01", pr.dados["data"], "desdobrada da COB01; correntes no meio da alma; diagonais no ST-1")
 pr.revisao("02", pr.dados["data"], "X de nó a nó com esticador (sem CH-X); tirantes rígidos L 51; detalhes no padrão de referência")
 pr.revisao("03", "14/10/2026", "17 TERÇAS POR MEIA ÁGUA (c/1,20 m); ORELHAS OR-X PARAFUSADAS NAS ESPERAS ES-2 (SEM SOLDA)")

@@ -31,7 +31,7 @@ LN = PROJ = 0.27                      # nariz do dente = projeção do consolo (
 A_DENTE = FOLGA + LN - X_PAD
 TRIB = 9.63 / 2                       # faixa de cobertura que apoia na VB (vão de oitão L1–L2)
 G_TERCA, Q_COB = 0.495, 0.25          # kN/m² (rev03, com painéis solares) e sobrecarga de cobertura
-G_FAV, CP_SUC, Q0 = 0.158 + 0.087, -1.6, 0.874   # sucção: telha+isolamento+fixações+terça; faixa de borda; kN/m²
+G_FAV, CP_SUC, Q0 = json.loads((Path(__file__).parent / "ligacoes.json").read_text(encoding="utf-8"))["cargas_cob"]["g_favoravel_sucao"] + 0.087, -1.6, 0.874   # rev06c: Kingspan zipada dupla (ligacoes.py) + terça
 N_TRACAO = 95.8                       # kN, ELU-1 vento x (modelo_global_r04)
 ADOTADO = (0.15, 0.60, 0.30)          # rev04: VB 15 × 60, dente 30 (Nathan, 16/10/2026)
 PRECO = dict(concreto=1800.0, aco=9.0)

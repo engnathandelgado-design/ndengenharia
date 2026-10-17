@@ -6,8 +6,8 @@ from cob_comum import cabecalho, XT, PASSO, H_TERCA, B_TERCA, B_INF, D_SUP, D_IN
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CH = json.load(open(AQ + "calha.json"))
-pr = Prancha("A1", cabecalho("ND-LET-COB03", "06/06", "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS"))
-pr.revisao("06", "17/10/2026", "EMISSÃO: CALHA 300×150 COM 40 cm LIVRES NO EIXO A; 9 DESCIDAS Ø200; RUFOS RF-1 A RF-4")
+pr = Prancha("A1", cabecalho("ND-LET-COB03", "03/04", "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS"))
+pr.revisao("06", "18/10/2026", "CALHA 300×150 NO EIXO A; 9 DESCIDAS Ø200; RUFOS TRANSFERIDOS PARA A ND-LET-COB04 (KINGSPAN)")
 C45 = math.cos(math.radians(45))
 I3 = 0.03
 ZREF = 8000                                             # níveis desenhados a partir de +8,000
@@ -15,7 +15,7 @@ Z0 = LG["Z0_TS"] * 1000 - ZREF                          # fundo da TS-01 em x = 
 zts = lambda x: Z0 + I3 * x + 900                       # topo da TS-01 (mm, x do eixo A)
 X_T0 = XT[0]                                            # alma da 1ª terça (490)
 ZT0 = zts(X_T0 + 27) + 10                               # fundo da 1ª terça
-PAC = [("TP40 0,50", 40), ("lã de rocha 40", 40), ("zipada 0,65", 70), ("painel solar", 110)]
+PAC = [("TP-40 #0,65", 40), ("cartola + lã FSR 32", 40), ("zipada 455 #0,50", 70), ("painel solar", 110)]
 BC, HC = 300, 150
 XC0 = 20                                                # face de trás da calha (20 da cabeça do pilar)
 Z_TOP_CALHA = ZT0 + H_TERCA - I3 * (X_T0 - 250) - 40    # borda da calha 40 mm abaixo da face inferior da telha na ponta
@@ -51,7 +51,7 @@ def suporte(v):
 
 
 # ------------------------------------------------------------------ CORTE 1 — ENTRE PILARES (placa da platibanda)
-c1 = pr.vista("CORTE 1", (140, 300), 5, titulo="CORTE 1 — CALHA NO EIXO A, ENTRE PILARES", subtitulo="seção transversal à calha; placa de 10 cm por fora dos pilares (topo e RF-1 no det. 4); cotas em mm")
+c1 = pr.vista("CORTE 1", (140, 300), 5, titulo="CORTE 1 — CALHA NO EIXO A, ENTRE PILARES", subtitulo="seção transversal à calha; placa de 10 cm por fora dos pilares (rufos na ND-LET-COB04); cotas em mm")
 ZB = Z_FUNDO - 250
 ZTOPO = Z_TOP_CALHA + 650
 c1.ret(-400, ZB, 100, ZTOPO - ZB, "CORTADO"); c1.hachura([(-400, ZB), (-300, ZB), (-300, ZTOPO), (-400, ZTOPO)], "AR-CONC", 0.03)
@@ -121,14 +121,6 @@ for zz in (-15, 25):
     d.circulo((0, zz), 5, "METALICA")
 d.chamada((0, 25), (14, 10), "2 M10 + arruelas na alma da 1ª terça (furos Ø12 de fábrica)")
 d.chamada((-300, -(ZT0 + 60 - Z_FUNDO + 6)), (10, -16), "berço da calha (dobrado, sem solda)")
-rr = pr.vista("RUFOS", (330, 120), 10, titulo="DETALHE 4 — RUFOS RF-1 A RF-4", subtitulo="chapa galvanizada 0,65 com pintura eletrostática; vedação com selante PU")
-for k, (nome, pts) in enumerate((("RF-1", [(0, -60), (0, 8), (420, 8), (420, -60)]), ("RF-2", [(0, 60), (0, 0), (320, -30), (320, -100)]),
-                                 ("RF-3", [(0, 200), (0, 0), (220, -7)]), ("RF-4", [(0, 200), (0, 0), (150, 0)]))):
-    x0 = k * 560
-    rr.poli([(x0 + a, b) for a, b in pts], "METALICA")
-    rr.texto((x0 + 150, -160), nome, "nota", "TOP_CENTER")
-rr.texto((0, 260), "RF-1 capa da platibanda · RF-2 fechamento placa→calha (eixo A) · RF-3 encosto do lado alto (eixo E) · RF-4 encosto lateral (fachadas 1 e 9)", "min", "BOTTOM_LEFT")
-
 # ------------------------------------------------------------------ tabelas e notas
 x0, y = pr.quadro[2] - 196, pr.quadro[3] - 6
 cc, ca, de, su = CH["contribuicao"], CH["calha"], CH["descidas"], CH["suportes"]
@@ -137,19 +129,15 @@ lin = [["CA-1", f"{ca['L_m']:.0f} m", f"calha {BC}×{HC}, chapa galv. 1,25, dese
        ["SC-1", f"{su['n']}", "suporte ferro chato 38×6,35 A36 galv. + 2 M10", "c/750, na 1ª terça"],
        ["BO-1", f"{de['n']}", "bocal de saída Ø200 com ralo hemisférico", "junto aos pilares P1"],
        ["DE-1", f"{math.ceil(L_desc / 6)} barras", f"tubo PVC Ø200 série R (≈ {L_desc:.0f} m em barras de 6 m)".replace(".", ","), "descidas até a caixa de areia"],
-       ["EX-1", "2", "extravasor Ø100 (tubo + flange) através da placa", "pontas da calha, fachadas 1 e 9"],
-       ["RF-1", f"{2 * 79.35 + 2 * 39.5 + 1:.0f} m", "rufo de capa da platibanda, desenv. 550", "topo das placas e cabeças"],
-       ["RF-2", f"{79.35 - 9 * 0.4:.0f} m", "rufo de fechamento placa → calha, desenv. 450", "eixo A, entre pilares"],
-       ["RF-3", "80 m", "rufo de encosto, desenv. 350", "eixo E (lado alto)"],
-       ["RF-4", "80 m", "rufo de encosto lateral, desenv. 350", "fachadas 1 e 9"]]
-y = pr.tabela(x0, y, "LISTA DE MATERIAIS — CALHA, DESCIDAS E RUFOS", ["MARCA", "QT", "DESCRIÇÃO", "ONDE"], lin, [16, 24, 100, 56])
+       ["EX-1", "2", "extravasor Ø100 (tubo + flange) através da placa", "pontas da calha, fachadas 1 e 9"]]
+y = pr.tabela(x0, y, "LISTA DE MATERIAIS — CALHA E DESCIDAS (RUFOS NA ND-LET-COB04)", ["MARCA", "QT", "DESCRIÇÃO", "ONDE"], lin, [16, 24, 100, 56])
 notas = [f"Dimensionamento (NBR 10844:1989): intensidade I = {CH['chuva']['I_mm_h']:.0f} mm/h (T = 5 anos) — CONFIRMAR com a tabela 5 / dados da cidade da obra; área de contribuição {cc['A_por_m_m2']} m² por metro de calha (água de 39,50 m a 3 %), {cc['area_total_m2']:.0f} m² no total.",
          f"Calha {BC} × {HC}, i = 0,5 %, n = 0,011: capacidade {ca['Q_cap_L_s']} L/s com lâmina de 100 mm ≥ {cc['Q_lado_L_s']} L/s que chega a cada saída por lado (uso {ca['uso']}). Fundo com caimento de 0,5 % para as saídas (25 mm por meio vão), dado pelos berços dos SC-1.",
          f"Descidas Ø200 nas 9 linhas: capacidade da saída {de['Q_cap_L_s']} L/s ≥ {cc['Q_saida_L_s']} L/s (uso {de['uso']}); descida aparente ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01), presa por abraçadeiras em buchas, até a caixa de areia (projeto de drenagem).",
          "Espaço livre de 40 cm entre a face da cabeça dos pilares P1 e a aba da 1ª terça (ND-LET-COB01); a calha fica de 20 a 320 mm do eixo A. A telha avança 150 mm além da aba da terça, com pingadeira 100 mm dentro da calha.",
          "Extravasores Ø100 nas duas pontas da calha (fachadas 1 e 9), 50 mm abaixo da borda, para a água sair pela fachada se uma saída entupir.",
          "Juntas de dilatação da calha a cada ≈ 20 m (sobre as linhas 3, 5 e 7), com tampa e selante; emendas rebitadas e vedadas com PU (sem solda).",
-         "Lado alto (eixo E): a última terça fica a 21,5 cm da cabeça do P2; telha arrematada pelo rufo de encosto RF-3. Fachadas 1 e 9: rufo lateral RF-4.",
+         "Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada dupla com lã de rocha): ND-LET-COB04 (RF-2/RF-2C da calha no det. 1 e 2 de lá).",
          "Carga da calha cheia na 1ª terça (0,12 kN/m de chapa + 0,45 kN/m de água) considerada no modelo integrado r05.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 190)

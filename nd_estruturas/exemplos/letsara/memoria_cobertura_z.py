@@ -158,6 +158,17 @@ for k, d in ch.items():
     lin.append([k, d["esperas"], f(d.get("interacao", d.get("uso")), 3)])
 E += [tab(lin, [45, 95, 30])]
 
+FT = json.loads((AQ / "fixacao_telhas.json").read_text(encoding="utf-8"))
+E += [Paragraph("7a. Telhas e fixações — Kingspan zipada dupla com lã de rocha (rev06c)", T2),
+      P(f"{FT['sistema']} (manual de instalação da zipada, p. 28). Cargas: zipada 0,051, lã FSR 32 0,013, TP-40 #0,65 0,062, cartola e clipes 0,011 kN/m² "
+        f"(g favorável na sucção {f(FT['g_fav_kNm2'], 3)} kN/m², sem painéis). Fixações à sucção por linha de terça (s = {f(FT['passo_tercas_m'], 3)} m), "
+        "parafusos auto-atarraxantes pela NBR 14762:2010 10.6 / AISI S100-16 J4.4 (arrancamento 0,85·t·d·fu, rasgamento 1,5·t·dw·fu, γ = 2,0; fu 360 MPa da chapa adotado):")]
+lin = [["Ligação", "zona", "F (kN)", "Rd (kN)", "uso"]]
+for zona, zz in FT["zonas"].items():
+    for k, v in zz["ligacoes"].items():
+        lin.append([k, zona, f(v["F_kN"], 2), f(v["Rd_kN"], 2), f(v["uso"], 2)])
+E += [tab(lin, [95, 20, 18, 18, 15]), P(FT["conclusao"] + " Adotado nas pranchas (COB01/COB04): costura da cartola em todas as ondas.")]
+
 E += [Paragraph("8. Observações", T2),
       P(f"Peças: cada terça vence um vão e passa {pc['transpasse_cada_lado_mm']} mm além do eixo do apoio interno (nas fachadas {pc['extensao_fachada_mm']} mm); "
         f"maior peça {pc['L_max_mm']} mm (≤ 12 m, transporte). Furação de fábrica METSEC (E 55 / F 52; correntes no meio da alma)."),
