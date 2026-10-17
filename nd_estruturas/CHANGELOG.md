@@ -4,6 +4,8 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Letsara rev06: IFC com as ligações como na execução — ST-1P/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas (gancho, porcas, grampos), OR-X com ES-2, X com esticador, CL-1 + trilho TR-1 + bucha BR-1 e CA-1 + luvas IB-1 das placas (PP00 det. 2 e 4), CL-P dos pilares dos portões; peças metálicas como aço no IFC.
+
 - Letsara rev06 (DEC-024, DEC-025): modelo integrado r05 com toda a estrutura e o vento da NBR 6123 (`nd_estruturas.vento_nbr6123`, `modelo_integrado_r05.py`, validação), estudo de 14 arranjos de X; X nos vãos 4-5 a 8-9, 15 espaços de terça com calha no eixo A (`calc_calha.py`, COB03 nova), ST-1V-R no eixo 9, grampos nas ES-1, pilares dos portões PG-01 a PG-04 ligados à TS-01; `calc_cobertura_metalica.py` lendo o modelo integrado; COB01/02, TS-01, VB01, PL-07/08, fechamento, BIM (X, calha, descidas), memória MC06 rev06, listas e PDFs rev06.
 
 - Letsara rev05 (DEC-023): terças Z 302×90/82×2,30 METSEC contínuas por transpasse (METLAP), sem mão-francesa — `calc_cobertura_metalica.py` com MEF de viga contínua, transpasse 450 + 450, apoio 4 M12 e emendas 2 M12; COB01/COB02 refeitas (planta com peças e transpasses, apoio na TS-01 e na VB, emenda, seção e furação do Z); ES-3/CMF-1/MF-1 retirados das TS-01 e VB; BIM com o polígono real do Z, transpasses, ST-1V e 2176 parafusos; memória ND-LET-MC06; entregas rev05.

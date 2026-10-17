@@ -66,6 +66,62 @@ from lajes_placas import paineis_mez
 PAINEIS_MEZ = paineis_mez()[0]                                                   # placas: mesma fonte das pranchas PP (vistas do R01)
 
 
+
+# ------------------------------------------------------------------ peças metálicas como executadas (rev06: iguais às pranchas)
+GM, GE, GP = "Ligações da cobertura", "Esperas e insertos embutidos", "Fixação das placas"
+
+
+def caixa(m, marca, x0, x1, y0, y1, z0, z1, grupo, obs=""):
+    """Chapa / barra como prisma alinhado aos eixos (aço)."""
+    xa, xb, ya, yb, za, zb = min(x0, x1), max(x0, x1), min(y0, y1), max(y0, y1), min(z0, z1), max(z0, z1)
+    if zb - za < 1e-4 or xb - xa < 1e-4 or yb - ya < 1e-4:
+        return None
+    return m.linear("inserto", marca, PerfilRetangular(round(xb - xa, 5), round(yb - ya, 5)), ((xa + xb) / 2, (ya + yb) / 2, za),
+                    ((xa + xb) / 2, (ya + yb) / 2, zb), grupo, cima=(0.0, 1.0, 0.0), material="aco", obs=obs)
+
+
+def barra_v(m, marca, x, y, z0, z1, d, grupo):
+    return caixa(m, marca, x - d / 2, x + d / 2, y - d / 2, y + d / 2, z0, z1, grupo)
+
+
+def espera(m, marca, x, y, zc, d, hef, sai, grupo=GE, grampo=False, porcas=True):
+    """Barra roscada com gancho embutida (hef) + saliência; porca de nivelamento, porca e contraporca; grampo U Ø10 opcional."""
+    barra_v(m, marca, x, y, zc - hef, zc + sai, d, grupo)
+    caixa(m, marca + " (gancho)", x, x + 0.060, y - d / 2, y + d / 2, zc - hef, zc - hef + d, grupo)
+    if porcas:
+        for z_ in (zc + 0.0095, zc + 0.0095 + 0.014):
+            caixa(m, f"porca M{d*1000:.0f}", x - 0.6 * d - 0.004, x + 0.6 * d + 0.004, y - 0.6 * d - 0.004, y + 0.6 * d + 0.004, z_, z_ + 0.014, GM)
+    if grampo:
+        for dx in (-0.045, 0.045):
+            barra_v(m, "grampo U Ø10", x + dx, y, zc - 0.20, zc - 0.03, 0.010, grupo)
+        caixa(m, "grampo U Ø10", x - 0.045, x + 0.045, y - 0.005, y + 0.005, zc - 0.20, zc - 0.19, grupo)
+
+
+def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, grampo=False):
+    """ST-1P / ST-1V / ST-1V-R / ST-1F: chapa dobrada 9,5 × 220 — aba vertical 290 contra a alma da terça (lado `lado` da
+    alma) e aba horizontal 150 sobre o concreto, presa em `esperas` (x, y relativos à alma e ao eixo do apoio)."""
+    t = 0.0095
+    caixa(m, marca, xw, xw + lado * t, y - 0.11, y + 0.11, zc, zc + 0.290, GM, obs="chapa dobrada 9,5 × 220 A36 galv., aba vertical 290")
+    caixa(m, marca, xw + lado * t, xw + lado * 0.150, y - 0.11, y + 0.11, zc, zc + t, GM, obs="aba horizontal 150, oblongos")
+    for dx, dy in esperas:
+        espera(m, marca.split()[0].replace("ST-1P", "ES-1").replace("ST-1V-R", "ES-1R").replace("ST-1V", "ES-1V").replace("ST-1F", "ES-1F"),
+               xw + dx, y + dy, zc, d, hef, 0.12 if d < 0.02 else 0.12, grampo=grampo)
+
+
+def orelha(m, x, y, zc, ux, uy, h_furo):
+    """OR-X L 102×76×6,3 L = 80 girada ⊥ ao tirante (direção ux, uy saindo do nó), na espera ES-2 a 45 mm atrás."""
+    px, py = -uy, ux
+    w = 0.040
+    a, b = (x + px * w, y + py * w, zc), (x - px * w, y - py * w, zc)
+    m.linear("inserto", "OR-X L 102×76×6,3 L=80", PerfilRetangular(0.0063, 0.102, "aba 102"), (a[0], a[1], zc + 0.051), (b[0], b[1], zc + 0.051), GM,
+             cima=(0, 0, 1), material="aco", obs=f"furo Ø18 a {h_furo*1000:.0f} do concreto")
+    cx, cy = x - ux * 0.038, y - uy * 0.038
+    m.linear("inserto", "OR-X L 102×76×6,3 L=80", PerfilRetangular(0.076, 0.0063, "aba 76"), (cx + px * w, cy + py * w, zc + 0.00315),
+             (cx - px * w, cy - py * w, zc + 0.00315), GM, cima=(0, 0, 1), material="aco")
+    espera(m, "ES-2", x - ux * 0.045, y - uy * 0.045, zc, 0.016, 0.110, 0.05, grampo=True, porcas=False)
+    caixa(m, "porca M16", x - ux * 0.045 - 0.014, x - ux * 0.045 + 0.014, y - uy * 0.045 - 0.014, y - uy * 0.045 + 0.014, zc + 0.0063, zc + 0.0203, GM)
+
+
 def montar() -> ModeloBIM:
     m = ModeloBIM("Letsara — Pavilhão pré-moldado", obra="Obra Letsara (Marques Engenharia e Construções)")
     ass_ts = lambda x_pino: zf(x_pino) + H_DENTE * C3 - 0.01               # topo do consolo que recebe a TS-01
@@ -100,8 +156,14 @@ def montar() -> ModeloBIM:
     for nome, x, b_ in (("P9 (PG-01)", 9.87, 0.40), ("P10 (PG-02)", 15.195, 0.25), ("P10 (PG-04)", 24.305, 0.25), ("P12 (PG-03)", 29.63, 0.40)):
         zt_ = round(zf(x) - 0.02, 2)
         m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, b_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), topo +{zt_:.2f}; portão livre até +7,40")
+        yl4 = Y_LIN[LINHA_PORTOES]
         for sx in (-1, 1):
-            m.bloco("inserto", "CL-P L 102×102×9,5 L=250 (ligação em y à TS-01)", (x + sx * (b_ / 2 + 0.005), Y_LIN[LINHA_PORTOES], zf(x)), 0.010, 0.25, 0.102, "Insertos metálicos")
+            xf_ = x + sx * b_ / 2
+            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.0095, yl4 - 0.125, yl4 + 0.125, zf(x) - 0.102, zf(x), GM, obs="aba no pilar, 1 M16 em oblongo vertical")
+            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.102, yl4 - 0.125, yl4 + 0.125, zf(x) - 0.0095, zf(x), GM, obs="aba sob a TS-01A, 2 M16 nos IT-P")
+            m.linear("inserto", "M16 8.8 (IL-1)", PerfilRetangular(0.016, 0.016), (xf_ - sx * 0.10, yl4, zf(x) - 0.06), (xf_ + sx * 0.03, yl4, zf(x) - 0.06), GM, material="aco")
+            for dy in (-0.0975, 0.0975):
+                barra_v(m, "M16 8.8 + IT-P (fundo da TS-01A)", xf_ + sx * 0.06, yl4 + dy, zf(x) - 0.03, zf(x) + 0.08, 0.016, GM)
 
     # 2. vigas centrais I130 (comprimentos do R01) e consolos CP-I130 / CV-TS
     zc = Z_I130_TOPO - H_I130 / 2
@@ -188,7 +250,13 @@ def montar() -> ModeloBIM:
                         m.linear("inserto", "M12 8.8 (apoio/emenda da terça)", PARAF, (xw - 0.012, yl + dy, zb + zz), (xw + 0.016, yl + dy, zb + zz),
                                  "Parafusos da cobertura", material="aco")
                 if j in (0, n_v):
-                    m.bloco("inserto", "ST-1V (chapa dobrada) nas esperas ES-1V da VB", (xw - 0.075, yl, zb - 0.010 + 0.30), 0.15, 0.22, 0.30, "Insertos metálicos")
+                    zc = zb - 0.010
+                    if xw > LARG - 0.325 - 0.04:                     # última terça do lado E: no recuo do pilar de canto (ST-1F espelhado)
+                        suporte_st(m, f"ST-1F (pilar de canto, eixo {j+1})", xw, yl, zc, lado=+1, esperas=((0.075, 0.0), (0.135, 0.0)), d=0.020, hef=0.150)
+                    elif j == n_v:                                   # eixo 9: ST-1V-R, 2 M20 hef 400 + grampo
+                        suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
+                    else:
+                        suporte_st(m, "ST-1V (VB eixo 1)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.016, hef=0.150)
     for k in range(int(COMP // 1.0)):
         y = 0.5 + k * 1.0
         xa_, xb_ = 0.25, LARG - 0.06                          # rev06: telha entra 150 na calha (eixo A); no eixo E sob o rufo RF-3
@@ -204,7 +272,15 @@ def montar() -> ModeloBIM:
             sb = 0.200 if k + 1 == len(Y_LIN) - 1 else CT["s_orelha"]
             for xa, xb in zip(meia[:-1], meia[1:]):
                 for (x1, x2), dz in (((xa + CT["s_orelha"], xb - sb), CT["z_baixo"]), ((xb - CT["s_orelha"], xa + sb), CT["z_alto"])):
-                    m.linear("inserto", "X Ø16 A36 + esticador", BAR16, (x1, ya, zf(x1) + H_TS + dz), (x2, yb, zf(x2) + H_TS + dz), "Contraventamento", material="aco")
+                    pa, pb = (x1, ya, zf(x1) + H_TS + dz), (x2, yb, zf(x2) + H_TS + dz)
+                    m.linear("inserto", "X Ø16 A36 (trecho A + B)", BAR16, pa, pb, "Contraventamento", material="aco")
+                    L_ = math.dist(pa, pb); ux, uy = (pb[0] - pa[0]) / L_, (pb[1] - pa[1]) / L_
+                    e0 = [pa[i] + (pb[i] - pa[i]) * 9.0 / L_ for i in range(3)]
+                    m.linear("inserto", "esticador M16", PerfilRetangular(0.036, 0.036), e0, [e0[i] + (pb[i] - pa[i]) * 0.2 / L_ for i in range(3)],
+                             "Contraventamento", material="aco")
+                    zc_b = zf(x2) + H_TS if k + 1 < len(Y_LIN) - 1 else zf(x2) + H_TS     # VB do eixo 9: topo da VB = topo da TS-01
+                    orelha(m, x1, ya, zf(x1) + H_TS, ux, uy, dz)
+                    orelha(m, x2, yb, zc_b, -ux, -uy, dz)
     # calha do eixo A (rev06, calc_calha.py / ND-LET-COB03): 300 × 150, de x = 0,02 a 0,32, borda 40 mm abaixo da telha
     zt_c = zf(0.517) + H_TS + 0.010 + 0.302 - 0.03 * (0.49 - 0.25) - 0.040
     t_c = 0.003
@@ -289,17 +365,40 @@ def montar() -> ModeloBIM:
         for xa, _ in PONTAS:
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027
-                m.bloco("inserto", "ST-1P (chapa dobrada) nas esperas ES-1", (x - 0.075, y, zf(x) + H_TS + 0.15), 0.15, 0.22, 0.30, INS)
-    for V, (pecas, ca1, _) in FCH.DADOS.items():                            # CL-1 (trilho TR-1 do pilar + bucha BR-1 da placa), sem solda
+                suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
+    # rev06: fixação das placas como no PP00 — det. 2 (CL-1 + trilho TR-1 + bucha BR-1) e det. 4 (CA-1 + luvas IB-1)
+    def rasgo(V, c):
+        """normal da parede: (eixo do pilar, sentido para fora) a partir da posição da placa."""
+        return (1 if (c > COMP / 2 if pos[V][0] == "x" else c > LARG / 2) else -1)
+    for V, (pecas, ca1, _) in FCH.DADOS.items():
         ax, c = pos[V]
+        out = rasgo(V, c)
+        y_face = c - out * (0.025 + 0.05)                                  # face do pilar do lado das placas
+        P_ = lambda u, v, z: (u, y_face - out * v, z) if ax == "x" else (y_face - out * v, u, z)
+        def cx(u0, u1, v0, v1, z0, z1, marca, grupo=GP):
+            (a0, b0, _), (a1, b1, _) = P_(u0, v0, 0), P_(u1, v1, 0)
+            caixa(m, marca, a0, a1, b0, b1, z0, z1, grupo)
+        pil = FCH.VISTAS[V]["pil"]
         for pc in pecas:
-            for s in (pc["s0"] / 1000 + 0.255, pc["s1"] / 1000 - 0.255):
-                z = pc["z1"] / 1000 - 0.15
-                pt = (s, c, z) if ax == "x" else (c, s, z)
-                m.bloco("inserto", "CL-1 L 102×102×12,5 (TR-1 + BR-1)", pt, 0.15, 0.10, 0.10, INS)
+            b = pc["bay"]
+            for (s_ax, b_w, d) in ((pil[b][0], pil[b][1], +1), (pil[b + 1][0], pil[b + 1][1], -1)):
+                uf = (s_ax + d * b_w / 2) / 1000                              # face lateral do pilar
+                z1 = pc["z1"] / 1000 - 0.15 + 0.075; z0 = z1 - 0.150
+                cx(uf, uf + d * 0.0125, -0.025, 0.077, z0, z1, "CL-1 L 102×102×12,5 L=150")       # aba na face lateral do pilar
+                cx(uf, uf + d * 0.102, -0.025, -0.0125, z0, z1, "CL-1 L 102×102×12,5 L=150")       # aba na placa
+                cx(uf - d * 0.022, uf, 0.040, 0.080, z1 - 0.20, z1 + 0.05, "TR-1 trilho 40/22 L=250 (pilar)", GE)
+                m.linear("inserto", "parafuso T M16 8.8 (TR-1)", PerfilRetangular(0.016, 0.016), P_(uf - d * 0.01, 0.060, (z0 + z1) / 2),
+                         P_(uf + d * 0.03, 0.060, (z0 + z1) / 2), GP, material="aco")
+                ub = uf + d * 0.060
+                m.linear("inserto", "M16 8.8 + bucha BR-1 (placa)", PerfilRetangular(0.016, 0.016), P_(ub, -0.095, (z0 + z1) / 2),
+                         P_(ub, 0.0, (z0 + z1) / 2), GP, material="aco")
         for (s, z0) in ca1:
-            pt = (s / 1000, c, z0 / 1000) if ax == "x" else (c, s / 1000, z0 / 1000)
-            m.bloco("inserto", "CA-1 L 152×102×19 (2 M20 em luvas IB-1)", pt, 0.30, 0.15, 0.10, INS)
+            u, zt = s / 1000, z0 / 1000 - 0.010                             # topo do CA-1 (neoprene de 10 mm sob a placa)
+            cx(u - 0.15, u + 0.15, -0.152, 0.0, zt - 0.019, zt, "CA-1 L 152×102×19 L=300")         # aba de assento
+            cx(u - 0.15, u + 0.15, -0.019, 0.0, zt - 0.102, zt, "CA-1 L 152×102×19 L=300")         # aba no pilar
+            cx(u - 0.15, u + 0.15, -0.135, -0.025, zt, zt + 0.010, "neoprene 100 × 150 × 10")
+            for du in (-0.075, 0.075):
+                m.linear("inserto", "M20 8.8 + luva IB-1", PerfilRetangular(0.020, 0.020), P_(u + du, -0.035, zt - 0.06), P_(u + du, 0.40, zt - 0.06), GE, material="aco")
 
     # 8. piso e fundações (indicativos): piso de concreto 15 cm e blocos de fundação com cálice sob cada pilar
     m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(LARG + 1.0, 0.15), (LARG / 2, -0.5, -0.075), (LARG / 2, COMP + 0.5, -0.075), "Piso e fundações")
@@ -317,7 +416,7 @@ def montar() -> ModeloBIM:
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
     m.pendente("TS-01 sem dentes: apoio 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e 16,25 cm no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
     m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas com trilho TR-1 + bucha BR-1 + CL-1 e consolo CA-1 parafusado.")
-    m.pendente("Terças, laje, consolos e pacote da cobertura como envelope; X Ø16 modelado (barras retas de orelha a orelha); correntes, tirantes, rufos e orelhas só nas pranchas COB01 a COB03.")
+    m.pendente("Ligações modeladas como na execução (COB01/COB02, PP00): ST-1P/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; OR-X com ES-2; X Ø16 com esticador; CL-1 + TR-1 + BR-1 e CA-1 + IB-1 das placas; CL-P dos pilares dos portões. Correntes, tirantes rígidos e rufos só nas pranchas.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
@@ -352,8 +451,8 @@ if __name__ == "__main__":
                 continue
             doc = pymupdf.open(arq)
             for k, pg in enumerate(doc):
-                pix = pg.get_pixmap(dpi=int(1800 / pg.rect.width * 72))
-                img = pix.tobytes("jpeg", jpg_quality=72)
+                pix = pg.get_pixmap(dpi=int(1500 / pg.rect.width * 72))
+                img = pix.tobytes("jpeg", jpg_quality=60)
                 pranchas.append(dict(nome=nome + (f" ({k + 1}/{len(doc)})" if len(doc) > 1 else ""), desc=desc,
                                      img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
