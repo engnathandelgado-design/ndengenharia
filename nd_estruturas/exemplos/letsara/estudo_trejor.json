@@ -1,0 +1,93 @@
+{
+ "placa": {
+  "e_mm": 100.0,
+  "cordoalhas": "8 Ø12,7, eixo a 26,4 mm das faces",
+  "z_cordoalhas_m": [
+   0.156,
+   0.469,
+   0.781,
+   1.094
+  ],
+  "cobrimento_mm": 20.0
+ },
+ "dim_predimensionamento": {
+  "tsa": {
+   "b": 0.12,
+   "h": 0.26,
+   "t": 0.0125,
+   "pino": 0.016,
+   "hef": 0.15,
+   "rosca": "2 buchas M20"
+  },
+  "console": {
+   "b": 0.11,
+   "t_costas": 0.016,
+   "h_costas": 0.22,
+   "t_aba": 0.0125,
+   "h_braco": 0.1,
+   "nariz": 0.055,
+   "paraf_sup": "M20",
+   "paraf_frontal": "M16"
+  },
+  "nicho": {
+   "b": 0.15,
+   "h": 0.2,
+   "prof": 0.06,
+   "t": 0.00475,
+   "t_apoio": 0.0125,
+   "z_centro": 0.312
+  },
+  "faca": {
+   "t": 0.025,
+   "h": 0.15,
+   "na_gaveta": 0.11,
+   "na_placa": 0.1,
+   "abertura": 0.02
+  },
+  "gaveta": {
+   "b": 0.04,
+   "h": 0.19,
+   "prof": 0.13,
+   "t": 0.00475
+  },
+  "nicho_faca": {
+   "b": 0.035,
+   "h": 0.18,
+   "prof": 0.115,
+   "t": 0.00475
+  }
+ },
+ "conferencia": {
+  "S1 console parafusado": {
+   "prof_mm": 60,
+   "concreto_atras_mm": 40,
+   "folga_cordoalha_mm": 50,
+   "corta_cordoalha": false,
+   "dist_ponta_placa_mm": 35,
+   "borda_pilar_mm": 25
+  },
+  "S2 console soldado": {
+   "prof_mm": 60,
+   "concreto_atras_mm": 40,
+   "folga_cordoalha_mm": 50,
+   "corta_cordoalha": false,
+   "dist_ponta_placa_mm": 35,
+   "borda_pilar_mm": 25
+  },
+  "S3 console concretado": {
+   "prof_mm": 60,
+   "concreto_atras_mm": 40,
+   "folga_cordoalha_mm": 50,
+   "corta_cordoalha": false,
+   "dist_ponta_placa_mm": 35,
+   "borda_pilar_mm": 25
+  },
+  "S4 console faca": {
+   "prof_mm": 115,
+   "parede_concreto_cada_lado_mm": 32,
+   "folga_cordoalha_mm": 35,
+   "corta_cordoalha": false,
+   "gaveta_ate_barra_canto_mm": -18
+  }
+ }
+}

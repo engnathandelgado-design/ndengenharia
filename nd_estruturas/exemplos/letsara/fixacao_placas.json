@@ -1,0 +1,492 @@
+{
+ "pacotes_suspensos": {
+  "placa com trava de pé PT-2 (pacote suspenso)": {
+   "PT2_d_kN": 4.96,
+   "pino_d_kN": 0.0,
+   "Ry_console_d_kN": 7.48,
+   "M_placa_d_kNm": 30.81
+  }
+ },
+ "mef_parede": {
+  "x_pinos_m": [
+   2.285,
+   7.88
+  ],
+  "modelo": "ShellMITC4, 8 placas 125 × 10 sobrepostas, consoles a 6 cm das pontas e 94 cm da base, 2 pinos por junta a 0,21 L + 15 cm das pontas",
+  "Ry_d_kN": 13.81,
+  "Ry_mao_sem_pino_kN": 12.29,
+  "Rz_d_kN": 22.2,
+  "Rz_k_kN": 15.86,
+  "F_pino_d_kN": 4.17,
+  "M_placa_d_kNm": 33.87,
+  "M_mao_kNm": 30.86,
+  "MRd_placa_kNm": 37.56,
+  "Mxx_local_max_kNm_m": 27.12,
+  "MRd_por_m": 30.05,
+  "uso_flexao_placa": 0.902,
+  "uy_k_mm": 90.3,
+  "por_fiada": {
+   "sobrepressao": [
+    {
+     "fiada": 1,
+     "lado": 0,
+     "Ry": 12.44,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 2,
+     "lado": 0,
+     "Ry": 12.43,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 3,
+     "lado": 0,
+     "Ry": 12.45,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 4,
+     "lado": 0,
+     "Ry": 12.39,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 5,
+     "lado": 0,
+     "Ry": 12.58,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 6,
+     "lado": 0,
+     "Ry": 11.98,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 7,
+     "lado": 0,
+     "Ry": 13.81,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 8,
+     "lado": 0,
+     "Ry": 8.27,
+     "Rz": 22.2
+    }
+   ],
+   "succao": [
+    {
+     "fiada": 1,
+     "lado": 0,
+     "Ry": -12.44,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 2,
+     "lado": 0,
+     "Ry": -12.43,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 3,
+     "lado": 0,
+     "Ry": -12.45,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 4,
+     "lado": 0,
+     "Ry": -12.39,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 5,
+     "lado": 0,
+     "Ry": -12.58,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 6,
+     "lado": 0,
+     "Ry": -11.98,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 7,
+     "lado": 0,
+     "Ry": -13.81,
+     "Rz": 22.2
+    },
+    {
+     "fiada": 8,
+     "lado": 0,
+     "Ry": -8.27,
+     "Rz": 22.2
+    }
+   ]
+  },
+  "pinos_kN": {
+   "sobrepressao": [
+    3.13,
+    3.13,
+    3.13,
+    3.13,
+    3.15,
+    3.15,
+    3.1,
+    3.1,
+    3.25,
+    3.25,
+    2.79,
+    2.79,
+    4.17,
+    4.17,
+    3.13,
+    3.13
+   ],
+   "succao": [
+    3.13,
+    3.13,
+    3.13,
+    3.13,
+    3.15,
+    3.15,
+    3.1,
+    3.1,
+    3.25,
+    3.25,
+    2.79,
+    2.79,
+    4.17,
+    4.17,
+    3.13,
+    3.13
+   ]
+  }
+ },
+ "dente_ponta": {
+  "Vd_kN": 26.8,
+  "Hd_kN": 10.72,
+  "nariz_mm": {
+   "h": 205,
+   "ln": 120,
+   "b": 100
+  },
+  "resultado": {
+   "NBR": {
+    "tipo": "muito curto (atrito-cisalhamento)",
+    "a_d": 0.324,
+    "As_tir": 60,
+    "As_sus": 62,
+    "As_cost": 30,
+    "tau_wd": 1.45,
+    "tau_lim": 5.14,
+    "ok_biela": true
+   },
+   "PCI": {
+    "a_mm": 90,
+    "As_flex": 66,
+    "As_cis": 43,
+    "As_min": 59,
+    "As": 66,
+    "Ah": 19,
+    "Ash": 71,
+    "Av": 19,
+    "Vmax_kN": 76.3,
+    "ok_Vmax": true,
+    "mu_e": 3.4
+   },
+   "adotado": {
+    "As_tir": 66,
+    "tirante": "2 Ø8 (101 mm²)",
+    "As_sus": 71,
+    "suspensao": "1 estribos Ø8 fechados (101 mm²) a até 102 mm da face reentrante",
+    "As_cost": 30,
+    "costura": "1 estribos horizontais Ø6.3 (62 mm²) nos 2/3 inferiores do dente",
+    "Av": 19,
+    "vertical_dente": "1 estribos verticais Ø10 no dente",
+    "ancoragem_tirante_mm": 1360,
+    "ok": true,
+    "n_tir": 2,
+    "d_tir": 8.0,
+    "n_sus": 1,
+    "d_sus": 8.0,
+    "n_cost": 1,
+    "d_cost": 6.3,
+    "n_v": 1
+   }
+  },
+  "obs": "nariz = concreto acima do nicho (teto a 104 cm); tirante horizontal Ø8 sobre o teto do nicho, suspensão em grampos Ø8 junto à face interna do nicho, até as cordoalhas de baixo"
+ },
+ "montagem_CS1_NC1": {
+  "folgas_mm": {
+   "aba atrás x dente (y)": 2.0,
+   "ponta x fundo (y)": 3.5,
+   "porca de nível na mesa (y)": 2.6,
+   "cabeça do nível sob o teto (y)": 4.6,
+   "cabeça do nível x abas (x)": 2.6,
+   "dente dentro da aba E (x)": 1.0,
+   "dente dentro da aba D (x)": 1.0,
+   "dente x porca de nível (x)": 13.6,
+   "aba x mesa com G mínimo (z)": 2.0,
+   "dente x teto com G mínimo (z)": 8.0,
+   "engate aba–dente com G máximo (z)": 10.0,
+   "cabeça x contraporca com G mínimo (z)": 7.2,
+   "rosca engatada do nível com G máximo (z)": 17.8,
+   "ponta do nível acima da face de baixo da mesa (z)": 1.0,
+   "porca frontal abaixo da mesa (z)": 3.6,
+   "prisioneiro: ponta de trás x costas (y)": 6.5,
+   "prisioneiro: rosca na porca com a máximo (y)": 7.2,
+   "janela de montagem G=40 (z)": 20.5,
+   "janela de montagem G=50 (z)": 20.5,
+   "janela de montagem G=60 (z)": 20.5
+  },
+  "janela_R_mm": {
+   "G=40": [
+    35.0,
+    55.5
+   ],
+   "G=50": [
+    25.0,
+    45.5
+   ],
+   "G=60": [
+    15.0,
+    35.5
+   ]
+  },
+  "obs": "R = altura do teto do nicho acima da posição final ao encostar a placa; tolerâncias a = 25 ± 5, G = 50 ± 10, x ± 5"
+ },
+ "console_mef": {
+  "peso + sobrepressão": {
+   "vm_max_MPa": 199.4,
+   "vm_p99_MPa": 135.5,
+   "flecha_mm": 0.041
+  },
+  "peso + sucção": {
+   "vm_max_MPa": 130.7,
+   "vm_p99_MPa": 98.0,
+   "flecha_mm": 0.055
+  },
+  "criterio": "von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = 314 MPa — NBR 8800:2008 5.1/6 (análise elástica)",
+  "uso": 0.432
+ },
+ "console_mao": {
+  "M_raiz_Nmm": 857568,
+  "sigma_almas_MPa": 42.3,
+  "tau_almas_MPa": 17.6,
+  "mesa_faixa_MPa": 229.0,
+  "obs": "mesa como faixa biapoiada nas almas (sem efeito de placa): limite superior do MEF"
+ },
+ "dentes_CS1": {
+  "peca": "2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas, filete 8 no contorno",
+  "F_por_dente_kN": 6.9,
+  "braco_mm": 27.0,
+  "sigma_MPa": 238.3,
+  "lim_MPa": 313.6,
+  "uso": 0.76,
+  "solda_MPa": 91.7,
+  "solda_lim_MPa": 215.6,
+  "uso_solda": 0.426
+ },
+ "solda": {
+  "filete_mm": 6.0,
+  "cordoes": "2 × 200 verticais",
+  "eletrodo": "E70XX",
+  "f_res_MPa": 50.5,
+  "fw_Rd_MPa": 215.6,
+  "uso": 0.234,
+  "obs": "solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda"
+ },
+ "parafusos_ajuste": {
+  "M16_nivel": {
+   "N_Sd_kN": 26.8,
+   "N_Rd_kN": 91.3,
+   "uso": 0.293
+  },
+  "M16_frontal": {
+   "N_Sd_kN": 13.8,
+   "N_Rd_kN": 64.2,
+   "uso": 0.215,
+   "solda_porca_kN": 63.4
+  },
+  "contato_teto_nicho": {
+   "obs": "cabeça do M16 de nível (dw 22,5) contra o teto 12,5 do nicho",
+   "sigma_MPa": 170.6,
+   "lim_MPa": 383.0
+  }
+ },
+ "CE1": {
+  "peca": "CE-1 380 × 330 × 16 A36 + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 no pilar",
+  "V_kN": 53.6,
+  "M_kNm": 3.0,
+  "T_linha_sup_kN": 24.5,
+  "phiN_linha_kN": 47.3,
+  "phiV_kN": 99.0,
+  "modo_V": "borda_paralela",
+  "modo_N": "cone",
+  "interacao": 0.883,
+  "ok": true,
+  "flexao_chapa": {
+   "t_mm": 16.0,
+   "sigma_MPa": 52.8,
+   "lim_MPa": 227.3
+  }
+ },
+ "pino_travamento": {
+  "peca": "PT-1 cartola Trejor (chapa dobrada 6,3 × 80, oblongo vertical 18 × 40) + 2 M16 8.8 nas luvas TSA M16 das duas placas; 2 por junta, ao lado das alças AL-P",
+  "F_d_kN": 4.17,
+  "Ft_M16_kN": 89.3,
+  "luva_phiN_kN": 14.0,
+  "modo": "cone",
+  "uso": 0.297,
+  "fc_usado": "fckj 25 MPa (montagem a favor da segurança)"
+ },
+ "trava_pe_PT2": {
+  "peca": "PT-2 L 102×102×9,5 A36 L=150 + 2 M16 8.8 (bucha BR-2 hef 100 na face lateral do pilar, bucha BR-1 hef 70 na placa), oblongos 18 × 40",
+  "F_d_kN": 4.96,
+  "M_aba_kNm": 0.248,
+  "MRd_aba_kNm": 0.513,
+  "uso_aba": 0.483,
+  "bucha_placa_phiN_kN": 20.5,
+  "bucha_pilar_phiV_kN": 7.1,
+  "modo_pilar": "borda",
+  "uso": 0.696
+ },
+ "nicho_NC1": {
+  "caixa": "teto 12,5 + base 9,5 + fundo 12,5 + 2 abas 12,5 × 38 (A572-50) + parede lateral 3 (A36, sem esforço), solda de oficina MIG, galvanizado a fogo, + 4 grampos U Ø6,3 A36 (c/c 32, a 31 mm da boca, dentro dos estribos N5 e N6)",
+  "fundo": {
+   "M_kNmm": 611.7,
+   "sigma_MPa": 195.7,
+   "lim_MPa": 313.6,
+   "uso": 0.624
+  },
+  "aba": {
+   "sigma_MPa": 243.0,
+   "largura_mm": 36.0,
+   "uso": 0.775
+  },
+  "parede": {
+   "t_mm": 3.0,
+   "obs": "sem esforço: as forças vão por teto, base e fundo; a parede só fecha o concreto na lateral do nicho"
+  },
+  "teto_compressao": {
+   "sigma_MPa": 4.7,
+   "fcd_MPa": 28.6
+  },
+  "sem_caixa_parede_40mm": {
+   "V_Rd_kN": 10.9,
+   "F_kN": 13.8,
+   "obs": "fundo apoiado só na parede de 40 mm não passaria — por isso o fundo vence o vão entre teto e base"
+  },
+  "ancoragem_teto": {
+   "F_kN": 13.8,
+   "N5_phi_kN": 19.7,
+   "grampos_phi_kN": 23.4,
+   "uso": 0.703
+  },
+  "ancoragem_base": {
+   "F_kN": 6.4,
+   "N6_phi_kN": 19.7,
+   "grampos_phi_kN": 23.4,
+   "uso": 0.328
+  }
+ },
+ "GEO": {
+  "CS1": {
+   "costas": {
+    "t": 16.0,
+    "b": 120.0,
+    "z0": -170.0,
+    "z1": 30.0
+   },
+   "alma": {
+    "t": 9.5,
+    "x": 35.0,
+    "y0": 16.0,
+    "y1": 64.0,
+    "h_raiz": 80.0,
+    "h_ponta": 50.0
+   },
+   "mesa": {
+    "t": 16.0,
+    "b": 80.0,
+    "y0": 16.0,
+    "y1": 64.0
+   },
+   "dente": {
+    "t": 19.0,
+    "b": 13.0,
+    "h": 32.0,
+    "y0": 44.5,
+    "x0": 27.0
+   },
+   "ponta": {
+    "t": 9.5,
+    "y0": 54.5,
+    "z0": -50.0,
+    "z1": -16.0,
+    "b": 60.5
+   },
+   "y_nivel": 48.0,
+   "z_frontal": -33.0,
+   "L_nivel": 45.0,
+   "L_frontal": 45.0
+  },
+  "NC1": {
+   "B": 120.0,
+   "H": 200.0,
+   "P": 60.0,
+   "y_gr": 31.0,
+   "d_gr": 6.3,
+   "x_gr": [
+    [
+     20.0,
+     52.0
+    ],
+    [
+     68.0,
+     100.0
+    ]
+   ],
+   "h_gr_teto": 40.0,
+   "h_gr_base": 28.0,
+   "t_teto": 12.5,
+   "t_base": 9.5,
+   "t_fundo": 12.5,
+   "t_parede": 3.0,
+   "t_aba": 12.5,
+   "h_aba": 38.0,
+   "aba_e": [
+    0.0,
+    39.0
+   ],
+   "aba_d": [
+    81.0,
+    117.0
+   ]
+  },
+  "hex": {
+   "s": 24.0,
+   "e": 26.75,
+   "k": 10.0,
+   "m": 14.8,
+   "m_fina": 8.0
+  },
+  "tol": {
+   "a": 25.0,
+   "a_tol": 5.0,
+   "G": 50.0,
+   "G_tol": 10.0,
+   "x_tol": 5.0
+  }
+ },
+ "cargas_por_console": {
+  "G_k_kN": 15.86,
+  "Vd_kN": 26.8,
+  "vento_d_kN": 13.81,
+  "obs": "placa PP-01 (L 10,165 m, 3,24 t); Vd com γf 1,3 × βa 1,3 de montagem (NBR 9062:2017 5.3.2), maior que 1,4 da fase final"
+ }
+}

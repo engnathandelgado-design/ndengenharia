@@ -62,6 +62,8 @@ CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 hC = lambda t: CONS[t]["h_total_m"]
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import fechamento as FCH
+import geo_fixacao as GF
+import numpy as np
 from lajes_placas import paineis_mez
 PAINEIS_MEZ = paineis_mez()[0]                                                   # placas: mesma fonte das pranchas PP (vistas do R01)
 
@@ -366,39 +368,64 @@ def montar() -> ModeloBIM:
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027
                 suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
-    # rev06: fixação das placas como no PP00 — det. 2 (CL-1 + trilho TR-1 + bucha BR-1) e det. 4 (CA-1 + luvas IB-1)
+    # rev06 (DEC-026): fixação das placas pelo sistema Trejor, como no PP00 — CE-1 no pilar (uma por fiada), console CS-1 soldado,
+    # nicho NC-1 nas pontas da placa, pinos PT-1 nas juntas (panos contínuos até o baldrame) e trava de pé PT-2 (pacotes suspensos)
     def rasgo(V, c):
         """normal da parede: (eixo do pilar, sentido para fora) a partir da posição da placa."""
         return (1 if (c > COMP / 2 if pos[V][0] == "x" else c > LARG / 2) else -1)
     for V, (pecas, ca1, _) in FCH.DADOS.items():
         ax, c = pos[V]
         out = rasgo(V, c)
-        y_face = c - out * (0.025 + 0.05)                                  # face do pilar do lado das placas
+        y_face = c - out * (0.025 + 0.05)                                  # face do pilar do lado das placas (v = 0; v > 0 entra no pilar)
         P_ = lambda u, v, z: (u, y_face - out * v, z) if ax == "x" else (y_face - out * v, u, z)
-        def cx(u0, u1, v0, v1, z0, z1, marca, grupo=GP):
+        def cx(u0, u1, v0, v1, z0, z1, marca, grupo=GP, obs=""):
             (a0, b0, _), (a1, b1, _) = P_(u0, v0, 0), P_(u1, v1, 0)
-            caixa(m, marca, a0, a1, b0, b1, z0, z1, grupo)
+            caixa(m, marca, a0, a1, b0, b1, z0, z1, grupo, obs)
         pil = FCH.VISTAS[V]["pil"]
+        cons = {(round(s_), round(z_)) for (s_, z_) in ca1}
+        ce_feitas = set()
         for pc in pecas:
-            b = pc["bay"]
-            for (s_ax, b_w, d) in ((pil[b][0], pil[b][1], +1), (pil[b + 1][0], pil[b + 1][1], -1)):
-                uf = (s_ax + d * b_w / 2) / 1000                              # face lateral do pilar
-                z1 = pc["z1"] / 1000 - 0.15 + 0.075; z0 = z1 - 0.150
-                cx(uf, uf + d * 0.0125, -0.025, 0.077, z0, z1, "CL-1 L 102×102×12,5 L=150")       # aba na face lateral do pilar
-                cx(uf, uf + d * 0.102, -0.025, -0.0125, z0, z1, "CL-1 L 102×102×12,5 L=150")       # aba na placa
-                cx(uf - d * 0.022, uf, 0.040, 0.080, z1 - 0.20, z1 + 0.05, "TR-1 trilho 40/22 L=250 (pilar)", GE)
-                m.linear("inserto", "parafuso T M16 8.8 (TR-1)", PerfilRetangular(0.016, 0.016), P_(uf - d * 0.01, 0.060, (z0 + z1) / 2),
-                         P_(uf + d * 0.03, 0.060, (z0 + z1) / 2), GP, material="aco")
-                ub = uf + d * 0.060
-                m.linear("inserto", "M16 8.8 + bucha BR-1 (placa)", PerfilRetangular(0.016, 0.016), P_(ub, -0.095, (z0 + z1) / 2),
-                         P_(ub, 0.0, (z0 + z1) / 2), GP, material="aco")
-        for (s, z0) in ca1:
-            u, zt = s / 1000, z0 / 1000 - 0.010                             # topo do CA-1 (neoprene de 10 mm sob a placa)
-            cx(u - 0.15, u + 0.15, -0.152, 0.0, zt - 0.019, zt, "CA-1 L 152×102×19 L=300")         # aba de assento
-            cx(u - 0.15, u + 0.15, -0.019, 0.0, zt - 0.102, zt, "CA-1 L 152×102×19 L=300")         # aba no pilar
-            cx(u - 0.15, u + 0.15, -0.135, -0.025, zt, zt + 0.010, "neoprene 100 × 150 × 10")
-            for du in (-0.075, 0.075):
-                m.linear("inserto", "M20 8.8 + luva IB-1", PerfilRetangular(0.020, 0.020), P_(u + du, -0.035, zt - 0.06), P_(u + du, 0.40, zt - 0.06), GE, material="aco")
+            z0p = pc["z0"] / 1000
+            zt = z0p + (FCH.Z_NC + FCH.NC_H / 2 - GF.N["t_teto"] - GF.T["G"]) / 1000   # topo da mesa do CS-1 (rev06c, PP03)
+            for (t, d) in ((pc["s0"], 1), (pc["s1"], -1)):
+                uc = t + d * FCH.X_CS
+                if (round(uc), round(pc["z0"] + FCH.Z_NC)) not in cons:
+                    continue                                               # ponta da porta: sem console
+                u = uc / 1000
+                # NC-1 / NC-1' e CS-1 com a geometria das pranchas PP02/PP03 (geo_fixacao, caixas envolventes de cada peça)
+                for sol, grupo, pref in ((GF.nc1_no_console(0), GE, "NC-1"), (GF.cs1_solidos(0), GP, "CS-1")):
+                    for so in sol:
+                        if so.item in (7, 8, 15, 17):
+                            continue                               # grampos e porcas: só nas pranchas (IFC mais leve)
+                        P3 = np.vstack(so.faces)
+                        x0_, y0_, z0_ = P3.min(0); x1_, y1_, z1_ = P3.max(0)
+                        ua, ub = sorted(((uc + d * x0_) / 1000, (uc + d * x1_) / 1000))
+                        cx(ua, ub, -y1_ / 1000, -y0_ / 1000, zt + z0_ / 1000, zt + z1_ / 1000, f"{pref} {so.nome}", grupo,
+                           obs="solda de campo filete 6 E70XX nos 2 lados verticais (DEC-026)" if so.nome == "costas" else "")
+                # CE-1 do pilar (uma por pilar e fiada)
+                s_ax = min((sp for sp, _, _ in pil), key=lambda sp: abs(sp - uc)) / 1000
+                bw = next(b_ for sp, b_, _ in pil if abs(sp / 1000 - s_ax) < 1e-6) / 1000
+                if (s_ax, pc["k"]) not in ce_feitas:
+                    ce_feitas.add((s_ax, pc["k"]))
+                    zce = z0p + FCH.Z_CE / 1000
+                    ub = min(0.19, bw / 2 - 0.01)
+                    cx(s_ax - ub, s_ax + ub, 0.0, 0.016, zce - 0.165, zce + 0.165, "CE-1 chapa de espera 380×330×16", GE)
+                    for du in (-0.12, 0.12):
+                        for dz in (-0.14, 0.14):
+                            cx(s_ax + du - 0.008, s_ax + du + 0.008, 0.016, 0.166, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
+            # pinos PT-1 (junta de baixo) ou travas de pé PT-2
+            if pc["trava"] == "PT-1":
+                for xp in (pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"])):
+                    u = xp / 1000
+                    cx(u - 0.04, u + 0.04, -0.025, 0.0113, z0p - 0.11, z0p + 0.11, "PT-1 cartola Trejor 6,3 × 80")
+                    for dz in (-0.07, 0.07):
+                        cx(u - 0.008, u + 0.008, -0.095, -0.025, z0p + dz - 0.008, z0p + dz + 0.008, "TSA luva M16 hef 70", GE)
+            for (xp, zp) in pc["pt2"]:
+                d = 1 if xp > min(abs(xp - sp) for sp, _, _ in pil) and any(abs(xp - 51 - (sp + b_ / 2)) < 2 for sp, b_, _ in pil) else -1
+                uf = (xp - d * 51) / 1000
+                zpp = zp / 1000
+                cx(uf, uf + d * 0.0095, -0.025, 0.077, zpp - 0.075, zpp + 0.075, "PT-2 L 102×102×9,5 L=150 (aba no pilar)")
+                cx(uf, uf + d * 0.102, -0.025, -0.0155, zpp - 0.075, zpp + 0.075, "PT-2 L 102×102×9,5 L=150 (aba na placa)")
 
     # 8. piso e fundações (indicativos): piso de concreto 15 cm e blocos de fundação com cálice sob cada pilar
     m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(LARG + 1.0, 0.15), (LARG / 2, -0.5, -0.075), (LARG / 2, COMP + 0.5, -0.075), "Piso e fundações")
@@ -415,8 +442,8 @@ def montar() -> ModeloBIM:
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
     m.pendente("TS-01 sem dentes: apoio 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e 16,25 cm no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
-    m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas com trilho TR-1 + bucha BR-1 + CL-1 e consolo CA-1 parafusado.")
-    m.pendente("Ligações modeladas como na execução (COB01/COB02, PP00): ST-1P/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; OR-X com ES-2; X Ø16 com esticador; CL-1 + TR-1 + BR-1 e CA-1 + IB-1 das placas; CL-P dos pilares dos portões. Correntes, tirantes rígidos e rufos só nas pranchas.")
+    m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas pelo sistema Trejor (DEC-026): consoles CS-1 soldados na obra nas CE-1 dos pilares — única solda de campo da obra.")
+    m.pendente("Ligações modeladas como na execução (COB01/COB02, PP00): ST-1P/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; OR-X com ES-2; X Ø16 com esticador; CE-1 + CS-1 + NC-1 + PT-1/PT-2 das placas (Trejor); CL-P dos pilares dos portões. Correntes, tirantes rígidos e rufos só nas pranchas.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
@@ -441,7 +468,7 @@ if __name__ == "__main__":
                  ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilar do portão PG-01 (P9)"), ("ND-LET-PG02", "pilar do portão PG-02 (P10a)"), ("ND-LET-PG03", "pilar do portão PG-03 (P12)"), ("ND-LET-PG04", "pilar do portão PG-04 (P10b)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"), ("ND-LET-COB03", "calha do eixo A, descidas e rufos"),
                  ("ND-LET-I130", "vigas centrais I130 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02 (meio vaso) — fôrma"), ("ND-LET-VM02", "vigas do mezanino — 2º estágio, apoio e insertos"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
-                 ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
+                 ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP01", "fixação das placas — armação da ponta, conjunto montado e sequência"), ("ND-LET-PP02", "nicho NC-1 — fabricação"), ("ND-LET-PP03", "console CS-1 — fabricação e parafusos"), ("ND-LET-PP04", "CE-1, PT-1, PT-2 e fixadores"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
                  ("ND-LET-PP-HJ", "placas das vistas H e J"), ("ND-LET-PP-G", "placas da vista G"), ("ND-LET-PP-EF", "placas das vistas E e F"),
                  ("ND-LET-PP-C", "placas da vista C (portões)"), ("ND-LET-PP-B", "placas da vista B"), ("ND-LET-PP-D", "placas da vista D"),
                  ("ND-LET-PP-A", "placas da vista A")]

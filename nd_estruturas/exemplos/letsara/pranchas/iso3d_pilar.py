@@ -67,10 +67,10 @@ def cena(p, z0=0.0, z1=L, com_chaves=True):
                         j = (i + 1) % n
                         faces += [4, i, j, n + j, n + i]
                     p.add_mesh(pv.PolyData(np.array(P), faces), color="#b5b5b0", show_edges=True, edge_color="#7a7a7a")
-    # insertos IP-01 na face C (x−) e alças AL-2 na face A (x+)
+    # insertos CE-1 na face C (x−) e alças AL-2 na face A (x+)
     for z in Z_PLACA:
         if z0 <= z <= z1:
-            p.add_mesh(box(-H / 2 - 0.0095, -0.075, z - 0.075, 0.0095, 0.15, 0.15), **aco)
+            p.add_mesh(box(-H / 2 - 0.0125, -0.19, z - 0.165, 0.0125, 0.38, 0.33), **aco)       # rev06: CE-1
     for z in AL:
         if z0 <= z <= z1:
             t = np.linspace(0, math.pi, 30)
@@ -89,7 +89,7 @@ cena(p)
 rot(p, [(H / 2 + CP, 0, ZC + 0.02), (H / 2 + PINO_X, 0, ZC + 0.38), (-H / 2 - 0.01, 0.0, Z_PLACA[1]), (-H / 2 - 0.01, 0.0, Z_PLACA[6]),
         (H / 2 + 0.14, 0, AL[0]), (H / 2 + 0.14, 0, AL[1]), (-H / 2, B / 2, 0.45), (0, B / 2, L),
         (0, B / 2, 1.0), (-H / 2, 0, 5.2), (0, B / 2, 3.6)],
-    ["consolo CP-TS (face A)", "PN-1 pino Ø20", "IP-01 (face C, 8x)", "IP-01", "AL-2 alça", "AL-2",
+    ["consolo CP-TS (face A)", "PN-1 pino Ø20", "CE-1 (face C, 8x)", "CE-1", "AL-2 alça", "AL-2",
      "chaves (cálice)", "topo +10,000", "piso ±0,000", "FACE C (placas)", "FACE B"], fs=13)
 p.enable_parallel_projection()
 p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]

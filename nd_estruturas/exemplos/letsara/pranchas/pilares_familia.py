@@ -9,7 +9,7 @@ from geometria import Y_LIN, X_EIXO, X_FACH
 num = lambda t: round(float(t.replace(",", ".")) * 1000)
 Z0 = G.LG["Z0_TS"]
 rec_vb = lambda x: math.ceil((Z0 + 0.03 * x + 0.90) / 0.05) * 50
-Z_PL = [1250 * k - 100 + 1000 for k in range(1, 9)]                       # IP-01 das fiadas 1 a 8 (a partir da base)
+Z_PL = [1250 * (k - 1) + 922 + 1000 for k in range(1, 9)]                # rev06: CE-1 (centro) das fiadas 1 a 8, a partir da base do pilar
 XB, YB = 152, 252
 XY = [(x, -YB) for x in (-XB, -76, 0, 76, XB)] + [(x, YB) for x in (-XB, -76, 0, 76, XB)] + \
      [(-XB, y) for y in (-84, 84)] + [(XB, y) for y in (-84, 84)]                       # rev04: 14 Ø20
@@ -43,7 +43,7 @@ def cons_marca(txt, lado="P1"):
 
 def ip_marca(txt):
     out = []
-    for m in re.finditer(r"(\d+)(?: IP-01)? \(([A-D])(?:, ([^)]*))?\)", txt):
+    for m in re.finditer(r"(\d+)(?: CE-1)? \(([A-D])(?:, ([^)]*))?\)", txt):
         n, fc, extra = int(m.group(1)), m.group(2), m.group(3) or ""
         zs = Z_PL if n == 8 else (Z_PL[-n:] if "fiadas" in extra else Z_PL[:n])
         out.append(dict(face=fc, z=zs, obs=extra))
@@ -121,7 +121,8 @@ def dados(mk):
     if n_mez:
         ins.append(["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", n_mez, "face do CP-MEZ"])
     for ip in ips:
-        ins.append(["IP-01", "Par de trilhos TR-1 HTA-CE 40/22 L=250 (sem solda)", len(ip["z"]), f"faces laterais junto à {ip['face']}, a 6 cm dela" + (f", {ip['obs']}" if ip["obs"] else "")])
+        ins.append(["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 grampos N18", len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
+        ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 102,5 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
         ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
@@ -140,7 +141,7 @@ def dados(mk):
                 f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
                 "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face A para cima.",
-                "IP-01 (rev03, sem solda): par de trilhos TR-1 embutidos nas faces laterais, a 6 cm da face das placas, em cada fiada (125 cm a partir do piso), para as cantoneiras CL-1 parafusadas; onde houver consolo metálico CA-1 das placas (vistas E, F, H, I, J), 2 luvas roscadas IB-1 M20 na face das placas sob a fiada apoiada (ND-LET-PP00). Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
+                "CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × 16 com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), rente à face das placas, centrada no pilar, uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm); os 2 consoles CS-1 das placas são soldados nela na obra (ND-LET-PP00 det. 2 e 4; fabricação no ND-LET-PP01). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"]) for ip in ips], grampos=(-84, 84), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL"):

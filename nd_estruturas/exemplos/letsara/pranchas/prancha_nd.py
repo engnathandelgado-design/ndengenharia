@@ -625,7 +625,7 @@ class Vista:
     def _dim(self, base, p1, p2, ang, texto="<>"):
         self._cotas.append((ang % 180, tuple(sorted([tuple(round(c, 1) for c in p1), tuple(round(c, 1) for c in p2)]))))
         d = self.pr.msp.add_linear_dim(base=self.P(base), p1=self.P(p1), p2=self.P(p2), angle=ang, text=texto,
-                                       dimstyle="ND", override={"dimlfac": self.esc * self.fator, "dimdec": 0 if self.fator == 1 else 1,
+                                       dimstyle="ND", override={"dimlfac": self.esc * self.fator, "dimdec": 1,
                                                                 "dimzin": 8}, dxfattribs={"layer": "COTA"})
         d.render()
         return self._add(d.dimension)

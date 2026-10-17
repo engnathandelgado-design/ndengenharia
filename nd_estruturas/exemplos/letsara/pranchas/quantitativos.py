@@ -114,6 +114,10 @@ for tp, n, n2, tela, kgpl, kgt in tab("PP00", "AÇO PASSIVO")["linhas"]:
     pp_kg[8.0] += int(n) * 2 * num(re.search(r"C=(\d+)", n2).group(1)) / 100 * 0.395 * 1.10
 pp_kg = {d: v / n_pp for d, v in pp_kg.items()}
 aco.append(("Placas PP (N2 Ø8)", "ND-LET-PP00", n_pp, pp_kg, "tela Q92 das pontas na aba Telas"))
+_kp = {d: 0.0 for d in DIAMS}                                         # rev06b: armadura das 2 pontas (dente Gerber), ND-LET-PP01
+_kp[6.3] = (2 * 54 + 2 * 54 + 2 * 46) / 100 * KGM[6.3] * 1.10
+_kp[8.0] = (4 * 138 + 2 * 256) / 100 * KGM[8.0] * 1.10
+aco.append(("Placas PP (ponta N3–N7)", "ND-LET-PP01", n_pp, _kp, "dente Gerber das 2 pontas"))
 
 # ------------------------------------------------------------------ protensão
 cord = []    # (peça, Ø, n por peça, L m, qtd, obs)
@@ -153,8 +157,25 @@ for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
 for l in tab("PP00", "INSERTOS E PEÇAS")["linhas"]:
-    if l[2] != "—":
+    if l[0] in ("NC-1", "TSA", "AL-P"):                                  # por placa (rev06: NC-1 nas 2 pontas, TSA dos pinos PT-1)
         ins.append(("ND-LET-PP00", "Placas PP", l[0], l[1], int(l[2]), n_pp))
+# rev06 (DEC-026): consoles, chapas de espera, pinos e travas contados peça a peça nas vistas (fechamento.py)
+import fechamento as _FC
+_pec = [p_ for V in _FC.DADOS for p_ in _FC.DADOS[V][0]]
+_n_cs = sum(len(_FC.DADOS[V][1]) for V in _FC.DADOS)
+_n_pt1 = sum(2 for p_ in _pec if p_["trava"] == "PT-1")
+_n_pt2 = sum(len(p_["pt2"]) for p_ in _pec)
+_ce = set()
+for V in _FC.DADOS:
+    pil = [s_ for s_, _, _ in _FC.VISTAS[V]["pil"]]
+    for (x_, z_) in _FC.DADOS[V][1]:
+        _ce.add((V, min(pil, key=lambda s_: abs(s_ - x_)), z_))
+_kg01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))
+ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1", f"Console soldado A572-50 (costas, almas, mesa, 2 dentes, ponta) + M16 de nível + prisioneiro (PP03) — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n_cs),
+        ("ND-LET-PP04", "Pilares (fábrica)", "CE-1", f"Chapa de espera A36 380×330×16 + 4 pinos Ø16×150 + 2 grampos N18 — {_kg01['kg_CE1']:.2f} kg/un".replace(".", ","), 1, len(_ce)),
+        ("ND-LET-PP04", "Placas PP (obra)", "PT-1", f"Cartola 6,3 × 80 + 2 M16 8.8 (junta de baixo) — {_kg01['kg_PT1']:.2f} kg/un".replace(".", ","), 1, _n_pt1),
+        ("ND-LET-PP04", "Placas PP (obra)", "PT-2", f"L 102×102×9,5 L=150 + 2 M16 + BR-1 (placa) + BR-2 (pilar) — {_kg01['kg_PT2']:.2f} kg/un".replace(".", ","), 1, _n_pt2),
+        ("ND-LET-PP02", "Placas PP", "NC-1 (kg)", f"Caixa A572-50 do nicho (parede 3 A36) — {_kg01['kg_NC1']:.2f} kg/un; aço estrutural total {_kg01['kg_NC1']*_kg01['n']['NC1'] + _kg01['kg_CS1']*_n_cs + _kg01['kg_CE1']*len(_ce) + _kg01['kg_PT1']*_n_pt1 + _kg01['kg_PT2']*_n_pt2:.0f} kg".replace(".", ","), 0, n_pp)]
 
 # ------------------------------------------------------------------ planilha
 wb = Workbook()

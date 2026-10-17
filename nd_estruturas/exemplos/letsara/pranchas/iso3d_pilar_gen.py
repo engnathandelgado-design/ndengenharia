@@ -1,4 +1,4 @@
-"""Isométricos (PyVista) de pilar genérico com consolos em qualquer face, pinos, IP-01 e alças — lê pilar_gen_geom.json.
+"""Isométricos (PyVista) de pilar genérico com consolos em qualquer face, pinos, CE-1 e alças — lê pilar_gen_geom.json.
 Faces: A = x+, B = y+, C = x−, D = y−. Unidades m. Saída: ISO-<marca>-geral.png e ISO-<marca>-consolo.png"""
 import json, math, sys, numpy as np, pyvista as pv
 pv.OFF_SCREEN = True
@@ -74,8 +74,8 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         for z in ip["z"]:
             z = z / 1000
             if z0 <= z <= z1:
-                p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0095 if nx < 0 else -0.075), ny * fd + (0 if ny > 0 else -0.0095 if ny < 0 else -0.075), z - 0.075,
-                               0.0095 if nx else 0.15, 0.0095 if ny else 0.15, 0.15), **aco)
+                p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0125 if nx < 0 else -0.19), ny * fd + (0 if ny > 0 else -0.0125 if ny < 0 else -0.19), z - 0.165,
+                               0.016 if nx else 0.38, 0.016 if ny else 0.38, 0.33), **aco)       # rev06b: CE-1 380 × 330 × 16
     for z in G.get("al", []):
         z = z / 1000
         if z0 <= z <= z1:

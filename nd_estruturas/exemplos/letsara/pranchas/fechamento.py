@@ -20,6 +20,11 @@ PL = json.load(open(AQ + "placas.json"))
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: round(v * 1000)
 H_PL, E_PL, JUNTA, FOLGA = 1250, 100, 20, 25           # rev04: junta vertical 20 mm (tex ±5 de projeto + tloc ±10 + Δ — NBR 9062:2017 3.1/5.2.2)
+FX = json.load(open(AQ + "fixacao_placas.json"))        # rev06 (DEC-026): sistema Trejor — console soldado CS-1 + nicho NC-1 + pino PT-1
+NC_B, NC_H, NC_P, Z_NC = 120, 200, 60, 940              # nicho NC-1: comprimento a partir da ponta, altura, profundidade, centro acima da base da placa
+X_CS = 60                                               # eixo do console a partir da ponta da placa
+CE_B, CE_H, Z_CE = 380, 330, 922                        # CE-1 no pilar: largura, altura, centro acima da base da fiada
+X_PT = lambda L: round(0.21 * L + 150)                  # pinos PT-1: 15 cm para dentro de cada alça AL-P
 Z_TOPO = 10000
 Z_VT0, Z_VT1, Z_ASS_VT = 7500, 8100, 7790              # VT 25×60 do eixo E atrás da fiada +7,50/+8,75; dente 30×20 → assento do CP-VT
 Z_VT_A = (6250, 6850, 6540)                             # rev03: VT do eixo A rebaixada (CP-VT abaixo do recuo +7,19), atrás da fiada +6,25/+7,50
@@ -86,13 +91,7 @@ def montar(V):
                 abert.append((s0, s1, k * H_PL, (k + 1) * H_PL, "esquadria"))
         for k in ks:
             z0 = k * H_PL
-            if k == 0:
-                apoio = "viga baldrame"
-            elif (k - 1) in ks:
-                apoio = "placa de baixo"
-            else:
-                apoio = "2 consolos CA-1"
-                ca1 += [(sa, z0), (sb, z0)]
+            apoio = "2 consoles CS-1"                                # rev06: cada placa no seu console (folga de 5 mm na junta)
             trechos = [(s0, s1)]
             if d.get("porta") and d["porta"][0] == b and d["porta"][1] == k:
                 p0, p1 = d["porta"][2]
@@ -100,7 +99,13 @@ def montar(V):
                 abert.append((p0, p1, 0, 2 * H_PL, "porta"))
             for (t0, t1) in trechos:
                 n += 1
-                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0, apoio=apoio))
+                ap = apoio if (t0 == s0 and t1 == s1) else ("console CS-1 + baldrame (ponta da porta)" if k == 0 else "console CS-1 + placa de baixo (porta)")
+                cont = all(j in ks for j in range(k))                       # pano contínuo até o baldrame → pinos PT-1; senão trava de pé PT-2
+                trava = "PT-1" if cont else "PT-2"
+                pt2 = [] if cont else [(sa + ba / 2 + 51, z0 + 150), (sb - bb / 2 - 51, z0 + 150)]
+                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0,
+                                  apoio=ap + (" + 2 PT-1 (pé)" if cont else " + 2 PT-2 (pé)"), trava=trava, pt2=pt2))
+                ca1 += [(t + sg * X_CS, z0 + Z_NC) for t, sg, ok in ((t0, 1, t0 == s0), (t1, -1, t1 == s1)) if ok]   # consoles CS-1 (só nas pontas sobre pilar)
     return pecas, ca1, abert
 
 
@@ -149,8 +154,14 @@ def desenhar_elev(pr, V, origem, esc):
         vv.ret(p["s0"], p["z0"] + JUNTA / 2, p["L"], H_PL - JUNTA, "VISTA")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.6), p["id"], "nota", "MIDDLE_CENTER")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.22), TIPO[p["L"]], "min", "MIDDLE_CENTER")
-    for (s, z) in ca1:
-        vv.chapa(s - 100, z - 175, 200, 175, 3.0)
+    for (s, z) in ca1:                                                              # rev06: nichos NC-1 / consoles CS-1 (atrás da placa)
+        vv.ret(s - NC_B / 2, z - NC_H / 2, NC_B, NC_H, "OCULTA")
+    for p in pecas:                                                                 # pinos PT-1 na junta de baixo / travas PT-2 no pé
+        if p["trava"] == "PT-1":
+            for xp in (p["s0"] + X_PT(p["L"]), p["s1"] - X_PT(p["L"])):
+                vv.circulo((xp, p["z0"]), 45, "OCULTA")
+        for (xp, zp) in p["pt2"]:
+            vv.ret(xp - 51, zp - 75, 102, 150, "OCULTA")
     vv.cota_h([s for s, _, _ in d["pil"]], -500, -8, total=False)
     vv.cota_h([d["ini"], d["fim"]], -500, -16, total=False)
     vv.cota_v([k * H_PL for k in range(0, 9)], d["fim"], 10, total=False)
@@ -164,7 +175,7 @@ def desenhar_elev(pr, V, origem, esc):
 
 # ================================================================== corte vertical da parede e planta-chave (pranchas por vista)
 def corte_parede(pr, V, origem, esc=50):
-    """Corte vertical típico da parede da vista: pilha de placas, baldrame, IP-01 / CL-1 nas fiadas, CA-1 e VT quando houver."""
+    """Corte vertical típico da parede da vista: placas, baldrame, CE-1 + CS-1 + NC-1 em cada fiada, PT-1 nas juntas (rev06)."""
     d = VISTAS[V]
     pecas, ca1, _ = DADOS[V]
     ks = sorted(set(p["k"] for p in pecas if p["bay"] == pecas[0]["bay"]))
@@ -175,9 +186,16 @@ def corte_parede(pr, V, origem, esc=50):
         z0 = k * H_PL
         pts = [(-FOLGA - E_PL, z0 + 5), (-FOLGA, z0 + 5), (-FOLGA, z0 + H_PL - 5), (-FOLGA - E_PL, z0 + H_PL - 5)]
         c.poli(pts, "CORTADO", fechada=True); c.hachura(pts, "AR-CONC", 0.02)
-        c.chapa(-FOLGA, z0 + H_PL - 200, 12.5, 150, 3.0)                                            # CL-1 (aba na placa, ao lado do pilar)
-        if (k - 1) not in ks and k > 0:
-            c.chapa(-FOLGA - E_PL, z0 - 16, FOLGA + E_PL, 16, 3.0)                                  # CA-1
+        zt = z0 + Z_NC + NC_H / 2 - 12.5 - 50                                                      # topo do braço do CS-1
+        c.chapa(0, z0 + Z_CE - CE_H / 2, 16, CE_H, 3.0)                                             # CE-1 (embutida no pilar)
+        c.chapa(-16, zt - 170, 16, 200, 3.0)                                                        # CS-1: costas soldadas na CE-1
+        c.chapa(-64, zt - 80, 48, 80, 3.0)                                                      # CS-1: braço dentro do nicho
+        c.ret(-FOLGA - NC_P, z0 + Z_NC - NC_H / 2, NC_P, NC_H, "METALICA")                          # NC-1 nicho na face interna da placa
+        tv = next((p_["trava"] for p_ in pecas if p_["bay"] == pecas[0]["bay"] and p_["k"] == k), "PT-1")
+        if tv == "PT-1":
+            c.chapa(-FOLGA - 6.3, z0 - 40, 6.3, 80, 3.0)                                            # PT-1 na junta de baixo
+        else:
+            c.chapa(-FOLGA, z0 + 100, FOLGA + 9.5, 100, 3.0)                                        # PT-2 no pé (ao lado do pilar)
     if d.get("vt"):
         c.ret(175, d["vt"][0], 250, d["vt"][1] - d["vt"][0], "OCULTA")
         c.chamada((300, Z_VT1), (10, 8), "VT 25×60 entre os pilares (atrás)")
@@ -185,11 +203,9 @@ def corte_parede(pr, V, origem, esc=50):
     c.cota_h([-FOLGA - E_PL, 0, 600], -500, -8, total=False)
     k0 = ks[-1]
     c.chamada((-FOLGA - E_PL / 2, k0 * H_PL + 600), (-14, 8), "placa 125 × 10 + folga 2,5")
-    c.chamada((-FOLGA, k0 * H_PL + H_PL - 120), (16, 10), "CL-1 parafusada: trilho TR-1 do pilar + bucha BR-1 da placa (PP00, det. 2)")
-    if ks[0] > 0 or len(ks) < 8:
-        kk = [k for k in ks if k > 0 and (k - 1) not in ks]
-        if kk:
-            c.chamada((-FOLGA - E_PL / 2, kk[0] * H_PL - 8), (-14, -10), "consolo CA-1 (PP00, det. 4)")
+    c.chamada((-40, k0 * H_PL + Z_NC), (16, 10), "console CS-1 soldado na CE-1 do pilar + nicho NC-1 da placa (PP00, det. 2 e 4)")
+    tv0 = next(p_["trava"] for p_ in pecas if p_["bay"] == pecas[0]["bay"] and p_["k"] == k0)
+    c.chamada((-FOLGA - 3, k0 * H_PL + (150 if tv0 == "PT-2" else 0)), (16, -12), "PT-1 pino de travamento (PP00, det. 3)" if tv0 == "PT-1" else "PT-2 trava de pé nos pilares (PP00, det. 6)")
     if 0 in ks:
         c.chamada((-FOLGA - E_PL, -250), (-12, -8), "viga baldrame (fundação)")
     return c
@@ -230,6 +246,7 @@ def prancha_vista(Vs, desenho, folha):
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL — CONFORME AS VISTAS DO FECHAMENTO DO R01")
     pr.revisao("03", "14/10/2026", "PLACA 125 × 10 (8 Ø12,7); LIGAÇÕES PARAFUSADAS (TRILHO + BUCHA), SEM SOLDA; VT DO EIXO A A +6,25")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; JUNTA VERTICAL 20 mm")
+    pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: CADA PLACA NO SEU CONSOLE CS-1 (SOLDADO NA CE-1) + NICHO NC-1 + 2 PINOS PT-1")
     Q = pr.quadro
     XC = Q[2] - 190
     pesos = sum(peso_t(p["L"]) for p in lista)
@@ -264,18 +281,18 @@ def prancha_vista(Vs, desenho, folha):
     y = pr.tabela(XC, y - 4, "RESUMO POR TIPO", ["TIPO", "L (cm)", "QT", "PESO (t)"], rr, [40, 50, 30, 70], h_lin=5.0, destaque_ultima=True)
     n_ca = sum(len(DADOS[V][1]) for V in Vs)
     notas = [f"Produzir na ordem da coluna SEQ e etiquetar cada peça com o código (ex.: {lista[0]['id']}) e o tipo; estocar por vista, na ordem inversa da montagem.",
-             "Montagem vão a vão, de baixo para cima; em cada ponta, cantoneira CL-1 parafusada no trilho TR-1 do pilar (parafuso T M16) e na bucha BR-1 da placa (M16) antes de soltar o guindaste. Nenhuma solda.",
+             "Montagem vão a vão, de baixo para cima. Antes da placa: soldar os 2 consoles CS-1 nas chapas de espera CE-1 dos pilares, no nível marcado pela topografia. A placa encosta no pilar com o braço do console entrando no nicho NC-1 de cada ponta e desce até o teto do nicho apoiar no parafuso de nível M16 (±20 mm); afastamento 25 mm pelo parafuso frontal M16. Cada placa leva só o próprio peso: folga de 5 mm na junta macho-fêmea. Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste (PP00, det. 2 a 6).",
              f"Placa protendida 125 × 10, C40, 8 cord. Ø12,7 CP-190 RB alinhadas (4 por face, cobrimento 2,0), {f(PL['protensao']['F_macaco_kN'])} kN por cordoalha no macaco: seção, insertos, alças e ligações na ND-LET-PP00."]
     if n_ca:
-        notas.append(f"Consolos metálicos CA-1 ({n_ca} nesta prancha, hachurados na elevação): cantoneira L 152×102×19 parafusada com 2 M20 nas luvas IB-1 do pilar antes de montar a peça que apoiam (PP00, detalhe 4).")
+        notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Solda de campo do CS-1 na CE-1: filete 6 mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio (DEC-026).")
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 livres até +7,40 (topo do PG-01).")
     if "G" in Vs:
         notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25: TS-01 baixa junto ao eixo A); acima, fechamento metálico leve até a telha.")
     if any(V in Vs for V in ("H", "J", "I")):
-        notas.append("Faixas hachuradas: esquadrias do anexo (R01), sem placa, de +1,25 a +2,50 e de +5,00 a +6,25; placa acima de cada faixa apoiada em 2 CA-1." + (" Porta: 180 × 250 (a confirmar)." if "I" in Vs else ""))
+        notas.append("Faixas hachuradas: esquadrias do anexo (R01), sem placa, de +1,25 a +2,50 e de +5,00 a +6,25; toda placa fica nos seus 2 consoles CS-1, também acima das faixas." + (" Porta: 180 × 250 (a confirmar); as placas ao lado da porta têm console só na ponta do pilar e apoiam no baldrame / na placa de baixo do lado da porta." if "I" in Vs else ""))
     if any(V in Vs for V in ("E", "F")):
-        notas.append("E (eixo A) e F (eixo E): abertas até +7,50; as 2 fiadas de cima apoiam em 2 consolos CA-1 parafusados nos pilares e vencem o vão entre eles (rev04: sem vigas de travamento — não há ponte rolante; estabilidade pela cobertura e pelos pilares engastados, NBR 9062:2017 5.1.2.1).")
+        notas.append("E (eixo A) e F (eixo E): abertas até +7,50; as 2 fiadas de cima ficam nos seus consoles CS-1 e vencem o vão entre os pilares; cada uma trava no pé com 2 PT-2 nos pilares (sem vigas de travamento — não há ponte rolante; NBR 9062:2017 5.1.2.1).")
     notas.append("Cotas de concreto em cm, níveis em m. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.")
     pr.notas(XC, y - 4, notas, 190)
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{desenho}")
@@ -284,6 +301,7 @@ def prancha_vista(Vs, desenho, folha):
 
 # ================================================================== ND-LET-PP00 — placa típica
 TELA_PL = 2 * 2 * 0.60 * 1.19                      # N1: tela Q92 nas 2 faces, 60 cm em cada ponta (m²/placa)
+KG_DENTE = json.load(open("/home/claude/letsara/pranchas/pp01.json"))["kg_ponta_por_placa"] / 1.10   # rev06b: N3–N7 das 2 pontas (ND-LET-PP01, sem perdas)
 
 
 def prancha_tipo():
@@ -292,6 +310,7 @@ def prancha_tipo():
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     pr.revisao("03", "14/10/2026", "PLACA 10 cm, 8 Ø12,7 ALINHADAS (COB. 2,0); LIGAÇÕES PARAFUSADAS SEM SOLDA")
     pr.revisao("04", "16/10/2026", "NBR 9062: JUNTA 20 mm, TOLERÂNCIAS, ESTABILIDADE NO IÇAMENTO")
+    pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: NICHO NC-1 NAS PONTAS, CONSOLE CS-1, PINOS PT-1, TRAVA PT-2; ARMADURA DO DENTE")
     Q = pr.quadro
     XC = Q[2] - 190
     Ls = sorted(TIPOS)
@@ -307,18 +326,25 @@ def prancha_tipo():
             e.linha((a, z), (b, z), "ARM_PROT")
     e.linha((0, 0), (0, H_PL), "VISTA"); e.linha((LD + 500 + LE, 0), (LD + 500 + LE, H_PL), "VISTA")
     e.interrupcao((LD, 0), (LD, H_PL)); e.interrupcao((LD + 500, 0), (LD + 500, H_PL))
-    e.circulo((255, H_PL - 150), 30, "METALICA"); e.circulo((LD + 500 + LE - 255, H_PL - 150), 30, "METALICA")
+    LT = LD + 500 + LE
+    for x0n in (0, LT - NC_B):                                                                   # NC-1 nas 2 pontas (face interna)
+        e.ret(x0n, Z_NC - NC_H / 2, NC_B, NC_H, "METALICA")
+        e.hachura([(x0n, Z_NC - NC_H / 2), (x0n + NC_B, Z_NC - NC_H / 2), (x0n + NC_B, Z_NC + NC_H / 2), (x0n, Z_NC + NC_H / 2)], "ANSI31", 0.3, "METALICA")
+    for xt in (2250, LT - 1350):                                                      # luvas TSA M16 dos pinos PT-1 (topo e base)
+        for zt_ in (60, H_PL - 60):
+            e.circulo((xt, zt_), 25, "METALICA")
     for xa in (2100, LD + 500 + LE - 2100 + 900):
         e.poli([(xa - 60, H_PL), (xa - 60, H_PL + 120), (xa + 60, H_PL + 120), (xa + 60, H_PL)], "METALICA")
-    e.cota_h([0, 255, 2100, LD], H_PL, 16, total=False)
+    e.cota_h([0, NC_B, 2100, 2250, LD], H_PL, 16, total=False)
     e.cota_v([0, 156, 469, 781, 1094, H_PL], 0, -10, total=False)
-    e.cota_v([H_PL - 150, H_PL], LD + 500 + LE, 10, total=False)
-    e.chamada((255, H_PL - 150), (12, -14), "BR-1 nas 2 pontas: a 25,5 cm da ponta (6 cm além da face do pilar) e 15 cm do topo")
+    e.cota_v([0, 60, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL - 60, H_PL], LD + 500 + LE, 10, total=False)
+    e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 18), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
+    e.chamada((2250, 60), (10, -16), "TSA M16 dos pinos PT-1: topo e base, a 0,21 L + 15 cm das pontas (DETALHE 3)")
     e.chamada((2100, H_PL + 120), (-6, 24), "AL-P alça de cordoalha Ø12,7 (2 por placa, a 0,21 L das pontas)")
     e.chamada((1500, 781), (12, -20), "C1 — 8 cord. Ø12,7 (4 por face), aderentes, cortadas rente às pontas")
     e.marcador_corte((1200, -350), (1200, H_PL + 100), "A", lado=1)
     # ---- corte A-A (1:10)
-    s = pr.vista("CORTE A-A", (Q[0] + 470, Q[1] + 70), 10, titulo="CORTE A-A", subtitulo="encaixe macho-fêmea, cordoalhas alinhadas, cobrimento 2,0", unidade="cm")
+    s = pr.vista("CORTE A-A", (Q[0] + 505, Q[1] + 45), 10, titulo="CORTE A-A", subtitulo="encaixe macho-fêmea, cordoalhas alinhadas, cobrimento 2,0", unidade="cm")
     pts = [(0, 0), (30, 0), (30, 35), (70, 35), (70, 0), (100, 0), (100, 1250), (70, 1250), (70, 1280), (30, 1280), (30, 1250), (0, 1250)]
     s.poli(pts, "CORTADO", fechada=True); s.hachura(pts, "AR-CONC", 0.03)
     for z in (156, 469, 781, 1094):
@@ -328,60 +354,135 @@ def prancha_tipo():
     s.ponto_barra((50, 1215), 8); s.ponto_barra((50, 80), 8)
     s.cota_h([0, 100], 0, -10, total=False)
     s.cota_v([0, 35, 156, 469, 781, 1094, 1250, 1280], 100, 10, total=False)
-    s.chamada((73.6, 469), (16, 6), "C1 — 8 cord. Ø12,7 (4 por face, eixo a 2,64 cm; cobrimento 2,0)")
+    s.chamada((73.6, 469), (12, 4), "C1 — 8 cord. Ø12,7 (eixo a 2,64; cob. 2,0)")
     s.chamada((50, 900), (16, 8), "N1 — tela Q92 no plano médio, 60 cm das pontas")
     s.chamada((50, 1215), (-14, 10), "N2 — 1 Ø8 no macho")
     s.chamada((50, 80), (-14, -12), "N2 — 1 Ø8 sobre a fêmea")
     s.chamada((50, 1265), (14, 12), "macho 4 × 3")
     s.chamada((50, 17), (16, -14), "fêmea 4 × 3,5")
-    # ---- detalhe 1: bucha BR-1 da placa (1:2,5 mm)
-    d1 = pr.vista("DETALHE 1", (Q[0] + 70, Q[3] - 240), 2.5, titulo="DETALHE 1 — BUCHA BR-1 DA PLACA", subtitulo="2 por placa, face interna, galvanizada; sem solda", unidade="mm")
-    d1.ret(0, -60, 100, 120, "CORTADO"); d1.hachura([(0, -60), (100, -60), (100, 60), (0, 60)], "AR-CONC", 0.02)
-    d1.chapa(0, -13, 70, 26, 0.3)
-    d1.ret(62, -40, 8, 80, "ARMADURA")
-    d1.cota_h([0, 70, 100], -60, -8, total=False)
-    d1.chamada((30, 13), (-6, 14), "bucha M16 (rosca interna), hef 70")
-    d1.chamada((66, 40), (8, 10), "barra transversal Ø8 L=80 (ancoragem)")
-    # ---- detalhe 2: ligação placa × pilar (planta, 1:5 mm) — sem solda
-    d2 = pr.vista("DETALHE 2", (Q[0] + 330, Q[3] - 300), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA)", subtitulo="pilar com lado de 40 na parede; junta 20 no eixo; folga 25; parafusada, sem solda", unidade="mm")
+    # ================= rev06 (DEC-026): fixação Trejor — console soldado CS-1, nicho NC-1, pinos PT-1, trava PT-2
+    DN = FX["dente_ponta"]["resultado"]["adotado"]
+    import geo_fixacao as GF
+    zt_cs = Z_NC + NC_H / 2 - GF.N['t_teto'] - GF.T['G']                     # topo da mesa do CS-1 (G = 50 sob o teto do nicho, PP03)
+    # ---- detalhe 1: ponta da placa com o nicho NC-1 = dente Gerber (vista pela face interna, 1:10 mm)
+    d1 = pr.vista("DETALHE 1", (Q[0] + 40, Q[1] + 278), 10, titulo="DETALHE 1 — PONTA DA PLACA: NICHO NC-1 E ARMADURA DO DENTE",
+                  subtitulo="vista pela face interna; nariz acima do nicho calculado como dente Gerber (bielas e tirantes)", unidade="mm")
+    d1.poli([(0, 600), (0, H_PL), (420, H_PL)], "VISTA"); d1.interrupcao((420, 600), (420, H_PL)); d1.linha((0, 600), (420, 600), "VISTA")
+    for z in (781, 1094):
+        d1.linha((10, z), (420, z), "ARM_PROT")
+    d1.ret(0, Z_NC - NC_H / 2, NC_B, NC_H, "METALICA")
+    d1.chapa(0, Z_NC + NC_H / 2 - 12.5, NC_B, 12.5, 0.15)                                   # teto (chapa de apoio)
+    d1.chapa(NC_B - 3, Z_NC - NC_H / 2 + 9.5, 3, NC_H - 22, 0.15)                           # parede lateral 3 (sem esforço)
+    d1.chapa(0, Z_NC - NC_H / 2, NC_B - 9.5, 9.5, 0.15)                                    # base do nicho
+    for (xa_, xb_) in GF.N["x_gr"]:                                                         # grampos Ø6,3 do NC-1
+        d1.poli([(xa_, Z_NC + NC_H / 2), (xa_, Z_NC + NC_H / 2 + 40), (xb_, Z_NC + NC_H / 2 + 40), (xb_, Z_NC + NC_H / 2)], "METALICA")
+    d1.linha((15, Z_NC + NC_H / 2 + 30), (420, Z_NC + NC_H / 2 + 30), "ARMADURA")         # N3 tirante 2 Ø8
+    d1.poli([(NC_B + 40, 600), (NC_B + 40, H_PL - 30), (NC_B + 60, H_PL - 30), (NC_B + 60, 600)], "ARM_TRANSV")  # N4 suspensão
+    d1.poli([(10, Z_NC + NC_H / 2 + 60), (NC_B + 30, Z_NC + NC_H / 2 + 60), (NC_B + 30, Z_NC + NC_H / 2 + 100), (10, Z_NC + NC_H / 2 + 100)], "ARM_TRANSV")  # N5
+    d1.cota_h([0, NC_B, NC_B + 50], 600, -10, total=False)
+    d1.cota_v([600, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL], 0, -10, total=False)
+    d1.chamada((60, Z_NC), (70, -14), f"NC-1 caixa {NC_B} × {NC_H} × {NC_P} aberta na ponta e na face interna (PP01 det. 3)")
+    d1.chamada((300, Z_NC + NC_H / 2 + 30), (30, 2), f"N3 — {DN['tirante']} C=138 cm (tirante do dente)")
+    d1.chamada((NC_B + 50, 700), (40, -8), f"N4 — {DN['suspensao'].split(' a até')[0]} até as cordoalhas de baixo")
+    d1.chamada((NC_B + 30, Z_NC + NC_H / 2 + 80), (70, 2), f"N5 — {DN['costura'].split(' nos')[0]} (costura)")
+    d1.chamada((60, Z_NC + NC_H / 2 - 6), (60, -3), "teto 12,5: apoio do M16 de nível; armação completa N3–N7 no ND-LET-PP01")
+    # ---- detalhe 2: planta da ligação placa × pilar
+    d2 = pr.vista("DETALHE 2", (Q[0] + 380, Q[1] + 325), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA NA ALTURA DO CONSOLE)",
+                  subtitulo="2 consoles CS-1 soldados na CE-1 do pilar (uma por fiada); junta 20 no eixo; folga 25", unidade="mm")
     pil = [(-200, 0), (200, 0), (200, 450), (-200, 450)]
     d2.poli(pil, "CORTADO", fechada=True); d2.hachura(pil, "AR-CONC", 0.03)
+    d2.chapa(-CE_B / 2, 0, CE_B, 16, 0.4)                                                    # CE-1
+    for xs_ in (-120, 120):
+        d2.ret(xs_ - 8, 16, 16, 150, "METALICA")                                           # pinos Ø16 hef 150
+    d2.poli([(-150, 190), (-150, 210), (150, 210), (150, 190)], "ARM_TRANSV")              # grampo U Ø10
     for sg in (-1, 1):
-        x0 = sg * 5
-        pts = [(x0, -FOLGA), (sg * 650, -FOLGA), (sg * 650, -FOLGA - E_PL), (x0, -FOLGA - E_PL)]
+        x0 = sg * 10
+        pts = [(x0, -FOLGA), (sg * 450, -FOLGA), (sg * 450, -FOLGA - E_PL), (x0, -FOLGA - E_PL)]
         d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, "AR-CONC", 0.03)
-        d2.chapa(sg * 200 if sg > 0 else -212.5, -FOLGA, 12.5, 102, 0.4)                 # CL-1 aba no pilar (face lateral)
-        d2.chapa(sg * 200 if sg > 0 else -302, -FOLGA, 102, 12.5, 0.4)                    # CL-1 aba na placa
-        d2.ret(sg * 200 - (22 if sg > 0 else 0), 40, 22, 40, "METALICA")                 # trilho TR-1 embutido na face lateral
-        d2.linha((sg * 190, 60), (sg * 230, 60), "METALICA")                             # parafuso T M16
-        d2.ret(sg * 260 - 8, -FOLGA - 70, 16, 70 + 12.5 + 10, "METALICA")               # M16 na bucha BR-1
-    d2.cota_h([-650, -260, -200, 0, 200, 260, 650], -FOLGA - E_PL, -10, total=False)
-    d2.cota_v([-FOLGA - E_PL, -FOLGA, 0, 60, 450], 650, 10, total=False)
-    d2.chamada((210, 60), (12, 20), "TR-1 trilho vertical embutido (faces laterais) + parafuso T M16 8.8")
-    d2.chamada((260, -FOLGA + 6), (16, -18), "CL-1 L 102×102×12,5 L=150; furo oblongo 18×40 horizontal na aba da placa")
-    d2.chamada((-260, -FOLGA - 40), (-16, -14), "M16 8.8 na bucha BR-1 da placa")
-    d2.chamada((-400, -FOLGA - 60), (-10, -24), "placa 10 cm")
-    d2.chamada((0, -FOLGA - 50), (8, -30), "junta 20 mm: tarucel Ø25 + selante PU (±25 %)")
-    # ---- detalhe 4: consolo metálico CA-1 (corte vertical, 1:5 mm) — sem solda
-    d4 = pr.vista("DETALHE 4", (Q[0] + 330, Q[1] + 115), 5, titulo="DETALHE 4 — CONSOLO METÁLICO CA-1", subtitulo="apoio da 1ª placa de pacote suspenso (vistas E, F, H, I, J); parafusado", unidade="mm")
-    d4.ret(0, -350, 400, 750, "VISTA")
-    d4.chapa(-152, -19, 152, 19, 0.4)                                          # aba de assento (152)
-    d4.chapa(-19, -102, 19, 102, 0.4)                                          # aba pendurada (102) contra o pilar
-    d4.ret(0, -72, 120, 24, "OCULTA")                                          # luva IB-1
-    d4.ret(120, -64, 280, 8, "ARMADURA")                                       # barra de ancoragem da luva
-    d4.ret(-35, -70, 120, 20, "METALICA")                                      # M20
-    d4.ret(-FOLGA - E_PL + 10, 0, E_PL - 10, 10, "METALICA")                  # neoprene 10
-    pts = [(-FOLGA - E_PL, 10), (-FOLGA, 10), (-FOLGA, 400), (-FOLGA - E_PL, 400)]
+        d2.interrupcao((sg * 450, -FOLGA), (sg * 450, -FOLGA - E_PL))
+        xe = x0 + sg * NC_B
+        d2.poli([(x0, -FOLGA - NC_P), (xe, -FOLGA - NC_P), (xe, -FOLGA)], "METALICA")    # nicho aberto na ponta e na face interna
+        xc = sg * (10 + X_CS)
+        d2.chapa(xc - 60, -16, 120, 16, 0.4)                                                 # costas do CS-1
+        for dx in (-35, 35):
+            d2.chapa(xc + dx - 4.75, -GF.C["alma"]["y1"], 9.5, GF.C["alma"]["y1"] - 16, 0.4)   # almas
+    d2.cota_h([-130, -10, 10, 130], -FOLGA - E_PL, -10, total=False)
+    d2.cota_v([-FOLGA - E_PL, -FOLGA - NC_P, -FOLGA, 0, 450], 450, 10, total=False)
+    d2.chamada((120, 90), (20, 32), "CE-1 380 × 330 × 16 + 4 pinos Ø16 × 150 c/ cabeça Ø32 + 2 grampos U Ø10 N18 (pilar; PP01 det. 5)")
+    d2.chamada((70, -8), (34, 6), "CS-1 soldado na obra: filete 6 E70XX nos 2 lados verticais das costas")
+    d2.chamada((-70, -FOLGA - 50), (-20, 16), "NC-1 nicho da placa (aberto na ponta)")
+    d2.chamada((-350, -FOLGA - 60), (-6, -16), "placa 10 cm")
+    d2.chamada((0, -FOLGA - 90), (16, -16), "junta 20 mm: tarucel Ø25 + selante PU (±25 %)")
+    # ---- detalhe 3: pino de travamento PT-1 (corte vertical na junta) e trava de pé PT-2 (planta)
+    d3 = pr.vista("DETALHE 3", (Q[0] + 90, Q[1] + 260), 5, titulo="DETALHE 3 — PINO DE TRAVAMENTO PT-1 (CARTOLA)",
+                  subtitulo="2 por junta, ao lado das alças AL-P; só força fora do plano; oblongo vertical", unidade="mm")
+    for z0_, z1_ in ((-150, -5), (5, 150)):
+        pts = [(-E_PL, z0_), (0, z0_), (0, z1_), (-E_PL, z1_)]
+        d3.poli(pts, "CORTADO", fechada=True); d3.hachura(pts, "AR-CONC", 0.03)
+    for zl in (-70, 70):
+        d3.chapa(-70, zl - 8, 70, 16, 0.15)                                                  # luvas TSA M16 (hef 70)
+    hat = [(0, -110), (6.3, -110), (6.3, -40), (36.3, -40), (36.3, 40), (6.3, 40), (6.3, 110), (0, 110), (0, 33.7), (30, 33.7), (30, -33.7), (0, -33.7)]
+    d3.poli(hat, "METALICA", fechada=True); d3.hachura(hat, "ANSI31", 0.15, "METALICA")
+    for zl in (-70, 70):
+        d3.ret(0, zl - 8, 22, 16, "METALICA")
+    d3.cota_v([-110, -70, -5, 5, 70, 110], 40, 10, total=False)
+    d3.chamada((36, 0), (16, 6), "PT-1 cartola Trejor 6,3 × 80 (aço galv.)")
+    d3.chamada((10, 70), (16, 10), "M16 8.8 na luva TSA (oblongo 18 × 40 vertical)")
+    d3.chamada((-35, -70), (20, -18), "luva TSA M16 hef 70 (as 2 placas)")
+    d3.chamada((-50, 0), (-16, 14), "folga 5 mm (macho-fêmea)")
+    # ---- detalhe 4: corte vertical pelo console CS-1
+    d4 = pr.vista("DETALHE 4", (Q[0] + 415, Q[1] + 20), 5, titulo="DETALHE 4 — CONSOLE CS-1 E NICHO NC-1 (CORTE VERTICAL)",
+                  subtitulo="cada placa no seu console: peso + vento; M16 de nível, prisioneiro frontal, 2 dentes; fabricação nas PP02–PP04", unidade="mm")
+    zb, za_ = Z_NC + NC_H / 2, Z_NC - NC_H / 2
+    d4.ret(0, za_ - 250, 250, 600, "VISTA")
+    d4.chapa(0, Z_CE - CE_H / 2, 16, CE_H, 0.4)                                            # CE-1 (embutida, rente à face)
+    for zp in (Z_CE - 140, Z_CE + 140):
+        d4.ret(16, zp - 8, 150, 16, "METALICA")
+    pts = [(-FOLGA - E_PL, za_ - 250), (-FOLGA, za_ - 250), (-FOLGA, zb + 210), (-FOLGA - E_PL, zb + 210)]
     d4.poli(pts, "CORTADO", fechada=True); d4.hachura(pts, "AR-CONC", 0.03)
-    d4.cota_v([-102, -60, -19, 0], -152, -10, total=False)
-    d4.cota_h([-152, -FOLGA - E_PL, -FOLGA, 0], -102, -20, total=False)
-    cf = P["fixacoes"]["CA1"]
-    d4.chamada((-100, -10), (-8, -44), "CA-1: L 152×102×19 A572-50, L = 300 (sem solda)")
-    d4.chamada((60, -60), (14, -16), "2 M20 8.8 nas luvas IB-1 (M20 + barra Ø16 L=400) do pilar")
-    d4.chamada((-60, 5), (-14, 22), f"neoprene {E_PL - 10} × 150 × 10")
-    d4.chamada((-60, 250), (-12, 10), "1ª placa do pacote")
+    d4.ret(-FOLGA - NC_P, za_, NC_P, NC_H, "METALICA")                                        # cavidade do nicho
+    Nn, Cc = GF.N, GF.C
+    pf_ = Nn["P"] - Nn["t_fundo"]
+    d4.chapa(-FOLGA - pf_, zb - Nn["t_teto"], pf_, Nn["t_teto"], 0.4)                          # teto
+    d4.ret(-FOLGA - Nn["t_aba"], zb - Nn["t_teto"] - Nn["h_aba"], Nn["t_aba"], Nn["h_aba"], "OCULTA")   # abas laterais (fora do corte)
+    d4.chapa(-FOLGA - pf_, za_, pf_, Nn["t_base"], 0.4)                                         # base
+    d4.chapa(-FOLGA - Nn["P"], za_, Nn["t_fundo"], NC_H, 0.4)                                   # fundo
+    al_ = [(-y, zt_cs + z) for y, z in GF.alma_poli()]
+    d4.chapa(-16, zt_cs + Cc["costas"]["z0"], 16, Cc["costas"]["z1"] - Cc["costas"]["z0"], 0.4)  # costas do CS-1
+    d4.poli(al_, "METALICA", fechada=True); d4.hachura(al_, "ANSI31", 0.4, "METALICA")
+    d4.chapa(-Cc["mesa"]["y1"], zt_cs - Cc["mesa"]["t"], Cc["mesa"]["y1"] - Cc["mesa"]["y0"], Cc["mesa"]["t"], 0.4)
+    d4.chapa(-Cc["dente"]["y0"] - Cc["dente"]["t"], zt_cs, Cc["dente"]["t"], Cc["dente"]["h"], 0.4)   # dentes (laterais)
+    d4.chapa(-Cc["ponta"]["y0"] - Cc["ponta"]["t"], zt_cs + Cc["ponta"]["z0"], Cc["ponta"]["t"], Cc["ponta"]["z1"] - Cc["ponta"]["z0"], 0.4)
+    yn_ = Cc["y_nivel"]
+    d4.ret(-yn_ - 12, zt_cs, 24, 22.8, "METALICA"); d4.ret(-yn_ - 8, zt_cs + 22.8, 16, GF.T["G"] - 10 - 22.8, "METALICA"); d4.ret(-yn_ - 12, zt_cs + GF.T["G"] - 10, 24, 10, "METALICA")
+    yt_ = FOLGA + NC_P - Nn["t_fundo"]
+    d4.ret(-yt_, zt_cs + Cc["z_frontal"] - 8, Cc["L_frontal"], 16, "METALICA")
+    d4.cota_v([za_, zt_cs, zb - Nn["t_teto"], zb], -FOLGA - E_PL, -10, total=False)
+    d4.cota_h([-FOLGA - E_PL, -FOLGA - NC_P, -FOLGA, -16, 0], za_ - 250, -10, total=False)
+    cs = FX["console_mef"]
+    d4.chamada((-6, Z_CE + 150), (10, 16), "CE-1 + pinos Ø16 × 150 (pilar, PP04)")
+    d4.chamada((-8, zt_cs - 150), (-30, -24), "CS-1: costas, almas, mesa, 2 dentes, chapa de ponta (PP03)")
+    d4.chamada((-yn_, zt_cs + 30), (-30, 22), "M16 de nível: G = 50 ± 10 sob o teto")
+    d4.chamada((-yt_ + 10, zt_cs + Cc["z_frontal"]), (-30, -6), "prisioneiro M16 frontal: afastamento 25 ± 5")
+    d4.chamada((-Cc["dente"]["y0"] - 10, zt_cs + 25), (-30, 40), "2 dentes 19 atrás das 2 abas 12,5 (sucção)")
+    d4.chamada((-FOLGA - E_PL / 2, za_ - 120), (-14, -10), "placa 10 cm")
+    # ---- detalhe 6: trava de pé PT-2 (planta, 1:5 mm) — placas de pacote suspenso (sem pano contínuo até o baldrame)
+    d6 = pr.vista("DETALHE 6", (Q[0] + 75, Q[1] + 140), 5, titulo="DETALHE 6 — TRAVA DE PÉ PT-2 (PLANTA)",
+                  subtitulo="placas de pacote suspenso (E, F e acima das esquadrias): 2 por placa, 15 cm acima da base", unidade="mm")
+    pil6 = [(-200, 0), (0, 0), (0, 200), (-200, 200)]
+    d6.poli(pil6, "CORTADO", fechada=True); d6.hachura(pil6, "AR-CONC", 0.03)
+    pl6 = [(-200, -FOLGA), (260, -FOLGA), (260, -FOLGA - E_PL), (-200, -FOLGA - E_PL)]
+    d6.poli(pl6, "CORTADO", fechada=True); d6.hachura(pl6, "AR-CONC", 0.03); d6.interrupcao((260, -FOLGA), (260, -FOLGA - E_PL))
+    d6.chapa(0, -FOLGA, 9.5, FOLGA + 102, 0.15)                                               # aba no pilar (face lateral)
+    d6.chapa(0, -FOLGA, 102, 9.5, 0.15)                                                       # aba na placa
+    d6.ret(-100, 52 - 8, 100, 16, "METALICA")                                                 # BR-2 M16 hef 100 no pilar
+    d6.ret(51 - 8, -FOLGA - 70, 16, 70, "METALICA")                                           # BR-1 M16 hef 70 na placa
+    d6.cota_v([-FOLGA - E_PL, -FOLGA, 52, 77], 260, 10, total=False)
+    d6.chamada((5, 60), (14, 14), "PT-2 L 102×102×9,5 L=150; oblongo 18 × 40 vertical na aba do pilar")
+    d6.chamada((-60, 52), (30, 26), "bucha BR-2 M16 hef 100 (face lateral do pilar)")
+    d6.chamada((51, -FOLGA - 50), (16, -10), "bucha BR-1 M16 hef 70 (placa)")
     # ---- detalhe 5: alça AL-P (1:10)
-    d5 = pr.vista("DETALHE 5", (Q[0] + 110, Q[1] + 110), 10, titulo="DETALHE 5 — ALÇA AL-P", subtitulo="cordoalha Ø12,7 CP-190 RB", unidade="cm")
+    d5 = pr.vista("DETALHE 5", (Q[0] + 270, Q[1] + 80), 10, titulo="DETALHE 5 — ALÇA AL-P", subtitulo="cordoalha Ø12,7 CP-190 RB", unidade="cm")
     d5.ret(-250, -600, 500, 600, "VISTA")
     d5.poli([(-60, -550), (-60, 80), (0, 120), (60, 80), (60, -550)], "ARMADURA")
     for xx in (-60, 60):
@@ -398,24 +499,28 @@ def prancha_tipo():
     y = pr.tabela(XC, y, f"TIPOS DE PLACA — {N_TOT} PEÇAS", ["TIPO", "L (cm)", "QT", "PESO (t)", "VISTAS"], rows, [18, 22, 14, 22, 114], destaque_ultima=True)
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=8, y=26, forca=P["protensao"]["F_macaco_kN"], isol=0)], 60)
     y = tc["y_base"]
-    ins = [["BR-1", "Bucha M16 c/ barra transversal, hef 70 (galv.)", 2, "face interna, pontas, 15 cm do topo"],
+    ins = [["NC-1", "Caixa 120×200×60 (ND-LET-PP02)", 2, "face int., nas 2 pontas"],
+           ["TSA", "Luva roscada M16 hef 70 (PT-1)", 4, "topo e base, 0,21 L + 15"],
            ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L das pontas"],
-           ["CL-1", "L 102×102×12,5 L=150 + M16 + parafuso T M16", 2, "trilho TR-1 do pilar × BR-1"],
-           ["CA-1", "L 152×102×19 L=300 + 2 M20 (luvas IB-1)", "—", "sob a 1ª placa de pacote suspenso"]]
-    y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS METÁLICAS — mm", ["MARCA", "DESCRIÇÃO", "QT/PL", "POSIÇÃO"], ins, [14, 86, 14, 76])
+           ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
+           ["CS-1", "Console soldado na obra (ND-LET-PP03)", "2", "CE-1 do pilar (det. 4)"],
+           ["PT-1", "Cartola 6,3 × 80 + 2 M16", "2", "junta de baixo (det. 3)"],
+           ["PT-2", "L 102×102×9,5 L=150 + 2 M16", "(2)", "pé, pacote suspenso (det. 6)"]]
+    y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS METÁLICAS — mm", ["MARCA", "DESCRIÇÃO", "QT/PL", "POSIÇÃO"], ins, [14, 92, 12, 72])
     rows_a = []
     for L in sorted(TIPOS, key=lambda L: -L):
         n = len(TIPOS[L])
         kg_n2 = 2 * (L - 60) / 1000 * 0.395 * 1.10
-        rows_a.append([TIPO[L], n, f"2 Ø8 C={(L - 60)/10:.0f}".replace(".", ","), f(TELA_PL, 2), f(kg_n2 + TELA_PL * 1.48 * 1.10, 1), f((kg_n2 + TELA_PL * 1.48 * 1.10) * n, 0)])
-    y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/placa", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
+        kg_den = KG_DENTE * 1.10
+        rows_a.append([TIPO[L], n, f"2 Ø8 C={(L - 60)/10:.0f}".replace(".", ","), f(TELA_PL, 2), f(kg_n2 + TELA_PL * 1.48 * 1.10 + kg_den, 1), f((kg_n2 + TELA_PL * 1.48 * 1.10 + kg_den) * n, 0)])
+    y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/pl (c/ N3–N7)", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, [
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
         f"Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
-        "Produção deitada, face interna para cima (buchas BR-1 presas na fôrma com gabarito); basculamento e montagem pelas alças AL-P do topo; estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
-        "Montagem: 1ª placa de cada pano na viga baldrame ou em 2 consolos CA-1 (parafusados); as demais encaixadas na de baixo com tira de elastômero 10 mm; CL-1 parafusada nas duas pontas (trilho TR-1 + BR-1) antes de soltar o guindaste. Nenhuma solda.",
-        f"Trilho TR-1 (pilar) e bucha BR-1 (placa): carga de cálculo ≥ {f(P['fixacoes']['R_vento_ponta_d'] + 0.05)} kN por ponto, em tração e em cortante (conferir no catálogo do fornecedor).",
+        "Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
+        "Montagem (sistema Trejor, DEC-026): soldar os 2 consoles CS-1 nas CE-1 dos pilares no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G 50 ± 10), afastamento 25 ± 5 pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa leva só o próprio peso e o vento: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos PT-1 na junta de baixo (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",
+        f"Cargas por console: G = {f(FX['cargas_por_console']['G_k_kN'])} kN (k), Vd = {f(FX['cargas_por_console']['Vd_kN'])} kN (montagem, γf·βa = 1,69), vento {f(FX['cargas_por_console']['vento_d_kN'])} kN (d); PT-1 {f(FX['mef_parede']['F_pino_d_kN'])} kN, PT-2 {f(FX['trava_pe_PT2']['F_d_kN'])} kN. Medidas do CS-1/NC-1 de pré-dimensionamento: confirmar com o catálogo Trejor (consoles para painéis de fachada).",
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",
         "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±5 mm (de projeto, para a junta de 20 mm), espessura −5/+10 mm, planicidade ±L/1000, insertos ±15 mm; montagem: prumo H/300 ≤ 25 mm, nível ±10 mm. Içamento na vertical pelas alças do topo: estabilidade lateral verificada (6.1).",
         "Cotas de concreto em cm, metálicas em mm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
@@ -430,6 +535,7 @@ def prancha_cm():
     pr.revisao("02", "12/10/2026", "GEOMETRIA DA LOCAÇÃO DO R01; H/J LATERAIS DO ANEXO; E/F ABERTAS ATÉ +7,50; 2 PORTÕES; PRANCHAS POR VISTA")
     pr.revisao("03", "14/10/2026", "PLACAS 125 × 10; LIGAÇÕES SEM SOLDA; VT DO EIXO A A +6,25; PORTÕES ATÉ +7,40")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; E E F ABERTAS ATÉ +7,50; JUNTA VERTICAL 20 mm")
+    pr.revisao("06", "17/10/2026", "FIXAÇÃO DAS PLACAS PELO SISTEMA TREJOR (CS-1 + CE-1 + NC-1 + PT-1/PT-2)")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("CM", f"PLACAS PROTENDIDAS 125 × 10 — {N_TOT} PEÇAS · {len(TIPO)} TIPOS · 10 VISTAS · {f(PESO_TOT, 0)} t",
@@ -497,8 +603,8 @@ def prancha_cm():
         "Vistas como no R01: B e D (linhas 4–9) fechadas, 8 fiadas; E (eixo A) e F (eixo E), linhas 2–4, só as 2 fiadas de cima (rev04, sem VT); H, J (anexo) e I (fachada da linha 1) com faixas de esquadria de +1,25 a +2,50 e de +5,00 a +6,25 e porta na I; A (linha 9) fechada.",
         "Paredes internas C (linha 4) e G (linha 2) com placas até +7,50 (vão A–B até +6,25: a TS-01 desce a +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve — confirmar com o cliente.",
         "Linha 4: 2 portões (P9–P10 e P10–P12), livres até +7,40 (topo do PG-01), sob a TS-01; o trecho P10–P11–P10 é fechado.",
-        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); ligações parafusadas (trilho TR-1 + bucha BR-1 + CL-1) e consolos CA-1 parafusados, sem solda: ND-LET-PP00.",
-        "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (CL-1 com furo oblongo) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
+        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); rev06 (DEC-026, sistema Trejor): cada placa nos seus 2 consoles CS-1 soldados na obra nas chapas de espera CE-1 dos pilares, nicho NC-1 nas pontas, folga de 5 mm na junta horizontal (sem empilhar peso), 2 pinos PT-1 por junta ou trava de pé PT-2 nos pacotes suspensos: ND-LET-PP00.",
+        "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (consoles com folga e pinos com furo oblongo vertical) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
         "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CM01")
     print("CM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])

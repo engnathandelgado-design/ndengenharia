@@ -13,6 +13,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Letsara rev06 (DEC-026): trocar as medidas de pré-dimensionamento do CS-1, NC-1 e cartola PT-1 pelas do catálogo 09 da Trejor (anexar o PDF e o DWG "Consoles 2a ETAPA" do e-mail de 05/02/2021) e recalcular `calc_fixacao_placas.py`; luvas TSA dos PT-1 da 1ª fiada no topo da viga baldrame (projeto de fundações); nas placas ao lado da porta da vista I, alinhar as TSA das peças de baixo com os pinos da peça de cima; CE-1 dos pilares do anexo (H/J/I) contadas em Z_PL[:6] (rever as fiadas reais com esquadria).
 - [ ] Letsara rev06: confirmar a intensidade de chuva da cidade (NBR 10844 tab. 5; adotado 200 mm/h) e a rede de drenagem das 9 descidas Ø200; desenhar os insertos IL-1 nas vistas dos pilares PG e a CL-P em detalhe próprio; conferir com a fábrica os insertos IT-P no fundo da TS-01A entre as cordoalhas; rodar os pilares da família 40×60 com os esforços do modelo integrado (uso 0,66).
 
 - [ ] Letsara: confirmar com o fornecedor o peso dos painéis solares (0,15 kN/m²) e a capacidade do trilho TR-1 / bucha BR-1 (≥ 12,4 kN por ponto); confirmar com a fábrica a cabeceira de 1105 kN da placa e a furação nova da grade da TS-01.
@@ -51,6 +52,10 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] Letsara rev06c: fixação compatibilizada (parede 3, 2 abas, 2 dentes, M16 com porca soldada, prisioneiro, grampos Ø6,3) e pranchas de fabricação PP02–PP04 com isométricos explodidos, soldas, roscas e listas; PP01 com conjunto, tolerâncias e sequência.
+- [x] Letsara rev06b: projeto executivo da fixação das placas — ND-LET-PP01 (armação da ponta, NC-1 caixa, CS-1, CE-1 + N18, PT-1, PT-2), PP00, pilares, MC07, quantitativos, IFC e PDF único.
+- [x] Letsara rev06 (DEC-026): fixação das placas pelo sistema Trejor — estudo IFC dos 4 sistemas, cálculo (MEF de casca, dente Gerber, console NBR 8800, CE-1, PT-1, PT-2), memória MC07, PP00/PP-x/CM01, pilares com CE-1, listas e IFC.
 
 - [x] Letsara rev06 (17/10/2026): modelo integrado r05 + otimização do X (DEC-024), 15 espaços de terça e calha do eixo A (DEC-025), COB03, PG-01 a PG-04, ST-1V-R, memória MC06 rev06, entregas rev06.
 - Letsara rev05: terças Z METSEC contínuas por transpasse, sem mão-francesa (DEC-023); estudo de terças (Ue, Z, C — Isoeste e METSEC).
