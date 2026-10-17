@@ -31,21 +31,21 @@ for pino, d in (("PN-3 Ø25 (pilares laterais)", 25), ("PN-5 Ø20 (I130, P8A, P1
         "tubos grauteados; na linha 2 (P8A) com mastique (desliza em x)")
 reg("TS-01 × apoio", "TS-01", "8 cordoalhas: |x| ≤ 40 e x = ±155", "tubos TB-3", "y = ±100, Ø50", "folga livre cordoalha × tubo", "100 − 25 − 40 − 6,35 = 28,7 mm ≥ 22,8 (1,2 dmáx)", True, "")
 
-# ------------------------------------------------------------------ 3. terças × TS-01 (ST-1P parafusado nas esperas ES-1) e mão-francesa (CMF-1 na ES-3)
+# ------------------------------------------------------------------ 3. terças Z × TS-01 (ST-1P parafusado nas esperas ES-1) e emendas por transpasse (sem mão-francesa)
 for t in LG["tercas"][:14]:
     reg("terça × TS-01", t["peca"], "ES-1 (2 M16) + ST-1P", t["com"], "linha de terças", "posição das esperas × linha de terças", f"{t['dist_mm']:.1f} mm", t["ok"], "")
 st = CM["ST1P"]
-reg("terça × TS-01", "ST-1P chapa dobrada 9,5", "4 furos Ø14 (2 por terça)", "terça Ue 300×2,65", "furos Ø14 a 60 da ponta, a 100 e 200 do fundo",
-    "furo da terça × furo do ST-1P (folga 10 mm da ponta ao eixo)", "60 − 10 = 50 = 50", True, "terça L = vão − 20")
-reg("terça × TS-01", "ST-1P", "furo Ø14", "terça Ue 300 (alma 2,65)", "M12 8.8", "2 M12 por ponta: corte / contato na alma", f"uso {st['M12_alma']['uso']:.2f}", st["M12_alma"]["uso"] <= 1.0, "")
+tc = CM["terca"]; pc = CM["pecas"]
+reg("terça × TS-01", "ST-1P chapa dobrada 9,5", "4 furos Ø14 (2 colunas a ±60, a 62 e 257 do concreto)", "2 terças Z 302×2,30 no transpasse", f"furos da alma a {pc['furos_z_mm'][0]} e {pc['furos_z_mm'][1]} do fundo (METSEC E/F)",
+    "furos da terça × furos do ST-1P (fundo 10 acima do concreto)", f"10 + {pc['furos_z_mm'][0]} = 62; 10 + {pc['furos_z_mm'][1]} = 257", True, f"peças com transpasse de {pc['transpasse_cada_lado_mm']} além do eixo")
+reg("terça × TS-01", "ST-1P", "furo Ø14", "terça Z 302 (alma 2,30) — sem mão-francesa", "4 M12 8.8", "torção de apoio (tração) + reação e escora (corte)", f"interação {tc['apoio']['uso']:.2f}", tc["apoio"]["uso"] <= 1.0, tc["apoio"]["nota"])
+reg("terça × terça", "emenda por transpasse", f"2 M12 a {pc['furos_transpasse_da_ponta_mm']} de cada ponta", "almas das 2 terças", "M12 8.8", "transferência do momento de apoio",
+    f"uso {tc['parafusos_transpasse']['uso']:.2f}", tc["parafusos_transpasse"]["uso"] <= 1.0, f"Fd {tc['parafusos_transpasse']['Fd']} kN ≤ {tc['parafusos_transpasse']['Rd']} kN")
 reg("terça × TS-01", "ST-1P", "aba horizontal 150, oblongos 18×40", "ES-1 (2 M16 a y = ±60)", "porca + contraporca", "flexão da aba / esperas (tração + corte)",
     f"aba {st['aba']['uso']:.2f}; esperas {st['esperas']['interacao']:.2f}", st["aba"]["uso"] <= 1 and st["esperas"]["interacao"] <= 1, "sem solda")
-mf = CM["MF1"]
-reg("mão-francesa", "MF-1 L 50×5", "furo Ø14 nas duas pontas", "CMF-1 (ES-3) / terça", "M12 8.8; alma da terça a 40 do fundo, a 1070 do eixo da viga", "compressão da MF", f"uso {mf['uso']:.2f}", mf["uso"] <= 1,
-    f"Nd {mf['Nd_kN']} kN; comprimento {mf['comp_m']} m; espera ES-3 a 100 do fundo, hef 110, fora das cordoalhas")
 for ch, d in CM["chumbadores"].items():
     val = d.get("interacao", d.get("uso"))
-    reg("esperas (ACI 318-19 cap. 17)", "TS-01", ch, "terça / X / mão-francesa", d["esperas"], "uso / interação tração × corte", f"{val:.2f} ≤ 1", val <= 1.0, "")
+    reg("esperas (ACI 318-19 cap. 17)", "TS-01", ch, "terça / X", d["esperas"], "uso / interação tração × corte", f"{val:.2f} ≤ 1", val <= 1.0, "")
 
 # ------------------------------------------------------------------ 3b. contraventamento em X de nó a nó (CH-T2 × CH-T2) e correntes
 cx, cc, lc = CM["contraventamento"], CM["correntes"], LG["contraventamento"]
@@ -54,8 +54,8 @@ reg("contraventamento", "diagonal Ø16 (rosca M16) + esticador", f"painel {cx['p
     f"Vd {cx['V_painel_d']} kN por painel; {lc['n_tirantes']*2} diagonais ({lc['n_tirantes']} por meia água × 2)")
 reg("contraventamento", "cruzamento do X", "2 diagonais a 45 e 85 mm do concreto", "terça intermediária do painel", "furos Ø18 na alma a 35 e 75 do fundo",
     "folga entre as diagonais / borda do furo ao fundo da terça", f"{lc['folga_cruzamento_mm']:.0f} mm / {lc['borda_furo_fundo_terca_mm']} mm", lc["ok"], "as diagonais cruzam-se sobre a terça, no meio do vão")
-reg("contraventamento", "orelha OR-X", "a 140 do eixo da terça", "terça do nó (mesa 85)", "ST-1P", "folga orelha × mesa da terça", f"{lc['folga_min_terca_mm']} mm ≥ 20", lc["folga_min_terca_mm"] >= 20, "")
-reg("contraventamento", "terça escora (todas as linhas de terças)", "Ue 300×85×25×2,65", "ST-1P", "2 M12 por ponta", "N + M (NBR 14762:2010 9.9), vento 0°", f"{CM['terca_escora']['interacao']:.2f} ≤ 1", CM["terca_escora"]["interacao"] <= 1.0,
+reg("contraventamento", "orelha OR-X", "a 140 do eixo da terça", "terça do nó (aba 90/82)", "ST-1P", "folga orelha × mesa da terça", f"{lc['folga_min_terca_mm']} mm ≥ 20", lc["folga_min_terca_mm"] >= 20, "")
+reg("contraventamento", "terça escora (todas as linhas de terças)", "Z 302×90/82×2,30", "ST-1P", "4 M12 por apoio", "N + M (NBR 14762:2010 9.9), vento 0°", f"{CM['terca_escora']['interacao']:.2f} ≤ 1", CM["terca_escora"]["interacao"] <= 1.0,
     f"governa vão {CM['terca_escora']['vao_governante']}, x = {CM['terca_escora']['linha_governante_x_m']} m (faixa {CM['terca_escora']['faixa_governante']}, vento {CM['terca_escora']['vento_governante']}): Nd {CM['terca_escora']['Nd']} kN; Nd máx. {CM['terca_escora']['Nd_max']} kN")
 reg("correntes", f"corrente flexível Ø{cc['flexivel']['d_mm']:g} M{cc['flexivel']['d_mm']:g}", f"furo {cc['flexivel']['furo']} no meio da alma", "terças", "porca + contraporca dos 2 lados", "tração acumulada (13 terças)", f"{cc['F_max_kN']} ≤ {cc['flexivel']['NtRd']} kN", cc["flexivel"]["uso"] <= 1, "")
 reg("correntes", "tirante rígido L 51×51×3,2", "clipe L 32×3 + M10 em furo oval", "1ª e 2ª terça junto às ancoragens", "furo oval 11×23 na alma", "compressão, λ " + str(cc["rigida"]["esbeltez"]), f"{cc['F_max_kN']} ≤ {cc['rigida']['NcRd']} kN", cc["rigida"]["uso"] <= 1, "")

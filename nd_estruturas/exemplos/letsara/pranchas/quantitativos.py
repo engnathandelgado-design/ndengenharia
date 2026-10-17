@@ -8,7 +8,7 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev04.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev05.xlsx")
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 LGQ = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
@@ -149,7 +149,7 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
 add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8)
-for k in ("ES-1", "ES-2", "ES-3", "TB-3", "AL-1"):
+for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
 for l in tab("PP00", "INSERTOS E PEÇAS")["linhas"]:
@@ -247,10 +247,10 @@ ws = wb.create_sheet("Cobertura metálica")
 r = folha(ws, "COBERTURA METÁLICA — TERÇAS, LIGAÇÕES E TRAVAMENTOS (parafusados)", RODAPE, ["MARCA", "DESCRIÇÃO", "QTD", "kg/un", "kg TOTAL", "ORIGEM"], [12, 70, 8, 9, 12, 18])
 r0 = r
 for m_, L, vaos, fur, qt, kg in terc:
-    linha(ws, r, [m_, f"terça Ue 300×85×25×2,65 ZAR 345, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
+    linha(ws, r, [m_, f"terça Z 302×90/82×2,30 METSEC (302Z23, fy 400, Z275), contínua por transpasse, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
           {4: "0.0", 5: "#,##0"}, entrada=(3, 4)); r += 1
 for m_, desc, qt, onde in lig_cob:
-    if m_ in ("ES-1", "ES-3"):
+    if m_ in ("ES-1",):
         continue                                              # esperas embutidas nas vigas: aba Insertos
     kgu = {"ST-1P": KG_UN.get("ST-1P", 7.4), "ST-1V": 7.4, "CMF-1": KG_UN.get("CMF-1", 0.6), "MF-1": KG_UN.get("MF-1", 4.6), "M12 8.8": 0.12, "M16": 0.08}.get(m_, 0)
     linha(ws, r, [m_, f"{desc} — {onde}", int(qt), kgu, f"=C{r}*D{r}", "ND-LET-COB01"], {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
@@ -346,12 +346,12 @@ def listas_pdf(caminho):
 
     def rodape(c, d):
         c.saveState(); c.setFont("DV", 7)
-        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev04 — projeto da ND Engenharia — para aprovação")
+        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev05 — projeto da ND Engenharia — para aprovação")
         c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
 
     doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
-                            title="Letsara — listas de materiais rev04", author="ND Engenharia")
-    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev04, 16/10/2026)", T1),
+                            title="Letsara — listas de materiais rev05", author="ND Engenharia")
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev05, 17/10/2026)", T1),
          Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
             "Rev04 (NBR 9062:2017): sem vigas de travamento; VM do mezanino em meio vaso com dente Gerber; pilares laterais 14 Ø20; neoprenes e consolos revistos.")]
     # 1 peças

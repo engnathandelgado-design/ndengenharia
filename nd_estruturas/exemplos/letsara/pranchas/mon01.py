@@ -32,6 +32,7 @@ pr.revisao("01", "12/10/2026", "geometria do R01 (79,35 × 39,50 m); corte 1-1 c
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (RECUO E TOPO DA I130); I130; COBERTURA REBAIXADA")
 pr.revisao("02", "12/10/2026", "MARCAS DOS PILARES POR LINHA; VB-01 A VB-04 15×90; PILARES DOS PORTÕES; CONSOLOS SEM CHANFRO")
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; NEOPRENES E CONSOLOS REVISTOS; MEZANINO MEIO VASO; VB 15×60 COM DENTE")
+pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE, SEM MÃO-FRANCESA")
 Q = pr.quadro
 
 # ------------------------------------------------------------------ PLANTA DE MONTAGEM 1:200 (x = comprimento 1–9, y = largura A–E)
@@ -119,7 +120,7 @@ for s in LG["s_tercas"]:
         c.ret(M(x) - 42, M(zf(x) + 0.91), 85, 300, "METALICA")
 c.linha((300, M(zf(0.30) + 1.21)), (Ly - 300, M(zf(Ly / 1000 - 0.30) + 1.21)), "METALICA")
 c.linha((300, M(zf(0.30) + 1.47)), (Ly - 300, M(zf(Ly / 1000 - 0.30) + 1.47)), "METALICA")
-c.texto((M(10), M(zf(10) + 1.8)), "TP40 + lã 40 + zipada + painéis solares sobre terças Ue 300 nos ST-1P (ND-LET-COB01)", "min", "BOTTOM_CENTER")
+c.texto((M(10), M(zf(10) + 1.8)), "TP40 + lã 40 + zipada + painéis solares sobre terças Z 302 contínuas nos ST-1P (ND-LET-COB01)", "min", "BOTTOM_CENTER")
 # níveis
 def niv(x, z, txt, lado=1):
     c.poli([(x, z), (x + lado * 250, z + 250), (x + lado * 250, z - 250), (x, z)], "COTA")

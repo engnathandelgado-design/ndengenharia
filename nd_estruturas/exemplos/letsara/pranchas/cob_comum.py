@@ -1,7 +1,8 @@
 """Cobertura metálica Letsara — geometria e marcas comuns às pranchas COB01 e COB02 (mm, x = transversal, y = longitudinal).
 
 Lógica de travamento (padrão das coberturas de referência do escritório):
-  - terças Ue 300 simplesmente apoiadas de viga a viga (TS-01 nas linhas 2–8; VB nas fachadas 1 e 9);
+  - rev05: terças Z 302×90/82×2,30 METSEC contínuas nos 8 vãos por transpasse (METLAP) sobre cada TS-01 (linhas 2–8);
+    nas fachadas 1 e 9 apoiam na VB pelo ST-1V; cada peça vence um vão e passa o transpasse do apoio interno;
   - 3 linhas de correntes Ø10 por vão (L/4, L/2, 3L/4), contínuas em cada meia água (13 terças);
   - nas duas pontas de cada meia água (1º espaço de terças): tirantes rígidos L 51×51×3,2 nas 3 linhas e diagonais de
     ancoragem Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça (Λ);
@@ -9,7 +10,7 @@ Lógica de travamento (padrão das coberturas de referência do escritório):
     2–3 e 7–8 (vizinhos aos oitões; rev. 03 — modelo global R01: X dos vãos 4–5 e 5–6 sem função, esforço no X 7,1 kN com
     2 ou 4 vãos); as terças dos nós são os montantes (escoras);
   - CH-T2 mantida em todas as TS-01 (marca única, mesma fôrma e insertos); orelhas sem uso nas linhas 4 a 6;
-  - mão-francesa (MF) em toda terça, dos dois lados de cada viga.
+  - sem mão-francesa (rev05): apoio com 4 M12 8.8 na alma (ST-1P / ST-1V) resiste à torção de apoio.
 """
 import json
 import sys
@@ -34,25 +35,49 @@ PASSO = round(LG["passo_tercas"] * 1000)
 NOS = [round(x * 1000 - 27) for x in LG["nos_contraventamento_x_esq"]]
 NOS_D = [n - X0E + X0D for n in NOS]
 VAOS_X = (1, 6)                          # índice k do vão (k → eixos k+1 a k+2) com contraventamento em X: 2-3 e 7-8
-FOLGA = 10                               # folga da ponta da terça ao eixo do suporte (20 entre terças)
-E_FURO, Z_FURO = 60, (100, 200)          # furos das pontas
-Z_COR = 150                              # corrente Ø10 (rosca M10, furo Ø12) no meio da alma
-Z_MF, Y_MF = 40, 1070                    # furo da mão-francesa na alma: 40 do fundo, a 1070 do eixo da viga
-Z_DIAG = 245                             # diagonal de ancoragem: furo Ø18 na alma da 2ª terça (245 do fundo) e no ST-1 (255 do concreto)
+PC = CB["pecas"]                         # rev05: peças METLAP (cobertura_metalica.json)
+A_TR = PC["transpasse_cada_lado_mm"]     # transpasse: cada terça passa A_TR além do eixo do apoio interno (total 2·A_TR)
+EXT_F = PC["extensao_fachada_mm"]        # nas fachadas (VB) a terça passa EXT_F além do eixo
+B_TR = PC["furos_transpasse_da_ponta_mm"]   # furos do transpasse a B_TR da ponta
+Y_COL = 60                               # colunas de furos do ST-1P / ST-1V a ±60 do eixo do apoio
+Z_FURO = tuple(PC["furos_z_mm"])         # furos de fixação na alma: F = 52 da base e 302 − E = 247 (METSEC)
+Z_COR = PC["furo_corrente_z_mm"]         # corrente Ø10 (rosca M10, furo Ø12) no meio da alma
+Z_DIAG = 245                             # diagonal de ancoragem: furo Ø18 na alma da 2ª terça (245 do fundo) e no ST-1 (255 do concreto, no eixo)
 Z_X = (35, 75)                           # cruzamento do X: furos Ø18 na alma da terça intermediária (do fundo da terça)
-H_TERCA, B_TERCA, PESO_UE = 300, 85, 10.6       # Ue 300×85×25×2,65 ZAR 345 (rev03)
+H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, T_Z = 302, 90, 82, 19, 21, 2.30
+PESO_UE = 8.92                           # kg/m (catálogo METSEC 302Z23)
+PERFIL_TXT = "Z 302×90/82×2,30 METSEC (302Z23, fy 400, Z275)"
+FOLGA = 0                                # sem folga ponta a ponta (rev05: transpasse)
 IDX_PONTA = {0, NT - 1, NT, 2 * NT - 1}                 # 1ª terça de cada ponta de meia água
 IDX_2A = {1, NT - 2, NT + 1, 2 * NT - 2}                 # 2ª terça (recebe as diagonais de ancoragem)
 IDX_X = set(range(1, NT - 1, 2)) | set(range(NT + 1, 2 * NT - 1, 2))   # intermediárias dos painéis do X (cruzamento)
-L_TERCA = [v - 2 * FOLGA for v in VAOS]
-_comp = sorted(set(L_TERCA), reverse=True)
-BASE = {L: f"T{i+1}" for i, L in enumerate(_comp)}
+L_TERCA = [p["L_mm"] for p in PC["por_vao"]]
+EXT = [(p["ext_ini_mm"], p["ext_fim_mm"]) for p in PC["por_vao"]]
+# peça-base por (comprimento, extensões): vão de fachada 1-2 e 8-9 têm uma ponta curta (EXT_F); os internos, transpasse nas 2
+_tipos = []
+for k in range(8):
+    tk = (L_TERCA[k], EXT[k])
+    if tk not in _tipos and (L_TERCA[k], EXT[k][::-1]) not in _tipos:
+        _tipos.append(tk)
+BASE_K = {}
+for k in range(8):
+    tk = (L_TERCA[k], EXT[k])
+    j = _tipos.index(tk) if tk in _tipos else _tipos.index((L_TERCA[k], EXT[k][::-1]))
+    BASE_K[k] = f"T{j+1}"
+BASE = {L_TERCA[k]: BASE_K[k] for k in range(8)}          # compatível com o uso por comprimento
+
+
+def furos_ponta(ext):
+    """Furos (distância da ponta, mm) de uma ponta de terça: fachada (2 colunas do ST-1V) ou transpasse (ST-1P + emenda)."""
+    if ext == EXT_F:
+        return [EXT_F - Y_COL, EXT_F + Y_COL]
+    return [B_TR, A_TR - Y_COL, A_TR + Y_COL, 2 * A_TR - B_TR]
 
 
 def marca(k, i):
-    """Marca da terça do vão k (0..7) na linha i (0..25): comprimento + furação (D = diagonais, X = cruzamento do X)."""
+    """Marca da terça do vão k (0..7) na linha i: peça-base + furação (D = diagonais, X = cruzamento do X)."""
     suf = ("D" if i in IDX_2A else "") + ("X" if (k in VAOS_X and i in IDX_X) else "")
-    return BASE[L_TERCA[k]] + suf
+    return BASE_K[k] + suf
 
 
 def lista_marcas():
@@ -66,6 +91,6 @@ def lista_marcas():
     return dict(sorted(q.items()))
 
 
-def cabecalho(desenho, folha, conteudo, rev="03"):
+def cabecalho(desenho, folha, conteudo, rev="05"):
     return dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                 conteudo=conteudo, desenho=desenho, folha=folha, fase="PARA APROVAÇÃO", rev=rev)

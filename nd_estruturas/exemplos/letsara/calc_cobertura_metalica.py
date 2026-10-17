@@ -1,19 +1,23 @@
-"""Letsara — cobertura metálica: terças Ue, correntes, cantoneira CT-1, mão-francesa, chapas CH-T/CH-MF e chumbadores.
+"""Letsara — cobertura metálica: terças Z Metsec contínuas por transpasse (METLAP), correntes, contraventamento em X,
+suporte ST-1P e esperas no concreto. Sem mão-francesa (rev05).
 
-Rev. 13/10/2026: esforços da terça-escora e do X lidos do modelo global R01 (modelo_global_r01.json, envoltória por vão;
-rodar modelo_global_r01.py antes); X só nos vãos 2-3 e 7-8; correntes Ø10; terça-escora verificada vão a vão com a sucção
-do vento 0° (faixa do oitão com Cpe médio de borda).
+Rev. 05 (17/10/2026): terças Z 302×90/82×2,30 (voestalpine Meincol / METSEC, fy 400) contínuas nos 8 vãos por transpasse
+sobre cada viga; esforços por MEF de viga contínua (nd_estruturas.viga_continua) com 2·EI no trecho do transpasse;
+comprimento do transpasse escolhido como o menor que atende; parafusos do transpasse e do apoio (2 M12 8.8 na alma, sem
+mão-francesa); escoras linha a linha com N do modelo global R01 e M do MEF contínuo.
+Rev. 13/10/2026: esforços da terça-escora e do X lidos do modelo global R01; X só nos vãos 2-3 e 7-8; correntes Ø10.
 
-Normas: NBR 14762:2010 (perfis formados a frio, MRD), NBR 8800:2008 (ligações, laminados), NBR 8681:2003 e
-NBR 8800 Tabela 1 (combinações), NBR 6123:1988 (vento), ACI 318-19 cap. 17 (chumbadores), AISI S100-16 (forças
-de travamento por correntes em perfis C). Unidades kN, m (perfis em mm).
+Normas: NBR 14762:2010 (perfis formados a frio, MRD), NBR 8800:2008 (ligações, laminados, Anexo C flechas), NBR 8681:2003,
+NBR 6123:1988 (vento), ACI 318-19 cap. 17 (chumbadores), AISI S100-16 D3.2 (travamento de terças Z). Unidades kN, m (perfis em mm).
 """
 import json, math, os, sys
 from pathlib import Path
+import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from nd_estruturas.metalica_fria import (PerfilUe, parafuso_corte_Rd, parafuso_tracao_Rd, pressao_contato_fino_Rd,
+from nd_estruturas.metalica_fria import (PerfilZ, parafuso_corte_Rd, parafuso_tracao_Rd, pressao_contato_fino_Rd,
                                          pressao_contato_Rd, barra_redonda_tracao_Rd, compressao_laminado_Rd)
 from nd_estruturas.ancoragem import GrupoPinos, interacao, grampo_ancoragem_kN
+from nd_estruturas.viga_continua import analisar
 
 AQUI = Path(__file__).parent
 R = {}
@@ -21,66 +25,157 @@ R = {}
 # ------------------------------------------------------------------ dados
 from geometria import VAOS_Y
 LG = json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))
-L = max(VAOS_Y)      # maior vão de terça (eixos 2–3 e 3–4: 10,075 m); demais 9,625–10,0 m
+L = max(VAOS_Y)          # maior vão de terça (10,075 m)
 s = LG["passo_tercas"]   # espaçamento entre terças (ao longo da água)
-CC = LG["cargas_cob"]   # rev03: zipada 0,65 + lã de rocha 40 + TP40 0,50 + fixações + painéis solares + instalações (ligacoes.py)
-PERFIL = tuple(float(v) for v in os.environ.get("ND_TERCA", "300,85,25,2.65").split(","))
-q0 = 0.874           # kN/m² — V0 45 m/s, S2 cat. III classe C, S3 0,95 (rodada 2)
-cp = dict(geral=-1.0, borda=-1.6)    # Cpe −0,8 / −1,4 (faixa de borda, NBR 6123 tab. 6 — conferir) com Cpi +0,2
+CC = LG["cargas_cob"]    # zipada 0,65 + lã de rocha 40 + TP40 0,50 + fixações + painéis solares + instalações (ligacoes.py)
+q0 = 0.874               # kN/m² — V0 45 m/s, S2 cat. III classe C, S3 0,95
+cp = dict(geral=-1.0, borda=-1.6)    # Cpe −0,8 / −1,4 (faixa de borda, NBR 6123 tab. 6) com Cpi +0,2
 MG = json.loads((AQUI / "modelo_global_r01.json").read_text(encoding="utf-8"))
 ELU = {k: v for k, v in MG["combinacoes"].items() if v["tipo"] == "ELU"}
-u = PerfilUe(*PERFIL, "ZAR345")
-g = CC["g_total_sem_terca"] + u.peso_kNm / s          # kN/m² (gravidade)
-g_fav = CC["g_favoravel_sucao"] + u.peso_kNm / s     # kN/m² (sucção: painéis e instalações desprezados, a favor da segurança)
+
+# Z METSEC 302Z23 (catálogo voestalpine Meincol 2019 p. 6): aba sup. 90 / inf. 82, enrijecedores Lt 19 / Lb 21 (45° adotado,
+# conferir), t 2,30, 8,92 kg/m; furos de fixação na alma a E = 55 do topo e F = 52 da base (entre furos 195). fy 400 (fu 480 adotado).
+Z = dict(bw=302, bf_sup=90, bf_inf=82, D_sup=19, D_inf=21, t=2.30, kg_m=8.92, E=55, F=52, nome="Z 302×90/82×2,30 (METSEC 302Z23)")
+u = PerfilZ(Z["bw"], Z["bf_sup"], Z["D_sup"], Z["t"], "METSEC400", 45.0, Z["bf_inf"], Z["D_inf"])
+peso_kNm = Z["kg_m"] * 9.81e-3
+g = CC["g_total_sem_terca"] + peso_kNm / s           # kN/m² (gravidade)
+g_fav = CC["g_favoravel_sucao"] + peso_kNm / s       # kN/m² (sucção: painéis e instalações desprezados)
 q = CC["sobrecarga"]
 cM = u.criticos("M")
 cN = u.criticos("N", L_dist_ref=cM["L_dist"])
-R["perfil"] = dict(nome=u.nome, aco=u.aco, A_mm2=round(u.p["A"]), Ix_cm4=round(u.p["Ix"] / 1e4, 1), W_cm3=round(u.W / 1e3, 1),
-                   peso_kNm=round(u.peso_kNm, 3), m_ct_mm=round(u.m_ct, 1),
+R["perfil"] = dict(nome=Z["nome"], aco=u.aco, fy=u.fy, fu=u.fu, A_mm2=round(u.p["A"]), Ix_cm4=round(u.p["Ix"] / 1e4, 1),
+                   Ixy_cm4=round(u.p["Ixy"] / 1e4, 1), W_cm3=round(u.W / 1e3, 1), kg_m=Z["kg_m"], peso_kNm=round(peso_kNm, 4),
+                   furos=dict(E_topo=Z["E"], F_base=Z["F"], entre=Z["bw"] - Z["E"] - Z["F"]),
                    assinatura_M=dict(local=round(cM["f_local"], 3), L_local=cM["L_local"], dist=round(cM["f_dist"], 3), L_dist=cM["L_dist"]),
                    assinatura_N=dict(local=round(cN["f_local"], 3), L_local=cN["L_local"], dist=round(cN["f_dist"], 3), obs=cN["obs_dist"]))
 
-# ------------------------------------------------------------------ terça corrente (NBR 14762)
-N_LIN = 3                         # linhas de correntes por vão (L/4, L/2, 3L/4): com 2 linhas (L/3) a faixa de borda e a terça escora não passam
-Lb = L / (N_LIN + 1) * 1000
-M_grav = u.MRd(0, crit=cM, contida=True)          # mesa superior (comprimida) presa à telha
-M_suc = u.MRd(Lb, Cb=1.0, crit=cM)                # mesa inferior comprimida, travada pelas correntes a L/3
+# ------------------------------------------------------------------ terça contínua por transpasse (MEF) — NBR 14762:2010
+N_LIN = 3                                   # linhas de correntes por vão (L/4, L/2, 3L/4)
+Lcorr = L / (N_LIN + 1)
+MRc = u.MRd(0, crit=cM, contida=True)       # mesa superior comprimida, presa à telha (M > 0 aqui: traciona a fibra inferior)
+MRb = u.MRd(Lcorr * 1000, Cb=1.0, crit=cM)  # mesa inferior comprimida, travada pelas correntes (M < 0)
 VRd = u.VRd()
-casos = {}
-for zona, c in cp.items():
-    w_grav = (1.35 * g + 1.5 * q) * s
-    w_suc = (1.4 * abs(c) * q0 - 1.0 * g_fav) * s
-    Mg, Ms = w_grav * L ** 2 / 8, w_suc * L ** 2 / 8
-    Vg, Vs = w_grav * L / 2, w_suc * L / 2
-    casos[zona] = dict(w_grav_kNm=round(w_grav, 3), w_suc_kNm=round(w_suc, 3),
-                       grav=dict(Msd=round(Mg, 2), MRd=round(M_grav["MRd"], 2), modo=M_grav["modo"], uso=round(Mg / M_grav["MRd"], 3)),
-                       suc=dict(Msd=round(Ms, 2), MRd=round(M_suc["MRd"], 2), modo=M_suc["modo"], uso=round(Ms / M_suc["MRd"], 3)),
-                       V=dict(Vsd=round(max(Vg, Vs), 2), VRd=round(VRd, 1), uso=round(max(Vg, Vs) / VRd, 3)))
-I = u.p["Ix"] * 1e-12
-delta = lambda w: 5 * w * L ** 4 / (384 * 200e6 * I) * 1000
-R["terca"] = dict(L_m=L, s_m=s, Lb_suc_mm=round(Lb), MRd_grav=M_grav, MRd_suc=M_suc, casos=casos,
-                  flecha_gq_mm=round(delta((g + q) * s), 1), flecha_vento_mm=round(delta((abs(cp["geral"]) * q0 - g_fav) * s), 1),
-                  flecha_lim_mm=round(L * 1000 / 180, 1))
+EI = 200e6 * u.p["Ix"] * 1e-12              # kN·m² (eixo geométrico: mesa superior travada pela telha)
+xa = np.concatenate([[0.0], np.cumsum(VAOS_Y)])
+n_v = len(VAOS_Y)
+w_g, w_q = g * s, q * s
 
-# terça escora: compressão N (modelo global R01, por vão e por linha de terça) + flexão por sucção do MESMO vento, terça a
-# terça. Vento é uma ação só: em cada combinação ELU com o vento como principal (ELU-1, 90°; ELU-2, 0°) o N daquela linha
-# vem do modelo (γ 1,4 no vento; G 1,3 no N, a favor da segurança) e o M da sucção com γ 1,4 e g favorável (1,0).
-# Telhado de uma água, θ ≈ 1,7° (NBR 6123:1988 tabela 6, menor θ tabelado). Zonas locais (Cpe médio de borda −1,4 + Cpi +0,2
-# = −1,6), tomadas como envoltória e aplicadas nos dois ângulos (a favor da segurança):
-#   - faixa do oitão: vãos 1-2 e 8-9 (terça inteira dentro de y = min(h; 0,15 b) da fachada — tomada inteira);
-#   - faixas de beiral: terças a até y = min(h; 0,15 b) dos eixos A e E (linhas de beiral), em todos os vãos;
-# demais terças: Ce −0,8 + Cpi +0,2 = −1,0.
+
+def casos(a):
+    """Combinações ELU/ELS no MEF da linha de terças com transpasse ±a (m) em cada apoio interno."""
+    tr = [(xa[i] - a, xa[i] + a, 2.0) for i in range(1, n_v)]
+    alt = [[1.5 * w_q if (i % 2 == p) else 0.0 for i in range(n_v)] for p in (0, 1)]
+    c = {"ELU grav": analisar(VAOS_Y, EI, 1.35 * w_g + 1.5 * w_q, EI_trechos=tr)}
+    for p, al in enumerate(alt):
+        c[f"ELU grav alt{p}"] = analisar(VAOS_Y, EI, [1.35 * w_g + v_ for v_ in al], EI_trechos=tr)
+    for zona, c_ in cp.items():
+        c[f"ELU suc {zona}"] = analisar(VAOS_Y, EI, -(1.4 * abs(c_) * q0 - 1.0 * g_fav) * s, EI_trechos=tr)
+    els = dict(gq=analisar(VAOS_Y, EI, w_g + w_q, EI_trechos=tr),
+               vento=analisar(VAOS_Y, EI, -(abs(cp["geral"]) * q0 - g_fav) * s, EI_trechos=tr))
+    return tr, c, els
+
+
+def verifica(a):
+    tr, c, els = casos(a)
+    x = c["ELU grav"]["x"]
+    dentro = np.zeros_like(x, dtype=bool)
+    for (t0, t1, _) in tr:
+        dentro |= (x > t0 + 1e-6) & (x < t1 - 1e-6)
+    pior = dict(uso=0)
+    for nome, r in c.items():
+        M, V = r["M"], r["V"]
+        Mr = np.where(M >= 0, MRc["MRd"], MRb["MRd"])
+        fat = np.where(dentro, 2.0, 1.0)
+        uso_M = np.abs(M) / (fat * Mr)
+        uso_MV = np.sqrt(uso_M ** 2 + (np.abs(V) / (fat * VRd)) ** 2)          # NBR 14762:2010 9.8.5 (M + V)
+        for arr, tipo in ((uso_M, "flexão"), (uso_MV, "flexão + cortante")):
+            i = int(np.argmax(arr))
+            if arr[i] > pior["uso"]:
+                pior = dict(uso=float(arr[i]), tipo=tipo, comb=nome, x_m=round(float(x[i]), 3), M=round(float(M[i]), 2),
+                            V=round(float(V[i]), 2), MRd=round(float(Mr[i] * fat[i]), 2), trecho="transpasse (2 Z)" if dentro[i] else "seção simples")
+    fl = max(float(np.max(np.abs(els["gq"]["v"]))), float(np.max(np.abs(els["vento"]["v"])))) * 1000
+    lim = min(VAOS_Y) * 1000 / 180
+    return dict(a=a, pior=pior, flecha_mm=round(fl, 1), flecha_lim_mm=round(lim, 1), ok=pior["uso"] <= 1.0 and fl <= lim), c, els, tr
+
+
+TRANSPASSES = [0.45, 0.60, 0.75, 0.90, 1.05, 1.20]
+estudo_tr = []
+for a in TRANSPASSES:
+    res, c, els, tr = verifica(a)
+    estudo_tr.append(dict(a_m=a, uso=round(res["pior"]["uso"], 3), governa=f'{res["pior"]["tipo"]} — {res["pior"]["comb"]} em x = {res["pior"]["x_m"]} ({res["pior"]["trecho"]})',
+                          flecha_mm=res["flecha_mm"], ok=res["ok"]))
+    if res["ok"]:
+        break
+assert res["ok"], estudo_tr
+A_TR, CASOS, ELS, TRECHOS = res["a"], c, els, tr
+
+# momentos e reações por vão / apoio (envoltória ELU)
+xg = CASOS["ELU grav"]["x"]
+por_vao = []
+for i in range(n_v):
+    msk = (xg >= xa[i]) & (xg <= xa[i + 1])
+    Mmax = max(float(np.max(r["M"][msk])) for r in CASOS.values())
+    Mmin = min(float(np.min(r["M"][msk])) for r in CASOS.values())
+    por_vao.append(dict(vao=f"{i+1}-{i+2}", L_m=VAOS_Y[i], M_pos=round(Mmax, 2), M_neg=round(Mmin, 2)))
+Msup = [min(float(r["M"][r["apoio_idx"][j]]) for r in CASOS.values()) for j in range(n_v + 1)]    # hogging no apoio (gravidade)
+Msup_s = [max(float(r["M"][r["apoio_idx"][j]]) for r in CASOS.values()) for j in range(n_v + 1)]  # sucção
+Rgrav = [max(float(r["reacoes"][j]) for k_, r in CASOS.items() if "grav" in k_) for j in range(n_v + 1)]
+Rsuc = [-min(float(r["reacoes"][j]) for k_, r in CASOS.items() if "suc" in k_) for j in range(n_v + 1)]
+
+# parafusos do transpasse: em cada ponta do transpasse 2 M12 8.8 na alma (furos E/F), atravessando as 2 almas.
+# O perfil que termina leva M_apoio/2 no apoio e zero na ponta, a uma distância a: força transferida na ponta = (|M|/2)/a,
+# dividida pelos 2 parafusos (+ parcela da cortante local, a favor da segurança).
+Rb_M12 = min(pressao_contato_fino_Rd(12, u.t, u.fu), parafuso_corte_Rd(12, "8.8"))
+F_tr = max((max(abs(Msup[j]), abs(Msup_s[j])) / 2 / A_TR) / 2 for j in range(1, n_v))
+# apoio (ST-1P): 4 M12 8.8 na alma (2 colunas a ±60 do eixo do apoio × 2 linhas nos furos E/F, sem mão-francesa); no apoio
+# interno os 4 parafusos atravessam ST-1P + as 2 almas do transpasse. A torção de apoio T = R·e (carga no meio da mesa superior
+# até a alma) é resistida pelo binário das 2 linhas (braço z = 195): a linha de cima tracionada (T/z, 2 parafusos) e a alma
+# apoiada no ST-1P embaixo; a reação R e a força de escora N vão em corte nos 4 parafusos.
+z_par = (Z["bw"] - Z["E"] - Z["F"]) / 1000
+e_tor = Z["bf_sup"] / 2 / 1000
+Ft_M12 = parafuso_tracao_Rd(12, "8.8")
+Pov = 0.5 * 1.5 * u.t * 24 * u.fu / 1e3                    # arrancamento da alma pela arruela Ø24 (AISI S100-16 J6.2.2, φ 0,5)
+Y_COL = 0.060                                              # colunas de furos do ST-1P a ±60 do eixo do apoio
+def f_apoio(Rk, Nk):
+    Tb = Rk * e_tor / z_par / 2
+    Vb = math.hypot(Rk, Nk) / 4
+    it = (Tb / min(Ft_M12, Pov)) ** 2 + (Vb / Rb_M12) ** 2
+    return dict(R=round(Rk, 2), T_parafuso=round(Tb, 2), V_parafuso=round(Vb, 2), interacao=round(it, 3))
+R["terca"] = dict(perfil=Z["nome"], sistema="contínua nos 8 vãos por transpasse sobre os apoios internos (METLAP)",
+                  transpasse_cada_lado_m=A_TR, transpasse_total_m=round(2 * A_TR, 2), estudo_transpasse=estudo_tr,
+                  L_m=L, vaos_m=VAOS_Y, s_m=s, Lb_corr_mm=round(Lcorr * 1000), MRd_contida=MRc, MRd_correntes=MRb, VRd=round(VRd, 1),
+                  governante=res["pior"], por_vao=por_vao, M_apoio_grav=[round(m_, 2) for m_ in Msup], M_apoio_suc=[round(m_, 2) for m_ in Msup_s],
+                  R_grav=[round(r_, 2) for r_ in Rgrav], R_suc=[round(r_, 2) for r_ in Rsuc],
+                  flecha_mm=res["flecha_mm"], flecha_lim_mm=res["flecha_lim_mm"],
+                  parafusos_transpasse=dict(desc="2 M12 8.8 em cada ponta do transpasse (furos E/F da alma, atravessando as 2 almas)",
+                                            Fd=round(F_tr, 2), Rd=round(Rb_M12, 1), uso=round(F_tr / Rb_M12, 3)),
+                  apoio=None,
+                  nota="MEF de viga contínua (Euler-Bernoulli), 2·EI no transpasse; M > 0 (mesa superior comprimida, travada pela telha) "
+                       "contra MRd sem FLT; M < 0 (mesa inferior comprimida) contra MRd com Lb entre correntes; no transpasse 2 perfis; "
+                       "sobrecarga alternada nos vãos; NBR 14762:2010 9.8 e 9.8.5; flecha L/180 (NBR 8800 Anexo C).")
+
+_Mx = np.array([r_["M"] for r_ in CASOS.values()])
+R["terca"]["envoltoria"] = dict(x=[round(float(v_), 3) for v_ in xg[::4]], M_max=[round(float(v_), 2) for v_ in _Mx.max(0)[::4]],
+                                M_min=[round(float(v_), 2) for v_ in _Mx.min(0)[::4]], x_apoios=[round(float(v_), 3) for v_ in xa])
+
+# ------------------------------------------------------------------ terça escora (N do modelo global + M do MEF contínuo, linha a linha)
 from geometria import X_EIXO
-H_COB = 9.9                                          # m — altura da cobertura (beiral alto)
-B_MENOR = X_EIXO["E"]                                # m — menor dimensão em planta
-Y_LOC = min(H_COB, 0.15 * B_MENOR)                   # largura das faixas locais (5,93 m)
+H_COB = 9.9
+B_MENOR = X_EIXO["E"]
+Y_LOC = min(H_COB, 0.15 * B_MENOR)
 VAO_FAIXA_OITAO = ("1-2", "8-9")
 COMB_VENTO = {"ELU-1 vento x": "90°", "ELU-2 vento y": "0°"}
+Mneg_vao = {zona: [] for zona in cp}
+for zona in cp:
+    r = CASOS[f"ELU suc {zona}"]
+    for i in range(n_v):
+        msk = (xg >= xa[i]) & (xg <= xa[i + 1])
+        Mneg_vao[zona].append(abs(float(np.min(r["M"][msk]))))
 esc_vaos, esc_linhas = [], []
 for iv, Lv in enumerate(VAOS_Y):
     nome = f"{iv+1}-{iv+2}"
     Lb_v = Lv / (N_LIN + 1) * 1000
-    NR = u.NcRd(Lv * 1000, Lb_v, Lb_v, crit=u.criticos("N", L_dist_ref=cM["L_dist"]))
+    NR = u.NcRd(Lv * 1000, Lb_v, Lb_v, crit=cN)
     MR = u.MRd(Lb_v, Cb=1.0, crit=cM)
     pior = None
     for comb, ang_v in COMB_VENTO.items():
@@ -89,10 +184,9 @@ for iv, Lv in enumerate(VAOS_Y):
             beiral = x_ <= Y_LOC or x_ >= B_MENOR - Y_LOC
             zona = "borda" if (nome in VAO_FAIXA_OITAO or beiral) else "geral"
             Nd_l = max(0.0, -nmin)
-            if abs(x_ - X_EIXO["C"]) < 0.01:             # linha do eixo C no modelo = 2 terças reais (última de cada TS-01, a ±292,5 mm do eixo)
+            if abs(x_ - X_EIXO["C"]) < 0.01:
                 Nd_l /= 2
-            w_l = (1.4 * abs(cp[zona]) * q0 - g_fav) * s
-            Md_l = w_l * Lv ** 2 / 8
+            Md_l = Mneg_vao[zona][iv]
             amp_l = 1 / (1 - Nd_l / NR["Nex"])
             it = Nd_l / NR["NcRd"] + Md_l * amp_l / MR["MRd"]
             reg_ = dict(vao=nome, x_m=x_, faixa=" + ".join(f_ for f_, c_ in (("oitão", nome in VAO_FAIXA_OITAO), ("beiral", beiral)) if c_) or "interna",
@@ -103,43 +197,44 @@ for iv, Lv in enumerate(VAOS_Y):
                 pior = reg_
     esc_vaos.append(pior)
 gov = max(esc_linhas, key=lambda e: e["interacao"])
-Nd = max(e["Nd"] for e in esc_linhas)                     # maior compressão de escora (ligações CT-1 / CH-T2)
+Nd = max(e["Nd"] for e in esc_linhas)
 bei = [e for e in esc_linhas if "beiral" in e["faixa"]]
 gov_bei = max(bei, key=lambda e: e["interacao"])
-assert all(c["suc"]["uso"] <= 1 and c["grav"]["uso"] <= 1 for c in casos.values()) and gov["interacao"] <= 1, (casos, gov)
+assert gov["interacao"] <= 1, gov
 R["terca_escora"] = dict(Nd=gov["Nd"], NcRd=gov["NcRd"], modo_N=gov["modo_N"], Md=gov["Md"], amplificacao=gov["amplificacao"],
                          MRd=gov["MRd"], interacao=gov["interacao"], ok=gov["interacao"] <= 1.0, vao_governante=gov["vao"],
                          linha_governante_x_m=gov["x_m"], faixa_governante=gov["faixa"], vento_governante=gov["vento"], Nd_max=Nd,
                          faixa_beiral=dict(y_m=round(Y_LOC, 2), Nd_max=max(e["Nd"] for e in bei), governante=gov_bei),
-                         por_vao=esc_vaos, fonte="modelo_global_r01.json (ELU-1 e ELU-2, por vão e por linha de terça)",
-                         nota="N e M do mesmo vento (0° ou 90°), γ 1,4; faixas locais de oitão e de beiral (y = min(h; 0,15 b)) com Cpe médio −1,4 "
-                              "+ Cpi +0,2 em envoltória; demais Ce −0,8 + Cpi +0,2 (NBR 6123:1988 tabela 6); NBR 14762:2010 item 9.9 — "
-                              "Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0")
+                         por_vao=esc_vaos, fonte="modelo_global_r01.json (ELU-1 e ELU-2) + MEF da terça contínua",
+                         nota="N do modelo global e M da sucção do MESMO vento (γ 1,4) tirado do MEF contínuo (maior |M−| do vão); "
+                              "NBR 14762:2010 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0 (Lx = vão, a favor da segurança)")
 
-# ------------------------------------------------------------------ correntes (AISI S100-16 D3.2.1(a) — perfil C, carga uniforme)
-d_terca = u.bw
-a = L / (N_LIN + 1)
-n_run = len(LG["s_tercas"])     # terças por meia água entre ancoragens (beiral, meio do vão no eixo C, cumeeira alta)
+# ------------------------------------------------------------------ correntes (AISI S100-16 D3.2.1 — Z: componente do produto de inércia)
+# Z sob carga no plano da alma tende a girar para o lado do eixo principal: força lateral por corrente P = W·Ixy/Ix (+ caimento),
+# acumulada nas terças da meia água até as ancoragens (a favor da segurança: sem a restrição da telha).
+a_c = L / (N_LIN + 1)
+n_run = len(LG["s_tercas"])
+k_xy = abs(u.p["Ixy"]) / u.p["Ix"]
 casos_c = {}
 for nome, wq, incl in (("sucção", (1.4 * abs(cp["geral"]) * q0 - g_fav) * s, 0.0), ("gravidade", (1.35 * g + 1.5 * q) * s, 0.03)):
-    W = wq * a
-    PL = 1.5 * (u.m_ct / d_terca) * W + incl * W           # torção do perfil C + componente do caimento de 3%
+    W = wq * a_c * 1.1                                       # 1,1: continuidade (reação interna da corrente)
+    PL = (k_xy + incl) * W
     casos_c[nome] = dict(W_kN=round(W, 2), PL_por_terca_kN=round(PL, 3), F_acumulada_kN=round(PL * n_run, 2))
 Fc = max(v["F_acumulada_kN"] for v in casos_c.values())
-D_COR = 10.0                               # corrente flexível Ø10 A36, rosca M10 (rev. 13/10/2026; antes Ø12,5)
+D_COR = 10.0
 cf = barra_redonda_tracao_Rd(D_COR)
-# tirante rígido (1º espaço de terças junto a cada ancoragem): L 51×51×3,2 (A36), A 3,13 cm², rz 1,00 cm
 A_L51, rz_L51 = 313.0, 10.0
 cr, lam0_cr, esb_cr = compressao_laminado_Rd(A_L51, rz_L51, s * 1000, fy=250)
-# diagonais de ancoragem (Λ) no 1º espaço: do nó da corrente na 2ª terça até o suporte ST-1 da 1ª terça (na viga):
-# L/4 → apoio mais próximo; L/2 → os dois apoios (metade da força em cada); 3L/4 → apoio mais próximo
 d_q = math.hypot(s, L / 4); d_m = math.hypot(s, L / 2)
 T_q, T_m = Fc * d_q / s, Fc / 2 * d_m / s
 T_diag, diag_len = max(T_q, T_m), (d_q if T_q >= T_m else d_m)
 td = barra_redonda_tracao_Rd(16.0)
-R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (150 do fundo)", casos=casos_c,
-                      F_max_kN=Fc,
-                      flexivel=dict(barra="Ø10 A36, roscas M10, porca + contraporca e arruela dos 2 lados de cada terça", d_mm=D_COR, furo="Ø12",
+uso_cor = Fc / cf
+D_COR_ADOT = 10.0 if uso_cor <= 1 else 12.5
+cf = barra_redonda_tracao_Rd(D_COR_ADOT)
+R["correntes"] = dict(linhas_por_vao=N_LIN, posicao="a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (151 do fundo)", casos=casos_c,
+                      Ixy_sobre_Ix=round(k_xy, 3), F_max_kN=Fc,
+                      flexivel=dict(barra=f"Ø{D_COR_ADOT:g} A36, roscas M{D_COR_ADOT:g}, porca + contraporca e arruela dos 2 lados de cada terça", d_mm=D_COR_ADOT, furo="Ø12" if D_COR_ADOT == 10 else "Ø14",
                                     NtRd=round(cf, 1), uso=round(Fc / cf, 3)),
                       rigida=dict(perfil="L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma", L_mm=round(s * 1000), NcRd=round(cr, 1),
                                   esbeltez=round(esb_cr), uso=round(Fc / cr, 3), onde="1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"),
@@ -167,46 +262,43 @@ R["contraventamento"] = dict(painel_x_m=round(P_X, 3), subpaineis=1, L_diag_m=L_
                              barra="Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
                              nota="X de nó a nó das vigas, abrangendo 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões); terças dos nós trabalham como escoras")
 
-# ------------------------------------------------------------------ suporte ST-1P (rev03): chapa dobrada 9,5 mm A36, sem solda,
-# parafusada em 2 esperas de barra roscada M16 (ASTM A36, rosca laminada, gancho na ponta) concretadas na mesa superior da TS-01,
-# a ±60 mm do eixo da viga, 120 mm acima do concreto; furos oblongos 18 × 40 na aba horizontal (ajuste ±11 mm). Terças com 2 M12 8.8.
-Vsuc_end = casos["geral"]["w_suc_kNm"] * L / 2      # reação de arrancamento por terça
-Vgrav_end = casos["geral"]["w_grav_kNm"] * L / 2
-fu_terca = u.fu
-b_web = pressao_contato_fino_Rd(12, u.t, fu_terca)       # M12 na alma da terça
-v_M12 = parafuso_corte_Rd(12, "8.8")
-F_M12 = math.hypot(Nd / 2, Vsuc_end / 2)
-T_st = 2 * Vsuc_end                                       # 2 terças (topo a topo) no mesmo suporte
-e_al = 75 - 9.5 - 8                                       # espera a 75 mm da dobra; braço até a face da aba vertical − raio
-M_aba = T_st * 1.25 * e_al / 2 / 1000                     # alavanca (+25 %)
+# ------------------------------------------------------------------ suporte ST-1P: chapa dobrada 9,5 mm A36, sem solda, parafusada em
+# 2 esperas M16 (A36, gancho) concretadas na mesa superior da TS-01 (±60 do eixo, 120 acima do concreto), furos oblongos 18 × 40.
+# Apoio interno: as 2 terças sobrepostas (transpasse) presas pelos MESMOS 2 M12 (atravessam ST-1P + 2 almas). Sem mão-francesa.
+ap_int = max((f_apoio(max(Rgrav[j], Rsuc[j]), Nd) for j in range(1, n_v)), key=lambda d_: d_["interacao"])
+ap_ext = max((f_apoio(max(Rgrav[j], Rsuc[j]), Nd) for j in (0, n_v)), key=lambda d_: d_["interacao"])
+R["terca"]["apoio"] = dict(desc="ST-1P com 4 M12 8.8 na alma (2 colunas a ±60 × furos E 55 / F 52, entre furos 195), sem mão-francesa",
+                           e_torcao_mm=Z["bf_sup"] / 2, Ft_Rd=round(Ft_M12, 1), arrancamento_alma_Rd=round(Pov, 1), Vb_Rd=round(Rb_M12, 1),
+                           interno=ap_int, extremo=ap_ext, uso=max(ap_int["interacao"], ap_ext["interacao"]),
+                           nota="tração T = R·e/z nos 2 parafusos de cima (binário com o apoio da alma no ST-1P) + corte √(R² + N²)/4; (T/TRd)² + (V/VRd)² ≤ 1")
+assert R["terca"]["apoio"]["uso"] <= 1 and R["terca"]["parafusos_transpasse"]["uso"] <= 1, R["terca"]
+# peças (METLAP): cada terça vence um vão e passa a do apoio interno; nas fachadas (VB, linhas 1 e 9) passa 110 além do eixo
+# (2 colunas de furos ±60 + borda 50). Furos do transpasse a 40 da ponta.
+EXT_FACH, BORDA_TR = 0.110, 0.040
+pecas = []
+for i, Lv in enumerate(VAOS_Y):
+    e0 = EXT_FACH if i == 0 else A_TR
+    e1 = EXT_FACH if i == n_v - 1 else A_TR
+    pecas.append(dict(vao=f"{i+1}-{i+2}", L_vao_mm=round(Lv * 1000), ext_ini_mm=round(e0 * 1000), ext_fim_mm=round(e1 * 1000),
+                      L_mm=round((Lv + e0 + e1) * 1000)))
+R["pecas"] = dict(transpasse_cada_lado_mm=round(A_TR * 1000), transpasse_total_mm=round(2 * A_TR * 1000), extensao_fachada_mm=round(EXT_FACH * 1000),
+                  furos_transpasse_da_ponta_mm=round(BORDA_TR * 1000), colunas_apoio_mm=[-60, 60], furos_z_mm=[Z["F"], Z["bw"] - Z["E"]],
+                  furo_corrente_z_mm=round(Z["bw"] / 2), por_vao=pecas, L_max_mm=max(p_["L_mm"] for p_ in pecas))
+assert R["pecas"]["L_max_mm"] <= 12000
+T_st = max(Rsuc[1:n_v])                                    # arrancamento no ST-1P interno (as 2 terças do transpasse)
+Vgrav_int = max(Rgrav[1:n_v])
+e_al = 75 - 9.5 - 8
+M_aba = T_st * 1.25 * e_al / 2 / 1000
 MRd_aba = 220 * 9.5 ** 2 / 4 * 250 / 1.10 / 1e6
-Ab16 = 157.0                                              # área efetiva da rosca M16
 Ft_esp = 0.75 * math.pi * 16 ** 2 / 4 * 400 / 1.35 / 1e3     # NBR 8800 6.3.3.1 (barra redonda rosqueada A36: fu 400)
 Fv_esp = 0.4 * math.pi * 16 ** 2 / 4 * 400 / 1.35 / 1e3
 Td_esp, Vd_esp = T_st * 1.25 / 2, Nd / 2
-R["ST1P"] = dict(peca="chapa dobrada 9,5 × 220 (aba vertical 290, aba horizontal 150) A36 galvanizada", reacao_suc_kN=round(Vsuc_end, 2), reacao_grav_kN=round(Vgrav_end, 2),
-                 M12_alma=dict(Fd=round(F_M12, 2), corte_Rd=round(v_M12, 1), contato_alma_Rd=round(b_web, 1), uso=round(F_M12 / min(v_M12, b_web), 3)),
+R["ST1P"] = dict(peca="chapa dobrada 9,5 × 220 (aba vertical 290, aba horizontal 150) A36 galvanizada", reacao_suc_kN=round(T_st, 2), reacao_grav_kN=round(Vgrav_int, 2),
+                 M12_alma=dict(Fd=ap_int["V_parafuso"], T=ap_int["T_parafuso"], uso=ap_int["interacao"]),
                  aba=dict(Md_kNm=round(M_aba, 3), MRd_kNm=round(MRd_aba, 3), uso=round(M_aba / MRd_aba, 3)),
                  esperas=dict(barra="2 barras roscadas M16 A36 (fu 400) com gancho, hef 150, saliência 120", Td=round(Td_esp, 2), Vd=round(Vd_esp, 2),
                               Ft_Rd=round(Ft_esp, 1), Fv_Rd=round(Fv_esp, 1), interacao=round((Td_esp / Ft_esp) ** 2 + (Vd_esp / Fv_esp) ** 2, 3)),
-                 rasgamento_alma=dict(e_mm=45, Fd=round(Nd / 2, 2), Rd=round(u.t * 45 * fu_terca / 1.45 / 1e3, 1)))
-
-# ------------------------------------------------------------------ mão-francesa MF-1 (rev03): da espera horizontal na lateral da mesa inferior da
-# TS-01 (barra roscada M16, saliência 60 mm, a 100 mm do fundo, hef 110 com porca e arruela na ponta) à alma da terça; L 50×5 parafusada (sem solda), 45°
-e_carga = u.bf / 2 + u.m_ct            # carga na mesa superior (meio da mesa) × centro de torção
-T_tors = casos["geral"]["w_suc_kNm"] * e_carga / 1000 * L / 2
-H_mf = T_tors / (u.bw / 1000)          # binário ST-1P (topo) × mão-francesa (mesa inferior)
-dz = 0.90 + 0.010 + 0.040 - 0.100       # espera (100 do fundo da viga) até o furo da MF na alma da terça (40 acima do fundo dela)
-dy = 1.07 - 0.20                        # furo da terça a 1070 do eixo da viga; espera na face lateral (b/2 = 200)
-N_mf = H_mf * math.hypot(dy, dz) / dy
-A_mf, r_mf = 4.80e2, 9.8                 # L 50×5: A = 4,80 cm², rz = 0,98 cm
-Ncr_mf, l0_mf, esb_mf = compressao_laminado_Rd(A_mf, r_mf, math.hypot(dy, dz) * 1000)
-R["MF1"] = dict(perfil="L 50×5 (A36)", comp_m=round(math.hypot(dy, dz), 2), angulo=f"{math.degrees(math.atan2(dz, dy)):.0f}°", e_torcao_mm=round(e_carga, 1),
-                T_apoio_kNm=round(T_tors, 3), H_kN=round(H_mf, 2), Nd_kN=round(N_mf, 2), NcRd=round(Ncr_mf, 1), esbeltez=round(esb_mf),
-                uso=round(N_mf / Ncr_mf, 3), parafusos="M12 8.8 na alma da terça (furo Ø14 a 40 mm do fundo) e porca M16 na espera da viga (furo Ø18 na aba da MF)",
-                contato_alma_terca_Rd=round(pressao_contato_fino_Rd(12, u.t, fu_terca), 1),
-                espera=dict(barra="barra roscada M16 A36 horizontal, hef 110 na mesa inferior (a 100 do fundo), porca + arruela 40×40×6 na ponta, saliência 60", Vd=round(N_mf, 2), Fv_Rd=round(Fv_esp, 1),
-                            uso=round(N_mf / Fv_esp, 3)))
+                 rasgamento_alma=dict(e_mm=45, Fd=round(Nd / 2, 2), Rd=round(u.t * 45 * u.fu / 1.45 / 1e3, 1)))
 
 # ------------------------------------------------------------------ esperas no concreto (ACI 318-19 cap. 17), C50
 # ST-1P: 2 M16 com gancho (≈ pino com cabeça de 32 mm), hef 150, s 120 em y; mesa superior 400 (borda lateral 140)
@@ -226,13 +318,9 @@ v2 = g2.cortante("y-", armadura_ancoragem_kN=gr)
 Vor = 2 * T_or                          # 2 diagonais do X na mesma orelha (painéis vizinhos), a favor da segurança
 ch["OR-X"] = dict(esperas="1 M16 com gancho por orelha, hef 110 + grampo U Ø10", Vu=round(Vor, 1), phiVn=round(v2["phiVn_kN"], 1), modoV=v2["modo"],
                   uso=round(Vor / v2["phiVn_kN"], 3))
-g3 = GrupoPinos(d=16, d_cabeca=40, hef=110, nx=1, ny=1, sx=0, sy=0, cx_neg=100, cx_pos=100, cy_neg=2000, cy_pos=2000, ha=400)
-t3, v3 = g3.tracao(), g3.cortante("x+")
-Nmf_h = N_mf * dy / math.hypot(dy, dz); Vmf = N_mf * dz / math.hypot(dy, dz)
-ch["MF-espera"] = dict(esperas="1 M16 horizontal por lado, hef 110, a 100 do fundo", Nu=round(Nmf_h, 2), Vu=round(Vmf, 2), phiNn=round(t3["phiNn_kN"], 1),
-                       phiVn=round(v3["phiVn_kN"], 1), interacao=round(interacao(Nmf_h, t3["phiNn_kN"], Vmf, v3["phiVn_kN"])[0], 3))
 R["chumbadores"] = ch
 
 (AQUI / "cobertura_metalica.json").write_text(json.dumps(R, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
 if __name__ == "__main__":
     print(json.dumps(R, indent=1, ensure_ascii=False, default=float)[:6000])
+

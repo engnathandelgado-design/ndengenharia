@@ -65,7 +65,7 @@ def spec_ts01():
                 marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord)],
                 notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm e 3 a 10 cm; as 2 de 10 cm em x = ±4 isoladas 3,00 m nas pontas; σpi = {P['sig_pi']} MPa.",
                        "Sem dentes: N6 (estribos verticais do maciço, fora da faixa dos tubos TB-3), N7 (grampos U horizontais) e N8 (estribos horizontais da mesa inferior) nas duas pontas.",
-                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2/ES-3 entre estribos, sem cortar armadura."])
+                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2 entre estribos, sem cortar armadura."])
 
 
 def spec_i(qual):

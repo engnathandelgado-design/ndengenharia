@@ -9,7 +9,7 @@ from ezdxf.addons import Importer
 
 PR = "/home/claude/letsara/pranchas/"
 OUT = "/home/claude/letsara/entregas/"
-REV = "rev04"
+REV = "rev05"
 GRUPOS = [
     ("01-PILARES", "PILARES — ARMADURAS (PADRÃO DE ARMAÇÃO) E FÔRMAS POR MARCA",
      [f"ND-LET-AR-PIL-{k:02d}" for k in range(1, 7)] + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)] +

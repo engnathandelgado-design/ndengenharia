@@ -1,111 +1,501 @@
 {
  "perfil": {
-  "nome": "Ue 300×85×25×2,65",
-  "aco": "ZAR345",
-  "A_mm2": 1350,
-  "Ix_cm4": 1780.9,
-  "W_cm3": 118.7,
-  "peso_kNm": 0.104,
-  "m_ct_mm": 35.0,
+  "nome": "Z 302×90/82×2,30 (METSEC 302Z23)",
+  "aco": "METSEC400",
+  "fy": 400.0,
+  "fu": 480.0,
+  "A_mm2": 1166,
+  "Ix_cm4": 1569.9,
+  "Ixy_cm4": 345.3,
+  "W_cm3": 104.0,
+  "kg_m": 8.92,
+  "peso_kNm": 0.0875,
+  "furos": {
+   "E_topo": 55,
+   "F_base": 52,
+   "entre": 195
+  },
   "assinatura_M": {
-   "local": 1.285,
+   "local": 0.821,
    "L_local": 169.0,
-   "dist": 1.224,
-   "L_dist": 741.0
+   "dist": 0.559,
+   "L_dist": 571.0
   },
   "assinatura_N": {
-   "local": 0.238,
-   "L_local": 220.0,
-   "dist": 0.407,
-   "obs": "sem mínimo distinto: curva em L = 741 mm"
+   "local": 0.15,
+   "L_local": 240.0,
+   "dist": 0.203,
+   "obs": "sem mínimo distinto: curva em L = 571 mm"
   }
  },
  "terca": {
+  "perfil": "Z 302×90/82×2,30 (METSEC 302Z23)",
+  "sistema": "contínua nos 8 vãos por transpasse sobre os apoios internos (METLAP)",
+  "transpasse_cada_lado_m": 0.45,
+  "transpasse_total_m": 0.9,
+  "estudo_transpasse": [
+   {
+    "a_m": 0.45,
+    "uso": 0.796,
+    "governa": "flexão + cortante — ELU suc borda em x = 10.1 (seção simples)",
+    "flecha_mm": 14.6,
+    "ok": true
+   }
+  ],
   "L_m": 10.075,
+  "vaos_m": [
+   9.65,
+   10.075,
+   10.075,
+   9.925,
+   10.0,
+   10.0,
+   10.0,
+   9.625
+  ],
   "s_m": 1.199,
-  "Lb_suc_mm": 2519,
-  "MRd_grav": {
-   "MRd": 31.16981042979493,
+  "Lb_corr_mm": 2519,
+  "MRd_contida": {
+   "MRd": 23.617684918891378,
    "modo": "distorcional",
-   "My": 40.96015439394251,
+   "My": 41.585693701077446,
    "Me": Infinity,
    "lam0": 0.0,
    "chi": 1.0,
-   "lam_l": 0.882305797936118,
-   "lam_dist": 0.903858791871384,
-   "MRe": 40.96015439394251,
-   "MRl": 37.768887522601595,
-   "MRdist": 34.286791472774425
+   "lam_l": 1.1039370909155857,
+   "lam_dist": 1.3373998855886011,
+   "MRe": 41.585693701077446,
+   "MRl": 33.09769664886017,
+   "MRdist": 25.97945341078052
   },
-  "MRd_suc": {
-   "MRd": 31.16981042979493,
-   "modo": "distorcional",
-   "My": 40.96015439394251,
-   "Me": 52.29824000569892,
-   "lam0": 0.8849877425914954,
-   "chi": 0.8683191242859137,
-   "lam_l": 0.8221646811348069,
-   "lam_dist": 0.903858791871384,
-   "MRe": 35.56648539396399,
-   "MRl": 34.30023536340555,
-   "MRdist": 34.286791472774425
+  "MRd_correntes": {
+   "MRd": 22.942380949790685,
+   "modo": "local",
+   "My": 41.585693701077446,
+   "Me": 29.000213678901744,
+   "lam0": 1.1974885686596695,
+   "chi": 0.6675027996564592,
+   "lam_l": 0.9019259263342583,
+   "lam_dist": 1.3373998855886011,
+   "MRe": 27.758566971125173,
+   "MRl": 25.236619044769757,
+   "MRdist": 25.97945341078052
   },
-  "casos": {
-   "geral": {
-    "w_grav_kNm": 1.25,
-    "w_suc_kNm": 1.174,
-    "grav": {
-     "Msd": 15.86,
-     "MRd": 31.17,
-     "modo": "distorcional",
-     "uso": 0.509
-    },
-    "suc": {
-     "Msd": 14.89,
-     "MRd": 31.17,
-     "modo": "distorcional",
-     "uso": 0.478
-    },
-    "V": {
-     "Vsd": 6.3,
-     "VRd": 52.0,
-     "uso": 0.121
-    }
+  "VRd": 33.7,
+  "governante": {
+   "uso": 0.7959049391598392,
+   "tipo": "flexão + cortante",
+   "comb": "ELU suc borda",
+   "x_m": 10.1,
+   "M": 17.44,
+   "V": 9.99,
+   "MRd": 23.62,
+   "trecho": "seção simples"
+  },
+  "por_vao": [
+   {
+    "vao": "1-2",
+    "L_m": 9.65,
+    "M_pos": 22.15,
+    "M_neg": -14.29
    },
-   "borda": {
-    "w_grav_kNm": 1.25,
-    "w_suc_kNm": 2.054,
-    "grav": {
-     "Msd": 15.86,
-     "MRd": 31.17,
-     "modo": "distorcional",
-     "uso": 0.509
-    },
-    "suc": {
-     "Msd": 26.06,
-     "MRd": 31.17,
-     "modo": "distorcional",
-     "uso": 0.836
-    },
-    "V": {
-     "Vsd": 10.35,
-     "VRd": 52.0,
-     "uso": 0.199
-    }
+   {
+    "vao": "2-3",
+    "L_m": 10.075,
+    "M_pos": 22.15,
+    "M_neg": -13.14
+   },
+   {
+    "vao": "3-4",
+    "L_m": 10.075,
+    "M_pos": 18.28,
+    "M_neg": -10.84
+   },
+   {
+    "vao": "4-5",
+    "L_m": 9.925,
+    "M_pos": 18.28,
+    "M_neg": -10.84
+   },
+   {
+    "vao": "5-6",
+    "L_m": 10.0,
+    "M_pos": 18.38,
+    "M_neg": -10.9
+   },
+   {
+    "vao": "6-7",
+    "L_m": 10.0,
+    "M_pos": 18.38,
+    "M_neg": -10.9
+   },
+   {
+    "vao": "7-8",
+    "L_m": 10.0,
+    "M_pos": 21.99,
+    "M_neg": -13.05
+   },
+   {
+    "vao": "8-9",
+    "L_m": 9.625,
+    "M_pos": 21.99,
+    "M_neg": -14.23
    }
+  ],
+  "M_apoio_grav": [
+   -0.0,
+   -13.14,
+   -10.18,
+   -10.84,
+   -10.42,
+   -10.9,
+   -9.95,
+   -13.05,
+   -0.0
+  ],
+  "M_apoio_suc": [
+   0.0,
+   22.15,
+   17.17,
+   18.28,
+   17.56,
+   18.38,
+   16.78,
+   21.99,
+   0.0
+  ],
+  "R_grav": [
+   4.83,
+   13.77,
+   12.02,
+   12.39,
+   12.14,
+   12.43,
+   11.88,
+   13.72,
+   4.82
+  ],
+  "R_suc": [
+   7.69,
+   23.21,
+   20.25,
+   20.89,
+   20.47,
+   20.95,
+   20.02,
+   23.12,
+   7.68
+  ],
+  "flecha_mm": 14.6,
+  "flecha_lim_mm": 53.5,
+  "parafusos_transpasse": {
+   "desc": "2 M12 8.8 em cada ponta do transpasse (furos E/F da alma, atravessando as 2 almas)",
+   "Fd": 12.3,
+   "Rd": 16.7,
+   "uso": 0.738
   },
-  "flecha_gq_mm": 33.6,
-  "flecha_vento_mm": 28.4,
-  "flecha_lim_mm": 56.0
+  "apoio": {
+   "desc": "ST-1P com 4 M12 8.8 na alma (2 colunas a ±60 × furos E 55 / F 52, entre furos 195), sem mão-francesa",
+   "e_torcao_mm": 45.0,
+   "Ft_Rd": 50.3,
+   "arrancamento_alma_Rd": 19.9,
+   "Vb_Rd": 16.7,
+   "interno": {
+    "R": 23.21,
+    "T_parafuso": 2.68,
+    "V_parafuso": 7.86,
+    "interacao": 0.24
+   },
+   "extremo": {
+    "R": 7.69,
+    "T_parafuso": 0.89,
+    "V_parafuso": 5.64,
+    "interacao": 0.116
+   },
+   "uso": 0.24,
+   "nota": "tração T = R·e/z nos 2 parafusos de cima (binário com o apoio da alma no ST-1P) + corte √(R² + N²)/4; (T/TRd)² + (V/VRd)² ≤ 1"
+  },
+  "nota": "MEF de viga contínua (Euler-Bernoulli), 2·EI no transpasse; M > 0 (mesa superior comprimida, travada pela telha) contra MRd sem FLT; M < 0 (mesa inferior comprimida) contra MRd com Lb entre correntes; no transpasse 2 perfis; sobrecarga alternada nos vãos; NBR 14762:2010 9.8 e 9.8.5; flecha L/180 (NBR 8800 Anexo C).",
+  "envoltoria": {
+   "x": [
+    0.0,
+    0.965,
+    1.93,
+    2.895,
+    3.86,
+    4.825,
+    5.79,
+    6.755,
+    7.72,
+    8.685,
+    9.409,
+    10.154,
+    11.161,
+    12.169,
+    13.176,
+    14.184,
+    15.191,
+    16.199,
+    17.206,
+    18.214,
+    19.221,
+    19.977,
+    20.733,
+    21.74,
+    22.747,
+    23.755,
+    24.762,
+    25.77,
+    26.777,
+    27.785,
+    28.793,
+    29.548,
+    30.296,
+    31.289,
+    32.281,
+    33.274,
+    34.266,
+    35.259,
+    36.251,
+    37.244,
+    38.236,
+    39.229,
+    39.975,
+    40.725,
+    41.725,
+    42.725,
+    43.725,
+    44.725,
+    45.725,
+    46.725,
+    47.725,
+    48.725,
+    49.475,
+    50.225,
+    51.225,
+    52.225,
+    53.225,
+    54.225,
+    55.225,
+    56.225,
+    57.225,
+    58.225,
+    59.225,
+    59.975,
+    60.725,
+    61.725,
+    62.725,
+    63.725,
+    64.725,
+    65.725,
+    66.725,
+    67.725,
+    68.725,
+    69.475,
+    70.206,
+    71.169,
+    72.131,
+    73.094,
+    74.056,
+    75.019,
+    75.981,
+    76.944,
+    77.906,
+    78.869
+   ],
+   "M_max": [
+    0.0,
+    4.09,
+    7.04,
+    8.85,
+    9.51,
+    9.03,
+    7.4,
+    4.64,
+    2.29,
+    11.26,
+    19.24,
+    16.91,
+    8.0,
+    1.42,
+    4.18,
+    5.69,
+    5.95,
+    4.97,
+    2.74,
+    4.52,
+    12.43,
+    14.64,
+    7.82,
+    1.5,
+    4.56,
+    6.38,
+    6.95,
+    6.27,
+    4.34,
+    1.25,
+    8.71,
+    15.69,
+    13.4,
+    5.17,
+    2.61,
+    5.06,
+    6.31,
+    6.34,
+    5.16,
+    2.77,
+    4.67,
+    12.75,
+    15.06,
+    8.33,
+    1.22,
+    4.25,
+    6.05,
+    6.63,
+    5.98,
+    4.1,
+    1.65,
+    8.98,
+    15.84,
+    13.38,
+    4.94,
+    2.8,
+    5.32,
+    6.62,
+    6.69,
+    5.54,
+    3.15,
+    3.82,
+    11.94,
+    14.38,
+    7.98,
+    1.26,
+    3.99,
+    5.56,
+    5.89,
+    5.0,
+    2.89,
+    4.39,
+    12.15,
+    19.34,
+    16.34,
+    6.47,
+    2.81,
+    6.13,
+    8.32,
+    9.36,
+    9.27,
+    8.05,
+    5.68,
+    2.18
+   ],
+   "M_min": [
+    -0.0,
+    -6.46,
+    -10.99,
+    -13.6,
+    -14.28,
+    -13.03,
+    -9.85,
+    -4.74,
+    -2.95,
+    -6.68,
+    -11.42,
+    -10.03,
+    -5.17,
+    -2.58,
+    -3.5,
+    -6.1,
+    -6.6,
+    -4.99,
+    -1.49,
+    -3.65,
+    -7.37,
+    -8.68,
+    -4.78,
+    -2.06,
+    -4.56,
+    -7.6,
+    -8.54,
+    -7.38,
+    -4.12,
+    -2.38,
+    -5.2,
+    -9.31,
+    -7.95,
+    -3.97,
+    -1.63,
+    -5.17,
+    -7.28,
+    -7.35,
+    -5.39,
+    -1.43,
+    -3.7,
+    -7.57,
+    -8.93,
+    -5.03,
+    -2.35,
+    -3.93,
+    -6.96,
+    -7.91,
+    -6.79,
+    -3.6,
+    -2.59,
+    -5.35,
+    -9.39,
+    -7.94,
+    -3.83,
+    -1.43,
+    -5.73,
+    -7.96,
+    -8.12,
+    -6.21,
+    -2.23,
+    -3.24,
+    -7.08,
+    -8.53,
+    -4.91,
+    -2.41,
+    -3.4,
+    -5.98,
+    -6.5,
+    -4.94,
+    -1.61,
+    -3.79,
+    -7.21,
+    -11.47,
+    -9.69,
+    -4.61,
+    -1.49,
+    -7.52,
+    -11.64,
+    -13.84,
+    -14.12,
+    -12.48,
+    -8.93,
+    -3.46
+   ],
+   "x_apoios": [
+    0.0,
+    9.65,
+    19.725,
+    29.8,
+    39.725,
+    49.725,
+    59.725,
+    69.725,
+    79.35
+   ]
+  }
  },
  "terca_escora": {
   "Nd": 21.2,
-  "NcRd": 128.9,
+  "NcRd": 98.6,
   "modo_N": "local-global",
-  "Md": 23.91,
-  "amplificacao": 1.059,
-  "MRd": 31.17,
-  "interacao": 0.977,
+  "Md": 14.29,
+  "amplificacao": 1.064,
+  "MRd": 23.62,
+  "interacao": 0.859,
   "ok": 1.0,
   "vao_governante": "1-2",
   "linha_governante_x_m": 19.75,
@@ -116,19 +506,19 @@
    "y_m": 5.92,
    "Nd_max": 7.5,
    "governante": {
-    "vao": "2-3",
-    "x_m": 2.68,
-    "faixa": "beiral",
-    "vento": "90°",
+    "vao": "1-2",
+    "x_m": 39.5,
+    "faixa": "oitão + beiral",
+    "vento": "0°",
     "cp": -1.6,
-    "L_m": 10.075,
-    "Nd": 7.3,
-    "NcRd": 123.9,
+    "L_m": 9.65,
+    "Nd": 7.5,
+    "NcRd": 98.6,
     "modo_N": "local-global",
-    "Md": 26.06,
-    "MRd": 31.17,
-    "amplificacao": 1.021,
-    "interacao": 0.913
+    "Md": 14.29,
+    "MRd": 23.62,
+    "amplificacao": 1.022,
+    "interacao": 0.694
    }
   },
   "por_vao": [
@@ -140,12 +530,12 @@
     "cp": -1.6,
     "L_m": 9.65,
     "Nd": 21.2,
-    "NcRd": 128.9,
+    "NcRd": 98.6,
     "modo_N": "local-global",
-    "Md": 23.91,
-    "MRd": 31.17,
-    "amplificacao": 1.059,
-    "interacao": 0.977
+    "Md": 14.29,
+    "MRd": 23.62,
+    "amplificacao": 1.064,
+    "interacao": 0.859
    },
    {
     "vao": "2-3",
@@ -155,12 +545,12 @@
     "cp": -1.6,
     "L_m": 10.075,
     "Nd": 7.3,
-    "NcRd": 123.9,
+    "NcRd": 93.8,
     "modo_N": "local-global",
-    "Md": 26.06,
-    "MRd": 31.17,
-    "amplificacao": 1.021,
-    "interacao": 0.913
+    "Md": 6.67,
+    "MRd": 22.94,
+    "amplificacao": 1.023,
+    "interacao": 0.375
    },
    {
     "vao": "3-4",
@@ -170,12 +560,12 @@
     "cp": -1.6,
     "L_m": 10.075,
     "Nd": 1.2,
-    "NcRd": 123.9,
+    "NcRd": 93.8,
     "modo_N": "local-global",
-    "Md": 26.06,
-    "MRd": 31.17,
+    "Md": 8.54,
+    "MRd": 22.94,
     "amplificacao": 1.004,
-    "interacao": 0.849
+    "interacao": 0.387
    },
    {
     "vao": "4-5",
@@ -185,12 +575,12 @@
     "cp": -1.6,
     "L_m": 9.925,
     "Nd": 0.9,
-    "NcRd": 125.7,
+    "NcRd": 95.5,
     "modo_N": "local-global",
-    "Md": 25.29,
-    "MRd": 31.17,
+    "Md": 7.57,
+    "MRd": 23.24,
     "amplificacao": 1.003,
-    "interacao": 0.821
+    "interacao": 0.337
    },
    {
     "vao": "5-6",
@@ -200,12 +590,12 @@
     "cp": -1.6,
     "L_m": 10.0,
     "Nd": 0.6,
-    "NcRd": 124.8,
+    "NcRd": 94.7,
     "modo_N": "local-global",
-    "Md": 25.67,
-    "MRd": 31.17,
+    "Md": 7.91,
+    "MRd": 23.09,
     "amplificacao": 1.002,
-    "interacao": 0.829
+    "interacao": 0.349
    },
    {
     "vao": "6-7",
@@ -215,12 +605,12 @@
     "cp": -1.6,
     "L_m": 10.0,
     "Nd": 0.6,
-    "NcRd": 124.8,
+    "NcRd": 94.7,
     "modo_N": "local-global",
-    "Md": 25.67,
-    "MRd": 31.17,
+    "Md": 8.3,
+    "MRd": 23.09,
     "amplificacao": 1.002,
-    "interacao": 0.829
+    "interacao": 0.366
    },
    {
     "vao": "7-8",
@@ -230,12 +620,12 @@
     "cp": -1.6,
     "L_m": 10.0,
     "Nd": 1.0,
-    "NcRd": 124.8,
+    "NcRd": 94.7,
     "modo_N": "local-global",
-    "Md": 25.67,
-    "MRd": 31.17,
+    "Md": 6.56,
+    "MRd": 23.09,
     "amplificacao": 1.003,
-    "interacao": 0.834
+    "interacao": 0.295
    },
    {
     "vao": "8-9",
@@ -245,57 +635,58 @@
     "cp": -1.6,
     "L_m": 9.625,
     "Nd": 3.0,
-    "NcRd": 129.2,
+    "NcRd": 98.9,
     "modo_N": "local-global",
-    "Md": 23.78,
-    "MRd": 31.17,
+    "Md": 14.23,
+    "MRd": 23.62,
     "amplificacao": 1.008,
-    "interacao": 0.792
+    "interacao": 0.638
    }
   ],
-  "fonte": "modelo_global_r01.json (ELU-1 e ELU-2, por vão e por linha de terça)",
-  "nota": "N e M do mesmo vento (0° ou 90°), γ 1,4; faixas locais de oitão e de beiral (y = min(h; 0,15 b)) com Cpe médio −1,4 + Cpi +0,2 em envoltória; demais Ce −0,8 + Cpi +0,2 (NBR 6123:1988 tabela 6); NBR 14762:2010 item 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0"
+  "fonte": "modelo_global_r01.json (ELU-1 e ELU-2) + MEF da terça contínua",
+  "nota": "N do modelo global e M da sucção do MESMO vento (γ 1,4) tirado do MEF contínuo (maior |M−| do vão); NBR 14762:2010 9.9 — Nc,Sd/Nc,Rd + Cm·Mx,Sd/[(1 − Nc,Sd/Nex)·Mx,Rd] ≤ 1, Cm = 1,0 (Lx = vão, a favor da segurança)"
  },
  "correntes": {
   "linhas_por_vao": 3,
-  "posicao": "a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (150 do fundo)",
+  "posicao": "a L/4, L/2 e 3L/4, furo Ø12 no meio da alma (151 do fundo)",
   "casos": {
    "sucção": {
-    "W_kN": 2.96,
-    "PL_por_terca_kN": 0.518,
-    "F_acumulada_kN": 8.8
+    "W_kN": 3.3,
+    "PL_por_terca_kN": 0.725,
+    "F_acumulada_kN": 12.33
    },
    "gravidade": {
-    "W_kN": 3.15,
-    "PL_por_terca_kN": 0.646,
-    "F_acumulada_kN": 10.98
+    "W_kN": 3.4,
+    "PL_por_terca_kN": 0.851,
+    "F_acumulada_kN": 14.46
    }
   },
-  "F_max_kN": 10.98,
+  "Ixy_sobre_Ix": 0.22,
+  "F_max_kN": 14.46,
   "flexivel": {
    "barra": "Ø10 A36, roscas M10, porca + contraporca e arruela dos 2 lados de cada terça",
    "d_mm": 10.0,
    "furo": "Ø12",
    "NtRd": 17.5,
-   "uso": 0.629
+   "uso": 0.828
   },
   "rigida": {
    "perfil": "L 51×51×3,2 (A36), presa em clipe L 32×32×3 com 1 M10 em furo oval 11×23 na alma",
    "L_mm": 1199,
    "NcRd": 33.2,
    "esbeltez": 120,
-   "uso": 0.331,
+   "uso": 0.436,
    "onde": "1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"
   },
   "diagonal": {
    "barra": "Ø16 A36, rosca M16",
    "comp_L4_m": 2.79,
    "comp_L2_m": 5.18,
-   "Td_L4": 25.5,
-   "Td_L2": 23.7,
-   "Td": 25.5,
+   "Td_L4": 33.6,
+   "Td_L2": 31.2,
+   "Td": 33.6,
    "NtRd": 44.7,
-   "uso": 0.572,
+   "uso": 0.753,
    "liga": "do nó da corrente na 2ª terça (L/4, L/2, 3L/4) ao furo Ø18 do ST-1 da 1ª terça, na viga"
   }
  },
@@ -320,65 +711,118 @@
   "barra": "Ø16 A36 em 2 trechos (≈ 9,0 m + 1,2 m) unidos por esticador M16 (rosca direita/esquerda), pré-tensão manual",
   "nota": "X de nó a nó das vigas, abrangendo 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões); terças dos nós trabalham como escoras"
  },
+ "pecas": {
+  "transpasse_cada_lado_mm": 450,
+  "transpasse_total_mm": 900,
+  "extensao_fachada_mm": 110,
+  "furos_transpasse_da_ponta_mm": 40,
+  "colunas_apoio_mm": [
+   -60,
+   60
+  ],
+  "furos_z_mm": [
+   52,
+   247
+  ],
+  "furo_corrente_z_mm": 151,
+  "por_vao": [
+   {
+    "vao": "1-2",
+    "L_vao_mm": 9650,
+    "ext_ini_mm": 110,
+    "ext_fim_mm": 450,
+    "L_mm": 10210
+   },
+   {
+    "vao": "2-3",
+    "L_vao_mm": 10075,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10975
+   },
+   {
+    "vao": "3-4",
+    "L_vao_mm": 10075,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10975
+   },
+   {
+    "vao": "4-5",
+    "L_vao_mm": 9925,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10825
+   },
+   {
+    "vao": "5-6",
+    "L_vao_mm": 10000,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10900
+   },
+   {
+    "vao": "6-7",
+    "L_vao_mm": 10000,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10900
+   },
+   {
+    "vao": "7-8",
+    "L_vao_mm": 10000,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 450,
+    "L_mm": 10900
+   },
+   {
+    "vao": "8-9",
+    "L_vao_mm": 9625,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": 110,
+    "L_mm": 10185
+   }
+  ],
+  "L_max_mm": 10975
+ },
  "ST1P": {
   "peca": "chapa dobrada 9,5 × 220 (aba vertical 290, aba horizontal 150) A36 galvanizada",
-  "reacao_suc_kN": 5.91,
-  "reacao_grav_kN": 6.3,
+  "reacao_suc_kN": 23.21,
+  "reacao_grav_kN": 13.77,
   "M12_alma": {
-   "Fd": 11.0,
-   "corte_Rd": 26.8,
-   "contato_alma_Rd": 17.8,
-   "uso": 0.619
+   "Fd": 7.86,
+   "T": 2.68,
+   "uso": 0.24
   },
   "aba": {
-   "Md_kNm": 0.425,
+   "Md_kNm": 0.834,
    "MRd_kNm": 1.128,
-   "uso": 0.377
+   "uso": 0.739
   },
   "esperas": {
    "barra": "2 barras roscadas M16 A36 (fu 400) com gancho, hef 150, saliência 120",
-   "Td": 7.39,
+   "Td": 14.51,
    "Vd": 10.6,
    "Ft_Rd": 44.7,
    "Fv_Rd": 23.8,
-   "interacao": 0.225
+   "interacao": 0.303
   },
   "rasgamento_alma": {
    "e_mm": 45,
    "Fd": 10.6,
-   "Rd": 35.4
-  }
- },
- "MF1": {
-  "perfil": "L 50×5 (A36)",
-  "comp_m": 1.22,
-  "angulo": "44°",
-  "e_torcao_mm": 77.5,
-  "T_apoio_kNm": 0.458,
-  "H_kN": 1.53,
-  "Nd_kN": 2.14,
-  "NcRd": 48.2,
-  "esbeltez": 124,
-  "uso": 0.044,
-  "parafusos": "M12 8.8 na alma da terça (furo Ø14 a 40 mm do fundo) e porca M16 na espera da viga (furo Ø18 na aba da MF)",
-  "contato_alma_terca_Rd": 17.8,
-  "espera": {
-   "barra": "barra roscada M16 A36 horizontal, hef 110 na mesa inferior (a 100 do fundo), porca + arruela 40×40×6 na ponta, saliência 60",
-   "Vd": 2.14,
-   "Fv_Rd": 23.8,
-   "uso": 0.09
+   "Rd": 34.3
   }
  },
  "chumbadores": {
   "ST-1P": {
    "esperas": "2 M16 com gancho, hef 150 (s 120)",
-   "Nu": 14.8,
-   "Vu": 11.0,
+   "Nu": 29.0,
+   "Vu": 14.5,
    "phiNn": 71.7,
    "modoN": "cone",
    "phiVn": 43.9,
    "modoV": "borda",
-   "interacao": 0.38
+   "interacao": 0.612
   },
   "OR-X": {
    "esperas": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10",
@@ -386,14 +830,6 @@
    "phiVn": 35.3,
    "modoV": "aco",
    "uso": 0.533
-  },
-  "MF-espera": {
-   "esperas": "1 M16 horizontal por lado, hef 110, a 100 do fundo",
-   "Nu": 1.53,
-   "Vu": 1.49,
-   "phiNn": 30.5,
-   "phiVn": 17.5,
-   "interacao": 0.085
   }
  }
 }

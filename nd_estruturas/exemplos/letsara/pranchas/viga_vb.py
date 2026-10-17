@@ -36,6 +36,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m: ESPERAS ES-1/ES-3 (SEM SOLDA); TB-1 SEM CHAPA; CARGAS COM PAINÉIS SOLARES")
 pr.revisao("04", "16/10/2026", "VB 15×60 COM DENTE GERBER, CONSOLO CP-VB ESCONDIDO; NEO-6 100×100×10; PN-6 ANTI-LEVANTAMENTO")
+pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
@@ -81,7 +82,6 @@ for tb_, ni_ in zip(TUBOS, NICHOS):
 for s_ in TERCAS:
     for dx in (45, 105):
         ve.ret(s_ - dx - 8, H, 16, 120, "METALICA")
-    ve.circulo((s_ - 25, 100), 8, "METALICA")
 for s_ in (1500, L - 1500):
     ve.poli([(s_ - 60, H), (s_ - 60, H + 100), (s_, H + 140), (s_ + 60, H + 100), (s_ + 60, H)], "METALICA")
 ve.cota_ord([PERF[7][0], round(Tm(XP, ZT(XP))[0])] + TERCAS + [round(Tm(L - XP, ZT(L - XP))[0]), PERF[6][0]], H + 140, 14, x0=PERF[7][0])
@@ -91,7 +91,6 @@ ve.chamada(Tm(XP, ZNL + 150), (14, -16), "TB-1 tubo Ø50×3,0 L=240 A PRUMO na m
 ve.chamada(PERF[1], (16, -22), "face de apoio do dente: HORIZONTAL na montagem (3 % na peça)")
 ve.chamada(PERF[7], (30, 30), "pontas e recortes a prumo na montagem")
 ve.chamada((TERCAS[2] - 45, H + 120), (10, 12), f"ES-1V: 2 esperas M16 no eixo da VB por terça — {len(TERCAS)} terças (ST-1V parafusado)")
-ve.chamada((TERCAS[3] - 25, 100), (10, -12), "ES-3 (mão-francesa), face interna")
 ve.chamada((1500, H + 140), (10, 10), "AL-1 alça (2x)")
 ve.marcador_corte((L / 2 + 400, -22 * ESC), (L / 2 + 400, H + 24 * ESC), "A", lado=1)
 ve.marcador_detalhe((LN / 2, REC), 500, 1, ang=-120, dist=8)
@@ -139,13 +138,11 @@ for x in (-B / 2 + COB + 6.3 + 5, 0, B / 2 - COB - 6.3 - 5):
     ca.ponto_barra((x, H - COB - 6.3 - 5), 10); ca.ponto_barra((x, H - COB - 6.3 - 5 - 30), 10)
 ca.ret(-8, H - 150, 16, 270, "METALICA")
 ca.poli([(-8, H - 150), (-8, H - 170), (52, H - 170)], "METALICA")
-ca.ret(B / 2 - 110, 92, 170, 16, "METALICA")
 ca.cota_h([-B / 2, B / 2], 0, -10); ca.cota_v([0, H], B / 2, 10)
 ca.chamada((B / 2 - COB - 11, H - COB - 11), (14, 12), "N2 — 6 Ø10 (2 camadas de 3)")
 ca.chamada((-xi, COB + 14), (14, -12), "N1 — 3 Ø16 (2 + 1)")
 ca.chamada((B / 2 - COB, 300), (14, -6), "N3 Ø6,3 c/15")
 ca.chamada((0, H + 60), (14, 14), "ES-1V M16 hef 150 + gancho, saliência 120 (no eixo)")
-ca.chamada((B / 2 + 30, 100), (14, -8), "ES-3 M16 hef 110, sai 60")
 
 d1 = pr.vista("DETALHE 1", (Q[0] + 300, YR - 10), 10, titulo="DETALHE 1 — DENTE NO CONSOLO CP-VB (POSIÇÃO MONTADA)", subtitulo="ponta baixa; viga a 3 %; face de apoio e topo do consolo horizontais; PN-6 com porca", unidade="cm")
 LD = 1100
@@ -198,7 +195,7 @@ ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
 y = ta["y_base"]
 ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 das pontas"],
        ["ES-1V", "2 barras roscadas M16 L=330 c/ gancho (ST-1V das terças)", 2 * len(TERCAS), "topo, a 45/105 da terça"],
-       ["ES-3", "Barra roscada M16 L=170 horizontal + porca/arruela (MF)", len(TERCAS), "face interna, 100 do fundo"], ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
+       ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
        ["NEO-6", "Neoprene 100×100×10 (furo Ø30)", 2, "sobre os consolos CP-VB"],
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
@@ -206,10 +203,10 @@ qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 60 cm, dente 30"], ["COMPRIMENTO", f"
       ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimento 3,0 cm (CAA II). N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas.",
-         "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V; mão-francesa MF-1 no CMF-1 da espera ES-3 (face interna) — ND-LET-COB01. Nenhuma solda.",
+         "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V, com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",
          "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). A ponta baixa vai sempre para o lado A. Folga de 2,5 cm entre a ponta da viga e a face do pilar e entre a ponta do consolo e o recorte.",
          "Sucção do vento na cobertura levanta a VB no apoio (28 kN de cálculo): pino PN-6 Ø20 roscado com porca, contraporca e arruela no nicho do topo do dente, apertado depois do neoprene assentado; graute do nicho só numa ponta (a outra livre para dilatar).",
-         "VB-05 a VB-08 (fachada 9) são o espelho das VB-01 a VB-04: mesma fôrma e armação, com as esperas ES-3 na outra face (face interna da fachada 9) — a ponta baixa continua no lado A.",
+         "VB-05 a VB-08 (fachada 9): mesma fôrma, armação e esperas das VB-01 a VB-04 (sem ES-3 desde a rev05, as peças ficaram iguais); marcas mantidas por fachada para a montagem — a ponta baixa continua no lado A.",
          "Placas de fechamento por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos trilhos IP-01).",
          "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

@@ -8,7 +8,8 @@ Geometria = a mesma da checagem de ligações (ligacoes.json) e do modelo global
 - rev03 (14/10/2026): cobertura rebaixada (TP40 + lã 40 + zipada + painéis solares) com ≥ 15 cm de folga à platibanda (+10,00);
 - TS-01 sem dentes, apoiada no recuo dos pilares laterais e no topo da I130 / pilares centrais (neoprene + 2 pinos);
 - vigas centrais I130 (h 1,30) com dente 78 × 35 nos consolos CP-I130;
-- terças Ue 300×2,65 c/1,20 m, ligações todas parafusadas (sem solda); mezanino com laje alveolar h20 + 5 sobre vigas I90.
+- terças Z 302×90/82×2,30 METSEC c/1,20 m contínuas por transpasse (rev05: peças com o polígono real, transpasse, ST-1P/ST-1V
+  e parafusos M12 do apoio e da emenda; sem mão-francesa), ligações todas parafusadas (sem solda); mezanino com laje alveolar h20 + 5 sobre vigas I90.
 - rev04 (16/10/2026, NBR 9062): sem VT; VM em meio vaso com dente Gerber, 2º estágio e alças; folgas reais; consolos com fundo alinhado.
 Unidades: m.
 """
@@ -49,7 +50,8 @@ I130 = PerfilI(h=1.30, b=0.40, tw=0.15, tf=0.25, nome="I130")
 I70 = PerfilI(h=0.70, b=0.40, tw=0.15, tf=0.15, nome="I70")
 VB = PerfilRetangular(0.15, 0.60, "VB 15x60")
 VB_N = PerfilRetangular(0.15, 0.30, "VB nariz do dente")
-TERCA = PerfilRetangular(0.085, 0.30, "Ue300x85x25x2,65 (envelope)")
+TERCA = PerfilRetangular(0.172, 0.302, "Z302 (envelope)")
+PARAF = PerfilRetangular(0.012, 0.012, "M12 8.8")
 LAJE = PerfilRetangular(1.24, H_LAJE, "LA h20+5")
 TELHA = PerfilRetangular(1.00, sum(LG["platibanda"]["pacote"].values()), "TP40 + lã 40 + zipada + painéis solares")
 H_PLACA, E_PLACA, N_FIADAS = 1.25, 0.10, 8
@@ -149,16 +151,44 @@ def montar() -> ModeloBIM:
                 m.bloco("inserto", "NEO-6 100×100×10", (xb_, y, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-6 Ø20 roscado + porca", (xb_, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
 
-    # 4. terças Ue 300 e telha
+    # 4. terças Z 302 METSEC contínuas por transpasse (METLAP), ST-1V nas VB, parafusos do apoio e da emenda; e telha
+    from shapely.geometry import LineString
+    CBM_ = json.loads((AQ / "cobertura_metalica.json").read_text(encoding="utf-8"))
+    PC_ = CBM_["pecas"]
+    A_TR, EXT_F, B_TR = PC_["transpasse_cada_lado_mm"] / 1000, PC_["extensao_fachada_mm"] / 1000, PC_["furos_transpasse_da_ponta_mm"] / 1000
+    ZF1, ZF2 = PC_["furos_z_mm"][0] / 1000, PC_["furos_z_mm"][1] / 1000
+    t_z, c45 = 0.0023, math.cos(math.radians(45))
+
+    def z_contorno(xw, z0):
+        cl = [(xw + 0.082 - 0.021 * c45, z0 + 0.021 * c45), (xw + 0.082, z0), (xw, z0), (xw, z0 + 0.302), (xw - 0.090, z0 + 0.302),
+              (xw - 0.090 + 0.019 * c45, z0 + 0.302 - 0.019 * c45)]
+        pol = LineString(cl).buffer(t_z / 2, cap_style=2, join_style=2).simplify(0.0002)
+        return [(round(x_, 5), round(z_, 5)) for x_, z_ in list(pol.exterior.coords)[:-1]]
+
+    n_v = len(Y_LIN) - 1
     for xa, _ in PONTAS:
         for s in LG["s_tercas"]:
-            x = xa + s * C3 - 0.027
-            zt = zf(x) + H_TS + 0.010 + TERCA.h / 2
-            for k in range(len(Y_LIN) - 1):
-                m.linear("terca", "Ue300", TERCA, (x, Y_LIN[k] + 0.01, zt), (x, Y_LIN[k + 1] - 0.01, zt), "Terças metálicas", material="aco")
+            xw = xa + s * C3 - 0.027                                 # alma da terça na face +x do ST-1P (linha das terças)
+            zb = zf(xw) + H_TS + 0.010                               # fundo da terça
+            for k in range(n_v):
+                e0 = EXT_F if k == 0 else A_TR
+                e1 = EXT_F if k == n_v - 1 else A_TR
+                dk = t_z if k % 2 else 0.0                           # vãos alternados: perfil encaixado por fora no transpasse
+                ya, yb = Y_LIN[k] - e0, Y_LIN[k + 1] + e1
+                pk = next(p_ for p_ in PC_["por_vao"] if p_["vao"] == f"{k+1}-{k+2}")
+                m.extrusao_y("terca", f"Z302 vão {k+1}-{k+2} L={pk['L_mm']}", z_contorno(xw + dk, zb + dk), (ya + yb) / 2, yb - ya,
+                             "Terças metálicas", material="aco", obs="Z 302×90/82×2,30 METSEC, contínua por transpasse")
+            for j, yl in enumerate(Y_LIN):
+                ys = (-0.06, 0.06) if j in (0, n_v) else (-0.06, 0.06, -(A_TR - B_TR), A_TR - B_TR)
+                for dy in ys:
+                    for zz in (ZF1, ZF2):
+                        m.linear("inserto", "M12 8.8 (apoio/emenda da terça)", PARAF, (xw - 0.012, yl + dy, zb + zz), (xw + 0.016, yl + dy, zb + zz),
+                                 "Parafusos da cobertura", material="aco")
+                if j in (0, n_v):
+                    m.bloco("inserto", "ST-1V (chapa dobrada) nas esperas ES-1V da VB", (xw - 0.075, yl, zb - 0.010 + 0.30), 0.15, 0.22, 0.30, "Insertos metálicos")
     for k in range(int(COMP // 1.0)):
         y = 0.5 + k * 1.0
-        z0, z1 = zf(0.18) + H_TS + 0.010 + 0.30 + TELHA.h / 2, zf(LARG - 0.18) + H_TS + 0.010 + 0.30 + TELHA.h / 2
+        z0, z1 = zf(0.18) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2, zf(LARG - 0.18) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2
         m.linear("placa", "telha", TELHA, (0.18, y, z0), (LARG - 0.18, y, z1), "Telhas", material="aco")
 
     # 5. mezanino (linhas 1–2), rev04: VM em MEIO VASO (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente
@@ -262,7 +292,7 @@ def montar() -> ModeloBIM:
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
     m.pendente("TS-01 sem dentes: apoio 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e 16,25 cm no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
-    m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1, OR-X nas ES-2, mão-francesa no CMF-1 das ES-3; placas com trilho TR-1 + bucha BR-1 + CL-1 e consolo CA-1 parafusado.")
+    m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas com trilho TR-1 + bucha BR-1 + CL-1 e consolo CA-1 parafusado.")
     m.pendente("Terças, laje, consolos e pacote da cobertura como envelope; contraventamento em X, correntes e mãos-francesas nas pranchas COB01/COB02, não modelados no 3D.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
@@ -285,7 +315,7 @@ if __name__ == "__main__":
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
                  ] + [(f"ND-LET-AR-PIL-{k:02d}", f"armaduras dos pilares — folha {k} de 6 (padrão de armação)") for k in range(1, 7)] + [(f"ND-LET-AR-VIG-{k:02d}", f"armaduras das vigas — {t}") for k, t in enumerate(("TS-01", "I130", "VM", "VB"), 1)] + [] + [(f"ND-LET-{m.replace('-', '')}", f"pilar {m} (família 40×60)") for m in ("PL-01", "PL-02", "PL-03", "PL-04", "PL-05", "PL-06", "PL-07", "PL-08", "PL-09", "PL-10", "PL-11", "PL-12", "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06")] + [ ("ND-LET-PC01", "pilar central PC-01 (P8A)"), ("ND-LET-PC02", "pilar central PC-02 (P11)"), ("ND-LET-PC03", "pilar central PC-03 (P13)"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilares dos portões PG-01 (P9, P12)"), ("ND-LET-PG02", "pilares dos portões PG-02 (P10)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento, ST-1P, mão-francesa (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilares dos portões PG-01 (P9, P12)"), ("ND-LET-PG02", "pilares dos portões PG-02 (P10)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"),
                  ("ND-LET-I130", "vigas centrais I130 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02 (meio vaso) — fôrma"), ("ND-LET-VM02", "vigas do mezanino — 2º estágio, apoio e insertos"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
                  ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),

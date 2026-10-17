@@ -143,7 +143,7 @@ notas = [f"Concreto C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj
          "C2 (x = ±4, y = 10) com bainha plástica estanque nos 3,00 m de cada ponta, vedada com fita nas extremidades.",
          f"Pista de {P['L_pista']} m: até 3 peças por linha; alongamento medido × teórico dentro de ±7 %. Cordoalhas por peça: {f(kg_cord,0)} kg.",
          "Sem dentes: N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais da mesa inferior) absorvem a reação de apoio e a transferência da protensão; estribos verticais fora da faixa dos tubos TB-3.",
-         "As alças AL-1, os tubos TB-3 e as esperas ES-1/ES-2/ES-3 estão na folha 01; posicionar entre os estribos N1, sem cortar armadura.",
+         "As alças AL-1, os tubos TB-3 e as esperas ES-1/ES-2 estão na folha 01; posicionar entre os estribos N1, sem cortar armadura.",
          "Cobrimento 3,0 cm (CAA II), medido também nas cunhas das pontas: nos 30 cm de cada ponta os espaçadores do fundo são de 4,0 cm (face rebaixada até 9 mm); cordoalhas a 5,5 cm ficam com 3,9 cm na ponta. Dobramento conforme NBR 6118:2023 item 9.4.6. Medidas em cm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 yl = pr.legenda_armadura(x0, tc["y_base"] - 4, True)

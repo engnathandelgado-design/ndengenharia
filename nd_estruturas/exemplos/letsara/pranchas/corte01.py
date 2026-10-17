@@ -86,9 +86,9 @@ def ts(R, x0):
         R.linha(glob(x0, s0, 0), glob(x0, s0 + 27, H), "EIXO")
     for s in TER:
         xt, zt = glob(x0, s, H)
-        R.ret(xt, zt + 10, 85, 300, "METALICA")                   # terça Ue 300
+        R.poli([(xt + 82, zt + 10), (xt, zt + 10), (xt, zt + 312), (xt - 90, zt + 312)], "METALICA")   # terça Z 302
         R.ret(xt - 9.5, zt + 10, 9.5, 290, "METALICA")            # ST-1P (aba vertical)
-    zz = H + 10 + 300
+    zz = H + 10 + 302
     for k_ in ("tp40", "espacador_la", "zipada", "painel_solar"):
         zz += PAC[k_] * 1000
         a, b = glob(x0, -100, zz), glob(x0, L + 100, zz)
@@ -174,6 +174,7 @@ pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); cabeça
 pr.revisao("02", pr.dados["data"], "CONSOLOS SEM CHANFRO (FUNDO ALINHADO À VIGA); VM I90 COM DENTE 45×30; LAJE 8 Ø12,7")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (APOIO NO RECUO E NO TOPO DA I130); PACOTE COM PAINÉIS; COBERTURA REBAIXADA; PLACAS 10 cm")
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; MEZANINO EM MEIO VASO COM DENTE")
+pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE, SEM MÃO-FRANCESA")
 z_tel = lambda x: zf(x) + (H + 10 + 300 + sum(PAC.values()) * 1000) * c       # topo dos painéis solares
 for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330), "CORTE 3-3"))):
     v = pr.vista(nome, org, 50, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
@@ -196,7 +197,7 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
     else:
         for zm in Z_MEZ:
             nivel(v, 4500, zm, f"piso mezanino {f(zm / 1000)}")
-    v.chamada((30000, z_tel(30000)), (6, 14), f"TP40 + lã 40 + zipada 0,65 (480 × 70) + painéis solares sobre terças Ue 300×2,65 c/{LG['passo_tercas']*100:.1f} cm nos ST-1P — ND-LET-COB01".replace(".", ","))
+    v.chamada((30000, z_tel(30000)), (6, 14), f"TP40 + lã 40 + zipada 0,65 (480 × 70) + painéis solares sobre terças Z 302×2,30 contínuas c/{LG['passo_tercas']*100:.1f} cm nos ST-1P — ND-LET-COB01".replace(".", ","))
     v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3 %, sem dentes (apoio direto)")
     v.chamada((39900, 5000), (6, 0), "placa de fechamento 10 cm (por fora)")
     v.chamada((39350, 9950), (8, 20), f"cabeça 40×30; folga de {Z_TOP_PIL - z_tel(39475):.0f} mm do topo dos painéis à platibanda")

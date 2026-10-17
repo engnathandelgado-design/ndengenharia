@@ -4,6 +4,9 @@ Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semân
 
 ## [Não lançado]
 
+- Letsara rev05 (DEC-023): terças Z 302×90/82×2,30 METSEC contínuas por transpasse (METLAP), sem mão-francesa — `calc_cobertura_metalica.py` com MEF de viga contínua, transpasse 450 + 450, apoio 4 M12 e emendas 2 M12; COB01/COB02 refeitas (planta com peças e transpasses, apoio na TS-01 e na VB, emenda, seção e furação do Z); ES-3/CMF-1/MF-1 retirados das TS-01 e VB; BIM com o polígono real do Z, transpasses, ST-1V e 2176 parafusos; memória ND-LET-MC06; entregas rev05.
+- `nd_estruturas.viga_continua`: viga contínua por MEF com EI variável (testes com fórmulas clássicas); `PerfilZ` com abas desiguais.
+
 - `metalica_fria.PerfilZ`: Z enrijecido ponto-simétrico (bordas a 45°), FLT 0,5·Cb·r0·√(Ney·Nez) e compressão nos eixos principais; teste com a área do catálogo Isoeste (Z272 × 2,30). Estudo das terças sem mão-francesa em andamento.
 - Letsara: `estudo_tercas_sem_mf.py` — escolha automática do perfil mais leve (Ue e Z45 Isoeste, biapoiada × contínua, 2 × 3 linhas de correntes) com apoio por 2 M12 na alma; Ue 300×85×25×2,65 atual passa sem MF (apoio 0,41); com aço CIVIL 300 (fy 300) uma escora do vão 1-2 dá 1,06 → #3,00 nessa linha. Incluídos Z (abas desiguais, `PerfilZ(bf_inf, D_inf)`) e C da Metsec/voestalpine Meincol (fy 400): melhor biapoiada C 342×88×18×2,30 (26,0 t, sucção 0,92; 5 escoras do oitão/beiral do vão 1-2/2-3 em #2,70).
 - Letsara (DEC-022): apoios horizontais das vigas inclinadas — cunhas nas pontas da TS-01, pinos simétricos, recuos e topo da I130/pilares centrais horizontais (2 níveis), VB com dentes nivelados e pontas a prumo, CP-VB por face, VB-05 a VB-08 espelhadas; BIM com `PerfilPoligono`/`extrusao_y`.

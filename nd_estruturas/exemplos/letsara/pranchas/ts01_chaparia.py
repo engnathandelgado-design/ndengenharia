@@ -11,6 +11,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1, TB-1 NO DENTE")
 pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T; OR-1 SOLDADA NA CH-MF")
 pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1; SEM DENTES")
+pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS POR TRANSPASSE: SEM MÃO-FRANCESA (SAEM ES-3, CMF-1, MF-1); ST-1P COM 4 M12")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
 nt, nn = len(P["tercas"]), len(P["nos"])
@@ -60,18 +61,6 @@ v.cota_v([-130, -110, 0, 50], 40, 10, total=False)
 v.chamada((0, 30), (10, 14), "barra roscada M16 A36 — 50 rosqueados")
 v.chamada((40, -60), (12, -14), "grampo U Ø10 CA-50, pernas 300")
 
-v = pr.vista("ES-3", (375, 440), 5, titulo="ES-3 — ESPERA DA MÃO-FRANCESA", subtitulo=f"horizontal, faces B e D · {2*nt} por peça")
-v.ret(-110, -8, 170, 16, "METALICA")
-for k in range(7):
-    v.linha((4 + 8 * k, -8), (8 + 8 * k, 8), "METALICA")
-v.chapa(-116, -20, 6, 40, 0.25)
-v.ret(-110, -13, 14, 26, "METALICA")
-v.linha((0, -40), (0, 40), "VISTA")
-v.cota_h([-116, -110, 0, 60], -20, -10, total=False)
-v.chamada((30, 8), (6, 14), "barra roscada M16 A36 — 60 para fora da face")
-v.chamada((-113, 20), (-8, 12), "porca M16 + arruela 40×40×6 (ancoragem)")
-v.chamada((0, -40), (6, -10), "face lateral da mesa inferior (h = 100 do fundo)")
-
 # ------------------------------------------------------------------ TB-3, PN-3, PN-5, NEO-3, NEO-4 (1:10)
 v = pr.vista("TB-3", (480, 455), 10, titulo="TB-3", subtitulo="tubo dos pinos · 4 por peça")
 v.ret(-25, -450, 50, 900, "METALICA")
@@ -104,18 +93,18 @@ v.chamada((210, 0), (10, 50), "NEO-3 100×300 (I130 / centro)")
 
 # ------------------------------------------------------------------ ST-1P (1:5)
 st = CB["ST1P"]
-v = pr.vista("ST-1P", (250, 280), 5, titulo="ST-1P — SUPORTE DA TERÇA", subtitulo=f"chapa dobrada 9,5 A36 · 1 por terça · {nt*14} na obra")
+v = pr.vista("ST-1P", (250, 280), 5, titulo="ST-1P — SUPORTE DA TERÇA", subtitulo=f"chapa dobrada 9,5 A36 · 1 por apoio de terça · {nt*14} na obra")
 v.chapa(-110, 0, 220, 9.5)
 v.chapa(-110, 9.5, 9.5, 280.5)
 v.texto((-100, 320), "perfil da dobra", "nota")
 v2 = pr.vista("ST-1P FRENTE", (330, 280), 5, titulo="ST-1P — ABA VERTICAL", subtitulo="furos das terças")
 v2.ret(-110, 0, 220, 290, "METALICA")
-for yy in (-50, 50):
-    for zz in (110, 210):
+for yy in (-60, 60):
+    for zz in (62, 257):
         furo(v2, (yy, zz), 14)
-v2.cota_h([-110, -50, 50, 110], 0, -8, total=False)
-v2.cota_v([0, 110, 210, 290], 110, 8, total=False)
-v2.chamada((50, 210), (10, 18), "4 furos Ø14: 2 M12 8.8 por terça")
+v2.cota_h([-110, -60, 60, 110], 0, -8, total=False)
+v2.cota_v([0, 62, 257, 290], 110, 8, total=False)
+v2.chamada((60, 257), (10, 18), "4 furos Ø14: 4 M12 8.8 pelas almas das 2 terças do transpasse")
 v3 = pr.vista("ST-1P PLANTA", (440, 290), 5, titulo="ST-1P — ABA HORIZONTAL", subtitulo="furos oblongos (ajuste ±11)")
 v3.ret(0, -110, 150, 220, "METALICA")
 for yy in (-60, 60):
@@ -124,7 +113,7 @@ v3.cota_v([-110, -60, 60, 110], 150, 8, total=False)
 v3.cota_h([0, 75, 150], -110, -8, total=False)
 v3.chamada((75, 60), (8, 24), "2 oblongos 18 × 40 (ES-1)")
 
-# ------------------------------------------------------------------ OR-X, CMF-1, MF-1 (1:5 e 1:10)
+# ------------------------------------------------------------------ OR-X (1:2,5)
 v = pr.vista("OR-X", (600, 300), 2.5, titulo="OR-X — ORELHA DO X", subtitulo="L 102×76×6,3 A36, L = 80 · vãos 2-3 e 7-8")
 v.ret(0, 0, 76, 6.3, "METALICA")
 v.ret(0, 0, 6.3, 102, "METALICA")
@@ -135,43 +124,20 @@ v.cota_h([0, 45, 76], 0, -14, total=False)
 v.chamada((3, 85), (-10, 14), "2 furos Ø18 (diagonal a 45 ou 85)")
 v.chamada((45, 6), (6, -20), "furo Ø18 na ES-2")
 
-mf = CB["MF1"]
-Lmf = round(mf["comp_m"] * 1000)
-v = pr.vista("CMF-1", (90, 125), 2.5, titulo="CMF-1 — CLIPE DA MÃO-FRANCESA", subtitulo=f"L 76×76×6,3 A36, L = 80 · 2 por terça")
-v.ret(0, 0, 76, 6.3, "METALICA")
-v.ret(0, 0, 6.3, 76, "METALICA")
-furo(v, (40, 3), 18)
-v.circulo((3, 40), 7, "METALICA")
-v.cota_h([0, 40, 76], 0, -14, total=False)
-v.cota_v([0, 40, 76], -10, -8, total=False)
-v.chamada((40, 6), (10, 24), "furo Ø18 na ES-3 (porca M16)")
-v.chamada((3, 40), (-6, 20), "furo Ø14: M12 na MF-1")
-
-v = pr.vista("MF-1", (215, 110), 10, titulo="MF-1 — MÃO-FRANCESA", subtitulo=f"L 50×5 A36, L = {Lmf} · 2 por terça · {mf['angulo']}")
-v.linha((0, 0), (Lmf, 0), "METALICA"); v.linha((0, 50), (Lmf, 50), "METALICA")
-v.linha((0, 0), (0, 50), "METALICA"); v.linha((Lmf, 0), (Lmf, 50), "METALICA")
-furo(v, (30, 25), 14); furo(v, (Lmf - 30, 25), 14)
-v.cota_h([0, 30, Lmf - 30, Lmf], 0, -8, total=False)
-v.chamada((30, 25), (-4, 14), "M12 8.8 no CMF-1")
-v.chamada((Lmf - 30, 25), (-30, 24), "M12 8.8 na alma da terça (a 40 do fundo)")
-
 # ------------------------------------------------------------------ ISO da ponta
 pr.imagem(400, 40, 640, 210, "/home/claude/letsara/pranchas/ISO-TS01-ponta-crop.png", "ISOMÉTRICO — LIGAÇÕES DA COBERTURA",
-          "terça, ST-1P, mão-francesa e contraventamento — tudo parafusado")
+          "terças Z contínuas por transpasse, ST-1P e contraventamento — tudo parafusado, sem mão-francesa")
 
 # ------------------------------------------------------------------ tabelas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 k = lambda kgm, Lm: f(kgm * Lm, 1)
 lista = [["ES-1", "barra roscada M16 L=330 c/ gancho", 2 * nt, 2 * nt * 14, k(1.58, 0.33)],
          ["ES-2", "barra roscada M16 L=220 c/ gancho + U Ø10", 4 * nn, 4 * nn * 14, k(1.58, 0.22)],
-         ["ES-3", "barra roscada M16 L=170 + porca + arruela", 2 * nt, 2 * nt * 14, k(1.58, 0.17)],
          ["TB-3", "tubo Ø50,8×2,0 L=900", 4, 56, k(2.41, 0.90)],
          ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 56, "1,5"],
          ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * 14, "7,4"],
          ["ST-1V", "igual ao ST-1P, 2 oblongos no eixo (VB)", "-", 4 * nt, "7,4"],
          ["OR-X", "L 102×76×6,3 L=80", "-", 4 * nn * 4, "0,7"],
-         ["CMF-1", "L 76×76×6,3 L=80", "-", 2 * nt * 14, "0,6"],
-         ["MF-1", f"L 50×5 L={Lmf}", "-", 2 * nt * 14, k(3.77, Lmf / 1000)],
          ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 28, "2,3"],
          ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 28, "1,5"],
          ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", 14, "-"],
@@ -180,7 +146,7 @@ y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MA
               [16, 92, 18, 22, 32])
 notas = ["Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
-         "Mão-francesa MF-1 em todas as terças, dos dois lados da viga: CMF-1 na espera ES-3 (porca M16) e MF-1 parafusada no CMF-1 e na alma da terça.",
+         "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",
          "OR-X só nos nós dos vãos contraventados (2-3 e 7-8); as esperas ES-2 existem em todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",
          "Pinos PN-3/PN-5 concretados no pilar / na I130, passando pelo neoprene e pelos tubos TB-3, grauteados após o alinhamento das vigas.",
          "Proteção: esperas, barras e peças galvanizadas a fogo (NBR 6323); retocar com tinta rica em zinco após a montagem.",

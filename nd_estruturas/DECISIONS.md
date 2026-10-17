@@ -235,3 +235,11 @@ Pedido do Nathan: ajustar as vigas de cobertura inclinadas (3 %), os dentes e os
 (3) Assentos horizontais: recuo dos pilares P1 (+7,195) e P2 (+8,369); topo da I130 e dos pilares P8A/P11 em dois níveis (+7,776 lado A, +7,788 lado E, degrau de 12 mm no eixo C), porque a ponta alta de uma TS-01 e a ponta baixa da outra ficam em níveis diferentes.
 (4) VB: pontas, recortes e tubos a prumo e face de apoio do dente horizontal na montagem (inclinados 3 % na fôrma reta, `vb_geom.py`); CP-VB com topo horizontal e nível próprio em cada face (diferença de 2 cm entre as faces do mesmo pilar); VB-05 a VB-08 da fachada 9 espelhadas (ES-3 na face interna).
 (5) BIM: `PerfilPoligono` + `ModeloBIM.extrusao_y` para modelar a elevação real (pontas a prumo, cunhas, dentes) em vez de prismas inclinados.
+
+## DEC-023 — Letsara rev05: terças Z METSEC contínuas por transpasse, sem mão-francesa (2026-10-17)
+
+Pedido do Nathan: terças sem mão-francesa; testar os perfis Z dos catálogos do Drive e do catálogo Purlins (voestalpine Meincol / METSEC). Estudo automático (`estudo_tercas_sem_mf.py`, NBR 14762 MRD): a mais leve biapoiada foi a C 342×2,30 METSEC (26,0 t); o Nathan escolheu a **Z 302×90/82×2,30 METSEC contínua por transpasse (METLAP)** (28,3 t; folga maior, encaixe das peças). Escolhas:
+(1) Terça contínua nos 8 vãos por MEF de viga contínua (`nd_estruturas.viga_continua`) com 2·EI no transpasse; transpasse escolhido como o menor que atende: 450 mm para cada lado de cada TS-01 (uso 0,80, flecha 14,6 mm de 53,5); peças de 10,19 a 10,98 m (≤ 12 m).
+(2) Sem mão-francesa: 4 M12 8.8 por apoio (2 colunas a ±60 nos furos METSEC E 55 / F 52) atravessando o ST-1P e as 2 almas; torção de apoio pelo binário das linhas (interação 0,24); 2 M12 em cada ponta do transpasse (uso 0,74). Saem ES-3, CMF-1 e MF-1 das TS-01 e das VB.
+(3) Aba de 90 voltada para o lado A, sobre o ST-1P (aba vertical 290 < 312 da terça), para não mexer nas esperas ES-1; correntes de Z pela componente Ixy/Ix (AISI S100-16 D3.2), uso 0,83 com Ø10.
+(4) Pendências com o fabricante: fu do aço (480 adotado), ângulo dos enrijecedores (45°), encaixe e furação no transpasse. A tabela do fabricante (por ensaio) pode dar espessuras menores; se usada, substitui a verificação da MC06.

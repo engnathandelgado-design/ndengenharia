@@ -13,6 +13,7 @@ pr.revisao("01", "12/10/2026", "DENTES GERBER, MÃO-FRANCESA NO FUNDO, CHUMBADOR
 pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01; ORELHAS DO X NA CH-T2")
 pr.revisao("03", "14/10/2026", "SEM DENTES (APOIO DIRETO), TERÇAS c/1,20 m, ESPERAS ROSCADAS (SEM SOLDA), 8 CORDOALHAS")
 pr.revisao("04", "16/10/2026", "NBR 9062: TOLERÂNCIA DE COMPRIMENTO ±10 mm (FOLGA CENTRAL 19 mm); ESTABILIDADE LATERAL")
+pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
@@ -78,7 +79,6 @@ for s0 in S_TB:
         ve.linha((s0 + d, 0), (s0 + d + DX, H), "OCULTA")
 for s in TER:
     esperas_topo(ve, s, False)
-    ve.circulo((ES3(s), 100), 8, "METALICA")
 for s in ALC:
     ve.poli([(s - 50, H), (s - 50, H + 110), (s, H + 150), (s + 50, H + 110), (s + 50, H)], "METALICA")
     for d in (-50, 50):
@@ -87,7 +87,6 @@ cgx, cgy = L / 2 + sk(sec.yc * 1000), sec.yc * 1000
 ve.circulo((cgx, cgy), 100, "INDICACAO"); ve.linha((cgx - 180, cgy), (cgx + 180, cgy), "INDICACAO")
 ve.linha((cgx, cgy - 180), (cgx, cgy + 180), "INDICACAO")
 ve.chamada((cgx + 70, cgy + 70), (10, 12), f"CG (s = {ve.fmt(cgx)}; h = {ve.fmt(cgy)})")
-ve.chamada((ES3(TER[6]), 100), (8, -22), "ES-3: espera M16 horizontal da mão-francesa, 2 por terça (faces B e D), h = 10")
 ve.chamada((S_TB[0] + 12, 700), (-14, 18), "TB-3 Ø50 a prumo")
 ve.chamada((S_TB[1] + 12, 700), (14, 18), "TB-3 Ø50 a prumo")
 ve.chamada((ES1(TER[3]) + DX, H + 120), (-6, 14), "ES-1 (saliência 12)")
@@ -110,9 +109,6 @@ for s0, (a, b) in ((S_TB[0], (25, 225)), (S_TB[1], (L - 127.5, L - 27.5))):
     vi.ret(a, -150, b - a, 300, "OCULTA")
     for yy in TB["y"]:
         vi.circulo((s0, yy), TB["d"] / 2, "METALICA")
-for s in TER:
-    for yy in (-200, 200):
-        vi.circulo((ES3(s), yy), 8, "METALICA")
 for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
 vi.chamada((LC / 2, 150), (10, 18), f"cunha: fundo rebaixado {EC} → 0 mm (ponta baixa)")
@@ -177,20 +173,17 @@ def corte_I(nome, org, sub, no):
         for yy in (-140, 140):                                             # ES-2 (hef 110 + grampo U Ø10)
             v.ret(yy - 8, H - 110, 16, 160, "METALICA")
         v.poli([(-170, H - 130), (-170, H - 60), (170, H - 60), (170, H - 130)], "ARM_TRANSV")
-    espera_mf(v)
     v.cota_h([-200, -60, 60, 200], H, 12 if not no else 16)
     v.cota_v([0, P["y2"], H], -200, -12)
-    v.cota_v([0, 100], 200, 22, total=False)
     v.cota_v([H, H + 120], 200, 12, total=False)
     return v
 
 
-va = corte_I("CORTE A-A", (118, 105), "terça comum: ES-1 + ES-3; COTAS EM CM", False)
+va = corte_I("CORTE A-A", (118, 105), "apoio de terça: ES-1; COTAS EM CM", False)
 va.chamada((60, H + 60), (16, 20), "ES-1: 2 barras roscadas M16 A36, hef 15 + gancho, saliência 12 (ST-1P parafusado na obra)")
-va.chamada((200, 100), (14, -14), "ES-3: M16 horizontal, hef 11, saliência 6 (mão-francesa)")
 va.chamada((40, P["y2"]), (20, 30), f"{P['n_cord']} cord. Ø12,7 (5 a 5,5 + 3 a 10 cm)")
 
-vc = corte_I("CORTE C-C", (292, 105), "nó do X: ES-1 + 4 ES-2 + ES-3; COTAS EM CM", True)
+vc = corte_I("CORTE C-C", (292, 105), "nó do X: ES-1 + 4 ES-2; COTAS EM CM", True)
 vc.chamada((140, H + 40), (14, 20), "ES-2: M16 hef 11 + grampo U Ø10 (orelha OR-X)")
 vc.cota_h([-140, 140], H, 32, total=False)
 
@@ -312,8 +305,7 @@ nn = len(NOS)
 ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "ver planta"],
        ["TB-3", "Tubo Ø50,8×2,0 L=900, passante, a prumo", 4, "a 77,5 das pontas, y = ±100"],
        ["ES-1", "Barra roscada M16 L=330, gancho, sai 120", 2 * len(TER), "2 por terça, y = ±60"],
-       ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, "4 por nó do X"],
-       ["ES-3", "Barra roscada M16 L=170, sai 60, porca + arruela", 2 * len(TER), "faces B e D, h = 100"]]
+       ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, "4 por nó do X"]]
 y = pr.tabela(x0, y, "INSERTOS (DETALHES NA FOLHA 03) — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 108, 10, 46])
 qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
@@ -332,9 +324,9 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
          f"CUNHAS no fundo das duas pontas (NBR 9062:2017 7.2.1.6 — aparelho de apoio horizontal): calço de aço em cunha 3 % fixado no fundo da fôrma, {LC/10:.0f} cm × 40 cm; ponta baixa rebaixo {EC} → 0 mm, ponta alta 0 → {EC} mm (degrau de {EC} mm). Na montagem a face de apoio fica horizontal sobre o neoprene e sobre o assento horizontal.",
          "Cordoalhas: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); as 2 de 10 cm em x = ±4 isoladas com bainha nos 3,00 m de cada ponta (folha 02).",
-         "Esperas ES-1/ES-2/ES-3 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",
+         "Esperas ES-1/ES-2 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
-         "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento; as esperas ES-3 sobressaem 6 cm das faces laterais.",
+         "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)

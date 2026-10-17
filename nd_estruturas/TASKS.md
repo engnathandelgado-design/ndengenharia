@@ -49,6 +49,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+- Letsara rev05: terças Z METSEC contínuas por transpasse, sem mão-francesa (DEC-023); estudo de terças (Ue, Z, C — Isoeste e METSEC).
 - Letsara: apoios horizontais e encaixes das vigas inclinadas (DEC-022).
 - Letsara: VB 15 × 60 com dente Gerber e CP-VB escondido (DEC-021).
 
