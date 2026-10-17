@@ -193,7 +193,7 @@ tab = [["P1 / P2", "40×60", "14", "laterais (A e E), linhas 2–8", f"recuo +{f
        ["P1C / P2C", "40×60", "4", "cantos", "recuo nas duas faces internas"],
        ["P3 P4 P5 / P3 P14 P5", "40×60", "6", "fachadas 1 e 9", "recuo acima da VB"],
        ["P8 P8B / P8A", "40×60", "3", "linha 2 (mezanino / eixo C)", "-"],
-       ["P9 P11 P12 / P10", "40×40 / 25×25", "5", "linha 4 (portões)", "-"],
+       ["P9 P11 P12 / P10", "40×40 / 25×25", "5", "linha 4 (portões); PG-01 a PG-04", "-"],
        ["P13", "60×60", "1", "eixo C (apoio V405/V406)", "-"],
        ["P6 / P7", "25×40 / 60×40", "3", "anexo do eixo E", "fora do projeto (a definir)"]]
 y = pr.tabela(x0, y, "PILARES (R01)", ["MARCA", "SEÇÃO", "QT", "POSIÇÃO", "CABEÇA"], tab, [38, 24, 10, 54, 54])
@@ -207,7 +207,7 @@ pr.notas(x0, y - 4, [
     "Geometria do R01 (locação de pilares): 79,35 m entre os eixos 1 e 9; 39,50 m entre os eixos A e E. Água única de 3 %, subindo de A para E; cobertura escondida pela platibanda +10,00 (placas por fora dos pilares).",
     f"RECUO DOS PILARES (rev03): o degrau do recuo é o assento da TS-01 (+{f(REC['A']/1000, 3)} no eixo A, +{f(REC['E']/1000, 3)} no eixo E), com neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25; acima dele o pilar sobe só com os 300 mm externos (cabeça 40×30) até +10,00, segurando as placas da platibanda. Pacote da cobertura e calha por dentro da linha das cabeças; folga ≥ 15 cm do topo dos painéis solares ao topo da platibanda.",
     "TS-01 sem dentes: apoio direto no recuo dos pilares (eixos A e E, 27,5 cm) e no topo da I130 ou dos pilares P8A/P11 (eixo C, 16,25 cm), com neoprene e 2 pinos grauteados nos tubos TB-3 da viga.",
-    "Contraventamento da cobertura em X Ø16 nos vãos 2-3 e 7-8 (ND-LET-COB02).",
+    "Contraventamento da cobertura em X Ø16 nos vãos 4-5 a 8-9 (ND-LET-COB02); calha do eixo A na ND-LET-COB03.",
     "Níveis em metros a partir do piso acabado; cotas em mm. Conferir a locação com o arquitetônico.",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 180)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-LOC01")

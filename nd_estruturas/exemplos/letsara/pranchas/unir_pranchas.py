@@ -9,17 +9,17 @@ from ezdxf.addons import Importer
 
 PR = "/home/claude/letsara/pranchas/"
 OUT = "/home/claude/letsara/entregas/"
-REV = "rev05"
+REV = "rev06"
 GRUPOS = [
     ("01-PILARES", "PILARES — ARMADURAS (PADRÃO DE ARMAÇÃO) E FÔRMAS POR MARCA",
      [f"ND-LET-AR-PIL-{k:02d}" for k in range(1, 7)] + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)] +
-     ["ND-LET-PC01", "ND-LET-PC02", "ND-LET-PC03", "ND-LET-PM01", "ND-LET-PG01", "ND-LET-PG02"]),
+     ["ND-LET-PC01", "ND-LET-PC02", "ND-LET-PC03", "ND-LET-PM01", "ND-LET-PG01", "ND-LET-PG02", "ND-LET-PG03", "ND-LET-PG04"]),
     ("02-VIGAS", "VIGAS — ARMADURAS (PADRÃO DE ARMAÇÃO), FÔRMAS E INSERTOS",
      [f"ND-LET-AR-VIG-{k:02d}" for k in range(1, 5)] + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01"]),
     ("03-FORMAS-E-FECHAMENTO-LATERAL", "LOCAÇÃO, FÔRMAS, MONTAGEM, LAJES E FECHAMENTO LATERAL",
      ["ND-LET-LOC01", "ND-LET-CT01", "ND-LET-MON01", "ND-LET-MON02", "ND-LET-LA01", "ND-LET-CM01", "ND-LET-PP00",
       "ND-LET-PP-A", "ND-LET-PP-B", "ND-LET-PP-C", "ND-LET-PP-D", "ND-LET-PP-EF", "ND-LET-PP-G", "ND-LET-PP-HJ", "ND-LET-PP-I"]),
-    ("04-COBERTURA", "COBERTURA METÁLICA — PLANTA, TRAVAMENTO, LIGAÇÕES E LISTA DE MATERIAIS", ["ND-LET-COB01", "ND-LET-COB02"]),
+    ("04-COBERTURA", "COBERTURA METÁLICA — PLANTA, TRAVAMENTO, LIGAÇÕES, CALHA E LISTAS DE MATERIAIS", ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03"]),
 ]
 
 

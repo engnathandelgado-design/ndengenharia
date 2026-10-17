@@ -45,14 +45,14 @@ A_VM, G_2E = 0.1925, 1.5
 X_PORTOES = [9.87, 15.195, 24.305, 29.63]      # pilares P9, P10a, P10b, P12 da linha 4 (portões)
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
 # terças: posições x (linha da alma) — mesmas do modelo r04 / pranchas
-NOS = LG["nos_contraventamento_x_esq"]
-NOS_D = [round(x + (2 * XC - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"], 3) for x in NOS]
-MID = [round((a + b) / 2, 3) for a, b in zip(NOS[:-1], NOS[1:])]
-MID_D = [round((a + b) / 2, 3) for a, b in zip(NOS_D[:-1], NOS_D[1:])]
-X_ESQ, X_DIR = sorted(NOS + MID), sorted(NOS_D + MID_D)
+# rev06 (DEC-025): 15 espaços por meia água, 1ª terça a 40 cm livres da cabeça do P1 (calha)
+X_ESQ = list(LG["x_tercas_esq"])
+X_DIR = [round(x + (2 * XC - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"], 3) for x in X_ESQ]
+IDX_NOS_X = LG["idx_nos_x"]
 X_TER = X_ESQ + X_DIR                        # 34 linhas de terças
 NT = len(X_ESQ)
 S_TER = LG["passo_tercas"]
+G_CALHA, Q_CALHA = 0.12, 0.45            # kN/m: calha de chapa + suportes; água com a calha cheia (300 × 150)
 CC = LG["cargas_cob"]
 PC = CB["pecas"]
 A_TR = PC["transpasse_cada_lado_mm"] / 1000
@@ -69,6 +69,7 @@ nos, tag = {}, [0]
 pil, ele = [], []                            # ele: dict(tag, tipo, grupo, n1, n2, ...)
 TER_ELE = []                                 # elementos de terça: dict(tag, linha, vao, dentro_transpasse)
 CLEAT = []                                   # zeroLength dos ST-1P: (tag, linha, eixo)
+PORT = []                                    # zeroLength das ligações pilar do portão × TS-01 (y)
 NO_TER = {}                                  # (indice_terça, y) -> nó da terça
 NO_TS = {}                                   # (linha i, x) -> nó da TS-01 / VB (CG)
 _eid = [0]
@@ -102,7 +103,7 @@ TR_V, TR_X, TR_Y, TR_Z = 1, 2, 3, 4          # transformações: pilar (vertical
 def montar(cfg):
     """cfg: dict(vaos_x=[k...], painel=n, A_x=m², fator_EI=float)."""
     ops.wipe(); ops.model("basic", "-ndm", 3, "-ndf", 6)
-    nos.clear(); tag[0] = 0; pil.clear(); ele.clear(); TER_ELE.clear(); CLEAT.clear(); NO_TER.clear(); NO_TS.clear(); _eid[0] = 0
+    nos.clear(); tag[0] = 0; pil.clear(); ele.clear(); TER_ELE.clear(); CLEAT.clear(); PORT.clear(); NO_TER.clear(); NO_TS.clear(); _eid[0] = 0
     ops.geomTransf("PDelta", TR_V, 1, 0, 0)
     ops.geomTransf("Linear", TR_X, 0, 0, 1)
     ops.geomTransf("Linear", TR_Y, 0, 0, 1)
@@ -164,7 +165,8 @@ def montar(cfg):
     for nome, x in (("P8", XF[1]), ("P8B", XF[3])):
         pilar(nome, x, Y[1], 0.40, 0.60, Z_MEZ[1], list(Z_MEZ))
     for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
-        pilar(nome, x, Y[LINHA_PORTOES], b, b, 7.50, [6.25])
+        # rev05 (DEC-024): cabeça dos pilares dos portões a 2 cm do fundo da TS-01 (ligação em y por 2 chapas parafusadas)
+        pilar(nome, x, Y[LINHA_PORTOES], b, b, round(zf(x) - 0.02, 3) if cfg.get("ligar_portoes", True) else 7.50, [6.25, 7.40])
 
     # ---------------- TS-01 (linhas 2 a 8): vigas 3D no CG (fundo + 0,45), nós em todas as terças
     A_TS, Iy_TS, Iz_TS, J_TS = 0.2225, 0.0198, 0.00177, 0.0016
@@ -212,7 +214,10 @@ def montar(cfg):
     # interna da linha 4 para a cobertura (cfg ligar_portoes)
     if cfg.get("ligar_portoes", True):
         for nm, xp in zip(("P9", "P10a", "P10b", "P12"), X_PORTOES):
-            ops.equalDOF(NO_TS[(LINHA_PORTOES, round(xp, 3))], at(nm, 7.50), 2)
+            p_ = next(pp for pp in pil if pp["nome"] == nm)
+            t = _e()
+            ops.element("zeroLength", t, NO_TS[(LINHA_PORTOES, round(xp, 3))], p_["ns"][-1], "-mat", 20, "-dir", 2)
+            PORT.append(dict(tag=t, nome=nm, x=xp))
     # torção da TS no centro (2 pinos) — presa pelo par de pinos: rotação em x igual à do apoio
     # (o apoio central não tem rigidez à torção relevante; deixado livre)
 
@@ -304,6 +309,8 @@ def montar(cfg):
     # ---------------- contraventamento em X (só tração), nós nas TS-01 / VB
     n_p = cfg.get("painel", 8)
     def lado(xs, x0, x1):
+        if cfg.get("nos_x"):                                  # rev06: nós explícitos (terças 0, 8, 15)
+            return [xs[i] for i in cfg["nos_x"]]
         idx = sorted(set(list(range(0, len(xs), n_p)) + [len(xs) - 1]))
         return [xs[i] for i in idx]
     xs_x = lado(X_ESQ, 0, XC) + lado(X_DIR, XC, LARG)
@@ -316,8 +323,8 @@ def montar(cfg):
     for k in cfg.get("vaos_x", []):
         for lad in (lado(X_ESQ, 0, XC), lado(X_DIR, XC, LARG)):
             for a, b in zip(lad[:-1], lad[1:]):
-                barra(nts(k, a), nts(k + 1, b), cfg.get("A_x", math.pi * 0.0125 ** 2 / 4), "X", 10, extra=dict(vao=f"{k+1}-{k+2}"))
-                barra(nts(k, b), nts(k + 1, a), cfg.get("A_x", math.pi * 0.0125 ** 2 / 4), "X", 10, extra=dict(vao=f"{k+1}-{k+2}"))
+                barra(nts(k, a), nts(k + 1, b), cfg.get("A_x", math.pi * 0.016 ** 2 / 4), "X", 10, extra=dict(vao=f"{k+1}-{k+2}"))
+                barra(nts(k, b), nts(k + 1, a), cfg.get("A_x", math.pi * 0.016 ** 2 / 4), "X", 10, extra=dict(vao=f"{k+1}-{k+2}"))
 
     # ---------------- mezanino: VM + laje alveolar como diafragma rígido
     for z in Z_MEZ:
@@ -396,7 +403,8 @@ def vento_paredes(d, ecc, interno):
                         continue
                     w = 0.0
                     for a, b in ((xa, xs[i]), (xs[i], xb)):
-                        aberto = any(abs(a - pa) < 0.05 and abs(b - pb) < 0.05 for pa, pb in port) and zm < 7.40
+                        # rev05: a folha do portão fechado leva a diferença de pressão aos pilares (a favor da segurança, sempre)
+                        aberto = False
                         if not aberto:
                             w += abs(b - a) / 2
                     add(n, 0.0, dp * QV(zk) * w * (z1 - z0))
@@ -461,6 +469,8 @@ def aplicar(caso, fatores, desaprumo):
             d, ecc, interno = caso
             ci = {"anexo": interno[0], "aberta": interno[1], "pavilhao": interno[2]}[compartimento(ym)]
             w += -(cpe_cob(d, x, ym) - ci) * QV(H_ED) * S_TER * fW
+        if e["linha"] == 0:                            # rev06: calha do eixo A presa na 1ª terça (chapa + água com a calha cheia)
+            w += -G_CALHA * fG - Q_CALHA * max(fQc, 0.7 if fG >= 1.2 else 0.0)
         ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, w)
     # mezanino (reações nos pilares, como r04)
     at = montar.at
@@ -550,22 +560,33 @@ def coletar(cfg):
     e_t, z_p = 0.045, 0.195
     pc_ = dict(it=0.0)
     n_falha = 0
+    n_esp9 = cfg.get("esperas_eixo9", 4)                  # rev05 (DEC-024): ST-1V-R com 4 esperas no eixo 9
+    por_grupo = {}
     for c in CLEAT:
         f = ops.eleResponse(c["tag"], "force")
         Rz, Fy, Fx = f[2], f[1], f[0]
         Tb = abs(Rz) * e_t / z_p / 2
         Vb = math.sqrt(Rz ** 2 + Fy ** 2 + Fx ** 2) / 4
         it_b = (Tb / TRd) ** 2 + (Vb / VbRd) ** 2
-        Te = max(-Rz, 0.0) * 1.25 / 2                         # arrancamento (Rz < 0: a terça puxa o ST-1P para cima)
-        Ve = math.hypot(Fy, Fx) / 2
+        ne = n_esp9 if c["eixo"] == 8 else 2
+        Te = max(-Rz, 0.0) * 1.25 / ne                        # arrancamento (Rz < 0: a terça puxa o ST-1P para cima)
+        Ve = math.hypot(Fy, Fx) / ne
         it_e = (Te / FtE) ** 2 + (Ve / FvE) ** 2
         it = max(it_b, it_e)
         if it > 1.0:
             n_falha += 1
+        gr_ = "ST-1V eixo 1" if c["eixo"] == 0 else "ST-1V-R eixo 9" if c["eixo"] == 8 else "ST-1P"
+        pg = por_grupo.setdefault(gr_, dict(it=0.0, Fy_max=0.0, Fx_max=0.0, Rz_up=0.0, Rz_down=0.0, esperas=ne))
+        pg["Fy_max"] = max(pg["Fy_max"], round(abs(Fy), 2)); pg["Fx_max"] = max(pg["Fx_max"], round(abs(Fx), 2))
+        pg["Rz_up"] = max(pg["Rz_up"], round(-Rz, 2)); pg["Rz_down"] = max(pg["Rz_down"], round(Rz, 2))
+        if it > pg["it"]:
+            pg.update(it=round(it, 3), parafusos=round(it_b, 3), esperas_it=round(it_e, 3), linha=c["linha"], x=round(c["x"], 2), Rz=round(Rz, 1),
+                      Fy=round(Fy, 1), Fx=round(Fx, 1))
         if it > pc_["it"]:
             pc_ = dict(it=round(it, 3), parafusos=round(it_b, 3), esperas=round(it_e, 3), linha=c["linha"], x=round(c["x"], 2), eixo=c["eixo"] + 1,
                        Rz=round(Rz, 1), Fy=round(Fy, 1), Fx=round(Fx, 1))
-    R["ST1P_verif"] = dict(pior=pc_, n_reprovados=n_falha)
+    R["ST1P_verif"] = dict(pior=pc_, n_reprovados=n_falha, por_grupo=por_grupo)
+    R["portoes"] = {p_["nome"]: round(abs(ops.eleResponse(p_["tag"], "force")[1]), 2) for p_ in PORT}
     # pilares
     base, uso = {}, {}
     for p in pil:
@@ -621,6 +642,15 @@ def envoltoria(res):
     env["ST1P"] = {k: max((r["ST1P"][k] for r in res.values()), key=abs) for k in ("Fz_up", "Fz_down", "Fy", "Fx", "T")}
     env["ST1P_verif"] = max((r["ST1P_verif"]["pior"] for r in res.values()), key=lambda d: d["it"])
     env["ST1P_reprovados_max"] = max(r["ST1P_verif"]["n_reprovados"] for r in res.values())
+    env["ST1P_grupos"] = {}
+    for r in res.values():
+        for k_, v_ in r["ST1P_verif"]["por_grupo"].items():
+            e_ = env["ST1P_grupos"].setdefault(k_, dict(v_))
+            for c_ in ("Fy_max", "Fx_max", "Rz_up", "Rz_down"):
+                e_[c_] = max(e_[c_], v_[c_])
+            if v_["it"] > e_["it"]:
+                e_.update({c_: v_[c_] for c_ in v_ if c_ not in ("Fy_max", "Fx_max", "Rz_up", "Rz_down")})
+    env["portoes"] = {k_: max(r["portoes"].get(k_, 0.0) for r in res.values()) for k_ in ("P9", "P10a", "P10b", "P12")}
     env["TS01_M_lateral"] = max(r["grupos"]["TS-01"]["max"] for r in res.values())
     env["usos"] = dict(corrente=round(env["corrente"]["max"] / NT10, 3), diagonal=round(env["diagonal de ancoragem"]["max"] / NT16, 3),
                        tirante=round(-env["tirante rígido"]["min"] / NCR_L51, 3))
@@ -628,7 +658,8 @@ def envoltoria(res):
 
 
 if __name__ == "__main__":
-    cfg = dict(vaos_x=[int(v) for v in os.environ.get("VAOS_X", "3,4,5,6,7").split(",") if v != ""], painel=int(os.environ.get("PAINEL", "8")))
+    cfg = dict(vaos_x=[int(v) for v in os.environ.get("VAOS_X", "3,4,5,6,7").split(",") if v != ""], painel=int(os.environ.get("PAINEL", "8")),
+               A_x=math.pi * 0.016 ** 2 / 4, esperas_eixo9=4, nos_x=IDX_NOS_X)
     res = analisar(cfg, verbose=True)
     env = envoltoria(res)
     print(json.dumps(env, ensure_ascii=False, indent=1))

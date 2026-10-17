@@ -96,9 +96,12 @@ def montar() -> ModeloBIM:
             m.bloco("pilar", f"{marca} degrau do topo", (X_C + bx / 4, y, LG["Z_TOPO_I130_DIR"]), bx / 2, by, LG["DEGRAU_C"], "Pilares")
     for marca, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
         m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino 40×60")
-    # pilares dos portões (linha 4): P9, P12 40×40 e P10 25×25, topo +7,40 (rev03; a TS-01 passa por cima)
-    for nome, x, b_ in (("P9", 9.87, 0.40), ("P10", 15.195, 0.25), ("P10", 24.305, 0.25), ("P12", 29.63, 0.40)):
-        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, b_, Z_CALICE, 7.40, obs="parede dos portões (vista C), topo +7,40")
+    # pilares dos portões (linha 4), rev06 (DEC-024): cabeça a 2 cm do fundo da TS-01, ligada em y por 2 cantoneiras CL-P
+    for nome, x, b_ in (("P9 (PG-01)", 9.87, 0.40), ("P10 (PG-02)", 15.195, 0.25), ("P10 (PG-04)", 24.305, 0.25), ("P12 (PG-03)", 29.63, 0.40)):
+        zt_ = round(zf(x) - 0.02, 2)
+        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, b_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), topo +{zt_:.2f}; portão livre até +7,40")
+        for sx in (-1, 1):
+            m.bloco("inserto", "CL-P L 102×102×9,5 L=250 (ligação em y à TS-01)", (x + sx * (b_ / 2 + 0.005), Y_LIN[LINHA_PORTOES], zf(x)), 0.010, 0.25, 0.102, "Insertos metálicos")
 
     # 2. vigas centrais I130 (comprimentos do R01) e consolos CP-I130 / CV-TS
     zc = Z_I130_TOPO - H_I130 / 2
@@ -188,8 +191,29 @@ def montar() -> ModeloBIM:
                     m.bloco("inserto", "ST-1V (chapa dobrada) nas esperas ES-1V da VB", (xw - 0.075, yl, zb - 0.010 + 0.30), 0.15, 0.22, 0.30, "Insertos metálicos")
     for k in range(int(COMP // 1.0)):
         y = 0.5 + k * 1.0
-        z0, z1 = zf(0.18) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2, zf(LARG - 0.18) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2
-        m.linear("placa", "telha", TELHA, (0.18, y, z0), (LARG - 0.18, y, z1), "Telhas", material="aco")
+        xa_, xb_ = 0.25, LARG - 0.06                          # rev06: telha entra 150 na calha (eixo A); no eixo E sob o rufo RF-3
+        z0, z1 = zf(xa_) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2, zf(xb_) + H_TS + 0.010 + 0.302 + 0.0046 + TELHA.h / 2
+        m.linear("placa", "telha", TELHA, (xa_, y, z0), (xb_, y, z1), "Telhas", material="aco")
+    # contraventamento em X Ø16 (rev06, DEC-024/025): vãos 4-5 a 8-9, nós nas terças 0, 8, 15 de cada meia água
+    BAR16 = PerfilRetangular(0.016, 0.016, "Ø16")
+    CT = LG["contraventamento"]["chapa"]
+    off_d = (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"]
+    for meia in (LG["nos_x_esq"], [x + off_d for x in LG["nos_x_esq"]]):
+        for k in LG["vaos_x"]:
+            ya, yb = Y_LIN[k] + CT["y_orelha"], Y_LIN[k + 1] - (0.0 if k + 1 == len(Y_LIN) - 1 else CT["y_orelha"])
+            sb = 0.200 if k + 1 == len(Y_LIN) - 1 else CT["s_orelha"]
+            for xa, xb in zip(meia[:-1], meia[1:]):
+                for (x1, x2), dz in (((xa + CT["s_orelha"], xb - sb), CT["z_baixo"]), ((xb - CT["s_orelha"], xa + sb), CT["z_alto"])):
+                    m.linear("inserto", "X Ø16 A36 + esticador", BAR16, (x1, ya, zf(x1) + H_TS + dz), (x2, yb, zf(x2) + H_TS + dz), "Contraventamento", material="aco")
+    # calha do eixo A (rev06, calc_calha.py / ND-LET-COB03): 300 × 150, de x = 0,02 a 0,32, borda 40 mm abaixo da telha
+    zt_c = zf(0.517) + H_TS + 0.010 + 0.302 - 0.03 * (0.49 - 0.25) - 0.040
+    t_c = 0.003
+    cal = [(0.02, zt_c + 0.12), (0.02, zt_c - 0.15), (0.32, zt_c - 0.15), (0.32, zt_c), (0.32 - t_c, zt_c), (0.32 - t_c, zt_c - 0.15 + t_c),
+           (0.02 + t_c, zt_c - 0.15 + t_c), (0.02 + t_c, zt_c + 0.12)]
+    m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP, "Calha e descidas", material="aco", obs="NBR 10844; i = 0,5 % para as saídas")
+    for yl in Y_LIN:
+        yd = yl + (0.35 if yl < COMP else -0.35)
+        m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
 
     # 5. mezanino (linhas 1–2), rev04: VM em MEIO VASO (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente
     #    Gerber nas pontas maciças; consolos CP-MEZ com fundo alinhado; 2º estágio (obra, com a capa) e alças N9 saindo da peça;
@@ -293,7 +317,7 @@ def montar() -> ModeloBIM:
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
     m.pendente("TS-01 sem dentes: apoio 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e 16,25 cm no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
     m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas com trilho TR-1 + bucha BR-1 + CL-1 e consolo CA-1 parafusado.")
-    m.pendente("Terças, laje, consolos e pacote da cobertura como envelope; contraventamento em X, correntes e mãos-francesas nas pranchas COB01/COB02, não modelados no 3D.")
+    m.pendente("Terças, laje, consolos e pacote da cobertura como envelope; X Ø16 modelado (barras retas de orelha a orelha); correntes, tirantes, rufos e orelhas só nas pranchas COB01 a COB03.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
@@ -315,7 +339,7 @@ if __name__ == "__main__":
         import pymupdf
         LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
                  ] + [(f"ND-LET-AR-PIL-{k:02d}", f"armaduras dos pilares — folha {k} de 6 (padrão de armação)") for k in range(1, 7)] + [(f"ND-LET-AR-VIG-{k:02d}", f"armaduras das vigas — {t}") for k, t in enumerate(("TS-01", "I130", "VM", "VB"), 1)] + [] + [(f"ND-LET-{m.replace('-', '')}", f"pilar {m} (família 40×60)") for m in ("PL-01", "PL-02", "PL-03", "PL-04", "PL-05", "PL-06", "PL-07", "PL-08", "PL-09", "PL-10", "PL-11", "PL-12", "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06")] + [ ("ND-LET-PC01", "pilar central PC-01 (P8A)"), ("ND-LET-PC02", "pilar central PC-02 (P11)"), ("ND-LET-PC03", "pilar central PC-03 (P13)"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilares dos portões PG-01 (P9, P12)"), ("ND-LET-PG02", "pilares dos portões PG-02 (P10)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"),
+                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilar do portão PG-01 (P9)"), ("ND-LET-PG02", "pilar do portão PG-02 (P10a)"), ("ND-LET-PG03", "pilar do portão PG-03 (P12)"), ("ND-LET-PG04", "pilar do portão PG-04 (P10b)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"), ("ND-LET-COB03", "calha do eixo A, descidas e rufos"),
                  ("ND-LET-I130", "vigas centrais I130 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02 (meio vaso) — fôrma"), ("ND-LET-VM02", "vigas do mezanino — 2º estágio, apoio e insertos"),
                  ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
                  ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),

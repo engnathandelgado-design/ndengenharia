@@ -44,10 +44,18 @@ def z_fundo_viga(x):            # fundo da TS-01 montada (x a partir do eixo do 
 
 # ------------------------------------------------------------------ TS-01 (coordenadas locais, m)
 L_TS = round((X_PONTA_CEN - X_PONTA_ESQ) / math.cos(math.atan(I)), 3)
-N_ESP = math.ceil((L_TS - 2 * 0.255) / 1.20 - 1e-9)
-PASSO_T = round((L_TS - 2 * 0.255) / N_ESP, 3)
+# rev06 (Nathan, 17/10/2026): 1ª terça do lado baixo (eixo A) com 40 cm livres entre a face da cabeça do pilar e a aba da
+# terça, para a calha; no lado alto (eixo E) a última terça fica a 21,5 cm da cabeça do P2 (≥ 15 cm pedidos; mais perto, a
+# última terça da meia água esquerda bateria na cabeça do pilar C das fachadas). Número ÍMPAR de espaços (15, c/ ≈ 1,263 m)
+# para os pilares B e D das fachadas caírem entre duas terças (com 16 espaços a terça do meio cai sobre eles — DEC-025).
+S0_TERCA = round((0.400 + 0.090 + 0.027 - X_PONTA_ESQ) / math.cos(math.atan(I)), 3)   # alma a 0,49 m do eixo A (aba sup. 90 para A)
+S1_TERCA = round(L_TS - 0.255, 3)
+N_ESP = 15
+PASSO_T = round((S1_TERCA - S0_TERCA) / N_ESP, 4)
+IDX_NOS_X = [0, 8, N_ESP]                                # nós do X (DEC-024/025): painéis de 8 e 7 espaços
 TS = dict(L=L_TS, alcas=[2.10, 7.60], estoque=[2.10],
-          tercas=[round(0.255 + PASSO_T * k, 3) for k in range(N_ESP + 1)], no_contrav=[round(0.255 + 2 * PASSO_T * k, 3) for k in range(N_ESP // 2 + 1)])
+          tercas=[round(S0_TERCA + PASSO_T * k, 4) for k in range(N_ESP + 1)])
+TS["no_contrav"] = [TS["tercas"][i] for i in IDX_NOS_X]
 TS["alcas"] += [round(TS["L"] - a, 3) for a in reversed(TS["alcas"])]
 TS["estoque"] += [round(TS["L"] - 2.10, 3)]
 TS["insertos"] = (
@@ -122,30 +130,37 @@ for lado in ("esq", "dir"):
 berco = []
 # contraventamento: nós de painel nas CH-T2 — mesma posição nas duas vigas do vão
 paineis = [round(X_PONTA_ESQ + s * math.cos(math.atan(I)), 3) for s in TS["no_contrav"]]
-# contraventamento em X Ø16 A36 (padrão das coberturas de referência): cada diagonal vai de nó a nó das vigas TS-01 do vão
-# (CH-T2 de uma linha à CH-T2 da linha seguinte), abrangendo 2 espaços de terças; terças dos nós = montantes (escoras).
-# CH-T2 com 4 orelhas, simétrica por rotação de 180° (uma só peça): orelhas em s = ±140 mm do eixo da terça (fora da mesa
-# de 85 mm e do ST-1) e y = ±140 mm do eixo da viga. As duas diagonais do X cruzam-se no meio do vão, exatamente sobre a
-# terça intermediária: uma passa a 45 mm e a outra a 85 mm acima do concreto (furos Ø18 na alma dessa terça, a 35 e 75 mm
-# do fundo dela, que fica 10 mm acima do concreto).
+# contraventamento em X Ø16 A36 — rev05 (DEC-024, modelo integrado r05): X nos 5 vãos do pavilhão (4-5 a 8-9), painel de
+# 8 espaços de terças (nós nas terças 0, 8 e 16 de cada meia água: eixos A, ≈B, C, ≈D, E), diagonal a ≈45°. Cada diagonal vai
+# da orelha OR-X de um nó à orelha do nó seguinte na outra viga (TS-01 ou VB do eixo 9) e atravessa as 7 terças intermediárias
+# do painel por furos oblongos na alma (as duas diagonais do painel: '/' a 45 e '\' a 85 mm do concreto). Terças dos nós = escoras.
+# Orelhas em s = ±140 mm do eixo da terça do nó e y = ±140 mm do eixo da viga (na VB do eixo 9: y = 0, ver COB02).
 CT2 = dict(y_orelha=0.140, s_orelha=0.140, z_baixo=0.045, z_alto=0.085, mesa_terca=0.085, d_tir=0.016, z_fundo_terca=0.010)
-VAOS = [(1, 2), (6, 7)]                            # vãos contraventados (2-3 e 7-8, vizinhos aos oitões); CH-T2 mantida em todas as TS-01 (marca única)
+PAINEL_X = 8                                        # espaços do 1º painel (o 2º tem N_ESP − 8 = 7)
+VAOS = [(k, k + 1) for k in (3, 4, 5, 6, 7)]       # vãos contraventados 4-5 a 8-9 (índices das linhas); ES-2 em todas as TS-01 (marca única)
+nos_x = paineis                                    # rev06: paineis = os 3 nós do X
+x_ter = [round(X_PONTA_ESQ + s * math.cos(math.atan(I)), 3) for s in TS["tercas"]]
 tir = []
 N_SUB = 1
 for (ia, ib) in VAOS:
-    for k in range(len(paineis) - 1):
-        xa, xb = paineis[k], paineis[k + 1]
-        ya, yb = YL[ia] + CT2["y_orelha"], YL[ib] - CT2["y_orelha"]
-        for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - CT2["s_orelha"]), CT2["z_baixo"]),
-                                  ("\\", (xb - CT2["s_orelha"], xa + CT2["s_orelha"]), CT2["z_alto"])):
+    y_or_b = 0.0 if ib == len(YL) - 1 else CT2["y_orelha"]          # VB do eixo 9: orelha no eixo da VB
+    for k in range(len(nos_x) - 1):
+        xa, xb = nos_x[k], nos_x[k + 1]
+        ya, yb = YL[ia] + CT2["y_orelha"], YL[ib] - y_or_b
+        s_b = 0.200 if ib == len(YL) - 1 else CT2["s_orelha"]       # VB do eixo 9: orelha a ±200 da terça (ES-2V fora das ES-1V)
+        for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - s_b), CT2["z_baixo"]),
+                                  ("\\", (xb - CT2["s_orelha"], xa + s_b), CT2["z_alto"])):
             fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
-            xm = (xa + xb) / 2
-            t = (xm - x1) / (x2 - x1)
+            furos = []
+            for xt in x_ter:
+                if min(xa, xb) + 0.01 < xt < max(xa, xb) - 0.01:
+                    t = (xt - x1) / (x2 - x1)
+                    furos.append(dict(x_m=xt, y_m=round(ya + t * (yb - ya) - YL[ia], 3)))
             tir.append(dict(vao=f"L{ia+1}-L{ib+1}", painel=k + 1, diagonal=nome,
                             comp_m=round(math.dist((x1, ya), (x2, yb)), 3),
                             ang_eixo_viga=round(math.degrees(math.atan2(yb - ya, abs(x2 - x1))), 1),
-                            folga_terca_no_mm=round(fol * 1000), furo_terca_interm=dict(y_m=round(ya + t * (yb - ya) - YL[ia], 3),
-                                                                                       h_mm=round((z - CT2["z_fundo_terca"]) * 1000))))
+                            folga_terca_no_mm=round(fol * 1000), h_furo_mm=round((z - CT2["z_fundo_terca"]) * 1000), furos=furos,
+                            furo_terca_interm=dict(y_m=furos[len(furos) // 2]["y_m"], h_mm=round((z - CT2["z_fundo_terca"]) * 1000))))
 gap_cruz = (CT2["z_alto"] - CT2["z_baixo"] - CT2["d_tir"]) * 1000
 furo_min = min(t["furo_terca_interm"]["h_mm"] for t in tir) - 9          # borda do furo Ø18 ao fundo da terça
 ok_tir = all(t["folga_terca_no_mm"] >= 20 for t in tir) and gap_cruz >= 5 and furo_min >= 20
@@ -156,10 +171,10 @@ folga_plat = dict(platibanda=PLATIBANDA, pacote_m=round(H_PAC, 3), pacote=PACOTE
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"],
            X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_TOPO_I130_DIR=Z_TOPO_I130_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN,
-           contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], borda_furo_fundo_terca_mm=furo_min,
+           contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], tirantes=tir, borda_furo_fundo_terca_mm=furo_min,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=[r for r in rel if r["ligacao"] == "apoio"], tercas=[r for r in rel if r["ligacao"] == "terças"],
-           berco_I130=berco, nos_contraventamento_x_esq=paineis,
+           berco_I130=berco, nos_contraventamento_x_esq=paineis, idx_nos_x=IDX_NOS_X, x_tercas_esq=x_ter, painel_x=PAINEL_X, vaos_x=[ia for ia, _ in VAOS], nos_x_esq=nos_x,
            alcas=TS["alcas"], estoque=TS["estoque"])
 (AQUI / "ligacoes.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
 print("erros:", erros)

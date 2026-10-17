@@ -6,7 +6,7 @@ Metálica em mm. A1. Padrão de apresentação: planta do banzo superior / plant
 """
 import math
 from prancha_nd import Prancha
-from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, Z_FURO, Z_COR, Z_DIAG, Z_X,
+from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, Z_FURO, Z_COR, Z_DIAG, Z_X, NOS_X, NOS_X_D, ORE_S, ORE_S9, ORE_Y, PAINEL_X, IDX_X, furos_x, sufixo_x, marca,
                        H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, T_Z, PESO_UE, PERFIL_TXT, IDX_2A, L_TERCA, EXT, BASE_K, NT, A_TR,
                        EXT_F, B_TR, Y_COL, furos_ponta, lista_marcas, cabecalho, CB, LG, f)
 
@@ -18,6 +18,7 @@ pr.revisao("01", pr.dados["data"], "furos centrados na alma; suporte ST-1 + CH-T
 pr.revisao("02", pr.dados["data"], "geometria do R01 (79,35 m; TS-01 19,15 m); X de nó a nó; correntes e MF no padrão de referência")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m Ue 300×2,65; PACOTE TP40 + LÃ 40 + ZIPADA + PAINÉIS; ST-1P E MF PARAFUSADOS (SEM SOLDA)")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302×2,30 METSEC CONTÍNUAS POR TRANSPASSE (METLAP); SEM MÃO-FRANCESA; APOIO COM 4 M12")
+pr.revisao("06", "17/10/2026", "MODELO INTEGRADO: X NOS VÃOS 4-5 A 8-9; 15 ESPAÇOS (CALHA 40 cm NO EIXO A); FUROS X/Y; ST-1V-R NO EIXO 9")
 st, chb, tc = CB["ST1P"], CB["chumbadores"], CB["terca"]
 
 # ------------------------------------------------------------------ PLANTA DE ENTERÇAMENTO E TRAVAMENTO 1:175 (papel: horizontal = y da obra)
@@ -51,10 +52,12 @@ for k in range(8):
             for (yq, ys) in ((q[0], ya), (q[1] - 60, ya), (q[1] + 60, yb), (q[2], yb)):
                 v.linha(M(yq, XT[pb]), M(ys, XT[pa]), "OCULTA")
     if k in VAOS_X:
-        for nos in (NOS, NOS_D):
+        yb_ = yb - (0 if k == 7 else ORE_Y)                       # eixo 9: orelha no eixo da VB
+        sb = ORE_S9 if k == 7 else ORE_S
+        for nos in (NOS_X, NOS_X_D):
             for a, b in zip(nos[:-1], nos[1:]):
-                v.linha(M(ya + 140, a + 140), M(yb - 140, b - 140), "ARMADURA")
-                v.linha(M(ya + 140, b - 140), M(yb - 140, a + 140), "ARMADURA")
+                v.linha(M(ya + ORE_Y, a + ORE_S), M(yb_, b - sb), "ARMADURA")
+                v.linha(M(ya + ORE_Y, b - ORE_S), M(yb_, a + sb), "ARMADURA")
 # eixos e marcas
 for i, yl in enumerate(YLmm):
     v.eixo(M(yl, -900), M(yl, X_E + 900), 0)
@@ -84,14 +87,14 @@ v.texto(M(YLmm[0] - 1700, (XT[NT] + XT[2 * NT - 1]) / 2), f"{NT - 1} × {PASSO}"
 v.cota_v([X0D, X0D + LTS], YLmm[0] - 900, -24, total=False)
 v.cota_v([0, X_C, X_E], YLmm[0] - 900, -36, total=False)
 RX = YLmm[8] - 300
-v.chamada(M(YLmm[8] - 2500, XT[2 * NT - 2] + 40), (16, 8), "terça Z 302 (alma na face +x do ST-1P, aba de 90 sobre o ST-1P)")
+v.chamada(M(YLmm[8] - 2500, XT[2 * NT - 2] + 40), (16, 14), "terça Z 302 (alma na face +x do ST-1P, aba de 90 sobre o ST-1P)")
 v.chamada(M(YLmm[6] + A_TR / 2, XT[NT - 3]), (-26, -16), f"transpasse {2 * A_TR} sobre cada TS-01 (det. 1)")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[NT + 5] + XT[NT + 6]) / 2), (18, 4), "corrente flexível Ø10 (L/4, L/2, 3L/4)")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.75, (XT[0] + XT[1]) / 2), (14, -14), "tirante rígido L 51×51×3,2 no 1º espaço")
 v.chamada(M(YLmm[7] + VAOS[7] * 0.15, (XT[2 * NT - 2] + XT[2 * NT - 1]) / 2), (34, 2), "diagonal de ancoragem Ø16")
 _ym = (YLmm[6] + YLmm[7]) / 2
-v.chamada(M(_ym, (NOS_D[4] + NOS_D[5]) / 2), (66, -6), "X Ø16 c/ esticador (vãos 2-3 e 7-8)")
-v.chamada(M(YLmm[8], XT[NT + 2]), (16, -6), f"fachada: terça passa {EXT_F} do eixo, ST-1V na VB (det. 2)")
+v.chamada(M(YLmm[7] + 7200, NOS_X[1] - 2300), (40, -22), "X Ø16 c/ esticador (vãos 4-5 a 8-9, painéis de 8 e 7 terças; COB02)")
+v.chamada(M(YLmm[8], XT[NT + 2]), (16, -6), f"fachada: terça passa {EXT_F} do eixo, ST-1V na VB (eixo 9: ST-1V-R, det. 2)")
 v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I130 (eixo C)")
 v.marcador_detalhe(M(YLmm[5], XT[NT + 8]), 600, 1, ang=60, dist=8)
 v.marcador_detalhe(M(YLmm[8], XT[NT + 11]), 500, 2, ang=-50, dist=8)
@@ -166,7 +169,7 @@ for z in ZB:
 c.cota_h([-ST1["aba"], xe, -ST1["t"], 0, B_INF], -170, -10, total=False)
 c.cota_h([-B_TERCA, 0], Z_TERCA + H_TERCA + 20, 8, total=False)
 c.cota_v([0, Z_TERCA, ZB[0], ZB[1], Z_TERCA + H_TERCA], B_INF + 30, 10, total=False)
-c.chamada((xe, 60), (-16, 20), "ES-1 M16, hef 150 + gancho; furo oblongo 18 × 40 na aba")
+c.chamada((xe, 60), (-16, 20), "ES-1 M16, hef 150 + gancho + grampo U Ø10; oblongo 18 × 40 na aba")
 c.chamada((xe, ST1["t"] + 20), (-12, 34), "porca + contraporca M16 (arruela lisa)")
 c.chamada((-ST1["t"] / 2, 180), (-16, 10), "ST-1P chapa dobrada 9,5 (sem solda)")
 c.chamada((B_INF - 10, Z_TERCA + 8), (12, -12), "2 Z 302×2,30 encaixados (aba 90 sobre o ST-1P)")
@@ -212,6 +215,7 @@ d.cota_v([0, ZB[0], ZB[1], Z_TERCA + H_TERCA], 700, 10, total=False)
 d.chamada((Y_COL, ZB[1]), (20, 14), "4 M12 8.8 (2 colunas a ±60)")
 d.chamada((ST1["larg"] / 2 - 10, 230), (16, -4), "ST-1V 9,5×220×290 nas 2 ES-1V (eixo da VB)")
 d.chamada((0, -300), (16, -6), "VB 15×60 (fachadas 1 e 9)")
+d.chamada((-45, -450), (16, -10), "eixo 9 (ST-1V-R): 2 ES-1R M20 hef 400 + grampo U Ø10 em cada")
 d.marcador_corte((-EXT_F - 60, 120), (-EXT_F - 60, 260), "B", lado=-1)
 
 bb = pr.vista("CORTE B-B", (415, 160), E5, titulo="CORTE B-B", subtitulo="apoio na VB: ST-1V + 1 Z")
@@ -225,7 +229,7 @@ for z in ZB:
     parafuso_h(bb, -ST1["t"], T_Z + 3, z)
 bb.cota_h([-ST1["aba"], -105, -45, 0, B_INF], -150, -10, total=False)
 bb.cota_v([0, Z_TERCA, ZB[0], ZB[1], Z_TERCA + H_TERCA], B_INF + 30, 10, total=False)
-bb.chamada((-75, 60), (-14, 18), "2 ES-1V M16 no eixo da VB, a 45 e 105 da alma")
+bb.chamada((-75, 60), (-14, 18), "eixo 1: 2 ES-1V M16 hef 150; eixo 9: 2 ES-1R M20 hef 400 + grampo")
 bb.chamada((B_INF - 10, Z_TERCA + 8), (12, -12), "Z 302×2,30")
 
 # ------------------------------------------------------------------ DETALHE 3 — SEÇÃO E FURAÇÃO DA TERÇA (1:5) + esquema por marca
@@ -240,7 +244,7 @@ s5.cota_v([0, Z_FURO[0], Z_FURO[1], H_TERCA], B_INF + 20, 10, total=False)
 s5.chamada((0, Z_FURO[1]), (24, 14), f"fixação: Ø14 a {Z_FURO[0]} e {Z_FURO[1]} (E 55 / F 52)")
 s5.chamada((0, Z_COR), (24, 6), "correntes Ø12")
 s5.chamada((0, Z_DIAG), (-34, -8), "diagonal Ø18 (marcas D)")
-s5.chamada((0, Z_X[0]), (-34, -14), "cruzamento do X 2 Ø18 (marcas X)")
+s5.chamada((0, Z_X[0]), (-34, -14), "X: oblongos 18×28 (marcas X / Y)")
 s5.chamada((-B_TERCA + 8, H_TERCA - 8), (-10, 10), f"enrijecedores {D_SUP} / {D_INF} a 45°")
 
 t20 = pr.vista("ESQUEMA DA TERÇA", (760, 300), 12.5, titulo="ESQUEMA DE FURAÇÃO DAS TERÇAS",
@@ -267,10 +271,23 @@ t20.chamada((A_TR + Y_COL, Z_FURO[0]), (14, -22), f"apoio: a {A_TR - Y_COL} e {A
 
 # ------------------------------------------------------------------ tabelas
 x0, y = pr.quadro[2] - 196, pr.quadro[3] - 6
+# furos do X por marca: y (mm) a partir do eixo do apoio do início do vão; '/' a 35 e '\\' a 75 do fundo da terça
+_bk = {BASE_K[k]: k for k in VAOS_X}
+tabX = []
+for j in sorted(i_ for i_ in IDX_X if i_ < NT):
+    lin_ = [sufixo_x(j)]
+    for bm, k in sorted(_bk.items()):
+        (y1, _, _), (y2, _, _) = furos_x(k, j)
+        lin_ += [f"{y1}", f"{y2}"]
+    tabX.append(lin_)
+cabX = ["FURO"] + sum(([f"{bm} /35", f"{bm} \\75"] for bm in sorted(_bk)), [])
+y = pr.tabela(x0, y, "FUROS DO X (OBLONGOS 18×28) — y DO EIXO INICIAL DO VÃO, mm", cabX, tabX,
+              [16] + [30] * (len(cabX) - 1))
+y -= 4
 LM = lista_marcas()
 tabT = []
 for m_, dd in LM.items():
-    fur = "pontas (apoio + emenda), correntes" + (" + diag. Ø18" if "D" in m_[2:] else "") + (" + X 2 Ø18" if "X" in m_[2:] else "")
+    fur = "pontas (apoio + emenda), correntes" + (" + diag. Ø18" if "D" in m_[2:] else "") + (f" + X {m_[-2:]}" if ("X" in m_[2:] or "Y" in m_[2:]) else "")
     tabT.append([m_, f"{dd['L']}", ", ".join(sorted(dd["vaos"])), fur, f"{dd['qt']}", f"{dd['qt']*dd['L']/1000*PESO_UE:,.0f}".replace(",", ".")])
 qt_t = sum(dd["qt"] for dd in LM.values())
 kg_t = sum(dd["qt"] * dd["L"] / 1000 * PESO_UE for dd in LM.values())
@@ -281,12 +298,15 @@ n_sup = 7 * N_T                           # ST-1P: TS-01 (linhas 2 a 8), 1 por a
 n_m12 = N_T * (7 * (4 + 4) + 2 * 4)       # por linha: 7 apoios internos (4 no ST-1P + 2×2 nas pontas do transpasse) + 2 fachadas (4)
 lm = [["ES-1", "2 esperas M16 por apoio, concretadas na TS-01 (ND-LET-TS01-3)", f"{7 * 2 * N_T}", "topo da TS-01"],
       ["ST-1P", "chapa dobrada 9,5×220 A36, 4 Ø14 + 2 oblongos", f"{n_sup}", "nas ES-1 (porca + contraporca)"],
-      ["ST-1V", "como o ST-1P, 2 oblongos no eixo (VB 15 cm)", f"{2 * N_T}", "nas ES-1V das VB (linhas 1 e 9)"],
+      ["GR-1", "grampo U Ø10 em cada ES-1 (armadura de ancoragem)", f"{7 * 2 * N_T}", "TS-01, com as ES-1"],
+      ["ST-1V", "como o ST-1P, 2 oblongos 18×40 no eixo (VB 15 cm)", f"{N_T}", "nas ES-1V da VB do eixo 1"],
+      ["ST-1V-R", "como o ST-1V, oblongos 22×44 (esperas M20)", f"{N_T}", "nas ES-1R da VB do eixo 9 (det. 2)"],
       ["M12 8.8", "parafuso + porca + 2 arruelas Ø24, zincado", f"{n_m12}", f"{N_T * (7 * 4 + 2 * 4)} nos apoios + {N_T * 7 * 4} nas emendas"],
-      ["M16", "porca + arruela (contraporca no ST-1P), galvanizadas", f"{3 * 7 * 2 * N_T + 3 * 2 * 2 * N_T}", "ES-1 e ES-1V"]]
+      ["M16", "porca + arruela (contraporca no ST-1P), galvanizadas", f"{3 * 7 * 2 * N_T + 3 * 2 * N_T}", "ES-1 e ES-1V"],
+      ["M20", "porca + arruela + contraporca, galvanizadas", f"{3 * 2 * N_T}", "ES-1R (eixo 9)"]]
 y = pr.tabela(x0, y - 4, "LISTA DE MATERIAIS — APOIOS E EMENDAS DAS TERÇAS (SEM SOLDA)", ["MARCA", "DESCRIÇÃO", "QT", "ONDE"], lm, [18, 106, 14, 58])
 cc = LG["cargas_cob"]
-notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z275) contínuas nos 8 vãos pelo sistema de transpasse (METLAP): cada peça vence um vão e passa {A_TR} além do eixo de cada TS-01 (transpasse total {2*A_TR}); nas fachadas passa {EXT_F} além do eixo da VB. Marca = peça (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais), X = terça intermediária dos painéis do X.",
+notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z275) contínuas nos 8 vãos pelo sistema de transpasse (METLAP): cada peça vence um vão e passa {A_TR} além do eixo de cada TS-01 (transpasse total {2*A_TR}); nas fachadas passa {EXT_F} além do eixo da VB. Marca = peça (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais), Xj / Yj = j-ésima terça dentro do painel do X de 8 espaços (X1..X7) ou de 7 espaços (Y1..Y6), com os 2 furos oblongos da tabela de furos do X.",
          f"Aba superior de 90 voltada para o lado A (sobre a aba vertical do ST-1P); aba inferior de 82 para o lado E. No transpasse os 2 perfis encaixam um no outro conforme o sistema METLAP do fabricante; furação de fábrica METSEC (E 55 / F 52) — conferir com a voestalpine Meincol antes do pedido.",
          f"Sem mão-francesa: em cada apoio 4 M12 8.8 atravessam o ST-1P (ou ST-1V) e as almas (2 colunas a ±{Y_COL} do eixo, furos a {Z_FURO[0]} e {Z_FURO[1]} do fundo); em cada ponta do transpasse 2 M12 8.8 pelas 2 almas, a {B_TR} da ponta.",
          f"Pacote da cobertura sobre as terças: telha inferior TP40 0,50 + lã de rocha 40 mm + telha zipada 0,65 (trapézio 480 × 70) + painéis solares. Cargas permanentes {f(cc['g_total_sem_terca'],3)} kN/m² + terças; sobrecarga {f(cc['sobrecarga'],2)} kN/m².",

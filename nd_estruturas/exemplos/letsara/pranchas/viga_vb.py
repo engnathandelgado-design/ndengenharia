@@ -8,7 +8,7 @@ from prancha_nd import Prancha
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from geometria import X_EIXO, Y_LIN as Y_LIN_R01
-from cob_comum import XT
+from cob_comum import XT, NT, IDX_NOS, ORE_S9
 X_FACH = [(k, X_EIXO[k]) for k in "ABCDE"]
 MEIA = {"A": 0.30, "B": 0.20, "C": 0.20, "D": 0.20, "E": 0.30}
 VBD = json.load(open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vb_dente.json'))['adotado']
@@ -26,7 +26,23 @@ for k, ((na, xa), (nb, xb)) in enumerate(zip(X_FACH[:-1], X_FACH[1:]), 1):
 for k, m_ in enumerate(list(MARCAS), 5):
     MARCAS.append((f"VB-0{k}", m_[1].replace("fachada 1", "fachada 9 (espelho da " + m_[0] + ")"), 1, m_[3], m_[4]))
 L, X0VB = MARCAS[1][3], MARCAS[1][4]                                         # VB-02 desenhada
-TERCAS = [x - X0VB + 42 for x in XT if X0VB + 150 < x + 42 < X0VB + L - 150]   # eixo da terça (alma + 42) a partir da ponta
+TERCAS = [x - X0VB + 42 for x in XT if X0VB + 145 <= x and x - 45 <= X0VB + L - 40]   # rev06: terças com as 2 esperas dentro da VB (40 da ponta)
+
+
+def esperas_marca(x0, Lm, fachada9):
+    """rev06: esperas por marca (mm a partir da ponta baixa): ES-1V/ES-1R a 45 e 105 da alma de cada terça apoiada na VB;
+    ES-2V (orelhas do X, só eixo 9) a ±200 da alma das terças dos nós."""
+    es1, es2 = [], []
+    for i, w in enumerate(XT):
+        p = [w - 105 - x0, w - 45 - x0]
+        if 40 <= p[0] and p[1] <= Lm - 40:
+            es1 += p
+        if fachada9 and (i % NT) in IDX_NOS:
+            for s in (-ORE_S9, ORE_S9):
+                xe = w + s - x0
+                if 100 <= xe <= Lm - 100:
+                    es2.append(xe)
+    return [round(v) for v in es1], [round(v) for v in es2]
 V = (B * H * L - 2 * B * REC * LN) / 1e9
 PESO = V * 25
 # rev04: Md 90,8 kN·m + tração 95,8 kN → 3 Ø16 inf.; sucção Md− 66,7 kN·m → 6 Ø10 sup.; Vd 38,5 kN; levantamento 28,3 kN (PN-6 roscado)
@@ -37,6 +53,7 @@ pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("03", "14/10/2026", "TERÇAS c/1,20 m: ESPERAS ES-1/ES-3 (SEM SOLDA); TB-1 SEM CHAPA; CARGAS COM PAINÉIS SOLARES")
 pr.revisao("04", "16/10/2026", "VB 15×60 COM DENTE GERBER, CONSOLO CP-VB ESCONDIDO; NEO-6 100×100×10; PN-6 ANTI-LEVANTAMENTO")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
+pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA; VB-05 A 08 COM ES-1R M20 + GRAMPO E ES-2V DO X; TABELA DE ESPERAS POR MARCA")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
@@ -193,22 +210,30 @@ barras = [dict(pos="N1", diam=16.0, qtd=3, comp=L1 + 40, forma=[(0, 20), (0, 0),
           dict(pos="N7", diam=6.3, qtd=4, comp=2 * 55 + 8, forma=[(55, 0), (0, 0), (0, 8), (55, 8)], trechos=["55", "8", "55"])]
 ta = pr.tabela_croqui(XC, y - 4, barras, h_lin=9.0)
 y = ta["y_base"]
+tabE = []
+for m_, p_, q_, Lm_, x0_ in MARCAS:
+    e1, e2 = esperas_marca(x0_, Lm_, "fachada 9" in p_)
+    ts_ = [round((e1[k] + e1[k + 1]) / 2 + 75) for k in range(0, len(e1), 2)]          # alma da terça a partir da ponta
+    tabE.append([m_, "ES-1R M20" if "fachada 9" in p_ else "ES-1V M16", f"{len(ts_)}", f"{ts_[0]/10:.1f}".replace(".", ","), f"{(ts_[1]-ts_[0])/10:.1f}".replace(".", ","),
+                 (" · ".join(f"{v/10:.1f}".replace(".", ",") for v in e2)) or "—"])
+y = pr.tabela(XC, y - 4, "ESPERAS NO TOPO POR MARCA (cm, da ponta baixa; par a 4,5/10,5 antes da alma)", ["MARCA", "ESPERA", "TERÇAS", "1ª ALMA", "PASSO", "ES-2V (X)"], tabE, [16, 26, 16, 18, 16, 90], h_lin=5.0)
 ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 das pontas"],
-       ["ES-1V", "2 barras roscadas M16 L=330 c/ gancho (ST-1V das terças)", 2 * len(TERCAS), "topo, a 45/105 da terça"],
+       ["ES-1V", "VB-01 a 04: 2 M16 L=330 c/ gancho por terça", 2 * len(TERCAS), "topo, a 45/105 da terça"],
+       ["ES-1R", "VB-05 a 08: 2 M20 L=520 gancho + grampo U Ø10", 2 * len(TERCAS), "topo, a 45/105 da terça"],
+       ["ES-2V", "VB-05 a 08: M16 L=220 gancho + grampo (OR-X)", "tab.", "eixo, ±200 da terça do nó"],
        ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
        ["NEO-6", "Neoprene 100×100×10 (furo Ø30)", 2, "sobre os consolos CP-VB"],
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 60 cm, dente 30"], ["COMPRIMENTO", f"{L/10:.0f} cm", "CONCRETO", "C40"], ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
       ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
-y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
+pr.tabela(Q[0] + 330, Q[3] - 308, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimento 3,0 cm (CAA II). N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas.",
          "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V, com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",
-         "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). A ponta baixa vai sempre para o lado A. Folga de 2,5 cm entre a ponta da viga e a face do pilar e entre a ponta do consolo e o recorte.",
+         "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). Ponta baixa sempre no lado A; folga de 2,5 cm nas pontas.",
          "Sucção do vento na cobertura levanta a VB no apoio (28 kN de cálculo): pino PN-6 Ø20 roscado com porca, contraporca e arruela no nicho do topo do dente, apertado depois do neoprene assentado; graute do nicho só numa ponta (a outra livre para dilatar).",
-         "VB-05 a VB-08 (fachada 9): mesma fôrma, armação e esperas das VB-01 a VB-04 (sem ES-3 desde a rev05, as peças ficaram iguais); marcas mantidas por fachada para a montagem — a ponta baixa continua no lado A.",
-         "Placas de fechamento por fora da viga; a VB não recebe carga das placas (fixadas nos pilares pelos trilhos IP-01).",
-         "Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Cotas de concreto em cm, chaparia em mm. Não medir no desenho.",
+         "VB-05 a 08 (fachada 9): mesma fôrma e armação; ES-1R M20 hef 400 + grampo U Ø10 no lugar das ES-1V (escora das terças, até 49 kN) e ES-2V das orelhas do X (tabela). Última terça do lado E apoiada no recuo do pilar de canto (ST-1F, PL-07/PL-08).",
+         "Placas por fora da viga, fixadas nos pilares (a VB não recebe carga das placas). Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Concreto em cm, chaparia em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 y = pr.legenda_armadura(XC, y - 4, False)
 pr.notas(XC, y - 4, notas, 182)

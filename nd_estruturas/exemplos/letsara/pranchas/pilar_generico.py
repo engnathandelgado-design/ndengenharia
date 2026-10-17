@@ -74,6 +74,10 @@ def prancha_pilar(P):
                             marca=P["marca"], qtd=P["qtd"], peso=f(PESO, 1), volume=f(V, 2)))
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM CP-VT; CONSOLOS COM ALÇAS; NEOPRENES REVISTOS; CP-MEZ P/ DENTE DA VM; CP-VB 15×27×29 P/ DENTE DA VB; PL 14 Ø20")
+    if P["marca"] in ("PL-07", "PL-08"):
+        pr.revisao("06", "17/10/2026", "ESPERAS ES-1F DO APOIO ST-1F DA ÚLTIMA TERÇA (15 ESPAÇOS DE TERÇA)")
+    if P["marca"].startswith("PG"):
+        pr.revisao("06", "17/10/2026", "CABEÇA A 2 cm DA TS-01 (4 MARCAS PG-01 A PG-04); INSERTOS IL-1 DA LIGAÇÃO EM y COM A TS-01")
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -388,7 +392,7 @@ def consolo(face, z_assento, tipo, larg, proj, h, hp, pino=("PN-1", 20, 700, 300
 
 KP_CEN = [("P8A", X_EIXO["C"], Y_LIN[1], 400, 600, "PC-01"), ("P11", X_EIXO["C"], Y_LIN[3], 400, 400, "PC-02"), ("P13", X_EIXO["C"], Y_P13, 600, 600, "PC-03"),
           ("P8", X_EIXO["B"], Y_LIN[1], 400, 600, "PM-01"), ("P8B", X_EIXO["D"], Y_LIN[1], 400, 600, "PM-01"),
-          ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-01"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-02")]
+          ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-03"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-04")]
 F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
 I130 = lambda face: consolo(face, Z_I130, "CP-I130", 500, 400, H_C["CP-I130"], H_C["CP-I130"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I130"]["tirante"].split(" (")[0], CONS_J["CP-I130"]["n_ramos"], CONS_J["CP-I130"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
@@ -468,30 +472,49 @@ def dados_pm():
                 ip01=[dict(face="B", z=IP_C)])
 
 
+# rev06 (DEC-024): cabeça dos pilares dos portões a 2 cm do fundo da TS-01 da linha 4, ligada à viga em y por 2 cantoneiras
+# L 102×102×9,5 (faces x do pilar) — 4 comprimentos → 4 marcas (mesma fôrma e armação por seção)
+IL1 = ["IL-1", "Inserto rosqueado M16 hef 100 (cantoneira CL-P)", 2, "faces B e D, 75 do topo"]
+NOTA_LIG = ("Cabeça a 2 cm do fundo da TS-01 da linha 4 (a viga sobe 3 % de A para E): em cada face lateral (B e D) uma cantoneira "
+            "L 102×102×9,5 L = 250 (CL-P) parafusada com 1 M16 8.8 no inserto IL-1 (furo oblongo vertical 18 × 50, a TS-01 flete livre) e com 2 M16 8.8 "
+            "nos insertos do fundo da TS-01; segura só em y a parede dos portões (Fd até 23 kN, cobertura_metalica.json). Portões livres até +7,40.")
+
+
+def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
+    secao = f"{b//10}×{b//10}"
+    P = base(marca, 1, b, b, ztop, [], bars_ret(b, b, 2, 2), desenho,
+             f"PILAR DOS PORTÕES {marca} ({nome}, {secao}) — LINHA 4, x = {x:.3f} m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO".replace(".", ","),
+             f"POSIÇÃO: linha 4, x = {x:.3f} m ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
+             [["PG-01", "P9", 1, "sem consolo; topo +7,47", "IP-01 (B); 2 IL-1; 2 AL-2"], ["PG-02", "P10 (x 15,195)", 1, "sem consolo; topo +7,63", "IP-01 (B); 2 IL-1; 2 AL-2"],
+              ["PG-04", "P10 (x 24,305)", 1, "sem consolo; topo +7,90", "IP-01 (B); 2 IL-1; 2 AL-2"], ["PG-03", "P12", 1, "sem consolo; topo +8,06", "IP-01 (B); 2 IL-1; 2 AL-2"]],
+             [["IP-01", "Par de trilhos TR-1 40/22 L=250 (placas)", 5 if b == 400 else 6, "faces A e C junto à B"], IL1,
+              ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+             [("Concreto C40; 4 Ø20 retos (cantos); " if b == 400 else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
+              NOTA_LIG,
+              "Pilar de fechamento da parede dos portões (vista C): recebe as placas, a folha do portão e o vento; apoiado em y na TS-01 pela cabeça (modelo integrado r05)."],
+             ip01=[dict(face="B", z=IP_C[:5] if b == 400 else IP_C)], d1=d1, zoom=2.8 if b == 400 else 2.4)
+    if est:
+        P |= dict(d_est=est)
+    return P
+
+
 def dados_pg1():
-    return base("PG-01", 2, 400, 400, 7400, [], bars_ret(400, 400, 2, 2), "ND-LET-PG01",
-                "PILARES DA PAREDE DOS PORTÕES PG-01 (P9 E P12, 40×40) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                "POSIÇÃO: linha 4, eixos B e D (P9 e P12); topo +7,40 (a TS-01 passa por cima)", "PILARES DA PAREDE DOS PORTÕES",
-                [["PG-01", "P9, P12", 2, "sem consolo", "5 IP-01 (B); 2 AL-2"]],
-                [["IP-01", "Par de trilhos TR-1 HTA-CE 40/22 L=250 (placas da vista C), sem solda", 5, "faces A e C junto à B, fiadas 0 a 4"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
-                ["Concreto C40; 4 Ø20 retos (cantos); estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
-                 "Pilar de fechamento: recebe só as placas da parede dos portões (vista C) e o vento sobre elas; topo em +7,40, 9 cm abaixo do fundo da TS-01 da linha 4 no P9 (rev03, cobertura rebaixada).",
-                 "Portões entre P9–P10 e P10–P12 (vão livre até +7,40, rev03): marco e fixação do portão pelo fornecedor, nos IP-01 da face lateral se necessário (a confirmar)."],
-                ip01=[dict(face="B", z=IP_C[:5])], zoom=2.8)
+    return _pg("PG-01", "P9", 9.87, 400, 7470, "ND-LET-PG01", 20.0)
 
 
 def dados_pg2():
-    return base("PG-02", 2, 250, 250, 7500, [], bars_ret(250, 250, 2, 2), "ND-LET-PG02",
-                "PILARES DOS PORTÕES PG-02 (P10, 25×25) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                "POSIÇÃO: linha 4, x = 15,195 e 24,305 m (P10); topo +7,50", "PILARES DOS PORTÕES 25×25",
-                [["PG-02", "P10 (2×)", 2, "sem consolo", "6 IP-01 (B); 2 AL-2"]],
-                [["IP-01", "Par de trilhos TR-1 HTA-CE 40/22 L=250, sem solda", 6, "faces A e C junto à B"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
-                ["Concreto C40; 4 Ø16 retos (cantos); estribos N2 Ø6,3 c/15 (c/10 nas pontas), ganchos 135°.",
-                 "Pilar de fechamento entre o portão e as placas da vista C; topo +7,50."],
-                ip01=[dict(face="B", z=IP_C)], d1=16.0, zoom=2.4) | dict(d_est=6.3)
+    return _pg("PG-02", "P10a", 15.195, 250, 7630, "ND-LET-PG02", 16.0, 6.3)
 
 
-DADOS = dict(pc1=dados_pc1, pc2=dados_pc2, pc3=dados_pc3, pm=dados_pm, pg1=dados_pg1, pg2=dados_pg2)
+def dados_pg3():
+    return _pg("PG-03", "P12", 29.63, 400, 8060, "ND-LET-PG03", 20.0)
+
+
+def dados_pg4():
+    return _pg("PG-04", "P10b", 24.305, 250, 7900, "ND-LET-PG04", 16.0, 6.3)
+
+
+DADOS = dict(pc1=dados_pc1, pc2=dados_pc2, pc3=dados_pc3, pm=dados_pm, pg1=dados_pg1, pg2=dados_pg2, pg3=dados_pg3, pg4=dados_pg4)
 
 
 if __name__ == "__main__":

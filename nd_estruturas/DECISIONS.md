@@ -243,3 +243,16 @@ Pedido do Nathan: terças sem mão-francesa; testar os perfis Z dos catálogos d
 (2) Sem mão-francesa: 4 M12 8.8 por apoio (2 colunas a ±60 nos furos METSEC E 55 / F 52) atravessando o ST-1P e as 2 almas; torção de apoio pelo binário das linhas (interação 0,24); 2 M12 em cada ponta do transpasse (uso 0,74). Saem ES-3, CMF-1 e MF-1 das TS-01 e das VB.
 (3) Aba de 90 voltada para o lado A, sobre o ST-1P (aba vertical 290 < 312 da terça), para não mexer nas esperas ES-1; correntes de Z pela componente Ixy/Ix (AISI S100-16 D3.2), uso 0,83 com Ø10.
 (4) Pendências com o fabricante: fu do aço (480 adotado), ângulo dos enrijecedores (45°), encaixe e furação no transpasse. A tabela do fabricante (por ensaio) pode dar espessuras menores; se usada, substitui a verificação da MC06.
+
+
+## DEC-024 — Letsara rev06: contraventamento otimizado no modelo integrado (2026-10-17)
+
+Pedido do Nathan: estudar o contraventamento num modelo único com toda a estrutura (pilares, TS-01, I130, VB, mezanino rígido, terças, correntes, tirantes, X), com o vento da NBR 6123 e as aberturas, usando a Mitsubishi como referência. `modelo_integrado_r05.py` + `nd_estruturas.vento_nbr6123`; 14 arranjos em 33 combinações ELU (`estudo_contraventamento_integrado.py`). O arranjo da rev05 (X nos vãos 2-3 e 7-8, painel de 2 terças) não muda nada em relação a não ter X. Escolhas (aprovadas pelo Nathan no croqui):
+(1) X Ø16 nos 5 vãos do pavilhão (4-5 a 8-9), painéis de ≈ 45° com nós nas terças 0, 8 e 15 de cada meia água; pilares de 0,71 para 0,66 de uso, X com Td 31 kN (uso 0,70). Mais vãos rendem pouco: o anexo e a área aberta ficam travados pelo mezanino.
+(2) As diagonais atravessam as terças intermediárias por furos oblongos 18 × 28 (marcas X1..X7, Y1..Y6); ES-2 só nos 3 nós de cada TS-01; no eixo 9 as orelhas vão na VB (ES-2V a ±200 da terça).
+(3) ST-1V-R na VB do eixo 9: o vento do oitão entra pelas terças (até 49 kN ao longo da terça); 2 esperas M20 hef 400 (descem até a armadura inferior da VB 15 cm) + grampo U Ø10. ST-1P com grampo U Ø10 em cada ES-1 (escora até 47 kN nos beirais).
+(4) Pilares dos portões da linha 4 com a cabeça a 2 cm do fundo da TS-01, ligados em y por 2 cantoneiras L 102 com furo oblongo vertical (Fd até 23 kN); 4 marcas PG-01 a PG-04; TS-01A (linha 4) com 6 insertos IT-P. A folha do portão fechado leva a diferença de pressão interna aos pilares.
+
+## DEC-025 — Letsara rev06: 15 espaços de terça e calha no eixo A (2026-10-17)
+
+Pedido do Nathan: 1ª terça com 40 cm livres no lado baixo (eixo A) para a calha e a última a 15 cm do pilar no lado alto. Com 16 espaços a terça do meio caía sobre os pilares B e D das fachadas (cabeça 40 × 30 acima da VB); número ímpar de espaços resolve. Adotado (escolha do Nathan): 15 espaços c/1,263 m, 16 terças por meia água (32 linhas, eram 34); no lado alto a última terça fica a 21,5 cm (mais perto bateria na cabeça do pilar C das fachadas). Terça governante 0,95 no modelo integrado. Calha de platibanda 300 × 150 em chapa galvanizada 1,25 a 0,5 %, 9 descidas Ø200 junto aos pilares P1, extravasores nas pontas e rufos RF-1 a RF-4 (`calc_calha.py`, NBR 10844:1989; I = 200 mm/h a confirmar com a cidade); a calha cheia carrega a 1ª terça (0,12 + 0,45 kN/m) no modelo. Prancha nova ND-LET-COB03.

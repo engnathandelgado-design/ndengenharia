@@ -8,7 +8,7 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev05.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev06.xlsx")
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 LGQ = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
@@ -72,7 +72,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:
     vol = 0.24 * (1.0 + zr) + cab * (10.0 - zr) + vc
     folha_mk = mk.replace("-", "")
     pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
-for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
+for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     q = quadro(f_)
     pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", ""), num(q["COMPRIMENTO"].split()[0]) / 100,
                   int(q["QUANTIDADE"].split()[0]), num(q["VOLUME"].split()[0]), num(q["PESO"].split()[0]), q["CONCRETO"], f"ND-LET-{f_}"))
@@ -98,7 +98,7 @@ aco = []     # (peça, prancha, qtd, {diam: kg/peça}, obs)
 for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     folha_mk = p_[9].replace("ND-LET-", "")
     aco.append((f"Pilar {p_[1]}", p_[9], p_[5], kg_diam(folha_mk), "consolos e cabeça da marca"))
-for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
+for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     aco.append((f"Pilar {quadro(f_)['MARCA']}", f"ND-LET-{f_}", int(quadro(f_)["QUANTIDADE"].split()[0]), kg_diam(f_), ""))
 import armaduras_vigas as AV
 for k_, (fam_, fn_) in enumerate(AV.SPECS, 1):
@@ -146,7 +146,7 @@ def add_ins(f_, peca, qtd, titulo="INSERTOS"):
         ins.append((f"ND-LET-{f_}", peca, l[0], l[1], q, qtd))
 for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
-for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02"):
+for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
 add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8)
 for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
@@ -346,12 +346,12 @@ def listas_pdf(caminho):
 
     def rodape(c, d):
         c.saveState(); c.setFont("DV", 7)
-        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev05 — projeto da ND Engenharia — para aprovação")
+        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev06 — projeto da ND Engenharia — para aprovação")
         c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
 
     doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
-                            title="Letsara — listas de materiais rev05", author="ND Engenharia")
-    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev05, 17/10/2026)", T1),
+                            title="Letsara — listas de materiais rev06", author="ND Engenharia")
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev06, 17/10/2026)", T1),
          Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
             "Rev04 (NBR 9062:2017): sem vigas de travamento; VM do mezanino em meio vaso com dente Gerber; pilares laterais 14 Ø20; neoprenes e consolos revistos.")]
     # 1 peças

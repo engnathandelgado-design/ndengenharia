@@ -52,12 +52,22 @@ cx, cc, lc = CM["contraventamento"], CM["correntes"], LG["contraventamento"]
 reg("contraventamento", "diagonal Ø16 (rosca M16) + esticador", f"painel {cx['painel_x_m']*1000:.0f} × vão, L ≈ {cx['L_diag_m']} m", "OR-X (viga da linha i) / OR-X (linha i+1)",
     "L 102×76×6,3 com furo Ø18, na espera ES-2", "tração na diagonal (NBR 8800:2008 6.3.3)", f"{cx['T_diag_d']} ≤ {cx['NtRd_16']} kN", cx["uso_diag"] <= 1.0,
     f"Vd {cx['V_painel_d']} kN por painel; {lc['n_tirantes']*2} diagonais ({lc['n_tirantes']} por meia água × 2)")
-reg("contraventamento", "cruzamento do X", "2 diagonais a 45 e 85 mm do concreto", "terça intermediária do painel", "furos Ø18 na alma a 35 e 75 do fundo",
-    "folga entre as diagonais / borda do furo ao fundo da terça", f"{lc['folga_cruzamento_mm']:.0f} mm / {lc['borda_furo_fundo_terca_mm']} mm", lc["ok"], "as diagonais cruzam-se sobre a terça, no meio do vão")
+reg("contraventamento", "passagem do X pelas terças", "2 diagonais a 45 e 85 mm do concreto", "terças intermediárias (X1..X7, Y1..Y6)", "oblongos 18×28 a 35 e 75 do fundo",
+    "folga entre as diagonais / borda do furo ao fundo da terça", f"{lc['folga_cruzamento_mm']:.0f} mm / {lc['borda_furo_fundo_terca_mm']} mm", lc["ok"], "as diagonais atravessam as terças do painel")
 reg("contraventamento", "orelha OR-X", "a 140 do eixo da terça", "terça do nó (aba 90/82)", "ST-1P", "folga orelha × mesa da terça", f"{lc['folga_min_terca_mm']} mm ≥ 20", lc["folga_min_terca_mm"] >= 20, "")
 reg("contraventamento", "terça escora (todas as linhas de terças)", "Z 302×90/82×2,30", "ST-1P", "4 M12 por apoio", "N + M (NBR 14762:2010 9.9), vento 0°", f"{CM['terca_escora']['interacao']:.2f} ≤ 1", CM["terca_escora"]["interacao"] <= 1.0,
-    f"governa vão {CM['terca_escora']['vao_governante']}, x = {CM['terca_escora']['linha_governante_x_m']} m (faixa {CM['terca_escora']['faixa_governante']}, vento {CM['terca_escora']['vento_governante']}): Nd {CM['terca_escora']['Nd']} kN; Nd máx. {CM['terca_escora']['Nd_max']} kN")
-reg("correntes", f"corrente flexível Ø{cc['flexivel']['d_mm']:g} M{cc['flexivel']['d_mm']:g}", f"furo {cc['flexivel']['furo']} no meio da alma", "terças", "porca + contraporca dos 2 lados", "tração acumulada (13 terças)", f"{cc['F_max_kN']} ≤ {cc['flexivel']['NtRd']} kN", cc["flexivel"]["uso"] <= 1, "")
+    f"modelo integrado r05: governa vão {CM['terca_escora']['vao_governante']}, x = {CM['terca_escora']['linha_governante_x_m']} m: Nd {CM['terca_escora']['Nd']} kN, Md {CM['terca_escora']['Md']} kN·m")
+st9, lp, chx = CM["ST1V_R"], CM["ligacao_portoes"], CM["chumbadores"]
+reg("cobertura × VB eixo 9", "ST-1V-R", "2 ES-1R M20 hef 400 + grampo U Ø10", "VB-05 a 08", "escora da terça (vento do oitão)", "aço / concreto (ACI 318-19 17)",
+    f"{st9['aco']['interacao']:.2f} / {st9['concreto']['interacao']:.2f}", st9["aco"]["interacao"] <= 1 and st9["concreto"]["interacao"] <= 1, f"Fy {st9['Fy_d']} kN")
+reg("cobertura × TS-01", "ST-1P", "2 ES-1 M16 + grampo U Ø10 em cada", "TS-01", "escora + arrancamento", "ACI 318-19 17.8", f"{chx['ST-1P']['interacao']:.2f}", chx["ST-1P"]["interacao"] <= 1, f"Vu {chx['ST-1P']['Vu_terca']} kN ao longo da terça")
+reg("contraventamento", "OR-X na VB do eixo 9", "1 ES-2V M16 + grampo", "VB-05 a 08", "a ±200 da terça do nó", "corte com armadura de ancoragem", f"{chx['OR-X VB']['uso']:.2f}", chx["OR-X VB"]["uso"] <= 1, "")
+reg("pilar do portão × TS-01A", "PG-01 a PG-04", "2 CL-P L 102×102×9,5 + M16 8.8", "TS-01A (linha 4)", "insertos IL-1 / IT-P", "corte (y)", f"{max(lp[k]['uso'] for k in ('parafusos', 'insertos_TS', 'inserto_pilar', 'cantoneira')):.2f}",
+    all(lp[k]["uso"] <= 1 for k in ("parafusos", "insertos_TS", "inserto_pilar", "cantoneira")), f"Fd {lp['Fd_max']} kN; furo oblongo vertical")
+CH_ = json.loads((AQ / "calha.json").read_text(encoding="utf-8"))
+reg("calha", "CA-1 300×150 + 9 descidas Ø200", "SC-1 c/750 na 1ª terça", "eixo A (40 cm livres)", "NBR 10844:1989", "capacidade calha / saída / suporte",
+    f"{CH_['calha']['uso']:.2f} / {CH_['descidas']['uso']:.2f} / {CH_['suportes']['uso']:.2f}", max(CH_["calha"]["uso"], CH_["descidas"]["uso"], CH_["suportes"]["uso"]) <= 1, "I = 200 mm/h a confirmar")
+reg("correntes", f"corrente flexível Ø{cc['flexivel']['d_mm']:g} M{cc['flexivel']['d_mm']:g}", f"furo {cc['flexivel']['furo']} no meio da alma", "terças", "porca + contraporca dos 2 lados", "tração acumulada (14 terças)", f"{cc['F_max_kN']} ≤ {cc['flexivel']['NtRd']} kN", cc["flexivel"]["uso"] <= 1, "")
 reg("correntes", "tirante rígido L 51×51×3,2", "clipe L 32×3 + M10 em furo oval", "1ª e 2ª terça junto às ancoragens", "furo oval 11×23 na alma", "compressão, λ " + str(cc["rigida"]["esbeltez"]), f"{cc['F_max_kN']} ≤ {cc['rigida']['NcRd']} kN", cc["rigida"]["uso"] <= 1, "")
 reg("correntes", "diagonal de ancoragem Ø16", "nó da corrente na 2ª terça", "ST-1P da 1ª terça (furo Ø18)", "porca + contraporca", "tração", f"{cc['diagonal']['Td']} ≤ {cc['diagonal']['NtRd']} kN", cc["diagonal"]["uso"] <= 1, "L/4 e 3L/4 ao apoio mais próximo; L/2 aos dois apoios")
 

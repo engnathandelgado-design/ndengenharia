@@ -1,0 +1,58 @@
+{
+ "chuva": {
+  "I_mm_h": 200.0,
+  "T_anos": 5,
+  "obs": "NBR 10844:1989 tab. 5 — confirmar a intensidade da cidade da obra"
+ },
+ "contribuicao": {
+  "A_por_m_m2": 40.09,
+  "Q_L_min_m": 133.6,
+  "L_max_ate_saida_m": 5.038,
+  "Q_lado_L_s": 11.22,
+  "Q_saida_L_s": 22.44,
+  "area_total_m2": 3181.0
+ },
+ "calha": {
+  "secao": "retangular 300 × 150 mm, chapa de aço galvanizado 1,25 mm (#18) com pintura eletrostática",
+  "i": 0.005,
+  "n": 0.011,
+  "lamina_m": 0.1,
+  "Q_cap_L_s": 29.6,
+  "uso": 0.38,
+  "L_m": 79.35,
+  "espaco_livre_m": 0.4,
+  "posicao": "x de +0,02 a +0,32 m do eixo A (face da cabeça do P1 em x = 0; aba da 1ª terça em x = 0,40)"
+ },
+ "descidas": {
+  "n": 9,
+  "d_mm": 200.0,
+  "Q_cap_L_s": 26.4,
+  "uso": 0.85,
+  "onde": "uma por linha (1 a 9), ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01), aparente na face lateral do pilar, até a caixa de areia"
+ },
+ "extravasores": {
+  "n": 2,
+  "d_mm": 100,
+  "onde": "pontas da calha nas fachadas 1 e 9, através da placa, 50 mm abaixo da borda"
+ },
+ "suportes": {
+  "peca": "SC-1 ferro chato 38 × 6,35 A36 galvanizado, dobrado em U, preso na alma da 1ª terça com 2 M10",
+  "s_m": 0.75,
+  "n": 107,
+  "Md_kNm": 0.192,
+  "MRd_kNm": 0.347,
+  "uso": 0.551
+ },
+ "carga_na_1a_terca": {
+  "G_kN_m": 0.12,
+  "Q_kN_m": 0.45,
+  "obs": "aplicada na linha de terças 0 do modelo integrado"
+ },
+ "rufos": [
+  "RF-1 rufo de capa da platibanda (topo +10,00) com pingadeira dos dois lados, sobre as cabeças dos pilares e as placas",
+  "RF-2 rufo de fechamento entre a face interna das placas (x = −0,30) e a borda de trás da calha, nos trechos entre pilares do eixo A",
+  "RF-3 rufo de encosto do lado alto (eixo E): fixado na face das cabeças/placas, cobre a telha 150 mm",
+  "RF-4 rufo lateral nas fachadas 1 e 9 (encosto da telha na platibanda ao longo da água)",
+  "pingadeira da telha entrando 100 mm na calha (telha avança 150 mm além da aba da 1ª terça)"
+ ]
+}

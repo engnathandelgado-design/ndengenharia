@@ -14,6 +14,7 @@ pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01; ORELHAS DO X NA CH-T2")
 pr.revisao("03", "14/10/2026", "SEM DENTES (APOIO DIRETO), TERÇAS c/1,20 m, ESPERAS ROSCADAS (SEM SOLDA), 8 CORDOALHAS")
 pr.revisao("04", "16/10/2026", "NBR 9062: TOLERÂNCIA DE COMPRIMENTO ±10 mm (FOLGA CENTRAL 19 mm); ESTABILIDADE LATERAL")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
+pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA (1ª A 40 cm DA CALHA); ES-2 SÓ NOS 3 NÓS DO X; GRAMPO NAS ES-1; TS-01A COM IT-P")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
@@ -304,8 +305,9 @@ x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 nn = len(NOS)
 ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "ver planta"],
        ["TB-3", "Tubo Ø50,8×2,0 L=900, passante, a prumo", 4, "a 77,5 das pontas, y = ±100"],
-       ["ES-1", "Barra roscada M16 L=330, gancho, sai 120", 2 * len(TER), "2 por terça, y = ±60"],
-       ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, "4 por nó do X"]]
+       ["ES-1", "Barra roscada M16 L=330, gancho, sai 120 + grampo U Ø10", 2 * len(TER), "2 por terça, y = ±60"],
+       ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, f"4 por nó do X ({nn} nós)"],
+       ["IT-P", "Só TS-01A (linha 4): inserto rosqueado M16 hef 80 no fundo", 6, "s = 452,0 / 984,8 / 1517,7; y = ±9,75"]]
 y = pr.tabela(x0, y, "INSERTOS (DETALHES NA FOLHA 03) — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 108, 10, 46])
 qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
@@ -328,6 +330,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
+         "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (y = ±97,5, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04).",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()

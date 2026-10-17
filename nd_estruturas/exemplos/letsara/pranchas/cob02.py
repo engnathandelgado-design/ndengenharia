@@ -5,7 +5,7 @@ tirante rígido + diagonal), diagonal no ST-1 e cruzamento do X na terça. Lista
 """
 import math
 from prancha_nd import Prancha
-from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, FOLGA, Z_COR, Z_DIAG, Z_X,
+from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, FOLGA, Z_COR, Z_DIAG, Z_X, NOS_X, NOS_X_D, ORE_S, ORE_Y, PAINEL_X, furos_x,
                        H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, A_TR, IDX_2A, NT, marca, cabecalho, CB, LG, f)
 
 pr = Prancha("A1", cabecalho("ND-LET-COB02", "05/05", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
@@ -13,16 +13,17 @@ pr.revisao("01", pr.dados["data"], "desdobrada da COB01; correntes no meio da al
 pr.revisao("02", pr.dados["data"], "X de nó a nó com esticador (sem CH-X); tirantes rígidos L 51; detalhes no padrão de referência")
 pr.revisao("03", "14/10/2026", "17 TERÇAS POR MEIA ÁGUA (c/1,20 m); ORELHAS OR-X PARAFUSADAS NAS ESPERAS ES-2 (SEM SOLDA)")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 METSEC CONTÍNUAS POR TRANSPASSE; SEM MÃO-FRANCESA; FUROS DO X E DA DIAGONAL")
+pr.revisao("06", "17/10/2026", "MODELO INTEGRADO: X NOS VÃOS 4-5 A 8-9 (45°); 15 ESPAÇOS DE TERÇA; FUROS OBLONGOS; ORELHAS NA VB DO EIXO 9")
 cx, cr = CB["contraventamento"], CB["correntes"]
-K = 1                                       # vão típico: eixos 2–3
+K = 4                                       # vão típico com X: eixos 5–6
 VAO = VAOS[K]
 q = [VAO / 4, VAO / 2, 3 * VAO / 4]
 ORE = dict(s=140, y=140, larg=60, t=9.5, h_baixo=80, h_alto=120)        # orelhas da CH-T2
 Z0T = 10                                     # fundo da terça acima do concreto
 
 # ------------------------------------------------------------------ PLANTA DO VÃO TÍPICO 1:100 (papel: horizontal = x da obra)
-v = pr.vista("PLANTA", (64, 436), 100, titulo="PLANTA DE TRAVAMENTO — VÃO ENTRE OS EIXOS 2 E 3 (TÍPICO DOS VÃOS COM X)",
-             subtitulo="vãos 2-3 e 7-8 com X; nos demais vãos tudo igual, sem o X e sem os furos X das terças")
+v = pr.vista("PLANTA", (64, 436), 100, titulo="PLANTA DE TRAVAMENTO — VÃO ENTRE OS EIXOS 5 E 6 (TÍPICO DOS VÃOS COM X)",
+             subtitulo="X nos vãos 4-5 a 8-9 (painéis de 8 e 7 terças); vãos 1-2 a 3-4 iguais, sem o X e sem os furos X das terças")
 for y in (0, VAO):
     v.ret(X0E, y - 200, LTS, 400, "VISTA"); v.ret(X0D, y - 200, LTS, 400, "VISTA")
     v.ret(-300, y - 200, 600, 400, "CORTADO"); v.ret(X_E - 300, y - 200, 600, 400, "CORTADO"); v.ret(X_C - 200, y - 300, 400, 600, "CORTADO")
@@ -40,10 +41,14 @@ for (p0, p1, p12, p11) in RUNS:
     for (pa, pb) in ((p0, p1), (p12, p11)):
         for (yq, ys) in ((q[0], 0), (q[1] - 60, 0), (q[1] + 60, VAO), (q[2], VAO)):
             v.linha((XT[pb], yq), (XT[pa], ys), "OCULTA")
-for nos in (NOS, NOS_D):
+for nos in (NOS_X, NOS_X_D):
     for a, b in zip(nos[:-1], nos[1:]):
         v.linha((a + ORE["s"], ORE["y"]), (b - ORE["s"], VAO - ORE["y"]), "ARMADURA")
         v.linha((b - ORE["s"], ORE["y"]), (a + ORE["s"], VAO - ORE["y"]), "ARMADURA")
+        for t_ in (0.3, 0.7):                                                   # esticadores (um por diagonal)
+            for (x1, y1, x2, y2) in ((a + ORE["s"], ORE["y"], b - ORE["s"], VAO - ORE["y"]), (b - ORE["s"], ORE["y"], a + ORE["s"], VAO - ORE["y"])):
+                if (t_ == 0.3) == (x2 > x1):
+                    v.ret(x1 + t_ * (x2 - x1) - 100, y1 + t_ * (y2 - y1) - 100, 200, 200, "METALICA")
 for lbl, x in (("A", 0), ("C", X_C), ("E", X_E)):
     v.eixo((x, -2100), (x, VAO + 600), 0)
     xp, yp = v.P((x, -2500)); v._add(pr.msp.add_circle((xp, yp), 3.2, dxfattribs={"layer": "INDICACAO"})); v._add(pr.texto(xp, yp, lbl, "sub", "TITULO", "MIDDLE_CENTER"))
@@ -54,12 +59,13 @@ v.cota_v([0, q[0], q[1], q[2], VAO], -900, -14, total=False)
 v.cota_h(XT[:NT], -900, -8, total=False)
 v.cota_h(XT[NT:], -900, -8, total=False)
 v.cota_h([0, X_C, X_E], -900, -16, total=False)
-v.chamada(((NOS_D[5] + NOS_D[6]) / 2, VAO * 0.25), (40, -24), f"X Ø16 + esticador, L ≈ {f(cx['L_diag_m'],2)} m (det. 4 e 5)")
+v.chamada((NOS_X_D[1] + 0.8 * (NOS_X_D[2] - NOS_X_D[1]), VAO * 0.2), (40, -24), f"X Ø16 + esticador, L ≈ {f(cx['L_diag_m'],2)} m (det. 4 e 5)")
+v.chamada((XT[NT + 3], ORE["y"] + 3 / 8 * (VAO - 2 * ORE["y"])), (30, 30), "furos oblongos do X nas terças X1..X7 / Y1..Y6 (det. 8)")
 v.chamada((XT[2 * NT - 1], q[2] + (VAO - q[2]) * 0.3), (16, -4), "tirante rígido L 51×51×3,2 (det. 6)")
 v.chamada(((XT[2 * NT - 2] + XT[2 * NT - 1]) / 2, q[2] + (VAO - q[2]) * 0.5), (16, 12), "diagonal de ancoragem Ø16 (det. 6 e 7)")
 v.chamada(((XT[NT + 7] + XT[NT + 8]) / 2, q[0]), (50, -18), "corrente flexível Ø10 (det. 6)")
 v.chamada((XT[2 * NT - 1] + B_INF, VAO + A_TR), (16, 20), f"terça Z 302 contínua: passa {A_TR} além de cada eixo (transpasse — COB01 det. 1)")
-v.marcador_detalhe((NOS[3], 0), 450, 4, ang=60, dist=10)
+v.marcador_detalhe((NOS_X[1], 0), 450, 4, ang=60, dist=10)
 v.marcador_detalhe((XT[1], q[0]), 450, 6, ang=-110, dist=8)
 v.marcador_detalhe((XT[0], 0), 400, 7, ang=-150, dist=6)
 v.marcador_detalhe((XT[3], q[1]), 400, 8, ang=110, dist=6)
@@ -168,14 +174,18 @@ d7.chamada((-30, 0), (36, 6), "calço biselado + porca + contraporca, furo Ø18 
 d7.cota_h([-200, -8, 0, B_INF, 200], -600, -10, total=False)
 
 # ------------------------------------------------------------------ DETALHE 8 — CRUZAMENTO DO X NA TERÇA (elevação 1:5)
-d8 = pr.vista("DETALHE 8", (540, 180), 5, titulo="DETALHE 8 — CRUZAMENTO DO X", subtitulo="terça intermediária do painel (marca X), no meio do vão")
+d8 = pr.vista("DETALHE 8", (540, 180), 5, titulo="DETALHE 8 — PASSAGEM DO X PELA TERÇA",
+              subtitulo="terças X1..X7 e Y1..Y6; posições y na tabela da COB01")
 d8.ret(-400, 0, 800, H_TERCA, "METALICA"); d8.linha((-400, D_INF), (400, D_INF), "OCULTA"); d8.linha((-400, H_TERCA - D_SUP), (400, H_TERCA - D_SUP), "OCULTA")
-for z in Z_X:
-    d8.circulo((0, z), 9, "METALICA"); d8.circulo((0, z), 8, "ARMADURA")
+for z, xx in ((Z_X[0], -150), (Z_X[1], 150)):
+    d8.linha((xx - 5, z - 9), (xx + 5, z - 9), "METALICA"); d8.linha((xx - 5, z + 9), (xx + 5, z + 9), "METALICA")
+    d8.circulo((xx - 5, z), 9, "METALICA"); d8.circulo((xx + 5, z), 9, "METALICA"); d8.circulo((xx, z), 8, "ARMADURA")
+    d8.linha((xx - 120, z - 30), (xx + 120, z + 30), "ARMADURA")
 d8.linha((-400, Z_COR), (-60, Z_COR), "OCULTA"); d8.linha((60, Z_COR), (400, Z_COR), "OCULTA"); d8.circulo((0, Z_COR), 6, "METALICA")
 d8.cota_v([0, Z_X[0], Z_X[1], Z_COR, H_TERCA], 400, 10, total=False)
-d8.chamada((0, Z_X[0]), (-20, -14), f"X '/' (orelha baixa): furo Ø18 a {Z_X[0]} do fundo")
-d8.chamada((0, Z_X[1]), (-20, 14), f"X '\\' (orelha alta): furo Ø18 a {Z_X[1]} do fundo")
+d8.cota_h([-164, -136], Z_X[0] - 9, -8, total=False)
+d8.chamada((-150, Z_X[0]), (-20, -14), f"X '/' (orelha baixa): oblongo 18×28 a {Z_X[0]} do fundo")
+d8.chamada((150, Z_X[1]), (-10, 18), f"X '\\' (orelha alta): oblongo 18×28 a {Z_X[1]} do fundo")
 d8.chamada((0, Z_COR), (20, 12), f"corrente L/2 (Ø12, {Z_COR})")
 
 # ------------------------------------------------------------------ LISTA DE MATERIAIS DO TRAVAMENTO
@@ -185,15 +195,17 @@ lin = []
 n_half = 2
 D_COR = cr["flexivel"]["d_mm"]                                   # corrente flexível (calc_cobertura_metalica.py)
 xs = {}
-for k in VAOS_X:
-    Lx = round(math.hypot(2 * PASSO - 2 * ORE["s"], VAOS[k] - 2 * ORE["y"]))
-    xs.setdefault(Lx, []).append(f"{k+1}-{k+2}")
+for t_ in LG["contraventamento"]["tirantes"]:
+    Lx = round(t_["comp_m"] * 1000)
+    xs.setdefault(Lx, set()).add(t_["vao"].replace("L", ""))
 pos = 1
+nx_tot = 0
 for Lx, vs in sorted(xs.items(), reverse=True):
-    n = 12 * n_half * len(vs)
+    n = sum(1 for t_ in LG["contraventamento"]["tirantes"] if round(t_["comp_m"] * 1000) == Lx) * 2      # 2 meias águas
+    nx_tot += n
     Lb = Lx + 2 * 54 - 200 + 150
-    lin.append([f"X{pos}", f"{n}", "Ø16 A36", f"{9000} + {Lb - 9000}", f"{n * Lb / 1000 * W['r16']:,.0f}".replace(",", "."), f"X, vãos {', '.join(vs)} (c-c furos {Lx})"]); pos += 1
-nx_tot = 12 * n_half * len(VAOS_X)
+    LA = 9000
+    lin.append([f"X{pos}", f"{n}", "Ø16 A36", f"{LA} + {Lb - LA}", f"{n * Lb / 1000 * W['r16']:,.0f}".replace(",", "."), f"X, vãos {', '.join(sorted(vs))} (orelha a orelha {Lx})"]); pos += 1
 lin.append(["ES", f"{nx_tot}", "esticador M16", "-", "-", "um por diagonal do X"])
 # diagonais de ancoragem
 dd = {}
@@ -212,12 +224,12 @@ lin.append(["C1", f"{n_cf}", f"Ø{D_COR:g} A36", f"{L_cf}", f"{n_cf * L_cf / 100
 n_tr = 3 * 2 * n_half * 8
 lin.append(["R1", f"{n_tr}", "L 51×51×3,2", f"{PASSO - 83}", f"{n_tr * (PASSO - 83) / 1000 * W['L51']:,.0f}".replace(",", "."), "tirante rígido (2 furos oval 11×23)"])
 lin.append(["CL", f"{2 * n_tr}", "L 32×32×3", "100", "-", "clipe do tirante rígido"])
-lin.append(["OR-X", f"{4 * 2 * len(NOS) * 2}", "L 102×76×6,3", "80", "-", "nós das linhas 2, 3, 7 e 8 (vãos 2-3 e 7-8), nas ES-2"])
+lin.append(["OR-X", f"{2 * nx_tot}", "L 102×76×6,3", "80", "-", f"{2 * nx_tot - 8} nas TS-01 (linhas 4 a 8) + 8 na VB do eixo 9"])
 lin.append(["CB", f"{4 * 2 * n_half * 8 * 2}", "CH 6,3×50×50", "-", "-", "calço biselado das diagonais"])
 y = pr.tabela(x0, y, "LISTA DE MATERIAIS — TRAVAMENTO DA COBERTURA", ["POS.", "QT", "PERFIL", "COMP. (mm)", "kg", "DESCRIÇÃO"], lin, [12, 12, 28, 26, 16, 102])
-notas = ["Lógica do travamento: terças Z contínuas por transpasse sobre as vigas (sem mão-francesa); 3 linhas de correntes Ø10 por vão (L/4, L/2, 3L/4), contínuas na meia água; nas duas pontas de cada meia água, tirantes rígidos no 1º espaço e diagonais Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça; X Ø16 de nó a nó das vigas a cada 2 espaços de terças, só nos vãos 2-3 e 7-8 (vizinhos aos oitões), com as terças dos nós como escoras.",
-         "Esperas ES-2 em todas as TS-01 (marca única); orelhas OR-X só nos nós das vigas das linhas 2, 3, 7 e 8.",
-         "X: orelhas OR-X (cantoneira L 102×76×6,3, 4 por nó) parafusadas nas esperas ES-2 com 1 M16, giradas perpendiculares ao tirante, furo Ø18 a 45 (X /) e 85 mm (X \\) do concreto; as duas diagonais cruzam-se no meio do vão, passando pelos furos Ø18 da terça intermediária (marca X), sem porca.",
+notas = ["Lógica do travamento (modelo integrado r05, DEC-024): terças Z contínuas por transpasse sobre as vigas (sem mão-francesa); 3 linhas de correntes Ø10 por vão (L/4, L/2, 3L/4), contínuas na meia água; nas duas pontas de cada meia água, tirantes rígidos no 1º espaço e diagonais Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça; X Ø16 nos 5 vãos do pavilhão (4-5 a 8-9), painéis de 8 e 7 espaços de terças (nós nas terças 1, 9 e 16 de cada meia água, ≈ 45°), terças dos nós como escoras; 15 espaços c/1,263 m por meia água, 1ª terça com 40 cm livres no eixo A para a calha (COB03).",
+         "Esperas ES-2 nos 3 nós de todas as TS-01 (marca única; sem uso nas linhas 2 e 3); no eixo 9 as orelhas ficam no eixo da VB (ES-2V, ND-LET-VB01).",
+         "X: orelhas OR-X (cantoneira L 102×76×6,3) parafusadas nas esperas ES-2 com 1 M16, giradas perpendiculares ao tirante, furo Ø18 a 45 (X /) e 85 mm (X \\) do concreto; 1 orelha por diagonal (nós de ponta: 1 por lado; nó do meio: 2 por lado). As diagonais atravessam as 7 terças intermediárias do painel por furos oblongos 18×28 de fábrica (marcas X1..X7 e Y1..Y6, tabela na COB01), sem porca.",
          "Esticador a 9,0 m da ponta (trecho A); tensionar após o aperto de todas as terças, até eliminar a flecha visível da barra, sem empenar a terça. Porca + contraporca em todas as pontas.",
          "Diagonais de ancoragem: calço biselado de chapa 6,3 na alma da 2ª terça e no ST-1P, porca + contraporca. Tirante rígido preso por clipes L 32×32×3 parafusados (M10, furo oval para ajuste); a corrente flexível passa pelo clipe e pela alma da 2ª terça.",
          "Barras A36 e chapas galvanizadas a fogo; roscas laminadas; porcas classe 5. Nenhuma solda (fábrica ou obra).",

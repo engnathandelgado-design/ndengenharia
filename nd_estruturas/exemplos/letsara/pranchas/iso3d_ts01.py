@@ -4,7 +4,7 @@ pv.OFF_SCREEN = True
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 L, H, MAC = LG["L_TS"], 0.90, 1.20
 TERCAS = LG["s_tercas"]
-NOS = [TERCAS[k] for k in range(0, len(TERCAS), 2)]
+NOS = [TERCAS[k] for k in LG["idx_nos_x"]]                      # rev06: nós do X nas terças 0, 8, 15
 ALCAS = LG["alcas"]
 SEC = [(-0.20, 0), (0.20, 0), (0.20, 0.15), (0.075, 0.23), (0.075, 0.70), (0.20, 0.78), (0.20, 0.90),
        (-0.20, 0.90), (-0.20, 0.78), (-0.075, 0.70), (-0.075, 0.23), (-0.20, 0.15)]

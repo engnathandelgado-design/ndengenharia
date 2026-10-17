@@ -125,6 +125,8 @@ def dados(mk):
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 102,5 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
         ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
+    if mk in ("PL-07", "PL-08"):                                              # rev06: última terça do lado E apoia no recuo do canto
+        ins.append(["ES-1F", "2 barras roscadas M20 A36 L=520 c/ gancho (ST-1F da última terça)", 2, "topo do recuo, x = −22,3 e −16,3 cm do eixo E, no eixo da linha"])
     ins.append(["AL-2", "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN", 2, "face A: 320 cm do topo e 230 cm da base"])
     tipos = sorted(set(c["tipo"] for c in cons))
     lin = "fachada " + ("1" if "L1" in pos else "9") if mk.startswith("PF") else ("eixo E" if lado_e else "eixo A")

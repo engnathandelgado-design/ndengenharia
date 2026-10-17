@@ -13,6 +13,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Letsara rev06: confirmar a intensidade de chuva da cidade (NBR 10844 tab. 5; adotado 200 mm/h) e a rede de drenagem das 9 descidas Ø200; desenhar os insertos IL-1 nas vistas dos pilares PG e a CL-P em detalhe próprio; conferir com a fábrica os insertos IT-P no fundo da TS-01A entre as cordoalhas; rodar os pilares da família 40×60 com os esforços do modelo integrado (uso 0,66).
+
 - [ ] Letsara: confirmar com o fornecedor o peso dos painéis solares (0,15 kN/m²) e a capacidade do trilho TR-1 / bucha BR-1 (≥ 12,4 kN por ponto); confirmar com a fábrica a cabeceira de 1105 kN da placa e a furação nova da grade da TS-01.
 - [ ] Letsara rev04: fábrica comprovar controle de pré-fabricado (12.1.2) para o cobrimento de 2 cm das placas; TRRF do Corpo de Bombeiros; catálogo TR-2/BR-2 (≥ 40 kN) da CT-1; colarinho dos cálices no projeto de fundações.
 - [ ] Letsara: planilha de custo dos pilares com as quantidades da rev03 e o preço do C50.
@@ -49,6 +51,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] Letsara rev06 (17/10/2026): modelo integrado r05 + otimização do X (DEC-024), 15 espaços de terça e calha do eixo A (DEC-025), COB03, PG-01 a PG-04, ST-1V-R, memória MC06 rev06, entregas rev06.
 - Letsara rev05: terças Z METSEC contínuas por transpasse, sem mão-francesa (DEC-023); estudo de terças (Ue, Z, C — Isoeste e METSEC).
 - Letsara: apoios horizontais e encaixes das vigas inclinadas (DEC-022).
 - Letsara: VB 15 × 60 com dente Gerber e CP-VB escondido (DEC-021).

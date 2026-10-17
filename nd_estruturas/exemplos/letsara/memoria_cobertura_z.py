@@ -1,4 +1,4 @@
-"""Memória de cálculo ND-LET-MC06 (PDF) — cobertura metálica rev05: terças Z 302 METSEC contínuas por transpasse (METLAP),
+"""Memória de cálculo ND-LET-MC06 (PDF) — cobertura metálica rev06: terças Z 302 METSEC contínuas por transpasse (METLAP),
 apoios sem mão-francesa, emendas, escoras, correntes, suporte ST-1P e esperas. Lê cobertura_metalica.json e estudo_tercas_sem_mf.json."""
 import json
 from pathlib import Path
@@ -60,9 +60,9 @@ fig.tight_layout()
 FIG = AQ / "mc06_envoltoria.png"
 fig.savefig(FIG); plt.close(fig)
 
-doc = SimpleDocTemplate(str(AQ / "ND-LET-MC06-COBERTURA-rev05.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
+doc = SimpleDocTemplate(str(AQ / "ND-LET-MC06-COBERTURA-rev06.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
                         bottomMargin=15 * mm, title="Letsara — memória MC06: cobertura metálica (terças Z contínuas)", author="ND Engenharia")
-E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC06 (rev05)", T1),
+E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC06 (rev06)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marque Engenharia). Assunto: terças da cobertura sem mão-francesa — perfil Z METSEC contínuo "
        "por transpasse (METLAP), ligações terça × viga, emendas, escoras do contraventamento, correntes, suporte ST-1P e esperas. "
        "17/10/2026. Projeto da ND Engenharia — para aprovação."),
@@ -115,12 +115,34 @@ E += [Paragraph("4. Ligações: emenda por transpasse e apoio sem mão-francesa"
         f"TRd = min(tração do M12 {f(ap['Ft_Rd'])} kN; arrancamento da alma pela arruela Ø24 {f(ap['arrancamento_alma_Rd'])} kN, AISI S100-16 J6.2.2). "
         "A torção de apoio do Z (carga no meio da aba superior, a 45 mm da alma) é resistida pelo binário das 2 linhas de parafusos — dispensa a mão-francesa.")]
 
-E += [Paragraph("5. Terças escoras do contraventamento (NBR 14762:2010 9.9)", T2), P(te["nota"] + ".")]
-lin = [["vão", "faixa", "vento", "Nd (kN)", "NcRd", "Md (kN·m)", "MRd", "amplif.", "interação"]]
-for e_ in te["por_vao"]:
-    lin.append([e_["vao"], e_["faixa"], e_["vento"], f(e_["Nd"]), f(e_["NcRd"]), f(e_["Md"], 2), f(e_["MRd"], 2), f(e_["amplificacao"], 3), f(e_["interacao"], 3)])
-E += [tab(lin, [14, 26, 14, 16, 16, 20, 16, 16, 18]),
-      P(f"Governa o vão {te['vao_governante']}, linha x = {f(te['linha_governante_x_m'], 2)} m ({te['faixa_governante']}): interação {f(te['interacao'], 3)} ≤ 1 — {ok(te['ok'])}.")]
+MI_ = json.loads((AQ / "modelo_integrado_r05.json").read_text(encoding="utf-8"))["envoltoria"]
+EST_ = json.loads((AQ / "estudo_contraventamento_integrado.json").read_text(encoding="utf-8"))
+CX_, S9_, LP_, CH_ = CB["contraventamento"], CB["ST1V_R"], CB["ligacao_portoes"], json.loads((AQ / "calha.json").read_text(encoding="utf-8"))
+E += [Paragraph("5. Modelo integrado e contraventamento (DEC-024 / DEC-025)", T2),
+      P("Toda a estrutura num modelo 3D OpenSeesPy (modelo_integrado_r05.py): pilares engastados no cálice com P-Delta e rigidez 0,4 EciIc, TS-01, I130, "
+        "VB 15×60, vigas e laje do mezanino como diafragma rígido, terças Z contínuas (2·EI no transpasse) apoiadas em cada ST-1P/ST-1V por mola, correntes, "
+        "tirantes rígidos, diagonais de ancoragem e X Ø16 só à tração; cabeça dos pilares dos portões ligada em y à TS-01. 33 combinações ELU com vento NBR 6123 "
+        "em 4 direções, Cpi por compartimento (anexo, área aberta, pavilhão), excentricidade 0,075 a/b, desaprumo H/400 e a carga da calha cheia na 1ª terça. "
+        "Validação: equilíbrio vertical e horizontal e momentos da terça contra viga contínua (validacao_modelo_integrado.json)."),
+      P("Estudo de 14 arranjos de X no modelo integrado (estudo_contraventamento_integrado.json): o X só nos vãos vizinhos ao oitão (rev05) não trabalha; "
+        "o adotado é X nos 5 vãos do pavilhão (4-5 a 8-9), painéis de 8 e 7 espaços de terça (≈ 45°). 15 espaços de terça por meia água (c/1,263 m): "
+        "1ª terça com 40 cm livres para a calha no eixo A e os pilares B e D das fachadas entre duas terças.")]
+lin = [["arranjo (painel 8)", "diag.", "kg", "pilar uso", "M base", "terça"]]
+for r_ in EST_:
+    if r_["painel"] == 8 and len(r_["vaos"]) in (0, 2, 3, 5, 8):
+        lin.append([", ".join(r_["vaos"]) or "sem X", f"{r_['n_diagonais']}", f"{r_['kg_X']}", f(r_["pilar_uso"], 3), f(r_["M_base"], 0), f(r_["terca_it"], 3)])
+E += [tab(lin, [60, 16, 16, 20, 20, 18]),
+      P(f"Resultado final (arranjo adotado, 15 espaços): terça {f(MI_['terca']['it'], 3)} (vão {MI_['terca']['vao']}, x = {f(MI_['terca']['x'], 2)} m, N {f(MI_['terca']['N'])} kN, "
+        f"My {f(MI_['terca']['My'], 2)} kN·m); pilares uso {f(MI_['pilar_uso_max'], 3)}; momento na base {f(MI_['M_base_max'])} kN·m; X: Td {f(CX_['T_diag_d'], 1)} kN ≤ "
+        f"{f(CX_['NtRd_16'], 1)} kN (Ø16, uso {f(CX_['uso_diag'], 3)}); correntes uso {f(MI_['usos']['corrente'], 3)}; diagonais de ancoragem uso {f(MI_['usos']['diagonal'], 3)}."),
+      P(f"ST-1V-R (VB do eixo 9): escora até {f(S9_['Fy_d'], 1)} kN ao longo da terça; 2 esperas M20 hef 400 + grampo U Ø10 — aço {f(S9_['aco']['interacao'], 3)}, "
+        f"concreto {f(S9_['concreto']['interacao'], 3)} (sem grampo a ruptura de borda daria {f(S9_['concreto']['phiVn_sem_grampo'], 1)} kN). "
+        f"ST-1P: grampo U Ø10 em cada ES-1 (interação {f(ch['ST-1P']['interacao'], 3)})."),
+      P(f"Pilares dos portões (PG-01 a PG-04): cabeça a 2 cm da TS-01, 2 cantoneiras CL-P por pilar; Fd {f(LP_['Fd_max'], 1)} kN; parafusos {f(LP_['parafusos']['uso'], 3)}, "
+        f"insertos da TS-01 {f(LP_['insertos_TS']['uso'], 3)}, inserto do pilar {f(LP_['inserto_pilar']['uso'], 3)}, cantoneira {f(LP_['cantoneira']['uso'], 3)}."),
+      P(f"Calha do eixo A (NBR 10844:1989, ND-LET-COB03): I = {f(CH_['chuva']['I_mm_h'], 0)} mm/h (confirmar), {f(CH_['contribuicao']['A_por_m_m2'], 2)} m²/m; calha "
+        f"300 × 150 a 0,5 %: {f(CH_['calha']['Q_cap_L_s'], 1)} L/s ≥ {f(CH_['contribuicao']['Q_lado_L_s'], 2)} L/s (uso {f(CH_['calha']['uso'], 3)}); 9 descidas Ø200: "
+        f"uso {f(CH_['descidas']['uso'], 3)}; suportes SC-1 uso {f(CH_['suportes']['uso'], 3)}.")]
 
 E += [Paragraph("6. Correntes, tirantes rígidos e diagonais (AISI S100-16 D3.2)", T2),
       P(f"Terça Z: força lateral por corrente P = W·(Ixy/Ix) + componente do caimento 3 % (Ixy/Ix = {f(cr['Ixy_sobre_Ix'], 3)}), acumulada nas terças da meia água "
@@ -129,7 +151,7 @@ E += [Paragraph("6. Correntes, tirantes rígidos e diagonais (AISI S100-16 D3.2)
 
 E += [Paragraph("7. Suporte ST-1P e esperas no concreto", T2),
       P(f"ST-1P (chapa dobrada 9,5 A36) no apoio interno: arrancamento de cálculo {f(st['reacao_suc_kN'], 2)} kN (as 2 terças do transpasse); flexão da aba "
-        f"uso {f(st['aba']['uso'], 3)}; 2 esperas ES-1 M16: tração {f(st['esperas']['Td'], 2)} kN e corte {f(st['esperas']['Vd'], 2)} kN → interação {f(st['esperas']['interacao'], 3)} "
+        f"uso {f(st['aba']['uso'], 3)}; 2 esperas ES-1 M16, com os esforços de cada cleat do modelo integrado: interação {f(MI_['ST1P_grupos']['ST-1P']['it'], 3)} "
         "(NBR 8800:2008 6.3.3).")]
 lin = [["espera (ACI 318-19 cap. 17, C50 fissurado)", "descrição", "uso / interação"]]
 for k, d in ch.items():

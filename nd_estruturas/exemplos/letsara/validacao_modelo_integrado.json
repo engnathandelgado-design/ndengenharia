@@ -1,22 +1,22 @@
 {
  "vertical": {
-  "reacoes": 14334.0,
-  "cargas": 14335.0,
-  "dif_pct": -0.007
+  "reacoes": 14346.8,
+  "cargas": 14299.7,
+  "dif_pct": 0.329
  },
  "horizontal_y": {
-  "reacoes": 278.8,
-  "vento": 278.8,
-  "dif_pct": 0.0
+  "reacoes": 253.7,
+  "vento": 253.7,
+  "dif_pct": -0.0
  },
  "terca_linha8": {
   "M_apoio_L4": {
-   "integrado": 10.01,
-   "viga_continua": 9.27
+   "integrado": 10.56,
+   "viga_continua": 9.71
   },
   "M_vao_4_5": {
-   "integrado": 3.83,
-   "viga_continua": 3.84
+   "integrado": 4.0,
+   "viga_continua": 4.02
   }
  }
 }

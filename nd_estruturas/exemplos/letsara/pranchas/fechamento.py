@@ -127,7 +127,10 @@ def desenhar_elev(pr, V, origem, esc):
     vv = pr.vista(f"VISTA {V}", origem, esc, titulo=d["titulo"], subtitulo="peças numeradas na ordem de produção e montagem (vão a vão, de baixo para cima)", unidade="cm")
     nomes = d.get("nomes_pil")
     for i, (s, b, _) in enumerate(d["pil"]):
-        zt = 7500 if nomes and nomes[i] == "P10" else Z_TOPO
+        zt = Z_TOPO
+        if nomes and nomes[i] in ("P9", "P10", "P12"):                # rev06: cabeça a 2 cm do fundo da TS-01 (ligação em y)
+            _lg = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
+            zt = round((_lg["Z0_TS"] + 0.03 * s / 1000) * 1000 - 20)
         vv.ret(s - b / 2, -500, b, zt + 500, "OCULTA")
         if nomes:
             vv.texto((s, zt + 200), nomes[i], "min", "BOTTOM_CENTER")

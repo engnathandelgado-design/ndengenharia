@@ -12,7 +12,7 @@ H = 900
 DX = round(H * I_CAI)                                 # ponta a prumo: topo deslocado 27 mm
 HD, LN = 0, 0                                         # rev03: sem dente Gerber (apoio direto no assento do pilar / topo da I130)
 N_ESP = len(LG["s_tercas"]) - 1
-PASSO_T = round((L - 510) / N_ESP)
+PASSO_T = round(LG["passo_tercas"] * 1000)
 P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,
          fck=50, fckj=35, n_cord=8, y_cord=71.875, x_cord=[-155, -40, 0, 40, 155], x_cord2=[-40, 0, 40], y1=55, y2=100,
          isol=dict(n=2, x=[-40, 40], L=3000),
@@ -20,7 +20,7 @@ P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, m
          tb=dict(d=50, y=(-100, 100), s_ext=round(LG["PINO_TS"] * 1000, 1), s_cen=round(LG["PINO_TS"] * 1000, 1), L=900),   # rev04: simétrico
          cunha=dict(L=round(LG["CUNHA"] * 1000), e=round(LG["DEGRAU_CUNHA"] * 1000)),   # rev04: cunha no fundo das pontas (face de apoio horizontal)
          alcas=[2100, 7600, L - 7600, L - 2100], estoque=[2100, L - 2100],
-         tercas=[255 + PASSO_T * k for k in range(N_ESP + 1)], nos=[255 + 2 * PASSO_T * k for k in range(N_ESP // 2 + 1)],
+         tercas=[round(s * 1000) for s in LG["s_tercas"]], nos=[round(LG["s_tercas"][i] * 1000) for i in LG["idx_nos_x"]],   # rev06: 15 espaços; nós do X nas terças 0, 8, 15
          neo_ext=round((LG["NEO_EXT"]["xc"] - LG["X_PONTA_ESQ"]) * 1000), neo_cen=round((LG["X_PONTA_CEN"] - LG["NEO_CEN"]["xc"]) * 1000),
          pino_x=round((LG["NEO_EXT"]["xc"] - LG["X_PONTA_ESQ"]) * 1000), L_pista=60, sig_pi=1453, x_mac=1200)
 C = Concreto(P["fck"])
