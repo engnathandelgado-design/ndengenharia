@@ -6,6 +6,8 @@ import json
 import math
 import fechamento as FCH
 import geo_fixacao as GF
+gg = lambda v: f"{v:g}".replace(".", ",")
+AS = GF.C["a_solda"]
 import iso_nd as I
 from prancha_nd import Prancha
 
@@ -58,13 +60,13 @@ va.cota_h([0, yn], co["z1"], 8, total=False)
 va.cota_h([y_tip - C["L_frontal"], y_tip], zf, -22, total=False)
 va.cota_v([co["z0"], -al["h_raiz"], po["z0"], zf, -me["t"], 0, HX["m"], HX["m"] + HX["m_fina"], hb, G0, co["z1"]], 0, -12, total=False)
 va.cota_v([0, de["h"]], de["y0"] + de["t"], 26, total=False)
-I.solda(va, (co["t"], -40), (16, -30), a=6, tipo="filete", lado="ambos", cauda="alma × costas")
-I.solda(va, (co["t"], -me["t"] / 2), (-30, 36), a=6, tipo="filete", lado="ambos", cauda="mesa × costas")
-I.solda(va, (de["y0"], 4), (-28, 52), a=8, tipo="filete", lado="seta", contorno=True, cauda="dentes × mesa")
-I.solda(va, (po["y0"], po["z0"] + 4), (20, -40), a=5, tipo="filete", lado="seta", contorno=True, cauda="ponta × almas e mesa")
+I.solda(va, (co["t"], -40), (16, -30), a=AS["alma_costas"], tipo="filete", lado="ambos", cauda="alma × costas")
+I.solda(va, (co["t"], -me["t"] / 2), (-30, 36), a=AS["mesa_costas"], tipo="filete", lado="ambos", cauda="mesa × costas")
+I.solda(va, (de["y0"], 4), (-28, 52), a=AS["dentes_mesa"], tipo="filete", lado="seta", contorno=True, cauda="dentes × mesa")
+I.solda(va, (po["y0"], po["z0"] + 4), (20, -40), a=AS["ponta"], tipo="filete", lado="seta", contorno=True, cauda="ponta × almas e mesa")
 I.solda(va, (po["y0"] - HX["m"], zf - 10), (-34, -58), a=5, tipo="filete", lado="seta", contorno=True, cauda="porca frontal × ponta")
-I.solda(va, (yn - e2, 4), (-40, 70), a=4, tipo="filete", lado="seta", cauda="porca × mesa, 3 faces")
-I.solda(va, (0, co["z0"] + 30), (-24, -20), a=6, tipo="filete", lado="seta", campo=True, comp=co["z1"] - co["z0"], cauda="OBRA: costas × CE-1, 2 lados verticais")
+I.solda(va, (yn - e2, 4), (-40, 70), a=AS["porca"], tipo="filete", lado="seta", cauda="porca × mesa, 3 faces")
+I.solda(va, (0, co["z0"] + 30), (-24, -20), a=FXJ["solda"]["filete_mm"], tipo="filete", lado="seta", campo=True, comp=co["z1"] - co["z0"], cauda="OBRA: costas × CE-1, 2 lados verticais")
 
 # ================================================================== VISTA FRONTAL (do lado da placa) 1:1,5
 vf = pr.vista("VISTA FRONTAL", (Q[0] + 300, Q[1] + 410), 1.5, titulo="VISTA FRONTAL", subtitulo="pelo lado da placa", unidade="mm")
@@ -113,33 +115,33 @@ for k, p in anc.items():
 
 # ================================================================== peças 1:1,5
 yP = Q[1] + 200
-p10 = pr.vista("ITEM 10 — COSTAS", (Q[0] + 30, Q[1] + 60), 1.5, titulo="ITEM 10 — COSTAS", subtitulo="CH 16 A572-50", unidade="mm")
+p10 = pr.vista("ITEM 10 — COSTAS", (Q[0] + 30, Q[1] + 60), 1.5, titulo="ITEM 10 — COSTAS", subtitulo=f"CH {gg(co['t'])} A572-50", unidade="mm")
 ch(p10, 0, 0, co["b"], co["z1"] - co["z0"])
 p10.ret((co["b"] - me["b"]) / 2, co["z1"] - co["z0"] - 30 - me["t"], me["b"], me["t"], "OCULTA")
 p10.cota_h([0, (co["b"] - me["b"]) / 2, (co["b"] + me["b"]) / 2, co["b"]], 0, -8, total=True)
 p10.cota_v([0, co["z1"] - co["z0"] - 30 - me["t"], co["z1"] - co["z0"] - 30, co["z1"] - co["z0"]], co["b"], 10, total=False)
 p10.chamada((co["b"] / 2, co["z1"] - co["z0"] - 38), (16, -12), "traçar a mesa")
 
-p11 = pr.vista("ITEM 11 — ALMA", (Q[0] + 140, Q[1] + 105), 1.5, titulo="ITEM 11 — ALMA (2×)", subtitulo="CH 9,5 A572-50", unidade="mm")
+p11 = pr.vista("ITEM 11 — ALMA", (Q[0] + 140, Q[1] + 105), 1.5, titulo="ITEM 11 — ALMA (2×)", subtitulo=f"CH {gg(al['t'])} A572-50", unidade="mm")
 pa = [(y - al["y0"], z + me["t"]) for y, z in GF.alma_poli()]
 p11.poli(pa, "METALICA", fechada=True); p11.hachura(pa, "ANSI31", HT, "METALICA")
 p11.cota_h([0, al["y1"] - al["y0"]], -(al["h_raiz"] - me["t"]), -8, total=False)
 p11.cota_v([-(al["h_raiz"] - me["t"]), -(al["h_ponta"] - me["t"]), 0], al["y1"] - al["y0"], 10, total=False)
 
-p12 = pr.vista("ITEM 12 — MESA", (Q[0] + 140, Q[1] + 175), 1.5, titulo="ITEM 12 — MESA", subtitulo="CH 16 A572-50, furo Ø18", unidade="mm")
+p12 = pr.vista("ITEM 12 — MESA", (Q[0] + 140, Q[1] + 175), 1.5, titulo="ITEM 12 — MESA", subtitulo=f"CH {gg(me['t'])} A572-50, furo Ø18", unidade="mm")
 ch(p12, 0, 0, me["b"], me["y1"] - me["y0"])
 p12.circulo((me["b"] / 2, yn - me["y0"]), 9, "METALICA")
 p12.cota_h([0, me["b"] / 2, me["b"]], 0, -8, total=False)
 p12.cota_v([0, yn - me["y0"], me["y1"] - me["y0"]], me["b"], 10, total=False)
 p12.cota_diam((me["b"] / 2, yn - me["y0"]), 9, ang=135)
 
-p13 = pr.vista("ITEM 13 — DENTE", (Q[0] + 262, Q[1] + 175), 1.5, titulo="ITEM 13 — DENTE (2×)", subtitulo="CH 19 A572-50", unidade="mm")
+p13 = pr.vista("ITEM 13 — DENTE", (Q[0] + 262, Q[1] + 175), 1.5, titulo="ITEM 13 — DENTE (2×)", subtitulo=f"CH {gg(de['t'])} A572-50", unidade="mm")
 ch(p13, 0, 0, de["b"], de["h"])
 p13.cota_h([0, de["b"]], 0, -8, total=False)
 p13.cota_v([0, de["h"]], de["b"], 10, total=False)
-p13.chamada((de["b"] / 2, de["h"]), (6, 8), "esp. 19")
+p13.chamada((de["b"] / 2, de["h"]), (6, 8), f"esp. {gg(de['t'])}")
 
-p14 = pr.vista("ITEM 14 — CHAPA DE PONTA", (Q[0] + 230, Q[1] + 95), 1.5, titulo="ITEM 14 — CHAPA DE PONTA", subtitulo="CH 9,5 A572-50, furo Ø18", unidade="mm")
+p14 = pr.vista("ITEM 14 — CHAPA DE PONTA", (Q[0] + 230, Q[1] + 95), 1.5, titulo="ITEM 14 — CHAPA DE PONTA", subtitulo=f"CH {gg(po['t'])} A572-50, furo Ø18", unidade="mm")
 hp = po["z1"] - po["z0"]
 ch(p14, 0, 0, po["b"], hp)
 p14.circulo((po["b"] / 2, zf - po["z0"]), 9, "METALICA")
@@ -194,9 +196,9 @@ pr.notas(XC, y - 4, [
     "Medidas em mm. Tolerâncias gerais NBR ISO 2768-1 classe m; furos Ø18 ± 0,3; esquadro mesa × costas 90° ± 0,5°.",
     "Corte a laser ou plasma de alta definição; peças isentas de rebarbas e arestas cortantes; quebrar cantos vivos 1 mm.",
     "Soldagem de oficina GMAW (MIG) ER70S-6 Ø1,0 com Ar + 20 % CO₂ (ou FCAW E71T-1 com CO₂), soldador qualificado (AWS D1.1); soldas contínuas, isentas de trincas, porosidade e mordeduras; inspeção visual 100 %.",
-    "Sequência: (1) almas e mesa nas costas (gabarito, esquadro); (2) chapa de ponta entre as almas; (3) dentes sobre as almas; (4) porcas (15) centradas nos furos com um parafuso-guia, solda 4 em 3 faces alternadas (nível) e 5 no contorno (frontal), sem respingo na rosca.",
+    "Sequência: (1) almas e mesa nas costas (gabarito, esquadro); (2) chapa de ponta entre as almas; (3) dentes sobre as almas; (4) porcas (15) centradas nos furos com um parafuso-guia, solda " + gg(AS["porca"]) + " em 3 faces alternadas (nível) e " + gg(AS["ponta"]) + " no contorno (frontal), sem respingo na rosca.",
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); porcas soldadas com rosca sobremedida (repassar a rosca depois da galvanização). Parafusos galvanizados a fogo, prisioneiro zincado.",
-    f"Solda de obra só costas × CE-1: filete 6 E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
+    f"Solda de obra só costas × CE-1: filete {FXJ['solda']['filete_mm']:g} E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
     f"Folgas verificadas no pior caso das tolerâncias (afastamento {T['a']:g} ± {T['a_tol']:g}, G {G0:g} ± {T['G_tol']:g}, posição ± {T['x_tol']:g}): engate aba × dente ≥ {MO['folgas_mm']['engate aba–dente com G máximo (z)']:g}, rosca do nível ≥ 16 fios-mm, janela de montagem ≥ 15 (memória ND-LET-MC07).",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP03")

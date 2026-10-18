@@ -76,10 +76,17 @@ lin = [["Armadura", "Calculada (mm²)", "Adotada"],
        ["Costura", f"{DN['resultado']['NBR']['As_cost']} / {DN['resultado']['PCI']['Ah']}", "N5 " + DA["costura"].split(" nos")[0]],
        ["Vertical do nariz", f"{DA['Av']}", "N7 1 estribo Ø6,3 (2 ramos, 62 mm²)"],
        ["Ancoragem da base do nicho", "—", "N6 1 estribo horizontal Ø6,3"]]
+GC, GN = FX["GEO"]["CS1"], FX["GEO"]["NC1"]
+MNC = json.loads((AQ / "mef_nc1.json").read_text(encoding="utf-8"))
+_mc = json.loads((AQ / "mef_cs1.json").read_text(encoding="utf-8")); MCS = {}
+for _c in _mc["casos"].values():
+    for _p, _v in _c["uso_parte"].items():
+        MCS[_p] = max(MCS.get(_p, 0), _v)
+g_ = lambda v: f"{v:g}".replace(".", ",")
 E += [tab(lin, [50, 40, 80]),
       Paragraph("4. Console CS-1 — MEF de casca das chapas + NBR 8800:2008", T2),
-      P(f"Costas 16 × 120 × 130 (só a altura da ligação: z −100 a +30), 2 almas 9,5 (raiz 80, ponta 50, braço até 64 mm do plano da CE-1), mesa 16 × 48 × 80, 2 dentes 19 × 13 × 32 sobre as almas, "
-        f"chapa de ponta 9,5 × 34 × 60,5 entre as almas com porca soldada do prisioneiro frontal; A572-50 (fy 345). Engaste nas linhas de solda; chapa de ponta incluída no modelo; "
+      P(f"Costas {g_(GC['costas']['t'])} × 120 × {g_(GC['costas']['z1'] - GC['costas']['z0'])} (só a altura da ligação), 2 almas {g_(GC['alma']['t'])} (raiz 80, ponta 50, braço até 64 mm do plano da CE-1), mesa {g_(GC['mesa']['t'])} × 80, 2 dentes {g_(GC['dente']['t'])} × 13 × 32 sobre as almas, "
+        f"chapa de ponta {g_(GC['ponta']['t'])} entre as almas com porca soldada do prisioneiro frontal; A572-50 (fy 345). Engaste nas linhas de solda; chapa de ponta incluída no modelo; "
         f"carga do M16 de nível na área da porca soldada; momento dos dentes como binário vertical sobre as almas. "
         f"Conferência à mão: almas na raiz σ = {f(FX['console_mao']['sigma_almas_MPa'])} MPa, τ = {f(FX['console_mao']['tau_almas_MPa'])} MPa.")]
 lin = [["Caso", "von Mises máx (MPa)", "p99 (MPa)", "flecha (mm)"]] + [[k, f(v["vm_max_MPa"]), f(v["vm_p99_MPa"]), f(v["flecha_mm"], 3)] for k, v in CS.items() if isinstance(v, dict)]
@@ -92,11 +99,20 @@ E += [tab(lin, [60, 36, 30, 30]), P(CS["criterio"] + f" — uso {f(CS['uso'], 3)
         f"prisioneiro M16 × 45 frontal N = {f(FX['parafusos_ajuste']['M16_frontal']['N_Sd_kN'])} kN ≤ {f(FX['parafusos_ajuste']['M16_frontal']['N_Rd_kN'])} kN; contato da cabeça do M16 de nível no teto: {f(FX['parafusos_ajuste']['contato_teto_nicho']['sigma_MPa'])} MPa."),
       Paragraph("4a. Nicho NC-1 — caixa fechada e ancoragem no concreto", T2),
       P(f"{NC['caixa']}. Caminho das forças: peso → M16 de nível → teto → nariz (compressão {f(NC['teto_compressao']['sigma_MPa'])} ≤ fcd {f(NC['teto_compressao']['fcd_MPa'])} MPa); "
-        f"sucção → 2 dentes → 2 abas laterais (σ {f(NC['aba']['sigma_MPa'])} MPa, uso {f(NC['aba']['uso'], 3)}) → teto → grampos + N5; sobrepressão → prisioneiro frontal → fundo 12,5 como viga entre teto e base "
-        f"(M = {f(NC['fundo']['M_kNmm'], 0)} kN·mm, σ {f(NC['fundo']['sigma_MPa'])} ≤ {f(NC['fundo']['lim_MPa'])} MPa, uso {f(NC['fundo']['uso'], 3)}) → teto e base → grampos + N5 / N6. "
+        f"sucção → 2 dentes → 2 abas laterais (σ {f(NC['aba']['sigma_MPa'])} MPa, uso {f(NC['aba']['uso'], 3)}) → teto → grampos + N5; sobrepressão → prisioneiro frontal → fundo entre teto e base → teto e base → grampos + N5 / N6 (espessuras de cada chapa pelo MEF da seção 4c). "
         f"A parede de concreto de 40 mm atrás do fundo, sozinha, não passaria ({f(NC['sem_caixa_parede_40mm']['V_Rd_kN'])} < {f(NC['sem_caixa_parede_40mm']['F_kN'])} kN) e não é contada. "
         f"Ancoragem do teto: F = {f(NC['ancoragem_teto']['F_kN'])} kN contra N5 {f(NC['ancoragem_teto']['N5_phi_kN'])} kN + grampos {f(NC['ancoragem_teto']['grampos_phi_kN'])} kN (uso {f(NC['ancoragem_teto']['uso'], 3)}); "
-        f"da base: F = {f(NC['ancoragem_base']['F_kN'])} kN (uso {f(NC['ancoragem_base']['uso'], 2)}). Parede lateral 3 mm sem esforço (só fecha o concreto). Armação da ponta: ND-LET-PP01; fabricação: ND-LET-PP02."),
+        f"da base: F = {f(NC['ancoragem_base']['F_kN'])} kN (uso {f(NC['ancoragem_base']['uso'], 2)}). Parede lateral fina (2 mm): trabalha junto com a caixa; chapa e soldas verificadas no MEF (seção 4c). Armação da ponta: ND-LET-PP01; fabricação: ND-LET-PP02."),
+      Paragraph("4c. Espessura de cada chapa — elementos finitos (rev06d, DEC-030)", T2),
+      P("Cada chapa com a menor espessura comercial que atende: console pelo MEF de casca dedicado (mef_cs1.py, 3 casos, malhas de 4 e 2 mm); nicho pelo MEF de casca apoiado no concreto por molas só de compressão, "
+        "com os grampos como molas e sem contar a parede de 40 mm atrás do fundo (mef_nc1.py). von Mises nas faces (EN 1993-1-1:2005 6.2.1(5)), percentil 99 de cada chapa, ≤ fy/γa1. "
+        "Soldas do console e do nicho: esforços da casca na borda de cada chapa junto à junta (N⊥/2 + M⊥/t, com os cisalhamentos), 2 filetes por junta, força por mm = maior média em 10 mm de cordão "
+        "(o pico do canto reentrante depende da malha), ≤ 0,6·fw·Aw/γw2 (NBR 8800:2008 6.2.5.1, E70, γw2 1,35); parede de 2 mm com filete 2 dos dois lados (AWS D1.3, chapa fina). "
+        "A mesa do console fica em 16 mm pela geometria (com G mínimo a ponta do M16 × 45 de nível não pode passar da face de baixo da mesa), não pela tensão."),
+      tab([["Peça", "Chapa", "Espessura (mm)", "Uso no MEF"]] + [["CS-1", k, g_(GC[{"costas": "costas", "almas": "alma", "mesa": "mesa", "ponta": "ponta", "dentes": "dente"}[k]]["t"]), f(v, 2)] for k, v in MCS.items()]
+          + [["CS-1", "solda " + k.replace("_", " × "), "filete " + g_(v["a_mm"]), f(max(c["solda"][k]["uso"] for c in _mc["casos"].values()), 2)] for k, v in _mc["casos"]["succao"]["solda"].items()]
+          + [["NC-1", k, g_(v), f(MNC["uso"][k], 2)] for k, v in MNC["T"].items()]
+          + [["NC-1", "solda " + k.replace("_", " × "), "filete " + g_(v["a_mm"]), f(max(MNC["casos"][c]["solda"][k]["uso"] for c in MNC["casos"]), 2)] for k, v in MNC["casos"]["succao"]["solda"].items()] + [["CE-1", "chapa de espera", g_(float(CE["flexao_chapa"]["t_mm"])), f(CE["flexao_chapa"]["sigma_MPa"] / CE["flexao_chapa"]["lim_MPa"], 2)]], [20, 40, 30, 30]),
       Paragraph("4b. Compatibilidade geométrica e janela de montagem", T2),
       P("Conferido no pior caso das tolerâncias (afastamento 25 ± 5, G 50 ± 10, posição do console ± 5): " + "; ".join(f"{k} {f(v, 1)}" for k, v in FX["montagem_CS1_NC1"]["folgas_mm"].items()) + " mm. A placa encosta com o teto do nicho R acima da posição final: " + "; ".join(f"{k}: R = {f(v[0], 0)} a {f(v[1], 1)}" for k, v in FX["montagem_CS1_NC1"]["janela_R_mm"].items()) + " mm (aba por cima dos dentes e base por baixo do braço, 5 mm de folga)."),
       Paragraph("5. Chapa de espera CE-1 no pilar (ACI 318-19 cap. 17, concreto fissurado)", T2),

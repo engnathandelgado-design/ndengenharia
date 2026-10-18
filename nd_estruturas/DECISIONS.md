@@ -284,3 +284,14 @@ Registro: no estudo apareceu que as placas vizinhas às faixas de janela (H, I, 
 Contexto: o Nathan observou que a chapa de 16 mm das costas só precisa existir na parte de cima, onde a carga da placa chega ao console.
 Estudo (calc_fixacao_placas + mef_cs1, alturas de 120 a 200 e espessuras 12,5 e 16): todas passam; a solda de campo vai de 0,23 (200) a 0,47 (120).
 Decisão: costas 16 × 120 × 130 (z −100 a +30): 20 mm abaixo da raiz das almas para o retorno da solda de oficina; solda de campo 2 × 130 (uso 0,42); espessura mantida em 16 (costas 0,33 no MEF; com 12,5 seria 0,52).
+
+## DEC-030 — Letsara: espessura de cada chapa da fixação das placas pelo cálculo (2026-10-18)
+
+Contexto: o Nathan pediu "só a chapa que precisa em cada lugar": as chapas laterais, de trás e de baixo do nicho poderiam ser finas; a de cima, que recebe o M16 de nível, grossa.
+Estudo: MEF de casca do nicho apoiado no concreto por molas só de compressão, com os grampos como molas e sem contar os 40 mm de concreto atrás do fundo (`mef_nc1.py`), e MEF de casca do console (`mef_cs1.py`); von Mises nas faces, percentil 99 por chapa, ≤ fy/γa1. Soldas verificadas linha a linha: força por mm na borda da chapa junto a cada cordão (N⊥/2 + M⊥/t com os cisalhamentos), média em 10 mm (o pico do canto reentrante depende da malha), ≤ 0,6·fw·Aw/γw2 (NBR 8800:2008 6.2.5.1).
+Decisão (menor chapa comercial que atende, usos do MEF):
+- NC-1: teto 12,5 (0,76; 9,5 daria 1,07), abas 12,5 (0,96; 9,5 daria 1,56), fundo 9,5 (0,73; 8 daria 1,02 — o prisioneiro frontal apoia nele, não pode ser fino), base 3 (0,82), parede lateral 2 A36 (0,69). A parede não é "sem esforço": na sucção ela trava o canto do teto na boca (414 N/mm na linha de solda); com filete 2 dos dois lados passa (0,86 → 0,71 na verificação final). Soldas: teto × fundo 5 (0,45), base × fundo 3 (0,37), parede 2 dos dois lados (0,71, AWS D1.3), aba × teto CJP + 6, grampos 3 × 20.
+- CS-1: costas 9,5 × 120 × 130 (0,88), almas 6,3 (0,74), mesa 16 (0,66 — fica em 16 pela geometria: com G mínimo a ponta do M16 × 45 de nível não pode passar da face de baixo da mesa; 12,5 falha na montagem), ponta 8 (0,86; 6,3 daria 1,25), dentes 19 (0,79). Soldas: alma × costas 5 (0,53), mesa × costas 8 (0,73; com 5 daria 1,16 e com 6, 0,97 — 8 para não depender da média de 10 mm), dentes × mesa 6 (0,84; era 8), ponta 5 (0,72). Solda de campo costas × CE-1 de 6 para 5 (mínimo AWS para 9,5; uso 0,50).
+- CE-1: 16 → 12,5 (σ 133 ≤ 227 MPa; 9,5 não passa).
+Economia: NC-1 3,92 → 3,05 kg (−349 kg nos 404), CS-1 4,50 → 2,44 kg (−812 kg), CE-1 15,8 → 12,3 kg (−935 kg nas 271) ≈ 2,1 t de aço.
+Sem teste automatizado: os dois MEF levam cerca de 1 e 2,5 min; `calc_fixacao_placas.py` lê os JSON e recusa espessura diferente ou uso > 1.

@@ -14,6 +14,7 @@ AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 FX = json.load(open(AQ + "fixacao_placas.json"))
 G = FX["GEO"]
 C, N, HX, T = G["CS1"], G["NC1"], G["hex"], G["tol"]
+TCE = G.get("CE1", {}).get("t", 16.0)
 RHO = 7.85e-6
 A_NOM, G_NOM = T["a"], T["G"]
 DZ = -(N["H"] - N["t_teto"]) + G_NOM            # z_CS = z_NC + DZ
@@ -50,7 +51,7 @@ def nc1_itens():
         (1, "TETO", f"CH {tt:g} × {pf:g} × {B:g}", "ASTM A572 Gr.50", 1, kg_ch(B, pf, tt)),
         (2, "BASE", f"CH {tb:g} × {pf:g} × {B:g}", "ASTM A572 Gr.50", 1, kg_ch(B, pf, tb)),
         (3, "FUNDO", f"CH {tf:g} × {B:g} × {H:g}", "ASTM A572 Gr.50", 1, kg_ch(B, H, tf)),
-        (4, "PAREDE LATERAL (sem esforço)", f"CH {tp:g} × {pf:g} × {H - tt - tb:g}", "ASTM A36", 1, kg_ch(pf, H - tt - tb, tp)),
+        (4, "PAREDE LATERAL", f"CH {tp:g} × {pf:g} × {H - tt - tb:g}", "ASTM A36", 1, kg_ch(pf, H - tt - tb, tp)),
         (5, "ABA E (lado da ponta)", f"CH {ta:g} × {ha:g} × {be:g}", "ASTM A572 Gr.50", 1, kg_ch(be, ha, ta)),
         (6, "ABA D", f"CH {ta:g} × {ha:g} × {bd:g}", "ASTM A572 Gr.50", 1, kg_ch(bd, ha, ta)),
         (7, "GRAMPO U DO TETO", f"RED Ø{N['d_gr']:g} × {L_gt:g} (desenv.)", "ASTM A36", 2, kg_red(N["d_gr"], L_gt)),
@@ -150,16 +151,16 @@ def placa_ponta(L=320.0, z0=-360.0, z1=260.0):
 
 # ------------------------------------------------------------------ CE-1, PT-1, PT-2
 def ce1_itens():
-    return [(20, "CHAPA DE ESPERA", "CH 16 × 330 × 380", "ASTM A36", 1, kg_ch(380, 330, 16)),
+    return [(20, "CHAPA DE ESPERA", f"CH {TCE:g} × 330 × 380", "ASTM A36", 1, kg_ch(380, 330, TCE)),
             (21, "PINO COM CABEÇA (stud)", "Ø16 × 150, cabeça Ø32 × 10 — ISO 13918 SD", "S235J2 + C450", 4, kg_red(16, 140) + kg_red(32, 10))]
 
 
 def ce1_solidos(explode=0.0):
-    S = [I.caixa(-190, 190, -16, 0, -165, 165, item=20, nome="CE-1")]
+    S = [I.caixa(-190, 190, -TCE, 0, -165, 165, item=20, nome="CE-1")]
     for x in (-120, 120):
         for z in (-140, 140):
-            S.append(I.cilindro((x, -16 - 140, z), "y", 8, 140, n=14, item=21, cor=I.CINZA_PAR).movido((0, -explode, 0)))
-            S.append(I.cilindro((x, -16 - 150, z), "y", 16, 10, n=18, item=21, cor=I.CINZA_PAR).movido((0, -explode, 0)))
+            S.append(I.cilindro((x, -TCE - 140, z), "y", 8, 140, n=14, item=21, cor=I.CINZA_PAR).movido((0, -explode, 0)))
+            S.append(I.cilindro((x, -TCE - 150, z), "y", 16, 10, n=18, item=21, cor=I.CINZA_PAR).movido((0, -explode, 0)))
     return S
 
 

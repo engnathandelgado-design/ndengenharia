@@ -125,9 +125,9 @@ d3 = pr.vista("DETALHE 3", (Q[0] + 110, Q[1] + 150), 2.0, titulo="DETALHE 3 — 
 ZB, ZT2 = -245.0, 130.0
 pil = [(-190, ZB), (0, ZB), (0, ZT2), (-190, ZT2)]
 d3.poli(pil, "CORTADO", fechada=True); d3.hachura(pil, "AR-CONC", 0.03)
-d3.chapa(-16, -55.5 - 165, 16, 330, 0.6)                                 # CE-1 embutida
+d3.chapa(-GF.TCE, -55.5 - 165, GF.TCE, 330, 0.6)                                 # CE-1 embutida
 for z in (-140, 140):
-    d3.ret(-16 - 140, -55.5 + z - 8, 140, 16, "METALICA")
+    d3.ret(-GF.TCE - 140, -55.5 + z - 8, 140, 16, "METALICA")
 d3.chapa(0, co["z0"], co["t"], co["z1"] - co["z0"], 0.6)
 d3.poli(GF.alma_poli(), "VISTA", fechada=True)
 d3.chapa(me["y0"], -me["t"], me["y1"] - me["y0"], me["t"], 0.6)
@@ -197,7 +197,7 @@ R_m = round((MOJ[0] + MOJ[1]) / 2)
 
 
 def esquema(v, dy, dz, seta=None):
-    v.chapa(-16, -55.5 - 165, 16, 330, 0.8)
+    v.chapa(-GF.TCE, -55.5 - 165, GF.TCE, 330, 0.8)
     v.chapa(0, co["z0"], co["t"], co["z1"] - co["z0"], 0.8)
     v.poli(GF.alma_poli(), "METALICA", fechada=True)
     v.chapa(me["y0"], -me["t"], me["y1"] - me["y0"], me["t"], 0.8)
@@ -268,7 +268,7 @@ tol = [["afastamento placa–pilar (a)", f"{T['a']:g} ± {T['a_tol']:g}", "prisi
 y = pr.tabela(XC, y - 4, "TOLERÂNCIAS E FOLGAS DE MONTAGEM (mm)", ["ITEM", "VALOR", "AJUSTE / OBS."], tol, [70, 60, 60], h_lin=5.0)
 seq = [
     "Topografia marca na CE-1 de cada pilar o nível do topo da mesa dos 2 consoles (cota do teto do nicho − 50).",
-    "Soldar os CS-1 na CE-1 (filete 6, 2 lados verticais, ND-LET-PP03), eixo a 70 do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
+    f"Soldar os CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a 70 do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
     "Regular em cada console o M16 de nível (topo da cabeça a G da mesa, 40 a 60) e o prisioneiro frontal (afastamento 25 ± 5); travar contraporca e trava química.",
     f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MO['janela_R_mm']['G=50'][0]:g} a {MO['janela_R_mm']['G=50'][1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",

@@ -16,6 +16,11 @@ def test_folgas_e_usos():
     assert fo["engate aba–dente com G máximo (z)"] >= 10
     for k in ("console_mef", "dentes_CS1", "solda"):
         assert R[k]["uso"] <= 1.0
-    assert R["nicho_NC1"]["fundo"]["uso"] <= 1 and R["nicho_NC1"]["aba"]["uso"] <= 1
+    # rev06d (DEC-030): chapas e soldas do nicho pelo MEF de casca (mef_nc1); a viga à mão do fundo é só limite superior
+    m = R["nicho_NC1"]["mef"]
+    assert m["atual"] and max(m["uso"].values()) <= 1
+    assert {"solda_teto_fundo", "solda_base_fundo", "solda_parede"} <= set(m["uso"])
+    c = R["console_mef_casca"]
+    assert c["uso"] <= 1 and max(c["soldas"].values()) <= 1
     d = R["dentes_CS1"]
     assert d["sigma_MPa"] == pytest.approx(6.9e3 * 27 / (13 * 19 ** 2 / 6), rel=0.02)

@@ -1,0 +1,224 @@
+<title>MEF do console CS-1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout: título, modelo 3D com controles à esquerda, leitura dos resultados à direita */
+:root{
+  --bg:#f3f4f2; --panel:#ffffff; --ink:#1d2327; --mut:#5d6870; --line:#d5d9d6; --steel:#a9470c; --acc:#1f6fb2; --three:#e9ece8;
+  --ok:#2e7d4f; --warn:#b26a00;
+  --f-disp:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif; --f-body:"Barlow",Arial,sans-serif; --f-mono:"JetBrains Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15191b;--panel:#1d2326;--ink:#e7ebe9;--mut:#9aa6ad;--line:#30393d;--steel:#e7853f;--acc:#7fb0f0;--three:#20272a;--ok:#6cc596;--warn:#e0a24a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15191b;--panel:#1d2326;--ink:#e7ebe9;--mut:#9aa6ad;--line:#30393d;--steel:#e7853f;--acc:#7fb0f0;--three:#20272a;--ok:#6cc596;--warn:#e0a24a;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1280px;margin:0 auto;display:grid;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;border-bottom:1px solid var(--line);padding-bottom:12px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(24px,3.2vw,34px);margin:0;text-wrap:balance}
+.sub{color:var(--mut);margin:2px 0 0}
+.tag{font-family:var(--f-mono);font-size:12px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.viewer{background:var(--three);border:1px solid var(--line);border-radius:6px;position:relative;overflow:hidden;aspect-ratio:4/3;max-width:100%}
+.viewer canvas{display:block;width:100%;height:100%}
+.vtools{position:absolute;left:10px;top:10px;display:flex;flex-wrap:wrap;gap:6px;right:10px}
+button{font:600 12.5px var(--f-body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:4px;padding:5px 9px;cursor:pointer}
+button[aria-pressed="true"]{border-color:var(--steel);color:var(--steel)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.legend{position:absolute;right:10px;bottom:30px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:11.5px}
+.legend .row{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.legend .sw{width:14px;height:11px;border-radius:2px}
+.wm{position:absolute;left:10px;bottom:8px;font-size:11px;font-style:italic;color:var(--mut)}
+.lbl{position:absolute;transform:translate(-50%,-100%);font-size:11.5px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:1px 6px;white-space:nowrap;pointer-events:none}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+h2{font-family:var(--f-disp);font-weight:600;font-size:19px;margin:0 0 6px}
+h3{font-family:var(--f-disp);font-weight:600;font-size:14px;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ctrl label{font-size:13px;color:var(--mut)}
+input[type=range]{width:180px;accent-color:var(--steel)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+td.r,th.r{text-align:right}
+.pill{display:inline-block;font:600 11.5px var(--f-mono);padding:1px 6px;border-radius:9px;border:1px solid currentColor}
+.ok{color:var(--ok)} .warn{color:var(--warn)}
+.beh{min-height:96px}
+.beh b{font-family:var(--f-disp);font-size:17px;display:block}
+.side{display:grid;gap:14px}
+.wrapx{overflow-x:auto}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Console CS-1 — elementos finitos</h1>
+      <p class="sub">Letsara · fixação das placas · modelo de casca (OpenSeesPy, ShellMITC4) · cargas de cálculo de um console</p>
+    </div>
+    <span class="tag">rev06c · ND-LET-PP03 · projeto da ND Engenharia</span>
+  </header>
+  <div class="grid">
+    <div style="display:grid;gap:14px;min-width:0">
+      <div class="viewer" id="viewer">
+        <div class="vtools">
+          <button data-caso="montagem" aria-pressed="false">Peso</button>
+          <button data-caso="sobrepressao" aria-pressed="false">Peso + sobrepressão</button>
+          <button data-caso="succao" aria-pressed="true">Peso + sucção</button>
+          <span style="flex:1"></span>
+          <button id="vIso" aria-pressed="true">Isométrico</button>
+          <button id="vLat" aria-pressed="false">Lateral</button>
+          <button id="vFrente" aria-pressed="false">Pela placa</button>
+        </div>
+        <div id="lbls"></div>
+        <div class="legend" id="legend"></div>
+        <span class="wm">projeto da ND Engenharia — arraste para girar</span>
+      </div>
+      <div class="card">
+        <div class="ctrl">
+          <label for="amp">Deformada ampliada <span class="num" id="ampv"></span></label>
+          <input type="range" id="amp" min="0" max="400" step="10" value="100">
+          <button id="anim" aria-pressed="false">Animar carga</button>
+          <button id="malha" aria-pressed="true">Malha</button>
+        </div>
+        <div class="beh" id="beh" aria-live="polite" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h2>Resultado</h2>
+        <p style="margin:0 0 8px">Tensão de von Mises nas faces das chapas, percentil 99 de cada peça (sem os picos de canto), contra fy/γa1 = 345/1,10 = <span class="num">314</span> MPa.</p>
+        <div class="wrapx"><table id="tab"></table></div>
+        <p style="margin:8px 0 0;font-size:13px;color:var(--mut)" id="gov"></p>
+      </div>
+      <div class="card">
+        <h2>Conferências</h2>
+        <table id="conf"></table>
+      </div>
+      <div class="card">
+        <h2>Modelo</h2>
+        <table>
+          <tr><td>Malha</td><td id="mmalha"></td></tr>
+          <tr><td>Peças</td><td>costas 16 · almas 9,5 · mesa 16 · ponta 9,5 · dentes 19 (A572-50), nós comuns em todas as soldas</td></tr>
+          <tr><td>Apoio</td><td>engaste nas 2 bordas verticais das costas (filetes de obra de 6 mm na CE-1)</td></tr>
+          <tr><td>Cargas</td><td id="mcargas"></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const D = __VIS__;
+const R = __RES__;
+(function(){
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const host = document.getElementById("viewer");
+const renderer = new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+host.insertBefore(renderer.domElement, host.firstChild);
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(32, 1.3, 1, 5000); cam.up.set(0,0,1);
+const ctl = new THREE.OrbitControls(cam, renderer.domElement); ctl.enableDamping = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x999999, 0.9));
+const dl = new THREE.DirectionalLight(0xffffff, 0.35); dl.position.set(200,-300,400); scene.add(dl);
+// faixas de cor (8 faixas, 0 a 314 MPa)
+const LIM = 314, NB = 8;
+const BANDS = ["#2c3e9e","#2f6fd0","#2aa7c9","#3fbf8a","#a6cf3a","#f2c230","#f08a24","#d7301f"];
+function cor(v){ const k = Math.min(NB-1, Math.max(0, Math.floor(v / LIM * NB))); return new THREE.Color(BANDS[k]); }
+const leg = document.getElementById("legend");
+leg.innerHTML = "<div style='font-weight:600;margin-bottom:3px'>von Mises (MPa)</div>" + BANDS.map((c,i)=>`<div class="row"><span class="sw" style="background:${c}"></span>${Math.round(i*LIM/NB)}–${Math.round((i+1)*LIM/NB)}</div>`).reverse().join("");
+// geometria: cada elemento com vértices próprios (cor por elemento)
+const nE = D.elem.length;
+const pos = new Float32Array(nE*6*3), col = new Float32Array(nE*6*3);
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.BufferAttribute(pos,3)); geo.setAttribute("color", new THREE.BufferAttribute(col,3));
+const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}));
+scene.add(mesh);
+const epos = new Float32Array(nE*8*3);
+const egeo = new THREE.BufferGeometry(); egeo.setAttribute("position", new THREE.BufferAttribute(epos,3));
+const edges = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({color:0x1d2327, transparent:true, opacity:.22}));
+scene.add(edges);
+// contorno indeformado
+const opos = []; D.elem.forEach(e=>{ for(let k=0;k<4;k++){ const a=D.nos[e[k]], b=D.nos[e[(k+1)%4]]; opos.push(...a,...b);} });
+const outline = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(opos,3)), new THREE.LineBasicMaterial({color:0x8a949b, transparent:true, opacity:.10}));
+scene.add(outline);
+// linhas de solda (engaste)
+const sw = new THREE.Group(); scene.add(sw);
+[-60,60].forEach(x=>{ const g = new THREE.CylinderGeometry(1.6,1.6,200,10); const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color:0x111111})); m.rotation.x = Math.PI/2; m.position.set(x,8,-70); sw.add(m); });
+// setas de carga
+const arrows = new THREE.Group(); scene.add(arrows);
+let caso = "succao", amp = 100, fase = 1, animando = false;
+const T = {
+  montagem:{t:"Peso da placa (montagem)", d:"A porca do M16 de nível empurra a mesa para baixo. O console trabalha como um balanço curto: a mesa e as duas almas formam um T que leva o peso até as costas, e as costas dobram entre os dois cordões de solda na CE-1. Deslocamento máximo de 0,04 mm: o console é praticamente rígido."},
+  sobrepressao:{t:"Peso + vento de sobrepressão", d:"O vento empurra a placa contra o pilar e o prisioneiro frontal empurra a chapa de ponta para trás. A chapa de ponta dobra entre as duas almas (região laranja em volta da porca) e as almas recebem a reação nas bordas. É a peça mais solicitada neste caso, com folga."},
+  succao:{t:"Peso + vento de sucção (governa)", d:"O vento puxa a placa para fora e as abas do nicho puxam os dois dentes. Cada dente trabalha como um balanço de 32 mm engastado na mesa: a tensão máxima fica na base do dente (vermelho) e a mesa dobra logo abaixo. É o caso que governa o console."}
+};
+function atualiza(){
+  const C = D.casos[caso], U = C.u, a = amp * fase;
+  let ip = 0, ie = 0;
+  const P = i => { const n = D.nos[i], u = U[i]; return [n[0]+a*u[0], n[1]+a*u[1], n[2]+a*u[2]]; };
+  D.elem.forEach((e, k)=>{
+    const p = e.map(P), c = cor(C.vm[k]);
+    [[0,1,2],[0,2,3]].forEach(tri=>tri.forEach(j=>{ pos.set(p[j], ip*3); col.set([c.r,c.g,c.b], ip*3); ip++; }));
+    for(let j=0;j<4;j++){ epos.set(p[j], ie*3); epos.set(p[(j+1)%4], ie*3+3); ie+=2; }
+  });
+  geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true; geo.computeVertexNormals();
+  egeo.attributes.position.needsUpdate = true;
+  arrows.clear();
+  C.carga.forEach(c=>{
+    const L = 22 + 1.2*c.F_kN, dir = new THREE.Vector3(...c.d).normalize();
+    const org = new THREE.Vector3(...c.p).addScaledVector(dir, -L - 2);
+    arrows.add(new THREE.ArrowHelper(dir, org, L, c.tipo==="peso"?0x1d2327:0x1f6fb2, 9, 6));
+  });
+  document.getElementById("ampv").textContent = "× " + amp;
+  const t = T[caso]; document.getElementById("beh").innerHTML = `<b>${t.t}</b>${t.d} <span class="num" style="color:var(--mut)">(deslocamento máx. ${C.u_max.toFixed(3).replace(".",",")} mm; von Mises máx. ${String(C.vm_max).replace(".",",")} MPa)</span>`;
+  document.querySelectorAll("[data-caso]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.caso===caso));
+}
+document.querySelectorAll("[data-caso]").forEach(b=>b.addEventListener("click", ()=>{ caso = b.dataset.caso; atualiza(); }));
+const ampEl = document.getElementById("amp"); ampEl.addEventListener("input", ()=>{ amp = +ampEl.value; atualiza(); });
+const bA = document.getElementById("anim"); let t0 = 0;
+bA.addEventListener("click", ()=>{ animando = !animando; bA.setAttribute("aria-pressed", animando); if(!animando){ fase = 1; atualiza(); } t0 = performance.now(); });
+const bM = document.getElementById("malha"); bM.addEventListener("click", ()=>{ edges.visible = !edges.visible; bM.setAttribute("aria-pressed", edges.visible); });
+const views = {vIso:[[330,420,190],[0,30,-55]], vLat:[[560,32,-40],[0,32,-55]], vFrente:[[0,560,-40],[0,30,-55]]};
+function setView(id){ const v = views[id]; cam.position.set(...v[0]); ctl.target.set(...v[1]); ctl.update(); Object.keys(views).forEach(k=>document.getElementById(k).setAttribute("aria-pressed", k===id)); }
+Object.keys(views).forEach(k=>document.getElementById(k).addEventListener("click", ()=>setView(k)));
+// rótulos
+const lbls = document.getElementById("lbls");
+const LB = [{p:[-60,8,40],t:"solda na CE-1"},{p:[0,8,30],t:"costas"},{p:[38,40,-60],t:"alma"},{p:[0,40,6],t:"mesa"},{p:[0,64,-55],t:"chapa de ponta"},{p:[33,54,36],t:"dente"}];
+LB.forEach(l=>{ const d = document.createElement("div"); d.className="lbl"; d.textContent=l.t; lbls.appendChild(d); l.el=d; });
+function bg(){ scene.background = new THREE.Color(css("--three") || "#e9ece8"); }
+bg(); try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", bg); new MutationObserver(bg).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]}); }catch(e){}
+function resize(){ const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w,h,false); cam.aspect = w/h; cam.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(host); resize();
+const v3 = new THREE.Vector3();
+function tick(now){
+  if(animando){ fase = 0.5 - 0.5*Math.cos((now - t0)/700); atualiza(); }
+  ctl.update(); renderer.render(scene, cam);
+  const w = host.clientWidth, h = host.clientHeight;
+  LB.forEach(l=>{ v3.set(...l.p).project(cam); const ok = v3.z<1 && Math.abs(v3.x)<1 && Math.abs(v3.y)<1; l.el.hidden=!ok; if(ok){ l.el.style.left=((v3.x+1)/2*w)+"px"; l.el.style.top=((1-v3.y)/2*h)+"px"; } });
+  requestAnimationFrame(tick);
+}
+// tabelas
+const PART = {almas:"almas", costas:"costas", mesa:"mesa", ponta:"chapa de ponta", dentes:"dentes"};
+const fmt = (v,d=2)=>v.toFixed(d).replace(".",",");
+let h = "<tr><th>Peça</th><th class='r'>Peso</th><th class='r'>+ sobrep.</th><th class='r'>+ sucção</th></tr>";
+Object.keys(PART).forEach(p=>{ h += `<tr><td>${PART[p]}</td>` + ["montagem","sobrepressao","succao"].map(c=>{ const u = R.casos[c].uso_parte[p]; return `<td class="r num ${u>0.7?'warn':''}">${fmt(u)}</td>`; }).join("") + "</tr>"; });
+const SOL = {alma_costas:"solda alma × costas", mesa_costas:"solda mesa × costas", dentes_mesa:"solda dentes × mesa", ponta:"solda da chapa de ponta"};
+Object.keys(SOL).forEach(j=>{ if(!R.casos.montagem.solda) return; h += `<tr><td>${SOL[j]} (filete ${fmt(R.casos.montagem.solda[j].a_mm,0)})</td>` + ["montagem","sobrepressao","succao"].map(c=>{ const u = R.casos[c].solda[j].uso; return `<td class="r num ${u>0.7?'warn':''}">${fmt(u)}</td>`; }).join("") + "</tr>"; });
+document.getElementById("tab").innerHTML = h;
+let gv = {u:0}; const NOMC = {montagem:"no peso", sobrepressao:"na sobrepressão", succao:"na sucção"};
+Object.keys(R.casos).forEach(c=>{ Object.entries(R.casos[c].uso_parte).forEach(([p,u])=>{ if(u>gv.u) gv={u, n:PART[p], c}; }); Object.entries(R.casos[c].uso_solda||{}).forEach(([j,u])=>{ if(u>gv.u) gv={u, n:SOL[j], c}; }); });
+document.getElementById("gov").innerHTML = `Governa: ${gv.n} ${NOMC[gv.c]}, uso <b class="num">${fmt(gv.u)}</b> <span class="pill ok">atende</span>. Malha de 4 mm, conferida com 2 mm; soldas pela força por mm na linha de cada cordão.`;
+const M = R.mao, mc = R.casos.montagem;
+document.getElementById("conf").innerHTML = `
+<tr><th>Item</th><th class="r">MEF</th><th class="r">à mão</th></tr>
+<tr><td>Raiz das almas, peso (seção T almas + mesa)</td><td class="r num">${fmt(M.mef_almas_raiz_vm_med_MPa,1)} MPa</td><td class="r num">${fmt(M.sigma_secao_T_raiz_MPa,1)} MPa</td></tr>
+<tr><td>Dentes, sucção (balanço 13 × 19, braço 27)</td><td class="r num">${fmt(R.casos.succao.uso_parte.dentes)}</td><td class="r num">0,76</td></tr>
+<tr><td>Equilíbrio: soma das reações verticais</td><td class="r num">${fmt(mc.soma_Rz_kN,1)} kN</td><td class="r num">${fmt(R.cargas.Vd_kN,1)} kN</td></tr>`;
+document.getElementById("mmalha").textContent = `${mc.n_elem} elementos de casca de 4 nós, ${mc.n_nos} nós (≈ 4 mm)`;
+document.getElementById("mcargas").innerHTML = `peso Vd = <span class="num">${fmt(R.cargas.Vd_kN,1)}</span> kN no anel da porca do nível (montagem, γf 1,3 × βa 1,3); vento Fd = <span class="num">${fmt(R.cargas.Fd_kN,1)}</span> kN no prisioneiro (sobrepressão) ou nos 2 dentes (sucção)`;
+setView("vIso"); atualiza(); requestAnimationFrame(tick);
+})();
+</script>

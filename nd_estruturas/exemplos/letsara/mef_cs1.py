@@ -39,6 +39,49 @@ YD = DE["y0"] + DE["t"] / 2
 TP = C["ponta"]["t"]
 YN, ZF = C["y_nivel"], C["z_frontal"]
 S_PORCA = FX["GEO"]["hex"]["s"]
+FW, GW2 = 485.0, 1.35                                  # E70 / ER70S-6; NBR 8800:2008 6.2.5.1
+# filetes de oficina dos dois lados de cada junta (mínimos AWS D1.1 tab. 5.7 pela chapa mais fina: 6,3 e 8 → 5; 9,5 → 5; 16 → 6)
+A_SOLDA = {k: C.get("a_solda", {}).get(k, v) for k, v in dict(alma_costas=5.0, mesa_costas=5.0, dentes_mesa=6.0, ponta=5.0).items()}
+L_MED = 10.0                                           # mm: média móvel ao longo do cordão (pico de canto da casca elástica depende da malha)
+
+
+def soldas(nos, E):
+    """Força por mm em cada filete (2 por junta): esforços da casca na borda da chapa junto à linha de solda, N⊥/2 + M⊥/t, com os cisalhamentos (vetorial)."""
+    coord = {n: k for k, n in nos.items()}
+    linhas = dict(alma_costas=[("almas", lambda c: abs(c[1] - YC) < 1e-6, 2)],
+                  mesa_costas=[("mesa", lambda c: abs(c[1] - YC) < 1e-6, 0)],
+                  dentes_mesa=[("dentes", lambda c: abs(c[2]) < 1e-6, 0)],
+                  ponta=[("ponta", lambda c: abs(abs(c[0]) - XA) < 1e-6 and c[0] > 0, 2), ("ponta", lambda c: abs(abs(c[0]) - XA) < 1e-6 and c[0] < 0, 2),
+                         ("ponta", lambda c: abs(c[2]) < 1e-6, 0)])
+    out = {}
+    for j, regras in linhas.items():
+        fmax, fpico = 0.0, 0.0
+        for pp, f_, eixo in regras:
+            for sx in ((-1, 1) if pp in ("almas", "dentes") else (0,)):
+                lista = []
+                for k, (ns, t, p) in enumerate(E):
+                    if p != pp or not any(f_(coord[n]) for n in ns):
+                        continue
+                    if sx and np.sign(np.mean([coord[n][0] for n in ns])) != sx:
+                        continue
+                    s8 = np.array(ops.eleResponse(k + 1, "stresses")).reshape(4, 8).mean(0)
+                    # eixo local x da casca ≈ direção do 1º lado (nó 1 → 2): cordão ao longo de x local → componentes ⊥ em y local
+                    d12 = np.abs(np.array(coord[ns[1]]) - np.array(coord[ns[0]]))
+                    i_ = 1 if int(np.argmax(d12)) == eixo else 0
+                    nn, mm, vv = abs(s8[i_]), abs(s8[3 + i_]), math.hypot(s8[2], s8[6 + i_])   # N⊥, M⊥ (por mm); cisalhamento no plano e fora dele
+                    cs = [coord[n][eixo] for n in ns]
+                    lista.append((min(cs), max(cs), math.hypot(nn / 2 + mm / t, vv / 2)))
+                if not lista:
+                    continue
+                fim = max(v[1] for v in lista)
+                for x0, x1, fe in lista:
+                    fpico = max(fpico, fe)
+                    ini = min(x0, fim - L_MED)
+                    tr = [(min(v[1], ini + L_MED) - max(v[0], ini), v[2]) for v in lista if v[1] > ini and v[0] < ini + L_MED]
+                    fmax = max(fmax, sum(l * f for l, f in tr) / sum(l for l, f in tr))
+        rd = 0.6 * FW * 0.707 * A_SOLDA[j] / GW2
+        out[j] = dict(a_mm=A_SOLDA[j], F_Nmm=round(fmax, 1), F_pico_Nmm=round(fpico, 1), Rd_Nmm=round(rd, 1), uso=round(fmax / rd, 3))
+    return out
 
 
 def grade(pts, h):
@@ -57,8 +100,8 @@ def zb(y):                                             # borda inferior da alma 
 def montar(h=4.0):
     X = grade([-60, -BM, -XA, -DE["x0"] - DE["b"] + 0, -DE["x0"], -12, 0, 12, DE["x0"], DE["x0"] + DE["b"], XA, BM, 60], h)
     X = sorted(set(round(v, 6) for v in X))
-    Y = grade([YC, 16, 36, YN, YD, 60, YP], h)
-    ZC = grade([C["costas"]["z0"], -HR, -HP, ZF, -16, 0, C["costas"]["z1"]], h)
+    Y = grade([YC, C["alma"]["y0"], 36, YN, YD, 60, YP], h)
+    ZC = grade([C["costas"]["z0"], -HR, -HP, ZF, -TM, 0, C["costas"]["z1"]], h)
     S = [z / -HR for z in ZC if -HR <= z <= 0]           # parâmetros da altura da alma (1 na borda inferior, 0 na mesa)
     nos, E = {}, []
 
@@ -150,13 +193,14 @@ def analisar(caso, h=4.0):
         vm_e.append(v); parte_e.append(parte)
     U = {n: ops.nodeDisp(n)[:3] for n in nos.values()}
     vm_e = np.array(vm_e)
+    sol = soldas(nos, E)
     res = dict(caso=caso, n_elem=len(E), n_nos=len(nos), vm_max=float(vm_e.max()), vm_p99=float(np.percentile(vm_e, 99)),
                vm_parte={p: dict(max=float(vm_e[[i for i, q in enumerate(parte_e) if q == p]].max()),
                                  p99=float(np.percentile(vm_e[[i for i, q in enumerate(parte_e) if q == p]], 99))) for p in sorted(set(parte_e))},
                u_max_mm=float(max(np.linalg.norm(u) for u in U.values())), dz_nivel_mm=float(-np.mean([U[n][2] for n in anel])),
-               soma_Rz_kN=Rz / 1e3, soma_Ry_kN=Ry / 1e3, carga=carga)
-    # tensão média na raiz das almas (fibra extrema inferior, linha y = 16) para a conferência à mão
-    raiz = [i for i, (ns, t, p) in enumerate(E) if p == "almas" and abs(np.mean([k[1] for k, n in nos.items() if n in ns]) - 16) < h]
+               soma_Rz_kN=Rz / 1e3, soma_Ry_kN=Ry / 1e3, carga=carga, solda=sol)
+    # tensão média na raiz das almas (junto à face das costas) para a conferência à mão
+    raiz = [i for i, (ns, t, p) in enumerate(E) if p == "almas" and abs(np.mean([k[1] for k, n in nos.items() if n in ns]) - C["alma"]["y0"]) < h]
     res["almas_raiz_vm_med"] = float(np.mean(vm_e[raiz])) if raiz else None
     ops.wipe()
     return res, nos, E, U, vm_e
@@ -173,17 +217,19 @@ for k in CASOS:
                          p99_malha_2mm=round(r2["vm_p99"], 1),
                          p99_parte_malha_2mm={p_: round(v_["p99"], 1) for p_, v_ in r2["vm_parte"].items()},
                          uso_parte={p_: round(max(v_["p99"], r2["vm_parte"][p_]["p99"]) / (FY / GA1), 3) for p_, v_ in r["vm_parte"].items()})
-    R["casos"][k]["uso"] = max(R["casos"][k]["uso_parte"].values())
+    R["casos"][k]["solda"] = {j: max(r["solda"][j], r2["solda"][j], key=lambda v: v["uso"]) for j in r["solda"]}
+    R["casos"][k]["uso_solda"] = {j: v["uso"] for j, v in R["casos"][k]["solda"].items()}
+    R["casos"][k]["uso"] = max(list(R["casos"][k]["uso_parte"].values()) + list(R["casos"][k]["uso_solda"].values()))
     if VIS is None:
         inv = {n: k_ for k_, n in nos.items()}
         VIS = dict(nos=[list(inv[n]) for n in range(1, len(nos) + 1)], elem=[[n - 1 for n in ns] for ns, _, _ in E], parte=[p for _, _, p in E],
                    esp=[t for _, t, _ in E], casos={})
     VIS["casos"][k] = dict(nome=CASOS[k], u=[[round(c, 5) for c in U[n]] for n in range(1, len(nos) + 1)], vm=[round(float(v), 1) for v in vm],
                            carga=r["carga"], vm_p99=round(r["vm_p99"], 1), vm_max=round(r["vm_max"], 1), u_max=round(r["u_max_mm"], 4))
-# conferência à mão: almas na raiz como 2 balanços de 80 × 9,5 com o peso a y = 48 (braço até a face das costas 16)
-M = Vd * (YN - 16)
+# conferência à mão: almas na raiz como 2 balanços com o peso a y = 48 (braço até a face das costas)
+M = Vd * (YN - C["alma"]["y0"])
 W = 2 * TA * HR ** 2 / 6
-# seção T na raiz (2 almas 80 × 9,5 + mesa 80 × 16, colaborante): σ na fibra inferior = M·c/I
+# seção T na raiz (2 almas + mesa colaborante): σ na fibra inferior = M·c/I
 A1_, A2_ = 2 * HR * TA, 2 * BM * TM
 yb = (A1_ * (-HR / 2) + A2_ * (-TM / 2)) / (A1_ + A2_)
 I_T = 2 * TA * HR ** 3 / 12 + A1_ * (-HR / 2 - yb) ** 2 + 2 * BM * TM ** 3 / 12 + A2_ * (-TM / 2 - yb) ** 2

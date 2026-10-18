@@ -6,6 +6,8 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 import json
 import fechamento as FCH
 import geo_fixacao as GF
+gg = lambda v: f"{v:g}".replace(".", ",")
+AS = GF.N["a_solda"]
 import iso_nd as I
 from prancha_nd import Prancha
 
@@ -25,7 +27,7 @@ N_OBRA, N_E, N_D = PP01["n"]["NC1"], PP01["n"]["NC1_E"], PP01["n"]["NC1_D"]
 pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — NICHO NC-1: CONJUNTO SOLDADO, PEÇAS, SOLDAS E LISTA DE MATERIAIS",
                         desenho="ND-LET-PP02", folha="01/01", fase="PARA APROVAÇÃO", rev="06"))
-pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DO NC-1 (PAREDE LATERAL 3 SEM ESFORÇO, ABAS LATERAIS 12,5, GRAMPOS Ø6,3)")
+pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DO NC-1 (ESPESSURA DE CADA CHAPA PELO MEF, GRAMPOS Ø6,3)")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.cabecalho_peca("NC-1", f"NICHO NC-1 — CONJUNTO SOLDADO — {N_E} NC-1 + {N_D} NC-1' (ESPELHADO) = {N_OBRA} PEÇAS",
@@ -54,9 +56,9 @@ vf.cota_h([0] + XG + [B], H + hgt, 6, total=False)
 vf.cota_v([-hgb, 0, tb, za, H - tt, H, H + hgt], 0, -10, total=False)
 vf.cota_v([0, H], B, 12, total=False)
 vf.texto((-4, H / 2), "PONTA DA PLACA", "nota", "MIDDLE_CENTER", rot=90)
-I.solda(vf, (AE[1] - 6, H - tt), (12, -30), a=None, tipo="chanfro", lado="seta", cauda="CJP + filete 6 (det. A)")
-I.solda(vf, (B - tp, 110), (16, -10), a=3, tipo="filete", lado="seta", contorno=True, cauda="parede: 3 lados internos")
-I.solda(vf, (XG[3], H + 20), (40, 6), a=4, tipo="filete", lado="ambos", comp=20, cauda="cada perna (4×)")
+I.solda(vf, (AE[1] - 6, H - tt), (12, -30), a=None, tipo="chanfro", lado="seta", cauda=f"CJP + filete {gg(AS['aba_teto'])} (det. A)")
+I.solda(vf, (B - tp, 110), (16, -10), a=AS["parede"], tipo="filete", lado="ambos", contorno=True, cauda="parede: 3 lados, dentro e fora")
+I.solda(vf, (XG[3], H + 20), (40, 6), a=AS["grampo"], tipo="filete", lado="ambos", comp=20, cauda="cada perna (4×)")
 vf.marcador_corte((25, -45), (25, H + 60), "A", lado=1)
 
 # ================================================================== CORTE A-A (lateral) 1:1,5
@@ -70,9 +72,9 @@ va.ret(yg - dg / 2, H, dg, hgt, "ARMADURA"); va.ret(yg - dg / 2, -hgb, dg, hgb, 
 va.cota_h([0, ta, yg, pf, P], -hgb, -8, total=True)
 va.cota_v([-hgb, 0, tb, za, H - tt, H, H + hgt], P, 14, total=False)
 va.texto((-4, H / 2), "BOCA", "nota", "MIDDLE_CENTER", rot=90)
-I.solda(va, (pf, H - tt / 2), (22, 16), a=6, tipo="filete", lado="ambos", cauda="teto × fundo")
-I.solda(va, (pf, tb / 2), (22, -16), a=5, tipo="filete", lado="ambos", cauda="base × fundo")
-I.solda(va, (ta, H - tt - 2), (20, -40), a=6, tipo="filete", lado="seta", cauda="aba × teto (atrás)")
+I.solda(va, (pf, H - tt / 2), (22, 16), a=AS["teto_fundo"], tipo="filete", lado="ambos", cauda="teto × fundo")
+I.solda(va, (pf, tb / 2), (22, -16), a=AS["base_fundo"], tipo="filete", lado="ambos", cauda="base × fundo")
+I.solda(va, (ta, H - tt - 2), (20, -40), a=AS["aba_teto"], tipo="filete", lado="seta", cauda="aba × teto (atrás)")
 
 # ================================================================== VISTA SUPERIOR 1:1,5
 vs = pr.vista("VISTA SUPERIOR", (Q[0] + 290, Q[1] + 445), 2.0, titulo="VISTA SUPERIOR", subtitulo="boca embaixo; abas e parede tracejadas", unidade="mm")
@@ -108,35 +110,35 @@ def peca(nome, org, esc=2.0, sub=None):
     return pr.vista(nome, org, esc, titulo=nome, subtitulo=sub, unidade="mm")
 
 
-p1 = peca("ITEM 1 — TETO", (Q[0] + 25, y0p + 95), sub="CH 12,5 A572-50; traçar a posição dos grampos")
+p1 = peca("ITEM 1 — TETO", (Q[0] + 25, y0p + 95), sub=f"CH {gg(tt)} A572-50; traçar a posição dos grampos")
 chapa_lat(p1, 0, 0, B, pf)
 for x in XG:
     p1.circulo((x, yg), dg / 2, "ARMADURA")
 p1.cota_h([0] + XG + [B], 0, -8, total=False)
 p1.cota_v([0, yg, pf], B, 10, total=False)
-p1.chamada((B / 2, pf), (4, 8), "esp. 12,5 — 1 por conjunto")
+p1.chamada((B / 2, pf), (4, 8), f"esp. {gg(tt)} — 1 por conjunto")
 
-p2 = peca("ITEM 2 — BASE", (Q[0] + 25, y0p - 30), sub="CH 9,5 A572-50")
+p2 = peca("ITEM 2 — BASE", (Q[0] + 25, y0p - 30), sub=f"CH {gg(tb)} A572-50")
 chapa_lat(p2, 0, 0, B, pf)
 for x in XG:
     p2.circulo((x, yg), dg / 2, "ARMADURA")
 p2.cota_h([0, B], 0, -8, total=False)
 p2.cota_v([0, yg, pf], B, 10, total=False)
-p2.chamada((B / 2, pf), (4, 8), "esp. 9,5 — 1 por conjunto")
+p2.chamada((B / 2, pf), (4, 8), f"esp. {gg(tb)} — 1 por conjunto")
 
-p3 = peca("ITEM 3 — FUNDO", (Q[0] + 135, y0p - 30), sub="CH 12,5 A572-50")
+p3 = peca("ITEM 3 — FUNDO", (Q[0] + 135, y0p - 30), sub=f"CH {gg(tf)} A572-50")
 chapa_lat(p3, 0, 0, B, H)
 p3.cota_h([0, B], 0, -8, total=False)
 p3.cota_v([0, H], B, 10, total=False)
-p3.chamada((B / 2, H), (4, 8), "esp. 12,5 — 1 por conjunto")
+p3.chamada((B / 2, H), (4, 8), f"esp. {gg(tf)} — 1 por conjunto")
 
-p4 = peca("ITEM 4 — PAREDE", (Q[0] + 245, y0p - 30), sub="CH 3 A36, sem esforço")
+p4 = peca("ITEM 4 — PAREDE", (Q[0] + 245, y0p - 30), sub=f"CH {gg(tp)} A36, filete {gg(AS['parede'])} dos dois lados")
 chapa_lat(p4, 0, 0, pf, H - tt - tb)
 p4.cota_h([0, pf], 0, -8, total=False)
 p4.cota_v([0, H - tt - tb], pf, 10, total=False)
-p4.chamada((pf / 2, H - tt - tb), (4, 8), "esp. 3 — 1 por conjunto")
+p4.chamada((pf / 2, H - tt - tb), (4, 8), f"esp. {gg(tp)} — 1 por conjunto")
 
-p5 = peca("ITEM 5 — ABA E", (Q[0] + 345, y0p + 95), sub="CH 12,5 A572-50")
+p5 = peca("ITEM 5 — ABA E", (Q[0] + 345, y0p + 95), sub=f"CH {gg(ta)} A572-50")
 chapa_lat(p5, 0, 0, AE[1] - AE[0], ha)
 p5.cota_h([0, AE[1] - AE[0]], 0, -8, total=False)
 p5.cota_v([0, ha], AE[1] - AE[0], 10, total=False)
@@ -146,7 +148,7 @@ p5.hachura([(X5, 0), (X5 + ta, 0), (X5 + ta, ha), (X5 + 6, ha), (X5, ha - 6)], "
 p5.cota_h([X5, X5 + 6, X5 + ta], ha, 8, total=False)
 p5.chamada((X5 + 2, ha - 3), (8, 10), "chanfro 45° × 6 (lado da boca)")
 
-p6 = peca("ITEM 6 — ABA D", (Q[0] + 345, y0p - 10), sub="CH 12,5 A572-50, chanfro igual ao 5")
+p6 = peca("ITEM 6 — ABA D", (Q[0] + 345, y0p - 10), sub=f"CH {gg(ta)} A572-50, chanfro igual ao 5")
 chapa_lat(p6, 0, 0, AD[1] - AD[0], ha)
 p6.cota_h([0, AD[1] - AD[0]], 0, -8, total=False)
 p6.cota_v([0, ha], AD[1] - AD[0], 10, total=False)
@@ -164,7 +166,7 @@ p7.cota_v([0, hgb], X8 + L7, 10, total=False)
 p7.texto((X8 + L7 / 2, -10), f"8 (base): desenv. {2 * hgb + L7:g}", "nota", "TOP_CENTER")
 
 # detalhe A: junta aba × teto (1:1)
-dA = peca("DETALHE A — JUNTA ABA × TETO", (Q[0] + 500, y0p + 105), 1.0, sub="penetração total pela boca + filete 6 atrás")
+dA = peca("DETALHE A — JUNTA ABA × TETO", (Q[0] + 500, y0p + 105), 1.0, sub=f"penetração total pela boca + filete {gg(AS['aba_teto'])} atrás")
 dA.chapa(-10, ha, 70, tt, 0.5)                                                 # teto (corte)
 dA.poli([(0, 0), (ta, 0), (ta, ha), (6, ha), (0, ha - 6)], "METALICA", fechada=True)
 dA.hachura([(0, 0), (ta, 0), (ta, ha), (6, ha), (0, ha - 6)], "ANSI31", 0.5, "METALICA")
@@ -172,7 +174,7 @@ dA.hachura([(0, ha - 6), (6, ha), (0, ha)], "SOLID", 0.06, "METALICA")
 dA.hachura([(ta, ha), (ta + 6, ha), (ta, ha - 6)], "SOLID", 0.06, "METALICA")
 dA.cota_h([0, 6, ta], 0, -8, total=False)
 dA.chamada((2, ha - 1), (-14, 8), "CJP, esmerilhar rente à boca")
-dA.chamada((ta + 2, ha - 2), (12, -6), "filete 6")
+dA.chamada((ta + 2, ha - 2), (12, -6), f"filete {gg(AS['aba_teto'])}")
 dA.texto((-6, ha / 2), "BOCA", "nota", "MIDDLE_CENTER", rot=90)
 
 # ================================================================== tabelas
@@ -193,8 +195,9 @@ pr.notas(XC - 60, y - 4, [
     "Medidas em mm. Tolerâncias gerais NBR ISO 2768-1 classe m (corte e esquadro ±0,5); vão interno teto–base 178 ± 1 e profundidade 47,5 ± 1 (gabarito). Planicidade das chapas ≤ 1 mm.",
     "Corte a laser ou guilhotina; peças isentas de rebarbas e arestas cortantes; quebrar cantos vivos 1 mm.",
     "Soldagem de oficina GMAW (MIG) ER70S-6 Ø1,0 com Ar + 20 % CO₂ (ou FCAW E71T-1 com CO₂), soldador qualificado (AWS D1.1); soldas contínuas, isentas de trincas, porosidade e mordeduras; inspeção visual 100 %.",
-    "Sequência: (1) teto + fundo + base no gabarito, pontear e conferir o vão 178 e o esquadro; (2) soldas teto × fundo e base × fundo; (3) abas pela boca (CJP, det. A) e filete atrás; (4) parede lateral; (5) grampos (filete 4 × 20 nos 2 lados de cada perna).",
-    "Parede lateral (item 4) sem esforço: só fecha o concreto. Teto, base, fundo e abas recebem as forças do console (ND-LET-PP01): A572-50.",
+    "Sequência: (1) teto + fundo + base no gabarito, pontear e conferir o vão 178 e o esquadro; (2) soldas teto × fundo e base × fundo; (3) abas pela boca (CJP, det. A) e filete atrás; (4) parede lateral; (5) grampos (filete " + gg(AS["grampo"]) + " × 20 nos 2 lados de cada perna).",
+    f"Espessura de cada chapa pelo cálculo (MEF): teto e abas {gg(tt)} e fundo {gg(tf)} recebem as forças do console; base {gg(tb)} e parede {gg(tp)} são finas — "
+    f"soldar a parede com MIG de baixa corrente (Ø0,8), filete {gg(AS['parede'])} contínuo dentro e fora (AWS D1.3), sem furar a chapa. Itens 1 a 3, 5 e 6 em A572-50; parede em A36.",
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); retocar com galvanização a frio onde houver dano.",
     "Na fôrma da placa: boca rente à face interna (lado da fôrma) e ponta rente à cabeceira, preso no gabarito (posição ±5); vedar a cavidade com isopor antes de concretar. NC-1 na ponta inicial e NC-1' (espelhado) na final; pontas do lado da porta (vista I) sem nicho.",
     "Grampos dentro dos estribos N5 (teto) e N6 (base) da armação da ponta (ND-LET-PP01, det. 1 e 2).",

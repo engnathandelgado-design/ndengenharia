@@ -55,6 +55,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] Letsara rev06d (DEC-030): espessura de cada chapa e de cada solda da fixação pelo MEF (NC-1, CS-1, CE-1), aplicada em todas as pranchas, listas, IFC e páginas.
 - [x] Letsara rev06d (DEC-028): ombreiras OM-1 em U na porta da vista I, PP05, placa I-15 com 12 cordoalhas (PP-05P), IFC e quantitativos.
 - [x] Letsara rev06c: contagem NC-1 = IFC (404) e quantitativo do pacote Kingspan (telhas, cartolas, lã, clipes, parafusos) na COB04, planilha e LISTAS.
 - [x] Letsara rev06c (DEC-027): cobertura Kingspan zipada dupla com lã de rocha — cargas, fixações à sucção, acabamentos (COB04) e IFC com camadas, cartolas e rufos.

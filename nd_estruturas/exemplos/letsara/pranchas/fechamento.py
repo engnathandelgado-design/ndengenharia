@@ -296,7 +296,7 @@ def prancha_vista(Vs, desenho, folha):
              "Montagem vão a vão, de baixo para cima. Antes da placa: soldar os 2 consoles CS-1 nas chapas de espera CE-1 dos pilares, no nível marcado pela topografia. A placa encosta no pilar com o braço do console entrando no nicho NC-1 de cada ponta e desce até o teto do nicho apoiar no parafuso de nível M16 (±20 mm); afastamento 25 mm pelo parafuso frontal M16. Cada placa leva só o próprio peso: folga de 5 mm na junta macho-fêmea. Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste (PP00, det. 2 a 6).",
              f"Placa protendida 125 × 10, C40, 8 cord. Ø12,7 CP-190 RB alinhadas (4 por face, cobrimento 2,0), {f(PL['protensao']['F_macaco_kN'])} kN por cordoalha no macaco: seção, insertos, alças e ligações na ND-LET-PP00."]
     if n_ca:
-        notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Solda de campo do CS-1 na CE-1: filete 6 mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio (DEC-026).")
+        notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Solda de campo do CS-1 na CE-1: filete {FX['solda']['filete_mm']:g} mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio (DEC-026).")
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 livres até +7,40 (topo do PG-01).")
     if "G" in Vs:
@@ -384,7 +384,7 @@ def prancha_tipo():
         d1.linha((10, z), (420, z), "ARM_PROT")
     d1.ret(0, Z_NC - NC_H / 2, NC_B, NC_H, "METALICA")
     d1.chapa(0, Z_NC + NC_H / 2 - 12.5, NC_B, 12.5, 0.15)                                   # teto (chapa de apoio)
-    d1.chapa(NC_B - 3, Z_NC - NC_H / 2 + 9.5, 3, NC_H - 22, 0.15)                           # parede lateral 3 (sem esforço)
+    d1.chapa(NC_B - GF.N["t_parede"], Z_NC - NC_H / 2 + GF.N["t_base"], GF.N["t_parede"], NC_H - GF.N["t_base"] - GF.N["t_teto"], 0.15)   # parede lateral
     d1.chapa(0, Z_NC - NC_H / 2, NC_B - 9.5, 9.5, 0.15)                                    # base do nicho
     for (xa_, xb_) in GF.N["x_gr"]:                                                         # grampos Ø6,3 do NC-1
         d1.poli([(xa_, Z_NC + NC_H / 2), (xa_, Z_NC + NC_H / 2 + 40), (xb_, Z_NC + NC_H / 2 + 40), (xb_, Z_NC + NC_H / 2)], "METALICA")
@@ -397,7 +397,7 @@ def prancha_tipo():
     d1.chamada((300, Z_NC + NC_H / 2 + 30), (30, 2), f"N3 — {DN['tirante']} C=138 cm (tirante do dente)")
     d1.chamada((NC_B + 50, 700), (40, -8), f"N4 — {DN['suspensao'].split(' a até')[0]} até as cordoalhas de baixo")
     d1.chamada((NC_B + 30, Z_NC + NC_H / 2 + 80), (70, 2), f"N5 — {DN['costura'].split(' nos')[0]} (costura)")
-    d1.chamada((60, Z_NC + NC_H / 2 - 6), (60, -3), "teto 12,5: apoio do M16 de nível; armação completa N3–N7 no ND-LET-PP01")
+    d1.chamada((60, Z_NC + NC_H / 2 - 6), (60, -3), f"teto {GF.N['t_teto']:g}: apoio do M16 de nível; armação completa N3–N7 no ND-LET-PP01".replace(".", ","))
     # ---- detalhe 2: planta da ligação placa × pilar
     d2 = pr.vista("DETALHE 2", (Q[0] + 380, Q[1] + 325), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA NA ALTURA DO CONSOLE)",
                   subtitulo="2 consoles CS-1 soldados na CE-1 do pilar (uma por fiada); junta 20 no eixo; folga 25", unidade="mm")
@@ -420,8 +420,8 @@ def prancha_tipo():
             d2.chapa(xc + dx - 4.75, -GF.C["alma"]["y1"], 9.5, GF.C["alma"]["y1"] - 16, 0.4)   # almas
     d2.cota_h([-130, -10, 10, 130], -FOLGA - E_PL, -10, total=False)
     d2.cota_v([-FOLGA - E_PL, -FOLGA - NC_P, -FOLGA, 0, 450], 450, 10, total=False)
-    d2.chamada((120, 90), (20, 32), "CE-1 380 × 330 × 16 + 4 pinos Ø16 × 150 c/ cabeça Ø32 + 2 grampos U Ø10 N18 (pilar; PP01 det. 5)")
-    d2.chamada((70, -8), (34, 6), "CS-1 soldado na obra: filete 6 E70XX nos 2 lados verticais das costas")
+    d2.chamada((120, 90), (20, 32), f"CE-1 380 × 330 × {GF.TCE:g}".replace(".", ",") + " + 4 pinos Ø16 × 150 c/ cabeça Ø32 + 2 grampos U Ø10 N18 (pilar; PP01 det. 5)")
+    d2.chamada((70, -8), (34, 6), f"CS-1 soldado na obra: filete {FX['solda']['filete_mm']:g} E70XX nos 2 lados verticais das costas")
     d2.chamada((-70, -FOLGA - 50), (-20, 16), "NC-1 nicho da placa (aberto na ponta)")
     d2.chamada((-350, -FOLGA - 60), (-6, -16), "placa 10 cm")
     d2.chamada((0, -FOLGA - 90), (16, -16), "junta 20 mm: tarucel Ø25 + selante PU (±25 %)")
@@ -476,7 +476,7 @@ def prancha_tipo():
     d4.chamada((-8, zt_cs - 150), (-30, -24), "CS-1: costas, almas, mesa, 2 dentes, chapa de ponta (PP03)")
     d4.chamada((-yn_, zt_cs + 30), (-30, 22), "M16 de nível: G = 50 ± 10 sob o teto")
     d4.chamada((-yt_ + 10, zt_cs + Cc["z_frontal"]), (-30, -6), "prisioneiro M16 frontal: afastamento 25 ± 5")
-    d4.chamada((-Cc["dente"]["y0"] - 10, zt_cs + 25), (-30, 40), "2 dentes 19 atrás das 2 abas 12,5 (sucção)")
+    d4.chamada((-Cc["dente"]["y0"] - 10, zt_cs + 25), (-30, 40), f"2 dentes {Cc['dente']['t']:g} atrás das 2 abas {GF.N['t_aba']:g} (sucção)".replace(".", ","))
     d4.chamada((-FOLGA - E_PL / 2, za_ - 120), (-14, -10), "placa 10 cm")
     # ---- detalhe 6: trava de pé PT-2 (planta, 1:5 mm) — placas de pacote suspenso (sem pano contínuo até o baldrame)
     d6 = pr.vista("DETALHE 6", (Q[0] + 75, Q[1] + 140), 5, titulo="DETALHE 6 — TRAVA DE PÉ PT-2 (PLANTA)",

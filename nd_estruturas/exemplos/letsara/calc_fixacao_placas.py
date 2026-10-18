@@ -181,22 +181,24 @@ assert rd["adotado"]["ok"]
 # Eixos do console: y a partir da face da CE-1 (rumo à placa), z a partir do topo da mesa, x no eixo do console.
 FY, FU, ES = 345.0, 450.0, 200000.0                     # A572-50
 GA1, GA2, GW2 = 1.10, 1.35, 1.35                         # NBR 8800:2008 tab. 3
-T_COST = float(os.environ.get("CS1_T_COST", 16.0))     # costas (soldada na CE-1)
+T_COST = float(os.environ.get("CS1_T_COST", 9.5))      # costas (soldada na CE-1) — rev06d: espessuras de cada chapa pelo MEF (DEC-030)
 Z0_COST, Z1_COST = float(os.environ.get("CS1_Z0_COST", -100.0)), 30.0   # rev06d: costas 130 (z −100 a +30; antes −170, 200 mm): só a altura da ligação com almas e mesa + 20 abaixo da raiz
 B_COST, H_COST = 120.0, Z1_COST - Z0_COST
-T_ALMA, X_ALMA = 9.5, 35.0                              # 2 almas a ±35 do eixo
+T_ALMA, X_ALMA = 6.3, 35.0                              # 2 almas a ±35 do eixo
 Y_PONTA, H_RAIZ, H_PONTA = 64.0, 80.0, 50.0             # ponta do braço e alturas da alma (raiz 80: janela de montagem, ver abaixo)
-T_MESA, B_MESA = 16.0, 80.0                             # mesa y 16–64, x ±40
+T_MESA, B_MESA = 16.0, 80.0                             # mesa x ±40: 16 pelo curso do M16 de nível (a ponta do parafuso não pode passar da face de baixo da mesa com G mínimo)
 Y_NIV = 48.0                                            # parafuso de nível M16 (porca ISO 4032 soldada no topo da mesa + contraporca ISO 4035)
 Y_M20 = Y_NIV                                           # (nome histórico)
 DENTE = dict(t=19.0, b=13.0, h=32.0, y0=44.5, x0=27.0)  # 2 dentes y 44,5–63,5, x ±(27–40), 32 de altura
 Y_DENTE = DENTE["y0"] + DENTE["t"] / 2
-PONTA = dict(t=9.5, y0=54.5, z0=-50.0, z1=-16.0, b=2 * (X_ALMA - T_ALMA / 2))   # chapa de ponta entre as almas (60,5)
+PONTA = dict(t=8.0, y0=Y_PONTA - 8.0, z0=-50.0, z1=-T_MESA, b=2 * (X_ALMA - T_ALMA / 2))   # chapa de ponta entre as almas, sob a mesa
 Z_FRONT = -33.0                                         # prisioneiro M16 frontal (porca ISO 4032 soldada atrás da chapa de ponta)
 # folgas e tolerâncias de montagem (mm)
 A_NOM, A_TOL = 25.0, 5.0                                # afastamento placa–pilar (face interna da placa a y = a)
 G_NOM, G_TOL = 50.0, 10.0                               # topo da mesa → face inferior do teto do nicho (regulado pelo M16 de nível)
-NC = dict(B=120.0, H=200.0, P=60.0, y_gr=31.0, d_gr=6.3, x_gr=((20.0, 52.0), (68.0, 100.0)), h_gr_teto=40.0, h_gr_base=28.0, t_teto=12.5, t_base=9.5, t_fundo=12.5, t_parede=3.0, t_aba=12.5, h_aba=38.0,
+NC = dict(B=120.0, H=200.0, P=60.0, y_gr=31.0, d_gr=6.3, x_gr=((20.0, 52.0), (68.0, 100.0)), h_gr_teto=40.0, h_gr_base=28.0, t_teto=12.5, t_base=3.0, t_fundo=9.5, t_parede=2.0, t_aba=12.5, h_aba=38.0,
+          a_solda=dict(teto_fundo=5.0, base_fundo=3.0, parede=2.0, aba_teto=6.0, grampo=3.0),   # filetes de oficina (verificados no mef_nc1)
+         
           aba_e=(0.0, 39.0), aba_d=(81.0, 117.0))      # nicho: x a partir da ponta da placa; abas só nas laterais (o meio fica livre para o M16 de nível)
 X_TOL = 5.0                                             # posição do console em relação ao nicho (comprimento da placa ±5, soldagem do CS-1 ±3)
 HEX = dict(s=24.0, e=26.75, k=10.0, m=14.8, m_fina=8.0)  # M16: ISO 4017 / ISO 4032 / ISO 4035
@@ -336,21 +338,23 @@ M_mesa = Vd_N * 2 * X_ALMA / 4
 R["console_mao"] = dict(M_raiz_Nmm=round(M_raiz), sigma_almas_MPa=round(M_raiz / W_almas, 1), tau_almas_MPa=round(Vd_N / (2 * T_ALMA * H_RAIZ), 1),
                         mesa_faixa_MPa=round(6 * M_mesa / (b_mesa * T_MESA ** 2), 1), obs="mesa como faixa biapoiada nas almas (sem efeito de placa): limite superior do MEF")
 
-# dentes (2 × 19 × 13 × 32, A572-50): balanço com a sucção no topo — NBR 8800:2008 5.4.2 (Wel·fy/γa1) e solda de filete 8 no contorno
+# filetes de oficina do CS-1 (verificados linha a linha no mef_cs1; mínimos AWS D1.1 pela chapa mais fina)
+A_SOLDA_CS1 = dict(alma_costas=5.0, mesa_costas=8.0, dentes_mesa=6.0, ponta=5.0, porca=4.0)
+# dentes (2 × 19 × 13 × 32, A572-50): balanço com a sucção no topo — NBR 8800:2008 5.4.2 (Wel·fy/γa1) e solda de filete no contorno
 F_den = Fy_N / 2
 M_den = F_den * BR_DENTE
 W_den = DENTE["b"] * DENTE["t"] ** 2 / 6
-aw8 = 0.707 * 8.0
+aw8 = 0.707 * A_SOLDA_CS1["dentes_mesa"]
 Sw_den = DENTE["b"] * DENTE["t"] + DENTE["t"] ** 2 / 3                  # módulo do contorno (por mm de garganta), flexão no sentido de t
 f_w_den = math.hypot(M_den / (Sw_den * aw8), F_den / (2 * (DENTE["b"] + DENTE["t"]) * aw8))
 fw_Rd = 0.60 * 485.0 / GW2
-R["dentes_CS1"] = dict(peca="2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas, filete 8 no contorno", F_por_dente_kN=round(F_den / 1e3, 2), braco_mm=BR_DENTE,
+R["dentes_CS1"] = dict(peca=f"2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas, filete {A_SOLDA_CS1['dentes_mesa']:g} no contorno", F_por_dente_kN=round(F_den / 1e3, 2), braco_mm=BR_DENTE,
                        sigma_MPa=round(M_den / W_den, 1), lim_MPa=round(sig_Rd, 1), uso=round(M_den / W_den / sig_Rd, 3),
                        solda_MPa=round(f_w_den, 1), solda_lim_MPa=round(fw_Rd, 1), uso_solda=round(f_w_den / fw_Rd, 3))
 assert M_den / W_den <= sig_Rd and f_w_den <= fw_Rd
 
-# solda de campo CS-1 × CE-1: 2 cordões verticais de 200 mm, perna 6 (garganta 4,24) — NBR 8800:2008 6.2.5.1 (método vetorial elástico)
-A_W, L_W, FW = 6.0, H_COST, 485.0
+# solda de campo CS-1 × CE-1: 2 cordões verticais na altura da costas, perna A_W — NBR 8800:2008 6.2.5.1 (método vetorial elástico)
+A_W, L_W, FW = 5.0, H_COST, 485.0             # 5 = mínimo AWS D1.1 para a costas de 9,5
 tw = 0.707 * A_W
 Aw = 2 * L_W * tw
 Iw = 2 * tw * L_W ** 3 / 12
@@ -360,7 +364,7 @@ f_v = Vd_N / Aw
 f_n_M = Vd_N * e_z * z_max / Iw
 f_n_F = Fy_N / Aw + Fy_N * abs((Z0_COST + Z1_COST) / 2) * z_max / Iw   # vento normal à CE-1 + braço até o centroide do cordão
 f_res = math.sqrt(f_v ** 2 + (f_n_M + f_n_F) ** 2)
-R["solda"] = dict(filete_mm=A_W, cordoes="2 × 200 verticais", eletrodo="E70XX", f_res_MPa=round(f_res, 1), fw_Rd_MPa=round(fw_Rd, 1),
+R["solda"] = dict(filete_mm=A_W, cordoes=f"2 × {L_W:g} verticais", eletrodo="E70XX", f_res_MPa=round(f_res, 1), fw_Rd_MPa=round(fw_Rd, 1),
                   uso=round(f_res / fw_Rd, 3), obs="solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda")
 assert f_res <= fw_Rd
 
@@ -385,7 +389,7 @@ M_ce = 2 * Vd * (Y_NIV + 8.0) / 1000                    # kN·m (do plano médio
 N_ce_vento = 2 * Ry_d                                    # sucção puxa a CE-1 (as duas placas no mesmo sentido)
 z_ce = 280.0                                             # braço entre linhas de pinos
 T_linha = M_ce * 1000 / z_ce + N_ce_vento / 2            # tração na linha superior (2 pinos)
-T_CE = 16.0                                              # rev06b: CE-1 em 16 mm
+T_CE = 12.5                                              # rev06d: CE-1 em 12,5 mm (flexão local e pinos — DEC-030)
 grp = GrupoPinos(d=16.0, d_cabeca=32.0, hef=150.0, nx=2, ny=2, sx=240.0, sy=280.0, cx_neg=80.0, cx_pos=80.0,
                  cy_neg=400.0, cy_pos=400.0, ha=600.0, fc=40.0)
 t = grp.tracao()
@@ -398,7 +402,7 @@ v = dict(phiVn_kN=min(cands.values()), modo=min(cands, key=cands.get), todos_kN=
 # tração: só a linha superior (2 pinos) — grupo de 2: proporcional
 phiN_linha = t["phiNn_kN"] / 2
 ri, ok_i = interacao(T_linha, phiN_linha, V_ce, v["phiVn_kN"])
-R["CE1"] = dict(peca="CE-1 380 × 330 × 16 A36 + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 no pilar", V_kN=round(V_ce, 1), M_kNm=round(M_ce, 2),
+R["CE1"] = dict(peca=f"CE-1 380 × 330 × {T_CE:g} A36".replace(".", ",") + " + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 no pilar", V_kN=round(V_ce, 1), M_kNm=round(M_ce, 2),
                 T_linha_sup_kN=round(T_linha, 1), phiN_linha_kN=round(phiN_linha, 1), phiV_kN=round(v["phiVn_kN"], 1), modo_V=v["modo"],
                 modo_N=t["modo"], interacao=round(ri, 3), ok=ok_i)
 assert ok_i
@@ -430,9 +434,9 @@ assert R["trava_pe_PT2"]["uso"] <= 1, R["trava_pe_PT2"]
 
 # ------------------------------------------------------------------ 6. nicho NC-1 (caixa de oficina) e ancoragem no concreto da placa
 # rev06c: eixos do nicho — x a partir da ponta da placa (0–120), y a partir da boca (face interna da placa, 0–60), z a partir do fundo do nicho (0–200).
-# teto 120 × 47,5 × 12,5 (z 187,5–200) e base 120 × 47,5 × 9,5 (z 0–9,5); fundo 120 × 200 × 12,5 (y 47,5–60) vence o vão entre teto e base;
-# parede lateral 3 mm (x 117–120) só fecha o concreto (não recebe esforço); 2 abas 12,5 × 38 só nas laterais (x 0–39 e 81–117), soldadas sob
-# o teto na boca, deixando o meio livre para o M16 de nível. Todas as chapas estruturais em A572-50; parede em A36.
+# rev06d (DEC-030): espessura de cada chapa pelo MEF de casca (mef_nc1.py) — teto 12,5, base 3, fundo 9,5 (vence o vão entre teto e base),
+# parede lateral 2 (A36; trabalha junto com a caixa no MEF, solda de filete 2 dos dois lados), 2 abas 12,5 × 38 só nas laterais, soldadas sob
+# o teto na boca, deixando o meio livre para o M16 de nível. Demais chapas em A572-50.
 # Caminho das forças: peso → M16 de nível → teto → nariz (compressão); sucção → dentes → abas → teto → grampos + estribo N5;
 # sobrepressão → prisioneiro frontal → fundo (viga entre teto e base) → teto e base → grampos + estribos N5 (em cima) e N6 (embaixo).
 FY36 = 250.0
@@ -454,20 +458,34 @@ F_teto = max(Fy_N, R_teto) / 1e3
 F_base = R_base / 1e3
 g8 = 0.75 * 4 * 31.2 * 250 / 1e3                          # rev06c: 2 grampos U Ø6,3 A36 (4 pernas) por chapa, dentro do estribo N5/N6 (y = 31 da boca)
 R["nicho_NC1"] = dict(
-    caixa="teto 12,5 + base 9,5 + fundo 12,5 + 2 abas 12,5 × 38 (A572-50) + parede lateral 3 (A36, sem esforço), solda de oficina MIG, galvanizado a fogo, + 4 grampos U Ø6,3 A36 (c/c 32, a 31 mm da boca, dentro dos estribos N5 e N6)",
+    caixa=f"teto {NC['t_teto']:g} + base {NC['t_base']:g} + fundo {NC['t_fundo']:g} + 2 abas {NC['t_aba']:g} × 38 (A572-50) + parede lateral {NC['t_parede']:g} (A36)".replace(".", ",") + ", solda de oficina MIG, galvanizado a fogo, + 4 grampos U Ø6,3 A36 (c/c 32, a 31 mm da boca, dentro dos estribos N5 e N6)",
     fundo=dict(M_kNmm=round(M_fundo / 1e3, 1), sigma_MPa=round(M_fundo / W_fundo, 1), lim_MPa=round(FYNC / GA1, 1), uso=round(M_fundo / W_fundo / (FYNC / GA1), 3)),
     aba=dict(sigma_MPa=round(M_aba / W_aba, 1), largura_mm=b_aba, uso=round(M_aba / W_aba / (FYNC / GA1), 3)),
-    parede=dict(t_mm=NC["t_parede"], obs="sem esforço: as forças vão por teto, base e fundo; a parede só fecha o concreto na lateral do nicho"),
+    parede=dict(t_mm=NC["t_parede"], obs="trabalha junto com a caixa (MEF: placa e solda verificadas); as forças principais vão por teto, base, fundo e abas"),
     teto_compressao=dict(sigma_MPa=round(sig_teto, 2), fcd_MPa=round(fcd, 1)),
     sem_caixa_parede_40mm=dict(V_Rd_kN=round(V_parede / 1e3, 1), F_kN=round(Fy_N / 1e3, 1), obs="fundo apoiado só na parede de 40 mm não passaria — por isso o fundo vence o vão entre teto e base"),
     ancoragem_teto=dict(F_kN=round(F_teto, 1), N5_phi_kN=round(phi_N5, 1), grampos_phi_kN=round(g8, 1), uso=round(F_teto / min(phi_N5, g8), 3)),
     ancoragem_base=dict(F_kN=round(F_base, 1), N6_phi_kN=round(phi_N5, 1), grampos_phi_kN=round(g8, 1), uso=round(F_base / min(phi_N5, g8), 3)))
-assert M_fundo / W_fundo <= FYNC / GA1 and M_aba / W_aba <= FYNC / GA1 and F_teto <= min(phi_N5, g8) and F_base <= min(phi_N5, g8)
+assert F_teto <= min(phi_N5, g8) and F_base <= min(phi_N5, g8)
+# rev06d: chapas do nicho pelo MEF de casca apoiado no concreto (mef_nc1.py) — as contas de viga acima ficam só como referência
+_mn = AQ / "mef_nc1.json"
+if _mn.exists():
+    _M = json.loads(_mn.read_text(encoding="utf-8"))
+    _T = dict(teto=NC["t_teto"], base=NC["t_base"], fundo=NC["t_fundo"], parede=NC["t_parede"], abas=NC["t_aba"])
+    R["nicho_NC1"]["mef"] = dict(espessuras=_M["T"], uso=_M["uso"], atual=_M["T"] == _T)
+    assert _M["T"] == _T, "rodar mef_nc1.py com as espessuras atuais"
+    assert max(_M["uso"].values()) <= 1.0
+_mc = AQ / "mef_cs1.json"
+if _mc.exists():
+    _C = json.loads(_mc.read_text(encoding="utf-8"))
+    R["console_mef_casca"] = dict(uso=_C["uso"], soldas={j: max(c["uso_solda"][j] for c in _C["casos"].values()) for j in _C["casos"]["succao"]["uso_solda"]})
+    assert _C["uso"] <= 1.0
 # geometria única para pranchas e IFC
 R["GEO"] = dict(CS1=dict(costas=dict(t=T_COST, b=B_COST, z0=Z0_COST, z1=Z1_COST), alma=dict(t=T_ALMA, x=X_ALMA, y0=T_COST, y1=Y_PONTA, h_raiz=H_RAIZ, h_ponta=H_PONTA),
                          mesa=dict(t=T_MESA, b=B_MESA, y0=T_COST, y1=Y_PONTA), dente=DENTE, ponta=PONTA, y_nivel=Y_NIV, z_frontal=Z_FRONT,
+                         a_solda=A_SOLDA_CS1,
                          L_nivel=L_NIV, L_frontal=L_FRONT),
-                NC1=NC, hex=HEX, tol=dict(a=A_NOM, a_tol=A_TOL, G=G_NOM, G_tol=G_TOL, x_tol=X_TOL))
+                NC1=NC, hex=HEX, tol=dict(a=A_NOM, a_tol=A_TOL, G=G_NOM, G_tol=G_TOL, x_tol=X_TOL), CE1=dict(t=T_CE, b=380.0, h=330.0))
 # CE-1 à flexão local: tração do topo do console (M = Vd·e / braço 2/3·200) levada ao pino mais próximo (40 mm), faixa de 100 mm
 T_topo = Vd_N * (Y_NIV + 8) / (2 / 3 * H_COST)
 M_ce_loc = T_topo * 40 / 2
