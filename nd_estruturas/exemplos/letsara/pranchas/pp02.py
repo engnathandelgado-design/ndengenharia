@@ -20,7 +20,7 @@ AE, AD = N["aba_e"], N["aba_d"]
 za = H - tt - ha                                    # face de baixo das abas
 f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
 PP01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))
-N_OBRA = PP01["n"]["NC1"]
+N_OBRA, N_E, N_D = PP01["n"]["NC1"], PP01["n"]["NC1_E"], PP01["n"]["NC1_D"]
 
 pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — NICHO NC-1: CONJUNTO SOLDADO, PEÇAS, SOLDAS E LISTA DE MATERIAIS",
@@ -28,7 +28,7 @@ pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZ
 pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DO NC-1 (PAREDE LATERAL 3 SEM ESFORÇO, ABAS LATERAIS 12,5, GRAMPOS Ø6,3)")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.cabecalho_peca("NC-1", f"NICHO NC-1 — CONJUNTO SOLDADO — {N_OBRA // 2} NC-1 + {N_OBRA // 2} NC-1' (ESPELHADO) = {N_OBRA} PEÇAS",
+pr.cabecalho_peca("NC-1", f"NICHO NC-1 — CONJUNTO SOLDADO — {N_E} NC-1 + {N_D} NC-1' (ESPELHADO) = {N_OBRA} PEÇAS",
                   f"embutido nas 2 pontas de cada placa (ND-LET-PP00/PP01) · {B:g} × {H:g} × {P:g} · aberto na boca e na ponta · cotas em mm",
                   largura=XC - 60 - Q[0] - 10)
 
@@ -185,8 +185,8 @@ rows.append(["", "PESO TOTAL DO CONJUNTO (kg)", "", "", "", "", f(tot, 2)])
 y = pr.tabela(XC - 60, Q[3] - 6, "LISTA DE MATERIAIS — NC-1 (1 CONJUNTO)", ["Nº", "DESCRIÇÃO", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg/un", "kg"],
               rows, [9, 50, 52, 34, 10, 22, 23], h_lin=5.4, destaque_ultima=True)
 y = pr.tabela(XC - 60, y - 4, "QUANTIDADE NA OBRA", ["CONJUNTO", "USO", "QTD", "kg"],
-              [["NC-1", "ponta esquerda da placa (vista pela face interna)", N_OBRA // 2, f(tot * N_OBRA / 2, 0)],
-               ["NC-1'", "ponta direita — espelhado (abas e parede trocam de lado)", N_OBRA // 2, f(tot * N_OBRA / 2, 0)],
+              [["NC-1", "ponta inicial da placa (início do comprimento na vista PP-x)", N_E, f(tot * N_E, 0)],
+               ["NC-1'", "ponta final — espelhado (abas e parede trocam de lado)", N_D, f(tot * N_D, 0)],
                ["", "total", N_OBRA, f(tot * N_OBRA, 0)]], [22, 120, 18, 40], h_lin=5.4, destaque_ultima=True)
 json.dump(dict(kg_NC1=tot), open("/home/claude/letsara/pranchas/pp02.json", "w"))
 pr.notas(XC - 60, y - 4, [
@@ -196,7 +196,7 @@ pr.notas(XC - 60, y - 4, [
     "Sequência: (1) teto + fundo + base no gabarito, pontear e conferir o vão 178 e o esquadro; (2) soldas teto × fundo e base × fundo; (3) abas pela boca (CJP, det. A) e filete atrás; (4) parede lateral; (5) grampos (filete 4 × 20 nos 2 lados de cada perna).",
     "Parede lateral (item 4) sem esforço: só fecha o concreto. Teto, base, fundo e abas recebem as forças do console (ND-LET-PP01): A572-50.",
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); retocar com galvanização a frio onde houver dano.",
-    "Na fôrma da placa: boca rente à face interna (lado da fôrma) e ponta rente à cabeceira, preso no gabarito (posição ±5); vedar a cavidade com isopor antes de concretar. NC-1 na ponta esquerda e NC-1' (espelhado) na direita.",
+    "Na fôrma da placa: boca rente à face interna (lado da fôrma) e ponta rente à cabeceira, preso no gabarito (posição ±5); vedar a cavidade com isopor antes de concretar. NC-1 na ponta inicial e NC-1' (espelhado) na final; pontas do lado da porta (vista I) sem nicho.",
     "Grampos dentro dos estribos N5 (teto) e N6 (base) da armação da ponta (ND-LET-PP01, det. 1 e 2).",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP02")

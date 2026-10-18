@@ -55,6 +55,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] Letsara rev06d (DEC-028): ombreiras OM-1 em U na porta da vista I, PP05, placa I-15 com 12 cordoalhas (PP-05P), IFC e quantitativos.
+- [x] Letsara rev06c: contagem NC-1 = IFC (404) e quantitativo do pacote Kingspan (telhas, cartolas, lã, clipes, parafusos) na COB04, planilha e LISTAS.
 - [x] Letsara rev06c (DEC-027): cobertura Kingspan zipada dupla com lã de rocha — cargas, fixações à sucção, acabamentos (COB04) e IFC com camadas, cartolas e rufos.
 - [x] Letsara rev06c: fixação compatibilizada (parede 3, 2 abas, 2 dentes, M16 com porca soldada, prisioneiro, grampos Ø6,3) e pranchas de fabricação PP02–PP04 com isométricos explodidos, soldas, roscas e listas; PP01 com conjunto, tolerâncias e sequência.
 - [x] Letsara rev06b: projeto executivo da fixação das placas — ND-LET-PP01 (armação da ponta, NC-1 caixa, CS-1, CE-1 + N18, PT-1, PT-2), PP00, pilares, MC07, quantitativos, IFC e PDF único.

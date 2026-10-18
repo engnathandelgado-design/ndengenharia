@@ -33,6 +33,8 @@ PP_KNM = PL["secao"]["pp_kNm"]
 FIADAS = list(range(8))
 ESQ = (1, 4)                                            # fiadas sem placa (faixas de esquadria) nas vistas H, J e I
 PORTA_I = (M(23.79), M(25.59))                          # porta da vista I (fiada 1, vão C–D) — R01: 1,80 m (a confirmar)
+J_OM = 20                                               # rev06d (DEC-028): ponta da placa a 20 mm do vão da porta (alma da ombreira OM-1 em U + junta)
+OMB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
 FACE_X = (-300, M(LARG) + 300)                          # faces externas dos pilares de canto (direção x)
 FACE_Y = (-200, M(COMP) + 200)
 CLIENTE = "MARQUES ENGENHARIA E CONSTRUÇÕES"
@@ -95,15 +97,18 @@ def montar(V):
             trechos = [(s0, s1)]
             if d.get("porta") and d["porta"][0] == b and d["porta"][1] == k:
                 p0, p1 = d["porta"][2]
-                trechos = [(s0, p0 - JUNTA // 2), (p1 + JUNTA // 2, s1)]
+                trechos = [(s0, p0 - J_OM), (p1 + J_OM, s1)]
                 abert.append((p0, p1, 0, 2 * H_PL, "porta"))
             for (t0, t1) in trechos:
                 n += 1
-                ap = apoio if (t0 == s0 and t1 == s1) else ("console CS-1 + baldrame (ponta da porta)" if k == 0 else "console CS-1 + placa de baixo (porta)")
+                ap = apoio if (t0 == s0 and t1 == s1) else "CS-1 + baldrame + OM-1"
+                esp = bool(d.get("porta") and d["porta"][0] == b and k == 2)     # placa sobre a porta: recebe o topo das 2 OM-1 → 12 cordoalhas
+                if esp:
+                    ap = "2 CS-1 + topo das 2 OM-1"
                 cont = all(j in ks for j in range(k))                       # pano contínuo até o baldrame → pinos PT-1; senão trava de pé PT-2
                 trava = "PT-1" if cont else "PT-2"
                 pt2 = [] if cont else [(sa + ba / 2 + 51, z0 + 150), (sb - bb / 2 - 51, z0 + 150)]
-                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0,
+                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0, Lk=(t1 - t0) + (0.1 if esp else 0), especial=esp,
                                   apoio=ap + (" + 2 PT-1 (pé)" if cont else " + 2 PT-2 (pé)"), trava=trava, pt2=pt2))
                 ca1 += [(t + sg * X_CS, z0 + Z_NC) for t, sg, ok in ((t0, 1, t0 == s0), (t1, -1, t1 == s1)) if ok]   # consoles CS-1 (só nas pontas sobre pilar)
     return pecas, ca1, abert
@@ -113,8 +118,10 @@ DADOS = {V: montar(V) for V in VISTAS}
 TIPOS = {}
 for V, (pecas, _, _) in DADOS.items():
     for p in pecas:
-        TIPOS.setdefault(p["L"], []).append((V, p["id"]))
-TIPO = {L: f"PP-{i+1:02d}" for i, L in enumerate(sorted(TIPOS, key=lambda L: -L))}
+        TIPOS.setdefault(p["Lk"], []).append((V, p["id"]))
+TIPO = {L: f"PP-{i+1:02d}" for i, L in enumerate(sorted([L for L in TIPOS if L == int(L)], key=lambda L: -L))}
+for _L in [L for L in TIPOS if L != int(L)]:                # rev06d: variante com 12 cordoalhas (placa sobre a porta da vista I)
+    TIPO[_L] = TIPO.get(int(_L), f"PP-{len(TIPO) + 1:02d}") + "P"
 N_TOT = sum(len(v) for v in TIPOS.values())
 peso_t = lambda L: PP_KNM * L / 1000 / 9.81
 PESO_TOT = sum(len(v) * peso_t(L) for L, v in TIPOS.items())
@@ -150,10 +157,14 @@ def desenhar_elev(pr, V, origem, esc):
         vv.hachura(pts, "ANSI37", 3.0, "HACHURA")
         vv.poli(pts, "EIXO", fechada=True)
         vv.texto(((a0 + a1) / 2, (z0 + z1) / 2), {"portão": "PORTÃO — livre até +7,40", "porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
+        if rot == "porta":                                                          # rev06d: ombreiras OM-1 em U nos 2 lados (ND-LET-PP05)
+            for xa in (a0 - 20, a1):
+                vv.ret(xa, 12, 20, z1 - 22, "METALICA")
+            vv.chamada((a0 - 10, z1 * 0.55), (-10, 6), "OM-1 (PP05)")
     for p in pecas:
         vv.ret(p["s0"], p["z0"] + JUNTA / 2, p["L"], H_PL - JUNTA, "VISTA")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.6), p["id"], "nota", "MIDDLE_CENTER")
-        vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.22), TIPO[p["L"]], "min", "MIDDLE_CENTER")
+        vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.22), TIPO[p["Lk"]], "min", "MIDDLE_CENTER")
     for (s, z) in ca1:                                                              # rev06: nichos NC-1 / consoles CS-1 (atrás da placa)
         vv.ret(s - NC_B / 2, z - NC_H / 2, NC_B, NC_H, "OCULTA")
     for p in pecas:                                                                 # pinos PT-1 na junta de baixo / travas PT-2 no pé
@@ -269,13 +280,13 @@ def prancha_vista(Vs, desenho, folha):
     planta_chave(pr, Vs, (Q[0] + 330, Q[1] + 60), 700)
     # lista de produção
     y = Q[3] - 6
-    rows = [[p["seq"], p["id"], TIPO[p["L"]], f"{p['L']/10:.1f}".replace(".", ","), f"+{f(p['z0']/1000, 2)}", f(peso_t(p["L"]), 2), p["apoio"]] for p in lista]
+    rows = [[p["seq"], p["id"], TIPO[p["Lk"]], f"{p['L']/10:.1f}".replace(".", ","), f"+{f(p['z0']/1000, 2)}", f(peso_t(p["L"]), 2), p["apoio"]] for p in lista]
     h = 4.4 if len(rows) > 32 else 5.0
     y = pr.tabela(XC, y, "LISTA DE PRODUÇÃO E MONTAGEM (na ordem)", ["SEQ", "PEÇA", "TIPO", "L (cm)", "BASE", "PESO (t)", "APOIO DA PEÇA"],
                   rows, [10, 18, 18, 18, 18, 18, 90], h_lin=h)
     res = {}
     for p in lista:
-        res.setdefault(TIPO[p["L"]], [0, p["L"]])[0] += 1
+        res.setdefault(TIPO[p["Lk"]], [0, p["L"]])[0] += 1
     rr = [[t, f"{L/10:.1f}".replace(".", ","), n_, f(n_ * peso_t(L), 1)] for t, (n_, L) in sorted(res.items())]
     rr.append(["", "total", len(lista), f(pesos, 1)])
     y = pr.tabela(XC, y - 4, "RESUMO POR TIPO", ["TIPO", "L (cm)", "QT", "PESO (t)"], rr, [40, 50, 30, 70], h_lin=5.0, destaque_ultima=True)
@@ -340,7 +351,7 @@ def prancha_tipo():
     e.cota_v([0, 60, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL - 60, H_PL], LD + 500 + LE, 10, total=False)
     e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 18), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
     e.chamada((2250, 60), (10, -16), "TSA M16 dos pinos PT-1: topo e base, a 0,21 L + 15 cm das pontas (DETALHE 3)")
-    e.chamada((2100, H_PL + 120), (-6, 24), "AL-P alça de cordoalha Ø12,7 (2 por placa, a 0,21 L das pontas)")
+    e.chamada((2100, H_PL + 120), (-6, 24), "AL-P cordoalha Ø12,7 (2/placa, 0,21 L) — cortar após montar")
     e.chamada((1500, 781), (12, -20), "C1 — 8 cord. Ø12,7 (4 por face), aderentes, cortadas rente às pontas")
     e.marcador_corte((1200, -350), (1200, H_PL + 100), "A", lado=1)
     # ---- corte A-A (1:10)
@@ -482,11 +493,13 @@ def prancha_tipo():
     d6.chamada((-60, 52), (30, 26), "bucha BR-2 M16 hef 100 (face lateral do pilar)")
     d6.chamada((51, -FOLGA - 50), (16, -10), "bucha BR-1 M16 hef 70 (placa)")
     # ---- detalhe 5: alça AL-P (1:10)
-    d5 = pr.vista("DETALHE 5", (Q[0] + 270, Q[1] + 80), 10, titulo="DETALHE 5 — ALÇA AL-P", subtitulo="cordoalha Ø12,7 CP-190 RB", unidade="cm")
+    d5 = pr.vista("DETALHE 5", (Q[0] + 270, Q[1] + 80), 10, titulo="DETALHE 5 — ALÇA AL-P", subtitulo="cordoalha Ø12,7 CP-190 RB — cortada rente ao topo após a montagem, ponta com epóxi", unidade="cm")
     d5.ret(-250, -600, 500, 600, "VISTA")
     d5.poli([(-60, -550), (-60, 80), (0, 120), (60, 80), (60, -550)], "ARMADURA")
     for xx in (-60, 60):
         d5.linha((xx, -550), (xx - 40, -620), "ARMADURA")
+    d5.linha((-110, 0), (110, 0), "OCULTA")
+    d5.chamada((80, 0), (14, -14), "linha de corte rente ao topo (após montar)")
     d5.cota_v([-550, 0, 120], 250, 8, total=False)
     d5.chamada((0, 120), (-30, 10), f"laço de 1,40 m; {f(P['transitorias']['F_alca_kN'])} kN por alça")
     # ---- tabelas
@@ -499,9 +512,9 @@ def prancha_tipo():
     y = pr.tabela(XC, y, f"TIPOS DE PLACA — {N_TOT} PEÇAS", ["TIPO", "L (cm)", "QT", "PESO (t)", "VISTAS"], rows, [18, 22, 14, 22, 114], destaque_ultima=True)
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=8, y=26, forca=P["protensao"]["F_macaco_kN"], isol=0)], 60)
     y = tc["y_base"]
-    ins = [["NC-1", "Caixa 120×200×60 (ND-LET-PP02)", 2, "face int., nas 2 pontas"],
+    ins = [["NC-1", "Caixa 120×200×60 (ND-LET-PP02)", 2, "face int., 2 pontas (1 junto à porta)"],
            ["TSA", "Luva roscada M16 hef 70 (PT-1)", 4, "topo e base, 0,21 L + 15"],
-           ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L das pontas"],
+           ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L; cortar após montar"],
            ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
            ["CS-1", "Console soldado na obra (ND-LET-PP03)", "2", "CE-1 do pilar (det. 4)"],
            ["PT-1", "Cartola 6,3 × 80 + 2 M16", "2", "junta de baixo (det. 3)"],
@@ -517,8 +530,8 @@ def prancha_tipo():
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, [
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
-        f"Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
-        "Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
+        f"PP-05P (placa I-15, sobre a porta da vista I): mesma fôrma da PP-05, com 12 cordoalhas Ø12,7 (6 por face, a 9,5 / 15,6 / 46,9 / 78,1 / 109,4 / 115,5 cm da base, fora do nicho NC-1) e 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, nos eixos das ombreiras OM-1. Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
+        "Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; depois de montada a placa, cortar as alças rente ao topo (disco, sem aquecer o concreto) e proteger as pontas com epóxi antes de montar a placa de cima (junta de 5 mm); estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
         "Montagem (sistema Trejor, DEC-026): soldar os 2 consoles CS-1 nas CE-1 dos pilares no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G 50 ± 10), afastamento 25 ± 5 pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa leva só o próprio peso e o vento: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos PT-1 na junta de baixo (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",
         f"Cargas por console: G = {f(FX['cargas_por_console']['G_k_kN'])} kN (k), Vd = {f(FX['cargas_por_console']['Vd_kN'])} kN (montagem, γf·βa = 1,69), vento {f(FX['cargas_por_console']['vento_d_kN'])} kN (d); PT-1 {f(FX['mef_parede']['F_pino_d_kN'])} kN, PT-2 {f(FX['trava_pe_PT2']['F_d_kN'])} kN. Medidas do CS-1/NC-1 de pré-dimensionamento: confirmar com o catálogo Trejor (consoles para painéis de fachada).",
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",

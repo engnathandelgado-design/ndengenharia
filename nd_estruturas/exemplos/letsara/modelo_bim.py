@@ -431,6 +431,20 @@ def montar() -> ModeloBIM:
             (a0, b0, _), (a1, b1, _) = P_(u0, v0, 0), P_(u1, v1, 0)
             caixa(m, marca, a0, a1, b0, b1, z0, z1, grupo, obs)
         pil = FCH.VISTAS[V]["pil"]
+        # rev06d (DEC-028): ombreiras OM-1 em U na porta (ND-LET-PP05) — abas abraçando a ponta das placas, base no baldrame, CL-1 no topo
+        for (a0_, a1_, _z0, _z1, rot_) in FCH.DADOS[V][2]:
+            if rot_ != "porta":
+                continue
+            for xe, dd in ((a0_ / 1000, -1), (a1_ / 1000, 1)):           # dd: sentido da placa a partir da face do vão
+                def ux(a, b):
+                    return sorted((xe + dd * a, xe + dd * b))
+                ua, ub = ux(0.0, 0.0063); cx(ua, ub, -0.1373, -0.0127, 0.0125, 2.490, "OM-1 alma U 125×80×6,3", GP, obs="ND-LET-PP05")
+                ua, ub = ux(0.0, 0.080)
+                cx(ua, ub, -0.019, -0.0127, 0.0125, 2.490, "OM-1 aba interna", GP); cx(ua, ub, -0.1373, -0.131, 0.0125, 2.490, "OM-1 aba externa", GP)
+                ua, ub = ux(-0.160, 0.020); cx(ua, ub, -0.175, 0.025, 0.0, 0.0125, "OM-1 chapa de base 12,5×200×180", GP)
+                for xc_ in (-0.060, -0.130):
+                    ua, ub = ux(xc_ - 0.008, xc_ + 0.008); cx(ua, ub, -0.083, -0.067, -0.100, 0.035, "OM-1 chumbador químico M16 hef 100", GP)
+                ua, ub = ux(-0.010, 0.090); cx(ua, ub, -0.0127, -0.0002, 2.340, 2.700, "CL-1 chapa de ligação 12,5×100×360", GP, obs="M16 em bucha BR-1 na I-15")
         cons = {(round(s_), round(z_)) for (s_, z_) in ca1}
         ce_feitas = set()
         for pc in pecas:

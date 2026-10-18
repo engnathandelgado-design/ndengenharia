@@ -130,6 +130,7 @@ for nome, f_, L, qt in (("TS-01", "TS01-2", LGQ["L_TS"], 14), ("I130 (média)", 
 n, d = 8, 12.7
 L_pp = sum(p[4] * p[5] for p in pecas if p[0] == "Placas de fechamento") / n_pp
 cord.append(("Placas PP (média)", d, n, round(L_pp, 3), n_pp, ""))
+cord.append(("Placa PP-05P (I-15, sobre a porta): +4 cordoalhas", d, 4, 9.86, 1, "rev06d: 12 cordoalhas nesta placa (topo das ombreiras OM-1)"))
 cord.append(("Lajes alveolares LA", 12.7, 8, 9.45, sum(p[5] for p in pecas if p[1].startswith("LA")), "fornecimento do fabricante da laje"))
 KGC = {9.5: 0.432, 12.7: 0.792}
 
@@ -158,7 +159,10 @@ for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
 for l in tab("PP00", "INSERTOS E PEÇAS")["linhas"]:
     if l[0] in ("NC-1", "TSA", "AL-P"):                                  # por placa (rev06: NC-1 nas 2 pontas, TSA dos pinos PT-1)
-        ins.append(("ND-LET-PP00", "Placas PP", l[0], l[1], int(l[2]), n_pp))
+        if l[0] == "NC-1":                                               # só nas pontas com console (lado da porta sem nicho): contagem do PP01
+            ins.append(("ND-LET-PP02", "Placas PP", "NC-1", l[1], 1, json.load(open("/home/claude/letsara/pranchas/pp01.json"))["n"]["NC1"]))
+        else:
+            ins.append(("ND-LET-PP00", "Placas PP", l[0], l[1], int(l[2]), n_pp))
 # rev06 (DEC-026): consoles, chapas de espera, pinos e travas contados peça a peça nas vistas (fechamento.py)
 import fechamento as _FC
 _pec = [p_ for V in _FC.DADOS for p_ in _FC.DADOS[V][0]]
@@ -175,6 +179,8 @@ ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1", f"Console soldado A572-50 (c
         ("ND-LET-PP04", "Pilares (fábrica)", "CE-1", f"Chapa de espera A36 380×330×16 + 4 pinos Ø16×150 + 2 grampos N18 — {_kg01['kg_CE1']:.2f} kg/un".replace(".", ","), 1, len(_ce)),
         ("ND-LET-PP04", "Placas PP (obra)", "PT-1", f"Cartola 6,3 × 80 + 2 M16 8.8 (junta de baixo) — {_kg01['kg_PT1']:.2f} kg/un".replace(".", ","), 1, _n_pt1),
         ("ND-LET-PP04", "Placas PP (obra)", "PT-2", f"L 102×102×9,5 L=150 + 2 M16 + BR-1 (placa) + BR-2 (pilar) — {_kg01['kg_PT2']:.2f} kg/un".replace(".", ","), 1, _n_pt2),
+        ("ND-LET-PP05", "Placas PP (obra)", "OM-1", f"Ombreira U 125×80×6,3 L=2478 + chapa de base + CL-1 + 2 chumbadores químicos M16 + 2 M16 passantes — {json.load(open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json'))['kg_un']:.1f} kg/un".replace(".", ","), 1, 2),
+        ("ND-LET-PP05", "Placas PP", "BR-1 (I-15)", "Bucha M16 hef 70 na face interna da I-15 (topo das OM-1)", 2, 1),
         ("ND-LET-PP02", "Placas PP", "NC-1 (kg)", f"Caixa A572-50 do nicho (parede 3 A36) — {_kg01['kg_NC1']:.2f} kg/un; aço estrutural total {_kg01['kg_NC1']*_kg01['n']['NC1'] + _kg01['kg_CS1']*_n_cs + _kg01['kg_CE1']*len(_ce) + _kg01['kg_PT1']*_n_pt1 + _kg01['kg_PT2']*_n_pt2:.0f} kg".replace(".", ","), 0, n_pp)]
 
 # ------------------------------------------------------------------ planilha
@@ -282,6 +288,20 @@ for l in trav:
 total(ws, r, "TOTAL (kg)", [5], r0, r - 1, 6)
 RC = r
 
+# 5a. cobertura Kingspan (telhas, cartolas, lã, clipes, fixações e rufos) — acabamentos_cob.py
+ACB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/acabamentos_cobertura.json"))
+ws = wb.create_sheet("Cobertura Kingspan")
+r = folha(ws, f"COBERTURA KINGSPAN ZIPADA DUPLA COM LÃ DE ROCHA (manual p. 28) — área {ACB['telhas']['area_m2']:.0f} m²".replace(".", ","), RODAPE,
+          ["ITEM", "UN", "LÍQUIDO", "COMPRA", "OBS.", "PRANCHA"], [48, 8, 10, 10, 90, 14])
+RK0 = r
+for t in ACB["telhas"]["itens"]:
+    linha(ws, r, [t["item"], t["un"], t["liq"], t["compra"], t["obs"], "ND-LET-COB04"], {3: "#,##0.#", 4: "#,##0"}, entrada=(3, 4)); r += 1
+for t in ACB["rufos"]:
+    linha(ws, r, [f"Rufo {t['marca']} {t['chapa']} desenv. {t['desenv_mm']}", "pç", t["pecas"], t["pecas"], f"{t['comprimento_m']:.1f} m — {t['descricao']}".replace(".", ",", 1), "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
+for t in ACB["acessorios"]:
+    linha(ws, r, [t["item"], "un", t["qtd"], t["qtd"], t["uso"], "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
+ws.cell(r + 1, 1, "Compra: +5 % em lã, clipes e parafusos; telhas e cartolas pela contagem de peças. Valores a confirmar com a Kingspan (cotação e paginação).").font = F
+
 # 6. insertos
 ws = wb.create_sheet("Insertos e ligações")
 r = folha(ws, "INSERTOS, CHAPARIA EMBUTIDA, PINOS, NEOPRENES E ALÇAS", RODAPE, ["PRANCHA", "PEÇA", "MARCA", "DESCRIÇÃO", "QT/PEÇA", "PEÇAS", "QT TOTAL", "kg/un", "kg TOTAL"], [16, 18, 9, 70, 9, 8, 9, 8, 10])
@@ -321,13 +341,14 @@ itens = [("Peças pré-moldadas", f"='Pré-moldados'!F{P1 + 1}", "pç", "aba Pr�
          ("Telas soldadas", "='Telas'!E7", "kg", "aba Telas"),
          ("Cordoalhas CP-190 RB", "='Protensão'!G" + str(5 + len(cord)), "kg", "aba Protensão"),
          ("Cobertura metálica (terças, ligações, travamentos)", f"='Cobertura metálica'!E{RC}", "kg", "aba Cobertura metálica"),
+         ("Cobertura Kingspan — telha zipada 455 + TP-40 + lã (área)", ACB["telhas"]["area_m2"], "m²", "aba Cobertura Kingspan"),
          ("Concreto / graute moldado na obra", "=SUM('Moldado in loco'!C5:C8)", "m³", "aba Moldado in loco")]
 for k, (a, b, c, d) in enumerate(itens, 5):
     for j, v in enumerate((a, b, c, d), 1):
         x = ws.cell(k, j, v); x.font = FB if not a.startswith("  ") else F; x.border = BOR
     ws.cell(k, 2).number_format = "#,##0.0"
 k += 2
-for t in ["Não inclui: fundações (blocos, cálices, estacas), piso, telhas e acessórios de cobertura (calhas, rufos), esquadrias e portões — fora do escopo da estrutura.",
+for t in ["Não inclui: fundações (blocos, cálices, estacas), piso, calhas e descidas, esquadrias e portões — fora do escopo da estrutura.",
           "Pilares P6 e P7 do anexo (R01) fora do quantitativo até a definição da função.",
           "Pilares PL/PF quantificados na opção A (concreto armado). Opção B (protendido) na prancha ND-LET-PIL-P01.",
           RODAPE]:
@@ -437,6 +458,16 @@ def listas_pdf(caminho):
     E.append(Spacer(1, 4))
     t2 = tab("COB02", "LISTA DE MATERIAIS")
     E.append(tb([t2["cab"]] + t2["linhas"], [16, 14, 30, 30, 16, 150]))
+    E += [PageBreak(), Paragraph(f"6. Cobertura Kingspan zipada dupla com lã de rocha (manual p. 28) — área {fm(ACB['telhas']['area_m2'], 0)} m² — ND-LET-COB04", T2)]
+    lin = [["ITEM", "UN", "LÍQUIDO", "COMPRA", "OBSERVAÇÃO"]] + [[t["item"], t["un"], fm(t["liq"], 1 if isinstance(t["liq"], float) else 0), fm(t["compra"], 0), t["obs"].replace(".", ",")] for t in ACB["telhas"]["itens"]]
+    E.append(tb(lin, [70, 14, 18, 18, 150]))
+    E.append(Spacer(1, 4))
+    lin = [["RUFO", "CHAPA", "DESENV. (mm)", "COMPR. (m)", "PEÇAS", "DESCRIÇÃO"]] + [[t["marca"], t["chapa"], t["desenv_mm"], fm(t["comprimento_m"], 1), t["pecas"], t["descricao"]] for t in ACB["rufos"]]
+    E.append(tb(lin, [18, 30, 20, 20, 14, 168]))
+    E.append(Spacer(1, 4))
+    lin = [["ACESSÓRIO", "USO", "QTD"]] + [[t["item"], t["uso"], fm(t["qtd"], 0)] for t in ACB["acessorios"]]
+    E.append(tb(lin, [80, 170, 20]))
+    E.append(Pp("Compra: +5 % em lã, clipes e parafusos. Rufos em peças de 3 m com transpasse de 200 (peças de 600 nos pilares). Confirmar com a Kingspan."))
     doc.build(E, onFirstPage=rodape, onLaterPages=rodape)
     return caminho
 

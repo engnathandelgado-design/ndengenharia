@@ -229,6 +229,10 @@ rows = [[r["marca"], r["descricao"][:58] + ("…" if len(r["descricao"]) > 58 el
 y = pr.tabela(XC, Q[3] - 6, "LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE)", ["MARCA", "DESCRIÇÃO", "CHAPA", "DESENV.", "m", "PÇ"], rows, [16, 132, 30, 18, 18, 16], h_lin=5.2)
 ac = [[a["item"], a["uso"], a["qtd"]] for a in R["acessorios"]]
 y = pr.tabela(XC, y - 4, "ACESSÓRIOS E FIXAÇÕES DOS ACABAMENTOS — OBRA", ["ITEM", "USO", "QTD"], ac, [68, 148, 14], h_lin=5.2)
+TL = R["telhas"]
+tl = [[t["item"], t["un"], t["liq"] if not isinstance(t["liq"], float) else f(t["liq"], 1), t["compra"], (t["obs"][:60] + ("…" if len(t["obs"]) > 60 else "")).replace(".", ",")] for t in TL["itens"]]
+y = pr.tabela(XC, y - 4, f"TELHAS, CARTOLAS E FIXAÇÕES — ÁREA {f(TL['area_m2'], 0)} m² (COMPRA: +{TL['perda'] * 100:.0f} %)",
+              ["ITEM", "UN", "LÍQ.", "COMPRA", "OBSERVAÇÃO"], tl, [84, 14, 14, 16, 102], h_lin=5.2)
 FT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/fixacao_telhas.json"))
 bo = FT["zonas"]["borda"]["ligacoes"]
 pr.notas(XC, y - 4, [

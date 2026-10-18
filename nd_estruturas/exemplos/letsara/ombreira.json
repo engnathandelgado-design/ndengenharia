@@ -1,0 +1,133 @@
+{
+ "peca": "OM-1 U dobrado 125 × 80 × 6,3 A36, L = 2478 + chapa de base 12,5 × 200 × 180 + 2 chumbadores químicos M16 + chapa de ligação CL-1 12,5 × 100 × 360",
+ "p_k_kNm2": 1.398,
+ "n": 2,
+ "solucao": "U rotulado na base (baldrame) e no topo (placa I-15 sobre a porta, com 12 cordoalhas)",
+ "base_engastada_descartada": {
+  "Md_kNm": 10.38,
+  "T_chumbador_kN": 32.5,
+  "uso_cone": 2.12,
+  "torcao_baldrame_kNm": 10.4
+ },
+ "placa_porta": {
+  "L_m": 4.01,
+  "sem_U": {
+   "flecha_mm": 4.1,
+   "sigma_k_MPa": 3.73,
+   "reacoes_pontuais_kN": [
+    4.61,
+    -3.18,
+    5.58
+   ],
+   "reacao_borda_U_kN": 0,
+   "soma_kN": 7.01,
+   "carga_kN": 7.01
+  },
+  "com_U": {
+   "flecha_mm": 0.8,
+   "sigma_k_MPa": 1.43,
+   "reacoes_pontuais_kN": [
+    1.84,
+    1.16,
+    3.3
+   ],
+   "reacao_borda_U_kN": 0.7,
+   "soma_kN": 7.01,
+   "carga_kN": 7.01
+  },
+  "sig_cp_inf_MPa": -7.07
+ },
+ "U": {
+  "L_mm": 2478,
+  "q_porta_kNm": 1.258,
+  "R_placa_kN": 0.7,
+  "R_base_k_kN": 1.33,
+  "R_topo_k_kN": 3.01,
+  "Mk_kNm": 2.44,
+  "Md_kNm": 3.41,
+  "MRd_kNm": 23.45,
+  "uso_flexao": 0.146,
+  "b_t_aba": 12.7,
+  "lim_b_t": 15.8,
+  "Vd_kN": 4.21,
+  "VRd_kN": 96.6,
+  "flecha_k_mm": 1.7,
+  "lim_mm": 8.3,
+  "I_mm4": 4299454,
+  "kg_m": 13.47
+ },
+ "ligacoes": {
+  "base": {
+   "Vd_kN": 1.86,
+   "chumbadores": "2 M16 5.8 químicos hef 100",
+   "Fv_Rd_2_kN": 75.4,
+   "uso": 0.025
+  },
+  "topo": {
+   "Fd_kN": 4.21,
+   "bucha_BR1_phiN_kN": 14.0,
+   "M16_Ft_Rd_kN": 69.8,
+   "chapa_CL1_uso": 0.533,
+   "uso": 0.533
+  },
+  "placa": {
+   "obs": "vento da placa passa ao U por contato das abas (neoprene 6); 2 M16 passantes só posicionam",
+   "R_k_kN": 0.7
+  }
+ },
+ "placa_I15": {
+  "vao_m": 9.74,
+  "Mk_sem_OM_kNm": 20.72,
+  "Mk_com_OM_kNm": 32.66,
+  "Md_kNm": 45.72,
+  "MRd_8cord_kNm": 37.56,
+  "uso_8cord": 1.217,
+  "MRd_10cord_kNm": 45.18,
+  "uso_10cord": 1.012,
+  "MRd_12cord_kNm": 52.08,
+  "uso_12cord": 0.878,
+  "sig_cp_inf_12cord_MPa": -10.61,
+  "sig_c0_12cord_MPa": -12.34,
+  "lim_transf_MPa": -17.5,
+  "cordoalhas": "12 Ø12,7 (6 por face, z = 95, 156, 469, 781, 1094, 1155 mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1"
+ },
+ "kg_un": 40.44,
+ "GEO": {
+  "U": {
+   "h": 125.0,
+   "b": 80.0,
+   "t": 6.3,
+   "neo": 6.0
+  },
+  "BASE": {
+   "t": 12.5,
+   "by": 200.0,
+   "bx": 180.0,
+   "ex": [
+    60.0,
+    130.0
+   ]
+  },
+  "CL1": {
+   "t": 12.5,
+   "b": 100.0,
+   "L": 360.0,
+   "z0": 2.34,
+   "z_par_U": 2.4,
+   "z_bucha": 2.65
+  },
+  "L_U_mm": 2477.5,
+  "T_BASE_mm": 12.5,
+  "FOLGA_mm": 10.0,
+  "JUNTA_U_mm": 20.0,
+  "Z_PAR_mm": [
+   310.0,
+   940.0
+  ],
+  "PORTA": [
+   23.79,
+   25.59,
+   2.5
+  ]
+ }
+}

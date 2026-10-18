@@ -147,6 +147,132 @@
  ],
  "n_zipadas": 176,
  "perimetro_platibanda_m": 240.3,
+ "telhas": {
+  "itens": [
+   {
+    "item": "Telha zipada 455 #0,50 pré-pintada (Kingspan)",
+    "un": "pç",
+    "liq": 176,
+    "compra": 176,
+    "obs": "peça única de 39.21 m (perfilada na obra), 6901 m; área 3123 m²"
+   },
+   {
+    "item": "Telha TP-40 STD 980 #0,65 (inferior)",
+    "un": "pç",
+    "liq": 328,
+    "compra": 328,
+    "obs": "82 colunas × 4 peças (11.71 + 11.12 + 11.57 + 5.39 m), transpasse 200 sobre terça; 3263 m"
+   },
+   {
+    "item": "Perfil cartola #0,65 h 40 (sobre cada terça)",
+    "un": "pç 3 m",
+    "liq": 864,
+    "compra": 864,
+    "obs": "32 linhas × 79.65 m = 2549 m; 27 peças de 3 m por linha"
+   },
+   {
+    "item": "Perfil cartola especial (bordas laterais, linhas 1 e 9)",
+    "un": "m",
+    "liq": 78.4,
+    "compra": 83,
+    "obs": "ao longo da água, com as bases deslizantes #0,80"
+   },
+   {
+    "item": "Lã de rocha FSR 32 e = 40 (entre cartolas)",
+    "un": "m²",
+    "liq": 3123,
+    "compra": 3280,
+    "obs": "painéis entre as cartolas, sem frestas; manter seca"
+   },
+   {
+    "item": "Clipe fixo #0,65",
+    "un": "pç",
+    "liq": 352,
+    "compra": 370,
+    "obs": "1 por zipada nas 2 terças do meio da água (x = 19.44 e 20.25 m)"
+   },
+   {
+    "item": "Clipe deslizante #0,65 + base deslizante",
+    "un": "cj",
+    "liq": 5280,
+    "compra": 5544,
+    "obs": "1 por zipada nas demais terças; a zipada dilata a partir do ponto fixo (≈ 12 mm em cada ponta para ΔT 50 °C — conferir curso do clipe com a Kingspan)"
+   },
+   {
+    "item": "PB 12-14 × 3/4\" P03 (TP-40 × terça)",
+    "un": "pç",
+    "liq": 10496,
+    "compra": 11021,
+    "obs": "4 por telha em cada terça"
+   },
+   {
+    "item": "PB 12-14 × 3/4\" P03 (clipe × cartola)",
+    "un": "pç",
+    "liq": 11264,
+    "compra": 11828,
+    "obs": "2 por clipe"
+   },
+   {
+    "item": "PB 1/4\"-14 × 7/8\" P01 (cartola × TP-40)",
+    "un": "pç",
+    "liq": 10432,
+    "compra": 10954,
+    "obs": "costura em TODAS as ondas (sucção de borda — calc_fixacao_telhas)"
+   }
+  ],
+  "n_zipadas": 176,
+  "n_colunas_tp40": 82,
+  "pecas_tp40_m": [
+   11.71,
+   11.12,
+   11.57,
+   5.39
+  ],
+  "emendas_tp40_x_m": [
+   11.86,
+   22.779,
+   34.149
+  ],
+  "n_linhas_terca": 32,
+  "x_tercas_m": [
+   0.49,
+   1.753,
+   3.017,
+   4.28,
+   5.543,
+   6.807,
+   8.07,
+   9.333,
+   10.596,
+   11.86,
+   13.123,
+   14.386,
+   15.65,
+   16.913,
+   18.176,
+   19.439,
+   20.253,
+   21.516,
+   22.779,
+   24.043,
+   25.306,
+   26.569,
+   27.833,
+   29.096,
+   30.359,
+   31.623,
+   32.886,
+   34.149,
+   35.412,
+   36.676,
+   37.939,
+   39.202
+  ],
+  "area_m2": 3122.9,
+  "comprimento_agua_m": 39.208,
+  "largura_m": 79.65,
+  "perda": 0.05
+ },
  "secoes": {
   "RF-2": {
    "borda": "A",

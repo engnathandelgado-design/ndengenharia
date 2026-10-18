@@ -33,6 +33,15 @@ for V in FCH.DADOS:
     for (x, z) in FCH.DADOS[V][1]:
         CE.add((V, min(pil, key=lambda s: abs(s - x)), z))
 N_CE, N_PL = len(CE), len(PEC)
+# NC-1 só nas pontas com console (as pontas do lado da porta da vista I não têm console nem nicho): NC-1 na ponta inicial (s0)
+# e NC-1' (espelhado) na ponta final (s1) do comprimento da placa, como nas pranchas PP-x e no IFC
+N_NC_E = N_NC_D = 0
+for V in FCH.DADOS:
+    cons = {(round(s_), round(z_)) for (s_, z_) in FCH.DADOS[V][1]}
+    for pc in FCH.DADOS[V][0]:
+        N_NC_E += (round(pc["s0"] + FCH.X_CS), round(pc["z0"] + FCH.Z_NC)) in cons
+        N_NC_D += (round(pc["s1"] - FCH.X_CS), round(pc["z0"] + FCH.Z_NC)) in cons
+N_NC = N_NC_E + N_NC_D
 
 
 def kg_ch(a, b, t, n=1):
@@ -237,12 +246,15 @@ kg_nc, kg_cs, kg_ce = kg(GF.nc1_itens()), kg(GF.cs1_itens()), kg(GF.ce1_itens())
 pti = {n: (q, k) for n, _, _, _, q, k in GF.pt_itens()}
 kg_pt1 = sum(pti[n][0] * pti[n][1] for n in (30, 31, 32))
 kg_pt2 = pti[40][1] + pti[31][0] * pti[31][1] + pti[32][0] * pti[32][1]
-rows = [["NC-1 / NC-1'", "caixa soldada + grampos (2 por placa)", "ND-LET-PP02", 2 * N_PL, f(kg_nc, 2), f(kg_nc * 2 * N_PL, 0)],
+rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET-PP02", N_NC, f(kg_nc, 2), f(kg_nc * N_NC, 0)],
         ["CS-1", "console soldado + parafusos de ajuste", "ND-LET-PP03", N_CS, f(kg_cs, 2), f(kg_cs * N_CS, 0)],
         ["CE-1", "chapa de espera + 4 pinos (no pilar)", "ND-LET-PP04", N_CE, f(kg_ce, 2), f(kg_ce * N_CE, 0)],
         ["PT-1", "cartola + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT1, f(kg_pt1, 2), f(kg_pt1 * N_PT1, 0)],
         ["PT-2", "cantoneira + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT2, f(kg_pt2, 2), f(kg_pt2 * N_PT2, 0)]]
-tot = kg_nc * 2 * N_PL + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt2 * N_PT2
+OMJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
+kg_om = OMJ["kg_un"] + 0.94 + 0.32 * 2 + 0.25 * 2 + 0.10 * 2
+rows.append(["OM-1", "ombreira em U + base + CL-1 (porta da vista I)", "ND-LET-PP05", 2, f(kg_om, 2), f(kg_om * 2, 0)])
+tot = kg_nc * N_NC + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt2 * N_PT2 + kg_om * 2
 rows.append(["", "total da fixação (sem luvas e buchas)", "", "", "", f(tot, 0)])
 y = pr.tabela(XC, y - 8, "RESUMO DAS PEÇAS METÁLICAS — OBRA", ["MARCA", "COMPOSIÇÃO", "FOLHA", "QT", "kg/un", "kg"], rows, [24, 76, 26, 14, 20, 30], h_lin=5.2, destaque_ultima=True)
 MO = FX["montagem_CS1_NC1"]
@@ -260,7 +272,8 @@ seq = [
     "Regular em cada console o M16 de nível (topo da cabeça a G da mesa, 40 a 60) e o prisioneiro frontal (afastamento 25 ± 5); travar contraporca e trava química.",
     f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MO['janela_R_mm']['G=50'][0]:g} a {MO['janela_R_mm']['G=50'][1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",
-    "Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 nas placas de pacote suspenso) antes de soltar o guindaste; selar a junta vertical (tarucel + PU)."]
+    "Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 nas placas de pacote suspenso) antes de soltar o guindaste; selar a junta vertical (tarucel + PU).",
+    "Soltar o guindaste, cortar as 2 alças AL-P rente ao topo da placa (disco de corte, sem aquecer o concreto) e proteger as pontas da cordoalha com epóxi; só então montar a placa de cima."]
 y = pr.notas(XC, y - 4, seq, 190, titulo="SEQUÊNCIA DE MONTAGEM")
 NM = FX["nicho_NC1"]
 pr.notas(XC, y - 2, [
@@ -268,7 +281,7 @@ pr.notas(XC, y - 2, [
     "Barras da ponta no plano médio, entre as cordoalhas (eixo a 2,64 cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
     "Medidas das peças Trejor (CS-1, NC-1, cartola) de pré-dimensionamento: confirmar com o catálogo 09 da Trejor antes da compra.",
     "Cotas metálicas em mm; concreto em cm. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
-json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, n=dict(NC1=2 * N_PL, CS1=N_CS, CE1=N_CE, PT1=N_PT1, PT2=N_PT2)),
+json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CE1=N_CE, PT1=N_PT1, PT2=N_PT2)),
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")
 print("PP01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])
