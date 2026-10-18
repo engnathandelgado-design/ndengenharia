@@ -22,6 +22,7 @@ Unidades: kN, m (MEF da parede); N, mm, MPa (console). Medidas de pré-dimension
 """
 import json
 import math
+import os
 from pathlib import Path
 
 import numpy as np
@@ -180,7 +181,9 @@ assert rd["adotado"]["ok"]
 # Eixos do console: y a partir da face da CE-1 (rumo à placa), z a partir do topo da mesa, x no eixo do console.
 FY, FU, ES = 345.0, 450.0, 200000.0                     # A572-50
 GA1, GA2, GW2 = 1.10, 1.35, 1.35                         # NBR 8800:2008 tab. 3
-T_COST, B_COST, H_COST = 16.0, 120.0, 200.0             # costas (soldada na CE-1): z −170 a +30
+T_COST = float(os.environ.get("CS1_T_COST", 16.0))     # costas (soldada na CE-1)
+Z0_COST, Z1_COST = float(os.environ.get("CS1_Z0_COST", -100.0)), 30.0   # rev06d: costas 130 (z −100 a +30; antes −170, 200 mm): só a altura da ligação com almas e mesa + 20 abaixo da raiz
+B_COST, H_COST = 120.0, Z1_COST - Z0_COST
 T_ALMA, X_ALMA = 9.5, 35.0                              # 2 almas a ±35 do eixo
 Y_PONTA, H_RAIZ, H_PONTA = 64.0, 80.0, 50.0             # ponta do braço e alturas da alma (raiz 80: janela de montagem, ver abaixo)
 T_MESA, B_MESA = 16.0, 80.0                             # mesa y 16–64, x ±40
@@ -267,7 +270,7 @@ def mef_console(Fz, Fy, ponto_y, Mx=0.0):
                 E.append((e, sec, nome))
     yc = T_COST / 2
     zt = 0.0
-    malha((-60, yc, zt - 170), (60, yc, zt - 170), (-60, yc, zt + 30), (60, yc, zt + 30), 24, 20, 1, "costas")
+    malha((-60, yc, zt + Z0_COST), (60, yc, zt + Z0_COST), (-60, yc, zt + Z1_COST), (60, yc, zt + Z1_COST), 24, round(H_COST / 10), 1, "costas")
     for xa in (-X_ALMA, X_ALMA):
         malha((xa, yc, zt - H_RAIZ), (xa, Y_PONTA, zt - H_PONTA), (xa, yc, zt), (xa, Y_PONTA, zt), 14, round(H_RAIZ / 10), 2, "alma")   # 10 mm na raiz = malha das costas (nós comuns)
     malha((-X_ALMA, yc, zt), (X_ALMA, yc, zt), (-X_ALMA, Y_PONTA, zt), (X_ALMA, Y_PONTA, zt), 14, 14, 3, "mesa")
@@ -321,7 +324,7 @@ mc = {k: mef_console(*v) for k, v in casos.items()}
 sig_Rd = FY / GA1
 vm_proj = max(v["vm_p99"] for v in mc.values())
 R["console_mef"] = {k: dict(vm_max_MPa=round(v["vm_max"], 1), vm_p99_MPa=round(v["vm_p99"], 1), flecha_mm=round(v["flecha_mm"], 3)) for k, v in mc.items()}
-R["console_mef"]["criterio"] = f"von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = {sig_Rd:.0f} MPa — NBR 8800:2008 5.1/6 (análise elástica)"
+R["console_mef"]["criterio"] = f"von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = {sig_Rd:.0f} MPa — critério de von Mises do EN 1993-1-1:2005 6.2.1(5), γa1 = 1,10 da NBR 8800:2008"
 R["console_mef"]["uso"] = round(vm_proj / sig_Rd, 3)
 assert vm_proj <= sig_Rd
 
@@ -347,7 +350,7 @@ R["dentes_CS1"] = dict(peca="2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas,
 assert M_den / W_den <= sig_Rd and f_w_den <= fw_Rd
 
 # solda de campo CS-1 × CE-1: 2 cordões verticais de 200 mm, perna 6 (garganta 4,24) — NBR 8800:2008 6.2.5.1 (método vetorial elástico)
-A_W, L_W, FW = 6.0, 200.0, 485.0
+A_W, L_W, FW = 6.0, H_COST, 485.0
 tw = 0.707 * A_W
 Aw = 2 * L_W * tw
 Iw = 2 * tw * L_W ** 3 / 12
@@ -355,7 +358,7 @@ e_z = Y_NIV
 z_max = L_W / 2
 f_v = Vd_N / Aw
 f_n_M = Vd_N * e_z * z_max / Iw
-f_n_F = Fy_N / Aw + Fy_N * 70 * z_max / Iw               # vento normal à CE-1 + braço até o centroide do cordão (z −70)
+f_n_F = Fy_N / Aw + Fy_N * abs((Z0_COST + Z1_COST) / 2) * z_max / Iw   # vento normal à CE-1 + braço até o centroide do cordão
 f_res = math.sqrt(f_v ** 2 + (f_n_M + f_n_F) ** 2)
 R["solda"] = dict(filete_mm=A_W, cordoes="2 × 200 verticais", eletrodo="E70XX", f_res_MPa=round(f_res, 1), fw_Rd_MPa=round(fw_Rd, 1),
                   uso=round(f_res / fw_Rd, 3), obs="solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda")
@@ -461,18 +464,18 @@ R["nicho_NC1"] = dict(
     ancoragem_base=dict(F_kN=round(F_base, 1), N6_phi_kN=round(phi_N5, 1), grampos_phi_kN=round(g8, 1), uso=round(F_base / min(phi_N5, g8), 3)))
 assert M_fundo / W_fundo <= FYNC / GA1 and M_aba / W_aba <= FYNC / GA1 and F_teto <= min(phi_N5, g8) and F_base <= min(phi_N5, g8)
 # geometria única para pranchas e IFC
-R["GEO"] = dict(CS1=dict(costas=dict(t=T_COST, b=B_COST, z0=-170.0, z1=30.0), alma=dict(t=T_ALMA, x=X_ALMA, y0=T_COST, y1=Y_PONTA, h_raiz=H_RAIZ, h_ponta=H_PONTA),
+R["GEO"] = dict(CS1=dict(costas=dict(t=T_COST, b=B_COST, z0=Z0_COST, z1=Z1_COST), alma=dict(t=T_ALMA, x=X_ALMA, y0=T_COST, y1=Y_PONTA, h_raiz=H_RAIZ, h_ponta=H_PONTA),
                          mesa=dict(t=T_MESA, b=B_MESA, y0=T_COST, y1=Y_PONTA), dente=DENTE, ponta=PONTA, y_nivel=Y_NIV, z_frontal=Z_FRONT,
                          L_nivel=L_NIV, L_frontal=L_FRONT),
                 NC1=NC, hex=HEX, tol=dict(a=A_NOM, a_tol=A_TOL, G=G_NOM, G_tol=G_TOL, x_tol=X_TOL))
 # CE-1 à flexão local: tração do topo do console (M = Vd·e / braço 2/3·200) levada ao pino mais próximo (40 mm), faixa de 100 mm
-T_topo = Vd_N * (Y_NIV + 8) / (2 / 3 * 200)
+T_topo = Vd_N * (Y_NIV + 8) / (2 / 3 * H_COST)
 M_ce_loc = T_topo * 40 / 2
 R["CE1"]["flexao_chapa"] = dict(t_mm=T_CE, sigma_MPa=round(6 * M_ce_loc / (100 * T_CE ** 2), 1), lim_MPa=round(FY36 / GA1, 1))
 assert 6 * M_ce_loc / (100 * T_CE ** 2) <= FY36 / GA1
 
 R["cargas_por_console"] = dict(G_k_kN=round(Rz_k, 2), Vd_kN=round(Vd, 2), vento_d_kN=round(Ry_d, 2),
                                obs="placa PP-01 (L 10,165 m, 3,24 t); Vd com γf 1,3 × βa 1,3 de montagem (NBR 9062:2017 5.3.2), maior que 1,4 da fase final")
-(AQ / "fixacao_placas.json").write_text(json.dumps(R, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+(Path(os.environ.get("CS1_SAIDA", AQ / "fixacao_placas.json"))).write_text(json.dumps(R, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
 if __name__ == "__main__":
     print(json.dumps(R, indent=1, ensure_ascii=False, default=float))

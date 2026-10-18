@@ -261,17 +261,17 @@
  },
  "console_mef": {
   "peso + sobrepressão": {
-   "vm_max_MPa": 199.4,
-   "vm_p99_MPa": 135.5,
-   "flecha_mm": 0.041
+   "vm_max_MPa": 199.0,
+   "vm_p99_MPa": 143.0,
+   "flecha_mm": 0.042
   },
   "peso + sucção": {
-   "vm_max_MPa": 130.7,
-   "vm_p99_MPa": 98.0,
-   "flecha_mm": 0.055
+   "vm_max_MPa": 133.3,
+   "vm_p99_MPa": 101.6,
+   "flecha_mm": 0.056
   },
-  "criterio": "von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = 314 MPa — NBR 8800:2008 5.1/6 (análise elástica)",
-  "uso": 0.432
+  "criterio": "von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = 314 MPa — critério de von Mises do EN 1993-1-1:2005 6.2.1(5), γa1 = 1,10 da NBR 8800:2008",
+  "uso": 0.456
  },
  "console_mao": {
   "M_raiz_Nmm": 857568,
@@ -295,9 +295,9 @@
   "filete_mm": 6.0,
   "cordoes": "2 × 200 verticais",
   "eletrodo": "E70XX",
-  "f_res_MPa": 50.5,
+  "f_res_MPa": 89.9,
   "fw_Rd_MPa": 215.6,
-  "uso": 0.234,
+  "uso": 0.417,
   "obs": "solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda"
  },
  "parafusos_ajuste": {
@@ -331,7 +331,7 @@
   "ok": true,
   "flexao_chapa": {
    "t_mm": 16.0,
-   "sigma_MPa": 52.8,
+   "sigma_MPa": 81.2,
    "lim_MPa": 227.3
   }
  },
@@ -399,7 +399,7 @@
    "costas": {
     "t": 16.0,
     "b": 120.0,
-    "z0": -170.0,
+    "z0": -100.0,
     "z1": 30.0
    },
    "alma": {

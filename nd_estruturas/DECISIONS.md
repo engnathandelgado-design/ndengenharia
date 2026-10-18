@@ -277,3 +277,10 @@ Contexto: as placas I-13 / I-14 ao lado da porta da vista I não tinham apoio fo
 Alternativas: (A) U rotulado na base e no topo, topo preso na placa de +2,50; (B) U engastado no baldrame com topo solto. A B foi descartada no cálculo: com o baldrame estreito os chumbadores ficam a ±80 mm do eixo da parede e cada um puxaria 32 kN (uso 2,1 no cone), além de ~10 kN·m de torção no baldrame.
 Decisão: A. OM-1 = U dobrado 125 × 80 × 6,3 A36 (abas por fora das faces da placa, neoprene 6), base 12,5 × 200 × 180 com 2 chumbadores químicos M16 (rótula), topo pela chapa CL-1 12,5 × 100 × 360 em bucha BR-1 na placa I-15 (oblongo vertical). A I-15 recebe o topo das 2 ombreiras e passa a ter 12 cordoalhas (6 por face, fora do nicho), tipo PP-05P (uso 0,88; com 8 seria 1,22). Pontas das placas I-13 / I-14 a 20 mm do vão (vão livre 1,80 mantido). calc_ombreira.py, prancha ND-LET-PP05, IFC.
 Registro: no estudo apareceu que as placas vizinhas às faixas de janela (H, I, J) recebem metade do vento das janelas se o caixilho for preso nelas; o Nathan decidiu manter essas placas como estão. A fixação das esquadrias fica com o fornecedor.
+
+
+## DEC-029 — Letsara: costas do CS-1 com 130 mm de altura (2026-10-18)
+
+Contexto: o Nathan observou que a chapa de 16 mm das costas só precisa existir na parte de cima, onde a carga da placa chega ao console.
+Estudo (calc_fixacao_placas + mef_cs1, alturas de 120 a 200 e espessuras 12,5 e 16): todas passam; a solda de campo vai de 0,23 (200) a 0,47 (120).
+Decisão: costas 16 × 120 × 130 (z −100 a +30): 20 mm abaixo da raiz das almas para o retorno da solda de oficina; solda de campo 2 × 130 (uso 0,42); espessura mantida em 16 (costas 0,33 no MEF; com 12,5 seria 0,52).

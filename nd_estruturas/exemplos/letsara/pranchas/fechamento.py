@@ -13,6 +13,7 @@ import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
+import geo_fixacao as GF
 from geometria import X_FACH, Y_LIN, X_L4, LARG, COMP
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
@@ -199,7 +200,7 @@ def corte_parede(pr, V, origem, esc=50):
         c.poli(pts, "CORTADO", fechada=True); c.hachura(pts, "AR-CONC", 0.02)
         zt = z0 + Z_NC + NC_H / 2 - 12.5 - 50                                                      # topo do braço do CS-1
         c.chapa(0, z0 + Z_CE - CE_H / 2, 16, CE_H, 3.0)                                             # CE-1 (embutida no pilar)
-        c.chapa(-16, zt - 170, 16, 200, 3.0)                                                        # CS-1: costas soldadas na CE-1
+        c.chapa(-16, zt + GF.C["costas"]["z0"], 16, GF.C["costas"]["z1"] - GF.C["costas"]["z0"], 3.0)                                                        # CS-1: costas soldadas na CE-1
         c.chapa(-64, zt - 80, 48, 80, 3.0)                                                      # CS-1: braço dentro do nicho
         c.ret(-FOLGA - NC_P, z0 + Z_NC - NC_H / 2, NC_P, NC_H, "METALICA")                          # NC-1 nicho na face interna da placa
         tv = next((p_["trava"] for p_ in pecas if p_["bay"] == pecas[0]["bay"] and p_["k"] == k), "PT-1")

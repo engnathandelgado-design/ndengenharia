@@ -78,7 +78,7 @@ lin = [["Armadura", "Calculada (mm²)", "Adotada"],
        ["Ancoragem da base do nicho", "—", "N6 1 estribo horizontal Ø6,3"]]
 E += [tab(lin, [50, 40, 80]),
       Paragraph("4. Console CS-1 — MEF de casca das chapas + NBR 8800:2008", T2),
-      P(f"Costas 16 × 120 × 200, 2 almas 9,5 (raiz 80, ponta 50, braço até 64 mm do plano da CE-1), mesa 16 × 48 × 80, 2 dentes 19 × 13 × 32 sobre as almas, "
+      P(f"Costas 16 × 120 × 130 (só a altura da ligação: z −100 a +30), 2 almas 9,5 (raiz 80, ponta 50, braço até 64 mm do plano da CE-1), mesa 16 × 48 × 80, 2 dentes 19 × 13 × 32 sobre as almas, "
         f"chapa de ponta 9,5 × 34 × 60,5 entre as almas com porca soldada do prisioneiro frontal; A572-50 (fy 345). Engaste nas linhas de solda; chapa de ponta incluída no modelo; "
         f"carga do M16 de nível na área da porca soldada; momento dos dentes como binário vertical sobre as almas. "
         f"Conferência à mão: almas na raiz σ = {f(FX['console_mao']['sigma_almas_MPa'])} MPa, τ = {f(FX['console_mao']['tau_almas_MPa'])} MPa.")]

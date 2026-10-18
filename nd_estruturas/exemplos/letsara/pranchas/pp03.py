@@ -64,7 +64,7 @@ I.solda(va, (de["y0"], 4), (-28, 52), a=8, tipo="filete", lado="seta", contorno=
 I.solda(va, (po["y0"], po["z0"] + 4), (20, -40), a=5, tipo="filete", lado="seta", contorno=True, cauda="ponta × almas e mesa")
 I.solda(va, (po["y0"] - HX["m"], zf - 10), (-34, -58), a=5, tipo="filete", lado="seta", contorno=True, cauda="porca frontal × ponta")
 I.solda(va, (yn - e2, 4), (-40, 70), a=4, tipo="filete", lado="seta", cauda="porca × mesa, 3 faces")
-I.solda(va, (0, co["z0"] + 30), (-24, -20), a=6, tipo="filete", lado="seta", campo=True, comp=200, cauda="OBRA: costas × CE-1, 2 lados verticais")
+I.solda(va, (0, co["z0"] + 30), (-24, -20), a=6, tipo="filete", lado="seta", campo=True, comp=co["z1"] - co["z0"], cauda="OBRA: costas × CE-1, 2 lados verticais")
 
 # ================================================================== VISTA FRONTAL (do lado da placa) 1:1,5
 vf = pr.vista("VISTA FRONTAL", (Q[0] + 300, Q[1] + 410), 1.5, titulo="VISTA FRONTAL", subtitulo="pelo lado da placa", unidade="mm")
@@ -196,7 +196,7 @@ pr.notas(XC, y - 4, [
     "Soldagem de oficina GMAW (MIG) ER70S-6 Ø1,0 com Ar + 20 % CO₂ (ou FCAW E71T-1 com CO₂), soldador qualificado (AWS D1.1); soldas contínuas, isentas de trincas, porosidade e mordeduras; inspeção visual 100 %.",
     "Sequência: (1) almas e mesa nas costas (gabarito, esquadro); (2) chapa de ponta entre as almas; (3) dentes sobre as almas; (4) porcas (15) centradas nos furos com um parafuso-guia, solda 4 em 3 faces alternadas (nível) e 5 no contorno (frontal), sem respingo na rosca.",
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); porcas soldadas com rosca sobremedida (repassar a rosca depois da galvanização). Parafusos galvanizados a fogo, prisioneiro zincado.",
-    "Solda de obra só costas × CE-1: filete 6 E70XX nos 2 lados verticais (200 mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
+    f"Solda de obra só costas × CE-1: filete 6 E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
     f"Folgas verificadas no pior caso das tolerâncias (afastamento {T['a']:g} ± {T['a_tol']:g}, G {G0:g} ± {T['G_tol']:g}, posição ± {T['x_tol']:g}): engate aba × dente ≥ {MO['folgas_mm']['engate aba–dente com G máximo (z)']:g}, rosca do nível ≥ 16 fios-mm, janela de montagem ≥ 15 (memória ND-LET-MC07).",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP03")
