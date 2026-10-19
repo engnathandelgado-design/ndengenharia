@@ -33,6 +33,21 @@ for V in FCH.DADOS:
     for (x, z) in FCH.DADOS[V][1]:
         CE.add((V, min(pil, key=lambda s: abs(s - x)), z))
 N_CE, N_PL = len(CE), len(PEC)
+# rev06e (DEC-031): CE-1 da face C sai da fábrica com os consoles soldados e concretada com o pilar (CC-1 / CC-1E / CC-1D)
+from collections import defaultdict as _dd
+_grp = _dd(list)
+for V in FCH.DADOS:
+    for (x, z) in FCH.DADOS[V][1]:
+        s_, w_, _ = min(FCH.VISTAS[V]["pil"], key=lambda p: abs(p[0] - x))
+        _grp[(V, s_, w_, z)].append(x - s_)
+N_CC = dict(CC2=0, CC1E=0, CC1D=0)
+N_CE_OBRA = N_CS_OBRA = 0
+for (V, s_, w_, z), xs in _grp.items():
+    if GF.concretado(V, w_):
+        N_CC["CC2" if len(xs) == 2 else ("CC1E" if xs[0] < 0 else "CC1D")] += 1
+    else:
+        N_CE_OBRA += 1; N_CS_OBRA += len(xs)
+N_CS_FAB = N_CS - N_CS_OBRA
 # NC-1 só nas pontas com console (as pontas do lado da porta da vista I não têm console nem nicho): NC-1 na ponta inicial (s0)
 # e NC-1' (espelhado) na ponta final (s1) do comprimento da placa, como nas pranchas PP-x e no IFC
 N_NC_E = N_NC_D = 0
@@ -58,8 +73,8 @@ pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZ
 pr.revisao("06", "18/10/2026", "EXECUTIVO DA FIXAÇÃO TREJOR (DEC-026): ARMADURA DA PONTA, CONJUNTO MONTADO; FABRICAÇÃO NAS PP02 A PP04")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.cabecalho_peca("FX", f"FIXAÇÃO DAS PLACAS — {N_CS} CONSOLES CS-1 · {N_CE} CE-1 · {N_PT1} PT-1 · {N_PT2} PT-2",
-                  "sistema Trejor, console soldado (DEC-026) · placa típica ND-LET-PP00 · fabricação: NC-1 PP02, CS-1 PP03, CE-1/PT-1/PT-2 PP04 · metálica em mm, concreto em cm",
+pr.cabecalho_peca("FX", f"FIXAÇÃO DAS PLACAS — {N_CS} CONSOLES CS-1 ({N_CS_FAB} CONCRETADOS) · {N_CE} CE-1 · {N_PT1} PT-1 · {N_PT2} PT-2",
+                  "sistema Trejor (DEC-026): console concretado com o pilar na face C (CC-1, DEC-031) e soldado na obra nas faces laterais · placa típica ND-LET-PP00 · fabricação: NC-1 PP02, CS-1 PP03, CE-1/PT-1/PT-2 PP04 · metálica em mm, concreto em cm",
                   largura=XC - Q[0] - 10)
 
 # ================================================================== D1 — armação da ponta (vista pela face interna, 1:10)
@@ -192,7 +207,7 @@ d4.texto((-70, -128), "eixo do pilar", "nota", "TOP_CENTER")
 d4.chamada((60, -70), (14, -10), "pilar")
 
 # ================================================================== D5 — sequência de montagem (cortes esquemáticos 1:5)
-MOJ = FX["montagem_CS1_NC1"]["janela_R_mm"]["G=50"]
+MOJ = FX["montagem_CS1_NC1"]["janela_R_mm"][f"G={T['G']:g}"]
 R_m = round((MOJ[0] + MOJ[1]) / 2)
 
 
@@ -223,7 +238,7 @@ def esquema(v, dy, dz, seta=None):
 
 ESQ = [("1 — APROXIMAR", 150, R_m, ((260, 90), (150, 90))), ("2 — ENCOSTAR", 0, R_m, ((70, 160 + R_m + 30), (70, 160 + R_m + 2))), ("3 — BAIXAR", 0, 0, ((70, 230), (70, 175)))]
 d5 = pr.vista("DETALHE 5", (Q[0] + 448, Q[1] + 360), 5.0, titulo="DETALHE 5 — SEQUÊNCIA DE MONTAGEM",
-              subtitulo=f"esquema; janela R = {MOJ[0]:g} a {MOJ[1]:g} com G = 50", unidade="mm")
+              subtitulo=f"esquema; janela R = {MOJ[0]:g} a {MOJ[1]:g} com G = {T['G']:g}", unidade="mm")
 O5 = d5.o
 for k, (tit, dy_, dz_, st) in enumerate(ESQ):
     d5.o = (O5[0] + 58 * k, O5[1])
@@ -247,8 +262,11 @@ pti = {n: (q, k) for n, _, _, _, q, k in GF.pt_itens()}
 kg_pt1 = sum(pti[n][0] * pti[n][1] for n in (30, 31, 32))
 kg_pt2 = pti[40][1] + pti[31][0] * pti[31][1] + pti[32][0] * pti[32][1]
 rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET-PP02", N_NC, f(kg_nc, 2), f(kg_nc * N_NC, 0)],
-        ["CS-1", "console soldado + parafusos de ajuste", "ND-LET-PP03", N_CS, f(kg_cs, 2), f(kg_cs * N_CS, 0)],
-        ["CE-1", "chapa de espera + 4 pinos (no pilar)", "ND-LET-PP04", N_CE, f(kg_ce, 2), f(kg_ce * N_CE, 0)],
+        ["CC-1", "CE-1 + 2 CS-1 soldados na fábrica (face C, concretado)", "PP03/PP04", N_CC["CC2"], f(kg_ce + 2 * kg_cs, 2), f((kg_ce + 2 * kg_cs) * N_CC["CC2"], 0)],
+        ["CC-1E", "CE-1 + 1 CS-1 à esquerda (face C, concretado)", "PP03/PP04", N_CC["CC1E"], f(kg_ce + kg_cs, 2), f((kg_ce + kg_cs) * N_CC["CC1E"], 0)],
+        ["CC-1D", "CE-1 + 1 CS-1 à direita (face C, concretado)", "PP03/PP04", N_CC["CC1D"], f(kg_ce + kg_cs, 2), f((kg_ce + kg_cs) * N_CC["CC1D"], 0)],
+        ["CE-1", "chapa de espera + 4 pinos (faces laterais, rente)", "ND-LET-PP04", N_CE_OBRA, f(kg_ce, 2), f(kg_ce * N_CE_OBRA, 0)],
+        ["CS-1", "console soldado na obra na CE-1 lateral", "ND-LET-PP03", N_CS_OBRA, f(kg_cs, 2), f(kg_cs * N_CS_OBRA, 0)],
         ["PT-1", "cartola + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT1, f(kg_pt1, 2), f(kg_pt1 * N_PT1, 0)],
         ["PT-2", "cantoneira + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT2, f(kg_pt2, 2), f(kg_pt2 * N_PT2, 0)]]
 OMJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
@@ -261,16 +279,16 @@ MO = FX["montagem_CS1_NC1"]
 fo = MO["folgas_mm"]
 tol = [["afastamento placa–pilar (a)", f"{T['a']:g} ± {T['a_tol']:g}", "prisioneiro frontal"],
        ["G: mesa → teto do nicho", f"{T['G']:g} ± {T['G_tol']:g}", "M16 de nível"],
-       ["posição do console × nicho (x)", f"± {T['x_tol']:g}", "placa ±5, solda ±3"],
+       ["posição do console × nicho (x)", f"± {T['x_tol']:g}", "fábrica ±5, pilar ±10, placa ±5"],
        ["engate aba × dente (G máx.)", f"≥ {fo['engate aba–dente com G máximo (z)']:g}", "sucção"],
        ["folga aba × dente (a máx.)", f"≥ {fo['aba atrás x dente (y)']:g}", "montagem"],
-       ["janela de montagem R", f"{MO['janela_R_mm']['G=50'][0]:g} a {MO['janela_R_mm']['G=50'][1]:g} (G = 50)", "teto acima da final"]]
+       ["janela de montagem R", f"{MOJ[0]:g} a {MOJ[1]:g} (G = {T['G']:g})", "teto acima da final"]]
 y = pr.tabela(XC, y - 4, "TOLERÂNCIAS E FOLGAS DE MONTAGEM (mm)", ["ITEM", "VALOR", "AJUSTE / OBS."], tol, [70, 60, 60], h_lin=5.0)
 seq = [
-    "Topografia marca na CE-1 de cada pilar o nível do topo da mesa dos 2 consoles (cota do teto do nicho − 50).",
-    f"Soldar os CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a 70 do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
-    "Regular em cada console o M16 de nível (topo da cabeça a G da mesa, 40 a 60) e o prisioneiro frontal (afastamento 25 ± 5); travar contraporca e trava química.",
-    f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MO['janela_R_mm']['G=50'][0]:g} a {MO['janela_R_mm']['G=50'][1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
+    f"Face C dos pilares: consoles já concretados (CC-1). Topografia confere o nível real do topo da mesa de cada console e calcula G para cada um (G nominal {T['G']:g}).",
+    f"Faces laterais (CE-1 rente): topografia marca o nível; soldar o CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a 70 do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
+    f"Regular em cada console o M16 de nível (topo da cabeça a G da mesa, {T['G'] - T['G_tol']:g} a {T['G'] + T['G_tol']:g}) e o prisioneiro frontal (afastamento {T['a']:g} ± {T['a_tol']:g}); travar contraporca e trava química.",
+    f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MOJ[0]:g} a {MOJ[1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",
     "Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 nas placas de pacote suspenso) antes de soltar o guindaste; selar a junta vertical (tarucel + PU).",
     "Soltar o guindaste, cortar as 2 alças AL-P rente ao topo da placa (disco de corte, sem aquecer o concreto) e proteger as pontas da cordoalha com epóxi; só então montar a placa de cima."]
@@ -281,7 +299,7 @@ pr.notas(XC, y - 2, [
     "Barras da ponta no plano médio, entre as cordoalhas (eixo a 2,64 cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
     "Medidas das peças Trejor (CS-1, NC-1, cartola) de pré-dimensionamento: confirmar com o catálogo 09 da Trejor antes da compra.",
     "Cotas metálicas em mm; concreto em cm. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
-json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CE1=N_CE, PT1=N_PT1, PT2=N_PT2)),
+json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CE1=N_CE, CE1_obra=N_CE_OBRA, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT2=N_PT2)),
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")
 print("PP01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

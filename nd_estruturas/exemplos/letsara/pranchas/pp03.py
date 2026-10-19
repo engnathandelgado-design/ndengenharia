@@ -29,7 +29,7 @@ pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DO CS-1 (2 DENTES 19, M16
 Q = pr.quadro
 XC = Q[2] - 250
 pr.cabecalho_peca("CS-1", f"CONSOLE CS-1 — CONJUNTO SOLDADO — {N_OBRA} PEÇAS (2 POR PLACA, EXCETO PONTAS DE PORTA)",
-                  "soldado na obra na chapa de espera CE-1 do pilar (ND-LET-PP04) · recebe o peso e o vento de uma ponta de placa · cotas em mm",
+                  "soldado na CE-1 do pilar (ND-LET-PP04): na fábrica do pilar nos CC-1 da face C (concretados) e na obra nas faces laterais · recebe o peso e o vento de uma ponta de placa · cotas em mm",
                   largura=XC - Q[0] - 10)
 HT = 0.45
 
@@ -40,7 +40,7 @@ def ch(v, x, y, w, h):
 
 # ================================================================== CORTE A-A (plano do eixo, y-z) 1:1,5
 va = pr.vista("CORTE A-A", (Q[0] + 125, Q[1] + 410), 1.5, titulo="CORTE A-A (EIXO DO CONSOLE)",
-              subtitulo="face da CE-1 à esquerda; parafusos na posição nominal (G = 50)", unidade="mm")
+              subtitulo=f"face da CE-1 à esquerda; parafusos na posição nominal (G = {G0:g})", unidade="mm")
 ch(va, 0, co["z0"], co["t"], co["z1"] - co["z0"])                                   # costas (cortada)
 va.poli(GF.alma_poli(), "VISTA", fechada=True)                                       # alma vista ao fundo
 ch(va, me["y0"], -me["t"], me["y1"] - me["y0"], me["t"])                             # mesa (cortada)
@@ -190,7 +190,7 @@ json.dump(dict(kg_CS1=tot), open("/home/claude/letsara/pranchas/pp03.json", "w")
 MO = FXJ["montagem_CS1_NC1"]
 reg = [["M16 de nível (16)", f"topo da cabeça a G = {G0:g} ± {T['G_tol']:g} acima da mesa", "contraporca (17) 120 N·m"],
        ["prisioneiro (18)", f"ponta a {y_tip:g} ± {T['a_tol']:g} da face da CE-1 (afastamento {T['a']:g})", "trava química média"],
-       ["placa na montagem", f"teto do nicho {MO['janela_R_mm']['G=50'][0]:g} a {MO['janela_R_mm']['G=50'][1]:g} acima da final (G = 50)", "encostar e baixar"]]
+       ["placa na montagem", f"teto do nicho {MO['janela_R_mm'][f'G={G0:g}'][0]:g} a {MO['janela_R_mm'][f'G={G0:g}'][1]:g} acima da final (G = {G0:g})", "encostar e baixar"]]
 y = pr.tabela(XC, y - 8, "REGULAGEM (ANTES DE IÇAR A PLACA)", ["PEÇA", "AJUSTE", "TRAVAMENTO"], reg, [40, 130, 60], h_lin=5.4)
 pr.notas(XC, y - 4, [
     "Medidas em mm. Tolerâncias gerais NBR ISO 2768-1 classe m; furos Ø18 ± 0,3; esquadro mesa × costas 90° ± 0,5°.",
@@ -198,7 +198,7 @@ pr.notas(XC, y - 4, [
     "Soldagem de oficina GMAW (MIG) ER70S-6 Ø1,0 com Ar + 20 % CO₂ (ou FCAW E71T-1 com CO₂), soldador qualificado (AWS D1.1); soldas contínuas, isentas de trincas, porosidade e mordeduras; inspeção visual 100 %.",
     "Sequência: (1) almas e mesa nas costas (gabarito, esquadro); (2) chapa de ponta entre as almas; (3) dentes sobre as almas; (4) porcas (15) centradas nos furos com um parafuso-guia, solda " + gg(AS["porca"]) + " em 3 faces alternadas (nível) e " + gg(AS["ponta"]) + " no contorno (frontal), sem respingo na rosca.",
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); porcas soldadas com rosca sobremedida (repassar a rosca depois da galvanização). Parafusos galvanizados a fogo, prisioneiro zincado.",
-    f"Solda de obra só costas × CE-1: filete {FXJ['solda']['filete_mm']:g} E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
+    f"Solda costas × CE-1 (na fábrica do pilar nos CC-1 da face C; na obra nas CE-1 laterais): filete {FXJ['solda']['filete_mm']:g} E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
     f"Folgas verificadas no pior caso das tolerâncias (afastamento {T['a']:g} ± {T['a_tol']:g}, G {G0:g} ± {T['G_tol']:g}, posição ± {T['x_tol']:g}): engate aba × dente ≥ {MO['folgas_mm']['engate aba–dente com G máximo (z)']:g}, rosca do nível ≥ 16 fios-mm, janela de montagem ≥ 15 (memória ND-LET-MC07).",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP03")

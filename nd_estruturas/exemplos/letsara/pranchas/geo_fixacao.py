@@ -15,6 +15,13 @@ FX = json.load(open(AQ + "fixacao_placas.json"))
 G = FX["GEO"]
 C, N, HX, T = G["CS1"], G["NC1"], G["hex"], G["tol"]
 TCE = G.get("CE1", {}).get("t", 16.0)
+
+
+def concretado(vista, largura_pilar):
+    """rev06e (DEC-031): pilar concretado com a face C (placas) para cima — consoles na face C saem da fábrica soldados na CE-1
+    e concretados com o pilar (CC-1, CC-1E, CC-1D). Nas faces laterais B/D (fôrma lateral, tem de abrir) e nas paredes internas
+    a CE-1 vai rente e o CS-1 é soldado na obra. Fachadas A/I: o pilar de canto aparece pelo lado de 60 (face lateral)."""
+    return vista in "BDEFHJ" or (vista in "AI" and round(largura_pilar) == 400)
 RHO = 7.85e-6
 A_NOM, G_NOM = T["a"], T["G"]
 DZ = -(N["H"] - N["t_teto"]) + G_NOM            # z_CS = z_NC + DZ

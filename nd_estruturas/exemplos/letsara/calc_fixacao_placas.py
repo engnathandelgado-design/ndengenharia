@@ -184,25 +184,27 @@ GA1, GA2, GW2 = 1.10, 1.35, 1.35                         # NBR 8800:2008 tab. 3
 T_COST = float(os.environ.get("CS1_T_COST", 9.5))      # costas (soldada na CE-1) — rev06d: espessuras de cada chapa pelo MEF (DEC-030)
 Z0_COST, Z1_COST = float(os.environ.get("CS1_Z0_COST", -100.0)), 30.0   # rev06d: costas 130 (z −100 a +30; antes −170, 200 mm): só a altura da ligação com almas e mesa + 20 abaixo da raiz
 B_COST, H_COST = 120.0, Z1_COST - Z0_COST
-T_ALMA, X_ALMA = 6.3, 35.0                              # 2 almas a ±35 do eixo
+T_ALMA, X_ALMA = 6.3, 45.0                              # rev06e (DEC-031): 2 almas a ±45 do eixo, sob os dentes (39–52)
 Y_PONTA, H_RAIZ, H_PONTA = 64.0, 80.0, 50.0             # ponta do braço e alturas da alma (raiz 80: janela de montagem, ver abaixo)
-T_MESA, B_MESA = 16.0, 80.0                             # mesa x ±40: 16 pelo curso do M16 de nível (a ponta do parafuso não pode passar da face de baixo da mesa com G mínimo)
-Y_NIV = 48.0                                            # parafuso de nível M16 (porca ISO 4032 soldada no topo da mesa + contraporca ISO 4035)
+T_MESA, B_MESA = 16.0, 104.0                            # mesa x ±40: 16 pelo curso do M16 de nível (a ponta do parafuso não pode passar da face de baixo da mesa com G mínimo)
+Y_NIV = 46.0                                            # parafuso de nível M16 (porca ISO 4032 soldada no topo da mesa + contraporca ISO 4035)
 Y_M20 = Y_NIV                                           # (nome histórico)
-DENTE = dict(t=19.0, b=13.0, h=32.0, y0=44.5, x0=27.0)  # 2 dentes y 44,5–63,5, x ±(27–40), 32 de altura
+DENTE = dict(t=19.0, b=13.0, h=35.0, y0=44.5, x0=39.0)  # rev06e: 2 dentes y 44,5–63,5, x ±(39–52), 35 de altura (folga x ±12)
 Y_DENTE = DENTE["y0"] + DENTE["t"] / 2
 PONTA = dict(t=8.0, y0=Y_PONTA - 8.0, z0=-50.0, z1=-T_MESA, b=2 * (X_ALMA - T_ALMA / 2))   # chapa de ponta entre as almas, sob a mesa
 Z_FRONT = -33.0                                         # prisioneiro M16 frontal (porca ISO 4032 soldada atrás da chapa de ponta)
 # folgas e tolerâncias de montagem (mm)
 A_NOM, A_TOL = 25.0, 5.0                                # afastamento placa–pilar (face interna da placa a y = a)
-G_NOM, G_TOL = 50.0, 10.0                               # topo da mesa → face inferior do teto do nicho (regulado pelo M16 de nível)
-NC = dict(B=120.0, H=200.0, P=60.0, y_gr=31.0, d_gr=6.3, x_gr=((20.0, 52.0), (68.0, 100.0)), h_gr_teto=40.0, h_gr_base=28.0, t_teto=12.5, t_base=3.0, t_fundo=9.5, t_parede=2.0, t_aba=12.5, h_aba=38.0,
+G_NOM, G_TOL = 51.0, 12.0                               # topo da mesa → face inferior do teto do nicho (regulado pelo M16 de nível)
+# rev06e (DEC-031): console concretado na fábrica (face C do pilar) — sem a solda de obra para corrigir a posição, o curso cobre a tolerância
+# global estatística (NBR 9062:2017 3.15): fábrica do pilar ±5, montagem do pilar ±10 (5.2.2.6), placa ±5 → √(25 + 100 + 25) ≈ ±12 em z e em x
+NC = dict(B=140.0, H=200.0, P=60.0, y_gr=31.0, d_gr=6.3, x_gr=((24.0, 56.0), (84.0, 116.0)), h_gr_teto=40.0, h_gr_base=28.0, t_teto=12.5, t_base=3.0, t_fundo=9.5, t_parede=2.0, t_aba=12.5, h_aba=38.0,
           a_solda=dict(teto_fundo=5.0, base_fundo=3.0, parede=2.0, aba_teto=6.0, grampo=3.0),   # filetes de oficina (verificados no mef_nc1)
          
-          aba_e=(0.0, 39.0), aba_d=(81.0, 117.0))      # nicho: x a partir da ponta da placa; abas só nas laterais (o meio fica livre para o M16 de nível)
-X_TOL = 5.0                                             # posição do console em relação ao nicho (comprimento da placa ±5, soldagem do CS-1 ±3)
+          aba_e=(0.0, 44.0), aba_d=(96.0, 138.0))      # nicho: x a partir da ponta da placa; abas só nas laterais (o meio fica livre para o M16 de nível)
+X_TOL = 12.0                                            # posição do console em relação ao nicho: estatística de fábrica ±5, locação do pilar ±10 e placa ±5 (DEC-031)
 HEX = dict(s=24.0, e=26.75, k=10.0, m=14.8, m_fina=8.0)  # M16: ISO 4017 / ISO 4032 / ISO 4035
-L_NIV, L_FRONT = 45.0, 45.0                             # M16 × 45 8.8 rosca total (nível) e prisioneiro M16 × 45 ISO 4026 (frontal)
+L_NIV, L_FRONT = 50.0, 45.0                             # M16 × 50 8.8 rosca total (nível) e prisioneiro M16 × 45 ISO 4026 (frontal)
 Vd_N = Vd * 1e3
 Fy_N = Ry_d * 1e3                                       # vento por console (sobrepressão no frontal / sucção nos dentes)
 
@@ -227,7 +229,7 @@ chk = {
     "engate aba–dente com G máximo (z)": min(eng),
     "cabeça x contraporca com G mínimo (z)": G_NOM - G_TOL - HEX["k"] - (HEX["m"] + HEX["m_fina"]),
     "rosca engatada do nível com G máximo (z)": (HEX["m"] + HEX["m_fina"]) - (G_NOM + G_TOL - HEX["k"] - L_NIV),
-    "ponta do nível acima da face de baixo da mesa (z)": (G_NOM - G_TOL - HEX["k"] - L_NIV) + T_MESA,
+    "parafuso de nível livre da chapa de ponta (y)": PONTA["y0"] - (Y_NIV + 8.0),   # rev06e: com G mínimo a ponta passa da mesa, entre as almas
     "porca frontal abaixo da mesa (z)": -T_MESA - (Z_FRONT + r_hex),
     "prisioneiro: ponta de trás x costas (y)": (A_NOM - A_TOL + NC["P"] - NC["t_fundo"]) - L_FRONT - T_COST,
     "prisioneiro: rosca na porca com a máximo (y)": PONTA["y0"] - HEX["m"] - ((A_NOM + A_TOL + NC["P"] - NC["t_fundo"]) - L_FRONT),
@@ -241,7 +243,7 @@ for G in (G_NOM - G_TOL, G_NOM, G_NOM + G_TOL):
     jan[f"G={G:.0f}"] = (round(R_min, 1), round(R_max, 1))
     chk[f"janela de montagem G={G:.0f} (z)"] = R_max - R_min
 R["montagem_CS1_NC1"] = dict(folgas_mm={k: round(v, 1) for k, v in chk.items()}, janela_R_mm=jan,
-                             obs="R = altura do teto do nicho acima da posição final ao encostar a placa; tolerâncias a = 25 ± 5, G = 50 ± 10, x ± 5")
+                             obs=f"R = altura do teto do nicho acima da posição final ao encostar a placa; tolerâncias a = {A_NOM:g} ± {A_TOL:g}, G = {G_NOM:g} ± {G_TOL:g}, x ± {X_TOL:g} (DEC-031: console concretado, tolerância global estatística)")
 bad = {k: v for k, v in chk.items() if v < (10.0 if k.startswith("janela") or k.startswith("engate") else (16.0 if k.startswith("rosca") else 0.0))}
 assert not bad, bad
 
@@ -328,7 +330,7 @@ vm_proj = max(v["vm_p99"] for v in mc.values())
 R["console_mef"] = {k: dict(vm_max_MPa=round(v["vm_max"], 1), vm_p99_MPa=round(v["vm_p99"], 1), flecha_mm=round(v["flecha_mm"], 3)) for k, v in mc.items()}
 R["console_mef"]["criterio"] = f"von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = {sig_Rd:.0f} MPa — critério de von Mises do EN 1993-1-1:2005 6.2.1(5), γa1 = 1,10 da NBR 8800:2008"
 R["console_mef"]["uso"] = round(vm_proj / sig_Rd, 3)
-assert vm_proj <= sig_Rd
+assert vm_proj <= sig_Rd, {k: round(v["vm_p99"], 1) for k, v in mc.items()}
 
 # conferência à mão das almas na raiz: M = Vd·(Y_NIV − T_COST), W = 2·t·h²/6
 M_raiz = Vd_N * (Y_NIV - T_COST)
@@ -340,7 +342,7 @@ R["console_mao"] = dict(M_raiz_Nmm=round(M_raiz), sigma_almas_MPa=round(M_raiz /
 
 # filetes de oficina do CS-1 (verificados linha a linha no mef_cs1; mínimos AWS D1.1 pela chapa mais fina)
 A_SOLDA_CS1 = dict(alma_costas=5.0, mesa_costas=8.0, dentes_mesa=6.0, ponta=5.0, porca=4.0)
-# dentes (2 × 19 × 13 × 32, A572-50): balanço com a sucção no topo — NBR 8800:2008 5.4.2 (Wel·fy/γa1) e solda de filete no contorno
+# dentes (2 × 19 × 13 × 35, A572-50): balanço com a sucção no topo — NBR 8800:2008 5.4.2 (Wel·fy/γa1) e solda de filete no contorno
 F_den = Fy_N / 2
 M_den = F_den * BR_DENTE
 W_den = DENTE["b"] * DENTE["t"] ** 2 / 6
@@ -348,7 +350,7 @@ aw8 = 0.707 * A_SOLDA_CS1["dentes_mesa"]
 Sw_den = DENTE["b"] * DENTE["t"] + DENTE["t"] ** 2 / 3                  # módulo do contorno (por mm de garganta), flexão no sentido de t
 f_w_den = math.hypot(M_den / (Sw_den * aw8), F_den / (2 * (DENTE["b"] + DENTE["t"]) * aw8))
 fw_Rd = 0.60 * 485.0 / GW2
-R["dentes_CS1"] = dict(peca=f"2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas, filete {A_SOLDA_CS1['dentes_mesa']:g} no contorno", F_por_dente_kN=round(F_den / 1e3, 2), braco_mm=BR_DENTE,
+R["dentes_CS1"] = dict(peca=f"2 dentes ch. {DENTE['t']:g} × {DENTE['b']:g} × {DENTE['h']:g} A572-50 sobre as almas, filete {A_SOLDA_CS1['dentes_mesa']:g} no contorno", F_por_dente_kN=round(F_den / 1e3, 2), braco_mm=BR_DENTE,
                        sigma_MPa=round(M_den / W_den, 1), lim_MPa=round(sig_Rd, 1), uso=round(M_den / W_den / sig_Rd, 3),
                        solda_MPa=round(f_w_den, 1), solda_lim_MPa=round(fw_Rd, 1), uso_solda=round(f_w_den / fw_Rd, 3))
 assert M_den / W_den <= sig_Rd and f_w_den <= fw_Rd
@@ -368,7 +370,7 @@ R["solda"] = dict(filete_mm=A_W, cordoes=f"2 × {L_W:g} verticais", eletrodo="E7
                   uso=round(f_res / fw_Rd, 3), obs="solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda")
 assert f_res <= fw_Rd
 
-# parafusos de ajuste: M16 × 45 8.8 de nível (compressão; λ = 2·40/(16/4) = 20), prisioneiro M16 × 45 frontal
+# parafusos de ajuste: M16 × 50 8.8 de nível (compressão; λ = 2·40/(16/4) = 20), prisioneiro M16 × 45 frontal
 fub88 = 800.0
 A16 = 157.0
 Nc_niv = A16 * 640 / GA1

@@ -42,9 +42,11 @@ alt = C["costas"]["z1"] - C["costas"]["z0"]
 FX = json.loads((L / "fixacao_placas.json").read_text(encoding="utf-8"))
 s = s.replace("Console CS-1 — 120 × 200 × 64 mm", f"Console CS-1 — {C['costas']['b']:g} × {alt:g} × {C['alma']['y1']:g} mm")
 s = s.replace("(filete 6 mm nos 2 lados verticais)", f"(filete {FX['solda']['filete_mm']:g} mm nos 2 lados verticais)")
+N01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))["n"]
 rep = dict(VIS=(L / "saidas" / "mef_cs1_vis.json").read_text(), RES=(L / "mef_cs1.json").read_text(), PEC=json.dumps(P, separators=(",", ":")),
            ITN=json.dumps(ITN, ensure_ascii=False), ITC=json.dumps(ITC, ensure_ascii=False), KGN=f"{kgn:.2f}".replace(".", ","), KGC=f"{kgc:.2f}".replace(".", ","),
-           NE="202", ND="202", NCS="404", IMG=base64.b64encode(bio.getvalue()).decode())
+           NE=str(N01["NC1_E"]), ND=str(N01["NC1_D"]), NCS=str(N01["CS1"]), NCC=str(N01["CC1"] + N01["CC1E"] + N01["CC1D"]), NCE=str(N01["CE1_obra"]),
+           G=f"{GF.T['G']:g}", GT=f"{GF.T['G_tol']:g}", DNC=f"{GF.N['B']:g} × {GF.N['H']:g} × {GF.N['P']:g}", IMG=base64.b64encode(bio.getvalue()).decode())
 for k, v in rep.items():
     assert f"__{k}__" in s, k
     s = s.replace(f"__{k}__", v)

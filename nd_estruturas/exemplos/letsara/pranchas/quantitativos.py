@@ -175,8 +175,14 @@ for V in _FC.DADOS:
     for (x_, z_) in _FC.DADOS[V][1]:
         _ce.add((V, min(pil, key=lambda s_: abs(s_ - x_)), z_))
 _kg01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))
-ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1", f"Console soldado A572-50 (costas, almas, mesa, 2 dentes, ponta) + M16 de nível + prisioneiro (PP03) — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n_cs),
-        ("ND-LET-PP04", "Pilares (fábrica)", "CE-1", f"Chapa de espera A36 380×330×{__import__("geo_fixacao").TCE:g} + 4 pinos Ø16×150 + 2 grampos N18 — {_kg01['kg_CE1']:.2f} kg/un".replace(".", ","), 1, len(_ce)),
+_n01 = _kg01["n"]
+assert _n01["CS1"] == _n_cs and _n01["CE1"] == len(_ce), (_n01, _n_cs, len(_ce))
+_TCE = __import__("geo_fixacao").TCE
+ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1 obra", f"Console soldado A572-50 (costas, almas, mesa, 2 dentes, ponta) + M16 de nível + prisioneiro, soldado na obra na CE-1 lateral — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n01["CS1_obra"]),
+        ("ND-LET-PP03", "Pilares (fábrica)", "CS-1 fábrica", f"Console CS-1 soldado na fábrica do pilar sobre a CE-1 (compõe o CC-1) — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n01["CS1_fabrica"]),
+        ("ND-LET-PP04", "Pilares (fábrica)", "CC-1", "CE-1 + 2 CS-1 soldados na fábrica, concretados na face C (DEC-031)", 1, _n01["CC1"]),
+        ("ND-LET-PP04", "Pilares (fábrica)", "CC-1E/D", "CE-1 + 1 CS-1 (esquerdo/direito) soldados na fábrica, face C", 1, _n01["CC1E"] + _n01["CC1D"]),
+        ("ND-LET-PP04", "Pilares (fábrica)", "CE-1", f"Chapa de espera A36 380×330×{_TCE:g} + 4 pinos Ø16×150 + 2 grampos N18 — {_kg01['kg_CE1']:.2f} kg/un (total; {_n01['CE1_obra']} lisas p/ solda na obra)".replace(".", ","), 1, len(_ce)),
         ("ND-LET-PP04", "Placas PP (obra)", "PT-1", f"Cartola 6,3 × 80 + 2 M16 8.8 (junta de baixo) — {_kg01['kg_PT1']:.2f} kg/un".replace(".", ","), 1, _n_pt1),
         ("ND-LET-PP04", "Placas PP (obra)", "PT-2", f"L 102×102×9,5 L=150 + 2 M16 + BR-1 (placa) + BR-2 (pilar) — {_kg01['kg_PT2']:.2f} kg/un".replace(".", ","), 1, _n_pt2),
         ("ND-LET-PP05", "Placas PP (obra)", "OM-1", f"Ombreira U 125×80×6,3 L=2478 + chapa de base + CL-1 + 2 chumbadores químicos M16 + 2 M16 passantes — {json.load(open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json'))['kg_un']:.1f} kg/un".replace(".", ","), 1, 2),

@@ -79,7 +79,11 @@ def prancha_pilar(P):
         r06.insert(0, "ESPERAS ES-1F DO APOIO ST-1F DA ÚLTIMA TERÇA")
     if P["marca"].startswith("PG"):
         r06.insert(0, "CABEÇA A 2 cm DA TS-01; INSERTOS IL-1 (LIGAÇÃO EM y COM A TS-01)")
-    pr.revisao("06", "17/10/2026", "; ".join(r06))
+    if any(ip["face"] == "C" for ip in P.get("ip01", [])):
+        r06.append("CE-1 12,5; CC-1 (CS-1 DE FÁBRICA) NA FACE C; FACE C PARA CIMA NA FÔRMA (DEC-031)")
+    elif P.get("ip01"):
+        r06.append("CE-1 12,5")
+    pr.revisao("06", "19/10/2026", "; ".join(r06))
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -381,7 +385,9 @@ def prancha_pilar(P):
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, False)
-    pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
+    y_nt = pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
+    if any(ip["face"] == "C" for ip in P.get("ip01", [])):
+        posicao_forma(pr, P, cons, Q[2] - 150, min(Q[1] + 225, y_nt - 95))
     pr.posicoes_desenho.update({b["pos"] for b in barras if b["pos"] in ("N1", "N1A", "N13", "N14")})
     pr.posicoes_desenho.discard("N1") if not xy_sobe else None
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
@@ -430,7 +436,7 @@ def dados_pc1():
                 [["PC-01", "P8A (C2)", 1, "topo: 2 TS-01 (oblongo); CP-I130 (B); 2 CP-MEZ (A, C)", "6 CE-1 (B); 2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I130", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=700 — CP-MEZ", 4, "faces A e C"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
                  ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I130"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", 4, "face do CP-MEZ"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
-                 ["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada, fiadas 0 a 5"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada, fiadas 0 a 5"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"TS-01 da linha 2 apoiadas no topo do pilar (topo horizontal em 2 níveis: +{F(Z_TOP_C)} na metade do lado A e +{F(Z_TOP_CD)} na metade do lado E, degrau no eixo C), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, com os tubos TB-3 da viga preenchidos com mastique (sem graute: a viga desliza ±15 mm em x, o mezanino já trava o pilar); CP-I130 na face B (+{F(Z_I130)}) para a ponta da V407; CP-MEZ nas faces A e C para as VM dos dois níveis.",
                  f"Topo do pilar horizontal em 2 níveis: +{F(Z_TOP_C)} (metade do lado A) e +{F(Z_TOP_CD)} (metade do lado E), degrau de {Z_TOP_CD - Z_TOP_C} mm no eixo C, igual ao topo da I130. CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede interna da linha 2 (vista G)."],
@@ -445,7 +451,7 @@ def dados_pc2():
                 [["PC-02", "P11 (C4)", 1, "topo: 2 TS-01; CP-I130 (B, D)", "6 CE-1 (B); 2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I130", 2, "faces B e D"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
                  ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I130"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
-                 ["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 N18 (CS-1, vista C)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista C)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 8 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"CP-I130 nas faces B (V406) e D (V407), assento +{F(Z_I130)}; TS-01 da linha 4 apoiadas no topo (topo horizontal em 2 níveis: +{F(Z_TOP_C)} lado A / +{F(Z_TOP_CD)} lado E), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, grauteados nos tubos TB-3.",
                  "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede dos portões (vista C, fiadas até +7,50)."],
@@ -471,7 +477,7 @@ def dados_pm():
                 "POSIÇÃO: linha 2, eixos B e D (P8 e P8B); 40 em x × 60 em y", "PILARES DO MEZANINO PM-01",
                 [["PM-01", "P8, P8B", 2, "2 CP-MEZ (A, C)", "6 CE-1 (B); 2 AL-2"]],
                 [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", 4, "face do CP-MEZ"],
-                 ["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS,
                  f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM meio vaso com dente Gerber: fundo do consolo = fundo da viga); pino PN-1 Ø20 no TB-1 do dente; trilho IP-02 para a cantoneira CT-1 antigiro.",
                  "Topo do pilar em +6,550 (piso superior do mezanino). CE-1 na face B para as placas da parede interna da linha 2 (vista G)."],
@@ -493,7 +499,7 @@ def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
              f"POSIÇÃO: linha 4, x = {x:.3f} m ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
              [["PG-01", "P9", 1, "sem consolo; topo +7,47", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-02", "P10 (x 15,195)", 1, "sem consolo; topo +7,63", "CE-1 (B); 2 IL-1; 2 AL-2"],
               ["PG-04", "P10 (x 24,305)", 1, "sem consolo; topo +7,90", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-03", "P12", 1, "sem consolo; topo +8,06", "CE-1 (B); 2 IL-1; 2 AL-2"]],
-             [["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 N18 (CS-1)", 5 if b == 400 else 6, "face B, centrada"], IL1,
+             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1)", 5 if b == 400 else 6, "face B, centrada"], IL1,
               ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
              [("Concreto C40; 4 Ø20 retos (cantos); " if b == 400 else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
               NOTA_LIG,
@@ -521,6 +527,41 @@ def dados_pg4():
 
 
 DADOS = dict(pc1=dados_pc1, pc2=dados_pc2, pc3=dados_pc3, pm=dados_pm, pg1=dados_pg1, pg2=dados_pg2, pg3=dados_pg3, pg4=dados_pg4)
+
+
+
+def posicao_forma(pr, P, cons, x, y):
+    """rev06e (DEC-031): seção do pilar deitado na fôrma — face C (placas) para cima com os CC-1 (consoles já soldados na CE-1,
+    concretados com o pilar); face A no fundo; CE-1 das faces laterais B/D rentes, presas na lateral da fôrma."""
+    B, H = P["B"], P["H"]
+    v = pr.vista("POSIÇÃO NA FÔRMA", (x, y), 10, titulo="POSIÇÃO NA FÔRMA", subtitulo="seção do pilar deitado; face C para cima", unidade="cm")
+    xb, yc = B / 2, H                                                    # x: D (−) → B (+); y: A (0, fundo) → C (H, em cima)
+    v.ret(-xb - 60, -60, B + 120, 60, "VISTA"); v.ret(-xb - 60, 0, 60, H + 40, "VISTA"); v.ret(xb, 0, 60, H + 40, "VISTA")
+    pts = [(-xb, 0), (xb, 0), (xb, yc), (-xb, yc)]
+    v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
+    faces = {ip["face"] for ip in P["ip01"]}
+    if "C" in faces:                                                     # CC-1 na face de cima
+        v.chapa(-190, yc - 12.5, 380, 12.5)
+        for xs in (-120, 120):
+            v.ret(xs - 8, yc - 12.5 - 150, 16, 150, "OCULTA")
+        for xc_ in (-70, 70):
+            v.ret(xc_ - 52, yc, 104, 64, "METALICA")
+        v.chamada((-70, yc + 50), (-16, 10), "CC-1 (CS-1 de fábrica, sai 64)")
+    for F_, sg in (("B", 1), ("D", -1)):                                 # CE-1 rente na lateral
+        if F_ in faces:
+            x0 = xb - 12.5 if sg > 0 else -xb
+            v.chapa(x0, yc / 2 - 190, 12.5, 380)
+            for yy in (yc / 2 - 120, yc / 2 + 120):
+                v.ret(x0 - 150 if sg > 0 else x0 + 12.5, yy - 8, 150, 16, "OCULTA")
+            v.chamada((x0 + (12.5 if sg > 0 else 0), yc / 2 + 150 * sg), (-16, -6 if sg > 0 else 6), f"CE-1 face {F_}: rente, presa na lateral")
+    if any(c["face"] == "A" for c in cons):
+        v.ret(-150, -60, 300, 60, "OCULTA")
+        v.chamada((-100, -30), (-16, -8), "consolos face A: caixão no fundo")
+    v.texto((0, yc - 40), "C (placas)", "nota", "TOP_CENTER"); v.texto((0, 30), "A (interna)", "nota", "BOTTOM_CENTER")
+    v.texto((xb - 30, yc / 2), "B", "nota", "MIDDLE_CENTER"); v.texto((-xb + 30, yc / 2), "D", "nota", "MIDDLE_CENTER")
+    v.texto((0, -80), "FUNDO DA FÔRMA", "nota", "TOP_CENTER")
+    if P.get("rec"):
+        v.texto((0, -125), "cabeça: calço 30 cm no fundo", "nota", "TOP_CENTER")
 
 
 if __name__ == "__main__":

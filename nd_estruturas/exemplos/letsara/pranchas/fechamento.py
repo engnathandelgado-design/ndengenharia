@@ -215,7 +215,7 @@ def corte_parede(pr, V, origem, esc=50):
     c.cota_h([-FOLGA - E_PL, 0, 600], -500, -8, total=False)
     k0 = ks[-1]
     c.chamada((-FOLGA - E_PL / 2, k0 * H_PL + 600), (-14, 8), "placa 125 × 10 + folga 2,5")
-    c.chamada((-40, k0 * H_PL + Z_NC), (16, 10), "console CS-1 soldado na CE-1 do pilar + nicho NC-1 da placa (PP00, det. 2 e 4)")
+    c.chamada((-40, k0 * H_PL + Z_NC), (16, 10), "console CS-1 na CE-1 do pilar (CC-1 concretado na face C ou soldado na obra nas laterais) + nicho NC-1 da placa (PP00, det. 2 e 4)")
     tv0 = next(p_["trava"] for p_ in pecas if p_["bay"] == pecas[0]["bay"] and p_["k"] == k0)
     c.chamada((-FOLGA - 3, k0 * H_PL + (150 if tv0 == "PT-2" else 0)), (16, -12), "PT-1 pino de travamento (PP00, det. 3)" if tv0 == "PT-1" else "PT-2 trava de pé nos pilares (PP00, det. 6)")
     if 0 in ks:
@@ -258,7 +258,7 @@ def prancha_vista(Vs, desenho, folha):
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL — CONFORME AS VISTAS DO FECHAMENTO DO R01")
     pr.revisao("03", "14/10/2026", "PLACA 125 × 10 (8 Ø12,7); LIGAÇÕES PARAFUSADAS (TRILHO + BUCHA), SEM SOLDA; VT DO EIXO A A +6,25")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; JUNTA VERTICAL 20 mm")
-    pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: CADA PLACA NO SEU CONSOLE CS-1 (SOLDADO NA CE-1) + NICHO NC-1 + 2 PINOS PT-1")
+    pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: CONSOLE CS-1 (CC-1 NA FACE C OU NA CE-1) + NICHO NC-1 + 2 PINOS PT-1")
     Q = pr.quadro
     XC = Q[2] - 190
     pesos = sum(peso_t(p["L"]) for p in lista)
@@ -292,11 +292,12 @@ def prancha_vista(Vs, desenho, folha):
     rr.append(["", "total", len(lista), f(pesos, 1)])
     y = pr.tabela(XC, y - 4, "RESUMO POR TIPO", ["TIPO", "L (cm)", "QT", "PESO (t)"], rr, [40, 50, 30, 70], h_lin=5.0, destaque_ultima=True)
     n_ca = sum(len(DADOS[V][1]) for V in Vs)
+    n_cc = sum(1 for V in Vs for (x, z) in DADOS[V][1] if GF.concretado(V, min(VISTAS[V]["pil"], key=lambda p: abs(p[0] - x))[1]))
     notas = [f"Produzir na ordem da coluna SEQ e etiquetar cada peça com o código (ex.: {lista[0]['id']}) e o tipo; estocar por vista, na ordem inversa da montagem.",
-             "Montagem vão a vão, de baixo para cima. Antes da placa: soldar os 2 consoles CS-1 nas chapas de espera CE-1 dos pilares, no nível marcado pela topografia. A placa encosta no pilar com o braço do console entrando no nicho NC-1 de cada ponta e desce até o teto do nicho apoiar no parafuso de nível M16 (±20 mm); afastamento 25 mm pelo parafuso frontal M16. Cada placa leva só o próprio peso: folga de 5 mm na junta macho-fêmea. Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste (PP00, det. 2 a 6).",
+             f"Montagem vão a vão, de baixo para cima. Consoles da face C dos pilares: já vêm concretados com o pilar (CC-1, DEC-031). Consoles das faces laterais e das paredes internas: antes da placa, soldar o CS-1 na CE-1 no nível marcado pela topografia. A placa encosta no pilar com o braço do console entrando no nicho NC-1 de cada ponta e desce até o teto do nicho apoiar no parafuso de nível M16 (G {GF.T['G']:g} ± {GF.T['G_tol']:g} mm); afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g} mm pelo parafuso frontal M16. Cada placa leva só o próprio peso: folga de 5 mm na junta macho-fêmea. Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste (PP00, det. 2 a 6).",
              f"Placa protendida 125 × 10, C40, 8 cord. Ø12,7 CP-190 RB alinhadas (4 por face, cobrimento 2,0), {f(PL['protensao']['F_macaco_kN'])} kN por cordoalha no macaco: seção, insertos, alças e ligações na ND-LET-PP00."]
     if n_ca:
-        notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Solda de campo do CS-1 na CE-1: filete {FX['solda']['filete_mm']:g} mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio (DEC-026).")
+        notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Consoles concretados (CC-1, face C) nesta prancha: {n_cc}; soldados na obra (faces laterais): {n_ca - n_cc} — filete {FX['solda']['filete_mm']:g} mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio.")
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 livres até +7,40 (topo do PG-01).")
     if "G" in Vs:
@@ -400,7 +401,7 @@ def prancha_tipo():
     d1.chamada((60, Z_NC + NC_H / 2 - 6), (60, -3), f"teto {GF.N['t_teto']:g}: apoio do M16 de nível; armação completa N3–N7 no ND-LET-PP01".replace(".", ","))
     # ---- detalhe 2: planta da ligação placa × pilar
     d2 = pr.vista("DETALHE 2", (Q[0] + 380, Q[1] + 325), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA NA ALTURA DO CONSOLE)",
-                  subtitulo="2 consoles CS-1 soldados na CE-1 do pilar (uma por fiada); junta 20 no eixo; folga 25", unidade="mm")
+                  subtitulo="2 consoles CS-1 na CE-1 do pilar (CC-1 de fábrica na face C); junta 20 no eixo; folga 25", unidade="mm")
     pil = [(-200, 0), (200, 0), (200, 450), (-200, 450)]
     d2.poli(pil, "CORTADO", fechada=True); d2.hachura(pil, "AR-CONC", 0.03)
     d2.chapa(-CE_B / 2, 0, CE_B, 16, 0.4)                                                    # CE-1
@@ -474,8 +475,8 @@ def prancha_tipo():
     cs = FX["console_mef"]
     d4.chamada((-6, Z_CE + 150), (10, 16), "CE-1 + pinos Ø16 × 150 (pilar, PP04)")
     d4.chamada((-8, zt_cs - 150), (-30, -24), "CS-1: costas, almas, mesa, 2 dentes, chapa de ponta (PP03)")
-    d4.chamada((-yn_, zt_cs + 30), (-30, 22), "M16 de nível: G = 50 ± 10 sob o teto")
-    d4.chamada((-yt_ + 10, zt_cs + Cc["z_frontal"]), (-30, -6), "prisioneiro M16 frontal: afastamento 25 ± 5")
+    d4.chamada((-yn_, zt_cs + 30), (-30, 22), f"M16 de nível: G = {GF.T['G']:g} ± {GF.T['G_tol']:g} sob o teto")
+    d4.chamada((-yt_ + 10, zt_cs + Cc["z_frontal"]), (-30, -6), f"prisioneiro M16 frontal: afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g}")
     d4.chamada((-Cc["dente"]["y0"] - 10, zt_cs + 25), (-30, 40), f"2 dentes {Cc['dente']['t']:g} atrás das 2 abas {GF.N['t_aba']:g} (sucção)".replace(".", ","))
     d4.chamada((-FOLGA - E_PL / 2, za_ - 120), (-14, -10), "placa 10 cm")
     # ---- detalhe 6: trava de pé PT-2 (planta, 1:5 mm) — placas de pacote suspenso (sem pano contínuo até o baldrame)
@@ -517,7 +518,7 @@ def prancha_tipo():
            ["TSA", "Luva roscada M16 hef 70 (PT-1)", 4, "topo e base, 0,21 L + 15"],
            ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L; cortar após montar"],
            ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
-           ["CS-1", "Console soldado na obra (ND-LET-PP03)", "2", "CE-1 do pilar (det. 4)"],
+           ["CS-1", "Console (ND-LET-PP03)", "2", "CC-1 na face C ou CE-1 lateral"],
            ["PT-1", "Cartola 6,3 × 80 + 2 M16", "2", "junta de baixo (det. 3)"],
            ["PT-2", "L 102×102×9,5 L=150 + 2 M16", "(2)", "pé, pacote suspenso (det. 6)"]]
     y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS METÁLICAS — mm", ["MARCA", "DESCRIÇÃO", "QT/PL", "POSIÇÃO"], ins, [14, 92, 12, 72])
@@ -533,7 +534,7 @@ def prancha_tipo():
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
         f"PP-05P (placa I-15, sobre a porta da vista I): mesma fôrma da PP-05, com 12 cordoalhas Ø12,7 (6 por face, a 9,5 / 15,6 / 46,9 / 78,1 / 109,4 / 115,5 cm da base, fora do nicho NC-1) e 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, nos eixos das ombreiras OM-1. Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
         "Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; depois de montada a placa, cortar as alças rente ao topo (disco, sem aquecer o concreto) e proteger as pontas com epóxi antes de montar a placa de cima (junta de 5 mm); estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
-        "Montagem (sistema Trejor, DEC-026): soldar os 2 consoles CS-1 nas CE-1 dos pilares no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G 50 ± 10), afastamento 25 ± 5 pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa leva só o próprio peso e o vento: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos PT-1 na junta de baixo (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",
+        f"Montagem (sistema Trejor, DEC-026/031): consoles da face C já concretados com o pilar (CC-1); nas faces laterais soldar o CS-1 na CE-1 no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G {GF.T['G']:g} ± {GF.T['G_tol']:g}), afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g} pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa leva só o próprio peso e o vento: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos PT-1 na junta de baixo (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",
         f"Cargas por console: G = {f(FX['cargas_por_console']['G_k_kN'])} kN (k), Vd = {f(FX['cargas_por_console']['Vd_kN'])} kN (montagem, γf·βa = 1,69), vento {f(FX['cargas_por_console']['vento_d_kN'])} kN (d); PT-1 {f(FX['mef_parede']['F_pino_d_kN'])} kN, PT-2 {f(FX['trava_pe_PT2']['F_d_kN'])} kN. Medidas do CS-1/NC-1 de pré-dimensionamento: confirmar com o catálogo Trejor (consoles para painéis de fachada).",
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",
         "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±5 mm (de projeto, para a junta de 20 mm), espessura −5/+10 mm, planicidade ±L/1000, insertos ±15 mm; montagem: prumo H/300 ≤ 25 mm, nível ±10 mm. Içamento na vertical pelas alças do topo: estabilidade lateral verificada (6.1).",
@@ -549,7 +550,7 @@ def prancha_cm():
     pr.revisao("02", "12/10/2026", "GEOMETRIA DA LOCAÇÃO DO R01; H/J LATERAIS DO ANEXO; E/F ABERTAS ATÉ +7,50; 2 PORTÕES; PRANCHAS POR VISTA")
     pr.revisao("03", "14/10/2026", "PLACAS 125 × 10; LIGAÇÕES SEM SOLDA; VT DO EIXO A A +6,25; PORTÕES ATÉ +7,40")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; E E F ABERTAS ATÉ +7,50; JUNTA VERTICAL 20 mm")
-    pr.revisao("06", "17/10/2026", "FIXAÇÃO DAS PLACAS PELO SISTEMA TREJOR (CS-1 + CE-1 + NC-1 + PT-1/PT-2)")
+    pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR (CS-1/CC-1 + CE-1 + NC-1 + PT-1/PT-2); TOLERÂNCIA ±12 (DEC-031)")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("CM", f"PLACAS PROTENDIDAS 125 × 10 — {N_TOT} PEÇAS · {len(TIPO)} TIPOS · 10 VISTAS · {f(PESO_TOT, 0)} t",
@@ -617,7 +618,7 @@ def prancha_cm():
         "Vistas como no R01: B e D (linhas 4–9) fechadas, 8 fiadas; E (eixo A) e F (eixo E), linhas 2–4, só as 2 fiadas de cima (rev04, sem VT); H, J (anexo) e I (fachada da linha 1) com faixas de esquadria de +1,25 a +2,50 e de +5,00 a +6,25 e porta na I; A (linha 9) fechada.",
         "Paredes internas C (linha 4) e G (linha 2) com placas até +7,50 (vão A–B até +6,25: a TS-01 desce a +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve — confirmar com o cliente.",
         "Linha 4: 2 portões (P9–P10 e P10–P12), livres até +7,40 (topo do PG-01), sob a TS-01; o trecho P10–P11–P10 é fechado.",
-        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); rev06 (DEC-026, sistema Trejor): cada placa nos seus 2 consoles CS-1 soldados na obra nas chapas de espera CE-1 dos pilares, nicho NC-1 nas pontas, folga de 5 mm na junta horizontal (sem empilhar peso), 2 pinos PT-1 por junta ou trava de pé PT-2 nos pacotes suspensos: ND-LET-PP00.",
+        "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); rev06 (DEC-026, sistema Trejor): cada placa nos seus 2 consoles CS-1 (concretados com o pilar na face C — CC-1, DEC-031 — ou soldados na obra nas CE-1 das faces laterais), nicho NC-1 nas pontas, folga de 5 mm na junta horizontal (sem empilhar peso), 2 pinos PT-1 por junta ou trava de pé PT-2 nos pacotes suspensos: ND-LET-PP00.",
         "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (consoles com folga e pinos com furo oblongo vertical) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
         "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CM01")

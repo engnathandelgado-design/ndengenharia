@@ -295,3 +295,15 @@ Decisão (menor chapa comercial que atende, usos do MEF):
 - CE-1: 16 → 12,5 (σ 133 ≤ 227 MPa; 9,5 não passa).
 Economia: NC-1 3,92 → 3,05 kg (−349 kg nos 404), CS-1 4,50 → 2,44 kg (−812 kg), CE-1 15,8 → 12,3 kg (−935 kg nas 271) ≈ 2,1 t de aço.
 Sem teste automatizado: os dois MEF levam cerca de 1 e 2,5 min; `calc_fixacao_placas.py` lê os JSON e recusa espessura diferente ou uso > 1.
+
+
+## DEC-031 — Letsara: consoles da face C concretados com o pilar (CC-1) e tolerância ±12 (2026-10-19)
+
+Contexto: o catálogo 09 da Trejor indica a posição de cada inserto na fôrma do pilar. O Nathan definiu a posição de concretagem: face C (cabeça/platibanda, onde ficam as placas) para cima, face A no fundo da fôrma, e propôs que os consoles da face C venham concretados com o pilar.
+Problema: sem a solda de campo, a posição do console não se ajusta mais na obra; a folga do conjunto CS-1 × NC-1 (G 50 ± 10, x ± 5) não cobria fábrica + montagem.
+Alternativas: (1) CC-1 concretado na face C com nicho mais largo e parafuso de nível mais longo; (2) manter tudo soldado na obra.
+Decisão: (1), confirmada pelo Nathan. Tolerância global estatística (NBR 9062:2017 3.15): fábrica ±5 (5.2.2.5), montagem do pilar ±10 (5.2.2.6), placa ±5 → ±12 em x e na altura. Geometria nova: nicho NC-1 140 × 200 × 60 (grampos em 24–56 e 84–116), mesa do CS-1 104, almas a ±45, dentes 13 × 35 a 39–52, M16 × 50 de nível com G = 51 ± 12 (Y_NIV 46). A regra "ponta do nível acima da face de baixo da mesa" foi trocada pela folga do nível à chapa de ponta. Todas as folgas ≥ 0 (mín. 0,6 mm cabeça × abas); janela de montagem 27 mm.
+MEF refeitos: NC-1 ≤ 0,80 (abas), soldas ≤ 0,70; CS-1 0,97 (ponta, sobrepressão), solda dentes × mesa 0,93; CE-1 interação 0,877.
+CC-1 = CE-1 380 × 330 × 12,5 + CS-1 soldados na fábrica do pilar (mesma ancoragem verificada). Contagem: 110 CC-1 (2 consoles), 28 CC-1E e 36 CC-1D (1 console), 97 CE-1 lisas nas faces laterais B/D para solda na obra (120 CS-1 de obra, 284 de fábrica).
+Hipóteses adotadas (sem pergunta ao Nathan, registrar): consolos da face A no caixão no fundo da fôrma; pilares genéricos PC/PM/PG mantêm CE-1 na face B com solda de campo e sem detalhe de posição na fôrma.
+Pranchas: posição na fôrma em cada pilar com face C, vista CC-1 na PP04, tabelas PP01/PP00, quantitativos, MC07, páginas do cliente.

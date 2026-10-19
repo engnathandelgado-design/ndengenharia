@@ -23,4 +23,4 @@ def test_folgas_e_usos():
     c = R["console_mef_casca"]
     assert c["uso"] <= 1 and max(c["soldas"].values()) <= 1
     d = R["dentes_CS1"]
-    assert d["sigma_MPa"] == pytest.approx(6.9e3 * 27 / (13 * 19 ** 2 / 6), rel=0.02)
+    assert d["sigma_MPa"] == pytest.approx(6.9e3 * 30 / (13 * 19 ** 2 / 6), rel=0.02)

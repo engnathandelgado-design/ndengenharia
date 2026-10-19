@@ -39,12 +39,12 @@ NC = FX["nicho_NC1"]
 DA = DN["resultado"]["adotado"]
 doc = SimpleDocTemplate(str(AQ / "ND-LET-MC07-FIXACAO-PLACAS-rev06.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
                         bottomMargin=15 * mm, title="Letsara — memória MC07: fixação das placas (sistema Trejor)", author="ND Engenharia")
-E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC07 (rev06c)", T1),
+E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC07 (rev06e)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Assunto: fixação das placas protendidas 125 × 10 do fechamento lateral "
-       "pelo sistema Trejor (console soldado), decisão DEC-026 de 17/10/2026. Projeto da ND Engenharia — para aprovação."),
+       "pelo sistema Trejor (console soldado), decisões DEC-026 de 17/10/2026, DEC-030 e DEC-031 de 19/10/2026. Projeto da ND Engenharia — para aprovação."),
      Paragraph("1. Sistema adotado", T2),
      P("Cada placa leva só o próprio peso e o vento: a junta horizontal macho-fêmea tem 5 mm de folga na altura (não há empilhamento). "
-       "Peso e vento entram em 2 consoles CS-1 por placa, soldados na obra nas chapas de espera CE-1 dos pilares (uma por fiada, 2 consoles por chapa); "
+       "Peso e vento entram em 2 consoles CS-1 por placa, ligados às chapas de espera CE-1 dos pilares (uma por fiada, 2 consoles por chapa). Na face C dos pilares (lado da platibanda, face de cima na fôrma) os consoles vêm soldados na fábrica sobre a CE-1 e são concretados com o pilar (conjunto CC-1, DEC-031); nas faces laterais B/D o CS-1 é soldado na obra na CE-1. "
        "a placa encosta no pilar com o braço do console no nicho NC-1 embutido em cada ponta (teto a 104 cm da base) e desce até o teto apoiar no "
        "parafuso de nível M16; o prisioneiro frontal M16 fixa o afastamento de 25 mm e segura a sobrepressão; os 2 dentes do console ficam atrás "
        "das 2 abas laterais do nicho e seguram a sucção. Como o console fica no terço superior, o vento (resultante a 62,5 cm) gira a placa em torno da linha dos "
@@ -95,7 +95,7 @@ E += [tab(lin, [60, 36, 30, 30]), P(CS["criterio"] + f" — uso {f(CS['uso'], 3)
         f"(6.2.5.1) — uso {f(SO['uso'], 3)}. {SO['obs']}."),
       P(f"Dentes: {FX['dentes_CS1']['peca']}; F = {f(FX['dentes_CS1']['F_por_dente_kN'], 2)} kN por dente a {f(FX['dentes_CS1']['braco_mm'], 0)} mm da mesa (engate mínimo 10): "
         f"σ = {f(FX['dentes_CS1']['sigma_MPa'])} ≤ {f(FX['dentes_CS1']['lim_MPa'])} MPa (uso {f(FX['dentes_CS1']['uso'], 3)}); solda {f(FX['dentes_CS1']['solda_MPa'])} ≤ {f(FX['dentes_CS1']['solda_lim_MPa'])} MPa."),
-      P(f"Parafusos de ajuste: M16 × 45 8.8 de nível (y = 48 mm, porca soldada + contraporca) N = {f(FX['parafusos_ajuste']['M16_nivel']['N_Sd_kN'])} kN ≤ {f(FX['parafusos_ajuste']['M16_nivel']['N_Rd_kN'])} kN; "
+      P(f"Parafusos de ajuste: M16 × 50 8.8 de nível (y = 46 mm, porca soldada + contraporca) N = {f(FX['parafusos_ajuste']['M16_nivel']['N_Sd_kN'])} kN ≤ {f(FX['parafusos_ajuste']['M16_nivel']['N_Rd_kN'])} kN; "
         f"prisioneiro M16 × 45 frontal N = {f(FX['parafusos_ajuste']['M16_frontal']['N_Sd_kN'])} kN ≤ {f(FX['parafusos_ajuste']['M16_frontal']['N_Rd_kN'])} kN; contato da cabeça do M16 de nível no teto: {f(FX['parafusos_ajuste']['contato_teto_nicho']['sigma_MPa'])} MPa."),
       Paragraph("4a. Nicho NC-1 — caixa fechada e ancoragem no concreto", T2),
       P(f"{NC['caixa']}. Caminho das forças: peso → M16 de nível → teto → nariz (compressão {f(NC['teto_compressao']['sigma_MPa'])} ≤ fcd {f(NC['teto_compressao']['fcd_MPa'])} MPa); "
@@ -108,13 +108,13 @@ E += [tab(lin, [60, 36, 30, 30]), P(CS["criterio"] + f" — uso {f(CS['uso'], 3)
         "com os grampos como molas e sem contar a parede de 40 mm atrás do fundo (mef_nc1.py). von Mises nas faces (EN 1993-1-1:2005 6.2.1(5)), percentil 99 de cada chapa, ≤ fy/γa1. "
         "Soldas do console e do nicho: esforços da casca na borda de cada chapa junto à junta (N⊥/2 + M⊥/t, com os cisalhamentos), 2 filetes por junta, força por mm = maior média em 10 mm de cordão "
         "(o pico do canto reentrante depende da malha), ≤ 0,6·fw·Aw/γw2 (NBR 8800:2008 6.2.5.1, E70, γw2 1,35); parede de 2 mm com filete 2 dos dois lados (AWS D1.3, chapa fina). "
-        "A mesa do console fica em 16 mm pela geometria (com G mínimo a ponta do M16 × 45 de nível não pode passar da face de baixo da mesa), não pela tensão."),
+        "A mesa do console fica em 16 mm (rosca da porca de nível soldada e altura dos dentes); a regra antiga da ponta do nível acima da face de baixo da mesa foi trocada pela folga do nível à chapa de ponta (DEC-031)."),
       tab([["Peça", "Chapa", "Espessura (mm)", "Uso no MEF"]] + [["CS-1", k, g_(GC[{"costas": "costas", "almas": "alma", "mesa": "mesa", "ponta": "ponta", "dentes": "dente"}[k]]["t"]), f(v, 2)] for k, v in MCS.items()]
           + [["CS-1", "solda " + k.replace("_", " × "), "filete " + g_(v["a_mm"]), f(max(c["solda"][k]["uso"] for c in _mc["casos"].values()), 2)] for k, v in _mc["casos"]["succao"]["solda"].items()]
           + [["NC-1", k, g_(v), f(MNC["uso"][k], 2)] for k, v in MNC["T"].items()]
           + [["NC-1", "solda " + k.replace("_", " × "), "filete " + g_(v["a_mm"]), f(max(MNC["casos"][c]["solda"][k]["uso"] for c in MNC["casos"]), 2)] for k, v in MNC["casos"]["succao"]["solda"].items()] + [["CE-1", "chapa de espera", g_(float(CE["flexao_chapa"]["t_mm"])), f(CE["flexao_chapa"]["sigma_MPa"] / CE["flexao_chapa"]["lim_MPa"], 2)]], [20, 40, 30, 30]),
       Paragraph("4b. Compatibilidade geométrica e janela de montagem", T2),
-      P("Conferido no pior caso das tolerâncias (afastamento 25 ± 5, G 50 ± 10, posição do console ± 5): " + "; ".join(f"{k} {f(v, 1)}" for k, v in FX["montagem_CS1_NC1"]["folgas_mm"].items()) + " mm. A placa encosta com o teto do nicho R acima da posição final: " + "; ".join(f"{k}: R = {f(v[0], 0)} a {f(v[1], 1)}" for k, v in FX["montagem_CS1_NC1"]["janela_R_mm"].items()) + " mm (aba por cima dos dentes e base por baixo do braço, 5 mm de folga)."),
+      P("Sem a solda de campo nos CC-1 não há ajuste na obra: as folgas foram conferidas com a tolerância global estatística (NBR 9062:2017, 3.15) de fábrica ±5 (5.2.2.5), montagem do pilar ±10 (5.2.2.6) e placa ±5, resultando ±12 mm na altura e na horizontal — "+FX["montagem_CS1_NC1"]["obs"]+". Folgas mínimas: " + "; ".join(f"{k} {f(v, 1)}" for k, v in FX["montagem_CS1_NC1"]["folgas_mm"].items()) + " mm. A placa encosta com o teto do nicho R acima da posição final: " + "; ".join(f"{k}: R = {f(v[0], 0)} a {f(v[1], 1)}" for k, v in FX["montagem_CS1_NC1"]["janela_R_mm"].items()) + " mm (aba por cima dos dentes e base por baixo do braço, 5 mm de folga)."),
       Paragraph("5. Chapa de espera CE-1 no pilar (ACI 318-19 cap. 17, concreto fissurado)", T2),
       P(f"{CE['peca']}. Por chapa (2 consoles): V = {f(CE['V_kN'])} kN, M = {f(CE['M_kNm'], 2)} kN·m, tração na linha superior "
         f"{f(CE['T_linha_sup_kN'])} kN ≤ {f(CE['phiN_linha_kN'])} kN ({CE['modo_N']}); cortante φVn = {f(CE['phiV_kN'])} kN ({CE['modo_V']}: pinos a 80 mm das "
@@ -127,6 +127,6 @@ E += [tab(lin, [60, 36, 30, 30]), P(CS["criterio"] + f" — uso {f(CS['uso'], 3)
       P("(a) Medidas do CS-1, NC-1 e cartola PT-1 são de pré-dimensionamento: trocar pelas do catálogo 09 da Trejor (consoles metálicos para painéis "
         "de fachada) e conferir as capacidades declaradas pelo fornecedor. (b) Pinos PT-1 da 1ª fiada: luva TSA no topo da viga baldrame (projeto de "
         "fundações). (c) Solda de campo: procedimento qualificado, soldador certificado, inspeção visual 100 % e líquido penetrante por amostragem, "
-        "galvanização a frio.")]
+        "galvanização a frio. (d) CC-1: solda costas × CE-1 na fábrica do pilar com o mesmo procedimento; gabarito na fôrma (face C para cima, face A no fundo, calço de 30 cm sob a cabeça) para garantir G e x dentro de ±5 de fábrica; conferir a posição antes de concretar.")]
 doc.build(E)
 print("ok", doc.filename)

@@ -224,80 +224,80 @@
   "folgas_mm": {
    "aba atrás x dente (y)": 2.0,
    "ponta x fundo (y)": 6.5,
-   "porca de nível na mesa (y)": 2.6,
-   "cabeça do nível sob o teto (y)": 4.6,
-   "cabeça do nível x abas (x)": 2.6,
+   "porca de nível na mesa (y)": 4.6,
+   "cabeça do nível sob o teto (y)": 2.6,
+   "cabeça do nível x abas (x)": 0.6,
    "dente dentro da aba E (x)": 1.0,
    "dente dentro da aba D (x)": 1.0,
-   "dente x porca de nível (x)": 13.6,
-   "aba x mesa com G mínimo (z)": 2.0,
-   "dente x teto com G mínimo (z)": 8.0,
+   "dente x porca de nível (x)": 25.6,
+   "aba x mesa com G mínimo (z)": 1.0,
+   "dente x teto com G mínimo (z)": 4.0,
    "engate aba–dente com G máximo (z)": 10.0,
-   "cabeça x contraporca com G mínimo (z)": 7.2,
-   "rosca engatada do nível com G máximo (z)": 17.8,
-   "ponta do nível acima da face de baixo da mesa (z)": 1.0,
+   "cabeça x contraporca com G mínimo (z)": 6.2,
+   "rosca engatada do nível com G máximo (z)": 19.8,
+   "parafuso de nível livre da chapa de ponta (y)": 2.0,
    "porca frontal abaixo da mesa (z)": 3.6,
    "prisioneiro: ponta de trás x costas (y)": 16.0,
    "prisioneiro: rosca na porca com a máximo (y)": 5.7,
-   "janela de montagem G=40 (z)": 30.3,
-   "janela de montagem G=50 (z)": 30.3,
-   "janela de montagem G=60 (z)": 30.3
+   "janela de montagem G=39 (z)": 27.3,
+   "janela de montagem G=51 (z)": 27.3,
+   "janela de montagem G=63 (z)": 27.3
   },
   "janela_R_mm": {
-   "G=40": [
-    35.0,
-    65.3
+   "G=39": [
+    39.0,
+    66.3
    ],
-   "G=50": [
-    25.0,
-    55.3
+   "G=51": [
+    27.0,
+    54.3
    ],
-   "G=60": [
+   "G=63": [
     15.0,
-    45.3
+    42.3
    ]
   },
-  "obs": "R = altura do teto do nicho acima da posição final ao encostar a placa; tolerâncias a = 25 ± 5, G = 50 ± 10, x ± 5"
+  "obs": "R = altura do teto do nicho acima da posição final ao encostar a placa; tolerâncias a = 25 ± 5, G = 51 ± 12, x ± 12 (DEC-031: console concretado, tolerância global estatística)"
  },
  "console_mef": {
   "peso + sobrepressão": {
-   "vm_max_MPa": 291.8,
-   "vm_p99_MPa": 219.5,
-   "flecha_mm": 0.084
+   "vm_max_MPa": 307.6,
+   "vm_p99_MPa": 215.2,
+   "flecha_mm": 0.069
   },
   "peso + sucção": {
-   "vm_max_MPa": 284.6,
-   "vm_p99_MPa": 234.8,
-   "flecha_mm": 0.123
+   "vm_max_MPa": 217.8,
+   "vm_p99_MPa": 163.8,
+   "flecha_mm": 0.096
   },
   "criterio": "von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = 314 MPa — critério de von Mises do EN 1993-1-1:2005 6.2.1(5), γa1 = 1,10 da NBR 8800:2008",
-  "uso": 0.749
+  "uso": 0.686
  },
  "console_mao": {
-  "M_raiz_Nmm": 1031762,
-  "sigma_almas_MPa": 76.8,
+  "M_raiz_Nmm": 978164,
+  "sigma_almas_MPa": 72.8,
   "tau_almas_MPa": 26.6,
-  "mesa_faixa_MPa": 201.7,
+  "mesa_faixa_MPa": 259.3,
   "obs": "mesa como faixa biapoiada nas almas (sem efeito de placa): limite superior do MEF"
  },
  "dentes_CS1": {
-  "peca": "2 dentes ch. 19 × 13 × 32 A572-50 sobre as almas, filete 6 no contorno",
+  "peca": "2 dentes ch. 19 × 13 × 35 A572-50 sobre as almas, filete 6 no contorno",
   "F_por_dente_kN": 6.9,
-  "braco_mm": 27.0,
-  "sigma_MPa": 238.3,
+  "braco_mm": 30.0,
+  "sigma_MPa": 264.8,
   "lim_MPa": 313.6,
-  "uso": 0.76,
-  "solda_MPa": 122.3,
+  "uso": 0.844,
+  "solda_MPa": 135.3,
   "solda_lim_MPa": 215.6,
-  "uso_solda": 0.567
+  "uso_solda": 0.628
  },
  "solda": {
   "filete_mm": 5.0,
   "cordoes": "2 × 130 verticais",
   "eletrodo": "E70XX",
-  "f_res_MPa": 107.9,
+  "f_res_MPa": 105.3,
   "fw_Rd_MPa": 215.6,
-  "uso": 0.501,
+  "uso": 0.489,
   "obs": "solda de campo: inspeção visual 100 % e líquido penetrante por amostragem; galvanização a frio após a solda"
  },
  "parafusos_ajuste": {
@@ -321,17 +321,17 @@
  "CE1": {
   "peca": "CE-1 380 × 330 × 12,5 A36 + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 no pilar",
   "V_kN": 53.6,
-  "M_kNm": 3.0,
-  "T_linha_sup_kN": 24.5,
+  "M_kNm": 2.89,
+  "T_linha_sup_kN": 24.1,
   "phiN_linha_kN": 47.3,
   "phiV_kN": 99.0,
   "modo_V": "borda_paralela",
   "modo_N": "cone",
-  "interacao": 0.883,
+  "interacao": 0.877,
   "ok": true,
   "flexao_chapa": {
    "t_mm": 12.5,
-   "sigma_MPa": 133.0,
+   "sigma_MPa": 128.2,
    "lim_MPa": 227.3
   }
  },
@@ -358,22 +358,22 @@
  "nicho_NC1": {
   "caixa": "teto 12,5 + base 3 + fundo 9,5 + 2 abas 12,5 × 38 (A572-50) + parede lateral 2 (A36), solda de oficina MIG, galvanizado a fogo, + 4 grampos U Ø6,3 A36 (c/c 32, a 31 mm da boca, dentro dos estribos N5 e N6)",
   "fundo": {
-   "M_kNmm": 630.5,
-   "sigma_MPa": 349.3,
+   "M_kNmm": 631.8,
+   "sigma_MPa": 300.0,
    "lim_MPa": 313.6,
-   "uso": 1.114
+   "uso": 0.957
   },
   "aba": {
-   "sigma_MPa": 243.0,
-   "largura_mm": 36.0,
-   "uso": 0.775
+   "sigma_MPa": 208.3,
+   "largura_mm": 42.0,
+   "uso": 0.664
   },
   "parede": {
    "t_mm": 2.0,
    "obs": "trabalha junto com a caixa (MEF: placa e solda verificadas); as forças principais vão por teto, base, fundo e abas"
   },
   "teto_compressao": {
-   "sigma_MPa": 4.42,
+   "sigma_MPa": 3.79,
    "fcd_MPa": 28.6
   },
   "sem_caixa_parede_40mm": {
@@ -388,10 +388,10 @@
    "uso": 0.703
   },
   "ancoragem_base": {
-   "F_kN": 6.2,
+   "F_kN": 6.3,
    "N6_phi_kN": 19.7,
    "grampos_phi_kN": 23.4,
-   "uso": 0.316
+   "uso": 0.32
   },
   "mef": {
    "espessuras": {
@@ -402,25 +402,25 @@
     "abas": 12.5
    },
    "uso": {
-    "teto": 0.76,
-    "base": 0.816,
-    "fundo": 0.731,
-    "parede": 0.691,
-    "abas": 0.958,
-    "solda_teto_fundo": 0.451,
-    "solda_base_fundo": 0.368,
-    "solda_parede": 0.711
+    "teto": 0.664,
+    "base": 0.755,
+    "fundo": 0.72,
+    "parede": 0.655,
+    "abas": 0.8,
+    "solda_teto_fundo": 0.441,
+    "solda_base_fundo": 0.333,
+    "solda_parede": 0.7
    },
    "atual": true
   }
  },
  "console_mef_casca": {
-  "uso": 0.878,
+  "uso": 0.968,
   "soldas": {
-   "alma_costas": 0.534,
-   "mesa_costas": 0.727,
-   "dentes_mesa": 0.841,
-   "ponta": 0.719
+   "alma_costas": 0.422,
+   "mesa_costas": 0.612,
+   "dentes_mesa": 0.93,
+   "ponta": 0.842
   }
  },
  "GEO": {
@@ -433,7 +433,7 @@
    },
    "alma": {
     "t": 6.3,
-    "x": 35.0,
+    "x": 45.0,
     "y0": 9.5,
     "y1": 64.0,
     "h_raiz": 80.0,
@@ -441,25 +441,25 @@
    },
    "mesa": {
     "t": 16.0,
-    "b": 80.0,
+    "b": 104.0,
     "y0": 9.5,
     "y1": 64.0
    },
    "dente": {
     "t": 19.0,
     "b": 13.0,
-    "h": 32.0,
+    "h": 35.0,
     "y0": 44.5,
-    "x0": 27.0
+    "x0": 39.0
    },
    "ponta": {
     "t": 8.0,
     "y0": 56.0,
     "z0": -50.0,
     "z1": -16.0,
-    "b": 63.7
+    "b": 83.7
    },
-   "y_nivel": 48.0,
+   "y_nivel": 46.0,
    "z_frontal": -33.0,
    "a_solda": {
     "alma_costas": 5.0,
@@ -468,23 +468,23 @@
     "ponta": 5.0,
     "porca": 4.0
    },
-   "L_nivel": 45.0,
+   "L_nivel": 50.0,
    "L_frontal": 45.0
   },
   "NC1": {
-   "B": 120.0,
+   "B": 140.0,
    "H": 200.0,
    "P": 60.0,
    "y_gr": 31.0,
    "d_gr": 6.3,
    "x_gr": [
     [
-     20.0,
-     52.0
+     24.0,
+     56.0
     ],
     [
-     68.0,
-     100.0
+     84.0,
+     116.0
     ]
    ],
    "h_gr_teto": 40.0,
@@ -504,11 +504,11 @@
    },
    "aba_e": [
     0.0,
-    39.0
+    44.0
    ],
    "aba_d": [
-    81.0,
-    117.0
+    96.0,
+    138.0
    ]
   },
   "hex": {
@@ -521,9 +521,9 @@
   "tol": {
    "a": 25.0,
    "a_tol": 5.0,
-   "G": 50.0,
-   "G_tol": 10.0,
-   "x_tol": 5.0
+   "G": 51.0,
+   "G_tol": 12.0,
+   "x_tol": 12.0
   },
   "CE1": {
    "t": 12.5,

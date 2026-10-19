@@ -3,6 +3,7 @@ cabeça recuada, consolos e insertos da marca. Rodar: python pilares_familia.py 
 import math, re, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import pilar_generico as G
+import geo_fixacao as GF
 from familia_pl import MARCAS
 from geometria import Y_LIN, X_EIXO, X_FACH
 
@@ -121,7 +122,7 @@ def dados(mk):
     if n_mez:
         ins.append(["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", n_mez, "face do CP-MEZ"])
     for ip in ips:
-        ins.append(["CE-1", "CE-1 380×330×16 + 4 pinos Ø16 + 2 grampos N18", len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
+        ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 (CS-1 na obra)").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
         ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 102,5 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
@@ -135,13 +136,13 @@ def dados(mk):
     P = G.base(mk, qt, 400, 600, 10000, cons, XY, f"ND-LET-{mk.replace('-', '')}",
                f"PILAR PRÉ-MOLDADO {mk} (FAMÍLIA 40×60) — {pos} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","), "FAMÍLIA DE PILARES 40×60",
-               [[mk, pos, qt, cons_t, ins_t]], ins,
+               [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
                 G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca.",
                 f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
-                "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face A para cima.",
-                "CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × 16 com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), rente à face das placas, centrada no pilar, uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm); os 2 consoles CS-1 das placas são soldados nela na obra (ND-LET-PP00 det. 2 e 4; fabricação no ND-LET-PP01). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
+                "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face C (placas) para cima e a face A no fundo da fôrma (detalhe POSIÇÃO NA FÔRMA, DEC-031): CC-1 na face de cima, preso em gabarito apoiado nas laterais; CE-1 das faces B/D rente e parafusada na lateral da fôrma; consolos da face A em caixão no fundo; calço de 30 cm no fundo sob a cabeça recuada.",
+                f"CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × {GF.TCE:g}".replace(".", ",") + " com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), centrada no pilar, uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm). Face C (DEC-031): sai da metalúrgica com os consoles CS-1 já soldados (CC-1 com 2 consoles; CC-1E/CC-1D com 1, nas pontas de parede) e é concretada com o pilar — posição ±5 mm pelo gabarito; o parafuso de nível absorve ±12 mm. Faces laterais: CE-1 rente e CS-1 soldado na obra (ND-LET-PP00 det. 2 e 4; fabricação PP03/PP04). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"]) for ip in ips], grampos=(-84, 84), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL"):

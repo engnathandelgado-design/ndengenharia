@@ -8,285 +8,285 @@
   "montagem": {
    "nome": "peso (montagem)",
    "caso": "montagem",
-   "n_elem": 2998,
-   "n_nos": 3083,
-   "vm_max": 184.291,
-   "vm_p99": 138.594,
+   "n_elem": 3200,
+   "n_nos": 3287,
+   "vm_max": 123.668,
+   "vm_p99": 91.303,
    "vm_parte": {
     "almas": {
-     "max": 164.31085105345855,
-     "p99": 117.03384601877248
+     "max": 111.14158852050792,
+     "p99": 83.50674427519878
     },
     "costas": {
-     "max": 162.37376100718464,
-     "p99": 142.23005630374348
+     "max": 98.22105576662645,
+     "p99": 92.46415544705017
     },
     "dentes": {
-     "max": 6.822439347320994,
-     "p99": 6.656008354584967
+     "max": 4.917580727088051,
+     "p99": 4.538117499738519
     },
     "mesa": {
-     "max": 184.29094693407708,
-     "p99": 112.77572704624163
+     "max": 123.6680165909233,
+     "p99": 97.63966173408973
     },
     "ponta": {
-     "max": 53.63442160554892,
-     "p99": 48.73779156734809
+     "max": 52.02233057515832,
+     "p99": 50.32550609758945
     }
    },
-   "u_max_mm": 0.104,
-   "dz_nivel_mm": 0.08,
+   "u_max_mm": 0.062,
+   "dz_nivel_mm": 0.056,
    "soma_Rz_kN": 26.8,
    "soma_Ry_kN": -0.0,
    "solda": {
     "alma_costas": {
      "a_mm": 5.0,
-     "F_Nmm": 284.3,
-     "F_pico_Nmm": 421.2,
+     "F_Nmm": 217.4,
+     "F_pico_Nmm": 381.2,
      "Rd_Nmm": 762.0,
-     "uso": 0.373
+     "uso": 0.285
     },
     "mesa_costas": {
      "a_mm": 8.0,
-     "F_Nmm": 456.2,
-     "F_pico_Nmm": 1014.8,
+     "F_Nmm": 373.4,
+     "F_pico_Nmm": 693.3,
      "Rd_Nmm": 1219.2,
-     "uso": 0.374
+     "uso": 0.306
     },
     "dentes_mesa": {
      "a_mm": 6.0,
-     "F_Nmm": 25.1,
-     "F_pico_Nmm": 42.2,
+     "F_Nmm": 15.1,
+     "F_pico_Nmm": 20.3,
      "Rd_Nmm": 914.4,
-     "uso": 0.027
+     "uso": 0.017
     },
     "ponta": {
      "a_mm": 5.0,
-     "F_Nmm": 215.2,
-     "F_pico_Nmm": 221.4,
+     "F_Nmm": 199.4,
+     "F_pico_Nmm": 203.9,
      "Rd_Nmm": 762.0,
-     "uso": 0.282
+     "uso": 0.262
     }
    },
-   "almas_raiz_vm_med": 61.247,
-   "p99_malha_2mm": 137.1,
+   "almas_raiz_vm_med": 48.315,
+   "p99_malha_2mm": 92.9,
    "p99_parte_malha_2mm": {
-    "almas": 115.1,
-    "costas": 145.7,
-    "dentes": 6.4,
-    "mesa": 110.9,
-    "ponta": 49.5
+    "almas": 83.2,
+    "costas": 98.5,
+    "dentes": 3.8,
+    "mesa": 98.1,
+    "ponta": 50.3
    },
    "uso_parte": {
-    "almas": 0.373,
-    "costas": 0.465,
-    "dentes": 0.021,
-    "mesa": 0.36,
-    "ponta": 0.158
+    "almas": 0.266,
+    "costas": 0.314,
+    "dentes": 0.014,
+    "mesa": 0.313,
+    "ponta": 0.16
    },
    "uso_solda": {
-    "alma_costas": 0.373,
-    "mesa_costas": 0.374,
-    "dentes_mesa": 0.027,
-    "ponta": 0.282
+    "alma_costas": 0.285,
+    "mesa_costas": 0.306,
+    "dentes_mesa": 0.017,
+    "ponta": 0.262
    },
-   "uso": 0.465
+   "uso": 0.314
   },
   "sobrepressao": {
    "nome": "peso + vento de sobrepressão",
    "caso": "sobrepressao",
-   "n_elem": 2998,
-   "n_nos": 3083,
-   "vm_max": 283.176,
-   "vm_p99": 224.628,
+   "n_elem": 3200,
+   "n_nos": 3287,
+   "vm_max": 312.412,
+   "vm_p99": 252.254,
    "vm_parte": {
     "almas": {
-     "max": 278.86501686592925,
-     "p99": 223.32458135122278
+     "max": 292.9058809801441,
+     "p99": 231.77116453112782
     },
     "costas": {
-     "max": 179.77341850557372,
-     "p99": 171.0529633824804
+     "max": 118.2028051612311,
+     "p99": 108.01999153104556
     },
     "dentes": {
-     "max": 3.13952274516406,
-     "p99": 3.137132607850757
+     "max": 5.077569738594524,
+     "p99": 4.868426220193555
     },
     "mesa": {
-     "max": 139.0024518374637,
-     "p99": 91.5839142157143
+     "max": 105.78160558563727,
+     "p99": 93.1747493575244
     },
     "ponta": {
-     "max": 283.1763947280719,
-     "p99": 261.67645122082973
+     "max": 312.41223261738674,
+     "p99": 300.98157135435787
     }
    },
-   "u_max_mm": 0.194,
-   "dz_nivel_mm": 0.081,
+   "u_max_mm": 0.233,
+   "dz_nivel_mm": 0.057,
    "soma_Rz_kN": 26.8,
    "soma_Ry_kN": 13.81,
    "solda": {
     "alma_costas": {
      "a_mm": 5.0,
-     "F_Nmm": 366.8,
-     "F_pico_Nmm": 519.3,
+     "F_Nmm": 295.0,
+     "F_pico_Nmm": 483.8,
      "Rd_Nmm": 762.0,
-     "uso": 0.481
+     "uso": 0.387
     },
     "mesa_costas": {
      "a_mm": 8.0,
-     "F_Nmm": 328.1,
-     "F_pico_Nmm": 689.2,
+     "F_Nmm": 278.0,
+     "F_pico_Nmm": 491.9,
      "Rd_Nmm": 1219.2,
-     "uso": 0.269
+     "uso": 0.228
     },
     "dentes_mesa": {
      "a_mm": 6.0,
-     "F_Nmm": 13.3,
-     "F_pico_Nmm": 28.4,
+     "F_Nmm": 12.6,
+     "F_pico_Nmm": 25.0,
      "Rd_Nmm": 914.4,
-     "uso": 0.015
+     "uso": 0.014
     },
     "ponta": {
      "a_mm": 5.0,
-     "F_Nmm": 547.9,
-     "F_pico_Nmm": 558.1,
+     "F_Nmm": 641.3,
+     "F_pico_Nmm": 649.7,
      "Rd_Nmm": 762.0,
-     "uso": 0.719
+     "uso": 0.842
     }
    },
-   "almas_raiz_vm_med": 85.446,
-   "p99_malha_2mm": 232.0,
+   "almas_raiz_vm_med": 74.757,
+   "p99_malha_2mm": 259.5,
    "p99_parte_malha_2mm": {
-    "almas": 233.0,
-    "costas": 166.4,
-    "dentes": 3.9,
-    "mesa": 93.0,
-    "ponta": 270.6
+    "almas": 241.2,
+    "costas": 105.0,
+    "dentes": 4.1,
+    "mesa": 93.5,
+    "ponta": 303.7
    },
    "uso_parte": {
-    "almas": 0.743,
-    "costas": 0.545,
-    "dentes": 0.013,
-    "mesa": 0.297,
-    "ponta": 0.863
+    "almas": 0.769,
+    "costas": 0.344,
+    "dentes": 0.016,
+    "mesa": 0.298,
+    "ponta": 0.968
    },
    "uso_solda": {
-    "alma_costas": 0.481,
-    "mesa_costas": 0.269,
-    "dentes_mesa": 0.015,
-    "ponta": 0.719
+    "alma_costas": 0.387,
+    "mesa_costas": 0.228,
+    "dentes_mesa": 0.014,
+    "ponta": 0.842
    },
-   "uso": 0.863
+   "uso": 0.968
   },
   "succao": {
    "nome": "peso + vento de sucção",
    "caso": "succao",
-   "n_elem": 2998,
-   "n_nos": 3083,
-   "vm_max": 341.964,
-   "vm_p99": 250.763,
+   "n_elem": 3200,
+   "n_nos": 3287,
+   "vm_max": 285.093,
+   "vm_p99": 195.65,
    "vm_parte": {
     "almas": {
-     "max": 237.0050695174146,
-     "p99": 167.6763312482112
+     "max": 164.06148608832964,
+     "p99": 123.9573862589401
     },
     "costas": {
-     "max": 291.7199895550999,
-     "p99": 275.2677003110515
+     "max": 212.70297409873243,
+     "p99": 165.4834405921341
     },
     "dentes": {
-     "max": 252.12815256002756,
-     "p99": 248.47654206103542
+     "max": 285.0931948690721,
+     "p99": 274.50462368426327
     },
     "mesa": {
-     "max": 341.9639479432242,
-     "p99": 207.95242440465043
+     "max": 230.0729019831417,
+     "p99": 205.99174492811844
     },
     "ponta": {
-     "max": 138.74667267854102,
-     "p99": 102.40970326234542
+     "max": 151.6190405851565,
+     "p99": 101.16683193416175
     }
    },
-   "u_max_mm": 0.246,
-   "dz_nivel_mm": 0.113,
+   "u_max_mm": 0.187,
+   "dz_nivel_mm": 0.073,
    "soma_Rz_kN": 26.8,
    "soma_Ry_kN": -13.81,
    "solda": {
     "alma_costas": {
      "a_mm": 5.0,
-     "F_Nmm": 407.2,
-     "F_pico_Nmm": 760.3,
+     "F_Nmm": 321.9,
+     "F_pico_Nmm": 563.5,
      "Rd_Nmm": 762.0,
-     "uso": 0.534
+     "uso": 0.422
     },
     "mesa_costas": {
      "a_mm": 8.0,
-     "F_Nmm": 886.9,
-     "F_pico_Nmm": 2040.3,
+     "F_Nmm": 745.9,
+     "F_pico_Nmm": 1426.3,
      "Rd_Nmm": 1219.2,
-     "uso": 0.727
+     "uso": 0.612
     },
     "dentes_mesa": {
      "a_mm": 6.0,
-     "F_Nmm": 769.3,
-     "F_pico_Nmm": 957.2,
+     "F_Nmm": 850.8,
+     "F_pico_Nmm": 1072.5,
      "Rd_Nmm": 914.4,
-     "uso": 0.841
+     "uso": 0.93
     },
     "ponta": {
      "a_mm": 5.0,
-     "F_Nmm": 259.9,
-     "F_pico_Nmm": 384.7,
+     "F_Nmm": 268.8,
+     "F_pico_Nmm": 479.0,
      "Rd_Nmm": 762.0,
-     "uso": 0.341
+     "uso": 0.353
     }
    },
-   "almas_raiz_vm_med": 85.743,
-   "p99_malha_2mm": 243.1,
+   "almas_raiz_vm_med": 65.669,
+   "p99_malha_2mm": 202.4,
    "p99_parte_malha_2mm": {
-    "almas": 167.5,
-    "costas": 266.5,
-    "dentes": 247.7,
-    "mesa": 207.9,
-    "ponta": 103.8
+    "almas": 124.4,
+    "costas": 177.0,
+    "dentes": 259.8,
+    "mesa": 218.5,
+    "ponta": 108.5
    },
    "uso_parte": {
-    "almas": 0.535,
-    "costas": 0.878,
-    "dentes": 0.792,
-    "mesa": 0.663,
-    "ponta": 0.331
+    "almas": 0.397,
+    "costas": 0.564,
+    "dentes": 0.875,
+    "mesa": 0.697,
+    "ponta": 0.346
    },
    "uso_solda": {
-    "alma_costas": 0.534,
-    "mesa_costas": 0.727,
-    "dentes_mesa": 0.841,
-    "ponta": 0.341
+    "alma_costas": 0.422,
+    "mesa_costas": 0.612,
+    "dentes_mesa": 0.93,
+    "ponta": 0.353
    },
-   "uso": 0.878
+   "uso": 0.93
   }
  },
  "mao": {
-  "sigma_secao_T_raiz_MPa": 52.3,
-  "sigma_almas_raiz_MPa": 76.8,
+  "sigma_secao_T_raiz_MPa": 48.2,
+  "sigma_almas_raiz_MPa": 72.8,
   "tau_almas_MPa": 26.6,
-  "vm_mao_MPa": 89.5,
-  "mef_almas_raiz_vm_med_MPa": 61.2
+  "vm_mao_MPa": 86.1,
+  "mef_almas_raiz_vm_med_MPa": 48.3
  },
- "uso": 0.878,
+ "uso": 0.968,
  "anterior_calc_fixacao_placas": {
   "peso + sobrepressão": {
-   "vm_max_MPa": 291.8,
-   "vm_p99_MPa": 219.5,
-   "flecha_mm": 0.084
+   "vm_max_MPa": 307.6,
+   "vm_p99_MPa": 215.2,
+   "flecha_mm": 0.069
   },
   "peso + sucção": {
-   "vm_max_MPa": 284.6,
-   "vm_p99_MPa": 234.8,
-   "flecha_mm": 0.123
+   "vm_max_MPa": 217.8,
+   "vm_p99_MPa": 163.8,
+   "flecha_mm": 0.096
   },
   "criterio": "von Mises (percentil 99, sem o pico singular no canto engastado) ≤ fy/γa1 = 314 MPa — critério de von Mises do EN 1993-1-1:2005 6.2.1(5), γa1 = 1,10 da NBR 8800:2008",
-  "uso": 0.749
+  "uso": 0.686
  }
 }

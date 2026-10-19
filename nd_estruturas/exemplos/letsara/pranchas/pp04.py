@@ -11,6 +11,7 @@ from prancha_nd import Prancha
 f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
 PP01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))
 NN = PP01["n"]
+FXJ = GF.FX
 HT = 0.45
 
 pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
@@ -20,22 +21,22 @@ pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DA CE-1, PT-1 E PT-2; TAB
 Q = pr.quadro
 XC = Q[2] - 250
 pr.cabecalho_peca("FX", f"CE-1 ({NN['CE1']} PÇ) · PT-1 ({NN['PT1']} PÇ) · PT-2 ({NN['PT2']} PÇ) · FIXADORES DO SISTEMA",
-                  "CE-1 vai embutida no pilar (fábrica dos pilares, ND-LET-PL/PF/PC/PM/PG); PT-1 e PT-2 instalados na montagem · cotas em mm",
+                  f"CE-1 embutida no pilar (fábrica dos pilares): {NN['CC1']} CC-1 + {NN['CC1E']} CC-1E + {NN['CC1D']} CC-1D concretados na face C com os CS-1 já soldados; {NN['CE1_obra']} CE-1 rentes nas faces laterais (CS-1 soldado na obra) · cotas em mm",
                   largura=XC - Q[0] - 10)
 
 # ================================================================== CE-1 — vista frontal 1:3
-v1 = pr.vista("CE-1", (Q[0] + 90, Q[1] + 440), 3.0, titulo="CE-1 — VISTA FRONTAL", subtitulo="face do pilar; CS-1 tracejados (soldados na obra)", unidade="mm")
+v1 = pr.vista("CE-1", (Q[0] + 90, Q[1] + 440), 3.0, titulo="CE-1 — VISTA FRONTAL", subtitulo="face do pilar; CS-1 do CC-1 (face C) soldados na fábrica; nas faces laterais, na obra", unidade="mm")
 v1.chapa(-190, -165, 380, 330, 1.2)
 for x in (-120, 120):
     for z in (-140, 140):
         v1.circulo((x, z), 16, "METALICA"); v1.circulo((x, z), 8, "OCULTA")
 ZT = FCH.Z_NC + FCH.NC_H / 2 - GF.N["t_teto"] - GF.T["G"] - FCH.Z_CE          # topo da mesa do CS-1 em relação ao centro da CE-1
 for xc in (-70, 70):
-    v1.ret(xc - 60, ZT + GF.C["costas"]["z0"], 120, GF.C["costas"]["z1"] - GF.C["costas"]["z0"], "OCULTA")
+    v1.ret(xc - 60, ZT + GF.C["costas"]["z0"], 120, GF.C["costas"]["z1"] - GF.C["costas"]["z0"], "METALICA")
 v1.eixo((0, -165), (0, 165), ext=20)
 v1.cota_h([-190, -120, -70, 0, 70, 120, 190], -165, -8, total=True)
 v1.cota_v([-165, -140, 0, 140, 165], 190, 10, total=True)
-v1.chamada((70, 60), (24, 18), "CS-1 (eixo a 70 do eixo do pilar)")
+v1.chamada((70, 60), (24, 18), "CS-1 (eixo a 70 do eixo do pilar): CC-1 = 2 CS-1; CC-1E/CC-1D = 1 CS-1")
 v1.chamada((120, 140), (20, 14), "pino com cabeça (21)")
 # corte com pinos e N18 (armadura do pilar)
 v2 = pr.vista("CE-1 CORTE", (Q[0] + 240, Q[1] + 440), 3.0, titulo="CE-1 — CORTE", subtitulo="pinos por solda de arco (stud welding) na oficina", unidade="mm")
@@ -50,6 +51,24 @@ v2.cota_v([-150, 300], 90, 22, total=False)
 v2.chamada((60, -150), (30, -16), "N18 — 2 U Ø10 C=96 (armadura do pilar)")
 I.solda(v2, (TC, 140 + 8), (16, 16), tipo="ponto", lado="seta", cauda="stud ISO 13918 SD Ø16")
 v2.texto((-4, 0), "FACE DO PILAR", "nota", "MIDDLE_CENTER", rot=90)
+# rev06e (DEC-031): CC-1 — conjunto de fábrica concretado na face C do pilar (corte pelo eixo de um console)
+vc = pr.vista("CC-1 CORTE", (Q[0] + 415, Q[1] + 336), 4.0, titulo="CC-1 — CORTE", subtitulo="CE-1 + CS-1 soldados na fábrica do pilar; face C para cima na fôrma", unidade="mm")
+Cc = GF.C
+vc.chapa(0, -165, TC, 330, 1.0)                                                    # CE-1 (x > 0 = dentro do pilar)
+for z in (-140, 140):
+    vc.ret(TC, z - 8, 140, 16, "METALICA"); vc.ret(TC + 140, z - 16, 10, 32, "METALICA")
+co_, me_, de_, po_ = Cc["costas"], Cc["mesa"], Cc["dente"], Cc["ponta"]
+zb = ZT                                                                            # topo da mesa (em relação ao centro da CE-1)
+vc.chapa(-co_["t"], zb + co_["z0"], co_["t"], co_["z1"] - co_["z0"], 1.0)          # costas
+vc.poli([(-y, zb + z) for y, z in GF.alma_poli()], "METALICA", fechada=True)       # alma (vista)
+vc.chapa(-me_["y1"], zb - me_["t"], me_["y1"] - me_["y0"], me_["t"], 1.0)          # mesa
+vc.ret(-(de_["y0"] + de_["t"]), zb, de_["t"], de_["h"], "METALICA")               # dente
+vc.chapa(-(po_["y0"] + po_["t"]), zb + po_["z0"], po_["t"], po_["z1"] - po_["z0"], 1.0)   # chapa de ponta
+vc.cota_v([zb + co_["z0"], zb, zb + co_["z1"]], -co_["t"] - 70, -10, total=False)
+vc.cota_h([-me_["y1"], -co_["t"], 0], zb + co_["z0"] - 10, -8, total=False)
+I.solda(vc, (-co_["t"], zb + co_["z0"] + 20), (-30, -10), a=FXJ["solda"]["filete_mm"], tipo="filete", lado="seta", comp=co_["z1"] - co_["z0"],
+        cauda="FÁBRICA: costas × CE-1, 2 lados verticais")
+vc.texto((TC + 4, -150), "DENTRO DO PILAR", "nota", "TOP_LEFT")
 # isométrico com balões
 cam = I.Camera((1.0, -1.2, 0.7))
 v3 = pr.vista("CE-1 ISO", (Q[0] + 420, Q[1] + 445), 5.0, titulo="CE-1 — ISOMÉTRICO", subtitulo="explodido", unidade="mm")

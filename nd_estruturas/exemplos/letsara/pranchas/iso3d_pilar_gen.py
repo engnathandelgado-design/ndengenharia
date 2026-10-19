@@ -75,7 +75,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
             z = z / 1000
             if z0 <= z <= z1:
                 p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0125 if nx < 0 else -0.19), ny * fd + (0 if ny > 0 else -0.0125 if ny < 0 else -0.19), z - 0.165,
-                               0.016 if nx else 0.38, 0.016 if ny else 0.38, 0.33), **aco)       # rev06b: CE-1 380 × 330 × 16
+                               0.0125 if nx else 0.38, 0.0125 if ny else 0.38, 0.33), **aco)       # rev06e: CE-1 380 × 330 × 12,5
     for z in G.get("al", []):
         z = z / 1000
         if z0 <= z <= z1:

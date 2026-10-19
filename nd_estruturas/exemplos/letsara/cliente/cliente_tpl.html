@@ -98,9 +98,9 @@ td.r,th.r{text-align:right}
         <ol style="margin:0;padding-left:20px;display:grid;gap:4px">
           <li>O nicho NC-1 vai embutido nas duas pontas de cada placa, na fábrica (boca na face interna).</li>
           <li>A chapa de espera CE-1 vai embutida no pilar, uma por fiada de placas.</li>
-          <li>Na obra, o console CS-1 é soldado na CE-1 no nível dado pela topografia.</li>
+          <li>Na face C do pilar (lado da platibanda, face de cima na fôrma) o console já vem soldado na CE-1 e concretado com o pilar (conjunto CC-1). Nas faces laterais, o CS-1 é soldado na CE-1 na obra, no nível dado pela topografia.</li>
           <li>A placa desce encostada no pilar: as abas do nicho passam sobre os dentes do console e o teto do nicho apoia no parafuso M16 de nível.</li>
-          <li>O M16 de nível regula a altura (folga G = 50 ± 10 mm) e o prisioneiro frontal regula o afastamento da placa ao pilar (25 ± 5 mm).</li>
+          <li>O M16 de nível regula a altura (folga G = __G__ ± __GT__ mm) e o prisioneiro frontal regula o afastamento da placa ao pilar (25 ± 5 mm). A folga cobre a tolerância somada de fábrica e montagem (NBR 9062:2017).</li>
           <li>Peso: M16 de nível → mesa → almas → costas → solda na CE-1. Vento de sobrepressão: prisioneiro → chapa de ponta. Vento de sucção: abas do nicho → dentes.</li>
         </ol>
       </div>
@@ -117,7 +117,7 @@ td.r,th.r{text-align:right}
   <div class="card">
     <h2>Dimensões e materiais</h2>
     <div class="grid2">
-      <div style="min-width:0"><h3>Nicho NC-1 — 120 × 200 × 60 mm, __KGN__ kg</h3><div class="wrapx"><table id="itn"></table></div></div>
+      <div style="min-width:0"><h3>Nicho NC-1 — __DNC__ mm, __KGN__ kg</h3><div class="wrapx"><table id="itn"></table></div></div>
       <div style="min-width:0"><h3>Console CS-1 — 120 × 200 × 64 mm, __KGC__ kg</h3><div class="wrapx"><table id="itc"></table></div></div>
     </div>
     <h3>Quantidades na obra</h3>
@@ -126,8 +126,10 @@ td.r,th.r{text-align:right}
       <tr><td>NC-1</td><td>ponta inicial de cada placa</td><td class="r num">__NE__</td></tr>
       <tr><td>NC-1'</td><td>ponta final (espelhado)</td><td class="r num">__ND__</td></tr>
       <tr><td>CS-1</td><td>um por ponta de placa sobre pilar</td><td class="r num">__NCS__</td></tr>
+      <tr><td>CC-1</td><td>conjuntos CE-1 + CS-1 de fábrica (face C do pilar)</td><td class="r num">__NCC__</td></tr>
+      <tr><td>CE-1</td><td>chapas lisas para solda do CS-1 na obra (faces laterais)</td><td class="r num">__NCE__</td></tr>
     </table>
-    <p style="margin:10px 0 0;font-size:13px;color:var(--mut)">Chapas cortadas a laser, solda de oficina MIG, galvanização a fogo após a solda. Única solda de obra: costas do CS-1 na chapa de espera CE-1 (filete 6 mm nos 2 lados verticais).</p>
+    <p style="margin:10px 0 0;font-size:13px;color:var(--mut)">Chapas cortadas a laser, solda de oficina MIG, galvanização a fogo após a solda. Única solda de obra (só nas faces laterais): costas do CS-1 na chapa de espera CE-1 (filete 6 mm nos 2 lados verticais).</p>
   </div>
   <div class="card">
     <h2>Desenho de fabricação</h2>
