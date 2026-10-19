@@ -4,7 +4,7 @@
    "PT2_d_kN": 4.96,
    "pino_d_kN": 0.0,
    "Ry_console_d_kN": 7.48,
-   "M_placa_d_kNm": 30.81
+   "M_placa_d_kNm": 30.69
   }
  },
  "mef_parede": {
@@ -14,17 +14,17 @@
   ],
   "modelo": "ShellMITC4, 8 placas 125 × 10 sobrepostas, consoles a 6 cm das pontas e 94 cm da base, 2 pinos por junta a 0,21 L + 15 cm das pontas",
   "Ry_d_kN": 13.81,
-  "Ry_mao_sem_pino_kN": 12.29,
+  "Ry_mao_sem_pino_kN": 12.26,
   "Rz_d_kN": 22.2,
   "Rz_k_kN": 15.86,
   "F_pino_d_kN": 4.17,
-  "M_placa_d_kNm": 33.87,
-  "M_mao_kNm": 30.86,
+  "M_placa_d_kNm": 33.73,
+  "M_mao_kNm": 30.73,
   "MRd_placa_kNm": 37.56,
-  "Mxx_local_max_kNm_m": 27.12,
+  "Mxx_local_max_kNm_m": 27.01,
   "MRd_por_m": 30.05,
-  "uso_flexao_placa": 0.902,
-  "uy_k_mm": 90.3,
+  "uso_flexao_placa": 0.898,
+  "uy_k_mm": 89.5,
   "por_fiada": {
    "sobrepressao": [
     {
@@ -177,7 +177,7 @@
   "resultado": {
    "NBR": {
     "tipo": "muito curto (atrito-cisalhamento)",
-    "a_d": 0.324,
+    "a_d": 0.27,
     "As_tir": 60,
     "As_sus": 62,
     "As_cost": 30,
@@ -186,26 +186,26 @@
     "ok_biela": true
    },
    "PCI": {
-    "a_mm": 90,
-    "As_flex": 66,
+    "a_mm": 80,
+    "As_flex": 63,
     "As_cis": 43,
     "As_min": 59,
-    "As": 66,
-    "Ah": 19,
+    "As": 63,
+    "Ah": 17,
     "Ash": 71,
-    "Av": 19,
+    "Av": 17,
     "Vmax_kN": 76.3,
     "ok_Vmax": true,
     "mu_e": 3.4
    },
    "adotado": {
-    "As_tir": 66,
+    "As_tir": 63,
     "tirante": "2 Ø8 (101 mm²)",
     "As_sus": 71,
     "suspensao": "1 estribos Ø8 fechados (101 mm²) a até 102 mm da face reentrante",
     "As_cost": 30,
     "costura": "1 estribos horizontais Ø6.3 (62 mm²) nos 2/3 inferiores do dente",
-    "Av": 19,
+    "Av": 17,
     "vertical_dente": "1 estribos verticais Ø10 no dente",
     "ancoragem_tirante_mm": 1360,
     "ok": true,

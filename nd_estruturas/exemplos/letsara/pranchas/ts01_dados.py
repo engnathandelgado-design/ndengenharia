@@ -1,8 +1,9 @@
 """TS-01 — dados únicos da peça (memória = prancha). Usado pelas 3 folhas (fôrma/insertos, armação, chaparia)."""
 import math, sys, json
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas")
-from nd_estruturas.prefabricados import (Concreto, Carregamento, secao_I, verificar_viga_pretracionada,
-                                         icamento_viga, pressao_vento, transitorias_viga, CORD)
+from nd_estruturas.prefabricados import (Concreto, Carregamento, secao_I, secao_retangular, verificar_viga_pretracionada,
+                                         icamento_viga, pressao_vento, transitorias_viga, CORD, ato_pretracao,
+                                         lbpt_cordoalha, GAMA_P_ATO, SIG_ACO_ATO)
 
 I_CAI = 0.03
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
@@ -30,7 +31,8 @@ TRIB, qv = 10.075, pressao_vento(45.0, S3=0.95)
 CC = LG["cargas_cob"]
 G_COB = CC["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]
 car = Carregamento(sec.A * 25, G_COB * TRIB, CC["sobrecarga"] * TRIB, w=qv * TRIB, psi1=0.4, psi2=0.0)
-R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"])
+# DEC-032: perdas pela NBR 6118:2023 9.6.3 (U 70 %, t0 fictícia 5 dias, cobertura aplicada aos 60 dias) e γp 1,1 no ato
+R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"], sig_pi=P["sig_pi"])
 Ap = P["n_cord"] * CORD["12.7"]
 V = sec.A * L / 1000 + (P["b"] * H / 1e6 - sec.A) * P["x_mac"] / 1000 * 2   # maciços de 1,20 m nas pontas
 peso = V * 25
@@ -39,7 +41,7 @@ Md_neg = max(0.0, (1.4 * car.w - car.g1 - car.g2) * L_calc ** 2 / 8)
 ep = sec.yc - P["y_cord"] / 1000
 # pontos de içamento/estocagem a 2,10 m ficam dentro do trecho isolado (3,00 m): 6 cordoalhas ativas (5 a 60 + 1 a 110 mm)
 Y_ATIVAS = (5 * P["y1"] + P["y2"]) / 6
-TR = transitorias_viga(sec, L / 1000, R.linhas["P0_kN"] * 6 / 8, sec.yc - Y_ATIVAS / 1000, C, P["fckj"],
+TR = transitorias_viga(sec, L / 1000, GAMA_P_ATO * R.linhas["P0_kN"] * 6 / 8, sec.yc - Y_ATIVAS / 1000, C, P["fckj"],
                        [a / 1000 for a in P["alcas"]], [a / 1000 for a in P["estoque"]])
 # alça de cordoalha: 1 laço (2 pernas) Ø12,7 CP-190; trabalho = 2 × Fptk/4 × 0,7 (redução por curvatura do laço)
 FPTK1 = 98.7 * 1900 / 1000
@@ -50,15 +52,26 @@ assert R.ok and TR["desforma_montagem"]["ok"] and TR["estoque_transporte"]["ok"]
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 
 
-# ato no apoio com 8 cordoalhas: 2 cordoalhas (C1, x = ±50) isoladas com bainha plástica nos 3,00 m de cada ponta
-R_PONTA = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"] - P["isol"]["n"], y_cord=Y_ATIVAS / 1000, fckj=P["fckj"])
-# tensão no topo na seção a 3,00 m da ponta (fim do isolamento), 8 cordoalhas ativas, peso próprio
-_x = P["isol"]["L"] / 1000
-_P0 = R.linhas["P0_kN"]; _ep = sec.yc - P["y_cord"] / 1000
-_Mg = sec.A * 25 * _x * (L_calc - _x) / 2
-SIG_TOPO_ISOL = (-_P0 / sec.A + _P0 * _ep * (sec.h - sec.yc) / sec.I - _Mg * (sec.h - sec.yc) / sec.I) / 1000   # MPa
-LIM_T_ATO = 1.2 * 0.7 * 0.3 * P["fckj"] ** (2 / 3)                     # NBR 6118 17.2.4.3.2: 1,2 fctm,j
-assert SIG_TOPO_ISOL <= LIM_T_ATO and R_PONTA.linhas["ato_apoio_sup_MPa"] <= TR["limites_MPa"][1], (SIG_TOPO_ISOL, R_PONTA.linhas)
+# ------------------------------------------------------------------ ato da protensão ao longo da peça (DEC-032)
+# NBR 6118:2023 17.2.4.3.2: γp 1,1; transferência em lbpt (9.4.5, liberação gradual); C2 (2 cord. a 10 cm) isoladas 3,00 m;
+# maciço 40 × 90 nos 1,20 m das pontas; peça apoiada nas pontas na pista (M = g1·x·(L − x)/2).
+SIG_P0 = R.linhas["sigma_p0_MPa"]
+LBPT, LBP, _ = lbpt_cordoalha(P["fckj"], SIG_P0, gradual=True)
+LBPT_BRUSCA = lbpt_cordoalha(P["fckj"], SIG_P0, gradual=False)[0]
+SEC_PONTA = secao_retangular(0.40, H / 1000)
+GRUPOS = [dict(n=5, y=P["y1"] / 1000, x0=0.0), dict(n=1, y=P["y2"] / 1000, x0=0.0), dict(n=2, y=P["y2"] / 1000, x0=P["isol"]["L"] / 1000)]
+ATO = ato_pretracao(sec, SEC_PONTA, P["x_mac"] / 1000, L / 1000, GRUPOS, SIG_P0, car.g1, P["fckj"], LBPT)
+AS_N2 = 4 * 1.227                                                       # N2 4 Ø12,5 no topo (cm²)
+# 17.2.4.3.2 c): As = R/250 MPa onde o topo está tracionado; complemento N9 nas pontas até cobrir As − N2 + lb
+_xs_falta = [p["x"] for p in ATO["pontos"] if p["R_tracao"] / (SIG_ACO_ATO * 1000) * 1e4 > AS_N2]
+LB_N9 = 10 / 4 * (500 / 1.15) / (2.25 * 0.7 * 0.3 * P["fckj"] ** (2 / 3) / 1.4) / 1000      # NBR 6118:2023 9.4.2.4 (Ø10, fckj)
+L_N9 = max(2500, math.ceil(((max(_xs_falta) if _xs_falta else 0) + LB_N9) * 1000 / 50) * 50)
+AS_TOPO = AS_N2 + 2 * 0.785                                             # N2 + N9 2 Ø10 na zona das pontas
+ATO["As_topo_adotada_cm2"] = round(AS_TOPO, 2)
+ATO["L_N9_mm"] = L_N9
+assert ATO["ok"] and ATO["As_topo_cm2"] <= AS_TOPO, (ATO["topo_max"], ATO["base_min"], ATO["As_topo_cm2"])
+SIG_TOPO_ISOL = max(p["topo"] for p in ATO["pontos"] if abs(p["x"] - (P["isol"]["L"] / 1000 + LBPT)) < 0.03)
+LIM_T_ATO = ATO["lim_t"]
 
 
 def armacao_ts01():
@@ -77,7 +90,9 @@ def armacao_ts01():
               dict(pos="N6", diam=8.0, qtd=2 * 8, comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)], trechos=["34", "84", "34", "84"], geo=dict(k="E", a=34, b=84)),
               dict(pos="N7", diam=10.0, qtd=2 * 3, comp=2 * 60 + 34, forma=[(60, 0), (0, 0), (0, 34), (60, 34)], trechos=["60", "34", "60"], geo=dict(k="U", a=60, b=34, g=0)),
               dict(pos="N8", diam=10.0, qtd=2 * 2, comp=round((2 * (750 + 340) + 140) / 10),
-                   forma=[(0, 0), (75, 0), (75, 34), (0, 34), (0, 0), (1.5, 1.5)], trechos=["75", "34", "75", "34"], geo=dict(k="E", a=75, b=34))]
+                   forma=[(0, 0), (75, 0), (75, 34), (0, 34), (0, 0), (1.5, 1.5)], trechos=["75", "34", "75", "34"], geo=dict(k="E", a=75, b=34)),
+              # DEC-032: tração no topo no ato (NBR 6118:2023 17.2.4.3.2 c) — 2 Ø10 complementares ao N2 em cada ponta
+              dict(pos="N9", diam=10.0, qtd=2 * 2, comp=round(L_N9 / 10), trechos=[f"{L_N9 / 10:.0f}"], geo=dict(k="R", a=round(L_N9 / 10)))]
     return x_est, [], barras
 
 
@@ -89,3 +104,5 @@ if __name__ == "__main__":
     print("L", L, "peso kN", round(peso, 1), "t", round(peso / 9.81, 2), "V", round(V, 3))
     print("TR", json.dumps(TR, indent=0))
     print("alça Fd", round(ALCA_Fd, 1), "cap", round(ALCA_cap, 1), "P0", R.linhas["P0_kN"])
+    print("ATO", {k: v for k, v in ATO.items() if k != "pontos"}, "lbpt", round(LBPT, 3), round(LBPT_BRUSCA, 3), "L_N9", L_N9)
+    print({k: v for k, v in R.linhas.items() if k != "perdas"})

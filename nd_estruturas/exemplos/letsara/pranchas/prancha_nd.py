@@ -15,16 +15,20 @@ def margens(fmt):
 
 MASSA_ACO = {5.0: 0.154, 6.3: 0.245, 8.0: 0.395, 10.0: 0.617, 12.5: 0.963, 16.0: 1.578,
              20.0: 2.466, 22.0: 2.984, 25.0: 3.853, 32.0: 6.313, 40.0: 9.865}
-ALTURAS = {"min": 1.8, "nota": 2.5, "cota": 2.5, "sub": 3.5, "titulo": 5.0, "grande": 7.0}
+# rev06e: padrão gráfico da usina (SP201/SP202/SP301/SP302): texto 1,8–2,0, cota 1,8 marrom com seta, armadura verde fina,
+# concreto preto, chapa preta com hachura cinza, hierarquia de espessuras corte > vista > armadura > cota > hachura
+ALTURAS = {"min": 1.6, "nota": 2.0, "cota": 1.8, "sub": 2.5, "titulo": 3.5, "grande": 5.0}
+DIM_K, DIM_DLI = 0.65, 4.5                 # cadeias: distância à peça = 0,65 × a pedida pelo gerador; parcial → total 4,5 mm
+COR_COTA = (149, 74, 0)                    # marrom da usina
 CAMADAS = {
-    "MOLDURA": (7, 70, "Continuous"), "CARIMBO": (7, 35, "Continuous"), "CARIMBO_FINO": (8, 18, "Continuous"),
-    "CORTADO": (7, 70, "Continuous"), "VISTA": (7, 35, "Continuous"), "OCULTA": (8, 25, "ACAD_ISO02W100"),
-    "EIXO": (8, 18, "ACAD_ISO10W100"), "ARMADURA": (5, 50, "Continuous"), "ARM_SECAO": (5, 50, "Continuous"),
-    "ARM_TRANSV": (6, 50, "Continuous"), "ARM_PROT": (3, 50, "Continuous"), "ARM_PROT_SECAO": (3, 50, "Continuous"),
-    "METALICA": (30, 50, "Continuous"), "TERRENO": (34, 35, "Continuous"), "HACHURA": (8, 13, "Continuous"),
-    "COTA": (1, 18, "Continuous"), "TEXTO": (7, 25, "Continuous"), "TITULO": (7, 50, "Continuous"),
-    "CHAMADA": (7, 18, "Continuous"), "INDICACAO": (7, 50, "Continuous"), "TABELA": (7, 25, "Continuous"),
-    "TABELA_FINA": (8, 13, "Continuous"),
+    "MOLDURA": (7, 50, "Continuous"), "CARIMBO": (7, 35, "Continuous"), "CARIMBO_FINO": (8, 18, "Continuous"),
+    "CORTADO": (7, 35, "Continuous"), "VISTA": (7, 25, "Continuous"), "OCULTA": (8, 18, "ACAD_ISO02W100"),
+    "EIXO": (8, 13, "ACAD_ISO10W100"), "ARMADURA": (3, 25, "Continuous"), "ARM_SECAO": (3, 25, "Continuous"),
+    "ARM_TRANSV": (3, 18, "Continuous"), "ARM_PROT": (6, 35, "Continuous"), "ARM_PROT_SECAO": (6, 35, "Continuous"),
+    "METALICA": (7, 25, "Continuous"), "TERRENO": (34, 25, "Continuous"), "HACHURA": (8, 9, "Continuous"),
+    "COTA": (32, 13, "Continuous"), "TEXTO": (7, 18, "Continuous"), "TITULO": (7, 25, "Continuous"),
+    "CHAMADA": (7, 13, "Continuous"), "INDICACAO": (7, 25, "Continuous"), "TABELA": (7, 25, "Continuous"),
+    "TABELA_FINA": (8, 13, "Continuous"), "BOLHA": (8, 13, "Continuous"), "POSICAO": (1, 18, "Continuous"),
 }
 EMPRESA = dict(nome="ND ENGENHARIA E ASSESSORIA LTDA", cnpj="46.745.157/0001-47",
                rt="Eng. Civil Nathan Henrique Delgado", crea="CREA-SC 168298-1", site="ndengenharia.com",
@@ -110,10 +114,11 @@ class Prancha:
         doc.styles.new("ND", dxfattribs={"font": fonte, "width": 1.0})
         for n, (c, lw, lt) in CAMADAS.items():
             doc.layers.add(n, color=c, lineweight=lw, linetype=lt)
+        doc.layers.get("COTA").rgb = COR_COTA
         ds = doc.dimstyles.new("ND")
-        for k, v in dict(dimtxsty="ND", dimtxt=ALTURAS["cota"], dimtsz=1.0, dimasz=2.0, dimexo=1.5, dimexe=1.5,
-                         dimdle=1.0, dimgap=0.8, dimtad=1, dimtih=0, dimtoh=0, dimdec=0, dimzin=8,
-                         dimdsep=ord(","), dimclrd=1, dimclre=1, dimclrt=1, dimlwd=18, dimlwe=18, dimtmove=0).items():
+        for k, v in dict(dimtxsty="ND", dimtxt=ALTURAS["cota"], dimtsz=0, dimasz=1.6, dimexo=1.0, dimexe=1.0,
+                         dimdle=0, dimgap=0.5, dimdli=DIM_DLI, dimtad=1, dimtih=0, dimtoh=0, dimdec=0, dimzin=8,
+                         dimdsep=ord(","), dimclrd=256, dimclre=256, dimclrt=256, dimlwd=13, dimlwe=13, dimtmove=0).items():
             setattr(ds.dxf, k, v)
 
     @property
@@ -217,7 +222,7 @@ class Prancha:
         return dict(y_base=y, avisos=av, sig_lim=lim)
 
     def legenda_armadura(self, x, y_topo, protensao=True):
-        """Legenda de cores: longitudinal (azul), transversal (magenta), protensão (verde)."""
+        """Legenda (rev06e, padrão usina): aço passivo em verde (longitudinal mais grossa), protensão em magenta."""
         self.texto(x, y_topo - ALTURAS["sub"], "LEGENDA DAS ARMADURAS", "sub", "TITULO")
         y = y_topo - ALTURAS["sub"] - 6
         itens = [("ARMADURA", "longitudinal (barras N, tirantes, pele)"), ("ARM_TRANSV", "transversal (estribos, grampos, suspensão, costura)")]
@@ -601,9 +606,9 @@ class Vista:
         h = self.pr.msp.add_hatch(color=256, dxfattribs={"layer": camada})
         h.paths.add_polyline_path([self.P(p) for p in pts], is_closed=True)
         if padrao == "SOLID":
-            h.set_solid_fill()
+            h.set_solid_fill(color=256)
         else:
-            h.set_pattern_fill(padrao, scale=escala_papel, angle=angulo)
+            h.set_pattern_fill(padrao, color=256, scale=escala_papel, angle=angulo)     # rev06e: sem color=256 o ezdxf pinta de preto (cor 7)
         return self._add(h)
 
     def eixo(self, p1, p2, ext=300):
@@ -631,6 +636,7 @@ class Vista:
         return self._add(d.dimension)
 
     def cota(self, p1, p2, dist_papel=-10.0, ang=0, texto="<>"):
+        dist_papel = dist_papel * DIM_K
         if ang == 0:
             return self._dim((p1[0], p1[1] + dist_papel * self.esc), p1, p2, 0, texto)
         return self._dim((p1[0] + dist_papel * self.esc, p1[1]), p1, p2, 90, texto)
@@ -646,19 +652,21 @@ class Vista:
         return self._add(self.pr.msp.add_lwpolyline(pts, dxfattribs={"layer": camada}))
 
     def cota_h(self, xs, y_ref, dist_papel=-10.0, total=True):
+        dist_papel = dist_papel * DIM_K
         yb = y_ref + dist_papel * self.esc
         for a, b in zip(xs[:-1], xs[1:]):
             self._dim((a, yb), (a, y_ref), (b, y_ref), 0)
         if total and len(xs) > 2:
-            yt = yb + math.copysign(7.0, dist_papel) * self.esc
+            yt = yb + math.copysign(DIM_DLI, dist_papel) * self.esc
             self._dim((xs[0], yt), (xs[0], y_ref), (xs[-1], y_ref), 0)
 
     def cota_v(self, ys, x_ref, dist_papel=-10.0, total=True):
+        dist_papel = dist_papel * DIM_K
         xb = x_ref + dist_papel * self.esc
         for a, b in zip(ys[:-1], ys[1:]):
             self._dim((xb, a), (x_ref, a), (x_ref, b), 90)
         if total and len(ys) > 2:
-            xt = xb + math.copysign(7.0, dist_papel) * self.esc
+            xt = xb + math.copysign(DIM_DLI, dist_papel) * self.esc
             self._dim((xt, ys[0]), (x_ref, ys[0]), (x_ref, ys[-1]), 90)
 
     def cota_ord(self, xs, y_ref, dist_papel=12.0, x0=None, rotulos=None):
@@ -688,10 +696,10 @@ class Vista:
             self._add(self.pr.texto(xp + sg * 1.4, yp + 0.6, t, "cota", "COTA", "BOTTOM_LEFT" if sg > 0 else "BOTTOM_RIGHT"))
 
     def chapa(self, x, y, w, h, escala_papel=0.25, camada="METALICA"):
-        """Chapa/inserto metálico: contorno + hachura ANSI31 (prática de detalhamento: chaparia sempre hachurada)."""
+        """Chapa/inserto metálico: contorno preto + hachura ANSI31 cinza fina (padrão da usina; chaparia sempre hachurada)."""
         pts = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
         self.poli(pts, camada, fechada=True)
-        return self.hachura(pts, "ANSI31", escala_papel, camada, 0)
+        return self.hachura(pts, "ANSI31", escala_papel, "HACHURA", 0)
 
     def cota_diam(self, c, r, ang=45, prefixo="Ø"):
         ux, uy = math.cos(math.radians(ang)), math.sin(math.radians(ang))
@@ -703,7 +711,11 @@ class Vista:
         lado = 1 if desloc_papel[0] >= 0 else -1
         x2 = x1 + lado * (_wtext(texto, ALTURAS[h]) + 2)
         self._add(self.pr.msp.add_lwpolyline([(x0, y0), (x1, y1), (x2, y1)], dxfattribs={"layer": "CHAMADA"}))
-        self._add(self.pr.msp.add_circle((x0, y0), 0.5, dxfattribs={"layer": "CHAMADA"}))
+        L_ = math.hypot(x1 - x0, y1 - y0) or 1.0                                  # rev06e: seta cheia na ponta (padrão usina)
+        ux_, uy_ = (x0 - x1) / L_, (y0 - y1) / L_
+        bx_, by_ = x0 - ux_ * 1.2, y0 - uy_ * 1.2
+        sh_ = self.pr.msp.add_solid([(x0, y0), (bx_ - uy_ * 0.3, by_ + ux_ * 0.3), (bx_ + uy_ * 0.3, by_ - ux_ * 0.3)], dxfattribs={"layer": "CHAMADA"})
+        self._add(sh_)
         return self._add(self.pr.texto(x1 + lado, y1 + 0.8, texto, h, "TEXTO", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT"))
 
     def barra(self, pts, pos, n, diam, espac=None, comp_cm=None, ponto_rotulo=None, desloc=(10, 8), camada="ARMADURA"):
@@ -734,7 +746,7 @@ class Vista:
                 self._add(msp.add_line(tip, (tip[0] - nx * 2.2 + ux * sgn, tip[1] - ny * 2.2 + uy * sgn),
                                        dxfattribs={"layer": "INDICACAO"}))
             lx, ly = x + nx * 3.5 - ux * 5.5 * s, y + ny * 3.5 - uy * 5.5 * s   # letra ao lado da seta, para fora
-            self._add(self.pr.texto(lx, ly, letra, "titulo", "TITULO", "MIDDLE_CENTER"))
+            self._add(self.pr.texto(lx, ly, letra, "sub", "TITULO", "MIDDLE_CENTER"))
         self.pr.refs.append(("CORTE", f"{letra}-{letra}"))
 
     def marcador_detalhe(self, c, r, num, ang=45, dist=6):
@@ -769,6 +781,5 @@ class Vista:
         w1 = _wtext(t1, ALTURAS["titulo"])
         self.pr.texto(cx, y, t1, "titulo", "TITULO", "BOTTOM_CENTER")
         self._add(self.pr.msp.add_line((cx - w1 / 2, y - 1.2), (cx + w1 / 2, y - 1.2), dxfattribs={"layer": "TITULO"}))
-        self._add(self.pr.msp.add_line((cx - w1 / 2, y - 2.0), (cx + w1 / 2, y - 2.0), dxfattribs={"layer": "CHAMADA"}))
-        self.pr.texto(cx, y - 6.5, f"ESC. 1:{self.esc:g} — COTAS EM {self.unidade.upper()}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")
+        self.pr.texto(cx, y - 5.0, f"ESC. 1:{self.esc:g} — COTAS EM {self.unidade.upper()}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")
         self._bbox_titulo = (cx - w1 / 2, y - 7, cx + w1 / 2, y + 5)

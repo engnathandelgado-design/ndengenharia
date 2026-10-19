@@ -219,14 +219,17 @@ def analisar(g, arm, cord, Vd, Hd, fck=50.0, malha=25.0, Ls=3000.0, xP=2000.0, p
         if lim is None:
             es = max(ops.basicDeformation(e_)[0] / malha for e_ in mon_s) if mon_s else 0.0
             ep = max((ops.basicDeformation(e_)[0] / malha - eps_ini[e_]) for e_ in mon_p) if mon_p else 0.0
-            ec = 0.0
+            ec, e_min = 0.0, None
             for e_ in mon_c:
                 st = ops.eleResponse(e_, "material", 1, "strain")
                 a_, b_, c_ = st[0], st[1], st[2]
-                ec = min(ec, (a_ + b_) / 2 - math.sqrt(((a_ - b_) / 2) ** 2 + (c_ / 2) ** 2))
+                ev = (a_ + b_) / 2 - math.sqrt(((a_ - b_) / 2) ** 2 + (c_ / 2) ** 2)
+                if ev < ec:
+                    ec, e_min = ev, e_
             if es >= 0.010 or ep >= 0.010 or ec <= -0.0035:
                 lim = dict(V=V, aco=round(es * 1000, 2), cordoalha=round(ep * 1000, 2), concreto=round(ec * 1000, 2),
-                           criterio="aço 10‰" if es >= 0.010 else ("cordoalha +10‰" if ep >= 0.010 else "concreto 3,5‰"))
+                           criterio="aço 10‰" if es >= 0.010 else ("cordoalha +10‰" if ep >= 0.010 else "concreto 3,5‰"),
+                           xy_concreto_mm=next(((round(xc), round(yc)) for e_, xc, yc in elem_c if e_ == e_min), None))
         if snap_d is None and V >= Vd:
             snap_d = _estado(ops, elem_c, barras)
         if len(hist) > 30 and V < 0.80 * max(h[1] for h in hist):

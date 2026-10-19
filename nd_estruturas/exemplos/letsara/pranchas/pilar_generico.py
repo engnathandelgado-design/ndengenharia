@@ -19,6 +19,10 @@ _VMP = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/
 # rev04: VM meio vaso com dente: assento do CP-MEZ = piso − capa 5 − laje 20 − fita 1 − h da VM + recorte − neoprene 1
 Z_MEZ_ASS = tuple(round(z - 260 - _VMP["h_pm"] * 1000 + _VMP["dente"]["recorte"] * 1000 - 10) for z in (3150, 6550))
 H_C = {k: round(v["h_total_m"] * 1000) for k, v in CONS_J.items()}
+import geo_fixacao as GF
+CS = GF.C
+XC_CS = 10 + GF.N["B"] / 2                     # rev06e: eixo do CS-1 a 80 mm do eixo do pilar (junta 20/2 + eixo do nicho 70)
+ZT_CS = 940 + GF.N["H"] / 2 - GF.N["t_teto"] - GF.T["G"] - 922   # topo da mesa do CS-1 acima do centro da CE-1 (54,5)
 IP_C = [1250 * k + 922 + 1000 for k in range(6)]    # rev06: CE-1 (centro)            # CE-1 das paredes internas (vistas C e G): fiadas 0 a 5 (até +7,50)
 COB = 30
 # direção horizontal de cada vista (olhando a face de fora, z para cima): (eixo, sinal) -> coordenada à direita
@@ -40,7 +44,7 @@ def prancha_pilar(P):
     HB, HH = B - rd("B") - rd("D"), H - rd("A") - rd("C")               # seção da cabeça (B–D × A–C)
     V = (B * H * z_rec + HB * HH * (L_TOT - z_rec)) / 1e9 + sum(c["larg"] * c["proj"] * c["h"] for c in cons) / 1e9
     PESO = V * 25
-    json.dump(dict(B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2), rec=REC),
+    json.dump(dict(B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, al_face=P.get("al_face", "A"), marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2), rec=REC),
               open(f"/home/claude/letsara/pranchas/{P['marca']}_geom.json", "w"))
     subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_pilar_gen.py", f"/home/claude/letsara/pranchas/{P['marca']}_geom.json",
                     "/home/claude/letsara/pranchas/"], check=True, capture_output=True)
@@ -97,9 +101,9 @@ def prancha_pilar(P):
     kp = pr.vista("PLANTA-CHAVE", (Q[0] + 487, Q[3] - 172), 750, titulo="PLANTA-CHAVE", subtitulo=f"{P['marca']} hachurado", unidade="cm")
     Xm = lambda m: m * 1000
     for y in Y_LIN:
-        kp.linha((Xm(-2.5), Xm(y)), (Xm(42.0), Xm(y)), "EIXO")
+        kp.linha((Xm(-2.5 + 1.1), Xm(y)), (Xm(42.0), Xm(y)), "EIXO")                    # rev06e: eixo para na bolha
     for x in X_FACH:
-        kp.linha((Xm(x), Xm(-2.5)), (Xm(x), Xm(85.5)), "EIXO")
+        kp.linha((Xm(x), Xm(-2.5)), (Xm(x), Xm(85.5 - 1.1)), "EIXO")
     for i, y in enumerate(Y_LIN, 1):
         kp.circulo((Xm(-2.5), Xm(y)), 1100, "VISTA"); kp.texto((Xm(-2.5), Xm(y)), str(i), "nota", "MIDDLE_CENTER")
     for j, x in enumerate(X_FACH):
@@ -115,9 +119,13 @@ def prancha_pilar(P):
     def largura(face):
         return B if face in "AC" else H
     def nivel(v, x, z, txt, lado=1):
-        v.poli([(x, z), (x + lado * 60, z + 60), (x + lado * 60, z - 60), (x, z)], "COTA")
-        v.linha((x + lado * 60, z), (x + lado * 260, z), "COTA")
-        v.texto((x + lado * 70, z + 10), txt, "min", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT", "COTA")
+        """rev06e: nível no padrão da usina — triângulo cheio com a ponta na linha, valor sublinhado, preto."""
+        e_ = v.esc
+        xa = x + lado * 1.0 * e_
+        v.hachura([(xa, z), (xa + lado * 1.2 * e_, z + 2.0 * e_), (xa - lado * 1.2 * e_, z + 2.0 * e_)], "SOLID", camada="TEXTO")
+        v.linha((x, z), (x + lado * 14 * e_, z), "TEXTO")
+        val = txt.split(" ")[0]
+        v.texto((x + lado * 3.5 * e_, z + 0.6 * e_), val, "min", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT")
 
     def vista_face(face, x_papel):
         W = largura(face)
@@ -147,6 +155,7 @@ def prancha_pilar(P):
         v.linha((0, L_CAL), (W, L_CAL), "EIXO")
         for k in range(3):                                                                   # chaves de cisalhamento (frontal)
             v.ret(50, 150 + k * 300 + 40, W - 100, 120, "OCULTA")
+        EXT = {1: 0.0, -1: 0.0}                                                              # rev06e: saliências laterais (cotas por fora)
         for c in cons:
             zc, proj, h, hp, larg = c["z"], c["proj"], c["h"], c["hp"], c["larg"]
             if c["face"] == face:                                                            # frontal
@@ -165,15 +174,24 @@ def prancha_pilar(P):
                 lado = 1 if ((c["face"] == "B" and eixo == "y" and sg > 0) or (c["face"] == "D" and eixo == "y" and sg < 0) or
                              (c["face"] == "A" and eixo == "x" and sg > 0) or (c["face"] == "C" and eixo == "x" and sg < 0)) else -1
                 x0 = W if lado > 0 else 0
+                EXT[lado] = max(EXT[lado], proj)
                 v.poli([(x0, zc - h), (x0 + lado * proj, zc - hp), (x0 + lado * proj, zc + proj * c.get("incl", 0.03)), (x0, zc)], "VISTA")
                 v.ret(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
                 v.chapa(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
                 v.chapa(x0 + (25 if lado > 0 else -25 - c["neo"][1]), zc, c["neo"][1], 10)
         for ip in P.get("ip01", []):                                                       # rev06: CE-1 = chapa de espera 380 × 330 na face
             F_ = ip["face"]                                                                # das placas, centrada (consoles CS-1 soldados)
+            cc = F_ == "C" and ip.get("lados")                                               # rev06e (DEC-031): CC-1 = CE-1 + CS-1 de fábrica
             if F_ == face:
-                for z in ip["z"]:
+                for k_, z in enumerate(ip["z"]):
                     v.chapa((W - 380) / 2, z - 165, 380, 330)
+                    if cc:
+                        for ld in ip["lados"][k_]:                                           # vista de fora: E à esquerda, D à direita
+                            xc = W / 2 + (-XC_CS if ld == "E" else XC_CS)
+                            v.ret(xc - CS["costas"]["b"] / 2, z + ZT_CS + CS["costas"]["z0"], CS["costas"]["b"], CS["costas"]["z1"] - CS["costas"]["z0"], "METALICA")
+                            v.ret(xc - CS["mesa"]["b"] / 2, z + ZT_CS - CS["mesa"]["t"], CS["mesa"]["b"], CS["mesa"]["t"], "METALICA")
+                        tp = {"DE": "CC-1", "E": "CC-1E", "D": "CC-1D"}[ip["lados"][k_]]
+                        v.texto((W / 2, z - 175), tp, "min", "TOP_CENTER")
             elif F_ != OPOSTA[face]:
                 lado = 1 if ((F_ == "B" and eixo == "y" and sg > 0) or (F_ == "D" and eixo == "y" and sg < 0) or
                              (F_ == "A" and eixo == "x" and sg > 0) or (F_ == "C" and eixo == "x" and sg < 0)) else -1
@@ -181,18 +199,29 @@ def prancha_pilar(P):
                 for z in ip["z"]:
                     v.chapa(xt, z - 165, 12.5, 330)
                     v.ret(W - 162.5 if lado > 0 else 12.5, z - 148, 150, 16, "OCULTA"); v.ret(W - 162.5 if lado > 0 else 12.5, z + 132, 150, 16, "OCULTA")
-        if face == "A":
+                    if cc:                                                                   # perfil do CS-1 saindo 64 mm da face C
+                        x0 = W if lado > 0 else 0
+                        EXT[lado] = max(EXT[lado], CS["mesa"]["y1"])
+                        X = lambda y_: x0 + lado * y_
+                        co, me, de = CS["costas"], CS["mesa"], CS["dente"]
+                        zt = z + ZT_CS
+                        v.chapa(min(X(0), X(co["t"])), zt + co["z0"], co["t"], co["z1"] - co["z0"])
+                        v.poli([(X(y_), zt + z_) for y_, z_ in GF.alma_poli()], "METALICA", fechada=True)
+                        v.chapa(min(X(me["y0"]), X(me["y1"])), zt - me["t"], me["y1"] - me["y0"], me["t"])
+                        v.ret(min(X(de["y0"]), X(de["y0"] + de["t"])), zt, de["t"], de["h"], "METALICA")
+        if face == P.get("al_face", "A"):                                                  # rev06e: AL-2 na face de cima da fôrma
             for z in AL:
                 v.linha((W / 2 - 50, z), (W / 2 + 50, z), "METALICA"); v.circulo((W / 2 - 50, z), 6.35, "METALICA"); v.circulo((W / 2 + 50, z), 6.35, "METALICA")
         cf = [c for c in cons if c["face"] == face]
         zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]))
-        v.cota_v(zs, 0, -9)
-        ords = sorted(set([0, L_CAL] + [c["z"] for c in cons if c["face"] == face] + [z for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
+        v.cota_v(zs, -EXT[-1], -9)
+        ords = sorted(set([0, L_CAL] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
         if len(ords) > 3:
-            v.cota_ord_v(ords, W, 9, y0=0)
+            v.cota_v(ords, W + EXT[1], 9)                                                    # rev06e: cadeia + total (usina), sem acumuladas
         v.cota_h([0, W], 0, -8)
         if REC and (dl or dr):
             v.cota_h(sorted(set([0, dl, W - dr, W])), L_TOT, 8, total=False)
+        v.ext = EXT
         return v
 
     xs_faces = {}
@@ -201,15 +230,16 @@ def prancha_pilar(P):
         xs_faces[face] = vista_face(face, xp)
         xp += 60 + (largura(face) + 2 * max([c["proj"] for c in cons] + [0])) / ESC
     vA = xs_faces[P["vistas"][0]]
-    nivel(vA, 0, L_CAL, "±0,000 piso", -1)
-    nivel(vA, 0, L_TOT, f"+{f(Z_TOP/1000, 3)} topo", -1)
+    XN = -vA.ext[-1] - 12.5 * ESC                                                                     # rev06e: níveis por fora das cadeias de cota
+    nivel(vA, XN, L_CAL, "±0,00", -1)
+    nivel(vA, XN, L_TOT, f"+{f(Z_TOP/1000, 2)}", -1)
     for c in cons:
         if c["face"] == P["vistas"][0]:
-            nivel(vA, 0, c["z"], f"+{f((c['z'] - L_CAL)/1000, 3)} assento", -1)
+            nivel(vA, XN, c["z"], f"+{f((c['z'] - L_CAL)/1000, 2)}", -1)
     vA.marcador_corte((-80, 4300), (largura(P["vistas"][0]) + 80, 4300), "A", lado=1)
     if REC:
         vA.marcador_corte((-20, (z_rec + L_TOT) / 2), (largura(P["vistas"][0]) + 20, (z_rec + L_TOT) / 2), "C", lado=1)
-        nivel(vA, 0, z_rec, f"+{f((z_rec - L_CAL)/1000, 3)} recuo", -1)
+        nivel(vA, XN, z_rec, f"+{f((z_rec - L_CAL)/1000, 2)}", -1)
 
     # ------------------------------------------------------------ ARMAÇÃO
     va = pr.vista("ARMAÇÃO", (xp, Y0), ESC, titulo="ARMAÇÃO", subtitulo="vista pela face A", unidade="cm")
@@ -492,19 +522,31 @@ NOTA_LIG = ("Cabeça a 2 cm do fundo da TS-01 da linha 4 (a viga sobe 3 % de A p
             "nos insertos do fundo da TS-01; segura só em y a parede dos portões (Fd até 23 kN, cobertura_metalica.json). Portões livres até +7,40.")
 
 
+def _fiadas_c(x):
+    """rev06e: fiadas com console na parede dos portões (vista C do fechamento) para o pilar em x (m) — fonte: fechamento."""
+    import fechamento as FCH
+    ks = set()
+    for (xc, z) in FCH.DADOS["C"][1]:
+        s_, b_, n_ = min(FCH.VISTAS["C"]["pil"], key=lambda q: abs(q[0] - xc))
+        if abs(s_ - x * 1000) < 50:
+            ks.add(round((z - FCH.Z_NC) / FCH.H_PL))
+    return [IP_C[k] if k < len(IP_C) else 1250 * k + 922 + 1000 for k in sorted(ks)]
+
+
 def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
     secao = f"{b//10}×{b//10}"
+    zce = _fiadas_c(x)
     P = base(marca, 1, b, b, ztop, [], bars_ret(b, b, 2, 2), desenho,
              f"PILAR DOS PORTÕES {marca} ({nome}, {secao}) — LINHA 4, x = {x:.3f} m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO".replace(".", ","),
              f"POSIÇÃO: linha 4, x = {x:.3f} m ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
              [["PG-01", "P9", 1, "sem consolo; topo +7,47", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-02", "P10 (x 15,195)", 1, "sem consolo; topo +7,63", "CE-1 (B); 2 IL-1; 2 AL-2"],
               ["PG-04", "P10 (x 24,305)", 1, "sem consolo; topo +7,90", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-03", "P12", 1, "sem consolo; topo +8,06", "CE-1 (B); 2 IL-1; 2 AL-2"]],
-             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1)", 5 if b == 400 else 6, "face B, centrada"], IL1,
+             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1)", len(zce), "face B, centrada"], IL1,
               ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
              [("Concreto C40; 4 Ø20 retos (cantos); " if b == 400 else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
               NOTA_LIG,
               "Pilar de fechamento da parede dos portões (vista C): recebe as placas, a folha do portão e o vento; apoiado em y na TS-01 pela cabeça (modelo integrado r05)."],
-             ip01=[dict(face="B", z=IP_C[:5] if b == 400 else IP_C)], d1=d1, zoom=2.8 if b == 400 else 2.4)
+             ip01=[dict(face="B", z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.4)
     if est:
         P |= dict(d_est=est)
     return P
@@ -544,9 +586,11 @@ def posicao_forma(pr, P, cons, x, y):
         v.chapa(-190, yc - 12.5, 380, 12.5)
         for xs in (-120, 120):
             v.ret(xs - 8, yc - 12.5 - 150, 16, 150, "OCULTA")
-        for xc_ in (-70, 70):
+        for xc_ in (-XC_CS, XC_CS):
             v.ret(xc_ - 52, yc, 104, 64, "METALICA")
-        v.chamada((-70, yc + 50), (-16, 10), "CC-1 (CS-1 de fábrica, sai 64)")
+        v.chamada((-XC_CS, yc + 50), (-16, 10), "CC-1 (CS-1 de fábrica, sai 64)")
+        if P.get("al_face") == "C":
+            v.chamada((0, yc), (14, 16), "AL-2 na face C (cortar após montar)")
     for F_, sg in (("B", 1), ("D", -1)):                                 # CE-1 rente na lateral
         if F_ in faces:
             x0 = xb - 12.5 if sg > 0 else -xb

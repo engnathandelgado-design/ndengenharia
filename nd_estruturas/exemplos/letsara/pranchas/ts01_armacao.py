@@ -1,6 +1,6 @@
 """ND-LET-TS01-2 — TS-01: armação passiva e protensão (A1), com croquis de dobramento. Rev. 03: sem dentes."""
 from prancha_nd import Prancha
-from ts01_dados import P, L, H, DX, sec, F_cord, Ap, f, peso, V, armacao_ts01
+from ts01_dados import P, L, H, DX, sec, F_cord, Ap, f, peso, V, armacao_ts01, L_N9, LBPT, LBPT_BRUSCA, ATO
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO E PROTENSÃO",
@@ -8,6 +8,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("01", "12/10/2026", "ARMADURA DOS DENTES GERBER (NBR 9062 + PCI, VERIFICADA POR MEF)")
 pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01")
 pr.revisao("03", "14/10/2026", "SEM DENTES: ARMADURA DE APOIO DIRETO; 8 CORDOALHAS (2 ISOLADAS 3,00 m)")
+pr.revisao("06", "19/10/2026", "DEC-032: N9 2 Ø10 NO TOPO DAS PONTAS (ATO); PERDAS 9.6.3; FORÇA NO MACACO E lbpt NAS NOTAS")
 pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {f(L/10,1)} cm (entre pontas, a prumo) · 14 PEÇAS",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes   ·   caimento 3 %", 560)
 sk = lambda h: h * DX / H
@@ -30,6 +31,8 @@ for x in x_est:
 for x in X_N6:
     va.linha((x + sk(30), 30), (x + sk(H - 30), H - 30), "ARM_TRANSV")
 va.barra([(30, H - 45), (L - 30, H - 45)], "N2", 4, 12.5, comp_cm=(L - 60) / 10, ponto_rotulo=(L * 0.62, H - 45), desloc=(10, 10))
+for xa, xb in ((30, L_N9 + 30), (L - 30 - L_N9, L - 30)):                       # DEC-032: tração no topo no ato
+    va.barra([(xa, H - 70), (xb, H - 70)], "N9", 2, 10, comp_cm=L_N9 / 10, ponto_rotulo=((xa + xb) / 2, H - 70), desloc=(6, -10))
 va.barra([(30, 40), (L - 30, 40)], "N5", 2, 10, comp_cm=(L - 60) / 10, ponto_rotulo=(L * 0.70, 40), desloc=(10, -12))
 va.linha((0, P["y1"]), (L, P["y1"]), "ARM_PROT")
 va.linha((0, P["y2"]), (L, P["y2"]), "ARM_PROT")
@@ -39,7 +42,7 @@ va.chamada((L * 0.3, P["y1"]), (-10, -16), "C1 — 6 cord. Ø12,7 aderentes")
 va.chamada((ISO / 2, P["y2"]), (10, 14), "C2 — 2 cord. Ø12,7, bainha plástica nos 3,00 m de cada ponta")
 va.chamada((x_est[22], 500), (12, 24), f"N1 - {n1} Ø6,3 c/15 (1,5 m nas pontas) e c/25")
 va.cota_h([0, 1500, ISO, L - ISO, L - 1500, L], 0, -14)
-pr.posicoes_desenho.update({"N1", "N3", "N4", "N6", "N7", "N8", "C1", "C2"})
+pr.posicoes_desenho.update({"N1", "N3", "N4", "N6", "N7", "N8", "N9", "C1", "C2"})
 va.marcador_corte((L / 2 + 1500, -120), (L / 2 + 1500 + DX, H + 120), "D", lado=1)
 va.marcador_corte((600, -40), (600 + DX, H + 120), "E", lado=1)
 va.marcador_detalhe((350, 450), 700, 4, ang=60, dist=6)
@@ -139,7 +142,8 @@ tc = pr.tabela_cordoalhas(x0, ta["y_base"] - 4, [dict(pos="C1", diam=12.7, qtd=6
                                                   dict(pos="C2", diam=12.7, qtd=2, y=P["y2"], forca=F_cord, isol=ISO)], P["L_pista"])
 kg_cord = Ap * 1e4 * L / 1000 * 0.785
 notas = [f"Concreto C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj']} MPa (corpo de prova curado com a peça).",
-         f"Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); σpi = {P['sig_pi']} MPa; liberação gradual e simétrica.",
+         f"Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); σpi = {P['sig_pi']} MPa ({f(F_cord, 1)} kN por cordoalha no macaco); liberação GRADUAL e simétrica (lbpt = {f(LBPT * 100, 0)} cm; brusca daria {f(LBPT_BRUSCA * 100, 0)} cm, não permitida).",
+         f"N9 2 Ø10 no topo, {f(L_N9 / 10, 0)} cm a partir de cada ponta: tração no topo no ato da protensão (NBR 6118:2023 17.2.4.3.2 c, As ≥ {f(ATO['As_topo_cm2'], 1)} cm² com N2).",
          "C2 (x = ±4, y = 10) com bainha plástica estanque nos 3,00 m de cada ponta, vedada com fita nas extremidades.",
          f"Pista de {P['L_pista']} m: até 3 peças por linha; alongamento medido × teórico dentro de ±7 %. Cordoalhas por peça: {f(kg_cord,0)} kg.",
          "Sem dentes: N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais da mesa inferior) absorvem a reação de apoio e a transferência da protensão; estribos verticais fora da faixa dos tubos TB-3.",

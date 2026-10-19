@@ -253,9 +253,13 @@ OUT["apoios_sem_recorte"] = [
 ]
 _mf = AQ / f"mef_vm_dente_{round(VM['premissas']['h_pm'] * 1000)}_{round(VM['premissas']['dente']['hd'] * 1000)}{VM['premissas'].get('mef_suf', '')}.json"
 MV = json.loads(_mf.read_text(encoding="utf-8")) if _mf.exists() else None
-OUT["dente_VM"] = dict(geometria=f"dente {HD_VM*100:.0f} × 35 (nariz), recorte 30, ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f} em 1,00 m", Fd_kN=round(1.1 * m["cortante"]["Vd"], 1),
-                       MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["Vu_kN"] >= 1.06 * 1.1 * m["cortante"]["Vd"] if MV else None),
-                       suspensao=f"{math.ceil(1.1 * m['cortante']['Vd'] / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
+_GN_VM = MV.get("gama_n", 1.2) if MV else 1.2                       # DEC-032: γn 1,2 (parcela variável ≈ 50 %, 7.3.1.1)
+_FD_VM = MV["Vd"] if MV else round(_GN_VM * m["cortante"]["Vd"], 1)
+OUT["dente_VM"] = dict(geometria=f"dente {HD_VM*100:.0f} × 35 (nariz), recorte 30, ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f} em 1,00 m", Fd_kN=_FD_VM, gama_n=_GN_VM,
+                       Vd_reacao_kN=round(m["cortante"]["Vd"], 1),
+                       MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["Vu_kN"] >= 1.06 * _FD_VM if MV else None),
+                       armacao_MEF=(MV["mef"].get("armacao") if MV else None), adotado=(MV["calculo"]["adotado"] if MV else None),
+                       suspensao=f"{math.ceil(_FD_VM / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
                        norma="NBR 9062:2017 7.4 + MEF não linear (mef_vm_dente.py)")
 OUT["dente_VB"] = dict(geometria="VB 15 × 60: dente 30 (nariz 27), recorte 30; consolo CP-VB 15 × 27 × 29 escondido, fundo alinhado ao fundo da viga",
                        Vd_kN=VBD["Vd"], Fd_kN=round(1.1 * VBD["Vd"], 1), dente=VBD["dente"], consolo_calc=VBD["consolo"], suspensao=VBD["suspensao"],
@@ -264,7 +268,10 @@ OUT["dente_VB"] = dict(geometria="VB 15 × 60: dente 30 (nariz 27), recorte 30; 
                                  sigma_s=VBD["sigma_s"], sigma_lim=VBD["sigma_lim"]),
                        norma="NBR 9062:2017 7.4 (dente = consolo 7.3, γn 1,1) e Tab. 8; NBR 6118:2023 17.2, 17.3, 17.4 (calc_vb_dente.py)")
 d130 = DT["I130"]
-OUT["dente_I130"] = dict(MEF_Vu_kN=d130.get("mef", {}).get("Vu_kN", 639.3), Vd_kN=d130.get("calculo", {}).get("Vd_kN", 472), FS=1.35,
+_m130 = d130.get("mef", {})
+OUT["dente_I130"] = dict(MEF_Vu_kN=_m130.get("Vu_kN"), Fd_kN=d130["Vd"], Vd_reacao_kN=d130.get("Vd_reacao"), gama_n=d130.get("gama_n"), Hd_kN=d130["Hd"],
+                         FS=round(_m130["Vu_kN"] / d130["Vd"], 2) if _m130 else None, ok_MEF=_m130.get("ok"), armacao_MEF=_m130.get("armacao"),
+                         adotado=d130["calculo"]["adotado"],
                          suspensao="estribos fechados concentrados junto ao recorte (até dvig/4), fyd ≤ 435 MPa, Fd total (7.4)",
                          tirante="ancorado com alças horizontais (7.3.3), entrando lb além de (dvig − d)",
                          restricao="somada ao tirante a força de restrição de retração e fluência após a montagem (7.4, protendida): Hd = 0,16 Fd já incluído",

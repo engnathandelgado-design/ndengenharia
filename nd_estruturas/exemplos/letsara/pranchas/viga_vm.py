@@ -42,6 +42,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL (I90 COM DENTE)")
 pr.revisao("03", "14/10/2026", "SEM SOLDA: TB-1 PASSANTE, SEM CHAPA CH-A1")
 pr.revisao("04", "16/10/2026", f"NBR 9062: MEIO VASO 40 × {H/10:g} (ALMA 25 + ABA 15 × 20) COM DENTE {HD/10:g} × 35; 2º ESTÁGIO E ALÇAS; CT-1")
+pr.revisao("06", "19/10/2026", "DEC-032: PERDAS 9.6.3 E γp 1,1 NO ATO; DENTE VERIFICADO POR MEF COM A ARMAÇÃO DA PRANCHA (γn 1,2); LIBERAÇÃO GRADUAL")
 Q = pr.quadro
 XC = Q[2] - 200
 pr.cabecalho_peca("VM-02", f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+ 2º ESTÁGIO 26 cm) — L = {L/10:g} cm  ·  VM-01: L = {L1/10:g} cm".replace(".", ","),
@@ -235,7 +236,7 @@ notas = [
     f"Dente Gerber {HD/10:g} × 35 nas pontas maciças (NBR 9062:2017 7.4; MEF não linear): fundo do consolo CP-MEZ = fundo da viga (+{f(ZB[0]/1000, 2)} e +{f(ZB[1]/1000, 2)}). Pino PN-1 Ø20 grauteado no TB-1 numa ponta; na outra graute flexível.",
     "TORÇÃO DE MONTAGEM (laje de um lado só): instalar a CT-1 nas duas pontas ANTES de soltar a viga do guindaste e antes de montar a laje (NBR 9062:2017 11.1); montar as lajes do vão a partir da VM; a CT-1 fica definitiva.",
     "Obra (sequência): VM + CT-1 → lajes alveolares (apoio 10 cm, neoprene em fita) → grautear junta das pontas e bainhas BA-1 com N11 → limpar e saturar o topo → N12, tela e chavetas → 2º estágio + capa de uma vez → cura 7 dias; carregar com fck ≥ 20 MPa.",
-    f"Protensão: {len(CORD)} cordoalhas Ø12,7 CP-190 RB aderentes (posição no corte A-A e na tabela), σpi = 1400 MPa; C1 isoladas 150 cm nas pontas; as 2 da aba equilibram a excentricidade lateral (resultante no centroide da seção T). Liberar com fcj ≥ 32 MPa.",
+    f"Protensão: {len(CORD)} cordoalhas Ø12,7 CP-190 RB aderentes (posição no corte A-A e na tabela), σpi = 1400 MPa; C1 isoladas 150 cm nas pontas; as 2 da aba equilibram a excentricidade lateral (resultante no centroide da seção T). Liberação GRADUAL e simétrica com fcj ≥ 32 MPa (lbpt = {f(R['ato']['lbpt_m'] * 100, 0)} cm; perdas pela NBR 6118 9.6.3 — total {f(R['protensao']['perdas']['perda_total_pct'])} %).",
     "Içar pelas 2 alças AL-1 (cabos ≥ 45°); estocar sobre 2 calços sob as alças, pressão ≤ 0,3 fcj; transportar apoiada nos mesmos pontos, travada contra tombamento.",
     "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±15 mm, seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm, cordoalhas ±10 mm (resultante ±5); montagem: nível do apoio ±10 mm, planta ±10 mm. Folga de 3 cm na ponta.",
     "Cotas de concreto em cm, chaparia em mm. Armadura passiva: ND-LET-AR-VIG-03. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

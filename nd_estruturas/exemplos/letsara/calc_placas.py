@@ -29,9 +29,16 @@ Ap1 = 98.7e-6                          # m² (Ø12,7 CP-190 RB)
 n_c = 8
 sig_pi = 1400.0                        # MPa na pista (≤ 0,77 fptk = 1463 — NBR 6118:2023 9.6.1.2.1)
 F_macaco = sig_pi * Ap1 * 1e3          # kN por cordoalha
-perdas = 0.20                          # perdas totais no infinito (estimativa: encurtamento + retração + fluência + relaxação)
-P0 = n_c * F_macaco * (1 - 0.07)       # após a liberação (perdas imediatas ~7 %)
-Pinf = n_c * F_macaco * (1 - perdas)
+# DEC-032: perdas pela NBR 6118:2023 9.6.3 (prefabricados.perdas_pretracao) no lugar de 7 % / 20 % fixos — protensão
+# centrada (yp = yc), placa estocada deitada (Mg em t0 desprezado, a favor), U 70 %, idade fictícia 5 dias, as 2 faces ao ar
+from nd_estruturas.prefabricados import perdas_pretracao, lbpt_cordoalha, Concreto as _Conc
+PERD = perdas_pretracao(sig_pi, n_c * Ap1, A, b * h ** 3 / 12, h / 2, h / 2, 0.0, _Conc(fck), fckj, 2 * (b + h), U=70.0, t0_dias=5.0)
+GAMA_P = 1.1                           # ato da protensão (NBR 6118:2023 17.2.4.3.2 a)
+P0 = PERD["P0"]                        # após a liberação
+Pinf = PERD["Pinf"]
+perdas = PERD["perda_total_pct"] / 100
+LBPT = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=True)[0]        # 9.4.5 — liberação gradual (indicada na prancha)
+LBPT_BRUSCA = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=False)[0]
 d_c = 0.020 + 0.0127 / 2               # cobrimento 2,0 cm (Nathan, 13/10/2026; redução por controle de fábrica — NBR 9062) → eixo a 2,64 cm
 sig_cp_inf = -Pinf / A / 1e3           # MPa (protensão centrada)
 
@@ -66,13 +73,13 @@ flecha_freq = 0.3 * flecha                                       # combinação 
 fctk_j = 0.7 * 0.3 * fckj ** (2 / 3)
 # desforma deitada pelas 2 alças do topo com basculamento? — adota-se: desforma deitada por 4 pontos (2 alças + 2 insertos de desforma) a 0,207 L
 M_desf = 0.0054 * pp * 1.3 * 1.2 * L ** 2        # 4 pontos com balancim (PCI) × dinâmico × sucção (por placa, fora do plano)
-sig_desf = -P0 / A / 1e3 + M_desf / W_fora / 1e3
+sig_desf = -GAMA_P * P0 / A / 1e3 + M_desf / W_fora / 1e3
 # içamento/montagem em pé pelas 2 alças do topo a 0,207 L: flexão no plano
 M_ic = 0.0214 * pp * 1.3 * L ** 2
-sig_ic = -P0 / A / 1e3 + M_ic / W_plano / 1e3
+sig_ic = -GAMA_P * P0 / A / 1e3 + M_ic / W_plano / 1e3
 # estocagem deitada em 2 calços a 0,207 L (pilha de até 6 placas com calços alinhados)
 M_est = 0.0214 * pp * L ** 2
-sig_est = -P0 / A / 1e3 + M_est / W_fora / 1e3
+sig_est = -GAMA_P * P0 / A / 1e3 + M_est / W_fora / 1e3
 # alça (2 alças, γdin 1,3, cabo a 60°)
 F_alca = pp * L * 1.3 / 2 / math.sin(math.radians(60))
 peso_t = pp * L / 9.81
@@ -106,9 +113,12 @@ R = dict(
     secao=dict(b_m=b, h_m=h, A_m2=A, pp_kNm=round(pp, 2), L_max_m=L, peso_t=round(peso_t, 2), fck=fck, fckj=fckj, Ec_MPa=round(Ec)),
     protensao=dict(cordoalhas=f"{n_c} Ø12,7 CP-190 RB (4 por face, alinhadas, eixo a 2,6 cm das faces)", Ap_mm2=round(n_c * Ap1 * 1e6, 1),
                    sig_pi_MPa=sig_pi, F_macaco_kN=round(F_macaco, 1), P0_kN=round(P0, 1), Pinf_kN=round(Pinf, 1),
-                   sig_cp_inf_MPa=round(sig_cp_inf, 2), along_pista_60m_mm=round(sig_pi / 195000 * 60000)),
+                   sig_cp_inf_MPa=round(sig_cp_inf, 2), along_pista_60m_mm=round(sig_pi / 195000 * 60000),
+                   perda_imediata_pct=round(PERD["perda_imediata_pct"], 1), perda_total_pct=round(PERD["perda_total_pct"], 1), phi=round(PERD["phi"], 2),
+                   lbpt_gradual_m=round(LBPT, 2), lbpt_brusca_m=round(LBPT_BRUSCA, 2), gama_p_ato=GAMA_P, sig_ato_MPa=round(-GAMA_P * P0 / A / 1e3, 2),
+                   lim_ato_MPa=round(-0.7 * fckj, 1), norma="NBR 6118:2023 9.6.3 (perdas), 9.4.5 (lbpt), 17.2.4.3.2 (ato)"),
     vento=dict(q0_kNm2=q0, cp_liq=cp_liq, p_k=round(p_k, 3), M_k=round(M_k, 2), M_d=round(M_d, 2), MRd=round(MRd, 2),
-               uso_ELU=round(M_d / MRd, 3), sig_vento_MPa=round(sig_vento, 2), sig_ELS_F=round(sig_els_f, 2), sig_rara=round(sig_rara, 2),
+               uso_ELU=round(M_d / MRd, 3), x_d=round(x / d, 3), sig_vento_MPa=round(sig_vento, 2), sig_ELS_F=round(sig_els_f, 2), sig_rara=round(sig_rara, 2),
                fct_f=round(fct_f, 2), ok_ELS_F=sig_els_f <= 0, ok_rara=sig_rara <= fct_f, flecha_mm=round(flecha, 1), flecha_freq_mm=round(flecha_freq, 1), lim_mm=round(lim_flecha, 1), ok_flecha=flecha_freq <= lim_flecha),
     transitorias=dict(fctk_j=round(fctk_j, 2), sig_desforma=round(sig_desf, 2), sig_icamento=round(sig_ic, 2), sig_estocagem=round(sig_est, 2),
                       ok=all(s <= fctk_j / 1.5 for s in (sig_desf, sig_ic, sig_est)), F_alca_kN=round(F_alca, 1)),

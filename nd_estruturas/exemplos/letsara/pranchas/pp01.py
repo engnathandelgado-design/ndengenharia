@@ -190,20 +190,21 @@ for sg in (-1, 1):
     x0 = min(sg * de["x0"], sg * (de["x0"] + de["b"]))
     d4.chapa(x0, de["y0"], de["b"], de["t"], 0.6)
 I.hexagono(d4, (0, yn), HX["s"], "METALICA")
-d4.chapa(-190 + (-70 - 0) + 70 - 70, -16, 380, 16, 0.6)
-d4.poli([(-270, -16), (-270, -120), (130, -120), (130, -16)], "CORTADO")
-d4.interrupcao((-270, -120), (130, -120))
+AX = xp - FCH.JUNTA / 2                                    # rev06e: eixo do pilar a 10 da ponta (junta 20) → console a 80 do eixo
+d4.chapa(AX - 190, -16, 380, 16, 0.6)
+d4.poli([(AX - 200, -16), (AX - 200, -120), (AX + 200, -120), (AX + 200, -16)], "CORTADO")
+d4.interrupcao((AX - 200, -120), (AX + 200, -120))
 d4.cota_h([xp, xp + N["aba_e"][1], xp + N["aba_d"][0], xp + N["aba_d"][1], xp + N["B"]], a0 + 100, 10, total=False)
-d4.cota_h([-70, 0], -120, -8, total=False)
-PV = [(-80 - 320, a0), (-80, a0), (-80, a0 + 100), (-80 - 320, a0 + 100)]
-d4.poli([(-80, a0), (-80 - 190, a0), (-80 - 190, a0 + 100), (-80, a0 + 100)], "OCULTA", fechada=True)
-d4.ret(-200, 0, 120, 16, "OCULTA")
-d4.chamada((-170, a0 + 95), (4, 16), "placa vizinha (NC-1' e CS-1 espelhados)")
+d4.cota_h([AX, 0], -120, -8, total=False)
+XV = AX - FCH.JUNTA / 2                                    # ponta da placa vizinha
+d4.poli([(XV, a0), (XV - 190, a0), (XV - 190, a0 + 100), (XV, a0 + 100)], "OCULTA", fechada=True)
+d4.ret(XV - N["B"] / 2 - co["b"] / 2, 0, co["b"], co["t"], "OCULTA")
+d4.chamada((XV - 100, a0 + 95), (4, 16), "placa vizinha (NC-1' e CS-1 espelhados)")
 d4.cota_v([-16, 0, a0, a0 + N["t_aba"], de["y0"], de["y0"] + de["t"], a0 + N["P"], a0 + 100], xp + 320, 10, total=False)
 d4.chamada((xp, a0 + 80), (-14, 10), "ponta da placa (junta 20 no eixo do pilar)")
 d4.chamada((0, yn), (30, -40), "M16 de nível (meio livre, sem aba)")
-d4.eixo((-70, -120), (-70, a0 + 100), ext=10)
-d4.texto((-70, -128), "eixo do pilar", "nota", "TOP_CENTER")
+d4.eixo((AX, -120), (AX, a0 + 100), ext=10)
+d4.texto((AX, -128), "eixo do pilar", "nota", "TOP_CENTER")
 d4.chamada((60, -70), (14, -10), "pilar")
 
 # ================================================================== D5 — sequência de montagem (cortes esquemáticos 1:5)
@@ -286,7 +287,7 @@ tol = [["afastamento placa–pilar (a)", f"{T['a']:g} ± {T['a_tol']:g}", "prisi
 y = pr.tabela(XC, y - 4, "TOLERÂNCIAS E FOLGAS DE MONTAGEM (mm)", ["ITEM", "VALOR", "AJUSTE / OBS."], tol, [70, 60, 60], h_lin=5.0)
 seq = [
     f"Face C dos pilares: consoles já concretados (CC-1). Topografia confere o nível real do topo da mesa de cada console e calcula G para cada um (G nominal {T['G']:g}).",
-    f"Faces laterais (CE-1 rente): topografia marca o nível; soldar o CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a 70 do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
+    f"Faces laterais (CE-1 rente): topografia marca o nível; soldar o CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a {FCH.JUNTA // 2 + FCH.X_CS:g} do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
     f"Regular em cada console o M16 de nível (topo da cabeça a G da mesa, {T['G'] - T['G_tol']:g} a {T['G'] + T['G_tol']:g}) e o prisioneiro frontal (afastamento {T['a']:g} ± {T['a_tol']:g}); travar contraporca e trava química.",
     f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MOJ[0]:g} a {MOJ[1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",

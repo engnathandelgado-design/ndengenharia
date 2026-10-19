@@ -76,11 +76,25 @@ def cena(p, z0=0.0, z1=L, chaves=True):
             if z0 <= z <= z1:
                 p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0125 if nx < 0 else -0.19), ny * fd + (0 if ny > 0 else -0.0125 if ny < 0 else -0.19), z - 0.165,
                                0.0125 if nx else 0.38, 0.0125 if ny else 0.38, 0.33), **aco)       # rev06e: CE-1 380 × 330 × 12,5
+                for k_, z_ in enumerate(ip["z"]):                                          # rev06e (DEC-031): CS-1 do CC-1 (face C, x−)
+                    if ip["face"] != "C" or not ip.get("lados") or abs(z_ / 1000 - z) > 1e-6:
+                        continue
+                    zt = z + 0.0545
+                    fo = fd + 0.0125
+                    for ld in ip["lados"][k_]:
+                        yc = 0.08 if ld == "E" else -0.08                                      # vista de fora (de x−): esquerda = B = y+
+                        p.add_mesh(box(-fo - 0.0095, yc - 0.06, zt - 0.100, 0.0095, 0.12, 0.13), color="#c46a2a")      # costas
+                        p.add_mesh(box(-fo - 0.064, yc - 0.052, zt - 0.016, 0.0545, 0.104, 0.016), color="#c46a2a")   # mesa
+                        for xa in (-0.045, 0.045):
+                            p.add_mesh(box(-fo - 0.064, yc + xa - 0.00315, zt - 0.080, 0.0545, 0.0063, 0.064), color="#c46a2a")   # almas
+                        for xd in (0.039, -0.052):
+                            p.add_mesh(box(-fo - 0.0635, yc + xd, zt, 0.019, 0.013, 0.035), color="#c46a2a")   # dentes
     for z in G.get("al", []):
         z = z / 1000
         if z0 <= z <= z1:
             t = np.linspace(0, math.pi, 30)
-            pts = np.c_[H / 2 + 0.14 * np.sin(t), 0.05 * np.cos(t), z + 0 * t]
+            sx = -1 if G.get("al_face", "A") == "C" else 1                                # rev06e: AL-2 na face C (de cima na fôrma)
+            pts = np.c_[sx * (H / 2 + 0.14 * np.sin(t)), 0.05 * np.cos(t), z + 0 * t]
             p.add_mesh(pv.Spline(pts, 60).tube(radius=0.0065), color="#8a8a8a")
     return labs
 

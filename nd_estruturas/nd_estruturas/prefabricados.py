@@ -125,6 +125,271 @@ def secao_I(h, bs=0.40, ts=0.10, ms=0.05, bw=0.12, bi=0.40, ti=0.15, mi=0.08, no
     return Secao(nome or f"I{h*100:.0f}", pts)
 
 
+# --------------------------------------------------------------------------- pré-tração: perdas, transferência, ato (DEC-032)
+
+FPTK, FPYK = 1900.0, 1710.0                        # MPa, CP-190 RB (NBR 7483)
+GAMA_P_ATO = 1.1                                   # NBR 6118:2023 17.2.4.3.2 a) — ato da protensão, pré-tração
+SIG_ACO_ATO = 250.0                                # MPa — 17.2.4.3.2 c) acréscimo máximo na armadura de tração (barra nervurada)
+
+# NBR 6118:2023 Tab. 8.4 — ψ1000 (%) da cordoalha de relaxação baixa (RB) em função de σp0/fptk
+_PSI1000_RB = ((0.5, 0.0), (0.6, 1.3), (0.7, 2.5), (0.8, 3.5))
+
+# NBR 6118:2023 Tab. 8.2 — valores característicos superiores de φ(t∞,t0) e εcs(t∞,t0) (‰), concretos C20 a C45
+# (para C50 o bloco C20–C45 é usado a favor da segurança: o concreto mais resistente flui e retrai menos).
+# chave: (U %, t0 dias) -> (φ para 2Ac/u = 20 cm, φ para 60 cm, εcs 20 cm, εcs 60 cm)
+_TAB_8_2 = {
+    (40, 5): (4.6, 3.8, -0.53, -0.47), (40, 30): (3.4, 3.0, -0.44, -0.45), (40, 60): (2.9, 2.7, -0.39, -0.43),
+    (55, 5): (3.9, 3.3, -0.48, -0.43), (55, 30): (2.9, 2.6, -0.41, -0.41), (55, 60): (2.5, 2.3, -0.36, -0.40),
+    (75, 5): (2.8, 2.4, -0.36, -0.32), (75, 30): (2.2, 2.0, -0.33, -0.31), (75, 60): (1.9, 1.8, -0.30, -0.31),
+    (90, 5): (2.0, 1.9, -0.18, -0.15), (90, 30): (1.6, 1.5, -0.17, -0.15), (90, 60): (1.4, 1.4, -0.17, -0.15),
+}
+
+
+def sigma_pi_max(fptk=FPTK, fpyk=FPYK):
+    """NBR 6118:2023 9.6.1.2.1 b) — pré-tração, aço RB: σpi ≤ 0,77 fptk e ≤ 0,85 fpyk (MPa)."""
+    return min(0.77 * fptk, 0.85 * fpyk)
+
+
+def psi1000_rb(r):
+    """NBR 6118:2023 Tab. 8.4 — ψ1000 (%) da cordoalha RB para r = σp/fptk (interpolação linear; 0 abaixo de 0,5)."""
+    if r <= 0.5:
+        return 0.0
+    for (a, pa), (b, pb) in zip(_PSI1000_RB[:-1], _PSI1000_RB[1:]):
+        if r <= b:
+            return pa + (pb - pa) * (r - a) / (b - a)
+    return _PSI1000_RB[-1][1]
+
+
+def relaxacao(sig, t_dias, fptk=FPTK):
+    """Perda por relaxação pura (MPa) até t: NBR 6118:2023 8.4.8 — ψ(t,t0) = ψ1000·((t − t0)/41,67)^0,15 (t em dias);
+    para t → ∞, ψ = 2,5·ψ1000."""
+    p = psi1000_rb(sig / fptk) / 100
+    psi = 2.5 * p if t_dias is None or t_dias == math.inf else p * (t_dias / 41.67) ** 0.15
+    return psi * sig, psi
+
+
+def eci_j(conc: Concreto, fckj):
+    """NBR 6118:2023 8.2.8 — Eci(t) = (fck(t)/fck)^0,5·Eci (C20–C45) ou ^0,3 (C50–C90). kPa."""
+    k = 0.5 if conc.fck < 50 else 0.3
+    return (min(fckj, conc.fck) / conc.fck) ** k * conc.Eci
+
+
+def fluencia_retracao(U, h_fic_cm, t0_dias):
+    """NBR 6118:2023 Tab. 8.2 (C20–C45) — φ(t∞,t0) e εcs(t∞,t0) (adimensional), interpolação linear em U, 2Ac/u e t0
+    (fora da tabela: valor da borda). U em %, h_fic = 2Ac/u em cm, t0 em dias (idade fictícia, Anexo A)."""
+    def lin(v, a, b, fa, fb):
+        return fa if b == a else fa + (fb - fa) * (v - a) / (b - a)
+
+    def faixa(v, xs):
+        v = min(max(v, xs[0]), xs[-1])
+        for a, b in zip(xs[:-1], xs[1:]):
+            if v <= b:
+                return v, a, b
+        return v, xs[-2], xs[-1]
+    Us, ts = (40, 55, 75, 90), (5, 30, 60)
+    u, u0, u1 = faixa(U, Us)
+    t, t_0, t_1 = faixa(t0_dias, ts)
+    h = min(max(h_fic_cm, 20.0), 60.0)
+
+    def val(uu, tt):
+        p20, p60, e20, e60 = _TAB_8_2[(uu, tt)]
+        return lin(h, 20, 60, p20, p60), lin(h, 20, 60, e20, e60)
+    out = []
+    for i in range(2):
+        a = [val(uu, tt)[i] for uu in (u0, u1) for tt in (t_0, t_1)]
+        v0 = lin(t, t_0, t_1, a[0], a[1])
+        v1 = lin(t, t_0, t_1, a[2], a[3])
+        out.append(lin(u, u0, u1, v0, v1))
+    return out[0], out[1] / 1000
+
+
+def lbpt_cordoalha(fckj, sig_p, diam_mm=12.7, gradual=True, eta_p2=1.0, gama_c=1.4):
+    """Comprimento de transferência da cordoalha de 7 fios (m) — NBR 6118:2023 9.4.5:
+    fbpd = ηp1·ηp2·fctd (ηp1 = 1,2 cordoalha de 7 fios; fctd = fctk,inf(fckj)/γc);
+    lbp = 7φ/36 · fpyd/fbpd; lbpt = 0,5·lbp·σ/fpyd (liberação gradual) e 0,625·lbp·σ/fpyd (liberação brusca)."""
+    fctm_j = 0.3 * fckj ** (2 / 3) if fckj <= 50 else 2.12 * math.log(1 + 0.11 * fckj)
+    fbpd = 1.2 * eta_p2 * 0.7 * fctm_j / gama_c
+    fpyd = FPYK / 1.15
+    lbp = 7 * diam_mm / 1000 / 36 * fpyd / fbpd
+    k = 0.5 if gradual else 0.625
+    return k * lbp * sig_p / fpyd, lbp, fbpd
+
+
+def gama_n_consolo(Fg_d, Fq_d, pre_fabricado=False):
+    """NBR 9062:2017 7.3.1.1 — coeficiente adicional γn dos consolos e dentes (7.4): elemento pré-moldado (12.1.1)
+    1,1 quando a parcela permanente é preponderante e 1,2 nos demais casos (pré-fabricado 12.1.2: 1,0 / 1,1).
+    Preponderante: parcela variável de cálculo < 50 % da força total (critério do projeto, DEC-032)."""
+    base = 1.0 if pre_fabricado else 1.1
+    return base if Fq_d < 0.5 * (Fg_d + Fq_d) else base + 0.1
+
+
+def perdas_pretracao(sig_pi, Ap, A, I, yc, yp, Mg_t0, conc: Concreto, fckj, u_ar, L_pista=60.0, cravacao=0.006,
+                     t_lib_dias=0.8, U=70.0, t0_dias=5.0, Ep=EP / 1000, fases=()):
+    """Perdas da pré-tração (MPa; kN·m e m nas entradas de seção). Seção bruta, cordoalhas com resultante em yp.
+
+    Imediatas (antes e na liberação): cravação na pista (Δ = cravação/L_pista·Ep), relaxação até a liberação
+    (8.4.8) e encurtamento elástico do concreto com Eci(t) (8.2.8 e 9.6.3.3.1), iterativo, com Mg_t0 (peso próprio).
+    Progressivas (9.6.3.4), com φ e εcs da Tab. 8.2 para U, 2Ac/u = 2A/u_ar e t0 (idade fictícia):
+      a) 9.6.3.4.2 processo simplificado (fase única): Δσp = [εcs·Ep − αp·σc,p0g·φ − σp0·χ] / [χp + χc·αp·η·ρp],
+         χ = −ln(1 − ψ∞), ψ∞ = 2,5 ψ1000, χc = 1 + 0,5φ, χp = 1 + χ, η = 1 + ep²·A/I, ρp = Ap/A, αp = Ep/Eci;
+      b) 9.6.3.4.3 processo aproximado (aço RB): Δσp/σp0 (%) = 7,4 + αp/18,7·φ^1,07·(3 + σc,p0g).
+    σc,p0g (compressão positiva) com P0 e a carga permanente mobilizada em t0.
+    fases: [(ΔM kN·m, t_i dias)] — cargas permanentes aplicadas depois da liberação (montagem, 2º estágio, cobertura).
+    Com fases, o termo de fluência de (a) é somado por superposição (fluência linear, 8.2.11): αp·[σc,p0g·φ(∞,t0) −
+    Σ Δσc,i·φ(∞,t_i)], Δσc,i = ΔM_i·ep/I (descompressão no nível do cabo) — é o que o processo simplificado faz numa fase
+    e o método geral (9.6.3.4.4) faz por etapas; adota-se (a) e (b) fica como referência (supõe toda a carga em t0).
+    Sem fases (carga permanente toda em t0): adota-se a MAIOR perda entre (a) e (b)."""
+    Ep_k = Ep * 1000                                                  # kPa
+    d_crav = cravacao / L_pista * Ep                                 # MPa
+    s1 = sig_pi - d_crav
+    d_rel0, _ = relaxacao(s1, t_lib_dias)                            # 8.4.8 até a liberação
+    s2 = s1 - d_rel0
+    Ecj = eci_j(conc, fckj)
+    ap_j = Ep_k / Ecj
+    e = yc - yp
+    s0 = s2
+    for _ in range(40):                                               # 9.6.3.3.1 — encurtamento imediato do concreto
+        P = s0 * 1000 * Ap
+        scp = (P / A + P * e * e / I - Mg_t0 * e / I) / 1000          # MPa, compressão +
+        s0 = s2 - ap_j * scp
+    P0 = s0 * 1000 * Ap
+    sc = (P0 / A + P0 * e * e / I - Mg_t0 * e / I) / 1000            # σc,p0g (MPa, compressão +)
+    h_fic = 2 * A / u_ar * 100
+    phi, ecs = fluencia_retracao(U, h_fic, t0_dias)
+    ap = Ep_k / conc.Eci
+    _, psi_inf = relaxacao(s0, math.inf)
+    chi = -math.log(1 - psi_inf)
+    eta = 1 + e * e * A / I
+    rho = Ap / A
+    fl = sc * phi
+    det_f = []
+    for dM, ti in fases:                                              # superposição das fases de carga (8.2.11)
+        phi_i, _ = fluencia_retracao(U, h_fic, ti)
+        dsc = dM * e / I / 1000
+        fl -= dsc * phi_i
+        det_f.append(dict(dM=dM, t_dias=ti, phi=phi_i, d_sigma_c=dsc))
+    d_a = -(ecs * Ep - ap * fl - s0 * chi) / ((1 + chi) + (1 + 0.5 * phi) * ap * eta * rho)          # 9.6.3.4.2
+    d_b = (7.4 + ap / 18.7 * phi ** 1.07 * (3 + sc)) / 100 * s0                                       # 9.6.3.4.3 (RB)
+    d_prog = d_a if fases else max(d_a, d_b)
+    s_inf = s0 - d_prog
+    return dict(sig_pi=sig_pi, d_cravacao=d_crav, d_relax_inicial=d_rel0, d_elastica=s2 - s0, sig_p0=s0, P0=P0,
+                perda_imediata_pct=(sig_pi - s0) / sig_pi * 100, alfa_p_j=ap_j, Eci_j_MPa=Ecj / 1000,
+                U=U, t0_dias=t0_dias, t_lib_dias=t_lib_dias, h_fic_cm=h_fic, phi=phi, eps_cs=ecs, sig_c_p0g=sc, fases=det_f,
+                processo="9.6.3.4.2 com fases (superposição)" if fases else "maior entre 9.6.3.4.2 e 9.6.3.4.3",
+                d_prog_9_6_3_4_2=d_a, d_prog_9_6_3_4_3=d_b, d_prog=d_prog, sig_pinf=s_inf, Pinf=s_inf * 1000 * Ap,
+                perda_progressiva_pct=d_prog / sig_pi * 100, perda_total_pct=(sig_pi - s_inf) / sig_pi * 100)
+
+
+def tensoes_secao(A, I, yc, h, P, yp, M):
+    """σ (MPa) na base e no topo; P (kN) de compressão em yp; M > 0 traciona a base. Compressão negativa."""
+    e = yc - yp
+    sb = (-P / A - P * e * yc / I + M * yc / I) / 1000
+    st = (-P / A + P * e * (h - yc) / I - M * (h - yc) / I) / 1000
+    return sb, st
+
+
+def resultante_tracao(sec: "Secao", sb, st, n=200):
+    """Resultante (kN) das tensões de tração no estádio I (distribuição linear entre base sb e topo st, MPa)."""
+    h = sec.h
+    R = 0.0
+    for k in range(n):
+        y = (k + 0.5) * h / n
+        s = sb + (st - sb) * y / h
+        if s > 0:
+            R += s * 1000 * sec.largura_em(y) * h / n
+    return R
+
+
+def ato_pretracao(sec: "Secao", sec_ponta: "Secao", x_mac, Lp, grupos, sig_p0, g1, fckj, lt, gama_p=GAMA_P_ATO,
+                  dx=0.025, x_fim=None):
+    """Ato da protensão ao longo da peça (pré-tração), NBR 6118:2023 17.2.4.3.2: força γp·P(x) com a transferência
+    linear em lt a partir do início da aderência de cada grupo (face da ponta/dente + isolamento) e o peso próprio da
+    peça apoiada nas pontas (M = g1·x·(Lp − x)/2). Seção maciça (sec_ponta) até x_mac. Limites: compressão 0,7 fckj e
+    tração 1,2 fctm,j (17.2.4.3.2 b); onde há tração, armadura As = R/250 MPa (17.2.4.3.2 c).
+    grupos: [dict(n, y, x0)] — n cordoalhas Ø12,7 em y (m) aderentes a partir de x0 (m, já com o isolamento).
+    Varre de dx até x_fim (padrão Lp/2). Retorna os extremos e os pontos de controle."""
+    fctm_j = 0.3 * fckj ** (2 / 3)
+    lim_c, lim_t = -0.7 * fckj, 1.2 * fctm_j
+    x_fim = Lp / 2 if x_fim is None else x_fim
+    pts = []
+    x = dx
+    while x <= x_fim + 1e-9:
+        P = My = 0.0
+        for gr in grupos:
+            f = min(1.0, max(0.0, (x - gr["x0"]) / lt)) * gr["n"] * CORD["12.7"] * sig_p0 * 1000
+            P += f
+            My += f * gr["y"]
+        if P > 0:
+            s = sec_ponta if x < x_mac else sec
+            M = g1 * x * (Lp - x) / 2
+            sb, st = tensoes_secao(s.A, s.I, s.yc, s.h, gama_p * P, My / P, M)
+            R = resultante_tracao(s, sb, st) if max(sb, st) > 0 else 0.0
+            pts.append(dict(x=round(x, 3), P=gama_p * P, base=sb, topo=st, R_tracao=R))
+        x += dx
+    pior_t = max(pts, key=lambda p: p["topo"])
+    pior_c = min(pts, key=lambda p: p["base"])
+    pior_R = max(pts, key=lambda p: p["R_tracao"])
+    return dict(lim_c=lim_c, lim_t=lim_t, topo_max=pior_t["topo"], x_topo_max=pior_t["x"], base_min=pior_c["base"],
+                x_base_min=pior_c["x"], R_tracao_max=pior_R["R_tracao"], x_R_max=pior_R["x"],
+                As_topo_cm2=pior_R["R_tracao"] / (SIG_ACO_ATO * 1000) * 1e4, gama_p=gama_p,
+                ok=pior_t["topo"] <= lim_t and pior_c["base"] >= lim_c, pontos=pts)
+
+
+def mrd_camadas(sec: "Secao", fcd, cords=(), barras=(), hogging=False, n=300):
+    """Momento resistente por compatibilidade (NBR 6118:2023 17.2.2): εcu 3,5 ‰, bloco 0,85·fcd em 0,8x na seção real.
+    cords: [(Ap m², y m, ε de pré-alongamento)] CP-190 bilinear (fpyd até εyd, fptd a 35 ‰);
+    barras: [(As m², y m)] CA-50 (fyd). hogging=False: compressão no topo. Retorna (MRd kN·m, x m, x/d)."""
+    h = sec.h
+    fpyd, fptd = FPYK / 1.15 * 1000, FPTK / 1.15 * 1000
+    eyd = fpyd / EP
+
+    def sp(eps):
+        if eps <= eyd:
+            return max(-fpyd, EP * eps)
+        return min(fptd, fpyd + (fptd - fpyd) * (eps - eyd) / (0.035 - eyd))
+
+    def forcas(x):
+        yl = 0.8 * x
+        C = MC = 0.0
+        for k in range(n):
+            t = (k + 0.5) * yl / n
+            y = h - t if not hogging else t
+            f = 0.85 * fcd * sec.largura_em(min(max(y, 1e-6), h - 1e-6)) * yl / n
+            C += f
+            MC += f * y
+        T = MT = 0.0
+        for Ap, y, e0 in cords:
+            dist = (h - y) if not hogging else y
+            s = sp(e0 + 0.0035 * (dist - x) / x) * Ap
+            T += s
+            MT += s * y
+        for As, y in barras:
+            dist = (h - y) if not hogging else y
+            s = max(-FYD_CA50, min(FYD_CA50, ES * 0.0035 * (dist - x) / x)) * As
+            T += s
+            MT += s * y
+        return C, MC, T, MT
+    lo, hi = 1e-4, h
+    for _ in range(80):
+        x = (lo + hi) / 2
+        C, _, T, _ = forcas(x)
+        if C > T:
+            hi = x
+        else:
+            lo = x
+    C, MC, T, MT = forcas(x)
+    yC = MC / C
+    yT = MT / T if T else 0.0
+    dmax = max(((h - y) if not hogging else y) for _, y, *_ in list(cords) + list(barras))
+    return abs(C * (yC - yT)), x, x / dmax
+
+
+def vc_protendido(conc: Concreto, bw, d, M0, Msd_max):
+    """NBR 6118:2023 17.4.2.2 b), modelo I, elemento protendido: Vc = Vc0·(1 + M0/Msd,máx) ≤ 2·Vc0, Vc0 = 0,6·fctd·bw·d."""
+    Vc0 = 0.6 * conc.fctk_inf / 1.4 * 1000 * bw * d
+    return min(2 * Vc0, Vc0 * (1 + M0 / Msd_max)) if Msd_max > 0 else 2 * Vc0, Vc0
+
+
 # --------------------------------------------------------------------------- viga pré-tracionada
 
 
@@ -148,18 +413,21 @@ class ResultadoViga:
 
 def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc: Concreto,
                                  n_cord: int, diam="12.7", y_cord=0.07, fckj=None,
-                                 perda_dif=0.17, caa="II", gama_g=1.3, gama_q=1.4,
-                                 isola_pontas=True, n_sup=0, y_sup=0.05) -> ResultadoViga:
-    """Viga biapoiada pré-tracionada, cordoalhas retas na mesa inferior.
+                                 perda_dif=None, caa="II", gama_g=1.3, gama_q=1.4,
+                                 isola_pontas=True, n_sup=0, y_sup=0.05, sig_pi=None, gama_p_ato=GAMA_P_ATO,
+                                 U=70.0, t0_dias=5.0, t_lib_dias=0.8, L_pista=60.0, t_g2_dias=60.0) -> ResultadoViga:
+    """Viga biapoiada pré-tracionada, cordoalhas retas na mesa inferior (+ n_sup na mesa superior).
 
-    Verifica: tensões no ato (meio do vão e apoio), ELS-F (freq.), ELS-D (q.perm.) para
-    protensão limitada (pré-tração, CAA II), ELU flexão no meio do vão, cortante (VRd2),
-    flecha diferida. Perdas diferidas adotadas como fração de σpi (conferir no executivo).
+    Verifica: tensões no ato (meio do vão e apoio) com γp = 1,1 (NBR 6118:2023 17.2.4.3.2 a), ELS-F (freq.) e ELS-D
+    (q. perm.) para protensão limitada (pré-tração, CAA II), ELU flexão no meio do vão, cortante (VRd2 e Vc do
+    elemento protendido, 17.4.2.2 b) e flecha diferida.
+    Perdas (DEC-032): imediatas e progressivas pela NBR 6118:2023 9.6.3 (perdas_pretracao), U e t0 (idade fictícia)
+    da Tab. 8.2, g2 aplicada em t_g2_dias (fase de carga). perda_dif (fração fixa de σpi) só para reproduzir estudos antigos.
     """
     fckj = fckj or 0.7 * conc.fck
     Ap_inf = n_cord * CORD[diam]
     Ap = (n_cord + n_sup) * CORD[diam]
-    sigma_pi = min(0.77 * 1900, 0.85 * 1710) * 1000  # kPa
+    sigma_pi = (sig_pi or sigma_pi_max()) * 1000  # kPa — NBR 6118:2023 9.6.1.2.1
     A, I, yc = sec.A, sec.I, sec.yc
     y_cg = (n_cord * y_cord + n_sup * (sec.h - y_sup)) / (n_cord + n_sup)
     ep = yc - y_cg
@@ -168,15 +436,13 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
     Mq = carga.q * L ** 2 / 8
     Mw = carga.w * L ** 2 / 8
 
-    # perda imediata por encurtamento elástico (pré-tração)
-    Ecj = conc.Ecs * math.sqrt(fckj / conc.fck)
-    alfa_p = EP / Ecj
-    P0_try = Ap * sigma_pi * 0.97  # 3% relaxação inicial/ancoragem (conferir)
-    s_cp = -(P0_try / A + P0_try * ep * ep / I) + Mg1 * ep / I
-    perda_el = alfa_p * abs(s_cp)
-    sigma_p0 = sigma_pi * 0.97 - perda_el
+    u_ar = sum(math.dist(a, b) for a, b in zip(sec.pts, sec.pts[1:] + sec.pts[:1]))
+    pp = perdas_pretracao(sigma_pi / 1000, Ap, A, I, yc, y_cg, Mg1, conc, fckj, u_ar, L_pista=L_pista,
+                          t_lib_dias=t_lib_dias, U=U, t0_dias=t0_dias, fases=[(Mg2, t_g2_dias)] if Mg2 > 0 else ())
+    sigma_p0 = pp["sig_p0"] * 1000
     P0 = Ap * sigma_p0
-    Pinf = Ap * (sigma_p0 - perda_dif * sigma_pi)
+    Pinf = Ap * (sigma_p0 - perda_dif * sigma_pi) if perda_dif is not None else pp["Pinf"]
+    phi_inf = pp["phi"]
 
     def tensoes(P, M):
         si = -P / A - P * ep / I * yc + M / I * yc  # fibra inferior (σ<0 compressão)
@@ -185,11 +451,11 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
 
     out, av = {}, []
     fctmj = 0.3 * fckj ** (2 / 3)
-    # ato da protensão — meio do vão e apoio (M=0)
-    si, ss = tensoes(P0, Mg1)
+    # ato da protensão — meio do vão e apoio (M=0), γp = 1,1 (NBR 6118:2023 17.2.4.3.2 a)
+    si, ss = tensoes(gama_p_ato * P0, Mg1)
     out["ato_meio_inf_MPa"] = round(si, 2)
     out["ato_meio_sup_MPa"] = round(ss, 2)
-    si_a, ss_a = tensoes(P0, 0)
+    si_a, ss_a = tensoes(gama_p_ato * P0, 0)
     out["ato_apoio_inf_MPa"] = round(si_a, 2)
     out["ato_apoio_sup_MPa"] = round(ss_a, 2)
     lim_c = -0.7 * fckj
@@ -273,18 +539,20 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
     VRd2 = 0.27 * av2 * conc.fcd * bw * 0.9 * dp
     out["Vd_kN"] = round(Vd, 1)
     out["VRd2_kN"] = round(VRd2, 1)
-    Vc = 0.6 * conc.fctk_inf / 1.4 * 1000 * bw * 0.9 * dp * 1.5  # protensão (Vc0·(1+M0/Msd)≤2Vc0), adotado 1,5
+    # NBR 6118:2023 17.4.2.2 b): Vc = Vc0·(1 + M0/Msd,máx) ≤ 2·Vc0, M0 com γp = 0,9 na borda inferior
+    M0 = 0.9 * Pinf * (sec.Wi / A + ep)
+    Vc, _ = vc_protendido(conc, bw, dp, M0, Md)
     asw = max(0.0, (Vd - Vc) / (0.9 * dp * FYD_CA50)) * 1e4  # cm²/m
     asw_min = 0.2 * conc.fctm / 500 * bw * 1e4
     out["Asw_cm2_m"] = round(max(asw, asw_min), 2)
     ok_v = Vd <= VRd2
 
-    # flecha (estádio I, Ecs): imediata + fluência (φ≈2,0 conferir), contraflecha da protensão
+    # flecha (estádio I, Ecs): imediata + fluência φ(t∞,t0) da Tab. 8.2 (mesma das perdas), contraflecha da protensão
     EI = conc.Ecs * I
     fg = 5 * (carga.g1 + carga.g2) * L ** 4 / (384 * EI)
     fq = 5 * carga.psi2 * carga.q * L ** 4 / (384 * EI)
     fp = -Pinf * ep * L ** 2 / (8 * EI)
-    f_inf = (fg + fp) * (1 + 2.0) + fq
+    f_inf = (fg + fp) * (1 + phi_inf) + fq
     out["flecha_final_mm"] = round(f_inf * 1000, 1)
     out["flecha_lim_mm"] = round(L / 250 * 1000, 1)
     ok_f = abs(f_inf) <= L / 250
@@ -292,6 +560,13 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
     out["P0_kN"] = round(P0, 1)
     out["Pinf_kN"] = round(Pinf, 1)
     out["perda_imediata_%"] = round((1 - sigma_p0 / sigma_pi) * 100, 1)
+    out["perda_total_%"] = round((1 - Pinf / (Ap * sigma_pi)) * 100, 1)
+    out["sigma_p0_MPa"] = round(sigma_p0 / 1000, 1)
+    out["sigma_pinf_MPa"] = round(Pinf / Ap / 1000, 1)
+    out["phi"] = round(phi_inf, 2)
+    out["eps_cs"] = pp["eps_cs"]
+    out["gama_p_ato"] = gama_p_ato
+    out["perdas"] = {k: (round(v, 3) if isinstance(v, float) else v) for k, v in pp.items()}
     out["A_m2"] = round(A, 4)
     out["peso_kN_m"] = round(A * 25, 2)
     ok = ok_ato and ok_els and ok_elu and ok_v and ok_f

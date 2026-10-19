@@ -35,7 +35,7 @@
    "soma_kN": 7.01,
    "carga_kN": 7.01
   },
-  "sig_cp_inf_MPa": -7.07
+  "sig_cp_inf_MPa": -6.61
  },
  "U": {
   "L_mm": 2478,
@@ -86,7 +86,7 @@
   "uso_10cord": 1.012,
   "MRd_12cord_kNm": 52.08,
   "uso_12cord": 0.878,
-  "sig_cp_inf_12cord_MPa": -10.61,
+  "sig_cp_inf_12cord_MPa": -9.92,
   "sig_c0_12cord_MPa": -12.34,
   "lim_transf_MPa": -17.5,
   "cordoalhas": "12 Ø12,7 (6 por face, z = 95, 156, 469, 781, 1094, 1155 mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1"

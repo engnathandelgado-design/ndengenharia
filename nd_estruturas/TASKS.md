@@ -36,6 +36,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
 
 ## Depois
+- Letsara: ligação da VB presa nas 2 pontas para ±69 kN (decisão do Nathan sobre o tipo de ligação).
+- Letsara: pranchas de pilar e viga em A1 conforme o tamanho do desenho (pedido do Nathan: ajustar a prancha ao desenho).
 
 - Bases Gerdau pendências (DEC-017): identificar o modo de falha das PBR com placa pouco maior que o perfil (85 de 273 linhas; hoje coberto pelo limite tabelado); PBE com chumbadores tracionados a até 2,7 %; extrair as geometrias de todas as tabelas PBE (hoje 4 de 107); barra de cisalhamento (o manual não traz); conferir no texto da NBR 8800:2024 os itens 6.6.5, 6.7.1.5 e 6.7.2 (base "tipo 2").
 - Ligação de viga metálica em consolo de pilar de concreto pré-moldado (manual 12.2.2/12.2.3: σc = fck/1,96·√(A2/A1), placa com m = t²/5·fy/γa1, chumbador com Ftd ≥ 20 kN, torção na montagem): implementar para os insertos/consolos da ND.
@@ -55,6 +57,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] Letsara rev06f (DEC-032): revisão de protensão (ato, ELS, ELU, perdas), dentes Gerber (biela, tirante, suspensão, MEF), ganchos/ancoragens, CC-1 nos pilares e padrão gráfico da usina.
 - [x] Letsara rev06e (DEC-031): consoles concretados na face C (CC-1), tolerância ±12, geometria e MEF refeitos, posição na fôrma nas pranchas dos pilares.
 - [x] Letsara rev06d (DEC-030): espessura de cada chapa e de cada solda da fixação pelo MEF (NC-1, CS-1, CE-1), aplicada em todas as pranchas, listas, IFC e páginas.
 - [x] Letsara rev06d (DEC-028): ombreiras OM-1 em U na porta da vista I, PP05, placa I-15 com 12 cordoalhas (PP-05P), IFC e quantitativos.

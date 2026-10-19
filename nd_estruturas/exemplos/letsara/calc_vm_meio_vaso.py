@@ -38,7 +38,12 @@ FYD_ALCA = min(FYD, 435e3)                                # NBR 9062:2017 6.3 / 
 EP, ES = 195e6, 200e6
 FPTK, FPYK = 1900e3, 1710e3
 AP1 = 98.7e-6                                             # Ø12,7 CP-190 RB
-SIG_PI, PERDA_IME, PERDA_TOT = 1400e3, 0.05, 0.20
+SIG_PI = 1400e3                                           # kPa na pista (138,2 kN por cordoalha no macaco)
+# DEC-032: perdas pela NBR 6118:2023 9.6.3 (prefabricados.perdas_pretracao) no lugar de 5 % / 20 % fixos:
+# U 70 % (Ijuí/RS, a favor), t0 fictícia 5 dias (liberação com ~0,8 dia e cura térmica), laje + capa + 2º estágio aos 60 dias,
+# revestimento aos 90 dias (superposição das fases, 8.2.11); γp 1,1 no ato (17.2.4.3.2 a)
+U_AMB, T0_LIB, T_MONT, T_REV = 70.0, 5.0, 60.0, 90.0
+GAMA_N_DENTE = 1.2                                        # NBR 9062:2017 7.3.1.1: parcela variável ≈ 50 % do Vd → 1,2 (decisão do engenheiro)
 ECI = lambda fck: 5600 * math.sqrt(fck) * 1e3             # NBR 6118:2023 8.2.8 (granito)
 ECS = lambda fck: (0.8 + 0.2 * fck / 80) * ECI(fck)
 FCTM = lambda fck: 0.3 * fck ** (2 / 3)
@@ -59,7 +64,7 @@ DENTE = dict(hd=0.50, ln=0.35, recorte=0.30, consolo_h=0.29, consolo_proj=0.35, 
 VAOS = {"VM-01": 9.37, "VM-02": 9.48}                     # entre faces de pilar (A–B: P1 60 / P3 40; B–C: 40 / 40)
 
 Y_LINHAS = (0.050, 0.120, 0.190)                         # linhas de cordoalhas: folga para os grampos N7 Ø12,5 do apoio a y = 85 mm
-A_ALCA, L_ISOL = 1.00, 1.50                               # alças a 1,0 m das pontas; 2 cordoalhas isoladas por 1,5 m em cada ponta
+A_ALCA, L_ISOL = 1.10, 1.50                               # alças AL-1 a 1,10 m das pontas (prancha VM01); 2 cordoalhas isoladas por 1,5 m em cada ponta
 # cargas (kN/m²)
 PP_LAJE, CAPA, REV, Q_MEZ, Q_MONT = 2.80, H_CAPA * 25, 1.0, 5.0, 1.0
 
@@ -166,10 +171,6 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     Ap = n * AP1
     yp = sum(y for _, y in pos) / n
     ep = yc - yp
-    P0 = (1 - PERDA_IME) * SIG_PI * Ap
-    Pinf = (1 - PERDA_TOT) * SIG_PI * Ap
-    eps_inf = Pinf / Ap / EP
-
     # ---- cargas (kN/m)
     larg_capa = TRIB + B_TOT                            # capa sobre a laje tributária + sobre a viga
     g_pm = A * 25
@@ -189,6 +190,17 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     Ac, xcc, ycc, Ic = props(Rc, [1, 1, n2, n2])
     htot = h + H_LAJE + H_CAPA
     Wci = Ic / ycc
+
+    # ---- perdas (NBR 6118:2023 9.6.3) — seção pré-moldada; fase 1 (laje, capa, 2º estágio) na peça isolada e o
+    # revestimento na seção composta, convertido em momento equivalente na peça (mesma descompressão no nível do cabo)
+    u_ar = h + B_ALMA + (h - H_ABA) + B_ABA + H_ABA + B_TOT  # perímetro da peça (T) em contato com o ar na liberação
+    M_rev_eq = M(g2) * (ycc - yp) / Ic * I / ep
+    from nd_estruturas.prefabricados import perdas_pretracao, Concreto as _C
+    PP = perdas_pretracao(SIG_PI / 1e3, Ap, A, I, yc, yp, M(g_pm), _C(FCK), FCKJ, u_ar, U=U_AMB, t0_dias=T0_LIB,
+                          fases=[(M(g1 - g_pm), T_MONT), (M_rev_eq, T_REV)])
+    P0 = PP["P0"]
+    Pinf = PP["Pinf"]
+    eps_inf = Pinf / Ap / EP
 
     # ---- ELU
     # F1: pré-moldado isolado, combinação de construção (NBR 8681: γg 1,3 pré-moldado; γq 1,3 montagem)
@@ -212,15 +224,23 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     # ---- ato da protensão (pontas: sem momento de peso; cordoalhas isoladas reduzem P0 na ponta)
     n_ponta = n - n_isol
     pos_p = pos[n_isol:]                                     # isoladas: as primeiras da linha de baixo (centrais no relatório)
-    P0p = (1 - PERDA_IME) * SIG_PI * n_ponta * AP1
+    GP = 1.1                                                 # γp no ato (NBR 6118:2023 17.2.4.3.2 a), pré-tração
+    P0p = GP * PP["sig_p0"] * 1e3 * n_ponta * AP1
     yp_p = sum(y for _, y in pos_p) / max(n_ponta, 1)
     ep_p = yc - yp_p
     s_ato_topo = (-P0p / A + P0p * ep_p / Ws) / 1e3
     s_ato_base = (-P0p / A - P0p * ep_p / Wi) / 1e3
     fctmj, fcj = FCTM(FCKJ), FCKJ
     # meio do vão no ato (com peso próprio)
-    s_ato_meio_t = (-P0 / A + P0 * ep / Ws - M(g_pm) / Ws) / 1e3
-    s_ato_meio_b = (-P0 / A - P0 * ep / Wi + M(g_pm) / Wi) / 1e3
+    s_ato_meio_t = (-GP * P0 / A + GP * P0 * ep / Ws - M(g_pm) / Ws) / 1e3
+    s_ato_meio_b = (-GP * P0 / A - GP * P0 * ep / Wi + M(g_pm) / Wi) / 1e3
+    # fim do isolamento + lbpt: todas as cordoalhas aderentes, momento do peso próprio ainda pequeno (pior topo)
+    from nd_estruturas.prefabricados import lbpt_cordoalha
+    lbpt = lbpt_cordoalha(FCKJ, PP["sig_p0"])[0]
+    x_iso = L_ISOL + lbpt
+    M_iso = g_pm * x_iso * (Lp - x_iso) / 2
+    s_ato_iso_t = (-GP * P0 / A + GP * P0 * ep / Ws - M_iso / Ws) / 1e3
+    s_ato_iso_b = (-GP * P0 / A - GP * P0 * ep / Wi + M_iso / Wi) / 1e3
 
     # ---- flechas (NBR 9062:2017 5.4.3.4, Tab. 9; módulo secante Ecs; fluência φ 2,0 na parcela permanente)
     E = ECS(FCK)
@@ -229,7 +249,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     f_F1 = 5 * (g1 - g_pm) * L ** 4 / (384 * E * I)
     f_g2 = 5 * g2 * L ** 4 / (384 * E * Ic)
     f_q = 5 * 0.4 * q2 * L ** 4 / (384 * E * Ic)
-    phi = 2.0
+    phi = PP["phi"]                                       # φ(t∞,t0) da Tab. 8.2 (mesmo das perdas)
     f_mont = contra + f_pp + f_F1                          # imediata após a montagem (peça isolada)
     f_final = (contra + f_pp + f_F1) * (1 + phi) + f_g2 * (1 + phi) + f_q * (1 + phi)
     lim_final = L / 250                                    # Tab. 9: final solidarizada L ≤ 15 m
@@ -307,7 +327,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     x_res = sum(x for x, _ in pos) / n
     ok_ct = H_ct_d <= 2 * 37.2                              # CT-1: 2 M16 8.8 ao corte (Fv,Rd 37,2 kN cada)
     ok = dict(ELU_F1=MR1 >= M1d and xd1 <= 0.45, ELU_F2=MR2 >= M2d and xd2 <= 0.45, ELS_F=sF <= fctf, ELS_D=sD <= 0.0,
-              ato=s_ato_topo <= 1.2 * fctmj and s_ato_base >= -0.7 * fcj and s_ato_meio_b >= -0.7 * fcj,
+              ato=max(s_ato_topo, s_ato_iso_t) <= 1.2 * fctmj and min(s_ato_base, s_ato_meio_b, s_ato_iso_b) >= -0.7 * fcj,
               flecha=f_final <= lim_final, VRd2=Vd <= VRd2, interface=tau_sd <= tau_rd and tau_sd <= tau_max,
               torcao=tor["ok"], apoio=ok_ct, icamento=s_ic_t_bal <= 1.2 * fctmj, lateral=lat[0] <= 50 and lat[1] <= 500)
     return dict(
@@ -315,12 +335,13 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
         L_faces=L_faces, L_peca=round(Lp, 3), L_calculo=round(L, 3),
         secao=dict(A=round(A, 4), yc=round(yc, 4), xc=round(xc, 4), I=round(I, 6), Ac_hom=round(Ac, 4), yc_comp=round(ycc, 4), I_comp=round(Ic, 6), bf_capa=round(bf, 2), peso_t=round(g_pm * Lp / 10, 2), volume_m3=round(A * Lp, 3)),
         cargas=dict(g_pm=round(g_pm, 2), g_laje=round(g_laje, 2), g_capa=round(g_capa, 2), g_2e=round(g_2e, 2), q_mont=round(q_mont, 2), g1=round(g1, 2), g2=round(g2, 2), q2=round(q2, 2)),
-        protensao=dict(P0=round(P0, 1), Pinf=round(Pinf, 1), ep=round(ep, 4), F_macaco_kN=round(SIG_PI * AP1, 1), sigma_pi=1400),
+        protensao=dict(P0=round(P0, 1), Pinf=round(Pinf, 1), ep=round(ep, 4), F_macaco_kN=round(SIG_PI * AP1, 1), sigma_pi=1400, perdas={k: (round(v, 3) if isinstance(v, float) else v) for k, v in PP.items()}),
         ELU=dict(M1d=round(M1d, 1), MRd1=round(MR1, 1), xd1=round(xd1, 3), M2d=round(M2d, 1), MRd2=round(MR2, 1), xd2=round(xd2, 3),
                  norma="NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"),
         ELS=dict(sig_F=round(sF, 2), lim_F=round(fctf, 2), sig_D=round(sD, 2), sig_rara=round(sR, 2), topo_F1=round(s_topo_F1, 2)),
         ato=dict(topo_ponta=round(s_ato_topo, 2), base_ponta=round(s_ato_base, 2), lim_t=round(1.2 * fctmj, 2), lim_c=-0.7 * fcj,
-                 topo_meio=round(s_ato_meio_t, 2), base_meio=round(s_ato_meio_b, 2), fckj=FCKJ),
+                 topo_meio=round(s_ato_meio_t, 2), base_meio=round(s_ato_meio_b, 2), topo_fim_isol=round(s_ato_iso_t, 2), base_fim_isol=round(s_ato_iso_b, 2),
+                 x_fim_isol=round(x_iso, 2), lbpt_m=round(lbpt, 3), gama_p=GP, fckj=FCKJ, norma="NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"),
         flecha=dict(contraflecha_mm=round(contra * 1e3, 1), montagem_mm=round(f_mont * 1e3, 1), final_mm=round(f_final * 1e3, 1),
                     lim_final_mm=round(lim_final * 1e3, 1), lim_montagem_L500=round(L / 500 * 1e3, 1), norma="NBR 9062:2017 5.4.3.4 Tab. 9"),
         cortante=dict(Vd=round(Vd, 1), VRd2=round(VRd2, 1), Vc0=round(Vc0, 1), Asw_req_cm2m=round(Asw_req, 2)),

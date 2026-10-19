@@ -42,7 +42,7 @@ Ec = PL["secao"]["Ec_MPa"] * 1e3                         # kPa
 PP = PL["secao"]["pp_kNm"] / H                           # kN/m² (peso por área)
 p_k = PL["vento"]["p_k"]                                 # kN/m² (Cpe borda −1,4 + Cpi 0,2, todas as placas)
 MRd_placa = PL["vento"]["MRd"]                           # kN·m por placa (1,25 m), cordoalhas de uma face
-X_CS = 0.060                                             # centro do console a partir da ponta da placa
+X_CS = 0.070                                            # rev06e: centro do console = eixo do nicho 140 (NC["B"] / 2), a partir da ponta da placa
 X_PT = round(0.21 * L + 0.15, 3)
 Z_PT2 = 0.150                                            # trava de pé PT-2 acima da base da 1ª placa do pacote suspenso                         # pinos PT-1: 15 cm para dentro de cada alça AL-P (0,21 L)
 Z_CS = 0.940                                             # centro do nicho a partir da base da placa

@@ -22,8 +22,8 @@ f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: round(v * 1000)
 H_PL, E_PL, JUNTA, FOLGA = 1250, 100, 20, 25           # rev04: junta vertical 20 mm (tex ±5 de projeto + tloc ±10 + Δ — NBR 9062:2017 3.1/5.2.2)
 FX = json.load(open(AQ + "fixacao_placas.json"))        # rev06 (DEC-026): sistema Trejor — console soldado CS-1 + nicho NC-1 + pino PT-1
-NC_B, NC_H, NC_P, Z_NC = 120, 200, 60, 940              # nicho NC-1: comprimento a partir da ponta, altura, profundidade, centro acima da base da placa
-X_CS = 60                                               # eixo do console a partir da ponta da placa
+NC_B, NC_H, NC_P, Z_NC = GF.N["B"], GF.N["H"], GF.N["P"], 940   # rev06e: geometria do GEO (DEC-031: nicho 140)              # nicho NC-1: comprimento a partir da ponta, altura, profundidade, centro acima da base da placa
+X_CS = NC_B / 2                                         # eixo do console = eixo do nicho, a partir da ponta da placa (70)
 CE_B, CE_H, Z_CE = 380, 330, 922                        # CE-1 no pilar: largura, altura, centro acima da base da fiada
 X_PT = lambda L: round(0.21 * L + 150)                  # pinos PT-1: 15 cm para dentro de cada alça AL-P
 Z_TOPO = 10000
@@ -351,7 +351,7 @@ def prancha_tipo():
     e.cota_h([0, NC_B, 2100, 2250, LD], H_PL, 16, total=False)
     e.cota_v([0, 156, 469, 781, 1094, H_PL], 0, -10, total=False)
     e.cota_v([0, 60, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL - 60, H_PL], LD + 500 + LE, 10, total=False)
-    e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 18), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
+    e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 30), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
     e.chamada((2250, 60), (10, -16), "TSA M16 dos pinos PT-1: topo e base, a 0,21 L + 15 cm das pontas (DETALHE 3)")
     e.chamada((2100, H_PL + 120), (-6, 24), "AL-P cordoalha Ø12,7 (2/placa, 0,21 L) — cortar após montar")
     e.chamada((1500, 781), (12, -20), "C1 — 8 cord. Ø12,7 (4 por face), aderentes, cortadas rente às pontas")
@@ -394,7 +394,7 @@ def prancha_tipo():
     d1.poli([(10, Z_NC + NC_H / 2 + 60), (NC_B + 30, Z_NC + NC_H / 2 + 60), (NC_B + 30, Z_NC + NC_H / 2 + 100), (10, Z_NC + NC_H / 2 + 100)], "ARM_TRANSV")  # N5
     d1.cota_h([0, NC_B, NC_B + 50], 600, -10, total=False)
     d1.cota_v([600, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL], 0, -10, total=False)
-    d1.chamada((60, Z_NC), (70, -14), f"NC-1 caixa {NC_B} × {NC_H} × {NC_P} aberta na ponta e na face interna (PP01 det. 3)")
+    d1.chamada((60, Z_NC), (70, -14), f"NC-1 caixa {NC_B:g} × {NC_H:g} × {NC_P:g} aberta na ponta e na face interna (PP01 det. 3)")
     d1.chamada((300, Z_NC + NC_H / 2 + 30), (30, 2), f"N3 — {DN['tirante']} C=138 cm (tirante do dente)")
     d1.chamada((NC_B + 50, 700), (40, -8), f"N4 — {DN['suspensao'].split(' a até')[0]} até as cordoalhas de baixo")
     d1.chamada((NC_B + 30, Z_NC + NC_H / 2 + 80), (70, 2), f"N5 — {DN['costura'].split(' nos')[0]} (costura)")
@@ -404,9 +404,9 @@ def prancha_tipo():
                   subtitulo="2 consoles CS-1 na CE-1 do pilar (CC-1 de fábrica na face C); junta 20 no eixo; folga 25", unidade="mm")
     pil = [(-200, 0), (200, 0), (200, 450), (-200, 450)]
     d2.poli(pil, "CORTADO", fechada=True); d2.hachura(pil, "AR-CONC", 0.03)
-    d2.chapa(-CE_B / 2, 0, CE_B, 16, 0.4)                                                    # CE-1
+    d2.chapa(-CE_B / 2, 0, CE_B, GF.TCE, 0.4)                                                # CE-1
     for xs_ in (-120, 120):
-        d2.ret(xs_ - 8, 16, 16, 150, "METALICA")                                           # pinos Ø16 hef 150
+        d2.ret(xs_ - 8, GF.TCE, 16, 140, "METALICA"); d2.ret(xs_ - 16, GF.TCE + 140, 32, 10, "METALICA")   # pinos Ø16 × 150 com cabeça
     d2.poli([(-150, 190), (-150, 210), (150, 210), (150, 190)], "ARM_TRANSV")              # grampo U Ø10
     for sg in (-1, 1):
         x0 = sg * 10
@@ -416,13 +416,14 @@ def prancha_tipo():
         xe = x0 + sg * NC_B
         d2.poli([(x0, -FOLGA - NC_P), (xe, -FOLGA - NC_P), (xe, -FOLGA)], "METALICA")    # nicho aberto na ponta e na face interna
         xc = sg * (10 + X_CS)
-        d2.chapa(xc - 60, -16, 120, 16, 0.4)                                                 # costas do CS-1
-        for dx in (-35, 35):
-            d2.chapa(xc + dx - 4.75, -GF.C["alma"]["y1"], 9.5, GF.C["alma"]["y1"] - 16, 0.4)   # almas
-    d2.cota_h([-130, -10, 10, 130], -FOLGA - E_PL, -10, total=False)
+        tc_ = GF.C["costas"]["t"]; ta_ = GF.C["alma"]["t"]
+        d2.chapa(xc - GF.C["costas"]["b"] / 2, -tc_, GF.C["costas"]["b"], tc_, 0.4)              # costas do CS-1
+        for dx in (-GF.C["alma"]["x"], GF.C["alma"]["x"]):
+            d2.chapa(xc + dx - ta_ / 2, -GF.C["alma"]["y1"], ta_, GF.C["alma"]["y1"] - tc_, 0.4)   # almas
+    d2.cota_h([-10 - NC_B, -10 - X_CS, -10, 10, 10 + X_CS, 10 + NC_B], -FOLGA - E_PL, -10, total=False)
     d2.cota_v([-FOLGA - E_PL, -FOLGA - NC_P, -FOLGA, 0, 450], 450, 10, total=False)
     d2.chamada((120, 90), (20, 32), f"CE-1 380 × 330 × {GF.TCE:g}".replace(".", ",") + " + 4 pinos Ø16 × 150 c/ cabeça Ø32 + 2 grampos U Ø10 N18 (pilar; PP01 det. 5)")
-    d2.chamada((70, -8), (34, 6), f"CS-1 soldado na obra: filete {FX['solda']['filete_mm']:g} E70XX nos 2 lados verticais das costas")
+    d2.chamada((70, -8), (34, 6), f"CS-1: solda filete {FX['solda']['filete_mm']:g} E70XX nos 2 lados verticais das costas — na fábrica (CC-1, face C) ou na obra (laterais)")
     d2.chamada((-70, -FOLGA - 50), (-20, 16), "NC-1 nicho da placa (aberto na ponta)")
     d2.chamada((-350, -FOLGA - 60), (-6, -16), "placa 10 cm")
     d2.chamada((0, -FOLGA - 90), (16, -16), "junta 20 mm: tarucel Ø25 + selante PU (±25 %)")
@@ -514,7 +515,7 @@ def prancha_tipo():
     y = pr.tabela(XC, y, f"TIPOS DE PLACA — {N_TOT} PEÇAS", ["TIPO", "L (cm)", "QT", "PESO (t)", "VISTAS"], rows, [18, 22, 14, 22, 114], destaque_ultima=True)
     tc = pr.tabela_cordoalhas(XC, y - 4, [dict(pos="C1", diam=12.7, qtd=8, y=26, forca=P["protensao"]["F_macaco_kN"], isol=0)], 60)
     y = tc["y_base"]
-    ins = [["NC-1", "Caixa 120×200×60 (ND-LET-PP02)", 2, "face int., 2 pontas (1 junto à porta)"],
+    ins = [["NC-1", f"Caixa {NC_B:g}×{NC_H:g}×{NC_P:g} (ND-LET-PP02)", 2, "face int., 2 pontas (1 junto à porta)"],
            ["TSA", "Luva roscada M16 hef 70 (PT-1)", 4, "topo e base, 0,21 L + 15"],
            ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L; cortar após montar"],
            ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
@@ -531,7 +532,7 @@ def prancha_tipo():
     y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/pl (c/ N3–N7)", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, [
-        f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão, desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
+        f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão (GRADUAL e simétrica — lbpt {f(P['protensao']['lbpt_gradual_m'] * 100, 0)} cm; liberação brusca proibida: c/φ 1,6), desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento das cordoalhas 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
         f"PP-05P (placa I-15, sobre a porta da vista I): mesma fôrma da PP-05, com 12 cordoalhas Ø12,7 (6 por face, a 9,5 / 15,6 / 46,9 / 78,1 / 109,4 / 115,5 cm da base, fora do nicho NC-1) e 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, nos eixos das ombreiras OM-1. Protensão: 8 cordoalhas Ø12,7 CP-190 RB aderentes, 4 por face, alinhadas (eixo a 2,64 cm das faces), σpi = 1400 MPa — {f(P['protensao']['F_macaco_kN'])} kN por cordoalha no macaco; alongamento teórico {P['protensao']['along_pista_60m_mm']} mm em pista de 60 m (tolerância ±7 %).",
         "Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; depois de montada a placa, cortar as alças rente ao topo (disco, sem aquecer o concreto) e proteger as pontas com epóxi antes de montar a placa de cima (junta de 5 mm); estocagem deitada em 2 calços a 0,21 L, até 6 placas com calços alinhados.",
         f"Montagem (sistema Trejor, DEC-026/031): consoles da face C já concretados com o pilar (CC-1); nas faces laterais soldar o CS-1 na CE-1 no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G {GF.T['G']:g} ± {GF.T['G_tol']:g}), afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g} pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa leva só o próprio peso e o vento: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos PT-1 na junta de baixo (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",

@@ -39,9 +39,9 @@ def tab(linhas, larg):
     return t
 
 
-doc = SimpleDocTemplate(str(AQ / "ND-LET-MC05-NBR9062-rev04.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
+doc = SimpleDocTemplate(str(AQ / "ND-LET-MC05-NBR9062-rev06.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
                         bottomMargin=15 * mm, title="Letsara — memória MC05: reanálise pela NBR 9062:2017", author="ND Engenharia")
-E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC05 (rev04)", T1),
+E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC05 (rev06, DEC-032)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marque Engenharia). Assunto: reanálise de toda a estrutura pela NBR 9062:2017 — sistema de "
        "estabilidade, deslocamentos, aparelhos de apoio, consolos, dentes, apoios sem recorte, cálices, situações transitórias, folgas, "
        "tolerâncias, incêndio e cobrimentos; vigas do mezanino em meio vaso. 16/10/2026. Projeto da ND Engenharia — para aprovação."),
@@ -96,7 +96,9 @@ lin = [["Peça", "Fd (kN)", "Asd = (Fd/1,2 + Hd)/fyd", "Ash = Asv = Fd/8fyd", "a
 for a in N9["apoios_sem_recorte"]:
     lin.append([a["peca"], f(a["Fd_kN"]), f(a["Asd_cm2"], 2), f(a["Ash_Asv_cm2"], 2), a["adotado"]])
 E += [tab(lin, [28, 14, 26, 24, 86]),
-      P(f"Dente da I130 (78 × 35): MEF não linear Vu = {f(N9['dente_I130']['MEF_Vu_kN'])} kN ≥ 1,06 Vd (FS {f(N9['dente_I130']['FS'], 2)}); {N9['dente_I130']['suspensao']}; "
+      P(f"Dente da I130 (78 × 35): reação real Vd = {f(N9['dente_I130']['Vd_reacao_kN'])} kN (TS-01 fora do centro), Fd = γn {f(N9['dente_I130']['gama_n'])} × Vd = {f(N9['dente_I130']['Fd_kN'])} kN, "
+        f"Hd = 0,16 Fd = {f(N9['dente_I130']['Hd_kN'])} kN. MEF não linear com a armação da prancha ({N9['dente_I130']['adotado']['tirante']}; {N9['dente_I130']['adotado']['suspensao']}): "
+        f"Vu = {f(N9['dente_I130']['MEF_Vu_kN'])} kN, Vu/Fd = {f(N9['dente_I130']['FS'], 2)} ≥ 1,06 — {ok(N9['dente_I130']['ok_MEF'])}; {N9['dente_I130']['suspensao']}; "
         f"{N9['dente_I130']['tirante']}; {N9['dente_I130']['restricao']}.")]
 
 # 5 VM meio vaso
@@ -112,8 +114,9 @@ for r in VMD["ranking"][:8]:
 lin.append(["sem dente 25 × 65 (consolo 45 abaixo da viga)", 12, "—", "45 cm", VMD["sem_dente"]["custo_indice"]])
 E += [tab(lin, [50, 18, 46, 40, 24]), P("Varredura de alma e altura de 5 em 5 cm (calc_vm_dente.py), a pedido do Nathan, com o dente e o consolo tratados como consolos (7.3/7.4). O cálculo analítico aprova h 65 a 75, mas o MEF não linear da ponta (quina do recorte, transferência da protensão) reprova h 65 e h 75; a menor altura aprovada no MEF foi adotada:")]
 FD = N9["dente_VM"]["Fd_kN"]
-lin = [["MEF h / dente (mm)", "Vu (kN) e critério", "pico (kN)", f"Vu / (1,06·Fd), Fd = 1,1·Vd = {f(FD)} kN", "situação"]]
-for k, d in MEF.items():
+lin = [["MEF h / dente (mm)", "Vu (kN) e critério", "pico (kN)", f"Vu / (1,06·Fd), Fd = γn {f(N9['dente_VM']['gama_n'])}·Vd = {f(FD)} kN", "situação"]]
+_k_ad = f"{round(VM['premissas']['h_pm'] * 1000)}_{round(VM['premissas']['dente']['hd'] * 1000)}"
+for k, d in ((k_, d_) for k_, d_ in MEF.items() if k_ == _k_ad):          # DEC-032: só o MEF da peça adotada, com a armação da prancha
     m = d["mef"]
     lim_ = (m["limite"] or {}).get("criterio", "pico da curva")
     lin.append([k.replace("_", " / ").replace("inf4x16", "+ 4 Ø16 inf."), f"{f(m['Vu_kN'])} ({lim_})", f(m.get("V_pico_kN", 0)), f(m["Vu_kN"] / (1.06 * FD), 2), ok(m["Vu_kN"] >= 1.06 * FD)])

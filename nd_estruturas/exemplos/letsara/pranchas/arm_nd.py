@@ -28,12 +28,12 @@ class Arm:
 
     def disco(self, c, r):
         self.msp.add_circle(c, r, dxfattribs={"layer": "ARM_SECAO"})
-        h = self.msp.add_hatch(color=5, dxfattribs={"layer": "ARM_SECAO"})
+        h = self.msp.add_hatch(color=256, dxfattribs={"layer": "ARM_SECAO"})              # rev06e: cor da camada (verde)
         h.paths.add_edge_path().add_arc(c, r, 0, 360)
 
     def bolha(self, x, y, pos, r=2.6, registrar=True):
-        self.circ((x, y), r, "INDICACAO")
-        self.tx(x, y, pos, 1.6 if len(pos) > 2 else "min", "MIDDLE_CENTER", lay="TITULO")
+        self.circ((x, y), r, "BOLHA")                                                    # rev06e: bolha cinza fina, posição em vermelho (usina)
+        self.tx(x, y, pos, 1.5 if len(pos) > 2 else "min", "MIDDLE_CENTER", lay="POSICAO")
         if registrar:
             self.pr.posicoes_desenho.add(pos)
 

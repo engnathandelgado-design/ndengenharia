@@ -39,7 +39,7 @@ NC = FX["nicho_NC1"]
 DA = DN["resultado"]["adotado"]
 doc = SimpleDocTemplate(str(AQ / "ND-LET-MC07-FIXACAO-PLACAS-rev06.pdf"), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm,
                         bottomMargin=15 * mm, title="Letsara — memória MC07: fixação das placas (sistema Trejor)", author="ND Engenharia")
-E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC07 (rev06e)", T1),
+E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC07 (rev06f)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Assunto: fixação das placas protendidas 125 × 10 do fechamento lateral "
        "pelo sistema Trejor (console soldado), decisões DEC-026 de 17/10/2026, DEC-030 e DEC-031 de 19/10/2026. Projeto da ND Engenharia — para aprovação."),
      Paragraph("1. Sistema adotado", T2),
@@ -127,6 +127,6 @@ E += [tab(lin, [60, 36, 30, 30]), P(CS["criterio"] + f" — uso {f(CS['uso'], 3)
       P("(a) Medidas do CS-1, NC-1 e cartola PT-1 são de pré-dimensionamento: trocar pelas do catálogo 09 da Trejor (consoles metálicos para painéis "
         "de fachada) e conferir as capacidades declaradas pelo fornecedor. (b) Pinos PT-1 da 1ª fiada: luva TSA no topo da viga baldrame (projeto de "
         "fundações). (c) Solda de campo: procedimento qualificado, soldador certificado, inspeção visual 100 % e líquido penetrante por amostragem, "
-        "galvanização a frio. (d) CC-1: solda costas × CE-1 na fábrica do pilar com o mesmo procedimento; gabarito na fôrma (face C para cima, face A no fundo, calço de 30 cm sob a cabeça) para garantir G e x dentro de ±5 de fábrica; conferir a posição antes de concretar.")]
+        "galvanização a frio. (d) CC-1: solda costas × CE-1 na fábrica do pilar com o mesmo procedimento; gabarito na fôrma (face C para cima, face A no fundo, calço de 30 cm sob a cabeça) para garantir G e x dentro de ±5 de fábrica; conferir a posição antes de concretar; CE-1 do CC-1 com 4 furos Ø20 de respiro (lançar e vibrar até o concreto sair pelos furos). (e) Pilares concretados com a face C para cima: alças AL-2 na face C, fora das chapas, cortadas rente após a montagem e antes das placas. (f) Fiadas com console em cada pilar: lidas das vistas do fechamento (rev06e corrigiu PL-02, PL-03, PL-06, PL-07, PF-01 a PF-03 — fiadas 0, 2, 3, 5, 6 e 7 — e PG-03 — 6 CE-1). Eixo do CS-1 a 80 mm do eixo do pilar (junta 20/2 + eixo do nicho 70).")]
 doc.build(E)
 print("ok", doc.filename)

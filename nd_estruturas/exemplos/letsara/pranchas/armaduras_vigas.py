@@ -79,7 +79,8 @@ def spec_i(qual):
     cont = [(0, H - HD), (LN, H - HD), (LN, 0), (L - LN, 0), (L - LN, H - HD), (L, H - HD), (L, H), (0, H)]
     ents = [([(x, cob), (x, H - cob)], "ARM_TRANSV") for x in xs_e]
     for y, xs, isol in P["cord"]:
-        ents.append(([(LN, y), (L - LN, y)], "ARM_PROT"))
+        x0c = LN if y < H - HD else 0                                   # cordoalhas da mesa superior vão de ponta a ponta
+        ents.append(([(x0c, y), (L - x0c, y)], "ARM_PROT"))
     ents.append(([(cob, H - cob - 5), (L - cob, H - cob - 5)], "ARMADURA"))
     for yy in P.get("pele", []):
         ents.append(([(cob, yy), (L - cob, yy)], "ARMADURA"))
@@ -87,12 +88,12 @@ def spec_i(qual):
     n_sus, n_cost, n_v = P["n_sus"], P["n_cost"], P["n_v"]
     for x0_, sg in ((0, 1), (L, -1)):
         y_t = H - HD + 55
-        ents.append(([(x0_ + sg * cob, y_t - 150), (x0_ + sg * cob, y_t), (x0_ + sg * P["anc"], y_t)], "ARMADURA"))
+        ents.append(([(x0_ + sg * cob, y_t), (x0_ + sg * P["anc"], y_t)], "ARMADURA"))          # N5: alças horizontais (U deitado)
         for k in range(n_sus):
             x = x0_ + sg * (LN + 60 + k * 80)
             ents.append(([(x, cob), (x, H - cob)], "ARM_TRANSV"))
-        for k in range(n_v):
-            x = x0_ + sg * (100 + k * 80)
+        for xk in VI.x_n8(n_v, LN, P["pino_x"]):
+            x = x0_ + sg * xk
             ents.append(([(x, H - HD + cob), (x, H - cob)], "ARM_TRANSV"))
     SEG = P.get("seg")
     if SEG:
@@ -125,11 +126,11 @@ def spec_i(qual):
     LD = max(1800, 2 * LN + 800)
     y_t = H - HD + 55
     det = [([(0, H - HD), (LN, H - HD), (LN, 0), (LD, 0)], "VISTA", False), ([(LD, H), (0, H), (0, H - HD)], "VISTA", False),
-           ([(cob, y_t - 150), (cob, y_t), (P["anc"] if P["anc"] < LD else LD, y_t)], "ARMADURA", False)]
+           ([(cob, y_t), (P["anc"] if P["anc"] < LD else LD, y_t)], "ARMADURA", False)]
     det += [([(LN + 60 + k * 80, cob), (LN + 60 + k * 80, H - cob)], "ARM_TRANSV", False) for k in range(n_sus)]
     det += [([(cob, H - HD + 150 + k * 100), (min(LN + 900, LD), H - HD + 150 + k * 100)], "ARM_TRANSV", False) for k in range(n_cost)]
-    det += [([(100 + k * 80, H - HD + cob), (100 + k * 80, H - cob)], "ARM_TRANSV", False) for k in range(n_v)]
-    det += [([(LN, y), (LD, y)], "ARM_PROT", False) for y, _, _ in P["cord"]]
+    det += [([(xk, H - HD + cob), (xk, H - cob)], "ARM_TRANSV", False) for xk in VI.x_n8(n_v, LN, P["pino_x"])]
+    det += [([(LN if y < H - HD else 0, y), (LD, y)], "ARM_PROT", False) for y, _, _ in P["cord"]]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
               bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (8, -8)), ("N8", (100, H - 100), (-16, 10))],
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
@@ -140,7 +141,8 @@ def spec_i(qual):
             _, bm = VI.armacao_i(P, Lm)
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
-            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(n_cord, n_cord * Lm / 1000)))
+            nc_mk = VI.I1J[mk]["arranjo"]["n_cord"] if "arranjo" in VI.I1J[mk] else n_cord
+            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000)))
         fam, tit, forma = "I130", "VIGAS CENTRAIS I130 PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
@@ -424,6 +426,7 @@ def folha(num, total, S):
                             desenho=f"ND-LET-AR-VIG-{num:02d}", folha=f"{num:02d}/{total:02d}", fase="PARA APROVAÇÃO"))
     pr.revisao("00", "13/10/2026", "EMISSÃO INICIAL — PADRÃO DE ARMADURAS")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; VM EM MEIO VASO COM DENTE")
+    pr.revisao("06", "19/10/2026", "DEC-032: I130 28 + 2 CORD., N5 EM ALÇAS HORIZONTAIS, BARRAS DOS DENTES NAS 2 PONTAS; DENTE DA VM PELO MEF COM A ARMAÇÃO DA PRANCHA; TS-01 N9")
     A = Arm(pr)
     Q = pr.quadro
     rep = next(m for m in S["marcas"] if m["marca"] == S.get("rep", S["marcas"][0]["marca"]))

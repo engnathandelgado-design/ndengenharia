@@ -31,12 +31,16 @@ for x in (-120, 120):
     for z in (-140, 140):
         v1.circulo((x, z), 16, "METALICA"); v1.circulo((x, z), 8, "OCULTA")
 ZT = FCH.Z_NC + FCH.NC_H / 2 - GF.N["t_teto"] - GF.T["G"] - FCH.Z_CE          # topo da mesa do CS-1 em relação ao centro da CE-1
-for xc in (-70, 70):
+XC1 = FCH.JUNTA / 2 + FCH.X_CS                                                 # eixo do CS-1 a partir do eixo do pilar (10 + 70 = 80)
+for xc in (-XC1, XC1):
     v1.ret(xc - 60, ZT + GF.C["costas"]["z0"], 120, GF.C["costas"]["z1"] - GF.C["costas"]["z0"], "METALICA")
 v1.eixo((0, -165), (0, 165), ext=20)
-v1.cota_h([-190, -120, -70, 0, 70, 120, 190], -165, -8, total=True)
+for xr, zr in ((0, -120), (0, 120), (-165, 0), (165, 0)):                         # rev06e: respiro do CC-1 (chapa horizontal na fôrma)
+    v1.circulo((xr, zr), 10, "METALICA")
+v1.chamada((0, -120), (30, -45), "CC-1: 4 FUROS Ø20 DE RESPIRO (CE-1 DE OBRA SEM FUROS)")
+v1.cota_h([-190, -120, -XC1, 0, XC1, 120, 190], -165, -8, total=True)
 v1.cota_v([-165, -140, 0, 140, 165], 190, 10, total=True)
-v1.chamada((70, 60), (24, 18), "CS-1 (eixo a 70 do eixo do pilar): CC-1 = 2 CS-1; CC-1E/CC-1D = 1 CS-1")
+v1.chamada((XC1, 60), (24, 18), f"CS-1 (eixo a {XC1:g} do eixo do pilar = eixo do nicho): CC-1 = 2 CS-1; CC-1E/CC-1D = 1 CS-1")
 v1.chamada((120, 140), (20, 14), "pino com cabeça (21)")
 # corte com pinos e N18 (armadura do pilar)
 v2 = pr.vista("CE-1 CORTE", (Q[0] + 240, Q[1] + 440), 3.0, titulo="CE-1 — CORTE", subtitulo="pinos por solda de arco (stud welding) na oficina", unidade="mm")
