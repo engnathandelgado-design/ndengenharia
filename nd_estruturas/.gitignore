@@ -12,3 +12,7 @@ saidas/
 *.out
 .DS_Store
 Thumbs.db
+
+# páginas geradas por exemplos/letsara/cliente/montar_cliente.py
+exemplos/letsara/cliente/fixacao_cliente.html
+exemplos/letsara/cliente/mef_cs1.html
