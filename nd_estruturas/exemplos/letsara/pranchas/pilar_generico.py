@@ -415,7 +415,8 @@ def prancha_pilar(P):
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])
     y = pr.tabela(XC, y - 4, "MEMÓRIA RESUMIDA (NBR 6118:2023)", ["VERIFICAÇÃO", "RESULTADO"], P["memoria"], [70, 112])
     y = pr.legenda_armadura(XC, y - 4, False)
-    y_nt = pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
+    y_nt = pr.notas(XC, y - 4, P["notas"] + ["Desformar, bascular e transportar só com fcj ≥ 25 MPa (corpo de prova curado com a peça); cobrimento 3,0 cm (CAA II); transportar deitado em 2 apoios a 0,21 L das pontas, sem apoiar sobre consolos ou consoles metálicos.",
+                                     "Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
     if any(ip["face"] == "C" for ip in P.get("ip01", [])):
         posicao_forma(pr, P, cons, Q[2] - 150, min(Q[1] + 225, y_nt - 95))
     pr.posicoes_desenho.update({b["pos"] for b in barras if b["pos"] in ("N1", "N1A", "N13", "N14")})

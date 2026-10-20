@@ -31,11 +31,12 @@ REC = dict(A=round(LG["REC"][0] * 1000), E=round(LG["REC"][1] * 1000), prof=300)
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="LOCAÇÃO DE PILARES E VIGAS DE COBERTURA — CORTE DO PÓRTICO E RECUO DOS PILARES NA PLATIBANDA",
                         desenho="ND-LET-LOC01", folha="01/01", fase="PARA APROVAÇÃO", rev="03"))
-pr.revisao("01", pr.dados["data"], "geometria do R01 (79,35 × 39,50 m); corte 1-1 refeito; recuo dos pilares acima da viga (a validar)")
-pr.revisao("02", pr.dados["data"], "RECUO APROVADO; CONSOLOS SEM CHANFRO (h 44); P6/P7 FORA DO PROJETO")
+pr.revisao("01", "12/10/2026", "geometria do R01 (79,35 × 39,50 m); corte 1-1 refeito; recuo dos pilares acima da viga (a validar)")
+pr.revisao("02", "12/10/2026", "RECUO APROVADO; CONSOLOS SEM CHANFRO (h 44); P6/P7 FORA DO PROJETO")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES NO RECUO E NO TOPO DA I130; COBERTURA REBAIXADA; I130; PLACAS 10 cm")
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; PILARES LATERAIS 14 Ø20; VB 15×60 COM DENTE")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE, SEM MÃO-FRANCESA")
+pr.revisao("06", "20/10/2026", "X DA COBERTURA NOS VÃOS DA DEC-024 (4-5 A 8-9), COMO NA COB02; VB-01 A VB-08")
 
 # ------------------------------------------------------------------ PLANTA 1:200 (horizontal = y da obra, vertical = x)
 v = pr.vista("PLANTA", (62, 330), 200, titulo="PLANTA DE LOCAÇÃO DE PILARES E VIGAS DE COBERTURA", subtitulo="eixos e ordenadas do R01; contraventamento da cobertura em X")
@@ -61,7 +62,8 @@ for (a, b), n in zip(((YL[1], YL[3]), (YL[3], round(Y_P13 * 1000)), (round(Y_P13
 for y in (YL[0], YL[8]):
     for xa, xb in zip(list(XA.values())[:-1], list(XA.values())[1:]):
         v.ret(y - 75, xa + 300, 150, xb - xa - 600, "OCULTA")
-for k in (1, 6):
+from cob_comum import VAOS_X                                  # DEC-024: vãos com X (k → eixos k+1 a k+2), fonte única com COB01/COB02
+for k in VAOS_X:
     for (xa, xb) in ((X0E, X0E + LTS), (X0D, X0D + LTS)):
         v.linha((YL[k], xa), (YL[k + 1], xb), "EIXO"); v.linha((YL[k], xb), (YL[k + 1], xa), "EIXO")
 for nome, x, y, bx, by in pil:
@@ -75,8 +77,8 @@ v.texto((YL[4], -900), "P1 40×60 (60 em x) nas linhas 2 a 8; P1C nos cantos", "
 v.texto((YL[4], Ly + 900), "P2 40×60 (60 em x) nas linhas 2 a 8; P2C nos cantos", "min", "MIDDLE_CENTER")
 v.cota_h(YL, -1500, -14)
 v.cota_v(list(XA.values()), Lx + 1500, 16)
-v.chamada((YL[4] + 2500, X0D + 4000), (6, 8), "X = contraventamento Ø16 (vãos 2-3, 4-5, 5-6, 7-8)")
-v.chamada((YL[8], XA["B"] + 3000), (30, 12), "VB-01 a VB-04 nas fachadas 1 e 9")
+v.chamada((YL[4] + 2500, X0D + 4000), (6, 8), "X = contraventamento Ø16 (vãos " + ", ".join(f"{k + 1}-{k + 2}" for k in VAOS_X) + "; ND-LET-COB02)")
+v.chamada((YL[8], XA["B"] + 3000), (30, 12), "VB-01 a VB-08 nas fachadas 1 e 9")
 v.marcador_corte((YL[2] + 2500, -3400), (YL[2] + 2500, Ly + 3400), "1", lado=1)
 
 # ------------------------------------------------------------------ CORTE 1-1 (linha 3, 1:150)
@@ -201,7 +203,7 @@ vg = [["TS-01", "I90", "14", f(LTS / 1000), "cobertura, linhas 2 a 8 (2 por linh
       ["V407", "I130", "1", f(LG["H_I130"] * 0 + (YL[3] - YL[1] - 550) / 1000), "eixo C, linha 2 → linha 4"],
       ["V406", "I130", "1", f((Y_P13 * 1000 - YL[3] - 550) / 1000), "eixo C, linha 4 → P13"],
       ["V405", "I130", "1", f((YL[8] - Y_P13 * 1000 - 550) / 1000), "eixo C, P13 → linha 9"],
-      ["VB-01..04", "15×60", "8", "9,32–9,43", "bordas das fachadas 1 e 9, com dente (ND-LET-VB01)"]]
+      ["VB-01..08", "15×60", "8", "9,32–9,43", "bordas das fachadas 1 e 9, com dente (ND-LET-VB01)"]]
 y = pr.tabela(x0, y - 4, "VIGAS DE COBERTURA", ["MARCA", "SEÇÃO", "QT", "L (m)", "POSIÇÃO"], vg, [22, 18, 10, 20, 110])
 pr.notas(x0, y - 4, [
     "Geometria do R01 (locação de pilares): 79,35 m entre os eixos 1 e 9; 39,50 m entre os eixos A e E. Água única de 3 %, subindo de A para E; cobertura escondida pela platibanda +10,00 (placas por fora dos pilares).",

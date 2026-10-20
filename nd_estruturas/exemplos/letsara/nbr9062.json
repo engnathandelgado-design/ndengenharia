@@ -713,7 +713,7 @@
    "lim": 250,
    "obs": "basculamento pela alça de topo com a base no chão; transporte apoiado em 2 pontos a 0,21 L"
   },
-  "resistencias_minimas": "fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 35, I130 35, VM 32, placas 25, VB/pilares 25",
+  "resistencias_minimas": "fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 35, I130 45, VM 32, placas 25, VB/pilares 25",
   "estoque": "pressão nos calços ≤ 0,3 fcj (10.2)"
  },
  "flechas": [

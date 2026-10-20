@@ -66,7 +66,9 @@ def unir_pdf(nome, folhas):
 if __name__ == "__main__":
     so = sys.argv[1:]
     # rev04 (preferência): PDF ÚNICO com todas as pranchas, na ordem dos grupos
-    todas = [f for _, _, fl in GRUPOS for f in fl]
+    # rev06 (revisão de obra): no PDF único, primeiro a obra inteira (locação, cortes, montagem, fechamento), depois as peças
+    GERAL = ["ND-LET-LOC01", "ND-LET-CT01", "ND-LET-MON01", "ND-LET-MON02", "ND-LET-CM01"]
+    todas = GERAL + [f for _, _, fl in GRUPOS for f in fl if f not in GERAL]
     falta = [f for f in todas if not os.path.exists(PR + f + ".pdf")]
     assert not falta, falta
     p = unir_pdf("PRANCHAS", todas)

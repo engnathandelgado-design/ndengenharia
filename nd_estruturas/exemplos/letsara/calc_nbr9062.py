@@ -318,7 +318,7 @@ OUT["transitorias"] = dict(
     pilar_PL=dict(peso_kN_m=6.0, L_m=11.0, M_basculamento_d=round(1.3 * (6.0 * 8.5 ** 2 / 8 - 6.0 * 2.5 ** 2 / 4), 1),
                   sigma_s_MPa=round(1.3 * (6.0 * 8.5 ** 2 / 8 - 6.0 * 2.5 ** 2 / 4) / (15.7e-4 * 0.9 * 0.35) / 1e3, 0), lim=250,
                   obs="basculamento pela alça de topo com a base no chão; transporte apoiado em 2 pontos a 0,21 L"),
-    resistencias_minimas="fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 35, I130 35, VM 32, placas 25, VB/pilares 25",
+    resistencias_minimas="fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 " + f"{TS.P['fckj']:g}, I130 {I1J['V406']['arranjo']['fckj']:g}, VM {VM['premissas'].get('fckj', 32):g}, placas 25, VB/pilares 25",
     estoque="pressão nos calços ≤ 0,3 fcj (10.2)")
 OUT["flechas"] = [
     dict(peca="TS-01 (cobertura, i = 3 %, sem empoçamento)", final_mm=TS.R.linhas["flecha_final_mm"], lim_mm=round(TS.L_calc * 1000 / 250, 1), regra="Tab. 8: L/250",
