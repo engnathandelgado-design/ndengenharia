@@ -549,17 +549,87 @@ class Prancha:
         return avisos
 
 
+_CAP, _DESC = 0.729, 0.236                      # DejaVu Sans: altura de maiúscula e descendente (fração do corpo)
+
+
+def _fonte_ttf():
+    import glob
+    for c in ("/usr/share/fonts/truetype/dejavu/" + FONTE, *glob.glob("/usr/share/fonts/**/" + FONTE, recursive=True)):
+        if os.path.exists(c):
+            return c
+    return None
+
+
+def _textos_pdf(doc, ctx, cor):
+    """TEXT do modelspace e MTEXT das cotas como (texto, x, y, h, rot, halign, valign, rgb) em mm (texto real no PDF)."""
+    def rgb(e):
+        if not cor:
+            return (0, 0, 0)
+        try:
+            c = ctx.resolve_all(e).color
+            return tuple(int(c[i:i + 2], 16) / 255 for i in (1, 3, 5))
+        except Exception:
+            return (0, 0, 0)
+    out = []
+    for e in doc.modelspace():
+        t = e.dxftype()
+        if t == "TEXT":
+            ha, va = e.dxf.get("halign", 0), e.dxf.get("valign", 0)
+            pt = e.dxf.insert if (ha == 0 and va == 0) or ha in (3, 5) else e.dxf.get("align_point", e.dxf.insert)
+            out.append((e.dxf.text, pt[0], pt[1], e.dxf.height, e.dxf.get("rotation", 0.0), ha if ha != 4 else 1, va if ha != 4 else 2, rgb(e)))
+        elif t == "DIMENSION":
+            for v in e.virtual_entities():
+                if v.dxftype() == "MTEXT":
+                    ap = v.dxf.get("attachment_point", 5)
+                    ha = (ap - 1) % 3
+                    va = {0: 3, 1: 2, 2: 1}[(ap - 1) // 3]
+                    rot = v.dxf.get("rotation", 0.0)
+                    if v.dxf.hasattr("text_direction"):
+                        dx, dy = v.dxf.text_direction[0], v.dxf.text_direction[1]
+                        rot = math.degrees(math.atan2(dy, dx))
+                    v.dxf.layer = e.dxf.layer
+                    out.append((v.plain_text(), v.dxf.insert[0], v.dxf.insert[1], v.dxf.char_height, rot, ha, va, rgb(v)))
+    return out
+
+
 def _exportar_pdf(doc, caminho, W, H, cor=True):
+    """PDF vetorial pelo ezdxf. rev06f: os textos vão como TEXTO REAL (fonte DejaVu embutida) e não como curvas — o PDF
+    das 66 folhas caiu de ~60 MB para poucos MB (antes 85 % do arquivo eram os contornos das letras) e o texto fica pesquisável."""
     from ezdxf.addons.drawing import Frontend, RenderContext, pymupdf as pmb, layout, config
+    import pymupdf
+    ttf = _fonte_ttf()
     be = pmb.PyMuPdfBackend()
     cfg = config.Configuration(
         background_policy=config.BackgroundPolicy.WHITE,
         color_policy=config.ColorPolicy.COLOR if cor else config.ColorPolicy.BLACK,
         lineweight_policy=config.LineweightPolicy.ABSOLUTE, lineweight_scaling=1.0,
-        min_lineweight=0.13 / 0.3527777, hatch_policy=config.HatchPolicy.NORMAL)
-    Frontend(RenderContext(doc), be, config=cfg).draw_layout(doc.modelspace())
+        min_lineweight=0.13 / 0.3527777, hatch_policy=config.HatchPolicy.NORMAL,
+        text_policy=config.TextPolicy.IGNORE if ttf else config.TextPolicy.FILLING)
+    ctx = RenderContext(doc)
+    Frontend(ctx, be, config=cfg).draw_layout(doc.modelspace())
     page = layout.Page(W, H, layout.Units.mm, margins=layout.Margins.all(0))
     data = be.get_pdf_bytes(page, settings=layout.Settings(fit_page=False, scale=1.0))
+    if ttf:
+        k = 72 / 25.4
+        pdf = pymupdf.open("pdf", data)
+        pg = pdf[0]
+        F = pymupdf.Font(fontfile=ttf)
+        pg.insert_font(fontname="ND", fontfile=ttf)
+        for s, x, y, h, rot, ha, va, c in _textos_pdf(doc, ctx, cor):
+            s = s.replace("\n", " ").replace("\P", " ")
+            if not s.strip():
+                continue
+            fs = h / _CAP * k
+            w = F.text_length(s, fontsize=fs)
+            dx = -w * (0, 0.5, 1)[min(ha, 2)]
+            dy = {0: 0.0, 1: _DESC * fs, 2: -h * k / 2, 3: -h * k}[va]          # deslocamento da linha de base (pt, y para cima)
+            a = math.radians(rot)
+            px, py = x * k, (H - y) * k
+            bx = px + dx * math.cos(a) - dy * math.sin(a)
+            by = py - (dx * math.sin(a) + dy * math.cos(a))
+            pg.insert_text((bx, by), s, fontsize=fs, fontname="ND", color=c,
+                           morph=(pymupdf.Point(bx, by), pymupdf.Matrix(rot)) if abs(rot) > 1e-6 else None)
+        data = pdf.tobytes(garbage=3, deflate=True)
     with open(caminho, "wb") as f:
         f.write(data)
 
