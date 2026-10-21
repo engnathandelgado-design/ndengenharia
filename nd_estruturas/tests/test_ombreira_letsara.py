@@ -39,4 +39,6 @@ def test_reacoes_U_somam_cargas(R):
 def test_usos(R):
     assert R["U"]["uso_flexao"] <= 1 and R["U"]["flecha_k_mm"] <= R["U"]["lim_mm"]
     assert R["ligacoes"]["topo"]["uso"] <= 1 and R["ligacoes"]["base"]["uso"] <= 1
-    assert R["placa_I15"]["uso_8cord"] > 1 >= R["placa_I15"]["uso_12cord"]
+    # DEC-035: placa só pelo peso próprio (vento não considerado na flexão da placa) — a I-15 fica igual à típica
+    assert R["placa_I15"]["n_total"] == 2 * R["placa_I15"]["n_por_face"]
+    assert R["placa_I15"]["z_mm"] == sorted(R["placa_I15"]["z_mm"]) and all(not 840 <= z <= 1040 for z in R["placa_I15"]["z_mm"])
