@@ -123,18 +123,20 @@ for n, a in zip(NIVEIS, ASSENTO):
 XC = Q[2] - 200
 y = Q[3] - 6
 LAJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/laje_alveolar.json"))
+X_JL = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["VM-02"]["torcao_montagem"]["junta"]["fcj_lajes_MPa"]   # DEC-039
 pecas = [[m, f"Meio vaso 40×{H_VIGA*100:.0f} protendido, dente {H_DENTE*100:.0f}×35, L {f(PQ[m][4], 2)} m", str(PQ[m][5]), fp(PQ[m][7]), f"CP-MEZ +{f(ASSENTO[0])} / +{f(ASSENTO[1])}"] for m in ("VM-01", "VM-02")]
 for mk, ds in (("LA-01", "Laje alveolar LP20 125×945, 7 Ø12,7"), ("LA-01R", "LA-01 c/ recorte 45×20, alv. 2 e 5 cheios"), ("LA-02", "Laje alveolar LP20 70×945, 4 Ø12,7")):
     pecas.append([mk, ds, str(PQ[mk][5]), fp(PQ[mk][7]), "sobre a aba das VM, apoio 10 cm"])
-pecas += [["CP-MEZ", f"Consolo 40×35×{H_CMEZ/10:.0f} sem chanfro (pilares das linhas 1–2)", "32", "—", "nos pilares (ver pranchas)"], ["CT-1", "Cantoneira antigiro L152×102×12,5 (parafusada)", "32", "—", "bucha rosqueada M16 embutida no pilar"],
+pecas += [["CP-MEZ", f"Consolo 40×35×{H_CMEZ/10:.0f} sem chanfro (pilares das linhas 1–2)", "32", "—", "nos pilares (ver pranchas)"],
           ["PM-01", f"Pilar 40×60 do mezanino (B2, D2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00"]]
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — MEZANINO", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [18, 92, 10, 18, 62], h_lin=6.0)
 seq = ["Pré-requisitos (ND-LET-MON01): pilares grauteados há 24 h (graute ≥ 15 MPa); cobertura das linhas 3 a 9 montada; TS-01 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 AINDA NÃO montadas (sem elas a laje de 9,45 m não passa: entre a VB da linha 1 e a TS-01 da linha 2 o vão livre é 9,37 m).",
        "Guindaste dentro do pavilhão no vão 2–3 (entrada pela abertura lateral das vistas E/F, livre até +7,50), afastado da I130 V407 do eixo C: duas posições (perto dos eixos B e D), raio até ~14 m para a linha 1; peça mais pesada VM-02 5,7 t.",
-       f"Nível +{f(NIVEIS[0],2)}: VM-01 e VM-02 na linha 1 e depois na linha 2 (sem escoramento): NEO-5 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); parafusar as 2 cantoneiras CT-1 nas buchas rosqueadas M16 embutidas no pilar ANTES de soltar do guindaste (torção de montagem, NBR 9062:2017 11.1).",
+       f"Nível +{f(NIVEIS[0],2)}: VM-01 e VM-02 na linha 1 e depois na linha 2 (sem escoramento): NEO-5 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); soltar do guindaste com a viga calçada no neoprene e conferida no nível.",
+       f"CONCRETAR AS PONTAS das VM dos dois lados (junta 3 cm VM × pilar, do recorte do dente ao topo, graute ou concreto fck ≥ 30 MPa, fôrma lateral; ND-LET-VM01 det. 2) e aguardar fcj ≥ {X_JL} MPa (corpo de prova da obra) ANTES de montar as lajes: a junta é que segura o giro de montagem do meio vaso (DEC-039, NBR 9062:2017 11.1).",
        f"Lajes LA-01/LA-01R/LA-02 do +{f(NIVEIS[0],2)} vão a vão alternando os lados dos PM-01 (A–B, B–C, D–E, C–D) para limitar o desequilíbrio nos pilares, içadas só por garra nas 2 pontas ({fp(PQ['LA-01'][7])} t), apoio de 10 cm na aba sobre fita de neoprene 10 × 50; LA-01R junto aos pilares; chavetas grauteadas.",
-       "Grautear a junta de 3 cm do nariz do dente e as bainhas BA-1 com as N11 (6 Ø16); limpar e saturar o topo das VM; 2º estágio + capa 5 C30 com tela Q138, N12 e N1, de uma vez, por quem executa a capa; cura úmida 7 dias.",
-       f"Nível +{f(NIVEIS[1],2)}: VM (as de cima só depois das lajes de baixo — a laje não passa entre as VM do nível superior), lajes, 2º estágio e capa, igual ao +{f(NIVEIS[0],2)}. Carregar só com fck ≥ 20 MPa na capa.",
+       "Grautear as bainhas BA-1 com as N11 (6 Ø16); limpar e saturar o topo das VM; 2º estágio + capa 5 C30 com tela Q138, N12 e N1, de uma vez, por quem executa a capa; cura úmida 7 dias.",
+       f"Nível +{f(NIVEIS[1],2)}: VM (as de cima só depois das lajes de baixo — a laje não passa entre as VM do nível superior), pontas concretadas e fcj ≥ {X_JL} MPa, lajes, 2º estágio e capa, igual ao +{f(NIVEIS[0],2)}. Carregar só com fck ≥ 20 MPa na capa.",
        "Estabilidade provisória: pilares das linhas 1–2 engastados nos cálices, sem escoramento nem contraventamento provisório (sem placas, o vento atua só nos pilares, bem abaixo do caso final com as placas); a laje passa a diafragma com a capa ≥ 15 MPa. Vigas e lajes sem escoramento.",
        "Depois: parede G da linha 2, TS-01 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")

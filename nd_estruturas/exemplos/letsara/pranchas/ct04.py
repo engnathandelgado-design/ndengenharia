@@ -173,8 +173,6 @@ d.poli(gr, "VISTA", True); d.hachura(gr, "AR-CONC", 0.01)
 xpd = VMP["x_pad"] * 1000
 neo(d, xpd - 75, ZAV, 150, 10)
 pino(d, xpd, ZAV - 300, ZAV + 400, 20)
-d.chapa(0, ZTV - 150, 152, 150, 0.1)                                              # rev08 (DEC-038): aba 152 da CT-1 na face externa da VM
-d.circulo((u0 + 50, ZTV - 75), 12, "METALICA")                                     # M20 na BR-4
 d.ret(0, ZTV + 10, u0 + 1200, 200, "OCULTA")
 d.ret(-400, ZTV + 210, u0 + 1600, 50, "VISTA")
 d.cota_h([0, u0, xpd, u0 + LNV, pcm], zbv, -8, total=False)
@@ -182,8 +180,7 @@ d.cota_v([zbv, ZAV, ZAV + 10, ZTV, ZTV + 210, ZN], u0 + 1250, 8, total=False)
 nivel(d, 0, ZAV, f"assento {f(ZAV / 1000)}", -1)
 nivel(d, u0 + 1200, ZN, f"piso {f(ZN / 1000)}", 1)
 d.chamada((xpd, ZAV + 200), (14, 8), "NEO-5 300×150×10 + PN-1 Ø20 L=700 (300 no consolo)")
-d.chamada((u0 + 110, ZTV - 120), (16, 6), "CT-1 L152×102×15,9 (2 BR-3 M16 + BR-4 M20; PL: CT-1P no topo)")
-d.chamada((u0 / 2, ZTV - 200), (-14, 12), "junta 3 grauteada")
+d.chamada((u0 / 2, ZTV - 200), (-14, 12), "junta 3 concretada")
 d.chamada((u0 + 900, ZTV + 235), (6, 10), "laje h20 + capa 5")
 
 # ------------------------------------------------------------------ 5. VB no CP-VB
@@ -244,7 +241,7 @@ for i_ in range(6):
 notas = ["Apoios desenhados na posição montada, com as folgas reais (NBR 9062:2017 3.1): TS-01 2,5 cm da cabeça do pilar e 7,5 cm entre pontas no eixo C; I130 7,5 cm; VM 3 cm (junta grauteada); VB 2,5 cm.",
          "Neoprenes: NEO-2 fretado 300×200×31 (I130); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5 300×150×10 (VM); NEO-6 100×100×10 (VB); fita 1 cm sob a laje alveolar.",
          "Pinos: grautear o tubo/nicho só depois do alinhamento e do nível conferidos; nas I130 e VB, graute numa ponta só (a outra livre para dilatar).",
-         "VM: parafusar as cantoneiras antigiro antes de soltar a viga do guindaste (torção de montagem do meio vaso): CT-1 L 152×102×15,9 L=150 nos PF, PC e PM (2 M16 nas buchas BR-3 do pilar + 1 M20 na BR-4 da VM) e CT-1P no topo da VM nos PL (2 M16 nas BR-3 + 1 M20 na BR-5); sem trilho e sem solda (ND-LET-VM01 det. 2 e 3; DEC-038). Lajes só depois das CT-1/CT-1P.",
+         "VM (DEC-039): sem cantoneira antigiro — montar a VM, concretar as pontas dos dois lados (junta 3 cm VM × pilar, graute ou concreto fck ≥ 30 MPa, do recorte do dente ao topo; ND-LET-VM01 det. 2), aguardar fcj ≥ 20 MPa e só então montar as lajes (torção de montagem do meio vaso).",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): nível dos apoios ±1,0 cm; apoio da laje ≥ 10 cm medido depois de montada.",
          "Imagens 3D: recortes do modelo da obra (concreto das vigas transparente para mostrar neoprene e pinos).",
          "Sequência completa: ND-LET-MON01 (pilares, vigas e cobertura), MON02 (mezanino) e MON03 (fechamento e sequência geral). Cotas em cm, níveis em m.",

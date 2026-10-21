@@ -129,14 +129,6 @@ def dados(mk):
         fc = re.search(r"recuo A e ([BD])", cons_t).group(1)
         d[fc] = 100
     cons = cons_marca(cons_t, "P2" if lado_e else "P1")
-    # rev08 (DEC-038): peça antigiro da VM e face deste pilar do lado externo da VM (linha 1: −y; linha 2: +y)
-    #   PL (P1/P2, 40 em y = VM): CT-1P no topo; P1: B = +y; P2: B = −y.  PF (P3–P5, linha 1): CT-1 lateral, face C = −y.
-    L1 = " L1" in pos
-    if pos.startswith(("P1", "P2")):
-        ext = ("D" if L1 else "B") if pos.startswith("P1") else ("B" if L1 else "D")
-        G.com_ct(cons, ext, "CT-1P")
-    else:
-        G.com_ct(cons, "C", "CT-1")
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
@@ -157,8 +149,6 @@ def dados(mk):
     n_mez = sum(1 for c in cons if c["tipo"] == "CP-MEZ")
     if n_mez and len({c["face"] for c in cons if c["tipo"] == "CP-MEZ"}) == 2:      # apoio interno: continuidade da VM atravessa o pilar
         ins.append(["BA-1", "Bainha corrugada Ø50 horizontal (N11)", n_mez, "12 cm acima da VM"])
-    if n_mez:
-        ins.append(G.linha_br3(cons))
     for ip in ips:
         ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 (CS-1 na obra)").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
         ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
@@ -185,7 +175,7 @@ def dados(mk):
                f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","), "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
-                G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca.",
+                G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
                 f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
                 "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face C (placas) para cima e a face A no fundo da fôrma (detalhe POSIÇÃO NA FÔRMA, DEC-031): CC-1 na face de cima, preso em gabarito apoiado nas laterais; CE-1 das faces B/D rente e parafusada na lateral da fôrma; consolos da face A em caixão no fundo; calço de 30 cm no fundo sob a cabeça recuada. Alças AL-2 na face C (de cima), fora das chapas, cortadas rente após a montagem e antes das placas. CE-1 do CC-1 com 4 furos Ø20 de respiro: lançar e vibrar o concreto até sair pelos furos.",

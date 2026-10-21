@@ -194,11 +194,6 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
 add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8)
-_vmi = {l[0]: l[1] for l in tab("VM01", "INSERTOS")["linhas"]}                  # rev08 (DEC-038): CT-1/CT-1P e BR-4/BR-5 variam por marca
-for _mk, _q in (("CT-1", (2, 1)), ("BR-4", (2, 1)), ("CT-1P", (0, 1)), ("BR-5", (0, 1))):
-    for _vm, _n in zip(("VM-02", "VM-01"), _q):
-        if _n:
-            ins.append(("ND-LET-VM01", _vm, _mk, _vmi[_mk], _n, 8))
 for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))

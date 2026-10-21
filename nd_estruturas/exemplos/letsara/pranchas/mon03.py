@@ -172,7 +172,7 @@ seq = [["1", "Locação dos cálices e conferência dos níveis", "±1,0 cm em p
        ["4", "Parede C (linha 4) — antes da TS-01 da linha 4", "cada placa nos seus 2 consoles", "MON03, PP-C"],
        ["5", "TS-01 L8 → L3 e VB-05 a VB-08 (guindaste de ré)", "pinos nos TB-3; VB escoradas", "MON01, CT04"],
        ["6", "Cobertura dos vãos 3–4 a 8–9 (terças, correntes, X, telhas)", "tudo parafusado; atrás do guindaste", "COB01 a COB04"],
-       ["7", "Mezanino +3,15 e +6,55: VM + CT-1, lajes, 2º estágio, capa", "cobertura dos vãos 1–3 aberta; capa ≥ 20 MPa", "MON02, CT02"],
+       ["7", "Mezanino +3,15 e +6,55: VM, pontas concretadas (fcj ≥ 20), lajes, 2º estágio, capa", "cobertura dos vãos 1–3 aberta; capa ≥ 20 MPa", "MON02, CT02"],
        ["8", "Parede G (linha 2) — antes da TS-01 da linha 2", "cada placa nos seus 2 consoles", "MON03, PP-G"],
        ["9", "TS-01 L2, VB-01 a VB-04, terças dos vãos 1–2 e 2–3", "ST-1P4 no beiral da linha 2", "MON01, COB01"],
        ["10", "Placas externas I, H, J, E, F, B, D e A (por fora)", "guindaste no perímetro", "MON03, PP"],
