@@ -555,7 +555,7 @@ def montar() -> ModeloBIM:
     m.pendente("I130 (DEC-032): V405/V406 com 30 cordoalhas (28 embaixo + 2 na mesa), V407 com 20; σpi 1453 MPa, fckj 45; NEO-2 300×200×31 fretado e PN-2 Ø25 grauteado numa ponta só.")
     m.pendente("TS-01 sem dentes: apoio no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
     m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
-    m.pendente("Fora do 3D (só nas pranchas): armaduras, cordoalhas, alças de içamento AL-1/AL-2/AL-3, grampos e porcas das placas, furos de ventilação dos pilares.")
+    m.pendente("Fora do 3D (só nas pranchas): armaduras, cordoalhas, alças de içamento AL-1/AL-2/AL-3, grampos e porcas das placas, furos de içamento dos pilares.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
