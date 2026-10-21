@@ -224,7 +224,7 @@ def gama_n_consolo(Fg_d, Fq_d, pre_fabricado=False):
 
 
 def perdas_pretracao(sig_pi, Ap, A, I, yc, yp, Mg_t0, conc: Concreto, fckj, u_ar, L_pista=60.0, cravacao=0.006,
-                     t_lib_dias=0.8, U=70.0, t0_dias=5.0, Ep=EP / 1000, fases=()):
+                     t_lib_dias=0.8, U=70.0, t0_dias=5.0, Ep=EP / 1000, fases=(), fptk=FPTK):
     """Perdas da pré-tração (MPa; kN·m e m nas entradas de seção). Seção bruta, cordoalhas com resultante em yp.
 
     Imediatas (antes e na liberação): cravação na pista (Δ = cravação/L_pista·Ep), relaxação até a liberação
@@ -242,7 +242,7 @@ def perdas_pretracao(sig_pi, Ap, A, I, yc, yp, Mg_t0, conc: Concreto, fckj, u_ar
     Ep_k = Ep * 1000                                                  # kPa
     d_crav = cravacao / L_pista * Ep                                 # MPa
     s1 = sig_pi - d_crav
-    d_rel0, _ = relaxacao(s1, t_lib_dias)                            # 8.4.8 até a liberação
+    d_rel0, _ = relaxacao(s1, t_lib_dias, fptk)                      # 8.4.8 até a liberação (fptk: fio CP-175 ou cordoalha CP-190)
     s2 = s1 - d_rel0
     Ecj = eci_j(conc, fckj)
     ap_j = Ep_k / Ecj
@@ -257,7 +257,7 @@ def perdas_pretracao(sig_pi, Ap, A, I, yc, yp, Mg_t0, conc: Concreto, fckj, u_ar
     h_fic = 2 * A / u_ar * 100
     phi, ecs = fluencia_retracao(U, h_fic, t0_dias)
     ap = Ep_k / conc.Eci
-    _, psi_inf = relaxacao(s0, math.inf)
+    _, psi_inf = relaxacao(s0, math.inf, fptk)
     chi = -math.log(1 - psi_inf)
     eta = 1 + e * e * A / I
     rho = Ap / A

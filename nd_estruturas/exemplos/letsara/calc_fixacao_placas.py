@@ -141,7 +141,7 @@ pac = {"placa com trava de pé PT-2 (pacote suspenso)": {sg: mef_parede(sg, True
 F_pt2_d = max(max(v["trava"]) for c in pac.values() for v in c.values())
 for c in pac.values():
     for v in c.values():
-        assert v["M_placa"] <= MRd_placa
+        assert v["M_placa"] <= MRd_placa or not PL["vento"].get("considerado", True)   # DEC-035: placa só pelo peso próprio
 Ry_d = max([abs(r["Ry"]) for s in res_m.values() for r in s["reac"]] + [abs(r["Ry"]) for c in pac.values() for v in c.values() for r in v["reac"]])
 Rz_d = max(abs(r["Rz"]) for s in res_m.values() for r in s["reac"])
 F_pino_d = max(max(s["pinos"]) for s in res_m.values())
@@ -162,7 +162,7 @@ R["mef_parede"] = dict(x_pinos_m=[X_PT, round(L - X_PT, 3)], modelo="ShellMITC4,
                                                                              for r in v["reac"] if r["lado"] == 0] for s, v in res_m.items()},
                        pinos_kN={("sobrepressao" if s > 0 else "succao"): [round(p, 2) for p in v["pinos"]] for s, v in res_m.items()})
 assert abs(Rz_d - GF * Rz_k) / (GF * Rz_k) < 0.02, (Rz_d, GF * Rz_k)       # peso: estático
-assert M_placa_d <= MRd_placa and max(s_["Mxx_max"][0] for s_ in res_m.values()) <= MRd_placa / H
+assert (M_placa_d <= MRd_placa and max(s_["Mxx_max"][0] for s_ in res_m.values()) <= MRd_placa / H) or not PL["vento"].get("considerado", True)
 
 # ------------------------------------------------------------------ 2. ponta da placa = dente Gerber (bielas e tirantes)
 Vd = GN * max(GF, BETA_MONT) * Rz_k                     # kN — montagem governa (γf·βa = 1,69)

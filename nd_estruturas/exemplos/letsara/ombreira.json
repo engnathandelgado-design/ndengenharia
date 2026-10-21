@@ -35,7 +35,7 @@
    "soma_kN": 7.01,
    "carga_kN": 7.01
   },
-  "sig_cp_inf_MPa": -6.52
+  "sig_cp_inf_MPa": -2.38
  },
  "U": {
   "L_mm": 2478,
@@ -80,27 +80,23 @@
   "Mk_sem_OM_kNm": 20.72,
   "Mk_com_OM_kNm": 32.66,
   "Md_kNm": 45.72,
-  "MRd_tipica_kNm": 37.95,
-  "uso_tipica": 1.205,
-  "n_por_face": 9,
-  "n_total": 18,
-  "MRd_kNm": 46.77,
-  "uso": 0.978,
+  "MRd_tipica_kNm": 14.3,
+  "uso_tipica": 3.197,
+  "n_por_face": 5,
+  "n_total": 10,
+  "MRd_kNm": 14.3,
+  "uso": 3.197,
   "z_mm": [
-   95,
    156,
    469,
-   550,
    625,
-   700,
    781,
-   1094,
-   1155
+   1094
   ],
-  "sig_cp_inf_MPa": -8.38,
-  "sig_c0_MPa": -10.41,
+  "sig_cp_inf_MPa": -2.38,
+  "sig_c0_MPa": -2.72,
   "lim_transf_MPa": -17.5,
-  "cordoalhas": "18 Ø9,5 (9 por face, z = 95, 156, 469, 550, 625, 700, 781, 1094, 1155 mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1"
+  "cordoalhas": "10 × Ø6 (5 por face, z = 156, 469, 625, 781, 1094 mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1"
  },
  "kg_un": 40.44,
  "GEO": {

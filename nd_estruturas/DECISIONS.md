@@ -337,3 +337,10 @@ Contexto: o Nathan propôs dimensionar a placa 125 × 10 só pelo peso próprio 
 Decisão do Nathan: cordoalhas Ø9,5. Adotado 14 Ø9,5 CP-190 RB (7 por face, z = 95/156/469/625/781/1094/1155 mm, simétricas nas 2 faces e na altura, eixo a 2,48 cm das faces, cobrimento 2,0 — decisão de 13/10), 77,7 kN por cordoalha no macaco. 12 Ø9,5 passava à mão (0,94) mas dava 1,02 no MEF de casca da parede (pinos PT-1 entre fiadas): 14 → 0,89 no MEF, 0,82 à mão. PP-05P (I-15, sobre a porta): 18 Ø9,5 (9 por face), uso 0,98.
 Manuseio: concretar deitada, desformar com 4 pontos e balancim, bascular e ESTOCAR EM PÉ (deitada em 2 calços a placa flecha ~27 mm com a fluência e fica empenada).
 Nesta obra (projeto da fábrica) as imagens não levam a marca "projeto da ND Engenharia".
+
+## DEC-035 — Letsara: placa de fechamento só pelo peso próprio, fios Ø6, pino PT-1 guia (2026-10-21)
+
+Decisão do Nathan (responsável técnico): as placas 125 × 10 são dimensionadas só pelo peso próprio — o vento NÃO é considerado na flexão da placa (registrado: pelo modelo biapoiado entre consoles com o vento da NBR 6123 o uso seria 2,17). Cada placa é independente nos seus 2 consoles (folga 5 mm na altura, junta 20 mm no comprimento mantida); o pino PT-1 vira só guia de montagem (M16 só na placa de baixo, não transmite esforço). Cabos de preferência fios Ø6, depois Ø5, Ø9,5 só se não houver jeito.
+Adotado: 10 fios Ø6 CP-175 RB (5 por face, z = 156/469/625/781/1094 mm, simétricos, eixo a 2,3 cm), σpi 1295 MPa (36,6 kN/fio), perdas 19 % (relaxação com fptk 1750 — parâmetro novo fptk em perdas_pretracao), lbpt de fio entalhado (ηp1 1,4) 52 cm.
+Verificações (σ em MPa, tração +): desforma deitada por 4 pontos numa face com balancim −1,21 (sem balancim +0,07, no limite 1,20), içamento em pé −2,17, estocagem em pé −2,25, montada nos consoles (descompressão sob peso próprio) −0,85. PP-05P (I-15) passa a ser igual à típica. Fixação (CS-1, NC-1, CE-1, PT-2) mantida como calculada (com vento, a favor da segurança).
+Mínimo com fios Ø5: 10 fios (5 por face), com a descompressão no limite (0,00) — por isso Ø6.

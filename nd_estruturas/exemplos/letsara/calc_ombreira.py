@@ -170,17 +170,20 @@ def MRd_n(n_face):                                                     # mesma f
 
 
 NF = PL["protensao"]["por_face"]
+Ap1 = PL["protensao"]["Ap_mm2"] / PL["protensao"]["n"] * 1e-6
+fpd = 0.9 * PL["protensao"].get("fptk", 1900.0) / 1.15
 assert abs(MRd_n(NF) - PL["vento"]["MRd"]) < 0.05                     # confere com placas.json
-NF_ESP = next(n for n in range(NF, 20) if GF * M_com <= MRd_n(n))      # cordoalhas por face na placa sobre a porta (I-15, PP-05P)
-Z_ESP = {6: [95, 156, 469, 781, 1094, 1155], 7: [95, 156, 469, 625, 781, 1094, 1155], 8: [95, 156, 469, 550, 700, 781, 1094, 1155],
+VENTO = PL["vento"].get("considerado", True)
+NF_ESP = next(n for n in range(NF, 20) if GF * M_com <= MRd_n(n)) if VENTO else NF   # DEC-035: sem vento a I-15 é igual à típica
+Z_ESP = PL["protensao"]["z_mm"] if NF_ESP == NF else {6: [95, 156, 469, 781, 1094, 1155], 7: [95, 156, 469, 625, 781, 1094, 1155], 8: [95, 156, 469, 550, 700, 781, 1094, 1155],
          9: [95, 156, 469, 550, 625, 700, 781, 1094, 1155]}[NF_ESP]      # simétricas em z (sem curvatura no plano), fora do nicho NC-1 (840–1040) e do espelho (210–410)
 R["placa_I15"] = dict(vao_m=round(L_sup, 3), Mk_sem_OM_kNm=round(M_so, 2), Mk_com_OM_kNm=round(M_com, 2), Md_kNm=round(GF * M_com, 2),
                       MRd_tipica_kNm=round(MRd_n(NF), 2), uso_tipica=round(GF * M_com / MRd_n(NF), 3),
                       n_por_face=NF_ESP, n_total=2 * NF_ESP, MRd_kNm=round(MRd_n(NF_ESP), 2), uso=round(GF * M_com / MRd_n(NF_ESP), 3), z_mm=Z_ESP,
                       sig_cp_inf_MPa=round(PL["protensao"]["sig_cp_inf_MPa"] * NF_ESP / NF, 2),
                       sig_c0_MPa=round(-2 * NF_ESP * PL["protensao"]["F_macaco_kN"] * 0.93 / (H_PL * E_PL) / 1e3, 2), lim_transf_MPa=round(-0.7 * 25, 1),
-                      cordoalhas=f"{2 * NF_ESP} Ø9,5 ({NF_ESP} por face, z = " + ", ".join(str(z) for z in Z_ESP) + " mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1")
-assert GF * M_com <= MRd_n(NF_ESP)
+                      cordoalhas=f"{2 * NF_ESP} × Ø{PL['protensao']['diam_mm']:g} ({NF_ESP} por face, z = " + ", ".join(str(z) for z in Z_ESP) + " mm — simétricas, fora do nicho NC-1 de 840 a 1040) + 2 buchas BR-1 M16 hef 70 na face interna, a 150 da base, nas posições das OM-1")
+assert GF * M_com <= MRd_n(NF_ESP) or not VENTO
 R["kg_un"] = round(R["U"]["kg_m"] * L_U + BASE["t"] * BASE["by"] * BASE["bx"] * 7.85e-6 + 12.5 * 100 * 360 * 7.85e-6, 2)
 R["GEO"] = dict(U=U, BASE=BASE, CL1=dict(t=12.5, b=100.0, L=360.0, z0=2.34, z_par_U=2.40, z_bucha=2.65), L_U_mm=round(L_U * 1000, 1), T_BASE_mm=T_BASE * 1000,
                 FOLGA_mm=FOLGA * 1000, JUNTA_U_mm=JUNTA_U * 1000, Z_PAR_mm=[z * 1000 for z in Z_PAR], PORTA=PORTA)

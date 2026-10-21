@@ -24,25 +24,33 @@ W_fora = b * h ** 2 / 6                # flexão fora do plano (vento)
 W_plano = h * b ** 2 / 6               # flexão no plano (peso, estocagem em pé)
 pp = A * 25
 
-# ---------------------------------------------------------------- protensão (DEC-034, Nathan 21/10/2026): 14 cordoalhas Ø9,5 CP-190 RB (12 davam 1,02 no MEF da parede)
-# (7 por face, alinhadas, simétricas no plano: z = 95/156/469/625/781/1094/1155 mm da base, fora do nicho NC-1 de 840 a 1040)
-D_CORD = 9.5
-Ap1 = 55.5e-6                          # m² (Ø9,5 CP-190 RB, NBR 7483)
-n_c = 14
-Z_CORD = [95, 156, 469, 625, 781, 1094, 1155]
-sig_pi = 1400.0                        # MPa na pista (≤ 0,77 fptk = 1463 — NBR 6118:2023 9.6.1.2.1)
-F_macaco = sig_pi * Ap1 * 1e3          # kN por cordoalha
-# DEC-032: perdas pela NBR 6118:2023 9.6.3 (prefabricados.perdas_pretracao) no lugar de 7 % / 20 % fixos — protensão
-# centrada (yp = yc), placa estocada deitada (Mg em t0 desprezado, a favor), U 70 %, idade fictícia 5 dias, as 2 faces ao ar
-from nd_estruturas.prefabricados import perdas_pretracao, lbpt_cordoalha, Concreto as _Conc
-PERD = perdas_pretracao(sig_pi, n_c * Ap1, A, b * h ** 3 / 12, h / 2, h / 2, 0.0, _Conc(fck), fckj, 2 * (b + h), U=70.0, t0_dias=5.0)
-GAMA_P = 1.1                           # ato da protensão (NBR 6118:2023 17.2.4.3.2 a)
+# ---------------------------------------------------------------- protensão (DEC-035, Nathan 21/10/2026): placa dimensionada SÓ pelo peso próprio
+# (vento não considerado — decisão do responsável técnico), pino PT-1 só guia (cada placa independente nos 2 consoles),
+# fios de protensão de preferência (Ø6, depois Ø5; Ø9,5 só se não houver jeito): 10 fios Ø6 CP-175 RB, 5 por face,
+# alinhados e simétricos (z = 156/469/625/781/1094 mm da base, fora do nicho NC-1 de 840 a 1040) — sem curvatura na liberação.
+ACO = "fio"                            # "fio" CP-175 RB entalhado (NBR 7482) ou "cordoalha" CP-190 RB (NBR 7483)
+D_CORD = 6.0
+Ap1 = 28.3e-6                          # m² (fio Ø6)
+FPTK_P = 1750.0                        # MPa (CP-175)
+n_c = 10
+Z_CORD = [156, 469, 625, 781, 1094]
+sig_pi = round(0.74 * FPTK_P)          # MPa na pista (≤ 0,77 fptk e ≤ 0,90 fpyk — NBR 6118:2023 9.6.1.2.1)
+F_macaco = sig_pi * Ap1 * 1e3          # kN por fio
+from nd_estruturas.prefabricados import perdas_pretracao, Concreto as _Conc
+PERD = perdas_pretracao(sig_pi, n_c * Ap1, A, b * h ** 3 / 12, h / 2, h / 2, 0.0, _Conc(fck), fckj, 2 * (b + h), U=70.0, t0_dias=5.0, fptk=FPTK_P)
+GAMA_P = 1.1                           # ato da protensão, efeito desfavorável (NBR 6118:2023 17.2.4.3.2 a)
+GAMA_P_FAV = 0.9                       # protensão favorável (tração nas fases transitórias)
 P0 = PERD["P0"]                        # após a liberação
 Pinf = PERD["Pinf"]
 perdas = PERD["perda_total_pct"] / 100
-LBPT = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=True)[0]        # 9.4.5 — liberação gradual (indicada na prancha)
-LBPT_BRUSCA = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=False)[0]
-d_c = 0.020 + D_CORD / 2000            # cobrimento 2,0 cm (Nathan, 13/10/2026; redução por controle de fábrica — NBR 9062) → eixo a 2,48 cm
+# lbpt de fio entalhado (NBR 6118:2023 9.4.5): ηp1 = 1,4; lbp = φ/4 · fpyd/fbpd; gradual 0,5·lbp·σ/fpyd, brusca 0,625
+_fctm_j = 0.3 * fckj ** (2 / 3)
+_fbpd = 1.4 * 0.7 * _fctm_j / 1.4
+_fpyd = 0.9 * FPTK_P / 1.15
+_lbp = D_CORD / 1000 / 4 * _fpyd / _fbpd
+LBPT = 0.5 * _lbp * PERD["sig_p0"] / _fpyd
+LBPT_BRUSCA = 0.625 * _lbp * PERD["sig_p0"] / _fpyd
+d_c = 0.020 + D_CORD / 2000            # cobrimento 2,0 cm (Nathan, 13/10/2026; redução por controle de fábrica — NBR 9062) → eixo a 2,3 cm
 sig_cp_inf = -Pinf / A / 1e3           # MPa (protensão centrada)
 
 # ---------------------------------------------------------------- vento (NBR 6123:2023): q0 do estudo da obra, coef. líquido de zona de borda
@@ -60,7 +68,7 @@ fct_f = 1.5 * fctk_inf                 # seção retangular: α = 1,5 (NBR 6118:
 sig_els_f = sig_cp_inf + 0.3 * sig_vento
 sig_rara = sig_cp_inf + sig_vento
 # ELU fora do plano: as 6 cordoalhas da face tracionada a d = h − d_c; fpyd = 1710/1,15
-fpd = 1710 / 1.15
+fpd = 0.9 * FPTK_P / 1.15
 Ap_t = n_c // 2 * Ap1
 d = h - d_c
 fcd = fck / 1.4
@@ -74,15 +82,19 @@ flecha_freq = 0.3 * flecha                                       # combinação 
 
 # ---------------------------------------------------------------- transitórias (fckj = 25 MPa)
 fctk_j = 0.7 * 0.3 * fckj ** (2 / 3)
-# desforma deitada pelas 2 alças do topo com basculamento? — adota-se: desforma deitada por 4 pontos (2 alças + 2 insertos de desforma) a 0,207 L
-M_desf = 0.0054 * pp * 1.3 * 1.2 * L ** 2        # 4 pontos com balancim (PCI) × dinâmico × sucção (por placa, fora do plano)
-sig_desf = -GAMA_P * P0 / A / 1e3 + M_desf / W_fora / 1e3
+# DEC-035: desforma/içamento deitada por 4 pontos numa face (2 alças de desforma + 2 insertos, com balancim — PCI 0,0054 wL²), βa 1,3, sucção 1,2
+M_desf = 0.0054 * pp * 1.3 * 1.2 * L ** 2        # por placa, fora do plano
+sig_desf = -GAMA_P_FAV * P0 / A / 1e3 + M_desf / W_fora / 1e3
+M_desf_sem_bal = 0.0107 * pp * 1.3 * 1.2 * L ** 2    # 4 pontos SEM balancim (2 efetivos) — informativo
+sig_desf_sem_bal = -GAMA_P_FAV * P0 / A / 1e3 + M_desf_sem_bal / W_fora / 1e3
 # içamento/montagem em pé pelas 2 alças do topo a 0,207 L: flexão no plano
 M_ic = 0.0214 * pp * 1.3 * L ** 2
-sig_ic = -GAMA_P * P0 / A / 1e3 + M_ic / W_plano / 1e3
-# estocagem deitada em 2 calços a 0,207 L (pilha de até 6 placas com calços alinhados)
+sig_ic = -GAMA_P_FAV * P0 / A / 1e3 + M_ic / W_plano / 1e3
+# estocagem EM PÉ em cavalete (DEC-034/035): só flexão no plano (2 calços a 0,207 L)
 M_est = 0.0214 * pp * L ** 2
-sig_est = -GAMA_P * P0 / A / 1e3 + M_est / W_fora / 1e3
+sig_est = -GAMA_P_FAV * P0 / A / 1e3 + M_est / W_plano / 1e3
+# peça montada nos 2 consoles (no plano, vão entre consoles): descompressão sob o peso próprio (σ ≤ 0)
+sig_montada = sig_cp_inf + pp * L_vao ** 2 / 8 / W_plano / 1e3
 # alça (2 alças, γdin 1,3, cabo a 60°)
 F_alca = pp * L * 1.3 / 2 / math.sin(math.radians(60))
 peso_t = pp * L / 9.81
@@ -114,18 +126,19 @@ int_ca = (T_ca / Ft_M20) ** 2 + (V_ca / Fv_M20) ** 2
 
 R = dict(
     secao=dict(b_m=b, h_m=h, A_m2=A, pp_kNm=round(pp, 2), L_max_m=L, peso_t=round(peso_t, 2), fck=fck, fckj=fckj, Ec_MPa=round(Ec)),
-    protensao=dict(cordoalhas=f"{n_c} Ø9,5 CP-190 RB ({n_c // 2} por face, alinhadas, eixo a {d_c * 100:.2f} cm das faces)".replace(".", ","), diam_mm=D_CORD, n=n_c,
+    protensao=dict(cordoalhas=f"{n_c} fios Ø{D_CORD:g} CP-175 RB ({n_c // 2} por face, alinhados, eixo a {d_c * 100:.2f} cm das faces)".replace(".", ","), aco=ACO, fptk=FPTK_P, diam_mm=D_CORD, n=n_c,
                    por_face=n_c // 2, z_mm=Z_CORD, eixo_face_mm=round(d_c * 1000, 1), Ap_mm2=round(n_c * Ap1 * 1e6, 1),
                    sig_pi_MPa=sig_pi, F_macaco_kN=round(F_macaco, 1), P0_kN=round(P0, 1), Pinf_kN=round(Pinf, 1),
                    sig_cp_inf_MPa=round(sig_cp_inf, 2), along_pista_60m_mm=round(sig_pi / 195000 * 60000),
                    perda_imediata_pct=round(PERD["perda_imediata_pct"], 1), perda_total_pct=round(PERD["perda_total_pct"], 1), phi=round(PERD["phi"], 2),
                    lbpt_gradual_m=round(LBPT, 2), lbpt_brusca_m=round(LBPT_BRUSCA, 2), gama_p_ato=GAMA_P, sig_ato_MPa=round(-GAMA_P * P0 / A / 1e3, 2),
                    lim_ato_MPa=round(-0.7 * fckj, 1), norma="NBR 6118:2023 9.6.3 (perdas), 9.4.5 (lbpt), 17.2.4.3.2 (ato)"),
-    vento=dict(q0_kNm2=q0, cp_liq=cp_liq, p_k=round(p_k, 3), M_k=round(M_k, 2), M_d=round(M_d, 2), MRd=round(MRd, 2),
+    vento=dict(considerado=False, obs="informativo — placa dimensionada só pelo peso próprio (DEC-035, decisão do responsável técnico)", q0_kNm2=q0, cp_liq=cp_liq, p_k=round(p_k, 3), M_k=round(M_k, 2), M_d=round(M_d, 2), MRd=round(MRd, 2),
                uso_ELU=round(M_d / MRd, 3), x_d=round(x / d, 3), sig_vento_MPa=round(sig_vento, 2), sig_ELS_F=round(sig_els_f, 2), sig_rara=round(sig_rara, 2),
                fct_f=round(fct_f, 2), ok_ELS_F=sig_els_f <= 0, ok_rara=sig_rara <= fct_f, flecha_mm=round(flecha, 1), flecha_freq_mm=round(flecha_freq, 1), lim_mm=round(lim_flecha, 1), ok_flecha=flecha_freq <= lim_flecha),
     transitorias=dict(fctk_j=round(fctk_j, 2), sig_desforma=round(sig_desf, 2), sig_icamento=round(sig_ic, 2), sig_estocagem=round(sig_est, 2),
-                      ok=all(s <= fctk_j / 1.5 for s in (sig_desf, sig_ic, sig_est)), F_alca_kN=round(F_alca, 1)),
+                      sig_desforma_sem_balancim=round(sig_desf_sem_bal, 2), sig_montada=round(sig_montada, 2),
+                      ok=all(s <= fctk_j / 1.5 for s in (sig_desf, sig_ic, sig_est)) and sig_montada <= 0, F_alca_kN=round(F_alca, 1)),
     fixacoes=dict(R_vento_ponta_d=round(R_vento_ponta_d, 2), Fv_M16_Rd=round(Fv_M16, 1), Ft_M16_Rd=round(Ft_M16, 1),
                   CL1=dict(peca="L 102×102×12,5 A36 L=150", M_kNm=round(M_cl, 3), MRd_kNm=round(MRd_cl, 3), uso=round(M_cl / MRd_cl, 3),
                            trilho="TR-1 tipo HTA-CE 40/22 (ou equivalente): carga de cálculo ≥ 12,4 kN por ponto (catálogo)",
