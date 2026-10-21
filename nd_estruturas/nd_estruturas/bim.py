@@ -316,7 +316,7 @@ def _data_url(caminho):
 
 
 def gravar_visualizador(malha, caminho, titulo: str, subtitulo: str = "", pendencias=(), cores=None,
-                        ocultas=("Placas de fechamento",), quant=None, pranchas=(), conexoes=(), logo_cliente=None, cliente="") -> Path:
+                        ocultas=("Placas de fechamento",), quant=None, pranchas=(), conexoes=(), logo_cliente=None, cliente="", autoria=AUTORIA) -> Path:
     """Página HTML única (three.js) com camadas, toque na peça, pendências e marca d'água ND.
 
     pranchas: lista de dict(nome, desc, img) — img é data-URL (jpeg/png) da prancha, para ver no celular;
@@ -328,7 +328,7 @@ def gravar_visualizador(malha, caminho, titulo: str, subtitulo: str = "", penden
     leve = OrderedDict((g, [{"n": it["n"], "v": it["v"], "f": it["f"]} for it in itens]) for g, itens in malha.items())
     cfg = {
         "titulo": titulo, "subtitulo": subtitulo, "pendencias": list(pendencias),
-        "cores": cores or {}, "ocultas": list(ocultas), "autoria": AUTORIA, "quant": quant or {},
+        "cores": cores or {}, "ocultas": list(ocultas), "autoria": autoria, "quant": quant or {},
         "pranchas": list(pranchas), "conexoes": list(conexoes), "cliente": cliente,
         "logo_cliente": _data_url(logo_cliente) if logo_cliente else None,
     }

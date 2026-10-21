@@ -168,30 +168,46 @@ def nivel(v, x, z, txt, lado=1):
 
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="CORTES TRANSVERSAIS DA ESTRUTURA (EIXOS 2 E 3) E APOIOS DA COBERTURA",
-                        desenho="ND-LET-CT01", folha="01/01", fase="PARA APROVAÇÃO", rev="03"))
+                        conteudo="CORTES TRANSVERSAIS DA ESTRUTURA — EIXOS 2 E 3",
+                        desenho="ND-LET-CT01", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
 pr.revisao("01", "12/10/2026", "geometria do R01 (79,35 × 39,50 m); cabeça dos pilares laterais recuada; placas 15 cm por fora")
 pr.revisao("02", "12/10/2026", "CONSOLOS SEM CHANFRO (FUNDO ALINHADO À VIGA); VM I90 COM DENTE 45×30; LAJE 8 Ø12,7")
 pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (APOIO NO RECUO E NO TOPO DA I130); PACOTE COM PAINÉIS; COBERTURA REBAIXADA; PLACAS 10 cm")
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; MEZANINO EM MEIO VASO COM DENTE")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE, SEM MÃO-FRANCESA")
+pr.revisao("07", "21/10/2026", "COTAS EM CM; MARCAS DOS PILARES NOS CORTES; DETALHES DE APOIO PASSAM PARA A ND-LET-CT04")
 z_tel = lambda x: zf(x) + (H + 10 + 300 + sum(PAC.values()) * 1000) * c       # topo dos painéis solares
-for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330), "CORTE 3-3"))):
+for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 170), "CORTE 3-3"))):
     v = pr.vista(nome, org, 50, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
-                 subtitulo="olhando para o eixo 9; cotas de nível em metros" + ("; mezanino entre os eixos 1 e 2" if eixo == 2 else ""))
+                 subtitulo="olhando para o eixo 9; níveis em metros" + ("; mezanino entre os eixos 1 e 2" if eixo == 2 else ""), unidade="cm")
     R = Recorte(v)
     v.linha((-1500, 0), (41000, 0), "TERRENO")
     estrutura(R, eixo)
     for x, nomex in ((0, "A"), (9870, "B"), (19750, "C"), (29630, "D"), (39500, "E")):
-        v.linha((x, -900), (x, 11600), "EIXO")
-        v.circulo((x, -1300), 400, "INDICACAO"); v.texto((x, -1300), nomex, "sub", alinh="MIDDLE_CENTER")
-    v.cota_h([0, 9870, 19750, 29630, 39500], 0, -40)
+        v.linha((x, -1800), (x, 11600), "EIXO")
+        v.circulo((x, -2250), 400, "BOLHA"); v.texto((x, -2250), nomex, "sub", alinh="MIDDLE_CENTER")
+    v.cota_h([0, 9870, 19750, 29630, 39500], 0, -40, total=False)
+    from prancha_nd import DIM_K, DIM_DLI
+    _yt = -40 * DIM_K * 50 - DIM_DLI * 50
+    _d = pr.msp.add_linear_dim(base=v.P((0, _yt)), p1=v.P((0, 0)), p2=v.P((39500, 0)), angle=0, location=v.P((14800, _yt)), dimstyle="ND",
+                               override={"dimlfac": v.esc * v.fator, "dimdec": 1, "dimzin": 8, "dimtmove": 2}, dxfattribs={"layer": "COTA"})
+    _d.render(); v._add(_d.dimension)                                                 # total com o texto fora do eixo C
+    MKS = {2: [(0, "PL-02"), (9870, "PM-01"), (19750, "PC-01"), (29630, "PM-01"), (39500, "PL-06")], 3: [(0, "PL-09"), (39500, "PL-11")]}[eixo]
+    for x_, mk_ in MKS:
+        if x_ == 39500:
+            v.texto((x_ - 350, 250), mk_, "nota", "BOTTOM_RIGHT")                  # pilar do eixo E: rótulo para dentro
+        else:
+            v.texto((x_ + 350, 250), mk_, "nota", "BOTTOM_LEFT")
+    v.cota_v([0, REC[0], Z_TOP_PIL], -2600, -8, total=False)
+    v.cota_v([0, REC[1], Z_TOP_PIL], 42300, 8, total=False)
     nivel(v, -300, 0, "±0,000", -1)
-    nivel(v, 600, REC[0], f"assento TS {f(REC[0] / 1000)}")
+    nivel(v, -450, REC[0], f"assento TS {f(REC[0] / 1000)}", -1)
     nivel(v, 300, Z_TOP_PIL, f"platibanda {f(Z_TOP_PIL / 1000)}", -1)
-    nivel(v, 38900, REC[1], f"assento TS {f(REC[1] / 1000)}", -1)
+    nivel(v, 39950, REC[1], f"assento TS {f(REC[1] / 1000)}")
     nivel(v, 39800, Z_TOP_PIL, f"platibanda {f(Z_TOP_PIL / 1000)} (painéis {f(z_tel(39475) / 1000)})")
-    nivel(v, 20400, Z_TOP_C, f"topo I130 / pilar central {f(Z_TOP_C / 1000)}")
+    v.linha((XC + 200, Z_TOP_C), (XC + 1100, Z_TOP_C), "INDICACAO")                  # nível do topo da I130: texto abaixo da TS-01
+    v.poli([(XC + 650 - 150, Z_TOP_C + 260), (XC + 650 + 150, Z_TOP_C + 260), (XC + 650, Z_TOP_C)], "INDICACAO", True)
+    v.texto((XC + 300, Z_TOP_C - 120), f"topo I130 / pilar central {f(Z_TOP_C / 1000)}", "nota", alinh="TOP_LEFT")
     if eixo == 3:
         nivel(v, 19950, Z_TOP_C - H_I130, f"fundo I130 {f((Z_TOP_C - H_I130) / 1000)}")
     else:
@@ -199,41 +215,13 @@ for k, (eixo, org, nome) in enumerate(((2, (70, 590), "CORTE 2-2"), (3, (70, 330
             nivel(v, 4500, zm, f"piso mezanino {f(zm / 1000)}")
     v.chamada((30000, z_tel(30000)), (6, 14), f"TP40 + lã 40 + zipada 0,65 (480 × 70) + painéis solares sobre terças Z 302×2,30 contínuas c/{LG['passo_tercas']*100:.1f} cm nos ST-1P — ND-LET-COB01".replace(".", ","))
     v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3 %, sem dentes (apoio direto)")
-    v.chamada((39900, 5000), (6, 0), "placa de fechamento 10 cm (por fora)")
+    v.chamada((39875, 5000), (6, 0), "placa 10 cm (por fora)")
     v.chamada((39350, 9950), (8, 20), f"cabeça 40×30; folga de {Z_TOP_PIL - z_tel(39475):.0f} mm do topo dos painéis à platibanda")
     if eixo == 3:
         v.chamada((XC, Z_TOP_C - 650), (10, -30), "I130 (h 130): TS-01 apoiadas no topo (NEO-3 + 2 PN-5 por viga)")
     else:
-        v.chamada((XC, 5000), (10, 10), "P8A 40×60 (40 em x): TS-01 apoiadas no topo")
+        v.chamada((XC + 200, 800), (10, 8), "P8A 40×60 (40 em x): TS-01 apoiadas no topo")
         v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "vigas do mezanino em meio vaso com dente + laje h20 + capa 5")
-
-# detalhes ampliados 1:20
-for k, (nome, org, jan, eixo, txt) in enumerate((
-        ("DETALHE 1", (80, 50), (-900, REC[0] - 800, 1700, 10300), 3, "apoio no pilar P1 — lado baixo"),
-        ("DETALHE 2", (330, 50), (18600, Z_TOP_C - 1400, 20900, Z_TOP_C + 1700), 3, "apoio no topo da I130 — eixo 3"),
-        ("DETALHE 3", (640, 50), (37900, REC[1] - 800, 40400, 10400), 3, "apoio no pilar P2 — lado alto"))):
-    v = pr.vista(nome, (org[0] - jan[0] / 20, org[1] - jan[1] / 20), 20, titulo=f"{nome} — {txt.upper()}", subtitulo="")
-    R = Recorte(v, jan)
-    estrutura(R, eixo)
-    v.poli([(jan[0], jan[1]), (jan[2], jan[1]), (jan[2], jan[3]), (jan[0], jan[3])], "CARIMBO_FINO", True)
-    if k == 0:
-        zs = REC[0]
-        v.cota_h([0, X0[0], X0[0] + 140, 300], zs - 300, -8, total=False)
-        v.cota_v([zs, zs + 10, zf(X0[0]) + 900], 1600, 8, total=False)
-        nivel(v, -800, zs, f"{f(zs / 1000)}")
-        nivel(v, 800, Z_TOP_PIL, f"{f(Z_TOP_PIL / 1000)}")
-        v.chamada((X0[0] + 140, zs + 200), (10, 18), "2 pinos PN-3 Ø25 + NEO-4 200×300×10; apoio 27,5")
-        v.chamada((-400, 9200), (-6, 18), "placa 10 cm")
-    elif k == 1:
-        v.cota_h([XC - 200, XC - 37.5, XC + 37.5, XC + 200], Z_TOP_C - 300, -8, total=False)
-        nivel(v, 20800, Z_TOP_C, f"{f(Z_TOP_C / 1000)}", -1)
-        v.chamada((XC + 115, Z_TOP_C + 200), (10, 24), "NEO-3 100×300 + 2 PN-5 Ø20 por TS-01; apoio 16,25")
-        v.chamada((XC - 600, zf(19200) + 1300), (-14, 14), "terças acima das TS-01")
-    else:
-        zs = REC[1]
-        v.cota_v([zs, Z_TOP_PIL - 150, Z_TOP_PIL], 40400 - 300, -6, total=False)
-        nivel(v, 40300, Z_TOP_PIL, f"{f(Z_TOP_PIL / 1000)}", -1)
-        v.chamada((39350, Z_TOP_PIL), (-10, 20), f"cabeça 40×30; folga de {(Z_TOP_PIL - z_tel(39475)):.0f} mm acima dos painéis")
 
 # coluna direita: tabela de níveis e notas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
@@ -248,7 +236,8 @@ notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações.",
          "Cabeça dos pilares laterais recuada acima do assento da TS-01: só os 30 cm externos sobem até +10,00 (consolos externos pela cabeça).",
          "Vigas centrais I130 (h 130) com dentes 78 × 35 nos consolos CP-I130; vigas do mezanino VM em meio vaso com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev04, ND-LET-VM01).",
          f"Pé-direito (rev03): fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C); no mezanino superior (+6,55), fundo das terças entre as linhas 1 e 2 de {f((REC[0] + 900 + 10) / 1000)} (eixo A) a {f((Z_TOP_C + 10) / 1000)} (eixo C) — conferir o uso do piso superior. Portões da linha 4 livres até +7,40.",
-         "Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
+         "Detalhes de cada apoio na montagem: ND-LET-CT04. Corte do mezanino: ND-LET-CT02. Corte longitudinal: ND-LET-CT03.",
+         "Cotas em cm, níveis em m. Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CT01")

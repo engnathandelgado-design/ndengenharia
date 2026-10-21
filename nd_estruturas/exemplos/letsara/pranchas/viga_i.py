@@ -102,7 +102,7 @@ def prancha_viga(P):
     pr.texto(Q[0] + 10, Q[3] - 14, P["subtitulo"] + f"   ·   PESO {f(peso/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {n_cord} cord. Ø12,7 CP-190 RB", "nota", "TEXTO")
 
     # ------------------------------------------------------------ planta-chave (posição das marcas) 1:1000
-    kp = pr.vista("PLANTA-CHAVE", (Q[0] + (560 if A1 else 800), Q[3] - (112 if A1 else 165)), 1000 if A1 else 600, titulo="PLANTA-CHAVE", subtitulo=P["kp_sub"], unidade="cm")
+    kp = pr.vista("PLANTA-CHAVE", (Q[0] + (560 if A1 else 880), Q[3] - (112 if A1 else 165)), 1000 if A1 else 600, titulo="PLANTA-CHAVE", subtitulo=P["kp_sub"], unidade="cm")
     M = lambda v: v * 1000
     for y in Y_LIN:
         kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
@@ -114,7 +114,10 @@ def prancha_viga(P):
         kp.texto((M(x), M(80)), "ABCDE"[j], "min", "BOTTOM_CENTER")
     for (x0, y0, x1, y1, rot) in P["kp_pecas"]:
         kp.ret(M(min(x0, x1)) - 200, M(min(y0, y1)) - 200, abs(M(x1 - x0)) + 400, abs(M(y1 - y0)) + 400, "CORTADO")
-        kp.texto((M((x0 + x1) / 2) + 500, M((y0 + y1) / 2)), rot, "min", "MIDDLE_LEFT")
+        ym = (y0 + y1) / 2
+        if any(abs(ym - y) < 1.5 for y in Y_LIN):                                    # rótulo fora da linha de eixo
+            ym += 2.5
+        kp.texto((M((x0 + x1) / 2) + 500, M(ym)), rot, "min", "MIDDLE_LEFT")
 
     # ------------------------------------------------------------ ELEVAÇÃO DE FÔRMA
     ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - (165 if A1 else 225)), ESC, titulo=f"ELEVAÇÃO DE FÔRMA — {P['marca']}", subtitulo="vista lateral; ponta esquerda = ponta 1", unidade="cm")
@@ -147,17 +150,18 @@ def prancha_viga(P):
     ords = sorted(set([0, P["pino_x"]] + list(P.get("tercas", [])) + [s for s, _ in P.get("consolos", [])] + list(P.get("pinos_topo", [])) + list(P.get("alcas", [])) + [L - P["pino_x"], L]))
     ve.cota_ord(ords, H + (140 if P.get("alcas") else 0), 14, x0=0)
     ve.cota_v([0, H - HD, H] if HD else [0, H], L, 10, total=False)
-    ve.chamada((P["pino_x"], H - HD + P["tb"][1] / 2 if HD else P["tb"][1] / 2), (12, 16), f"{P['tb_nome']} (2x)")
+    ve.chamada((P["pino_x"], H - HD + P["tb"][1] / 2 if HD else P["tb"][1] / 2), (12, 16), f"{P['tb_nome'].split(' ')[0]} (2x)")
     if HD:
         ve.chamada((LN / 2, H - HD / 2), (-8, -16), f"dente {HD/10:g} × {LN/10:g} cm")
     if P.get("tercas"):
         ve.chamada((P["tercas"][2], H + 12), (8, 12), "CH-T1 150×150×12,5 (terças)")
     if P.get("pinos_topo"):
-        ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 16), "apoio das TS-01 no topo: 2 NEO-3 100×300×10 + 4 pinos PN-5 Ø20 por linha")
+        ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 26), "apoio das TS-01: 2 NEO-3 + 4 PN-5 Ø20 por linha")
     if P.get("consolos"):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
-    ve.marcador_corte((L / 2, -22 * ESC), (L / 2, H + 24 * ESC), "A", lado=1)
-    ve.marcador_corte((P["x_mac"] / 2 + 100, -22 * ESC), (P["x_mac"] / 2 + 100, H + 24 * ESC), "B", lado=1)
+    xA = L / 2 + 1200                                                       # fora dos textos centrais das cotas
+    ve.marcador_corte((xA, -22 * ESC), (xA, H + 24 * ESC), "A", lado=1)
+    ve.marcador_corte((P["x_mac"] * 0.8, -22 * ESC), (P["x_mac"] * 0.8, H + 24 * ESC), "B", lado=1)
     if P.get("seg"):
         ve.marcador_corte((L * 0.7, -22 * ESC), (L * 0.7, H + 24 * ESC), "C", lado=1)
     ve.marcador_detalhe((P["pino_x"] + 200, H / 2), max(H * 0.9, 700), 1, ang=-120, dist=8)
@@ -189,6 +193,13 @@ def prancha_viga(P):
         vp.cota_v([-B / 2 - 350, -B / 2], 0, -10, total=False)
         vp.chamada((P["consolos"][1][0], B / 2 + 175), (8, 12), "CV-TS 100 × 35 × 44 com PN-1 Ø20 — assento +8,480 (lado A) / +8,505 (lado E)")
 
+    # ------------------------------------------------------------ ISOMÉTRICOS (iso3d_vigas.py) — rev08, só I130 (A0)
+    if not A1 and P["desenho"] == "ND-LET-I130":
+        pr.imagem(Q[0] + 35, Q[1] + 318, Q[0] + 600, Q[1] + 466, "/home/claude/letsara/pranchas/ISO-I130-geral.png",
+                  titulo=f"ISOMÉTRICO — {P['marca']}", subtitulo="peça inteira: dentes, alças AL-3, apoios das TS-01 (NEO-3 + PN-5), TB-2")
+        pr.imagem(Q[0] + 640, Q[1] + 298, Q[0] + 900, Q[1] + 466, "/home/claude/letsara/pranchas/ISO-I130-ponta.png",
+                  titulo="ISOMÉTRICO — PONTA NO CONSOLO CP-I130", subtitulo="dente, NEO-2 fretado, PN-2 no TB-2")
+
     # ------------------------------------------------------------ CORTES 1:10
     pts = sec_pts(B, H, P["ts"], P["ti"], P["m"], P["bw"])
     YR = Q[3] - (455 if A1 else 700)
@@ -199,18 +210,18 @@ def prancha_viga(P):
         for y, xs, _ in P["cord"]:
             for x in xs:
                 v.ponto_barra((x, y), 12.7, "ARM_PROT_SECAO")
-        v.cota_h([-B / 2, -P["bw"] / 2, P["bw"] / 2, B / 2], 0, -12, total=True)
+        v.cota_h([-B / 2, -P["bw"] / 2, P["bw"] / 2, B / 2], H, 12, total=True)
         v.cota_v([0, P["ti"], H - P["ts"], H], B / 2, 12)
         return v
-    va = corte("CORTE A-A", (Q[0] + 60, YR), "seção corrente")
+    va = corte("CORTE A-A", (Q[0] + (60 if A1 else 105), YR), "seção corrente")
     cob = 30
     e = [(-P["bw"] / 2 + cob, cob), (P["bw"] / 2 - cob, cob), (P["bw"] / 2 - cob, H - cob), (-P["bw"] / 2 + cob, H - cob)]
     va.poli(e, "ARM_TRANSV", fechada=True)
     va.poli([(-B / 2 + cob, cob), (B / 2 - cob, cob), (B / 2 - cob, P["ti"] - cob), (-B / 2 + cob, P["ti"] - cob)], "ARM_TRANSV", fechada=True)          # N11
     va.poli([(-B / 2 + cob, H - P["ts"] + cob), (B / 2 - cob, H - P["ts"] + cob), (B / 2 - cob, H - cob), (-B / 2 + cob, H - cob)], "ARM_TRANSV", fechada=True)  # N13
     va.chamada((B / 2 - cob, P["ti"] - cob), (16, 7), "N11 Ø6,3 c/25 (mesa inf.)")
-    va.chamada((B / 2 - cob, H - P["ts"] + cob), (12, -3), "N13 Ø6,3 c/25 (mesa sup.)")
-    va.chamada((-B / 2 + cob, cob + 5), (-5, 27), "N12 — 2 Ø10")
+    va.chamada((B / 2 - cob, H - P["ts"] + cob), (24, 4), "N13 Ø6,3 c/25 (mesa sup.)")
+    va.chamada((-B / 2 + cob, cob + 5), (-28, -14), "N12 — 2 Ø10")
     N3n, N3d, N3t = P.get("n3", (2, 10.0, "porta-estribos (mesa superior)"))
     xs3 = (-B / 2 + cob + 10, B / 2 - cob - 10) if N3n == 2 else tuple(-B / 2 + cob + 10 + k * (B - 2 * cob - 20) / (N3n - 1) for k in range(N3n))
     for x in xs3:
@@ -219,31 +230,31 @@ def prancha_viga(P):
         va.ponto_barra((x, cob + 5), 10)
     for yy in P.get("pele", []):
         va.ponto_barra((-P["bw"] / 2 + cob, yy), 8); va.ponto_barra((P["bw"] / 2 - cob, yy), 8)
-    va.chamada((P["bw"] / 2 - cob, H / 2), (12, 10), f"N2 estribo Ø{P['est'][0]:g} c/{P['est'][1]//10} (c/{P['est'][2]//10} nos {P['est'][3]/1000:g} m das pontas)")
+    va.chamada((P["bw"] / 2 - cob, H / 2), (36, 10), f"N2 estribo Ø{P['est'][0]:g} c/{P['est'][1]//10} (c/{P['est'][2]//10} nos {P['est'][3]/1000:g} m das pontas)")
     va.chamada((xs3[-1], H - cob - 5), (12, 8), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     va.chamada((P["cord"][0][1][-1], P["cord"][0][0]), (14, -12), f"C1 — {n_cord} cord. Ø12,7 (ver tabela)")
     if P.get("pele"):
-        va.chamada((-P["bw"] / 2 + cob, P["pele"][0]), (-14, -4), "N4 pele 2 Ø8 por face")
+        va.chamada((-P["bw"] / 2 + cob, P["pele"][0]), (-30, -4), "N4 pele 2 Ø8 por face")
     va.cota_v([0] + [y for y, _, _ in P["cord"]], -B / 2, -12, total=False)
     _sets = []
     for _, xs, _ in P["cord"]:
         if tuple(xs) not in _sets:
             _sets.append(tuple(xs))
     for k_, xs_ in enumerate(_sets):
-        va.cota_h(list(xs_), 0, -24 - 8 * k_, total=False)
-    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 270), YR), "maciço da ponta (TB e CH-A)", macico=True)
+        va.cota_h(list(xs_), 0, -12 - 8 * k_, total=False)
+    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 315), YR), "maciço da ponta (TB e CH-A)", macico=True)
     vb.chapa(-P["tb"][0] / 2, 0, P["tb"][0], H - HD if HD else H * 0.6)
     if P.get("cha", True):
         vb.chapa(-150, -12.5, 300, 12.5)
         for x in (-120, 120):
             vb.poli([(x, 0), (x, 180), (x + (25 if x < 0 else -25), 200)], "METALICA")
-    vb.chamada((-P["tb"][0] / 2, (H - HD) * 0.9 if HD else H * 0.55), (-12, 14), P["tb_nome"])
+    vb.chamada((-P["tb"][0] / 2, (H - HD) * 0.9 if HD else H * 0.55), (-28, 14), P["tb_nome"].split(" ")[0] + " (passante)")
     if P.get("cha", True):
         vb.chamada((150, -6), (14, -10), "CH-A 300×150×12,5 + 2 grapas Ø12,5")
     vb.chamada((-B / 2 + cob, H - cob - 5), (-8, 14), "N2 c/" + f"{P['est'][2]//10}")
 
     # ------------------------------------------------------------ DETALHE 1 — ponta (1:10) com armação
-    d1 = pr.vista("DETALHE 1", (Q[0] + (400 if A1 else 450), YR), 10, titulo="DETALHE 1 — PONTA, APOIO E ARMAÇÃO" + (" DO DENTE" if HD else ""),
+    d1 = pr.vista("DETALHE 1", (Q[0] + (400 if A1 else 500), YR), 10, titulo="DETALHE 1 — PONTA, APOIO E ARMAÇÃO" + (" DO DENTE" if HD else ""),
                   subtitulo=("NBR 9062:2017 7.4 / PCI 5.6 — verificado por MEF não linear" if HD else "apoio direto no consolo (sem dente)"), unidade="cm")
     LD = max(1800, 2 * LN + 800)
     if HD:
@@ -255,22 +266,22 @@ def prancha_viga(P):
         d1.ret(P["pino_x"] - 125, H - HD - 30, 250, 30, "VISTA")                              # neoprene
         y_t = H - HD + 55
         d1.poli([(cob, y_t), (P["anc"], y_t)], "ARMADURA")                                      # N5 tirante: alças horizontais (U deitado)
-        d1.chamada((P["anc"] * 0.6, y_t), (10, 12), (f"N5 tirante — {P['n5_u']} alças horizontais Ø20 (U deitado, curva na face do dente), ramos de {P['anc']/10:.0f} cm"
+        d1.chamada((P["anc"] * 0.6, y_t), (10, (H - y_t) / 10 + 16), (f"N5 tirante — {P['n5_u']} alças horizontais Ø20 (U deitado, curva na face do dente), ramos de {P['anc']/10:.0f} cm"
                                                      if P.get("n5_u") else f"N5 tirante — {P['tir']} (ancoragem {P['anc']/10:.0f} cm)"))
         for k in range(P["n_sus"]):                                                          # N6 suspensão
             x = LN + 60 + k * 80
             d1.poli([(x, cob), (x, H - cob)], "ARM_TRANSV")
-        d1.chamada((LN + 60 + 80, H - cob - 100), (12, 10), f"N6 suspensão — {P['sus']} (até 1/2 hd da reentrância)")
+        d1.chamada((LN + 60 + 80, H - cob - 100), (-12, 13 + cob / 10), f"N6 suspensão — {P['sus']} (até 1/2 hd da reentrância)")
         for k in range(P["n_cost"]):                                                         # N7 costura
             y = H - HD + 150 + k * 100
             d1.poli([(cob, y), (LN + 900, y)], "ARM_TRANSV")
-        d1.chamada((LN + 400, H - HD + 150 + 100 * (P["n_cost"] - 1)), (12, 10), f"N7 costura — {P['cost']} (estribos horizontais)")
+        d1.chamada((LN + 400, H - HD + 150 + 100 * (P["n_cost"] - 1)), (40, 10), f"N7 costura — {P['cost']}")
         for x in x_n8(P["n_v"], LN, P["pino_x"]):                                            # N8 estribos verticais no nariz, fora do TB-2
             d1.poli([(x, H - HD + cob), (x, H - cob)], "ARM_TRANSV")
-        d1.chamada((100, H - 60), (-8, 6), f"N8 — {P["n_v"]} estribos Ø10 no dente")
+        d1.chamada((100, H - 60), (-14, -10), f"N8 — {P["n_v"]} estribos Ø10 no dente")
         d1.cota_v([0, H - HD, H], LD, 10, total=False)
         d1.cota_h([0, P["pino_x"], LN, LD], H - HD, -12, total=False)
-        d1.chamada((P["pino_x"], H - HD + 60), (10, -26), f"{P['tb_nome']}; pino do consolo Ø{P['pino_d']} grauteado só numa ponta")
+        d1.chamada((P["pino_x"], H - HD + 60), (-12, -(H - HD + 60) / 10 - 14), f"{P['tb_nome'].split(' ')[0]}; pino Ø{P['pino_d']} grauteado numa ponta")
     else:
         d1.poli([(0, 0), (LD, 0), (LD, H), (0, H)], "VISTA", fechada=True)
         d1.interrupcao((LD, 0), (LD, H))

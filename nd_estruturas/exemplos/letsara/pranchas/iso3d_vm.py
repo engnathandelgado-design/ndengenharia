@@ -1,5 +1,5 @@
 """Isométrico 3D (PyVista) — ponta da VM meio vaso com dente Gerber no consolo CP-MEZ: pilar, consolo, NEO-5, pino PN-1,
-cantoneira CT-1, alças N9, 2º estágio (transparente) e laje alveolar. Gera ISO-VM-ponta.png (projeto da ND Engenharia)."""
+cantoneira CT-1, alças N9, 2º estágio (transparente) e laje alveolar. Gera ISO-VM-ponta.png (sem marca: projeto da fábrica)."""
 import json, math, numpy as np, pyvista as pv
 pv.OFF_SCREEN = True
 P = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["premissas"]
@@ -46,6 +46,5 @@ for k in range(2):
 p.add_mesh(box(x0, xa + LV, ye, yi - 0.10, zb + H, zb + H + 0.21), color="#7fb3d5", opacity=0.25)
 p.add_mesh(box(xa - FOL, xa, ye, yi, zb + REC, zb + H), color="#7fb3d5", opacity=0.35)       # junta grauteada
 p.camera_position = [(2.3, -2.6, 0.05), (0.55, 0.1, 0.40), (0, 0, 1)]
-p.add_text("projeto da ND Engenharia", position="lower_right", font_size=10, color="gray")
 p.screenshot("/home/claude/letsara/pranchas/ISO-VM-ponta.png")
 print("ok")

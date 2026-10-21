@@ -25,7 +25,7 @@ pr.cabecalho_peca("FX", f"CE-1 ({NN['CE1']} PÇ) · PT-1 ({NN['PT1']} PÇ) · PT
                   largura=XC - Q[0] - 10)
 
 # ================================================================== CE-1 — vista frontal 1:3
-v1 = pr.vista("CE-1", (Q[0] + 90, Q[1] + 440), 3.0, titulo="CE-1 — VISTA FRONTAL", subtitulo="face do pilar; CS-1 do CC-1 (face C) soldados na fábrica; nas faces laterais, na obra", unidade="mm")
+v1 = pr.vista("CE-1", (Q[0] + 90, Q[1] + 440), 3.0, titulo="CE-1 — VISTA FRONTAL", subtitulo="face do pilar; CC-1 = CE-1 + 2 CS-1 (CC-1E/D: 1) soldados na fábrica (face C); laterais: CS-1 na obra", unidade="mm")
 v1.chapa(-190, -165, 380, 330, 1.2)
 for x in (-120, 120):
     for z in (-140, 140):
@@ -37,10 +37,10 @@ for xc in (-XC1, XC1):
 v1.eixo((0, -165), (0, 165), ext=20)
 for xr, zr in ((0, -120), (0, 120), (-165, 0), (165, 0)):                         # rev06e: respiro do CC-1 (chapa horizontal na fôrma)
     v1.circulo((xr, zr), 10, "METALICA")
-v1.chamada((0, -120), (30, -45), "CC-1: 4 FUROS Ø20 DE RESPIRO (CE-1 DE OBRA SEM FUROS)")
+v1.chamada((0, -120), (60, -45), "CC-1: 4 FUROS Ø20 DE RESPIRO (CE-1 DE OBRA SEM FUROS)")
 v1.cota_h([-190, -120, -XC1, 0, XC1, 120, 190], -165, -8, total=True)
 v1.cota_v([-165, -140, 0, 140, 165], 190, 10, total=True)
-v1.chamada((XC1, 60), (24, 18), f"CS-1 (eixo a {XC1:g} do eixo do pilar = eixo do nicho): CC-1 = 2 CS-1; CC-1E/CC-1D = 1 CS-1")
+v1.chamada((XC1, 60), (60, 18), f"CS-1 (eixo a {XC1:g} do eixo do pilar)")
 v1.chamada((120, 140), (20, 14), "pino com cabeça (21)")
 # corte com pinos e N18 (armadura do pilar)
 v2 = pr.vista("CE-1 CORTE", (Q[0] + 240, Q[1] + 440), 3.0, titulo="CE-1 — CORTE", subtitulo="pinos por solda de arco (stud welding) na oficina", unidade="mm")
@@ -49,14 +49,15 @@ v2.chapa(0, -165, TC, 330, 1.0)
 for z in (-140, 140):
     v2.ret(TC, z - 8, 140, 16, "METALICA"); v2.ret(TC + 140, z - 16, 10, 32, "METALICA")
 v2.poli([(30, 300), (30, -150), (90, -150), (90, 300)], "ARMADURA")
-v2.cota_h([0, TC, TC + 140, TC + 150], -165, -8, total=False)
+v2.cota_h([0, TC + 140, TC + 150], -165, -8, total=False)
+v2.cota_h([0, TC], -165, -16, total=False)                                        # rev08: espessura da CE-1 em linha própria
 v2.cota_v([-165, -140, 140, 165], TC + 150, 10, total=False)
 v2.cota_v([-150, 300], 90, 22, total=False)
 v2.chamada((60, -150), (30, -16), "N18 — 2 U Ø10 C=96 (armadura do pilar)")
 I.solda(v2, (TC, 140 + 8), (16, 16), tipo="ponto", lado="seta", cauda="stud ISO 13918 SD Ø16")
 v2.texto((-4, 0), "FACE DO PILAR", "nota", "MIDDLE_CENTER", rot=90)
 # rev06e (DEC-031): CC-1 — conjunto de fábrica concretado na face C do pilar (corte pelo eixo de um console)
-vc = pr.vista("CC-1 CORTE", (Q[0] + 415, Q[1] + 336), 4.0, titulo="CC-1 — CORTE", subtitulo="CE-1 + CS-1 soldados na fábrica do pilar; face C para cima na fôrma", unidade="mm")
+vc = pr.vista("CC-1 CORTE", (Q[0] + 415, Q[1] + 314), 4.0, titulo="CC-1 — CORTE", subtitulo="CE-1 + CS-1 soldados na fábrica do pilar; face C para cima na fôrma", unidade="mm")
 Cc = GF.C
 vc.chapa(0, -165, TC, 330, 1.0)                                                    # CE-1 (x > 0 = dentro do pilar)
 for z in (-140, 140):
@@ -69,8 +70,8 @@ vc.chapa(-me_["y1"], zb - me_["t"], me_["y1"] - me_["y0"], me_["t"], 1.0)       
 vc.ret(-(de_["y0"] + de_["t"]), zb, de_["t"], de_["h"], "METALICA")               # dente
 vc.chapa(-(po_["y0"] + po_["t"]), zb + po_["z0"], po_["t"], po_["z1"] - po_["z0"], 1.0)   # chapa de ponta
 vc.cota_v([zb + co_["z0"], zb, zb + co_["z1"]], -co_["t"] - 70, -10, total=False)
-vc.cota_h([-me_["y1"], -co_["t"], 0], zb + co_["z0"] - 10, -8, total=False)
-I.solda(vc, (-co_["t"], zb + co_["z0"] + 20), (-30, -10), a=FXJ["solda"]["filete_mm"], tipo="filete", lado="seta", comp=co_["z1"] - co_["z0"],
+vc.cota_h([-me_["y1"], 0], zb + co_["z0"] - 10, -8, total=False)                # rev08: espessura das costas na PP03
+I.solda(vc, (-co_["t"], zb + co_["z0"] + 20), (-30, -10), a=FXJ["solda"]["filete_mm"], tipo="filete", lado="seta", comp=round(co_["z1"] - co_["z0"]),
         cauda="FÁBRICA: costas × CE-1, 2 lados verticais")
 vc.texto((TC + 4, -150), "DENTRO DO PILAR", "nota", "TOP_LEFT")
 # isométrico com balões
@@ -97,29 +98,29 @@ p2.poli([(31, 80), (31, 120), (49, 120), (49, 80)], "METALICA", fechada=True)
 p2.cota_v([-140, -100, -70, -40, 40, 70, 100, 140], 80, 10, total=True)
 p2.cota_h([0, 40, 80], -140, -8, total=False)
 # montagem PT-1 na junta (1:3)
-p3 = pr.vista("PT-1 MONT", (Q[0] + 262, Q[1] + 175), 2.5, titulo="PT-1 — NA JUNTA HORIZONTAL", subtitulo="2 por junta, ao lado das alças AL-P", unidade="mm")
+p3 = pr.vista("PT-1 MONT", (Q[0] + 300, Q[1] + 175), 2.5, titulo="PT-1 — GUIA NA JUNTA HORIZONTAL", subtitulo="2 por junta; M16 só na placa de baixo (guia, sem esforço — DEC-035)", unidade="mm")
 for z0_, z1_ in ((-150, -2.5), (2.5, 150)):
     pts = [(-100, z0_), (0, z0_), (0, z1_), (-100, z1_)]
     p3.poli(pts, "CORTADO", fechada=True); p3.hachura(pts, "AR-CONC", 0.03)
 for zl in (-70, 70):
     p3.chapa(-70, zl - 8, 70, 16, 0.3)
 p3.poli(hat, "METALICA", fechada=True); p3.hachura(hat, "ANSI31", 0.3, "METALICA")
-for zl in (-70, 70):
-    I.parafuso_lateral(p3, 40, zl, 40, 16, cabeca=(10, 24), sentido=-1)
+I.parafuso_lateral(p3, 40, -70, 40, 16, cabeca=(10, 24), sentido=-1)              # rev08 (DEC-035): M16 só na placa de baixo
+p3.chamada((36, 70), (12, 30), "sem parafuso na placa de cima")
 p3.cota_v([-70, 70], 50, 14, total=False)
-p3.chamada((-35, 70), (-16, 22), "luva TSA M16 hef 70 (33)")
+p3.chamada((-35, 70), (-40, 22), "luva TSA M16 hef 70 (33)")
 p3.chamada((40, -70), (16, -18), "M16 × 40 (31) + arruela larga (32)")
-p3.chamada((-50, 0), (-6, -44), "junta 5 (macho-fêmea)")
+p3.chamada((-50, 0), (-30, -44), "junta 5 (macho-fêmea)")
 
 # ================================================================== PT-2 — cantoneira (1:1,5)
 ang = [(0, 0), (102, 0), (102, 9.5), (9.5, 9.5), (9.5, 102), (0, 102)]
-q1 = pr.vista("PT-2", (Q[0] + 380, Q[1] + 205), 1.5, titulo="PT-2 — CANTONEIRA (SEÇÃO)", subtitulo="L 102 × 102 × 9,5 A36, L = 150", unidade="mm")
+q1 = pr.vista("PT-2", (Q[0] + 400, Q[1] + 185), 1.5, titulo="PT-2 — CANTONEIRA (SEÇÃO)", subtitulo="L 102 × 102 × 9,5 A36, L = 150", unidade="mm")
 q1.poli(ang, "METALICA", fechada=True); q1.hachura(ang, "ANSI31", HT, "METALICA")
 q1.cota_h([0, 9.5, 52, 102], 0, -8, total=False)
 q1.cota_v([0, 9.5, 52, 102], 0, -10, total=False)
 q1.chamada((52, 5), (16, -16), "aba na placa: oblongo 18 × 40 horizontal")
 q1.chamada((5, 52), (14, 18), "aba no pilar: oblongo 18 × 40 vertical")
-q2 = pr.vista("PT-2 ABAS", (Q[0] + 490, Q[1] + 205), 1.5, titulo="PT-2 — FURAÇÃO DAS ABAS", subtitulo="as 2 abas rebatidas", unidade="mm")
+q2 = pr.vista("PT-2 ABAS", (Q[0] + 510, Q[1] + 205), 1.5, titulo="PT-2 — FURAÇÃO DAS ABAS", subtitulo="as 2 abas rebatidas", unidade="mm")
 q2.chapa(0, 0, 150, 102, HT)
 q2.poli([(55, 43), (95, 43), (95, 61), (55, 61)], "METALICA", fechada=True)
 q2.chapa(0, 120, 150, 102, HT)
@@ -155,6 +156,6 @@ pr.notas(XC, y - 4, [
     "PT-1: chapa 6,3 A36 dobrada a frio (raio interno 6), galvanizada a fogo. Furo Ø18 na placa de baixo e oblongo vertical 18 × 40 na de cima: não travar o deslocamento vertical (aperto 80 N·m com arruela larga).",
     "PT-2: cantoneira A36 galvanizada; oblongo vertical na aba do pilar e horizontal na aba da placa (tolerâncias de montagem).",
     "Roscas métricas grossas ISO 261/965 (6g/6H); peças galvanizadas a fogo com porca sobremedida (6H + 0,4) ou rosca repassada; não lubrificar o prisioneiro antes da trava química.",
-    "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
+    "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP04")
 print("PP04", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

@@ -95,7 +95,6 @@ p.enable_parallel_projection()
 p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(3.4)
 p.add_text("PL-01 em pé", font_size=13, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=9, position="lower_left", color="#888888")
 p.screenshot(SAIDA + "ISO-PIL-geral.png")
 
 # 2) consolo CP-TS em detalhe (pilar em pé)
@@ -109,6 +108,5 @@ p.enable_parallel_projection()
 p.camera_position = [(H / 2 + 4.0, -3.4, ZC + 2.3), (H / 2 + 0.1, 0, ZC - 0.1), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.5)
 p.add_text("Detalhe — consolo CP-TS, pino e neoprene (PL-01, assento +7,914)", font_size=15, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot(SAIDA + "ISO-PIL-consolo.png")
 print("ok")

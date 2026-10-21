@@ -1,0 +1,52 @@
+{
+ "H_CT1_d_kN": 28.0,
+ "origem": "vm_meio_vaso.json VM-02 torcao_montagem (T_F1 15,0 kN·m, z 0,695 m)",
+ "BR3_CT1": {
+  "phiNn": 47.3,
+  "phiVn_dentro": 55.1,
+  "modo": "borda",
+  "phiVn_fora": 10.8,
+  "H_fora": 2.4,
+  "Nu": 5.6,
+  "interacao": 0.508
+ },
+ "BR3_CT1P": {
+  "phiNn": 49.8,
+  "modo": "cone",
+  "Nu": 28.0,
+  "uso": 0.562
+ },
+ "BR2_VM": {
+  "phiNn": 30.2,
+  "modo": "cone",
+  "Nu": 28.0,
+  "uso": 0.926
+ },
+ "CT1_aba": {
+  "M_kNm": 3.92,
+  "W_mm3": 84262,
+  "MRd_kNm": 19.15,
+  "uso": 0.205,
+  "sem_nervura_MRd_kNm": 0.89
+ },
+ "CT1P_chapa": {
+  "M_kNm": 5.88,
+  "W_mm3": 84262,
+  "MRd_kNm": 19.15,
+  "uso": 0.307
+ },
+ "parafusos": {
+  "M16_corte_2x_kN": 74.4,
+  "uso_M16": 0.376,
+  "M16_tracao_2x_kN": 139.6,
+  "M20_tracao_kN": 139.6,
+  "uso_M20": 0.201
+ },
+ "BR3": {
+  "d": 16,
+  "d_cabeca": 30,
+  "hef": 150,
+  "s": 80
+ },
+ "ok": true
+}

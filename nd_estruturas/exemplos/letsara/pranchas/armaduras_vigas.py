@@ -30,7 +30,8 @@ def spec_ts01():
     ents = [([(x + sk(40), 40), (x + sk(H - 40), H - 40)], "ARM_TRANSV") for x in x_est]
     ents += [([(x + sk(30), 30), (x + sk(H - 30), H - 30)], "ARM_TRANSV") for xs_ in (X_N6, [L - x for x in X_N6]) for x in xs_]
     ents += [([(30, H - 45), (L - 30, H - 45)], "ARMADURA"), ([(30, 40), (L - 30, 40)], "ARMADURA"),
-             ([(0, P["y1"]), (L, P["y1"])], "ARM_PROT"), ([(0, P["y2"]), (L, P["y2"])], "ARM_PROT")]
+             ([(0, P["y1"]), (L, P["y1"])], "ARM_PROT"), ([(0, P["y2"]), (L, P["y2"])], "ARM_PROT"),
+             ([(30, H - 70), (30 + T.L_N9, H - 70)], "ARMADURA"), ([(L - 30 - T.L_N9, H - 70), (L - 30, H - 70)], "ARMADURA")]   # N9 (ato)
     zs = [(X_N6[0], X_N6[-1], "8 N6")] + zonas_txt(x_est, "N1", 6.3) + [(L - X_N6[-1], L - X_N6[0], "8 N6")]
     sec = [(x * 1000, y * 1000) for x, y in T.sec.pts]
     prot = [(x, P["y1"]) for x in P["x_cord"]] + [(x, P["y2"]) for x in P["x_cord2"]]
@@ -45,8 +46,8 @@ def spec_ts01():
     S2 = dict(nome="SEÇÃO S.2", sub="maciço da ponta (tubos TB-3 a y = ±10)", esc=10, contorno=[[(-200, 0), (200, 0), (200, H), (-200, H)]],
               ents=[([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARM_TRANSV", True),
                     ([(-125, 0), (-75, 0), (-75, H), (-125, H)], "OCULTA", True), ([(75, 0), (125, 0), (125, H), (75, H)], "OCULTA", True)],
-              discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)], prot=prot,
-              bolhas=[("N6", (170, 560), (8, 4)), ("N2", (-160, H - 45), (-8, 6))], formas=["N6"])
+              discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)] + [(x, H - 70, 10) for x in (-110, 110)], prot=prot,
+              bolhas=[("N6", (170, 560), (8, 4)), ("N2", (-160, H - 45), (-8, 6)), ("N9", (110, H - 70), (14, 3))], formas=["N6"])
     det = [([(1600, 0), (0, 0), (DX, H), (1600 + DX, H)], "VISTA", False),
            ([(0, P["y1"]), (1600, P["y1"])], "ARM_PROT", False), ([(0, P["y2"]), (1600, P["y2"])], "ARM_PROT", False)]
     det += [([(x + sk(30), 30), (x + sk(H - 30), H - 30)], "ARM_TRANSV", False) for x in X_N6]
@@ -59,9 +60,9 @@ def spec_ts01():
     per = sum(math.dist(a, b) for a, b in zip(sec, sec[1:] + sec[:1])) / 1000
     area = per * L / 1000 - 0.40 * L / 1000 + 2 * 0.40 * 0.90               # laterais + fundo (topo livre) + topos
     cord = (P["n_cord"], P["n_cord"] * L / 1000)
-    return dict(fam="TS-01", titulo="VIGA DE COBERTURA TS-01 (I90 PROTENDIDA, SEM DENTES)", forma="ND-LET-TS01-1 / TS01-2", fck=50, L=L, H=H, esc=40,
+    return dict(fam="TS-01", titulo="VIGA DE COBERTURA TS-01 (I90 PROTENDIDA, SEM DENTES)", forma="ND-LET-TS01-1", fck=50, L=L, H=H, esc=40,
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 + 1500, "S.1"), (600, "S.2")], dets=[(350, "D1")],
-                longas=[("N2", 30), ("N5", 30)], blocos=[S1, S2, D1],
+                longas=[("N2", 30), ("N5", 30), ("N9", 30)], blocos=[S1, S2, D1],
                 marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord)],
                 notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm e 3 a 10 cm; as 2 de 10 cm em x = ±4 isoladas 3,00 m nas pontas; σpi = {P['sig_pi']} MPa.",
                        "Sem dentes: N6 (estribos verticais do maciço, fora da faixa dos tubos TB-3), N7 (grampos U horizontais) e N8 (estribos horizontais da mesa inferior) nas duas pontas.",
@@ -300,7 +301,9 @@ def spec_vm():
     S2 = dict(nome="SEÇÃO S.2", sub="ponta maciça 40 (nariz e recorte)", esc=10, contorno=[[(0, REC), (400, REC), (400, H), (0, H)]],
               ents=[([(COB, REC + COB), (400 - COB, REC + COB), (400 - COB, H - COB), (COB, H - COB)], "ARM_TRANSV", True)],
               discos=[(x, REC + 55, DA["d_tir"]) for x in (45, 125, 275, 355)] + [(x, H - COB - 10, 12.5) for x in (40, 210)], prot=[tuple(c) for c in prot if c[1] > REC],
-              bolhas=[("N10", (400 - COB, REC + HD / 2), (10, 0)), ("N6", (355, REC + 55), (10, -6))], formas=["N10"])
+              bolhas=[("N10", (400 - COB, REC + HD / 2), (10, 0)), ("N6", (355, REC + 55), (10, -6)), ("N9A", (30, H + 120), (-12, 6))], formas=["N10", "N9A"])
+    _a9 = next(b_["geo"]["a"] for b_ in barras if b_["pos"] == "N9A") * 10                 # N9A: alça curta do nariz (U de 34 cm)
+    S2["ents"].append(([(30, H + 200), (30, H + 200 - _a9), (370, H + 200 - _a9), (370, H + 200)], "ARM_TRANSV", False))
     det = [([(0, REC), (LN, REC), (LN, 0), (1600, 0)], "VISTA", False), ([(1600, H), (0, H), (0, REC)], "VISTA", False),
            ([(COB, REC + 55), (min(LN + DA["ancoragem_tirante_mm"], 1600), REC + 55)], "ARMADURA", False)]
     det += [([(LN + 40 + k * 50, COB), (LN + 40 + k * 50, H - COB)], "ARM_TRANSV", False) for k in range(DA["n_sus"])]

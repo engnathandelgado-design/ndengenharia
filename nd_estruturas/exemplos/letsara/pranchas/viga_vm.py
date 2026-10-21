@@ -51,7 +51,7 @@ pr.cabecalho_peca("VM-02", f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+
 
 # ------------------------------------------------------------------ planta-chave
 M = lambda v: v * 1000
-kp = pr.vista("PLANTA-CHAVE", (XC - 120, Q[3] - 125), 1000, titulo="PLANTA-CHAVE", subtitulo="VM nas linhas 1 e 2 (2 níveis)", unidade="cm")
+kp = pr.vista("PLANTA-CHAVE", (XC - 120, Q[3] - 125), 1000, titulo="PLANTA-CHAVE", subtitulo="VM nas linhas 1 e 2 (2 níveis); laje h20 + 5 entre as linhas", unidade="cm")
 XF = [X_EIXO[k] for k in "ABCDE"]
 for y in Y_LIN[:3]:
     kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
@@ -66,7 +66,6 @@ for y in Y_LIN[:2]:
         kp.ret(M(XF[k]) + 300, M(y) - 200, M(XF[k + 1] - XF[k]) - 600, 400, "CORTADO")
         kp.texto((M((XF[k] + XF[k + 1]) / 2), M(y) + (-700 if y == 0 else 700)), "VM-01" if k in (0, 3) else "VM-02", "min", "TOP_CENTER" if y == 0 else "BOTTOM_CENTER")
 kp.ret(M(0), M(0) + 200, M(XF[-1]), M(Y_LIN[1]) - 400, "OCULTA")
-kp.texto((M(19.75), M(Y_LIN[1] / 2)), "laje alveolar h20 + 5", "min", "MIDDLE_CENTER")
 
 # ------------------------------------------------------------------ ELEVAÇÃO DE FÔRMA 1:20 (vista de dentro, lado da aba)
 ESC = 15
@@ -86,13 +85,13 @@ for x in (1100, L - 1100):
 ve.cota_h([0, LN, MAC, L / 2, L - MAC, L - LN, L], 0, -12)
 ve.cota_v([0, REC, H - HA, H, H + 200], L, 12, total=False)
 ve.cota_ord([0, X_TB, 1100, L - 1100, L - X_TB, L], H + 200, 12, x0=0)
-ve.chamada((LN, REC / 2), (10, -14), f"recorte {REC/10:g} × 35 (dente)")
-ve.chamada((X_TB, REC + HD / 2), (14, 16), f"TB-1 Ø50×3,0 L={HD} (pino PN-1 do CP-MEZ)")
+ve.chamada((LN, REC / 2), (10, -14), f"recorte {REC/10:g} × 35")
+ve.chamada((X_TB, REC + HD / 2), (10, -(REC + HD / 2) / ESC - 22), "TB-1 (2x)")
 ve.chamada((L - 1100, H + 120), (10, 10), "AL-1 laço Ø12,7 (2x)")
 ve.chamada((L / 2 + 75, H + 200), (8, 12), "N9 alças Ø10 c/15 (20 cm acima da peça)")
 ve.chamada((L - MAC, H - HA - 60), (10, -14), "fim da ponta maciça")
 ve.marcador_corte((L / 2 - 600, -18 * ESC), (L / 2 - 600, H + 22 * ESC), "A", lado=1)
-ve.marcador_corte((600, -18 * ESC), (600, H + 22 * ESC), "B", lado=1)
+ve.marcador_corte((920, -18 * ESC), (920, H + 22 * ESC), "B", lado=1)
 ve.marcador_detalhe((LN / 2, H / 2), 650, 1, ang=-150, dist=8)
 
 # ------------------------------------------------------------------ CORTE A-A 1:10 — seção corrente + 2º estágio + laje + capa
@@ -119,25 +118,24 @@ for x, y in CORD:
     ca.circulo((x, y), 6.35, "ARM_PROT_SECAO")
 ca.cota_h([0, BA, B - 100, B], 0, -10, total=True)
 ca.cota_v(sorted({0} | {c[1] for c in CORD[:-2]} | {H - HA, H, H + NEOF + H2, H + NEOF + H2 + HCAPA}), -60, -10, total=False)
-ca.chamada((BA / 2, H / 3), (-26, -6), "alma 25 (lado da borda)")
+ca.chamada((BA / 2, H / 3), (-54, -6), "alma 25 (lado da borda)")
 ca.chamada((B - 50, H - HA / 2), (14, -12), "aba 15 × 20")
 ca.chamada((B - 50, H + NEOF / 2), (16, 6), "apoio da laje 10 cm + neoprene em fita 10")
-ca.chamada((120, H + 120), (-24, 14), "2º ESTÁGIO C30 (obra, com a capa)")
+ca.chamada((120, H + 120), (-56, 14), "2º ESTÁGIO C30 (obra, com a capa)")
 ca.chamada((LAJ - 150, H + NEOF + H2 + HCAPA), (8, 10), "capa 5 cm C30 + tela (obra)")
-ca.chamada((LAJ - 120, H + NEOF + H2 / 2), (8, -14), "laje alveolar h20")
-ca.chamada((BA - 40, H + 160), (10, 8), "N9 Ø10 c/15 (alça)")
-ca.chamada((CORD[0][0], CORD[0][1]), (-20, -12), f"{len(CORD) - 2} cord. Ø12,7 (y = " + " / ".join(sorted({f"{c[1]/10:g}" for c in CORD[:-2]})) + ")")
+ca.chamada((LAJ - 120, H + NEOF + H2 / 2), (34, -30), "laje alveolar h20")
+ca.chamada((BA - 40, H + 160), (10, 24), "N9 Ø10 c/15 (alça)")
+ca.chamada((CORD[0][0], CORD[0][1]), (-20, -20), f"{len(CORD) - 2} cord. Ø12,7 (y = " + " / ".join(sorted({f"{c[1]/10:g}" for c in CORD[:-2]})) + ")")
 ca.chamada((CORD[-1][0], CORD[-1][1]), (14, 4), f"2 cord. Ø12,7 na aba (y = {CORD[-1][1]/10:g})")
 
 # ------------------------------------------------------------------ CORTE B-B 1:10 — ponta maciça
-cb = pr.vista("CORTE B-B", (Q[0] + 355, YR), 5, titulo="CORTE B-B — PONTA MACIÇA", subtitulo=f"40 × {H/10:g} nos 100 cm das pontas", unidade="cm")
+cb = pr.vista("CORTE B-B", (Q[0] + 355, YR), 5, titulo="CORTE B-B — PONTA MACIÇA", subtitulo=f"40 × {H/10:g} nos 100 cm das pontas; seção T tracejada", unidade="cm")
 pb = [(0, 0), (B, 0), (B, H), (0, H)]
 cb.poli(pb, "CORTADO", fechada=True); cb.hachura(pb, "AR-CONC", 0.03)
 cb.linha((BA, 0), (BA, H - HA), "OCULTA")
 for x, y in CORD:
     cb.circulo((x, y), 6.35, "ARM_PROT_SECAO")
 cb.cota_h([0, BA, B], 0, -10); cb.cota_v([0, REC, H], B, 10, total=False)
-cb.chamada((BA, H / 3), (12, -8), "seção T tracejada")
 
 # ------------------------------------------------------------------ DETALHE 1 — apoio no CP-MEZ (vista do lado de fora)
 YD = YR - 10
@@ -169,8 +167,8 @@ d1.cota_h([-FOLGA, 0, X_TB, LN, -FOLGA + PROJ], 0, -14, total=False)
 d1.cota_h([-FOLGA, X_PAD - FOLGA - A_PAD / 2, X_PAD - FOLGA + A_PAD / 2], HC + NEOF, 10, total=False)
 d1.cota_v([0, HC, REC, H, H + NEOF + H2, H + NEOF + H2 + HCAPA], LD, 12, total=False)
 d1.chamada((-FOLGA + PROJ / 2, HC / 2), (-30, -14), f"CP-MEZ 40 × {PROJ/10:g} × {HC/10:g} (sem chanfro), tirante {N9['consolos'][1]['tirante'].split(' (')[0]}")
-d1.chamada((X_PAD - FOLGA, HC + 5), (22, -16), "NEO-5 300×150×10 (furo Ø30)")
-d1.chamada((X_TB, HC - 250), (30, -12), "PN-1 Ø20 L=700 (300 no consolo), grauteado")
+d1.chamada((X_PAD - FOLGA, HC + 5), (50, -16), "NEO-5 300×150×10 (furo Ø30)")
+d1.chamada((X_TB, HC - 250), (30, -40), "PN-1 Ø20 L=700 (300 no consolo), grauteado")
 d1.chamada((-FOLGA / 2, REC + HD / 2), (-26, 10), "junta 3 cm grauteada (obra, antes da capa)")
 d1.chamada((60, H - 40), (10, 22), "CT-1 L 152×102×12,5 L=150 + 1 M20 (BR-2) — det. 2")
 d1.chamada((-FOLGA - 300, H + 120), (-14, 14), "N11 6 Ø16 em 2 bainhas BA-1 Ø50 (obra)")
@@ -190,16 +188,18 @@ d2.linha((110, -200 - 12.5), (110, -80), "METALICA")                            
 d2.ret(100, -200, 20, 120, "OCULTA")
 d2.cota_h([0, 30, 110, 152], -330, -10, total=False)
 d2.cota_v([-302, -200, 200], 480, 10, total=False)
-d2.chamada((-11, -250), (-24, -12), "trilho TR-2 HTA-CE 40/22 vertical (IP-02 no pilar) + 2 parafusos T M16")
+d2.chamada((-11, -250), (-100, -12), "trilho TR-2 40/22 (IP-02) + 2 T M16")
 d2.chamada((76, -206), (14, -18), "CT-1: aba 152 com furo oblongo 22×40 horizontal")
 d2.chamada((110, -120), (16, 12), "bucha BR-2 M20 hef 120 + barra transversal")
-d2.chamada((300, 100), (10, 10), "VM (alma 25 do lado da borda)")
+d2.chamada((300, 100), (10, 32), "VM (alma 25 do lado da borda)")
 d2.chamada((-200, 0), (-10, 16), "pilar")
 
 # ------------------------------------------------------------------ isométrico da ponta (iso3d_vm.py)
 import subprocess
 subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_vm.py"], check=True, capture_output=True)
-pr.imagem(Q[0] + 560, Q[1] + 40, Q[0] + 560 + 300, Q[1] + 40 + 225, "/home/claude/letsara/pranchas/ISO-VM-ponta.png",
+pr.imagem(Q[0] + 345, Q[1] + 150, Q[0] + 635, Q[1] + 262, "/home/claude/letsara/pranchas/ISO-VM-geral.png",
+          titulo="ISOMÉTRICO — VM-02", subtitulo="peça inteira: alma 25, aba 15 × 20, dentes, alças N9 e AL-1")
+pr.imagem(Q[0] + 650, Q[1] + 40, Q[0] + 860, Q[1] + 265, "/home/claude/letsara/pranchas/ISO-VM-ponta.png",
           titulo="ISOMÉTRICO — PONTA DA VM NO PILAR", subtitulo="dente no CP-MEZ (fundos alinhados), CT-1, PN-1, alças N9, 2º estágio (azul) e laje")
 
 # ------------------------------------------------------------------ tabelas (coluna direita)
@@ -239,7 +239,7 @@ notas = [
     f"Protensão: {len(CORD)} cordoalhas Ø12,7 CP-190 RB aderentes (posição no corte A-A e na tabela), σpi = 1400 MPa; C1 isoladas 150 cm nas pontas; as 2 da aba equilibram a excentricidade lateral (resultante no centroide da seção T). Liberação GRADUAL e simétrica com fcj ≥ 32 MPa (lbpt = {f(R['ato']['lbpt_m'] * 100, 0)} cm; perdas pela NBR 6118 9.6.3 — total {f(R['protensao']['perdas']['perda_total_pct'])} %).",
     "Içar pelas 2 alças AL-1 (cabos ≥ 45°); estocar sobre 2 calços sob as alças, pressão ≤ 0,3 fcj; transportar apoiada nos mesmos pontos, travada contra tombamento.",
     "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±15 mm, seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm, cordoalhas ±10 mm (resultante ±5); montagem: nível do apoio ±10 mm, planta ±10 mm. Folga de 3 cm na ponta.",
-    "Cotas de concreto em cm, chaparia em mm. Armadura passiva: ND-LET-AR-VIG-03. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
+    "Cotas de concreto em cm, chaparia em mm. Armação e protensão na faixa de baixo desta folha. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 y = pr.notas(XC, y - 4, notas, 190)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VM01")
 print("VM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")

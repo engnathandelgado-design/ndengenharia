@@ -455,8 +455,8 @@ def montar() -> ModeloBIM:
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027
                 if i == 2 and ((ip_ == 0 and k == 0) or (ip_ == 1 and k == nst - 1)):   # rev06 (DEC-033): beirais do eixo 2 — 4 esperas
-                    suporte_st(m, "ST-1P4 (TS-01 eixo 2, beiral; 4 esperas — proposto DEC-033)", x, y, zf(x) + H_TS, aba=0.200,
-                               esperas=((-0.150, -0.06), (-0.150, 0.06), (-0.070, -0.06), (-0.070, 0.06)), d=0.016, hef=0.150, grampo=True)
+                    suporte_st(m, "ST-1P4 (TS-01B eixo 2, beiral; 4 esperas — aprovado DEC-036)", x, y, zf(x) + H_TS, aba=0.200,
+                               esperas=((-0.155, -0.06), (-0.155, 0.06), (-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
                 else:
                     suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
     # rev06 (DEC-026): fixação das placas pelo sistema Trejor, como no PP00 — CE-1 no pilar (uma por fiada), console CS-1 soldado,
@@ -575,15 +575,8 @@ if __name__ == "__main__":
     if pasta_pr.exists():
         import base64, io
         import pymupdf
-        LISTA = [("ND-LET-LOC01", "locação de pilares e vigas"), ("ND-LET-CT01", "cortes da estrutura"), ("ND-LET-MON01", "montagem da cobertura"), ("ND-LET-MON02", "montagem do mezanino"),
-                 ] + [(f"ND-LET-AR-PIL-{k:02d}", f"armaduras dos pilares — folha {k} de 6 (padrão de armação)") for k in range(1, 7)] + [(f"ND-LET-AR-VIG-{k:02d}", f"armaduras das vigas — {t}") for k, t in enumerate(("TS-01", "I130", "VM", "VB"), 1)] + [] + [(f"ND-LET-{m.replace('-', '')}", f"pilar {m} (família 40×60)") for m in ("PL-01", "PL-02", "PL-03", "PL-04", "PL-05", "PL-06", "PL-07", "PL-08", "PL-09", "PL-10", "PL-11", "PL-12", "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06")] + [ ("ND-LET-PC01", "pilar central PC-01 (P8A)"), ("ND-LET-PC02", "pilar central PC-02 (P11)"), ("ND-LET-PC03", "pilar central PC-03 (P13)"),
-                 ("ND-LET-PM01", "pilares do mezanino PM-01"), ("ND-LET-PG01", "pilar do portão PG-01 (P9)"), ("ND-LET-PG02", "pilar do portão PG-02 (P10a)"), ("ND-LET-PG03", "pilar do portão PG-03 (P12)"), ("ND-LET-PG04", "pilar do portão PG-04 (P10b)"), ("ND-LET-TS01-1", "TS-01 fôrma"), ("ND-LET-TS01-2", "TS-01 armação e protensão"), ("ND-LET-TS01-3", "TS-01 esperas e peças de ligação"), ("ND-LET-COB01", "cobertura metálica: enterçamento Z contínuo, apoios ST-1P/ST-1V e emendas por transpasse (sem solda)"), ("ND-LET-COB02", "cobertura metálica: contraventamento X, correntes, tirantes"), ("ND-LET-COB03", "calha do eixo A e descidas"), ("ND-LET-COB04", "acabamentos Kingspan: beirais, encostos, platibanda e rufos"),
-                 ("ND-LET-I130", "vigas centrais I130 V405/406/407"), ("ND-LET-VB01", "vigas de borda VB-01 a VB-04"), ("ND-LET-VM01", "vigas do mezanino VM-01 e VM-02 (meio vaso) — fôrma"), ("ND-LET-VM02", "vigas do mezanino — 2º estágio, apoio e insertos"),
-                 ("ND-LET-LA01", "lajes alveolares do mezanino"), ("ND-LET-CM01", "placas de fechamento — locação e ordem das vistas (R01)"),
-                 ("ND-LET-PP00", "placa protendida típica — fôrma, protensão, insertos, ligações"), ("ND-LET-PP01", "fixação das placas — armação da ponta, conjunto montado e sequência"), ("ND-LET-PP02", "nicho NC-1 — fabricação"), ("ND-LET-PP03", "console CS-1 — fabricação e parafusos"), ("ND-LET-PP04", "CE-1, PT-1, PT-2 e fixadores"), ("ND-LET-PP-I", "placas da vista I (produção e montagem)"),
-                 ("ND-LET-PP-HJ", "placas das vistas H e J"), ("ND-LET-PP-G", "placas da vista G"), ("ND-LET-PP-EF", "placas das vistas E e F"),
-                 ("ND-LET-PP-C", "placas da vista C (portões)"), ("ND-LET-PP-B", "placas da vista B"), ("ND-LET-PP-D", "placas da vista D"),
-                 ("ND-LET-PP-A", "placas da vista A")]
+        idx = json.loads((pasta_pr / "indice.json").read_text(encoding="utf-8"))          # rev08: ordem e títulos do índice da NG01
+        LISTA = [(n if n.startswith("ND-LET-") else "ND-LET-" + n, idx.get("titulos", {}).get(n, "").lower()) for n in idx["ordem"]]
         for nome, desc in LISTA:
             arq = pasta_pr / f"{nome}.pdf"
             if not arq.exists():
@@ -598,7 +591,8 @@ if __name__ == "__main__":
     gravar_visualizador(malha, saida / "letsara_3d.html", "Letsara · modelo estrutural e projetos",
                         "Pavilhão pré-moldado 39,50 × 79,35 m · Marques Engenharia e Construções · cobertura escondida na platibanda · pranchas e conferência de insertos",
                         pendencias=modelo.pendencias, quant=q, ocultas=("Placas de fechamento", "Telhas", "Rufos e acabamentos", "Piso e fundações"), pranchas=pranchas, conexoes=cx,
-                        logo_cliente=AQ / "pranchas" / "logos" / "marques.jpg", cliente="Marques Engenharia e Construções")
+                        logo_cliente=AQ / "pranchas" / "logos" / "marques.jpg", cliente="Marques Engenharia e Construções",
+                        autoria="")                                    # projeto da fábrica: sem marca da ND nas imagens (21/10/2026)
     for g, d in q.items():
         print(f"{g:26s} {d['pecas']:4d} peças  {d['volume_m3']:8.1f} m³")
     print("pendências:", len(modelo.pendencias), "->", saida)

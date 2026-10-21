@@ -72,10 +72,10 @@ terca(d1, XT[0])
 pacote_long(d1, mm(AC.X_TELHA_A), XT[0] + 420, cart=(XT[0] - 45,))
 for mk in ("RF-2", "PG-1"):
     rufo(d1, mk)
-d1.cota_h([mm(AC.X_PLACA_A), c0, c0 + 300, mm(AC.X_TELHA_A), XT[0] - B_TERCA, XT[0]], zc - 400, -10, total=False)
+d1.cota_h([mm(AC.X_PLACA_A), c0, c0 + 300, XT[0] - B_TERCA, XT[0]], zc - 400, -10, total=False)
 d1.chamada((mm(AC.X_PLACA_A), zc + 220), (8, 30), "RF-2: PAR Tapper a cada 500 + PU")
 d1.chamada((mm(AC.X_TELHA_A) - 15, zc - 60), (8, -24), "PG-1 pingadeira (100 na calha)")
-d1.chamada((c0 + 150, zc - 150), (-6, -14), "calha CA-1 300 × 150 (ND-LET-COB03)")
+d1.chamada((c0 + 150, zc - 150), (6, -26), "calha CA-1 300 × 150 (ND-LET-COB03)")
 d1.chamada((XT[0] - 45, zt(XT[0] - 45) + 60), (6, 36), "perfil cartola #0,65 sobre a terça")
 d1.chamada((XT[0] + 250, zt(XT[0] + 250) + 60), (6, 22), "lã de rocha FSR 32")
 d1.chamada((XT[0] + 350, zt(XT[0] + 350) + 80), (4, 12), "zipada 455 #0,50")
@@ -83,20 +83,19 @@ d1.chamada((XT[0] + 380, zt(XT[0] + 380)), (6, -10), "TP-40 STD #0,65")
 d1.texto((c0 + 330, zc + 6), f"+{AC.Z_TOP_CALHA:.3f}".replace(".", ","), "nota", "BOTTOM_LEFT")
 
 # ================================================================== DET 2 — na cabeça do P1 (eixo A) 1:10
-d2 = pr.vista("DET 2", (Q[0] + 255, Q[1] + 400 - zc / 10), 10, titulo="DETALHE 2 — CALHA NA CABEÇA DO P1", subtitulo="contra-rufo RF-2C na face da cabeça", unidade="mm")
+d2 = pr.vista("DET 2", (Q[0] + 255, Q[1] + 400 - zc / 10), 10, titulo="DETALHE 2 — CALHA NA CABEÇA DO P1", subtitulo="contra-rufo RF-2C na face da cabeça do P1 (40 × 30); calha a 20 da face", unidade="mm")
 pts = [(-300, zc - 400), (0, zc - 400), (0, zc + 520), (-300, zc + 520)]
 d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, CONC, 0.03)
 d2.interrupcao((-310, zc + 520), (10, zc + 520))
 d2.poli([(c0 + 60, zc + 120), (c0, zc + 120), (c0, zc - 150), (c0 + 300, zc - 150), (c0 + 300, zc), (c0 + 325, zc)], "METALICA")
 rufo(d2, "RF-2C")
 d2.chamada((0, zc + 200), (14, 16), "RF-2C: PAR Tapper a cada 250 + PU no topo")
-d2.chamada((-150, zc + 100), (-10, 20), "cabeça do P1 40 × 30")
-d2.cota_h([-300, 0, c0, c0 + 300], zc - 400, -10, total=False)
+d2.cota_h([-300, 0, c0 + 300], zc - 400, -10, total=False)
 
 # ================================================================== DET 3 — encosto no lado alto (eixo E) 1:10
 XE = mm(AC.LARG)
 zE = mm(AC.z_zip(AC.X_TELHA_E))
-d3 = pr.vista("DET 3", (Q[0] + 420 - XE / 10, Q[1] + 400 - zE / 10), 10, titulo="DETALHE 3 — ENCOSTO NO LADO ALTO (EIXO E, ENTRE PILARES)",
+d3 = pr.vista("DET 3", (Q[0] + 432 - XE / 10, Q[1] + 400 - zE / 10), 10, titulo="DETALHE 3 — ENCOSTO NO LADO ALTO (EIXO E, ENTRE PILARES)",
               subtitulo="rufo de topo liso RF-3 com veda-onda; sobe por baixo do rufo chapéu RF-1 (manual p. 40)", unidade="mm")
 zE = mm(AC.z_zip(AC.X_TELHA_E))
 placa(d3, mm(AC.X_PLACA_E), zE - 600, ZPA)
@@ -112,11 +111,11 @@ d3.poli([(XT[-1] - 700, zt(XT[-1] - 700) + 150), (xv - 200, zt(xv - 200) + 150),
 d3.cota_h([XT[-1] - B_TERCA, XT[-1], xv, XE, mm(AC.X_PLACA_E), mm(AC.X_PLACA_E) + 100], zE - 600, -10, total=False)
 d3.cota_v([zE, zE + 70, ZPA], mm(AC.X_PLACA_E) + 100, 14, total=False)
 d3.chamada((xv - 20, zE + 35), (-30, -22), "veda-onda + Z do veda-onda + massa")
-d3.chamada((mm(AC.X_PLACA_E) - 20, mm(AC.z_zip(AC.X_TELHA_E)) + 80), (-20, 30), "CR-1 L 40 × 40 #1,25 (Tapper a cada 500)")
+d3.chamada((mm(AC.X_PLACA_E) - 20, mm(AC.z_zip(AC.X_TELHA_E)) + 80), (-40, 44), "CR-1 L 40 × 40 #1,25 (Tapper a cada 500)")
 d3.chamada((xv - 250, zt(xv - 250) + 230), (-22, 18), "painel solar (tracejado)")
 d3.chamada((xv + 100, zE + 95), (6, 34), "RF-3 rufo de topo liso")
 d3.chamada((mm(AC.X_PLACA_E) + 50, ZPA + 10), (8, 12), "RF-1 rufo chapéu (det. 5)")
-d3.texto((mm(AC.X_PLACA_E) + 115, ZPA), "+10,000", "nota", "MIDDLE_LEFT")
+d3.texto((mm(AC.X_PLACA_E) + 200, ZPA), "+10,000", "nota", "MIDDLE_LEFT")
 
 # ================================================================== DET 4 — borda lateral (linhas 1 e 9) 1:5, corte transversal às ondas
 d4 = pr.vista("DET 4", (Q[0] + 45, Q[1] + 205), 5, titulo="DETALHE 4 — BORDA LATERAL (LINHAS 1 E 9)",
@@ -148,24 +147,24 @@ d4.poli(zp + [(yb + 700, 80)], "METALICA")
 conv4 = lambda a, b: (a, b - mm(AC.z_zip(AC.LARG / 2)) - 70 + 80 + 70)
 for mk in ("RF-4", "RF-4C", "RB-1/2"):
     rufo(d4, mk, lambda a, b: (a, b - mm(AC.z_zip(AC.LARG / 2) + AC.PAC["zipada"]) + 150))
-d4.cota_h([-100, 0, yv0, yb, yb + 60], -500, -8, total=False)
+d4.cota_h([-100, 0, yv0, yb, yb + 60], -540, -8, total=False)
 d4.cota_v([0, 40, 80, 150], yb + 700, 10, total=False)
 d4.chamada((30, 230), (10, 22), "RF-4C contra-rufo: Tapper a cada 500 + PU")
-d4.chamada((yb + 60, 130), (10, 36), "RB-1 / RB-2 rufo de borda + base deslizante")
+d4.chamada((yb + 60, 130), (30, 16), "RB-1 / RB-2 rufo de borda + base deslizante")
 d4.chamada((yb / 2, 168), (8, 24), "RF-4 rufo de acabamento lateral")
 d4.chamada((yv0 + 75, -420), (14, -6), "VB 15 × 60")
 d4.chamada((yb + 300, -150), (10, -14), "terça Z 302 (passa 110 do eixo da VB)")
 
 # ================================================================== DET 5 — rufo chapéu (RF-1 e RF-1C) 1:5
-d5 = pr.vista("DET 5", (Q[0] + 250, Q[1] + 230 - ZPA / 5), 5, titulo="DETALHE 5 — RUFO CHAPÉU DA PLATIBANDA", subtitulo="RF-1 sobre a placa; RF-1C sobre a cabeça do pilar + placa (manual p. 46)", unidade="mm")
+d5 = pr.vista("DET 5", (Q[0] + 294, Q[1] + 238 - ZPA / 5), 5, titulo="DETALHE 5 — RUFO CHAPÉU DA PLATIBANDA", subtitulo="RF-1 sobre a placa; RF-1C sobre a cabeça do pilar + placa (manual p. 46)", unidade="mm")
 placa(d5, 0, ZPA - 260, ZPA)
 d5.interrupcao((-10, ZPA - 260), (110, ZPA - 260))
 rufo(d5, "RF-1")
-d5.cota_h([-20, 0, 100, 120], ZPA - 260, -8, total=False)
+d5.cota_h([-20, 0, 100, 120], ZPA - 290, -8, total=False)
 d5.cota_v([ZPA - 100, ZPA - 70, ZPA], 135, 10, total=False)
 d5.chamada((-20, ZPA - 40), (-12, 10), "aba externa 70 + pingadeira")
-d5.chamada((120, ZPA - 60), (12, 6), "aba interna 100: Tapper a cada 500 + PU")
-d5.chamada((50, ZPA + 8), (6, 14), "caimento 5 % para dentro")
+d5.chamada((120, ZPA - 60), (8, 34), "aba interna 100: Tapper a cada 500 + PU")
+d5.chamada((50, ZPA + 8), (-24, 14), "caimento 5 % para dentro")
 X5 = 300
 pts = [(X5, ZPA - 260), (X5 + 100, ZPA - 260), (X5 + 100, ZPA), (X5, ZPA)]
 d5.poli(pts, "CORTADO", fechada=True); d5.hachura(pts, CONC, 0.03)
@@ -173,22 +172,22 @@ pts = [(X5 + 125, ZPA - 260), (X5 + 425, ZPA - 260), (X5 + 425, ZPA), (X5 + 125,
 d5.poli(pts, "CORTADO", fechada=True); d5.hachura(pts, CONC, 0.03)
 d5.interrupcao((X5 - 10, ZPA - 260), (X5 + 435, ZPA - 260))
 rufo(d5, "RF-1C", lambda u, w: (X5 + u, w))
-d5.cota_h([X5 - 20, X5, X5 + 100, X5 + 125, X5 + 425, X5 + 445], ZPA - 260, -8, total=False)
+d5.cota_h([X5 - 20, X5, X5 + 100, X5 + 125, X5 + 425, X5 + 445], ZPA - 290, -8, total=False)
 d5.chamada((X5 + 270, ZPA + 12), (6, 14), "RF-1C (peça de 600 sobre cada cabeça)")
 d5.texto((X5 + 275, ZPA - 120), "cabeça do pilar", "nota", "MIDDLE_CENTER")
 d5.texto((X5 + 50, ZPA - 120), "placa", "nota", "MIDDLE_CENTER", rot=90)
 
 # ================================================================== DET 6 — costura transversal (1:2,5) e DET 7 — pacote (1:5)
-d6 = pr.vista("DET 6", (Q[0] + 250, Q[1] + 95), 2.5, titulo="DETALHE 6 — COSTURA TRANSVERSAL DOS RUFOS", subtitulo="transpasse 200 com fita Tacky Tape e massa", unidade="mm")
+d6 = pr.vista("DET 6", (Q[0] + 235, Q[1] + 40), 4, titulo="DETALHE 6 — COSTURA TRANSVERSAL DOS RUFOS", subtitulo="transpasse 200 com fita Tacky Tape e massa", unidade="mm")
 d6.linha((0, 0), (400, 0), "METALICA"); d6.linha((200, 3), (600, 3), "METALICA")
 d6.ret(250, 0.5, 60, 2, "COTA")
 for x in (300, 350):
     d6.linha((x, -10), (x, 14), "METALICA")
 d6.cota_h([200, 300, 400], 3, 8, total=True)
 d6.chamada((280, 1.5), (-8, -10), "fita Tacky Tape 9,5 + massa vedante")
-d6.chamada((350, 14), (8, 8), "2 costuras PB 1/4\"-14 × 7/8\" P01")
+d6.chamada((350, 14), (20, 6), "2 costuras PB 1/4\"-14 × 7/8\" P01")
 
-d7 = pr.vista("DET 7", (Q[0] + 565, Q[1] + 200), 5, titulo="DETALHE 7 — PACOTE DA COBERTURA (SANDUÍCHE)", subtitulo="corte transversal às ondas sobre a terça (manual p. 28 e 29)", unidade="mm")
+d7 = pr.vista("DET 7", (Q[0] + 565, Q[1] + 214), 5, titulo="DETALHE 7 — PACOTE DA COBERTURA (SANDUÍCHE)", subtitulo="corte transversal às ondas sobre a terça (manual p. 28 e 29)", unidade="mm")
 d7.ret(0, -50, 400, 50, "VISTA")
 pts, u = [], 0
 while u < 400:
@@ -200,14 +199,14 @@ for xc in (106, 351):
 d7.hachura([(0, 40), (400, 40), (400, 80), (0, 80)], "ANSI37", 0.6, "HACHURA")
 d7.poli([(0, 80), (190, 80), (197, 150), (213, 150), (220, 80), (400, 80)], "METALICA")
 d7.poli([(195, 80), (195, 95), (215, 95), (215, 80)], "METALICA")
-d7.cota_v([-50, 0, 40, 80, 150], 400, 10, total=False)
+d7.cota_v([-50, 0, 40, 80, 150], 0, -10, total=False)
 for k, (yy, t) in enumerate([(-30, "0 terça Z 302 (cliente)"), (20, "1º TP-40 STD 980 #0,65 — PB 12-14 × 3/4\" P03, 4/telha/terça"),
                              (60, "2º cartola #0,65 — PB 1/4\"-14 × 7/8\" P01 em todas as ondas"), (70, "3º lã de rocha FSR 32 (40 mm)"),
                              (90, "4º clipe fixo/deslizante #0,65 — 2 PB 12-14 × 3/4\""), (130, "5º zipada 455 #0,50")]):
     d7.chamada((390, yy), (22, -30 + 13 * k), t)
 
 # ================================================================== PLANTA DE RUFOS E CLIPES (1:400)
-pl = pr.vista("PLANTA", (Q[0] + 470, Q[1] + 60), 800, titulo="PLANTA DE COBERTURA — RUFOS E CLIPES", subtitulo="água única de 3 % do eixo A para o eixo E; montagem da linha 1 para a 9", unidade="mm")
+pl = pr.vista("PLANTA", (Q[0] + 470, Q[1] + 36), 800, titulo="PLANTA DE COBERTURA — RUFOS E CLIPES", subtitulo="água única de 3 % do eixo A para o eixo E; montagem da linha 1 para a 9", unidade="mm")
 W, Lc = mm(AC.LARG), mm(AC.COMP)
 pl.ret(mm(AC.X_PLACA_A) - 100, mm(AC.Y_PLACA_1) - 100, W + 650 + 200, Lc + 650 + 200, "VISTA")
 pl.ret(mm(AC.X_PLACA_A), mm(AC.Y_PLACA_1), W + 650, Lc + 650, "VISTA")

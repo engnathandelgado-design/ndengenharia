@@ -1,5 +1,5 @@
 """ND-LET-PP05 — ombreira metálica OM-1 da porta da vista I (rev06d, DEC-028): U dobrado 125 × 80 × 6,3 abraçando a ponta das
-placas I-13 / I-14, base rotulada no baldrame e topo preso na placa I-15 (sobre a porta, 12 cordoalhas) pela chapa CL-1.
+placas I-13 / I-14, base rotulada no baldrame e topo preso na placa I-15 (sobre a porta, PP-05P: 10 fios Ø6 + 2 buchas BR-1) pela chapa CL-1.
 Vistas cotadas, planta (corte a +0,60), detalhes da base e da CL-1, isométrico com balões, lista de materiais, fixadores,
 sequência de montagem e notas. Cotas em mm. Geometria e esforços de calc_ombreira.py (ombreira.json)."""
 import sys
@@ -46,11 +46,12 @@ v1.ret(YF, CL0, CL["t"], CLL, "METALICA")
 v1.linha((-150, 0), (150, 0), "TERRENO")
 v1.cota_v([0, TB, 1250, ZT, ZI15], -100, -10, total=False)
 v1.cota_v([0, ZP[0], ZP[1], ZCLU, ZCLB], 100, 12, total=False)
-v1.cota_h([-100, -YF, YF, 100], 0, -10, total=False)
+v1.cota_h([-YF, YF], 0, -10, total=False)
+v1.cota_h([-100, 100], 0, -18, total=False)                                      # rev08: largura do U e da base em linhas separadas
 v1.chamada((0, 1800), (-32, 0), "1 — U 125 × 80 × 6,3")
 v1.chamada((YF + 6, CL0 + 200), (14, 8), "3 — CL-1 (face interna)")
 v1.chamada((0, ZI15 + 165), (-16, 10), "placa I-15 (+2,50)")
-v1.chamada((-30, 700), (-32, -10), "placa I-13 (atrás)")
+v1.chamada((-30, 700), (-32, 6), "placa I-13 (atrás)")
 I.solda(v1, (-YF, TB), (-16, -16), a=5, tipo="filete", contorno=True, cauda="oficina")
 
 # ================================================================== V2 — vista lateral pela face interna, 1:10
@@ -71,15 +72,15 @@ for x in B["ex"]:
 v2.linha((-450, 0), (250, 0), "TERRENO")
 v2.ret(0, 0, 200, 2470, "OCULTA")
 v2.texto((100, 1500), "PORTA", "min", "MIDDLE_CENTER", rot=90)
-v2.cota_h([-BF, XP, 0, 160], 0, -14, total=False)
-v2.cota_v([0, ZP[0], ZP[1], 1250, ZCLU, ZT, ZI15, ZCLB, CL0 + CLL], 200, 10, total=False)
-v2.chamada((-50, ZP[0]), (-22, 10), "4 — M16 passante (furo Ø18 nas 2 abas e na placa)")
-v2.chamada((-BF / 2, ZCLB), (-24, 12), "CL-1: M16 em bucha BR-1 (oblongo vertical)")
+v2.cota_h([-BF, 0, 160], 0, -14, total=False)
+v2.cota_v([0, ZP[0], ZP[1], 1250, ZCLU, ZI15, ZCLB, CL0 + CLL], 200, 10, total=False)   # rev08: folga U × I-15 (10) na vista pela porta
+v2.chamada((-50, ZP[0]), (-40, 10), "4 — M16 passante (Ø18)")
+v2.chamada((-BF / 2, ZCLB), (-40, 12), "CL-1: M16 em bucha BR-1")
 v2.chamada((B["ex"][1], -60), (14, -8), "2 chumbadores químicos M16 hef 100")
-v2.chamada((XP, 600), (10, -16), "ponta da placa a 20 do vão")
+v2.chamada((XP, 600), (-6, -16), "ponta da placa a 20")
 
 # ================================================================== V3 — planta (corte a +0,60), 1:2
-v3 = pr.vista("PLANTA", (Q[0] + 385, Q[1] + 345), 2.0, titulo="CORTE HORIZONTAL A +0,60 (PLANTA)", subtitulo="lado de fora embaixo; vão da porta à direita", unidade="mm")
+v3 = pr.vista("PLANTA", (Q[0] + 423, Q[1] + 345), 2.0, titulo="CORTE HORIZONTAL A +0,60 (PLANTA)", subtitulo="lado de fora embaixo; vão da porta à direita", unidade="mm")
 v3.ret(-250, -YP, 250 + XP, 2 * YP, "CORTADO")
 v3.hachura([(-250, -YP), (XP, -YP), (XP, YP), (-250, YP)], "AR-CONC", 0.03)
 U_pts = [(-BF, -YF), (0, -YF), (0, YF), (-BF, YF), (-BF, YF - T), (-T, YF - T), (-T, -YF + T), (-BF, -YF + T)]
@@ -119,8 +120,8 @@ v5.circulo((50, ZCLU - CL0), 9, "METALICA")
 v5.poli([(41, ZCLB - CL0 - 20), (59, ZCLB - CL0 - 20), (59, ZCLB - CL0 + 20), (41, ZCLB - CL0 + 20)], "METALICA", fechada=True)
 v5.cota_v([0, ZCLU - CL0, ZCLB - CL0, CLL], CL["b"], 8, total=True)
 v5.cota_h([0, 50, CL["b"]], 0, -8, total=False)
-v5.texto((62, ZCLU - CL0), "Ø18 (aba do U)", "min", "MIDDLE_LEFT")
-v5.texto((62, ZCLB - CL0), "oblongo 18 × 40 (I-15)", "min", "MIDDLE_LEFT")
+v5.chamada((50, ZCLU - CL0), (40, 6), "Ø18 (aba do U)")
+v5.chamada((50, ZCLB - CL0), (40, 6), "oblongo 18 × 40 (I-15)")
 
 # ================================================================== V6 — isométrico explodido com balões
 cam = I.Camera((-1.0, -1.25, 0.75))
@@ -135,7 +136,7 @@ for z in ZP:
 for x in B["ex"]:
     S.append(I.cilindro((x, 0, -600), "z", 8, 160, item=6, cor=I.CINZA_PAR, liso=True))
 S.append(I.caixa(-BF + 10, XP - 2, YP + 80, YP + 80 + NEO, 60, 1200, item=7, cor=(70, 70, 70)))
-v6 = pr.vista("ISO", (Q[0] + 525, Q[1] + 140), 9.0, titulo="OM-1 — ISOMÉTRICO EXPLODIDO", subtitulo="balões = itens da lista", unidade="mm")
+v6 = pr.vista("ISO", (Q[0] + 569, Q[1] + 132), 9.0, titulo="OM-1 — ISOMÉTRICO EXPLODIDO", subtitulo="balões = itens da lista", unidade="mm")
 pj = I.desenhar_iso(v6, S, cam)
 I.balao(v6, pj((0, 0, 1700)), (14, 6), 1)
 I.balao(v6, pj((80, 0, -300)), (14, -6), 2)
@@ -170,11 +171,11 @@ seq = [
     "Fornecedor da esquadria: batente da porta parafusado na alma do U; caixilhos da faixa encaixados nas abas, com vedação PU."]
 y = pr.notas(XC, y - 8, seq, 220, titulo="SEQUÊNCIA DE MONTAGEM")
 pr.notas(XC, y - 4, [
-    f"Função: dar apoio fora do plano à ponta das placas I-13 / I-14 do lado da porta e ao batente. Base rotulada (só cortante); topo na placa I-15, que tem 12 cordoalhas por receber o topo das 2 ombreiras (tipo PP-05P, ND-LET-PP00).",
+    f"Função: dar apoio fora do plano à ponta das placas I-13 / I-14 do lado da porta e ao batente. Base rotulada (só cortante); topo na placa I-15 (tipo PP-05P, ND-LET-PP00: mesma protensão da placa típica — 10 fios Ø6 — e 2 buchas BR-1 para a CL-1).",
     "A placa I-15 leva 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, a 40 mm de cada lado do vão para dentro das placas (eixo da CL-1).",
     "Chapas A36; U dobrado a frio (raio interno 6); solda de oficina U × chapa de base: filete 5 E70XX em todo o contorno, inspeção visual 100 %. Galvanização a fogo (NBR 6323) depois da solda; furos galvanizados repassados.",
     "Tolerâncias NBR ISO 2768-1 classe m; furos Ø18 ± 0,3; oblongo 18 × 40 ± 0,5. Prumo da ombreira 2 mm em 2,5 m.",
     "Chumbador químico M16 5.8 hef 100 (Hilti HIT-RE 500 V4, Fischer FIS EM Plus ou equivalente), borda mínima 75 mm no baldrame; seguir o tempo de cura do fabricante.",
-    "Medidas em mm. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
+    "Medidas em mm."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP05")
 print("PP05", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

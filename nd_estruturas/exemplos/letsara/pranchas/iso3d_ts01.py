@@ -75,7 +75,6 @@ p.enable_parallel_projection()
 p.camera_position = [(L * 0.5 - 8, -14, 9), (L * 0.5, 0, 0.45), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(2.3)
 p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · 12,0 t · 14 peças".replace(".", ","), font_size=16, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-geral.png")
 from PIL import Image, ImageChops
 im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-geral.png").convert("RGB")
@@ -134,7 +133,6 @@ p.enable_parallel_projection()
 p.camera_position = [(-3.2, -5.4, 2.4), (1.3, 0, 0.55), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.15)
 p.add_text("Ponta da TS-01: apoio, terças Z contínuas por transpasse, ST-1P e X — sem solda, sem mão-francesa", font_size=15, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-ponta.png")
 im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-ponta.png").convert("RGB")
 bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()

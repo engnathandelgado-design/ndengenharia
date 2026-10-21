@@ -54,15 +54,15 @@ for (x0, x1) in N["x_gr"]:
 vf.cota_h([0, AE[1], AD[0], AD[1], B], -hgb, -8, total=True)
 vf.cota_h([0] + XG + [B], H + hgt, 6, total=False)
 vf.cota_v([-hgb, 0, tb, za, H - tt, H, H + hgt], 0, -10, total=False)
-vf.cota_v([0, H], B, 12, total=False)
+vf.cota_v([0, H], 0, -18, total=False)                                          # rev08: altura total à esquerda (direita fica para as soldas)
 vf.texto((-4, H / 2), "PONTA DA PLACA", "nota", "MIDDLE_CENTER", rot=90)
-I.solda(vf, (AE[1] - 6, H - tt), (12, -30), a=None, tipo="chanfro", lado="seta", cauda=f"CJP + filete {gg(AS['aba_teto'])} (det. A)")
-I.solda(vf, (B - tp, 110), (16, -10), a=AS["parede"], tipo="filete", lado="ambos", contorno=True, cauda="parede: 3 lados, dentro e fora")
+I.solda(vf, (AE[1] - 6, H - tt), (36, -30), a=None, tipo="chanfro", lado="seta", cauda=f"CJP + filete {gg(AS['aba_teto'])} (det. A)")
+I.solda(vf, (B - tp, 160), (24, 14), a=AS["parede"], tipo="filete", lado="ambos", contorno=True, cauda="parede: 3 lados, dentro e fora")
 I.solda(vf, (XG[3], H + 20), (40, 6), a=AS["grampo"], tipo="filete", lado="ambos", comp=20, cauda="cada perna (4×)")
 vf.marcador_corte((25, -45), (25, H + 60), "A", lado=1)
 
 # ================================================================== CORTE A-A (lateral) 1:1,5
-va = pr.vista("CORTE A-A", (Q[0] + 195, Q[1] + 345), 2.0, titulo="CORTE A-A", subtitulo="boca à esquerda", unidade="mm")
+va = pr.vista("CORTE A-A", (Q[0] + 205, Q[1] + 345), 2.0, titulo="CORTE A-A", subtitulo="boca à esquerda", unidade="mm")
 va.ret(0, tb, pf, H - tt - tb, "VISTA")                                        # parede lateral vista ao fundo
 chapa_lat(va, 0, H - tt, pf, tt)
 chapa_lat(va, 0, 0, pf, tb)
@@ -73,11 +73,11 @@ va.cota_h([0, ta, yg, pf, P], -hgb, -8, total=True)
 va.cota_v([-hgb, 0, tb, za, H - tt, H, H + hgt], P, 14, total=False)
 va.texto((-4, H / 2), "BOCA", "nota", "MIDDLE_CENTER", rot=90)
 I.solda(va, (pf, H - tt / 2), (22, 16), a=AS["teto_fundo"], tipo="filete", lado="ambos", cauda="teto × fundo")
-I.solda(va, (pf, tb / 2), (22, -16), a=AS["base_fundo"], tipo="filete", lado="ambos", cauda="base × fundo")
-I.solda(va, (ta, H - tt - 2), (20, -40), a=AS["aba_teto"], tipo="filete", lado="seta", cauda="aba × teto (atrás)")
+I.solda(va, (pf, tb / 2), (30, -30), a=AS["base_fundo"], tipo="filete", lado="ambos", cauda="base × fundo")
+I.solda(va, (ta, H - tt - 2), (44, -40), a=AS["aba_teto"], tipo="filete", lado="seta", cauda="aba × teto (atrás)")
 
 # ================================================================== VISTA SUPERIOR 1:1,5
-vs = pr.vista("VISTA SUPERIOR", (Q[0] + 290, Q[1] + 445), 2.0, titulo="VISTA SUPERIOR", subtitulo="boca embaixo; abas e parede tracejadas", unidade="mm")
+vs = pr.vista("VISTA SUPERIOR", (Q[0] + 290, Q[1] + 507), 2.0, titulo="VISTA SUPERIOR", subtitulo="boca embaixo; abas e parede tracejadas", unidade="mm")
 chapa_lat(vs, 0, 0, B, pf)
 chapa_lat(vs, 0, pf, B, tf)
 vs.ret(B - tp, 0, tp, pf, "OCULTA")
@@ -98,7 +98,7 @@ ancora = {}
 for s in SE:
     if s.item and s.item not in ancora:
         ancora[s.item] = s.centro
-desl = {1: (-14, 10), 2: (-14, -8), 3: (12, 10), 4: (12, -8), 5: (-14, 4), 6: (12, 6), 7: (-12, 6), 8: (12, -6)}
+desl = {1: (16, 18), 2: (-26, -14), 3: (12, 10), 4: (12, -8), 5: (-14, 4), 6: (12, 6), 7: (-12, 6), 8: (12, -6)}
 for k, p in ancora.items():
     I.balao(ve, pj(p), desl[k], k)
 
@@ -201,6 +201,6 @@ pr.notas(XC - 60, y - 4, [
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); retocar com galvanização a frio onde houver dano.",
     "Na fôrma da placa: boca rente à face interna (lado da fôrma) e ponta rente à cabeceira, preso no gabarito (posição ±5); vedar a cavidade com isopor antes de concretar. NC-1 na ponta inicial e NC-1' (espelhado) na final; pontas do lado da porta (vista I) sem nicho.",
     "Grampos dentro dos estribos N5 (teto) e N6 (base) da armação da ponta (ND-LET-PP01, det. 1 e 2).",
-    "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
+    "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP02")
 print("PP02", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

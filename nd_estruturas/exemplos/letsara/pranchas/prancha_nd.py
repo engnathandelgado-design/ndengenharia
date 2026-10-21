@@ -30,10 +30,28 @@ CAMADAS = {
     "CHAMADA": (7, 13, "Continuous"), "INDICACAO": (7, 25, "Continuous"), "TABELA": (7, 25, "Continuous"),
     "TABELA_FINA": (8, 13, "Continuous"), "BOLHA": (8, 13, "Continuous"), "POSICAO": (1, 18, "Continuous"),
 }
+# Emissão executiva (21/10/2026, decisão do Nathan): toda folha gerada sai liberada para produção e montagem.
+# Uma revisão nova é acrescentada automaticamente (número = maior revisão da folha + 1) e a nota antiga
+# "PARA APROVAÇÃO, NÃO EXECUTAR" é trocada. EMISSAO = None volta ao comportamento anterior.
+EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM", fase="EXECUTIVO — LIBERADO",
+               nota="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM.")
+_NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
+                  "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
+
+
+def _emissao_txt(s):
+    if EMISSAO and isinstance(s, str):
+        for a in _NOTAS_ANTIGAS:
+            if a in s:
+                s = s.replace(a, EMISSAO["nota"])
+    return s
+
+
 EMPRESA = dict(nome="ND ENGENHARIA E ASSESSORIA LTDA", cnpj="46.745.157/0001-47",
                rt="Eng. Civil Nathan Henrique Delgado", crea="CREA-SC 168298-1", site="ndengenharia.com",
                contato="WhatsApp (46) 92000-4685 · Saudade do Iguaçu/PR")
-AREA_CORD = {9.5: 55.5, 12.7: 98.7, 15.2: 140.0}   # mm², cordoalhas de 7 fios CP-190 RB (NBR 7483 — conferir)
+AREA_CORD = {9.5: 55.5, 12.7: 98.7, 15.2: 140.0,   # mm², cordoalhas de 7 fios CP-190 RB (NBR 7483 — conferir)
+             4.0: 12.6, 5.0: 19.6, 6.0: 28.3, 7.0: 38.5, 8.0: 50.3}   # fios CP-175 RB (NBR 7482)
 FONTE = "DejaVuSansCondensed.ttf"
 # logos dos clientes no selo (campo à direita de CLIENTE/OBRA/LOCAL); chave = nome do cliente em maiúsculas
 LOGOS_CLIENTES = {"MARQUES ENGENHARIA E CONSTRUÇÕES": os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos", "marques.jpg")}
@@ -98,6 +116,8 @@ class Prancha:
                           data=datetime.date.today().strftime("%d/%m/%Y"), folha="01/01",
                           projeto=EMPRESA["rt"], desenhista="ND Engenharia", verificado="", fase="EXECUTIVO")
         self.dados.update(dados or {})
+        if EMISSAO:
+            self.dados["fase"] = EMISSAO["fase"]
         self.cor = cor
         self.revisoes, self.vistas, self.refs, self.blocos_livres = [], [], [], []
         self.posicoes_desenho, self.posicoes_tabela = set(), set()
@@ -130,10 +150,12 @@ class Prancha:
     def carimbo_bbox(self):
         x0, y0, x1, y1 = self.quadro
         extra = 8 if self.dados.get("marca") else 0
-        return (x1 - 180, y0, x1, y0 + 78 + extra + 5 * max(len(self.revisoes), 1) + 6)
+        n = max(len(self.revisoes), 1) + (1 if EMISSAO and not getattr(self, "_emitida", False) else 0)
+        return (x1 - 180, y0, x1, y0 + 78 + extra + 5 * n + 6)
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
+        s = _emissao_txt(s)
         t = self.msp.add_text(s, height=hh, rotation=rot, dxfattribs={"layer": camada, "style": "ND"})
         t.set_placement((x, y), align=TextEntityAlignment[alinh])
         return t
@@ -199,7 +221,7 @@ class Prancha:
                         lin_r, [28, 24, 32, 30], destaque_ultima=True)
         return dict(total_kg=total, resumo=resumo, y_base=y)
 
-    def tabela_cordoalhas(self, x, y_topo, cordoalhas, L_pista_m, Ep=195e3, fptk=1900.0):
+    def tabela_cordoalhas(self, x, y_topo, cordoalhas, L_pista_m, Ep=195e3, fptk=1900.0, nome="CORDOALHAS"):
         """cordoalhas: dict(pos='C1', diam=12.7, qtd=2, y=51 (mm da base), forca=137 (kN/cordoalha na pista),
         isol=3350 (mm isolado, 0 = aderente) e local='CENTRO'|'PONTAS'). ΔL teórico = F·L_pista/(Ep·Ap) (mm).
         Confere σpi ≤ min(0,77 fptk; 0,85 fpyk), fpyk = 0,9 fptk (pré-tração, RB — NBR 6118 9.6.1.2.1, conferir).
@@ -215,7 +237,7 @@ class Prancha:
             linhas.append([c["pos"], f"{c['diam']:g}".replace(".", ","), c["qtd"], f"{c['y']:.0f}",
                            f"{c['forca']:.1f}".replace(".", ","), f"{dL:.0f}", isol])
             self.posicoes_tabela.add(c["pos"])
-        y = self.tabela(x, y_topo, f"CORDOALHAS CP-{fptk/10:.0f} RB — PISTA {L_pista_m:g} m".replace(".", ","),
+        y = self.tabela(x, y_topo, f"{nome} CP-{fptk/10:.0f} RB — PISTA {L_pista_m:g} m".replace(".", ","),
                         ["POS", "Ø (mm)", "QUANT", "y (mm)", "F (kN)", "ΔL (mm)", "ISOLAM. (mm)"],
                         linhas, [12, 14, 14, 14, 18, 18, 38])
         self.avisos_extra += av                     # entram no verificar()/salvar()
@@ -238,6 +260,7 @@ class Prancha:
     def notas(self, x, y_topo, linhas, largura=170, titulo="NOTAS"):
         """Notas numeradas, quebra pela largura real. Use f-strings com os parâmetros (nota paramétrica)."""
         h = ALTURAS["nota"]
+        linhas = [_emissao_txt(t) for t in linhas]
         self.texto(x, y_topo - ALTURAS["sub"], titulo, "sub", "TITULO")
         y = y_topo - ALTURAS["sub"] - 4
         for i, s in enumerate(linhas, 1):
@@ -343,6 +366,7 @@ class Prancha:
         self.dados["rev"] = rev
 
     def _moldura_carimbo(self):
+        self._emitir()
         x0, y0, x1, y1 = self.quadro
         self.ret(0, 0, self.W, self.H, "CARIMBO_FINO")
         self.ret(x0, y0, x1, y1, "MOLDURA")
@@ -514,9 +538,19 @@ class Prancha:
                 if dono is not None and d2 == dono:
                     continue
                 if _seg_rect(a, b, r):
-                    av.append(("AVISO", f"linha ({lay}) cruza o texto '{txt[:30]}'"))
+                    av.append(("AVISO", f"linha ({lay}) cruza o texto '{txt[:30]}' @({r[0]:.0f},{r[1]:.0f})"))
                     break
         return av
+
+    def _emitir(self):
+        if EMISSAO and not getattr(self, "_emitida", False):
+            nums = [int(r) for r, _, _ in self.revisoes if str(r).isdigit()] or ([int(self.dados["rev"])] if str(self.dados.get("rev", "")).isdigit() else [0])
+            if not self.revisoes:
+                self.revisoes.append((self.dados["rev"], self.dados["data"], "EMISSÃO INICIAL"))
+            r = f"{max(nums) + 1:02d}"
+            self.revisoes.append((r, EMISSAO["data"], EMISSAO["desc"]))
+            self.dados["rev"], self.dados["data"] = r, EMISSAO["data"]
+            self._emitida = True
 
     def salvar(self, base, png_dpi=110):
         for v in self.vistas:

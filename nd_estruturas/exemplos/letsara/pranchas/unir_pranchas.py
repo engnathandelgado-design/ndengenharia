@@ -9,18 +9,34 @@ from ezdxf.addons import Importer
 
 PR = "/home/claude/letsara/pranchas/"
 OUT = "/home/claude/letsara/entregas/"
-REV = "rev06"
+REV = "rev08-executivo"
+# Emissão executiva (21/10/2026): fôrma e armação na mesma folha por marca; folhas AR-PIL/AR-VIG obsoletas.
+# A ordem segue o índice da NG01 (indice.json, quando existir).
 GRUPOS = [
-    ("01-PILARES", "PILARES — ARMADURAS (PADRÃO DE ARMAÇÃO) E FÔRMAS POR MARCA",
-     [f"ND-LET-AR-PIL-{k:02d}" for k in range(1, 7)] + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)] +
+    ("00-GERAIS", "FOLHA DE ROSTO, NOTAS GERAIS, PRODUÇÃO, LOCAÇÃO, CARGAS, CORTES E MONTAGEM",
+     ["ND-LET-NG01", "ND-LET-PR01", "ND-LET-LOC01", "ND-LET-CG01", "ND-LET-CT01", "ND-LET-CT02", "ND-LET-CT03", "ND-LET-CT04",
+      "ND-LET-MON01", "ND-LET-MON02", "ND-LET-MON03"]),
+    ("01-PILARES", "PILARES — FÔRMA E ARMAÇÃO POR MARCA",
+     [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)] +
      ["ND-LET-PC01", "ND-LET-PC02", "ND-LET-PC03", "ND-LET-PM01", "ND-LET-PG01", "ND-LET-PG02", "ND-LET-PG03", "ND-LET-PG04"]),
-    ("02-VIGAS", "VIGAS — ARMADURAS (PADRÃO DE ARMAÇÃO), FÔRMAS E INSERTOS",
-     [f"ND-LET-AR-VIG-{k:02d}" for k in range(1, 5)] + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01"]),
-    ("03-FORMAS-E-FECHAMENTO-LATERAL", "LOCAÇÃO, FÔRMAS, MONTAGEM, LAJES E FECHAMENTO LATERAL",
-     ["ND-LET-LOC01", "ND-LET-CT01", "ND-LET-MON01", "ND-LET-MON02", "ND-LET-LA01", "ND-LET-CM01", "ND-LET-PP00", "ND-LET-PP01", "ND-LET-PP02", "ND-LET-PP03", "ND-LET-PP04", "ND-LET-PP05",
-      "ND-LET-PP-A", "ND-LET-PP-B", "ND-LET-PP-C", "ND-LET-PP-D", "ND-LET-PP-EF", "ND-LET-PP-G", "ND-LET-PP-HJ", "ND-LET-PP-I"]),
-    ("04-COBERTURA", "COBERTURA METÁLICA — PLANTA, TRAVAMENTO, LIGAÇÕES, CALHA, ACABAMENTOS KINGSPAN E LISTAS", ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04"]),
+    ("02-VIGAS", "VIGAS — FÔRMA, ARMAÇÃO E PROTENSÃO POR MARCA", ["ND-LET-TS01-1", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01"]),
+    ("03-LAJES-E-FECHAMENTO", "LAJES ALVEOLARES E FECHAMENTO LATERAL",
+     ["ND-LET-LA01", "ND-LET-PP00", "ND-LET-PP01", "ND-LET-PP02", "ND-LET-PP03", "ND-LET-PP04", "ND-LET-PP05",
+      "ND-LET-PP-A", "ND-LET-PP-B", "ND-LET-PP-C", "ND-LET-PP-D", "ND-LET-PP-EF", "ND-LET-PP-G", "ND-LET-PP-HJ", "ND-LET-PP-I", "ND-LET-CM01"]),
+    ("04-COBERTURA", "COBERTURA METÁLICA — PLANTA, TRAVAMENTO, LIGAÇÕES, CALHA, ACABAMENTOS E LISTAS",
+     ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-MT01-1", "ND-LET-MT01-2"]),
 ]
+
+
+def _ordem():
+    """ordem do índice da NG01 (indice.json), senão a dos grupos; folhas extras dos grupos entram no fim do seu grupo."""
+    import json
+    base = [f for _, _, fl in GRUPOS for f in fl]
+    try:
+        idx = [("ND-LET-" + f if not f.startswith("ND-LET-") else f) for f in json.load(open(PR + "indice.json", encoding="utf-8"))["ordem"]]
+        return [f for f in idx if f in base] + [f for f in base if f not in idx]
+    except Exception:
+        return base
 
 
 def unir_dxf(nome, folhas):
@@ -65,10 +81,7 @@ def unir_pdf(nome, folhas):
 
 if __name__ == "__main__":
     so = sys.argv[1:]
-    # rev04 (preferência): PDF ÚNICO com todas as pranchas, na ordem dos grupos
-    # rev06 (revisão de obra): no PDF único, primeiro a obra inteira (locação, cortes, montagem, fechamento), depois as peças
-    GERAL = ["ND-LET-LOC01", "ND-LET-CT01", "ND-LET-MON01", "ND-LET-MON02", "ND-LET-CM01"]
-    todas = GERAL + [f for _, _, fl in GRUPOS for f in fl if f not in GERAL]
+    todas = _ordem()
     falta = [f for f in todas if not os.path.exists(PR + f + ".pdf")]
     assert not falta, falta
     p = unir_pdf("PRANCHAS", todas)

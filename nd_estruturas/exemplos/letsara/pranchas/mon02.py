@@ -3,6 +3,9 @@ lajes alveolares h20 + capa 5; corte de montagem; lista de peças e sequência. 
 import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha
+import pecas_obra as QT                                     # peças = mesma fonte das listas (quantitativos.py)
+PQ = {p_[1]: p_ for p_ in QT.pecas}
+fp = lambda t_: f"{t_:.1f}".replace(".", ",")
 
 f = lambda v, d=3: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
@@ -33,7 +36,7 @@ PIL2 = [("PL-02", 0.0, 600, 400), ("PM-01", X_EIXO["B"], 400, 600), ("PC-01", X_
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE MONTAGEM DO MEZANINO (+3,15 E +6,55) — VIGAS VM, LAJES ALVEOLARES, CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
-                        desenho="ND-LET-MON02", folha="02/02", fase="PARA APROVAÇÃO", rev="04"))
+                        desenho="ND-LET-MON02", folha="02/03", fase="PARA APROVAÇÃO", rev="04"))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
 pr.revisao("01", "12/10/2026", "GEOMETRIA DO R01; VM-01/VM-02; CONSOLOS SEM CHANFRO; CORTE 2-2 REFEITO")
 pr.revisao("04", "16/10/2026", "NBR 9062: VM EM MEIO VASO COM DENTE, 2º ESTÁGIO E CT-1; SEQUÊNCIA SEM ESCORAMENTO")
@@ -73,11 +76,11 @@ def planta(nome, origem, nivel, assento):
     return v
 
 v1 = planta("PLANTA +3,15", (Q[0] + 40, Q[3] - 165), NIVEIS[0], ASSENTO[0])
-v1.marcador_corte((M(12.0), -3000), (M(12.0), M(Y2) + 3000), "2", lado=1)
+v1.marcador_corte((M(12.0), -3000), (M(12.0), M(Y2) + 3000), "M", lado=1)
 v2 = planta("PLANTA +6,55", (Q[0] + 40, Q[3] - 357), NIVEIS[1], ASSENTO[1])
 
 # ------------------------------------------------------------------ CORTE 2-2 (1:50) — plano entre B e C, olhando para C
-c = pr.vista("CORTE 2-2", (Q[0] + 515, Q[3] - 370), 50, titulo="CORTE 2-2 — MEZANINO (ENTRE OS EIXOS B E C, OLHANDO PARA C)",
+c = pr.vista("CORTE M-M", (Q[0] + 515, Q[3] - 370), 50, titulo="CORTE M-M — MEZANINO (ENTRE OS EIXOS B E C, OLHANDO PARA C)",
              subtitulo="VM-02 meio vaso em corte nas linhas 1 e 2 (alma do lado da borda); laje h20 + capa 5; pilares do eixo C ao fundo", unidade="cm")
 c.linha((-1500, 0), (M(Y2) + 1500, 0), "TERRENO")
 Z_VISTA = 7600
@@ -105,7 +108,7 @@ for n, a in zip(NIVEIS, ASSENTO):
     c.ret(-200, zt + 210, M(Y2) + 400, 50, "VISTA")
     c.chamada((M(5.0), zt + 260), (10, 10), f"nível +{f(n, 2)}: laje h20 + capa 5 (tela Q138)")
 c.chamada((M(Y2) - 200, M(ASSENTO[0]) - 200), (-40, -22), f"CP-MEZ {H_CMEZ/10:.0f} cm sem chanfro, oculto atrás da VM (fundos alinhados)")
-c.chamada((0, M(ASSENTO[0]) + 150), (14, -12), f"VM-02 meio vaso 40 × {H_VIGA*100:.0f} protendida, {f(PESO_VM['VM-02'] + 0.1, 1)} t, 2 alças")
+c.chamada((0, M(ASSENTO[0]) + 150), (14, -12), f"VM-02 meio vaso 40 × {H_VIGA*100:.0f} protendida, {fp(PQ['VM-02'][7])} t, 2 alças")
 c.cota_h([0, M(Y2)], -1000, -10)
 c.cota_v([-1000, 0, M(ASSENTO[0]), M(NIVEIS[0]), M(ASSENTO[1]), M(NIVEIS[1])], -900, -10, total=False)
 def niv(x, z, txt, lado=1):
@@ -119,27 +122,24 @@ for n, a in zip(NIVEIS, ASSENTO):
 # ------------------------------------------------------------------ coluna direita
 XC = Q[2] - 200
 y = Q[3] - 6
-VMQ = {}
-for m, _, _, L in VM:
-    VMQ.setdefault(m, L)
-pecas = [[m, f"Meio vaso 40×{H_VIGA*100:.0f} protendido, dente {H_DENTE*100:.0f}×35, L {f(L, 2)} m", "8", f(PESO_VM[m] + 0.1, 1), f"CP-MEZ +{f(ASSENTO[0])} / +{f(ASSENTO[1])}"] for m, L in VMQ.items()]
-PESO_LA = 2.65 * L_P / 1000                                     # kN/m² × comprimento → kN por metro de largura
-for mk in ("LA-01", "LA-01R", "LA-02", "LA-02R"):
-    if mk in QT_LAJE:
-        bb = 1.25 if mk.startswith("LA-01") else 0.70
-        pecas.append([mk, f"Laje alveolar h20, {bb*100:.0f}×{L_P/10:.0f}{' c/ recorte' if mk.endswith('R') else ''}", f"{QT_LAJE[mk]}", f(PESO_LA * bb / 10, 1), "sobre as VM, apoio 10 cm"])
-pecas += [["CP-MEZ", f"Consolo 40×35×{H_CMEZ/10:.0f} sem chanfro (pilares das linhas 1–2)", "32", "—", "nos pilares (ver pranchas)"], ["CT-1", "Cantoneira antigiro L152×102×12,5 (parafusada)", "32", "—", "trilho IP-02 × bucha BR-2"],
-          ["PM-01", "Pilar 40×60 do mezanino (B2, D2), L 755", "2", f(0.24 * 7.55 * 25 / 10, 1), "cálice −1,00"]]
+LAJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/laje_alveolar.json"))
+pecas = [[m, f"Meio vaso 40×{H_VIGA*100:.0f} protendido, dente {H_DENTE*100:.0f}×35, L {f(PQ[m][4], 2)} m", str(PQ[m][5]), fp(PQ[m][7]), f"CP-MEZ +{f(ASSENTO[0])} / +{f(ASSENTO[1])}"] for m in ("VM-01", "VM-02")]
+for mk, ds in (("LA-01", "Laje alveolar LP20 125×945, 7 Ø12,7"), ("LA-01R", "LA-01 c/ recorte 45×20, alv. 2 e 5 cheios"), ("LA-02", "Laje alveolar LP20 70×945, 4 Ø12,7")):
+    pecas.append([mk, ds, str(PQ[mk][5]), fp(PQ[mk][7]), "sobre a aba das VM, apoio 10 cm"])
+pecas += [["CP-MEZ", f"Consolo 40×35×{H_CMEZ/10:.0f} sem chanfro (pilares das linhas 1–2)", "32", "—", "nos pilares (ver pranchas)"], ["CT-1", "Cantoneira antigiro L152×102×12,5 (parafusada)", "32", "—", "bucha rosqueada M16 embutida no pilar"],
+          ["PM-01", f"Pilar 40×60 do mezanino (B2, D2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00"]]
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — MEZANINO", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [18, 92, 10, 18, 62], h_lin=6.0)
-seq = ["Pilares das linhas 1 e 2 já grauteados e com 24 h (ND-LET-MON01, etapa 2).",
-       f"Nível +{f(NIVEIS[0],2)}: vigas VM-01 e VM-02 na linha 1 e depois na linha 2 (sem escoramento): NEO-5 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); parafusar as 2 cantoneiras CT-1 ANTES de soltar do guindaste (torção de montagem, NBR 9062:2017 11.1).",
-       "Lajes alveolares LA-01 de A para E, apoio de 10 cm na aba da VM, neoprene em fita; chavetas grauteadas antes da capa.",
-       "Grautear a junta de 3 cm entre o nariz do dente e o pilar e as bainhas BA-1 com as N11 (6 Ø16) da continuidade; limpar e saturar o topo das VM (alças N9 Ø10 c/15 saindo 20 cm).",
-       "2º estágio sobre a alma das VM + capa 5 cm C30 com tela Q138 e N12 (8 Ø12,5) sobre os apoios, concretados de uma vez por quem executa a capa; não carregar antes de 7 dias (fck ≥ 20 MPa).",
-       f"Repetir para o nível +{f(NIVEIS[1],2)}. A cobertura das linhas 1–2 só é montada depois da capa do +{f(NIVEIS[1],2)}."]
+seq = ["Pré-requisitos (ND-LET-MON01): pilares grauteados há 24 h (graute ≥ 15 MPa); cobertura das linhas 3 a 9 montada; TS-01 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 AINDA NÃO montadas (sem elas a laje de 9,45 m não passa: entre a VB da linha 1 e a TS-01 da linha 2 o vão livre é 9,37 m).",
+       "Guindaste dentro do pavilhão no vão 2–3 (entrada pela abertura lateral das vistas E/F, livre até +7,50), afastado da I130 V407 do eixo C: duas posições (perto dos eixos B e D), raio até ~14 m para a linha 1; peça mais pesada VM-02 5,7 t.",
+       f"Nível +{f(NIVEIS[0],2)}: VM-01 e VM-02 na linha 1 e depois na linha 2 (sem escoramento): NEO-5 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); parafusar as 2 cantoneiras CT-1 nas buchas rosqueadas M16 embutidas no pilar ANTES de soltar do guindaste (torção de montagem, NBR 9062:2017 11.1).",
+       f"Lajes LA-01/LA-01R/LA-02 do +{f(NIVEIS[0],2)} vão a vão alternando os lados dos PM-01 (A–B, B–C, D–E, C–D) para limitar o desequilíbrio nos pilares, içadas só por garra nas 2 pontas ({fp(PQ['LA-01'][7])} t), apoio de 10 cm na aba sobre fita de neoprene 10 × 50; LA-01R junto aos pilares; chavetas grauteadas.",
+       "Grautear a junta de 3 cm do nariz do dente e as bainhas BA-1 com as N11 (6 Ø16); limpar e saturar o topo das VM; 2º estágio + capa 5 C30 com tela Q138, N12 e N1, de uma vez, por quem executa a capa; cura úmida 7 dias.",
+       f"Nível +{f(NIVEIS[1],2)}: VM (as de cima só depois das lajes de baixo — a laje não passa entre as VM do nível superior), lajes, 2º estágio e capa, igual ao +{f(NIVEIS[0],2)}. Carregar só com fck ≥ 20 MPa na capa.",
+       "Estabilidade provisória: pilares das linhas 1–2 engastados nos cálices, sem escoramento nem contraventamento provisório (sem placas, o vento atua só nos pilares, bem abaixo do caso final com as placas); a laje passa a diafragma com a capa ≥ 15 MPa. Vigas e lajes sem escoramento.",
+       "Depois: parede G da linha 2, TS-01 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
-notas = [f"Laje alveolar h20 + 5 em {f(L_P/1000, 2)} m com 500 kgf/m²: seção genérica com 8 Ø12,7 passa (MRd 215 ≥ 192 kN·m por painel; ELS-D ok). Confirmar com a tabela do fabricante (ND-LET-LA01).",
-         f"Vigas VM em meio vaso 40 × {H_VIGA*100:.0f} (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente Gerber {H_DENTE*100:.0f} × 35 (NBR 9062:2017 7.4, MEF): assentos +{f(ASSENTO[0])} e +{f(ASSENTO[1])}; fundo da viga e do consolo +{f(ASSENTO[0] - H_CMEZ/1000 + 0.0)} / +{f(ASSENTO[1] - H_CMEZ/1000)}; altura total com laje e capa {H_VIGA*100 + 26:.0f} cm (I90 anterior: 115 cm).",
+notas = [f"Laje alveolar LP20 (1245 × 200, 6 alvéolos Ø15,2) + capa 5 C30 em {f(L_P/1000, 2)} m, vão de cálculo 9,35 m: 7 Ø12,7 CP-190 RB, uma por nervura, σpi 1450 MPa ({fp(LAJ['cordoalhas'][0]['F_macaco_kN'])} kN por cordoalha), liberação com fckj ≥ {LAJ['fckj']:.0f} MPa; sobrecarga 5,0 kN/m² (escritório) + revestimento 1,0 kN/m² (ND-LET-LA01).",
+         f"Vigas VM em meio vaso 40 × {H_VIGA*100:.0f} (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente Gerber {H_DENTE*100:.0f} × 35 (NBR 9062:2017 7.4, MEF): assentos +{f(ASSENTO[0])} e +{f(ASSENTO[1])}; fundo da viga e do consolo +{f(ASSENTO[0] - H_CMEZ/1000 + 0.0)} / +{f(ASSENTO[1] - H_CMEZ/1000)}; altura total com laje e capa {H_VIGA*100 + 26:.0f} cm.",
          "Tolerâncias NBR 9062:2017 (5.2.2.6): pilar ±10 mm em planta; nível dos apoios ±10 mm; folga de ponta 30 mm; apoio da laje ≥ 10 cm medido após a montagem.",
          "Níveis em m, cotas em cm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(XC, y - 4, notas, 200)

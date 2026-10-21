@@ -89,13 +89,31 @@ def cena(p, z0=0.0, z1=L, chaves=True):
                             p.add_mesh(box(-fo - 0.064, yc + xa - 0.00315, zt - 0.080, 0.0545, 0.0063, 0.064), color="#c46a2a")   # almas
                         for xd in (0.039, -0.052):
                             p.add_mesh(box(-fo - 0.0635, yc + xd, zt, 0.019, 0.013, 0.035), color="#c46a2a")   # dentes
+    FI = G.get("fi")
+    if FI:                                                                                  # rev07: furo de içamento FI-1 (tubo Ø60)
+        zf_ = FI["z"] / 1000
+        if z0 <= zf_ <= z1:
+            ax_ = (0, 1, 0) if FI["eixo"] == "BD" else (1, 0, 0)
+            Lt = (B if FI["eixo"] == "BD" else H) + 0.012
+            p.add_mesh(pv.Cylinder(center=(0, 0, zf_), direction=ax_, radius=FI["d"] / 2000 + 0.004, height=Lt, resolution=40), color="#d9822b")
+            p.add_mesh(pv.Cylinder(center=(0, 0, zf_), direction=ax_, radius=FI["d"] / 2000 - 0.002, height=Lt + 0.004, resolution=40), color="#111111")
+            labs.append((((0, B / 2 + 0.01, zf_) if FI["eixo"] == "BD" else (-H / 2 - 0.01, 0, zf_)), "FI-1 furo de içamento"))
     for z in G.get("al", []):
         z = z / 1000
         if z0 <= z <= z1:
             t = np.linspace(0, math.pi, 30)
             sx = -1 if G.get("al_face", "A") == "C" else 1                                # rev06e: AL-2 na face C (de cima na fôrma)
             pts = np.c_[sx * (H / 2 + 0.14 * np.sin(t)), 0.05 * np.cos(t), z + 0 * t]
-            p.add_mesh(pv.Spline(pts, 60).tube(radius=0.0065), color="#8a8a8a")
+            p.add_mesh(pv.Spline(pts, 60).tube(radius=0.009), color="#3a6ea5")
+            labs.append(((sx * (H / 2 + 0.14), 0, z), "AL-2 alça"))
+    for ip in G.get("ip01", []):
+        nx, ny = FACE_N[ip["face"]]
+        fd = H / 2 if nx else B / 2
+        zs_ = [z / 1000 for z in ip["z"] if z0 <= z / 1000 <= z1]
+        if zs_:
+            labs.append(((nx * (fd + 0.07), ny * (fd + 0.07), zs_[-1]), ("CC-1 (CS-1 de fábrica)" if ip["face"] == "C" and ip.get("lados") else "CE-1") + f" face {ip['face']} ×{len(ip['z'])}"))
+    if R and z1 > zr:
+        labs.append(((-H / 2 + d.get("C", 0), 0, (zr + L) / 2), "cabeça recuada"))
     return labs
 
 
@@ -114,8 +132,20 @@ p.enable_parallel_projection()
 p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2))
 p.add_text(f"{G['marca']} em pé", font_size=13, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=9, position="lower_left", color="#888888")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-geral.png")
+
+# rev07: duas vistas (frente C/B e costas A/D), para a produção
+p = pv.Plotter(off_screen=True, shape=(1, 2), window_size=(1500, 2600), border=False); p.set_background("white")
+for k_, (cam, nome_v) in enumerate((((-9.0, 7.5, L / 2 + 2.5), "faces C e B"), ((9.0, -7.5, L / 2 + 2.5), "faces A e D"))):
+    p.subplot(0, k_)
+    labs = cena(p)
+    rot(p, [l[0] for l in labs], [l[1] for l in labs], fs=17)
+    p.enable_parallel_projection()
+    p.camera_position = [cam, (0.0, 0, L / 2), (0, 0, 1)]
+    p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2) * 1.0)
+    p.add_text(f"{G['marca']} — {nome_v}", font_size=17, position="upper_left", color="#111111")
+pass
+p.screenshot(SAIDA + f"ISO-{G['marca']}-2v.png")
 
 c0 = G["consolos"][0] if G["consolos"] else None
 zc = c0["z"] / 1000 if c0 else L - 0.9
@@ -126,6 +156,5 @@ p.enable_parallel_projection()
 p.camera_position = [(H / 2 + 4.0, -3.4, zc + 2.3), (0, 0, zc - 0.1), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.3)
 p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} do {G['marca']}", font_size=15, position="upper_left", color="#111111")
-p.add_text("projeto da ND Engenharia", font_size=11, position="lower_right", color="#888888")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-consolo.png")
 print("ok")

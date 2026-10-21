@@ -8,7 +8,11 @@ from openpyxl.utils import get_column_letter
 
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev06.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev07.xlsx")
+LAJ = json.loads((AQ / "laje_alveolar.json").read_text(encoding="utf-8"))
+VMJ = json.loads((AQ / "vm_meio_vaso.json").read_text(encoding="utf-8"))
+FCK_CAPA = 30                                  # capa 5 cm C30 (ND-LET-LA01, quadro das lajes; laje_alveolar.json)
+FCK_2E = int(VMJ["premissas"]["fck_2estagio"])  # 2º estágio das VM: C30
 T = {p.name.replace(".tabelas.json", ""): json.loads(p.read_text(encoding="utf-8")) for p in PR.glob("ND-LET-*.tabelas.json")}
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
 LGQ = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
@@ -40,8 +44,14 @@ def quadro(folha):
 
 
 def kg_diam(folha):
-    """kg por bitola de UMA peça (com perdas), da relação do aço da prancha."""
+    """kg por bitola de UMA peça (com perdas), da relação do aço da prancha. rev07: pilares (fôrma + armação na mesma folha) leem
+    arm/<MARCA>.json, gravado pelo próprio gerador da folha — mesma fonte da tabela de ferros desenhada."""
     out = {d: 0.0 for d in DIAMS}
+    arq = PR / "arm" / (re.sub(r"^([A-Z]+)(\d+)$", r"\1-\2", folha) + ".json")
+    if arq.exists():
+        for b in json.loads(arq.read_text(encoding="utf-8"))["barras"]:
+            out[float(b["diam"])] += b["qtd"] * b["comp"] / 100 * KGM[float(b["diam"])] * 1.10
+        return out
     for a in T[f"ND-LET-{folha}"]["aco"]:
         for b in a["barras"]:
             out[float(b["diam"])] += b["qtd"] * b["comp"] / 100 * KGM[float(b["diam"])] * (1 + a["perda"])
@@ -87,7 +97,7 @@ VMP_H = round(json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/l
 for mk, pos, qt, L, p in tab("VM01", "MARCAS")["linhas"]:
     pecas.append(("Mezanino", mk, pos, f"meio vaso 40×{VMP_H:g} c/ dente", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C40", "ND-LET-VM01"))
 for mk, desc, qt, p, obs in tab("LA01", "MARCAS")["linhas"]:
-    pecas.append(("Mezanino", mk, f"laje alveolar {desc}; {obs}".replace("; -", ""), "h20 + capa 5", 9.45, int(qt), round(num(p) / 2.5, 3), num(p), "fabricante", "ND-LET-LA01"))
+    pecas.append(("Mezanino", mk, f"laje alveolar {desc}; {obs}".replace("; -", ""), "h20 + capa 5", 9.45, int(qt), round(num(p) / 2.5, 3), num(p), "C50", "ND-LET-LA01"))
 for tp, L, qt, p, vis in tab("PP00", "TIPOS")["linhas"]:
     if not tp:
         continue
@@ -101,12 +111,13 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     aco.append((f"Pilar {quadro(f_)['MARCA']}", f"ND-LET-{f_}", int(quadro(f_)["QUANTIDADE"].split()[0]), kg_diam(f_), ""))
 import armaduras_vigas as AV
+FOLHA_VIGA = {"TS-01": "ND-LET-TS01-1", "I130": "ND-LET-I130", "VM": "ND-LET-VM01", "VB": "ND-LET-VB01"}   # rev07: fôrma + armação na mesma folha
 for k_, (fam_, fn_) in enumerate(AV.SPECS, 1):
     for m_ in fn_()["marcas"]:
         kd_ = {d: 0.0 for d in DIAMS}
         for b_ in m_["barras"]:
             kd_[float(b_["diam"])] += b_["qtd"] * b_["comp"] / 100 * KGM[float(b_["diam"])] * 1.10
-        aco.append((f"{fam_} {m_['marca']}" if fam_ != m_["marca"] else fam_, f"ND-LET-AR-VIG-{k_:02d}", m_["qtd"], kd_, "tabela de ferros da marca"))
+        aco.append((f"{fam_} {m_['marca']}" if fam_ != m_["marca"] else fam_, FOLHA_VIGA[fam_], m_["qtd"], kd_, "tabela de ferros da marca"))
 pp_kg = {d: 0.0 for d in DIAMS}
 n_pp = 0
 for tp, n, n2, tela, kgpl, kgt in tab("PP00", "AÇO PASSIVO")["linhas"]:
@@ -122,23 +133,52 @@ aco.append(("Placas PP (ponta N3–N7)", "ND-LET-PP01", n_pp, _kp, "dente Gerber
 # ------------------------------------------------------------------ protensão
 cord = []    # (peça, Ø, n por peça, L m, qtd, obs)
 def soma_cord(f_):
-    t = tab(f_, "CORDOALHAS")
+    for g_ in ([f_, "TS01-2"] if f_.startswith("TS01") else [f_]):
+        try:
+            t = tab(g_, "CORDOALHAS"); break
+        except KeyError:
+            continue
+    else:
+        raise KeyError((f_, "CORDOALHAS"))
     n = sum(int(l[2]) for l in t["linhas"]); return n, num(t["linhas"][0][1])
-for nome, f_, L, qt in (("TS-01", "TS01-2", LGQ["L_TS"], 14), ("I130 (média)", "I130", 22.95, 3), ("VM-01/02", "VM01", 9.33, 16), ("PL protendido (opção B)", "PIL-P01", 11.0, 0)):
+for nome, f_, L, qt in (("TS-01", "TS01-1", LGQ["L_TS"], 14), ("VM-01/02", "VM01", 9.33, 16)):
     n, d = soma_cord(f_)
-    cord.append((nome, d, n, L, qt, "opção B não adotada (qtd 0)" if qt == 0 else ""))
-n, d = 8, 12.7
+    cord.append((nome, d, n, L, qt, ""))
+_IJ = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))          # I130: número de cordoalhas por marca (V407 20, V405/V406 30)
+for p_ in [p for p in pecas if p[9] == "ND-LET-I130"]:
+    cord.append((f"I130 {p_[1]}", 12.7, _IJ[p_[1]]["arranjo"]["n_cord"], _IJ[p_[1]]["L_peca"], p_[5], ""))
+_PLJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/placas.json"))["protensao"]
+_OMJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))["placa_I15"]
+n, d = _PLJ["n"], _PLJ["diam_mm"]                                          # DEC-035: 10 fios Ø6 CP-175 RB
 L_pp = sum(p[4] * p[5] for p in pecas if p[0] == "Placas de fechamento") / n_pp
-cord.append(("Placas PP (média)", d, n, round(L_pp, 3), n_pp, ""))
-cord.append(("Placa PP-05P (I-15, sobre a porta): +4 cordoalhas", d, 4, 9.86, 1, "rev06d: 12 cordoalhas nesta placa (topo das ombreiras OM-1)"))
-cord.append(("Lajes alveolares LA", 12.7, 8, 9.45, sum(p[5] for p in pecas if p[1].startswith("LA")), "fornecimento do fabricante da laje"))
-KGC = {9.5: 0.432, 12.7: 0.792}
+cord.append(("Placas PP (média) — fios CP-175 RB", d, n, round(L_pp, 3), n_pp, "fios entalhados, 5 por face"))
+if _OMJ["n_total"] > n:
+    cord.append((f"Placa PP-05P (I-15, sobre a porta): +{_OMJ['n_total'] - n}", d, _OMJ["n_total"] - n, 9.86, 1, f"{_OMJ['n_total']} nesta placa (topo das ombreiras OM-1)"))
+_nla = {l[0]: int(re.search(r"(\d+) Ø12,7", l[1]).group(1)) for l in tab("LA01", "MARCAS")["linhas"]}
+for mk_, q_ in ((p[1], p[5]) for p in pecas if p[1].startswith("LA")):
+    cord.append((f"Laje alveolar {mk_}", 12.7, _nla.get(mk_, LAJ["n_cord"]), 9.45, q_, "uma por nervura (ND-LET-LA01)"))
+KGC = {5.0: 0.154, 6.0: 0.222, 9.5: 0.432, 12.7: 0.792}                # kg/m: fios CP-175 Ø5/Ø6 (19,6/28,3 mm²); cordoalhas CP-190
 
 # ------------------------------------------------------------------ metálica e insertos
 terc = [l for l in tab("COB01", "TERÇAS")["linhas"] if l[0]]
 lig_cob = tab("COB01", "LISTA DE MATERIAIS")["linhas"]
+# DEC-033 aprovado (21/10/2026): ST-1P4 (aba 200, 4 esperas) nos 2 beirais da TS-01 do eixo 2 — se a COB01 ainda não o lista, ajusta aqui
+if not any(l[0] == "ST-1P4" for l in lig_cob):
+    N_ST4 = 2
+    lig_cob = [list(l) for l in lig_cob]
+    for l in lig_cob:
+        if l[0] == "ST-1P":
+            l[2] = str(int(l[2]) - N_ST4)
+        elif l[0] in ("ES-1", "GR-1"):
+            l[2] = str(int(l[2]) + 2 * N_ST4); l[3] += f" (+{2 * N_ST4} dos ST-1P4)"
+        elif l[0] == "M16":
+            l[2] = str(int(l[2]) + 3 * 2 * N_ST4)
+    i_ = next(k for k, l in enumerate(lig_cob) if l[0] == "ST-1P") + 1
+    lig_cob.insert(i_, ["ST-1P4", "como o ST-1P com aba 200 e 4 esperas ES-1 (DEC-033) — kg a confirmar no detalhe", str(N_ST4), "TS-01 do eixo 2, 1ª terça de cada beiral"])
 trav = tab("COB02", "LISTA DE MATERIAIS")["linhas"]
-chap_ts = {l[0]: l for l in tab("TS01-3", "LISTA DE PEÇAS")["linhas"]}
+chap_ts, chap_extra = {}, []
+for l in tab("TS01-3", "LISTA DE PEÇAS")["linhas"]:                   # 1ª linha de cada marca = por peça; linhas repetidas = acréscimos (ex.: ES-1 da TS-01B)
+    (chap_extra.append(l) if l[0] in chap_ts else chap_ts.__setitem__(l[0], l))
 KG_UN = {k: num(v[4]) for k, v in chap_ts.items() if v[4] not in ("-", "")}
 
 ins = []     # (prancha, peça, marca, descrição, qt por peça, peças)
@@ -157,6 +197,9 @@ add_ins("I130", "I130", 3); add_ins("VM01", "VM", 16); add_ins("VB01", "VB", 8)
 for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 14))
+for l in chap_extra:                                                     # acréscimo total (coluna total), não por peça
+    if l[0] in ("ES-1", "ES-2", "TB-3", "AL-1"):
+        ins.append(("ND-LET-TS01-3", "TS-01B", l[0], l[1], int(l[3]), 1))
 for l in tab("PP00", "INSERTOS E PEÇAS")["linhas"]:
     if l[0] in ("NC-1", "TSA", "AL-P"):                                  # por placa (rev06: NC-1 nas 2 pontas, TSA dos pinos PT-1)
         if l[0] == "NC-1":                                               # só nas pontas com console (lado da porta sem nicho): contagem do PP01
@@ -189,179 +232,186 @@ ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1 obra", f"Console soldado A572-
         ("ND-LET-PP05", "Placas PP", "BR-1 (I-15)", "Bucha M16 hef 70 na face interna da I-15 (topo das OM-1)", 2, 1),
         ("ND-LET-PP02", "Placas PP", "NC-1 (kg)", f"Caixa A572-50 do nicho (parede lateral A36) — {_kg01['kg_NC1']:.2f} kg/un; aço estrutural total {_kg01['kg_NC1']*_kg01['n']['NC1'] + _kg01['kg_CS1']*_n_cs + _kg01['kg_CE1']*len(_ce) + _kg01['kg_PT1']*_n_pt1 + _kg01['kg_PT2']*_n_pt2:.0f} kg".replace(".", ","), 0, n_pp)]
 
-# ------------------------------------------------------------------ planilha
-wb = Workbook()
-F = Font(name="Arial", size=9); FB = Font(name="Arial", size=9, bold=True); FT = Font(name="Arial", size=12, bold=True)
-FI = Font(name="Arial", size=9, color="0000FF")
-CAB = PatternFill("solid", fgColor="D9E1EA"); TOT = PatternFill("solid", fgColor="EEF2F6")
-fina = Side(style="thin", color="9AA5B1"); BOR = Border(left=fina, right=fina, top=fina, bottom=fina)
-
-
-def folha(ws, titulo, sub, cab, larg):
-    ws["A1"] = titulo; ws["A1"].font = FT
-    ws["A2"] = sub; ws["A2"].font = Font(name="Arial", size=8, italic=True)
-    for j, (c, w) in enumerate(zip(cab, larg), 1):
-        x = ws.cell(4, j, c); x.font = FB; x.fill = CAB; x.border = BOR; x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-        ws.column_dimensions[get_column_letter(j)].width = w
-    ws.row_dimensions[4].height = 30
-    ws.freeze_panes = "A5"
-    return 5
-
-
-def linha(ws, r, vals, fmts=None, entrada=()):
-    for j, v in enumerate(vals, 1):
-        x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR
-        if fmts and fmts.get(j):
-            x.number_format = fmts[j]
-
-
-def total(ws, r, rot, cols, r0, r1, ncol):
-    for j in range(1, ncol + 1):
-        x = ws.cell(r, j); x.fill = TOT; x.border = BOR; x.font = FB
-    ws.cell(r, 1, rot)
-    for c in cols:
-        L = get_column_letter(c)
-        ws.cell(r, c, f"=SUM({L}{r0}:{L}{r1})").number_format = "#,##0.00"
-
-
-RODAPE = "PROJETO DA ND ENGENHARIA — quantitativos extraídos das pranchas rev. vigentes (13/10/2026). Números em azul vêm das pranchas; em preto, fórmulas."
-
-# 1. pré-moldados
-ws = wb.active; ws.title = "Pré-moldados"
-r = folha(ws, "LETSARA — PEÇAS PRÉ-MOLDADAS", RODAPE,
-          ["GRUPO", "MARCA", "POSIÇÃO / DESCRIÇÃO", "SEÇÃO", "L (m)", "QTD", "VOLUME UNIT. (m³)", "VOLUME TOTAL (m³)", "PESO UNIT. (t)", "PESO TOTAL (t)", "CONCRETO", "PRANCHA"],
-          [20, 10, 62, 20, 8, 6, 12, 12, 10, 11, 11, 16])
-r0 = r
-for p in pecas:
-    linha(ws, r, [p[0], p[1], p[2], p[3], p[4], p[5], p[6], f"=F{r}*G{r}", p[7], f"=F{r}*I{r}", p[8], p[9]],
-          {5: "0.00", 7: "0.000", 8: "0.00", 9: "0.00", 10: "0.00"}, entrada=(5, 6, 7, 9))
-    r += 1
-total(ws, r, "TOTAL", [6, 8, 10], r0, r - 1, 12)
-ws.cell(r + 2, 1, "Volumes de pilares da família 40×60: corpo do cálice (−1,00) ao recuo + cabeça recuada até +10,00 + consolos da marca (b × proj × h, sem chanfro). Placas: 125 × 15 × L. Lajes alveolares: volume equivalente pelo peso (2,5 t/m³).").font = F
-RP = (r0, r - 1)
-
-# 2. aço CA-50
-ws = wb.create_sheet("Aço CA-50")
-r = folha(ws, "AÇO CA-50 — RELAÇÕES DAS PRANCHAS (+10 % de perdas)", RODAPE,
-          ["PEÇA", "PRANCHA", "QTD PEÇAS"] + [f"Ø{str(d).replace('.0', '').replace('.', ',')} (kg/peça)" for d in DIAMS] + ["kg/PEÇA", "kg TOTAL", "OBS."],
-          [30, 16, 9] + [11] * 6 + [10, 12, 60])
-r0 = r
-for nome, f_, qt, kg, obs in aco:
-    linha(ws, r, [nome, f_, qt] + [round(kg[d], 2) for d in DIAMS] + [f"=SUM(D{r}:I{r})", f"=C{r}*J{r}", obs],
-          {**{c: "0.00" for c in range(4, 10)}, 10: "0.0", 11: "#,##0"}, entrada=tuple(range(3, 10)))
-    r += 1
-total(ws, r, "TOTAL (kg)", [11], r0, r - 1, 12)
-r += 1
-ws.cell(r, 1, "por bitola (kg)").font = FB
-for j, d in enumerate(DIAMS):
-    L = get_column_letter(4 + j)
-    x = ws.cell(r, 4 + j, f"=SUMPRODUCT($C{r0}:$C{r - 2},{L}{r0}:{L}{r - 2})"); x.number_format = "#,##0"; x.font = FB; x.border = BOR
-RA = r
-
-# 3. telas
-ws = wb.create_sheet("Telas")
-r = folha(ws, "TELAS SOLDADAS", RODAPE, ["ITEM", "ONDE", "ÁREA (m²)", "kg/m²", "kg (+10 %)", "OBS."], [24, 50, 12, 10, 12, 50])
-r0 = r
-linha(ws, r, ["Q92", "placas PP — 2 faces × 60 cm nas 2 pontas", f"={n_pp}*{2 * 2 * 0.60 * 1.19}", 1.48, f"=C{r}*D{r}*1.1", f"{n_pp} placas"], {3: "0.0", 5: "0.0"}, entrada=(4,)); r += 1
-linha(ws, r, ["Q138", "capa 5 cm do mezanino (2 níveis)", f"=2*39.5*9.65", 2.20, f"=C{r}*D{r}*1.1", "ND-LET-LA01 / VM01"], {3: "0.0", 5: "0.0"}, entrada=(4,)); r += 1
-total(ws, r, "TOTAL", [3, 5], r0, r - 1, 6)
-
-# 4. protensão
-ws = wb.create_sheet("Protensão")
-r = folha(ws, "CORDOALHAS CP-190 RB", RODAPE, ["PEÇA", "Ø (mm)", "CORD./PEÇA", "L PEÇA (m)", "QTD PEÇAS", "kg/m", "kg (na peça)", "OBS."], [26, 8, 11, 10, 10, 8, 12, 50])
-r0 = r
-for nome, d, n, L, qt, obs in cord:
-    linha(ws, r, [nome, d, n, L, qt, KGC[d], f"=C{r}*D{r}*E{r}*F{r}", obs], {4: "0.00", 6: "0.000", 7: "#,##0"}, entrada=(2, 3, 4, 5, 6)); r += 1
-total(ws, r, "TOTAL (kg)", [7], r0, r - 1, 8)
-ws.cell(r + 2, 1, "Comprimento na peça (sem as sobras de pista entre peças e as pontas de ancoragem da pista); a fábrica soma conforme o arranjo da pista de 60 m.").font = F
-
-# 5. cobertura metálica
-ws = wb.create_sheet("Cobertura metálica")
-r = folha(ws, "COBERTURA METÁLICA — TERÇAS, LIGAÇÕES E TRAVAMENTOS (parafusados)", RODAPE, ["MARCA", "DESCRIÇÃO", "QTD", "kg/un", "kg TOTAL", "ORIGEM"], [12, 70, 8, 9, 12, 18])
-r0 = r
-for m_, L, vaos, fur, qt, kg in terc:
-    linha(ws, r, [m_, f"terça Z 302×90/82×2,30 METSEC (302Z23, fy 400, Z275), contínua por transpasse, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
-          {4: "0.0", 5: "#,##0"}, entrada=(3, 4)); r += 1
-for m_, desc, qt, onde in lig_cob:
-    if m_ in ("ES-1",):
-        continue                                              # esperas embutidas nas vigas: aba Insertos
-    kgu = {"ST-1P": KG_UN.get("ST-1P", 7.4), "ST-1V": 7.4, "CMF-1": KG_UN.get("CMF-1", 0.6), "MF-1": KG_UN.get("MF-1", 4.6), "M12 8.8": 0.12, "M16": 0.08}.get(m_, 0)
-    linha(ws, r, [m_, f"{desc} — {onde}", int(qt), kgu, f"=C{r}*D{r}", "ND-LET-COB01"], {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
-for l in trav:
-    q = int(l[1]); kg = l[4]
-    linha(ws, r, [l[0], f"{l[2]} — {l[5]} (comp. {l[3]})", q, round(num(kg) / q, 2) if kg not in ("-", "") else 0, f"=C{r}*D{r}", "ND-LET-COB02"],
-          {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
-total(ws, r, "TOTAL (kg)", [5], r0, r - 1, 6)
-RC = r
-
-# 5a. cobertura Kingspan (telhas, cartolas, lã, clipes, fixações e rufos) — acabamentos_cob.py
 ACB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/acabamentos_cobertura.json"))
-ws = wb.create_sheet("Cobertura Kingspan")
-r = folha(ws, f"COBERTURA KINGSPAN ZIPADA DUPLA COM LÃ DE ROCHA (manual p. 28) — área {ACB['telhas']['area_m2']:.0f} m²".replace(".", ","), RODAPE,
-          ["ITEM", "UN", "LÍQUIDO", "COMPRA", "OBS.", "PRANCHA"], [48, 8, 10, 10, 90, 14])
-RK0 = r
-for t in ACB["telhas"]["itens"]:
-    linha(ws, r, [t["item"], t["un"], t["liq"], t["compra"], t["obs"], "ND-LET-COB04"], {3: "#,##0.#", 4: "#,##0"}, entrada=(3, 4)); r += 1
-for t in ACB["rufos"]:
-    linha(ws, r, [f"Rufo {t['marca']} {t['chapa']} desenv. {t['desenv_mm']}", "pç", t["pecas"], t["pecas"], f"{t['comprimento_m']:.1f} m — {t['descricao']}".replace(".", ",", 1), "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
-for t in ACB["acessorios"]:
-    linha(ws, r, [t["item"], "un", t["qtd"], t["qtd"], t["uso"], "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
-ws.cell(r + 1, 1, "Compra: +5 % em lã, clipes e parafusos; telhas e cartolas pela contagem de peças. Valores a confirmar com a Kingspan (cotação e paginação).").font = F
 
-# 6. insertos
-ws = wb.create_sheet("Insertos e ligações")
-r = folha(ws, "INSERTOS, CHAPARIA EMBUTIDA, PINOS, NEOPRENES E ALÇAS", RODAPE, ["PRANCHA", "PEÇA", "MARCA", "DESCRIÇÃO", "QT/PEÇA", "PEÇAS", "QT TOTAL", "kg/un", "kg TOTAL"], [16, 18, 9, 70, 9, 8, 9, 8, 10])
-r0 = r
-for f_, peca, mk, desc, q, n in ins:
-    kgu = KG_UN.get(mk, 0.0) if f_ == "ND-LET-TS01-3" else 0.0
-    linha(ws, r, [f_, peca, mk, desc, q, n, f"=E{r}*F{r}", kgu, f"=G{r}*H{r}"], {8: "0.0", 9: "#,##0"}, entrada=(5, 6, 8)); r += 1
-total(ws, r, "TOTAL", [7, 9], r0, r - 1, 9)
-ws.cell(r + 2, 1, "kg só da chaparia da TS-01 (lista da ND-LET-TS01-3); demais insertos por unidade conforme as pranchas de cada peça.").font = F
 
-# 7. moldado in loco
-ws = wb.create_sheet("Moldado in loco")
-r = folha(ws, "CONCRETO E GRAUTE MOLDADOS NA OBRA", RODAPE, ["ITEM", "DESCRIÇÃO", "QTD", "UN", "OBS."], [24, 70, 12, 6, 50])
-r0 = r
-linha(ws, r, ["Capa C25", "capa 5 cm sobre as lajes alveolares, 2 níveis", "=2*39.5*9.65*0.05", "m³", "ND-LET-LA01 / MON02"], {3: "0.00"}); r += 1
-linha(ws, r, ["Enchimento C25", "30 × 20 sobre a mesa das VM (linhas 1 e 2, 2 níveis)", "=2*2*39.5*0.30*0.20", "m³", "ND-LET-VM01 corte C-C"], {3: "0.00"}); r += 1
-linha(ws, r, ["Graute cálices", "graute fck ≥ 30 MPa nos cálices (folga 5 cm, 1,00 m)", f"={sum(p[5] for p in pecas if p[0] == 'Pilares')}*0.05*4*0.55*1.0", "m³", "estimativa: 4 faces × 5 cm × 1,00 m por pilar"], {3: "0.00"}); r += 1
-linha(ws, r, ["Graute chavetas", "chavetas das lajes alveolares", "=2*31*9.45*0.006", "m³", "estimativa 0,006 m³/m"], {3: "0.00"}); r += 1
+def gerar_xlsx(SAIDA=SAIDA):
+    global wb
+    # ------------------------------------------------------------------ planilha
+    wb = Workbook()
+    F = Font(name="Arial", size=9); FB = Font(name="Arial", size=9, bold=True); FT = Font(name="Arial", size=12, bold=True)
+    FI = Font(name="Arial", size=9, color="0000FF")
+    CAB = PatternFill("solid", fgColor="D9E1EA"); TOT = PatternFill("solid", fgColor="EEF2F6")
+    fina = Side(style="thin", color="9AA5B1"); BOR = Border(left=fina, right=fina, top=fina, bottom=fina)
 
-# 0. resumo
-ws = wb.create_sheet("Resumo", 0)
-ws["A1"] = "LETSARA — PAVILHÃO COM MEZANINO — RESUMO DE QUANTITATIVOS"; ws["A1"].font = FT
-ws["A2"] = "MARQUES ENGENHARIA E CONSTRUÇÕES · ND ENGENHARIA E ASSESSORIA LTDA · 13/10/2026 · PARA APROVAÇÃO"; ws["A2"].font = Font(name="Arial", size=8, italic=True)
-for j, (c, w) in enumerate(zip(["ITEM", "QUANTIDADE", "UN", "FONTE"], [48, 16, 8, 40]), 1):
-    x = ws.cell(4, j, c); x.font = FB; x.fill = CAB; x.border = BOR
-    ws.column_dimensions[get_column_letter(j)].width = w
-P0, P1 = RP
-itens = [("Peças pré-moldadas", f"='Pré-moldados'!F{P1 + 1}", "pç", "aba Pré-moldados"),
-         ("Concreto pré-moldado", f"='Pré-moldados'!H{P1 + 1}", "m³", "aba Pré-moldados"),
-         ("Peso das peças pré-moldadas", f"='Pré-moldados'!J{P1 + 1}", "t", "aba Pré-moldados"),
-         ("  pilares (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Pilares\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
-         ("  vigas de cobertura (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de cobertura\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
-         ("  vigas de borda e travamento (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de borda\",'Pré-moldados'!H{P0}:H{P1})+SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de travamento\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
-         ("  mezanino — vigas e lajes (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Mezanino\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
-         ("  placas de fechamento (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Placas de fechamento\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
-         ("Aço CA-50 (barras)", f"='Aço CA-50'!K{RA - 1}", "kg", "aba Aço CA-50"),
-         ("Telas soldadas", "='Telas'!E7", "kg", "aba Telas"),
-         ("Cordoalhas CP-190 RB", "='Protensão'!G" + str(5 + len(cord)), "kg", "aba Protensão"),
-         ("Cobertura metálica (terças, ligações, travamentos)", f"='Cobertura metálica'!E{RC}", "kg", "aba Cobertura metálica"),
-         ("Cobertura Kingspan — telha zipada 455 + TP-40 + lã (área)", ACB["telhas"]["area_m2"], "m²", "aba Cobertura Kingspan"),
-         ("Concreto / graute moldado na obra", "=SUM('Moldado in loco'!C5:C8)", "m³", "aba Moldado in loco")]
-for k, (a, b, c, d) in enumerate(itens, 5):
-    for j, v in enumerate((a, b, c, d), 1):
-        x = ws.cell(k, j, v); x.font = FB if not a.startswith("  ") else F; x.border = BOR
-    ws.cell(k, 2).number_format = "#,##0.0"
-k += 2
-for t in ["Não inclui: fundações (blocos, cálices, estacas), piso, calhas e descidas, esquadrias e portões — fora do escopo da estrutura.",
-          "Pilares P6 e P7 do anexo (R01) fora do quantitativo até a definição da função.",
-          "Pilares PL/PF quantificados na opção A (concreto armado). Opção B (protendido) na prancha ND-LET-PIL-P01.",
-          RODAPE]:
-    ws.cell(k, 1, t).font = F; k += 1
-SAIDA.parent.mkdir(parents=True, exist_ok=True)
-wb.save(SAIDA)
-print("ok", SAIDA, len(pecas), "marcas;", sum(p[5] for p in pecas), "peças")
+
+    def folha(ws, titulo, sub, cab, larg):
+        ws["A1"] = titulo; ws["A1"].font = FT
+        ws["A2"] = sub; ws["A2"].font = Font(name="Arial", size=8, italic=True)
+        for j, (c, w) in enumerate(zip(cab, larg), 1):
+            x = ws.cell(4, j, c); x.font = FB; x.fill = CAB; x.border = BOR; x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            ws.column_dimensions[get_column_letter(j)].width = w
+        ws.row_dimensions[4].height = 30
+        ws.freeze_panes = "A5"
+        return 5
+
+
+    def linha(ws, r, vals, fmts=None, entrada=()):
+        for j, v in enumerate(vals, 1):
+            x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR
+            if fmts and fmts.get(j):
+                x.number_format = fmts[j]
+
+
+    def total(ws, r, rot, cols, r0, r1, ncol):
+        for j in range(1, ncol + 1):
+            x = ws.cell(r, j); x.fill = TOT; x.border = BOR; x.font = FB
+        ws.cell(r, 1, rot)
+        for c in cols:
+            L = get_column_letter(c)
+            ws.cell(r, c, f"=SUM({L}{r0}:{L}{r1})").number_format = "#,##0.00"
+
+
+    RODAPE = "EMISSÃO EXECUTIVA (21/10/2026) — quantitativos extraídos das tabelas das próprias pranchas vigentes. Números em azul vêm das pranchas; em preto, fórmulas."
+
+    # 1. pré-moldados
+    ws = wb.active; ws.title = "Pré-moldados"
+    r = folha(ws, "LETSARA — PEÇAS PRÉ-MOLDADAS", RODAPE,
+              ["GRUPO", "MARCA", "POSIÇÃO / DESCRIÇÃO", "SEÇÃO", "L (m)", "QTD", "VOLUME UNIT. (m³)", "VOLUME TOTAL (m³)", "PESO UNIT. (t)", "PESO TOTAL (t)", "CONCRETO", "PRANCHA"],
+              [20, 10, 62, 20, 8, 6, 12, 12, 10, 11, 11, 16])
+    r0 = r
+    for p in pecas:
+        linha(ws, r, [p[0], p[1], p[2], p[3], p[4], p[5], p[6], f"=F{r}*G{r}", p[7], f"=F{r}*I{r}", p[8], p[9]],
+              {5: "0.00", 7: "0.000", 8: "0.00", 9: "0.00", 10: "0.00"}, entrada=(5, 6, 7, 9))
+        r += 1
+    total(ws, r, "TOTAL", [6, 8, 10], r0, r - 1, 12)
+    ws.cell(r + 2, 1, "Volumes de pilares da família 40×60: corpo do cálice (−1,00) ao recuo + cabeça recuada até +10,00 + consolos da marca (b × proj × h, sem chanfro). Placas: 125 × 10 × L (seção concretada). Lajes alveolares: volume equivalente pelo peso (2,5 t/m³).").font = F
+    RP = (r0, r - 1)
+
+    # 2. aço CA-50
+    ws = wb.create_sheet("Aço CA-50")
+    r = folha(ws, "AÇO CA-50 — RELAÇÕES DAS PRANCHAS (+10 % de perdas)", RODAPE,
+              ["PEÇA", "PRANCHA", "QTD PEÇAS"] + [f"Ø{str(d).replace('.0', '').replace('.', ',')} (kg/peça)" for d in DIAMS] + ["kg/PEÇA", "kg TOTAL", "OBS."],
+              [30, 16, 9] + [11] * 6 + [10, 12, 60])
+    r0 = r
+    for nome, f_, qt, kg, obs in aco:
+        linha(ws, r, [nome, f_, qt] + [round(kg[d], 2) for d in DIAMS] + [f"=SUM(D{r}:I{r})", f"=C{r}*J{r}", obs],
+              {**{c: "0.00" for c in range(4, 10)}, 10: "0.0", 11: "#,##0"}, entrada=tuple(range(3, 10)))
+        r += 1
+    total(ws, r, "TOTAL (kg)", [11], r0, r - 1, 12)
+    r += 1
+    ws.cell(r, 1, "por bitola (kg)").font = FB
+    for j, d in enumerate(DIAMS):
+        L = get_column_letter(4 + j)
+        x = ws.cell(r, 4 + j, f"=SUMPRODUCT($C{r0}:$C{r - 2},{L}{r0}:{L}{r - 2})"); x.number_format = "#,##0"; x.font = FB; x.border = BOR
+    RA = r
+
+    # 3. telas
+    ws = wb.create_sheet("Telas")
+    r = folha(ws, "TELAS SOLDADAS", RODAPE, ["ITEM", "ONDE", "ÁREA (m²)", "kg/m²", "kg (+10 %)", "OBS."], [24, 50, 12, 10, 12, 50])
+    r0 = r
+    linha(ws, r, ["Q92", "placas PP — 2 faces × 60 cm nas 2 pontas", f"={n_pp}*{2 * 2 * 0.60 * 1.19}", 1.48, f"=C{r}*D{r}*1.1", f"{n_pp} placas"], {3: "0.0", 5: "0.0"}, entrada=(4,)); r += 1
+    linha(ws, r, ["Q138", "capa 5 cm do mezanino (2 níveis)", f"=2*39.5*9.65", 2.20, f"=C{r}*D{r}*1.1", "ND-LET-LA01 / VM01"], {3: "0.0", 5: "0.0"}, entrada=(4,)); r += 1
+    total(ws, r, "TOTAL", [3, 5], r0, r - 1, 6)
+
+    # 4. protensão
+    ws = wb.create_sheet("Protensão")
+    r = folha(ws, "CORDOALHAS CP-190 RB E FIOS CP-175 RB", RODAPE, ["PEÇA", "Ø (mm)", "CORD./PEÇA", "L PEÇA (m)", "QTD PEÇAS", "kg/m", "kg (na peça)", "OBS."], [26, 8, 11, 10, 10, 8, 12, 50])
+    r0 = r
+    for nome, d, n, L, qt, obs in cord:
+        linha(ws, r, [nome, d, n, L, qt, KGC[d], f"=C{r}*D{r}*E{r}*F{r}", obs], {4: "0.00", 6: "0.000", 7: "#,##0"}, entrada=(2, 3, 4, 5, 6)); r += 1
+    total(ws, r, "TOTAL (kg)", [7], r0, r - 1, 8)
+    ws.cell(r + 2, 1, "Comprimento na peça (sem as sobras de pista entre peças e as pontas de ancoragem da pista); a fábrica soma conforme o arranjo da pista de 60 m.").font = F
+
+    # 5. cobertura metálica
+    ws = wb.create_sheet("Cobertura metálica")
+    r = folha(ws, "COBERTURA METÁLICA — TERÇAS, LIGAÇÕES E TRAVAMENTOS (parafusados)", RODAPE, ["MARCA", "DESCRIÇÃO", "QTD", "kg/un", "kg TOTAL", "ORIGEM"], [12, 70, 8, 9, 12, 18])
+    r0 = r
+    for m_, L, vaos, fur, qt, kg in terc:
+        linha(ws, r, [m_, f"terça Z 302×90/82×2,30 METSEC (302Z23, fy 400, Z275), contínua por transpasse, L = {L} mm, vãos {vaos}; furação: {fur}", int(qt), round(num(kg) / int(qt), 1), f"=C{r}*D{r}", "ND-LET-COB01"],
+              {4: "0.0", 5: "#,##0"}, entrada=(3, 4)); r += 1
+    for m_, desc, qt, onde in lig_cob:
+        if m_ in ("ES-1",):
+            continue                                              # esperas embutidas nas vigas: aba Insertos
+        kgu = {"ST-1P": KG_UN.get("ST-1P", 7.4), "ST-1P4": KG_UN.get("ST-1P4", KG_UN.get("ST-1P", 7.4)), "ST-1V": 7.4, "CMF-1": KG_UN.get("CMF-1", 0.6), "MF-1": KG_UN.get("MF-1", 4.6), "M12 8.8": 0.12, "M16": 0.08}.get(m_, 0)
+        linha(ws, r, [m_, f"{desc} — {onde}", int(qt), kgu, f"=C{r}*D{r}", "ND-LET-COB01"], {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
+    for l in trav:
+        q = int(l[1]); kg = l[4]
+        linha(ws, r, [l[0], f"{l[2]} — {l[5]} (comp. {l[3]})", q, round(num(kg) / q, 2) if kg not in ("-", "") else 0, f"=C{r}*D{r}", "ND-LET-COB02"],
+              {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
+    total(ws, r, "TOTAL (kg)", [5], r0, r - 1, 6)
+    RC = r
+
+    # 5a. cobertura Kingspan (telhas, cartolas, lã, clipes, fixações e rufos) — acabamentos_cob.py
+    ACB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/acabamentos_cobertura.json"))
+    ws = wb.create_sheet("Cobertura Kingspan")
+    r = folha(ws, f"COBERTURA KINGSPAN ZIPADA DUPLA COM LÃ DE ROCHA (manual p. 28) — área {ACB['telhas']['area_m2']:.0f} m²".replace(".", ","), RODAPE,
+              ["ITEM", "UN", "LÍQUIDO", "COMPRA", "OBS.", "PRANCHA"], [48, 8, 10, 10, 90, 14])
+    RK0 = r
+    for t in ACB["telhas"]["itens"]:
+        linha(ws, r, [t["item"], t["un"], t["liq"], t["compra"], t["obs"], "ND-LET-COB04"], {3: "#,##0.#", 4: "#,##0"}, entrada=(3, 4)); r += 1
+    for t in ACB["rufos"]:
+        linha(ws, r, [f"Rufo {t['marca']} {t['chapa']} desenv. {t['desenv_mm']}", "pç", t["pecas"], t["pecas"], f"{t['comprimento_m']:.1f} m — {t['descricao']}".replace(".", ",", 1), "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
+    for t in ACB["acessorios"]:
+        linha(ws, r, [t["item"], "un", t["qtd"], t["qtd"], t["uso"], "ND-LET-COB04"], {3: "#,##0", 4: "#,##0"}, entrada=(3, 4)); r += 1
+    ws.cell(r + 1, 1, "Compra: +5 % em lã, clipes e parafusos; telhas e cartolas pela contagem de peças. Valores a confirmar com a Kingspan (cotação e paginação).").font = F
+
+    # 6. insertos
+    ws = wb.create_sheet("Insertos e ligações")
+    r = folha(ws, "INSERTOS, CHAPARIA EMBUTIDA, PINOS, NEOPRENES E ALÇAS", RODAPE, ["PRANCHA", "PEÇA", "MARCA", "DESCRIÇÃO", "QT/PEÇA", "PEÇAS", "QT TOTAL", "kg/un", "kg TOTAL"], [16, 18, 9, 70, 9, 8, 9, 8, 10])
+    r0 = r
+    for f_, peca, mk, desc, q, n in ins:
+        kgu = KG_UN.get(mk, 0.0) if f_ == "ND-LET-TS01-3" else 0.0
+        linha(ws, r, [f_, peca, mk, desc, q, n, f"=E{r}*F{r}", kgu, f"=G{r}*H{r}"], {8: "0.0", 9: "#,##0"}, entrada=(5, 6, 8)); r += 1
+    total(ws, r, "TOTAL", [7, 9], r0, r - 1, 9)
+    ws.cell(r + 2, 1, "kg só da chaparia da TS-01 (lista da ND-LET-TS01-3); demais insertos por unidade conforme as pranchas de cada peça.").font = F
+
+    # 7. moldado in loco
+    ws = wb.create_sheet("Moldado in loco")
+    r = folha(ws, "CONCRETO E GRAUTE MOLDADOS NA OBRA", RODAPE, ["ITEM", "DESCRIÇÃO", "QTD", "UN", "OBS."], [24, 70, 12, 6, 50])
+    r0 = r
+    _b2, _h2 = VMJ["VM-01"]["interface"]["b_int"], VMJ["VM-01"]["h_final"] - VMJ["VM-01"]["h_premoldado"] - 0.05
+    linha(ws, r, [f"Capa C{FCK_CAPA}", "capa 5 cm sobre as lajes alveolares, 2 níveis, tela Q138", "=2*39.5*9.65*0.05", "m³", "ND-LET-LA01 / MON02"], {3: "0.00"}); r += 1
+    linha(ws, r, [f"2º estágio C{FCK_2E}", f"{_b2 * 100:.0f} × {_h2 * 100:.0f} sobre a alma das VM meio vaso (linhas 1 e 2, 2 níveis), com a capa", f"=2*2*39.5*{_b2:.2f}*{_h2:.2f}", "m³", "ND-LET-VM01"], {3: "0.00"}); r += 1
+    linha(ws, r, ["Graute cálices", "graute fck ≥ 30 MPa nos cálices (folga 5 cm, 1,00 m)", f"={sum(p[5] for p in pecas if p[0] == 'Pilares')}*0.05*4*0.55*1.0", "m³", "estimativa: 4 faces × 5 cm × 1,00 m por pilar"], {3: "0.00"}); r += 1
+    linha(ws, r, ["Graute chavetas", "chavetas das lajes alveolares", "=2*31*9.45*0.006", "m³", "estimativa 0,006 m³/m"], {3: "0.00"}); r += 1
+
+    # 0. resumo
+    ws = wb.create_sheet("Resumo", 0)
+    ws["A1"] = "LETSARA — PAVILHÃO COM MEZANINO — RESUMO DE QUANTITATIVOS"; ws["A1"].font = FT
+    ws["A2"] = "MARQUES ENGENHARIA E CONSTRUÇÕES · ND ENGENHARIA E ASSESSORIA LTDA · 21/10/2026 · EMISSÃO EXECUTIVA"; ws["A2"].font = Font(name="Arial", size=8, italic=True)
+    for j, (c, w) in enumerate(zip(["ITEM", "QUANTIDADE", "UN", "FONTE"], [48, 16, 8, 40]), 1):
+        x = ws.cell(4, j, c); x.font = FB; x.fill = CAB; x.border = BOR
+        ws.column_dimensions[get_column_letter(j)].width = w
+    P0, P1 = RP
+    itens = [("Peças pré-moldadas", f"='Pré-moldados'!F{P1 + 1}", "pç", "aba Pré-moldados"),
+             ("Concreto pré-moldado", f"='Pré-moldados'!H{P1 + 1}", "m³", "aba Pré-moldados"),
+             ("Peso das peças pré-moldadas", f"='Pré-moldados'!J{P1 + 1}", "t", "aba Pré-moldados"),
+             ("  pilares (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Pilares\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
+             ("  vigas de cobertura (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de cobertura\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
+             ("  vigas de borda e travamento (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de borda\",'Pré-moldados'!H{P0}:H{P1})+SUMIF('Pré-moldados'!A{P0}:A{P1},\"Vigas de travamento\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
+             ("  mezanino — vigas e lajes (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Mezanino\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
+             ("  placas de fechamento (m³)", f"=SUMIF('Pré-moldados'!A{P0}:A{P1},\"Placas de fechamento\",'Pré-moldados'!H{P0}:H{P1})", "m³", ""),
+             ("Aço CA-50 (barras)", f"='Aço CA-50'!K{RA - 1}", "kg", "aba Aço CA-50"),
+             ("Telas soldadas", "='Telas'!E7", "kg", "aba Telas"),
+             ("Cordoalhas CP-190 RB e fios CP-175 RB", "='Protensão'!G" + str(5 + len(cord)), "kg", "aba Protensão"),
+             ("Cobertura metálica (terças, ligações, travamentos)", f"='Cobertura metálica'!E{RC}", "kg", "aba Cobertura metálica"),
+             ("Cobertura Kingspan — telha zipada 455 + TP-40 + lã (área)", ACB["telhas"]["area_m2"], "m²", "aba Cobertura Kingspan"),
+             ("Concreto / graute moldado na obra", "=SUM('Moldado in loco'!C5:C8)", "m³", "aba Moldado in loco")]
+    for k, (a, b, c, d) in enumerate(itens, 5):
+        for j, v in enumerate((a, b, c, d), 1):
+            x = ws.cell(k, j, v); x.font = FB if not a.startswith("  ") else F; x.border = BOR
+        ws.cell(k, 2).number_format = "#,##0.0"
+    k += 2
+    for t in ["Não inclui: fundações (blocos, cálices, estacas), piso, calhas e descidas, esquadrias e portões — fora do escopo da estrutura.",
+              "Pilares P6 e P7 do anexo (R01) fora do quantitativo até a definição da função.",
+              "Pilares PL/PF em concreto armado (opção A adotada).",
+              RODAPE]:
+        ws.cell(k, 1, t).font = F; k += 1
+    SAIDA.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(SAIDA)
+    print("ok", SAIDA, len(pecas), "marcas;", sum(p[5] for p in pecas), "peças")
+
 
 
 # ================================================================== rev04: LISTAS EM PDF ÚNICO (preferência: pranchas num PDF, listas em outro)
@@ -394,14 +444,14 @@ def listas_pdf(caminho):
 
     def rodape(c, d):
         c.saveState(); c.setFont("DV", 7)
-        c.drawString(12 * mm, 7 * mm, "ND ENGENHARIA — LETSARA — LISTAS DE MATERIAIS rev06 — projeto da ND Engenharia — para aprovação")
+        c.drawString(12 * mm, 7 * mm, "LETSARA — LISTAS DE MATERIAIS rev07 — EMISSÃO EXECUTIVA 21/10/2026")
         c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
 
     doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
-                            title="Letsara — listas de materiais rev06", author="ND Engenharia")
-    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev06, 17/10/2026)", T1),
+                            title="Letsara — listas de materiais rev07", author="ND Engenharia")
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev07, EMISSÃO EXECUTIVA, 21/10/2026)", T1),
          Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
-            "Rev04 (NBR 9062:2017): sem vigas de travamento; VM do mezanino em meio vaso com dente Gerber; pilares laterais 14 Ø20; neoprenes e consolos revistos.")]
+            "Rev07: placas 10 fios Ø6 CP-175 RB (só peso próprio, DEC-035); lajes alveolares LP20 com 7 Ø12,7 por painel e capa C30; ST-1P4 nos beirais do eixo 2 (DEC-033); fôrma e armação na mesma folha por marca.")]
     # 1 peças
     E.append(Paragraph("1. Peças pré-moldadas", T2))
     lin = [["GRUPO", "MARCA", "POSIÇÃO / DESCRIÇÃO", "SEÇÃO", "L (m)", "QT", "VOL. UNIT (m³)", "VOL. TOTAL (m³)", "PESO UNIT (t)", "CONCRETO", "PRANCHA"]]
@@ -409,7 +459,7 @@ def listas_pdf(caminho):
     for g, mk, pos, sec, L, q, v, p, c, fl in pecas:
         lin.append([g, mk, pos[:90], sec, fm(L, 2), q, fm(v, 3), fm(v * q, 2), fm(p, 2), c, fl]); vt += v * q; pt += p * q; qt_ += q
     lin.append(["TOTAL", "", "", "", "", qt_, "", fm(vt, 1), f"{fm(pt, 0)} t", "", ""])
-    E.append(tb(lin, [24, 14, 78, 26, 12, 9, 18, 18, 16, 16, 30], tot=True))
+    E.append(tb(lin, [24, 14, 76, 26, 12, 11, 18, 18, 16, 16, 30], tot=True))
     # 2 aço
     E += [PageBreak(), Paragraph("2. Aço CA-50 por peça e bitola (kg, +10 %)", T2)]
     ds = sorted({d for _, _, _, kd, _ in aco for d, v in kd.items() if v > 0})
@@ -425,7 +475,7 @@ def listas_pdf(caminho):
     lin.append(["TOTAL", "", ""] + [fm(tot[d], 0) for d in ds] + ["", fm(sum(tot.values()), 0)])
     E.append(tb(lin, [42, 30, 10] + [17] * len(ds) + [18, 20], tot=True))
     # 3 cordoalhas
-    E.append(Paragraph("3. Cordoalhas CP-190 RB", T2))
+    E.append(Paragraph("3. Cordoalhas CP-190 RB e fios CP-175 RB", T2))
     lin = [["PEÇA", "Ø (mm)", "CORD./PEÇA", "L (m)", "PEÇAS", "COMPR. TOTAL (m)", "kg", "OBS."]]
     tk = 0
     for pe, d, n, L, q, ob in cord:
@@ -478,4 +528,6 @@ def listas_pdf(caminho):
     return caminho
 
 
-print("ok", listas_pdf(SAIDA.with_name(SAIDA.name.replace("QUANTITATIVOS", "LISTAS").replace(".xlsx", ".pdf"))))
+if __name__ == "__main__":
+    gerar_xlsx(SAIDA)
+    print("ok", listas_pdf(SAIDA.with_name(SAIDA.name.replace("QUANTITATIVOS", "LISTAS").replace(".xlsx", ".pdf"))))

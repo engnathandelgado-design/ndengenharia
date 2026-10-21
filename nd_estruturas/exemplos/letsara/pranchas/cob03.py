@@ -67,14 +67,14 @@ c1.texto((0, ZTOPO + 40), "eixo A (face da cabeça do P1)", "min", "BOTTOM_CENTE
 c1.texto((-450, Z_FUNDO), "+" + f((Z_FUNDO + ZREF) / 1000, 3), "min", "MIDDLE_RIGHT")
 c1.texto((-450, Z_TOP_CALHA), "+" + f((Z_TOP_CALHA + ZREF) / 1000, 3), "min", "MIDDLE_RIGHT")
 c1.chamada((-150, Z_TOP_CALHA + 180), (40, 66), "RF-2 rufo de fechamento placa → calha")
-c1.chamada((XC0 + BC / 2, Z_FUNDO), (6, -26), f"calha {BC} × {HC}, chapa galvanizada 1,25 (#18), i = 0,5 %")
+c1.chamada((XC0 + BC / 2, Z_FUNDO), (6, -36), f"calha {BC} × {HC} #18, i = 0,5 %")
 c1.chamada((XC0 + BC / 2, Z_FUNDO + 100), (-40, -40), "lâmina de projeto 100 (folga 50)")
 c1.chamada((X_T0 - 40, ZT0 + 60), (26, -40), "SC-1 ferro chato 38×6,35 c/750, 2 M10 na alma da 1ª terça")
 c1.chamada((280, ZT0 + H_TERCA + 30), (10, 52), "telha avança 150 além da aba da terça; pingadeira 100 dentro da calha")
 c1.chamada((X_T0, ZT0 + 150), (20, 12), "1ª terça Z 302 (40 cm livres)")
 
 # ------------------------------------------------------------------ CORTE 2 — NA LINHA DO PILAR (descida ao lado)
-c2 = pr.vista("CORTE 2", (372, 300), 10, titulo="CORTE 2 — CALHA NA LINHA DO PILAR P1", subtitulo="cabeça do pilar 40×30 até +10,00; TS-01 no recuo; descida Ø200 ao lado do pilar")
+c2 = pr.vista("CORTE 2", (405, 300), 10, titulo="CORTE 2 — CALHA NA LINHA DO PILAR P1", subtitulo="cabeça do pilar 40×30 até +10,00; TS-01 no recuo; descida Ø200 ao lado do pilar")
 REC = LG["REC"][0] * 1000 - ZREF
 c2.ret(-300, ZB, 600, REC - ZB, "CORTADO"); c2.hachura([(-300, ZB), (300, ZB), (300, REC), (-300, REC)], "AR-CONC", 0.03)
 c2.ret(-300, REC, 300, PLAT - REC, "CORTADO"); c2.hachura([(-300, REC), (0, REC), (0, PLAT), (-300, PLAT)], "AR-CONC", 0.03)
@@ -86,16 +86,16 @@ z_terca(c2, X_T0, ZT0)
 telha(c2, 250, 900)
 calha(c2)
 c2.ret(XC0 + 50, ZB, 200, Z_FUNDO - ZB, "OCULTA")                                                               # descida (atrás, y + 350)
-c2.cota_v([REC, zts(25), Z_FUNDO, Z_TOP_CALHA, PLAT], -300, -14, total=False)
-c2.chamada((XC0 + 150, Z_FUNDO - 300), (30, -56), "descida Ø200 em y = linha + 0,35 m (fora da TS-01), bocal Ø200 no fundo")
+c2.cota_v([REC, zts(25), Z_FUNDO, Z_TOP_CALHA, PLAT], -400, -8, total=False)
+c2.chamada((XC0 + 150, Z_FUNDO - 300), (78, -56), "descida Ø200 a 0,35 m da linha, bocal no fundo")
 c2.chamada((-150, PLAT - 400), (24, 10), "cabeça do P1 40×30 (platibanda)")
 c2.chamada((-25, Z_TOP_CALHA + 170), (30, 40), "RF-2 contra-rufo na face da cabeça, vedado com PU")
-c2.chamada((450, zts(450) - 300), (24, -4), "TS-01 no assento do pilar")
+c2.chamada((450, zts(450) - 300), (50, -4), "TS-01 no assento do pilar")
 for z, t in ((REC, "+" + f((REC + ZREF) / 1000, 3)), (Z_FUNDO, "+" + f((Z_FUNDO + ZREF) / 1000, 3)), (Z_TOP_CALHA, "+" + f((Z_TOP_CALHA + ZREF) / 1000, 3)), (PLAT, "+10,000")):
-    c2.texto((-460, z), t, "min", "MIDDLE_RIGHT")
+    c2.texto((-600, z), t, "min", "MIDDLE_RIGHT")
 
 # ------------------------------------------------------------------ PLANTA PARCIAL 1:50 (linhas 1 a 3)
-pp = pr.vista("PLANTA", (545, 330), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares P1 de todas as linhas; caimento 0,5 % para as saídas")
+pp = pr.vista("PLANTA", (606, 296), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares P1 de todas as linhas; caimento 0,5 % para as saídas")
 Y3 = YLmm[1] + 3000
 pp.ret(-400, -300, 100, Y3 + 300, "CORTADO")
 for y in YLmm[:2]:
@@ -108,10 +108,10 @@ pp.linha((X_T0 - B_TERCA, -110), (X_T0 - B_TERCA, Y3), "METALICA"); pp.linha((X_
 for y0, y1 in zip(YLmm[:1], YLmm[1:2]):
     ym = (y0 + y1) / 2
     pp.linha((XC0 + 150, ym - 1500), (XC0 + 150, y0 + 900), "INDICACAO"); pp.linha((XC0 + 150, ym + 1500), (XC0 + 150, y1 - 900), "INDICACAO")
-    pp.texto((XC0 + 380, ym), "i = 0,5 %", "min", "MIDDLE_LEFT", rot=90)
+    pp.texto((XC0 + 150, ym), "i = 0,5 %", "min", "MIDDLE_CENTER", rot=90)
 pp.chamada((XC0 + 150, YLmm[1] + 350), (30, 6), "saída / descida Ø200 (9 no total)")
 pp.chamada((-350, YLmm[0] - 200), (20, -12), "extravasor Ø100 na placa da fachada 1 (e 9)")
-pp.chamada((XC0 + BC, YLmm[1] + 2400), (14, 40), f"calha {BC}×{HC} contínua, juntas a cada ≈ 20 m")
+pp.chamada((XC0 + BC, YLmm[1] + 2400), (14, 24), f"calha {BC}×{HC} contínua, juntas a cada ≈ 20 m")
 
 # ------------------------------------------------------------------ DETALHE SC-1 e RUFOS
 d = pr.vista("SC-1", (170, 150), 5, titulo="DETALHE 3 — SUPORTE DA CALHA SC-1", subtitulo="ferro chato 38 × 6,35 A36 galvanizado, a cada 750 mm")

@@ -20,7 +20,7 @@ ZN0, ZN1 = FCH.Z_NC - NH / 2, FCH.Z_NC + NH / 2          # 840 / 1040
 Z_N3, Z_N5, Z_N6 = 1060, 1075, 820                       # tirante, estribo de ancoragem do teto, estribo de ancoragem da base
 X_N4 = (130, 170)                                        # estribo de suspensão no plano médio
 X_N7 = (40, 80)                                          # estribo vertical do nariz (Av do PCI)
-Z_CORD = (156, 469, 781, 1094)
+Z_CORD = FCH.ZC_                                         # DEC-035: 10 fios Ø6 (5 por face), do placas.json
 
 # quantidades na obra (peça a peça nas vistas)
 PEC = [p for V in FCH.DADOS for p in FCH.DADOS[V][0]]
@@ -79,7 +79,7 @@ pr.cabecalho_peca("FX", f"FIXAÇÃO DAS PLACAS — {N_CS} CONSOLES CS-1 ({N_CS_F
 
 # ================================================================== D1 — armação da ponta (vista pela face interna, 1:10)
 d1 = pr.vista("DETALHE 1", (Q[0] + 40, Q[1] + 300), 10, titulo="DETALHE 1 — ARMAÇÃO DA PONTA DA PLACA",
-              subtitulo="vista pela face interna; as 2 pontas iguais (espelhadas); cordoalhas e tela N1 da ND-LET-PP00", unidade="cm")
+              subtitulo=f"vista pela face interna; as 2 pontas iguais (espelhadas); {FCH.PRT_} e tela N1 da ND-LET-PP00", unidade="cm")
 d1.poli([(500, 0), (0, 0), (0, H), (500, H)], "VISTA"); d1.interrupcao((500, 0), (500, H))
 for z in Z_CORD:
     d1.linha((10, z), (500, z), "ARM_PROT")
@@ -87,9 +87,9 @@ d1.ret(0, ZN0, NB, NH, "METALICA")
 d1.hachura([(0, ZN0), (NB, ZN0), (NB, ZN1), (0, ZN1)], "ANSI31", 0.6, "METALICA")
 d1.barra([(20, Z_N3), (500, Z_N3)], "N3", 2, 8, comp_cm=138, ponto_rotulo=(420, Z_N3), desloc=(14, 10))
 d1.barra([(X_N4[0], 60), (X_N4[1], 60), (X_N4[1], 1220), (X_N4[0], 1220), (X_N4[0], 60)], "N4", 1, 8, comp_cm=256,
-         ponto_rotulo=(X_N4[1], 600), desloc=(22, 0), camada="ARM_TRANSV")
+         ponto_rotulo=(X_N4[1], 600), desloc=(56, 0), camada="ARM_TRANSV")
 d1.barra([(15, Z_N5), (175, Z_N5)], "N5", 1, 6.3, comp_cm=54, ponto_rotulo=(100, Z_N5), desloc=(36, 18), camada="ARM_TRANSV")
-d1.barra([(15, Z_N6), (175, Z_N6)], "N6", 1, 6.3, comp_cm=54, ponto_rotulo=(100, Z_N6), desloc=(36, -10), camada="ARM_TRANSV")
+d1.barra([(15, Z_N6), (175, Z_N6)], "N6", 1, 6.3, comp_cm=54, ponto_rotulo=(100, Z_N6), desloc=(60, -10), camada="ARM_TRANSV")
 d1.barra([(X_N7[0], 1050), (X_N7[1], 1050), (X_N7[1], 1225), (X_N7[0], 1225), (X_N7[0], 1050)], "N7", 1, 6.3, comp_cm=46,
          ponto_rotulo=(X_N7[1], 1180), desloc=(30, 16), camada="ARM_TRANSV")
 d1.cota_h([0, NB, X_N4[0], X_N4[1], 500], 0, -10, total=False)
@@ -97,19 +97,19 @@ d1.cota_v([0, 60, Z_N6, ZN0, ZN1, Z_N3, 1220, H], 0, -10, total=False)
 for (xa, xb) in GF.N["x_gr"]:
     d1.poli([(xa, ZN1), (xa, ZN1 + GF.N["h_gr_teto"]), (xb, ZN1 + GF.N["h_gr_teto"]), (xb, ZN1)], "METALICA")
     d1.poli([(xa, ZN0), (xa, ZN0 - GF.N["h_gr_base"]), (xb, ZN0 - GF.N["h_gr_base"]), (xb, ZN0)], "METALICA")
-d1.chamada((60, FCH.Z_NC), (36, -6), "NC-1 (ND-LET-PP02) — tela N1 recortada no nicho")
-d1.chamada((GF.N["x_gr"][1][1], ZN1 + 30), (40, 4), "grampos do NC-1 dentro do N5 / N6")
-d1.chamada((300, 781), (18, -12), "C1 cordoalhas (ND-LET-PP00)")
+d1.chamada((60, FCH.Z_NC), (60, -6), "NC-1 (ND-LET-PP02) — tela N1 recortada no nicho")
+d1.chamada((GF.N["x_gr"][1][1], ZN1 + 30), (60, 1), "grampos do NC-1 dentro do N5 / N6")
+d1.chamada((300, 781), (40, -12), f"C1 {FCH.PRT_} (ND-LET-PP00)")
 
 # ================================================================== D2 — corte B-B pela ponta (1:5)
 d2 = pr.vista("DETALHE 2", (Q[0] + 265, Q[1] + 290), 5, titulo="DETALHE 2 — CORTE B-B NA PONTA",
-              subtitulo="espessura da placa (face interna à esquerda): barras no plano médio, entre as cordoalhas", unidade="cm")
+              subtitulo=f"espessura da placa (face interna à esquerda): barras no plano médio, entre os {FCH.PRT_}", unidade="cm")
 pts = [(0, 700), (E, 700), (E, H), (0, H)]
 d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, "AR-CONC", 0.03)
 d2.interrupcao((0, 700), (E, 700))
-for z in (781, 1094):
-    for y in (26.4, 73.6):
-        d2.ponto_barra((y, z), 12.7, "ARM_PROT_SECAO")
+for z in [z_ for z_ in Z_CORD if z_ > 700]:
+    for y in (FCH.EX_, E - FCH.EX_):
+        d2.ponto_barra((y, z), FCH.DC_, "ARM_PROT_SECAO")
 d2.ret(0, ZN0, NP, NH, "OCULTA")
 yg = GF.N["y_gr"]
 d2.ret(yg - 3.15, ZN1, 6.3, GF.N["h_gr_teto"], "METALICA"); d2.ret(yg - 3.15, ZN0 - GF.N["h_gr_base"], 6.3, GF.N["h_gr_base"], "METALICA")
@@ -120,10 +120,10 @@ for z in (Z_N5, Z_N6):
     d2.linha((23, z), (77, z), "ARM_TRANSV")
 d2.linha((50, 1050), (50, 1225), "ARM_TRANSV")
 d2.cota_h([0, yg, 50, E], 700, -10, total=False)
-d2.cota_v([700, Z_N6, ZN0, ZN1, Z_N3, Z_N5, H], E, 10, total=False)
-d2.chamada((50, 900), (16, -14), "N4 / N7 no plano médio (y = 5)")
-d2.chamada((60, Z_N3), (14, 10), "N3 — 2 Ø8 (y = 4 e 6)")
-d2.chamada((70, Z_N5), (16, 22), "N5 Ø6,3 fechado (horizontal), cobrimento 2,0")
+d2.cota_v([700, Z_N6, ZN0, ZN1, Z_N3, H], E, 10, total=False)
+d2.chamada((50, 900), (36, -22), "N4 / N7 no plano médio (y = 5)")
+d2.chamada((60, Z_N3), (30, 4), "N3 — 2 Ø8 (y = 4 e 6)")
+d2.chamada((70, Z_N5), (36, 22), f"N5 Ø6,3 fechado (horizontal), {f((Z_N5 - Z_N3) / 10)} acima do N3, cobrimento 2,0")
 d2.chamada((70, Z_N6), (16, -12), "N6 Ø6,3 fechado (horizontal)")
 d2.chamada((30, 960), (-14, 10), "NC-1")
 d2.chamada((yg, ZN1 + 20), (-16, 14), "grampo Ø6,3 (y = 3,1)")
@@ -165,18 +165,19 @@ d3.chapa(a0 + N["P"] - N["t_fundo"], zt_, N["t_fundo"], N["H"], 0.6)
 d3.ret(a0, zn1 - N["t_teto"] - N["h_aba"], N["t_aba"], N["h_aba"], "OCULTA")      # abas (laterais, fora do plano do corte)
 d3.interrupcao((-190, ZB), (-190, ZT2)); d3.interrupcao((a0, ZB), (a0 + 100, ZB)); d3.interrupcao((a0, ZT2), (a0 + 100, ZT2))
 d3.cota_h([-16, 0, a0, de["y0"], me["y1"], a0 + N["P"], a0 + 100], ZB, -10, total=False)
-d3.cota_v([co["z0"], zt_, zf, 0, G0, zn1, co["z1"]], a0 + 100, 16, total=False)
+d3.cota_v([co["z0"], zt_, zf, 0, G0, zn1], a0 + 100, 16, total=False)
+d3.cota_v([co["z0"], co["z1"]], a0 + 100, 26, total=False)                      # rev08: altura das costas do CS-1
 d3.chamada((-60, 100), (-14, 18), "pilar")
 d3.chamada((a0 + 70, -200), (14, -12), "placa 10 cm (ND-LET-PP00)")
-d3.chamada((-8, -55.5 - 120), (-30, -16), "CE-1 (PP04)")
+d3.chamada((-8, -55.5 - 120), (-30, -26), "CE-1 (PP04)")
 d3.chamada((8, -120), (-24, -32), "CS-1 (PP03)")
-d3.chamada((a0 + 30, zn1 - 6), (24, 26), "NC-1 (PP02)")
-d3.chamada((a0 + 6, zn1 - 30), (-18, 30), "abas laterais (tracejadas)")
-d3.chamada((yt, zf), (24, -16), "prisioneiro no fundo")
+d3.chamada((a0 + 30, zn1 - 6), (70, 26), "NC-1 (PP02)")
+d3.chamada((a0 + 6, zn1 - 30), (-18, 40), "abas laterais (tracejadas)")
+d3.chamada((yt, zf), (56, -16), "prisioneiro no fundo")
 d3.chamada((yn, G0), (-10, 40), "M16 de nível sob o teto")
 
 # ================================================================== D4 — planta do conjunto (1:2), logo abaixo do teto
-d4 = pr.vista("DETALHE 4", (Q[0] + 300, Q[1] + 145), 2.0, titulo="DETALHE 4 — PLANTA DO CONJUNTO", subtitulo="corte logo abaixo do teto do nicho; posição nominal", unidade="mm")
+d4 = pr.vista("DETALHE 4", (Q[0] + 380, Q[1] + 145), 2.0, titulo="DETALHE 4 — PLANTA DO CONJUNTO", subtitulo="corte logo abaixo do teto do nicho; posição nominal", unidade="mm")
 xp = -N["B"] / 2                                          # ponta da placa (x do console)
 pl = [(xp, a0), (xp + 320, a0), (xp + 320, a0 + 100), (xp, a0 + 100)]
 d4.poli([(xp, a0 + N["P"]), (xp, a0 + 100), (xp + 320, a0 + 100), (xp + 320, a0), (xp + N["B"], a0), (xp + N["B"], a0 + N["P"])], "CORTADO", fechada=True)
@@ -201,10 +202,10 @@ d4.poli([(XV, a0), (XV - 190, a0), (XV - 190, a0 + 100), (XV, a0 + 100)], "OCULT
 d4.ret(XV - N["B"] / 2 - co["b"] / 2, 0, co["b"], co["t"], "OCULTA")
 d4.chamada((XV - 100, a0 + 95), (4, 16), "placa vizinha (NC-1' e CS-1 espelhados)")
 d4.cota_v([-16, 0, a0, a0 + N["t_aba"], de["y0"], de["y0"] + de["t"], a0 + N["P"], a0 + 100], xp + 320, 10, total=False)
-d4.chamada((xp, a0 + 80), (-14, 10), "ponta da placa (junta 20 no eixo do pilar)")
-d4.chamada((0, yn), (30, -40), "M16 de nível (meio livre, sem aba)")
+d4.chamada((xp, a0 + 80), (10, 44), f"ponta da placa (junta {FCH.JUNTA:g} no eixo do pilar)")
+d4.chamada((0, yn), (64, -40), "M16 de nível (meio livre, sem aba)")
 d4.eixo((AX, -120), (AX, a0 + 100), ext=10)
-d4.texto((AX, -128), "eixo do pilar", "nota", "TOP_CENTER")
+d4.texto((AX, -150), "eixo do pilar", "nota", "TOP_CENTER")
 d4.chamada((60, -70), (14, -10), "pilar")
 
 # ================================================================== D5 — sequência de montagem (cortes esquemáticos 1:5)
@@ -239,12 +240,12 @@ def esquema(v, dy, dz, seta=None):
 
 ESQ = [("1 — APROXIMAR", 150, R_m, ((260, 90), (150, 90))), ("2 — ENCOSTAR", 0, R_m, ((70, 160 + R_m + 30), (70, 160 + R_m + 2))), ("3 — BAIXAR", 0, 0, ((70, 230), (70, 175)))]
 d5 = pr.vista("DETALHE 5", (Q[0] + 448, Q[1] + 360), 5.0, titulo="DETALHE 5 — SEQUÊNCIA DE MONTAGEM",
-              subtitulo=f"esquema; janela R = {MOJ[0]:g} a {MOJ[1]:g} com G = {T['G']:g}", unidade="mm")
+              subtitulo=f"esquema; janela R = {MOJ[0]:g} a {MOJ[1]:g} com G = {T['G']:g}".replace(".", ","), unidade="mm")
 O5 = d5.o
 for k, (tit, dy_, dz_, st) in enumerate(ESQ):
-    d5.o = (O5[0] + 58 * k, O5[1])
+    d5.o = (O5[0] + (0, 72, 116)[k], O5[1])                                      # rev08: o passo 1 (placa afastada 150) não encosta no passo 2
     esquema(d5, dy_, dz_, st)
-    d5.texto((110, 300), tit, "nota", "BOTTOM_CENTER")
+    d5.texto(((-GF.TCE + a0 + dy_ + 100) / 2, 300), tit, "nota", "BOTTOM_CENTER")
 d5.o = O5
 # ================================================================== tabelas
 y = Q[3] - 6
@@ -291,15 +292,15 @@ seq = [
     f"Regular em cada console o M16 de nível (topo da cabeça a G da mesa, {T['G'] - T['G_tol']:g} a {T['G'] + T['G_tol']:g}) e o prisioneiro frontal (afastamento {T['a']:g} ± {T['a_tol']:g}); travar contraporca e trava química.",
     f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MOJ[0]:g} a {MOJ[1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",
-    "Instalar os 2 pinos PT-1 na junta de baixo (ou as 2 travas PT-2 nas placas de pacote suspenso) antes de soltar o guindaste; selar a junta vertical (tarucel + PU).",
+    "Pinos guia PT-1: antes de montar a placa de cima, parafusar as 2 cartolas no topo da placa de baixo (M16 só nela); a placa de cima desce guiada, sem parafuso — o PT-1 não transmite esforço (DEC-035). Nas placas de pacote suspenso, apertar as 2 travas PT-2 no pé antes de soltar o guindaste. Selar a junta vertical (tarucel + PU).",
     "Soltar o guindaste, cortar as 2 alças AL-P rente ao topo da placa (disco de corte, sem aquecer o concreto) e proteger as pontas da cordoalha com epóxi; só então montar a placa de cima."]
 y = pr.notas(XC, y - 4, seq, 190, titulo="SEQUÊNCIA DE MONTAGEM")
 NM = FX["nicho_NC1"]
 pr.notas(XC, y - 2, [
-    "Ponta da placa = dente Gerber (bielas e tirantes, NBR 9062:2017 7.3/7.4): N3 tirante sobre o teto, N4 suspensão no plano médio até as cordoalhas de baixo, N5/N6 costura e ancoragem (os grampos do NC-1 ficam dentro deles), N7 estribo do nariz.",
-    "Barras da ponta no plano médio, entre as cordoalhas (eixo a 2,64 cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
+    "Ponta da placa = dente Gerber (bielas e tirantes, NBR 9062:2017 7.3/7.4): N3 tirante sobre o teto, N4 suspensão no plano médio até os fios de baixo, N5/N6 costura e ancoragem (os grampos do NC-1 ficam dentro deles), N7 estribo do nariz.",
+    f"Barras da ponta no plano médio, entre os {FCH.PRT_} (eixo a {f(FCH.EX_ / 10, 2)} cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
     "Medidas das peças Trejor (CS-1, NC-1, cartola) de pré-dimensionamento: confirmar com o catálogo 09 da Trejor antes da compra.",
-    "Cotas metálicas em mm; concreto em cm. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
+    "Cotas metálicas em mm; concreto em cm."], 190)
 json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CE1=N_CE, CE1_obra=N_CE_OBRA, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT2=N_PT2)),
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")

@@ -51,7 +51,7 @@ pr.revisao("06", "18/10/2026", "EMISSÃO PARA PRODUÇÃO NA METALÚRGICA")
 Q = pr.quadro
 pr.cabecalho_peca("MT", f"NICHO NC-1 ({N_E} + {N_D} NC-1' ESPELHADO = {N_NC} PÇ) · CONSOLE CS-1 ({N_CS} PÇ) — FABRICAÇÃO",
                   "aço A572-50 (parede do nicho e grampos A36) · solda de oficina MIG · galvanizado a fogo · cotas em mm", largura=Q[2] - Q[0] - 10)
-DY = 262
+DY = 250
 desenhar("/home/claude/letsara/pranchas/pp02.py", Proxy(pr, 0, DY, "NC "))
 desenhar("/home/claude/letsara/pranchas/pp03.py", Proxy(pr, 585, DY, "CS "))
 pr.linha((Q[0] + 588, Q[1] + 300), (Q[0] + 588, Q[3] - 34), "VISTA")

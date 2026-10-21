@@ -7,7 +7,7 @@ from ts01_dados import P, L, H, f, peso, V
 CB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cobertura_metalica.json"))
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="TS-01 — ESPERAS, INSERTOS E PEÇAS DE LIGAÇÃO DA COBERTURA (SEM SOLDA)",
-                        desenho="ND-LET-TS01-3", folha="03/03", fase="PARA APROVAÇÃO"))
+                        desenho="ND-LET-TS01-3", folha="02/02", fase="PARA APROVAÇÃO"))
 pr.revisao("01", "12/10/2026", "PINOS C/ CABEÇA CALCULADOS, CH-MF, CH-MF2, OR-1, CT-1, TB-1 NO DENTE")
 pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T; OR-1 SOLDADA NA CH-MF")
 pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1; SEM DENTES")
@@ -114,6 +114,16 @@ v3.cota_v([-110, -60, 60, 110], 150, 8, total=False)
 v3.cota_h([0, 75, 150], -110, -8, total=False)
 v3.chamada((75, 60), (8, 24), "2 oblongos 18 × 40 (ES-1)")
 
+# ------------------------------------------------------------------ ST-1P4 (1:5) — rev08, DEC-036: beirais do eixo 2 (TS-01B)
+v4 = pr.vista("ST-1P4 PLANTA", (150, 120), 5, titulo="ST-1P4 — ABA HORIZONTAL", subtitulo="só TS-01B, 1ª terça do beiral do eixo 2 (2 na obra)")
+v4.ret(0, -110, 200, 220, "METALICA")
+for xx in (45, 125):
+    for yy in (-60, 60):
+        oblongo(v4, (xx, yy), 18, 40, horiz=True)
+v4.cota_v([-110, -60, 60, 110], 200, 8, total=False)
+v4.cota_h([0, 45, 125, 200], -110, -8, total=False)
+v4.chamada((125, 60), (20, 30), "4 oblongos 18 × 40 (ES-1 a 7,5 e 15,5 do eixo)")
+
 # ------------------------------------------------------------------ OR-X (1:2,5)
 v = pr.vista("OR-X", (600, 300), 2.5, titulo="OR-X — ORELHA DO X", subtitulo="L 102×76×6,3 A36, L = 80 · vãos 4-5 a 8-9")
 v.ret(0, 0, 76, 6.3, "METALICA")
@@ -136,7 +146,9 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
          ["ES-2", "barra roscada M16 L=220 c/ gancho + U Ø10", 4 * nn, 4 * nn * 14, k(1.58, 0.22)],
          ["TB-3", "tubo Ø50,8×2,0 L=900", 4, 56, k(2.41, 0.90)],
          ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 56, "1,5"],
-         ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * 14, "7,4"],
+         ["ES-1", "idem, +2 na 1ª e +2 na última terça — só TS-01B", "-", 8, k(1.58, 0.33)],
+         ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * 14 - 2, "7,4"],
+         ["ST-1P4", "chapa dobrada 9,5 × 220 (200 + 290), 4 oblongos", "-", 2, "8,0"],
          ["ST-1V", "igual ao ST-1P, 2 oblongos no eixo (VB eixo 1)", "-", 2 * nt - 1, "7,4"],
          ["ST-1V-R", "como o ST-1V, oblongos 22×44 (VB eixo 9, M20)", "-", 2 * nt - 1, "7,4"],
          ["ST-1F", "como o ST-1V, no recuo do pilar de canto (lado E)", "-", 2, "7,4"],
@@ -149,6 +161,7 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
 y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
               [16, 92, 18, 22, 32])
 notas = ["Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
+         "ST-1P4 (DEC-036): igual ao ST-1P com aba horizontal de 200 e 4 oblongos, nas 4 ES-1 da 1ª terça do beiral do eixo 2 (TS-01B: +2 ES-1 com grampo na 1ª e na última terça, peça simétrica). ACI 318-19 cap. 17, C50: interação 0,59 com os grampos U Ø10.",
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
          "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",
          "OR-X só nos nós dos vãos com X (4-5 a 8-9; 72 nas TS-01 das linhas 4 a 8 + 8 na VB do eixo 9); as esperas ES-2 existem nos 3 nós de todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",

@@ -104,11 +104,10 @@ for s_ in (1500, L - 1500):
 ve.cota_ord([PERF[7][0], round(Tm(XP, ZT(XP))[0])] + TERCAS + [round(Tm(L - XP, ZT(L - XP))[0]), PERF[6][0]], H + 140, 14, x0=PERF[7][0])
 ve.cota_h([PERF[0][0], PERF[2][0], 1500, L - 1500, PERF[3][0], LU], 0, -10)
 ve.cota_v([0, PERF[4][1], H], PERF[6][0], 10)
-ve.chamada(Tm(XP, ZNL + 150), (14, -16), "TB-1 tubo Ø50×3,0 L=240 A PRUMO na montagem + nicho 12×12×6 (2x)")
-ve.chamada(PERF[1], (16, -22), "face de apoio do dente: HORIZONTAL na montagem (3 % na peça)")
-ve.chamada(PERF[7], (30, 30), "pontas e recortes a prumo na montagem")
-ve.chamada((TERCAS[2] - 45, H + 120), (10, 12), f"ES-1V: 2 esperas M16 no eixo da VB por terça — {len(TERCAS)} terças (ST-1V parafusado)")
-ve.chamada((1500, H + 140), (10, 10), "AL-1 alça (2x)")
+ve.chamada(Tm(XP, ZNL + 150), (14, -Tm(XP, ZNL + 150)[1] / ESC - 34), "TB-1 Ø50×3,0 L=240 a prumo + nicho 12×12×6 (2x)")
+ve.chamada(PERF[1], (16, -PERF[1][1] / ESC - 25), "face de apoio do dente: HORIZONTAL na montagem (3 % na peça)")
+ve.chamada((TERCAS[2] - 45, H + 120), (10, 34), f"ES-1V: 2 M16 no eixo por terça ({len(TERCAS)} terças, ST-1V)")
+ve.chamada((1500, H + 140), (10, 34), "AL-1 alça (2x)")
 ve.marcador_corte((L / 2 + 400, -22 * ESC), (L / 2 + 400, H + 24 * ESC), "A", lado=1)
 ve.marcador_detalhe((LN / 2, REC), 500, 1, ang=-120, dist=8)
 
@@ -189,11 +188,17 @@ d1.cota_h([FP, 0, XP, LN, LD], ZT(LD) + 150, 12, total=False)
 d1.cota_v([CT - 290, CT, ZNL], FP + 270, -14, total=False)
 d1.cota_h([FP, FP + 270], CT - 290, -12, total=False)
 d1.chamada((XP, ZT(XP) - 30), (40, 48), "PN-6 Ø20 roscado A36 L=700 (300 no consolo) + porca, contraporca e arruela 60×60×6; nicho grauteado")
-d1.chamada((XP, CT + 5), (-40, 30), "NEO-6 100×100×10 (furo Ø30) horizontal")
+d1.chamada((XP, CT + 5), (-62, 30), "NEO-6 100×100×10 (furo Ø30) horizontal")
 d1.chamada((FP + 200, CT - 170), (60, -30), "CP-VB 15 × 27 × 29, topo HORIZONTAL (ver prancha do pilar)")
 d1.chamada(Rp(LN, REC + COB + 20), (14, 10), "N5 alça Ø10 (tirante)")
 d1.chamada(Rp(XS[0], 150), (70, -16), "N6 suspensão 2 Ø10")
 d1.chamada(Rp(LN + COB, COB + 100), (12, 14), "N1 com gancho de 20 cm no recorte")
+
+# isométricos (iso3d_vigas.py) — rev08
+pr.imagem(540, 172, 985, 240, "/home/claude/letsara/pranchas/ISO-VB-geral.png", titulo="ISOMÉTRICO — VB-02",
+          subtitulo="dentes, esperas ES-1V das terças, alças AL-1, TB-1 + nicho")
+pr.imagem(560, 88, 760, 150, "/home/claude/letsara/pranchas/ISO-VB-ponta.png", titulo="ISOMÉTRICO — PONTA NO CP-VB",
+          subtitulo="consolo escondido no recorte, NEO-6, PN-6 com porca")
 
 # tabelas
 y = Q[3] - 6
