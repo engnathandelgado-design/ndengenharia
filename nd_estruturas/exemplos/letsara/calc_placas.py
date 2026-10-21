@@ -24,9 +24,12 @@ W_fora = b * h ** 2 / 6                # flexão fora do plano (vento)
 W_plano = h * b ** 2 / 6               # flexão no plano (peso, estocagem em pé)
 pp = A * 25
 
-# ---------------------------------------------------------------- protensão: 8 cordoalhas Ø12,7 (4 por face, alinhadas, simétrico)
-Ap1 = 98.7e-6                          # m² (Ø12,7 CP-190 RB)
-n_c = 8
+# ---------------------------------------------------------------- protensão (DEC-034, Nathan 21/10/2026): 14 cordoalhas Ø9,5 CP-190 RB (12 davam 1,02 no MEF da parede)
+# (7 por face, alinhadas, simétricas no plano: z = 95/156/469/625/781/1094/1155 mm da base, fora do nicho NC-1 de 840 a 1040)
+D_CORD = 9.5
+Ap1 = 55.5e-6                          # m² (Ø9,5 CP-190 RB, NBR 7483)
+n_c = 14
+Z_CORD = [95, 156, 469, 625, 781, 1094, 1155]
 sig_pi = 1400.0                        # MPa na pista (≤ 0,77 fptk = 1463 — NBR 6118:2023 9.6.1.2.1)
 F_macaco = sig_pi * Ap1 * 1e3          # kN por cordoalha
 # DEC-032: perdas pela NBR 6118:2023 9.6.3 (prefabricados.perdas_pretracao) no lugar de 7 % / 20 % fixos — protensão
@@ -39,7 +42,7 @@ Pinf = PERD["Pinf"]
 perdas = PERD["perda_total_pct"] / 100
 LBPT = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=True)[0]        # 9.4.5 — liberação gradual (indicada na prancha)
 LBPT_BRUSCA = lbpt_cordoalha(fckj, PERD["sig_p0"], gradual=False)[0]
-d_c = 0.020 + 0.0127 / 2               # cobrimento 2,0 cm (Nathan, 13/10/2026; redução por controle de fábrica — NBR 9062) → eixo a 2,64 cm
+d_c = 0.020 + D_CORD / 2000            # cobrimento 2,0 cm (Nathan, 13/10/2026; redução por controle de fábrica — NBR 9062) → eixo a 2,48 cm
 sig_cp_inf = -Pinf / A / 1e3           # MPa (protensão centrada)
 
 # ---------------------------------------------------------------- vento (NBR 6123:2023): q0 do estudo da obra, coef. líquido de zona de borda
@@ -56,9 +59,9 @@ fct_f = 1.5 * fctk_inf                 # seção retangular: α = 1,5 (NBR 6118:
 # ELS-F (combinação frequente, ψ1 vento 0,3) e ELS-D (quase permanente, ψ2 = 0): protensão limitada (CAA II)
 sig_els_f = sig_cp_inf + 0.3 * sig_vento
 sig_rara = sig_cp_inf + sig_vento
-# ELU fora do plano: 4 cordoalhas tracionadas a d = h − 4 cm; fpyd ≈ 0,9·1710/1,15
+# ELU fora do plano: as 6 cordoalhas da face tracionada a d = h − d_c; fpyd = 1710/1,15
 fpd = 1710 / 1.15
-Ap_t = 4 * Ap1
+Ap_t = n_c // 2 * Ap1
 d = h - d_c
 fcd = fck / 1.4
 x = Ap_t * fpd / (0.85 * fcd * 0.8 * b)          # m (bloco retangular λ 0,8, αc 0,85)
@@ -111,7 +114,8 @@ int_ca = (T_ca / Ft_M20) ** 2 + (V_ca / Fv_M20) ** 2
 
 R = dict(
     secao=dict(b_m=b, h_m=h, A_m2=A, pp_kNm=round(pp, 2), L_max_m=L, peso_t=round(peso_t, 2), fck=fck, fckj=fckj, Ec_MPa=round(Ec)),
-    protensao=dict(cordoalhas=f"{n_c} Ø12,7 CP-190 RB (4 por face, alinhadas, eixo a 2,6 cm das faces)", Ap_mm2=round(n_c * Ap1 * 1e6, 1),
+    protensao=dict(cordoalhas=f"{n_c} Ø9,5 CP-190 RB ({n_c // 2} por face, alinhadas, eixo a {d_c * 100:.2f} cm das faces)".replace(".", ","), diam_mm=D_CORD, n=n_c,
+                   por_face=n_c // 2, z_mm=Z_CORD, eixo_face_mm=round(d_c * 1000, 1), Ap_mm2=round(n_c * Ap1 * 1e6, 1),
                    sig_pi_MPa=sig_pi, F_macaco_kN=round(F_macaco, 1), P0_kN=round(P0, 1), Pinf_kN=round(Pinf, 1),
                    sig_cp_inf_MPa=round(sig_cp_inf, 2), along_pista_60m_mm=round(sig_pi / 195000 * 60000),
                    perda_imediata_pct=round(PERD["perda_imediata_pct"], 1), perda_total_pct=round(PERD["perda_total_pct"], 1), phi=round(PERD["phi"], 2),

@@ -55,7 +55,7 @@ E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC08 (rev06, DEC-0
        "permanente), 17.2 (ELU), 17.2.4.3 (ato da protensão: γp 1,1; compressão ≤ 0,7 fckj; tração ≤ 1,2 fctm,j; armadura de tração As = R/250 MPa), "
        "17.4 (cortante, modelo I). NBR 9062:2017: 5.3.2 (βa 1,3 no manuseio, 3,0 nas alças), 5.4.3.4 (flechas), 6.3 (peça composta), 7.3 e 7.4 "
        "(consolos e dentes, γn 7.3.1.1, Hd 7.3.1.2)."),
-     P("Cordoalha CP-190 RB Ø12,7 (98,7 mm²), Ep 195 GPa. Perdas: cravação 6 mm em pista de 60 m; relaxação até a liberação (0,8 dia); encurtamento "
+     P("Cordoalhas CP-190 RB Ø12,7 (98,7 mm²) e Ø9,5 (55,5 mm², placas), Ep 195 GPa. Perdas: cravação 6 mm em pista de 60 m; relaxação até a liberação (0,8 dia); encurtamento "
        "elástico com Eci(fckj); progressivas pelo processo 9.6.3.4.2 com as cargas aplicadas por fases (superposição, 8.2.11): U = 70 %, idade fictícia "
        "de liberação 5 dias (cura térmica), montagem/capa aos 60 dias e revestimento aos 90 dias. Liberação GRADUAL e simétrica (macaco), indicada nas "
        "pranchas. Uso do mezanino: escritório/academia (ψ1 0,6; ψ2 0,4), confirmado pelo Nathan.")]
