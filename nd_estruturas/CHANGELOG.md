@@ -3,6 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
+- Laje alveolar: módulo laje_alveolar.py (seção com alvéolos e recorte, tração na alma EN 1168, VRd1, seção composta, frequência) com testes; Letsara LP20 + capa 5, 7 Ø12,7 (calc_laje_alveolar.py). Cargas na fundação (calc_cargas_fundacao.py, em andamento).
 - Letsara modelo 3D rev06 (revisão de obra): I130 com dente, maciço, NEO-2 e PN-2; ST-1P4 proposto nos beirais do eixo 2; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16; CE-1 12,5 e CS-1 de fábrica (CC-1) × de obra; PN-6 da VB; pendências atualizadas. Página 3D republicada.
 - DEC-033: decisões do Nathan na Letsara — PG sem mudança, dente da VM aceito com a carga a 1,0 m, VB com o detalhe atual.
 

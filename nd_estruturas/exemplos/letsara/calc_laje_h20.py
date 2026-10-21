@@ -1,3 +1,4 @@
+# OBSOLETO (21/10/2026): substituído por calc_laje_alveolar.py (dimensionamento completo por fase, laje_alveolar.json).
 import numpy as np, math
 # Laje alveolar genérica LP20 (largura 1245, 6 alvéolos Ø152) + capa 50 (C30); C50, 7 cord. Ø12,7 a 40 do fundo
 b, h, nal, dal = 1.245, 0.20, 6, 0.152
