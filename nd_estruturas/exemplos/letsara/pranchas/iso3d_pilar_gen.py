@@ -60,6 +60,17 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         p.add_mesh(box(nx * face_d + (0.025 if nx > 0 else -nl - 0.025 if nx < 0 else -nw / 2), ny * face_d + (0.025 if ny > 0 else -nl - 0.025 if ny < 0 else -nw / 2), zc,
                        nl if nx else nw, nw if nx else nl, 0.01), color="#202020")
         labs.append(((nx * (face_d + proj), ny * (face_d + proj), zc + 0.02), f"{c['tipo']} (face {c['face']})"))
+        if c.get("ct_br"):                                                                    # rev08 (DEC-038): buchas BR-3 da CT-1 / CT-1P
+            ex, ey = FACE_N[c["ct_ext"]]
+            meia = (B / 2 if nx else H / 2)                                                   # meia largura da face
+            for off, zb in c["ct_br"]:
+                o = (meia - 0.050) if off is None else off / 1000
+                p.add_mesh(pv.Cylinder(center=(nx * (face_d - 0.075) + ex * o, ny * (face_d - 0.075) + ey * o, zb / 1000), direction=(nx, ny, 0),
+                                       radius=0.012, height=0.150), color="#444444")
+                p.add_mesh(pv.Cylinder(center=(nx * (face_d + 0.001) + ex * o, ny * (face_d + 0.001) + ey * o, zb / 1000), direction=(nx, ny, 0),
+                                       radius=0.016, height=0.003), color="#d9822b")
+            o = (meia - 0.050) if c["ct_br"][0][0] is None else c["ct_br"][-1][0] / 1000
+            labs.append(((nx * face_d + ex * o, ny * face_d + ey * o, max(z for _, z in c["ct_br"]) / 1000 + 0.03), f"2 BR-3 ({c['ct']})"))
     if chaves:
         for k in range(3):
             zz = 0.15 + k * 0.30

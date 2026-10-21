@@ -129,6 +129,14 @@ def dados(mk):
         fc = re.search(r"recuo A e ([BD])", cons_t).group(1)
         d[fc] = 100
     cons = cons_marca(cons_t, "P2" if lado_e else "P1")
+    # rev08 (DEC-038): peça antigiro da VM e face deste pilar do lado externo da VM (linha 1: −y; linha 2: +y)
+    #   PL (P1/P2, 40 em y = VM): CT-1P no topo; P1: B = +y; P2: B = −y.  PF (P3–P5, linha 1): CT-1 lateral, face C = −y.
+    L1 = " L1" in pos
+    if pos.startswith(("P1", "P2")):
+        ext = ("D" if L1 else "B") if pos.startswith("P1") else ("B" if L1 else "D")
+        G.com_ct(cons, ext, "CT-1P")
+    else:
+        G.com_ct(cons, "C", "CT-1")
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
@@ -150,12 +158,12 @@ def dados(mk):
     if n_mez and len({c["face"] for c in cons if c["tipo"] == "CP-MEZ"}) == 2:      # apoio interno: continuidade da VM atravessa o pilar
         ins.append(["BA-1", "Bainha corrugada Ø50 horizontal (N11)", n_mez, "12 cm acima da VM"])
     if n_mez:
-        ins.append(["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", n_mez, "face do CP-MEZ"])
+        ins.append(G.linha_br3(cons))
     for ip in ips:
         ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 (CS-1 na obra)").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
         ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
-        ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar), a 102,5 mm da face da cabeça", 2, "assento da TS-01 (y = ±100)"])
+        ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar)", 2, "assento TS-01, y ±100, 102,5 da cabeça"])
         ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
     if mk in ("PL-07", "PL-08"):                                              # rev06: última terça do lado E apoia no recuo do canto
         ins.append(["ES-1F", "2 barras roscadas M20 A36 L=520 c/ gancho (ST-1F da última terça)", 2, "topo do recuo, x = −22,3 e −16,3 cm do eixo E, no eixo da linha"])

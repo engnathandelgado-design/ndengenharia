@@ -1,52 +1,77 @@
 {
  "H_CT1_d_kN": 28.0,
+ "H_fora_kN": 2.4,
  "origem": "vm_meio_vaso.json VM-02 torcao_montagem (T_F1 15,0 kN·m, z 0,695 m)",
+ "cantoneira": "L 152×102×15,9 A36 (laminada inteira, sem solda); CT-1 e CT-1P L=150",
+ "CT1_aba152": {
+  "braco_mm": 66.1,
+  "M_kNm": 1.85,
+  "Z_mm3": 9480,
+  "MRd_kNm": 2.15,
+  "uso": 0.859,
+  "comparacao": {
+   "L152x102x12_5": 1.46,
+   "antiga_furo_a_140": 2.94
+  }
+ },
  "BR3_CT1": {
-  "phiNn": 47.3,
-  "phiVn_dentro": 55.1,
+  "desc": "2 BR-3 M16 hef 150 + barra Ø10, s 70 vertical, 50 da aresta",
+  "phiNn": 44.0,
+  "phiVn_dentro": 54.3,
+  "phiVn_fora": 8.4,
+  "interacao": 0.515
+ },
+ "BR4_VM": {
+  "desc": "BR-4 M20 hef 200 + barra Ø10 na ponta maciça da VM (50 da ponta, 75 do topo)",
+  "phiNn": 34.2,
+  "modo": "cone",
+  "uso": 0.818
+ },
+ "gabaritos": {
+  "CT1_aba102_g_mm": 50.0,
+  "folga_arruela_raiz_mm": 6.1,
+  "CT1_aba102_borda_ponta_mm": 52.0,
+  "CT1_borda_oblongo_topo_mm": 22,
+  "CT1_aba152_folga_arruela_raiz_mm": 32.6,
+  "CT1P_aba102_folga_arruela_raiz_mm": 17.0,
+  "CT1P_aba102_borda_topo_mm": 41.1,
+  "CT1P_furo_borda_ponta_mm": 25.0,
+  "borda_min_M16_Tab14_mm": 22.0
+ },
+ "BR5_VM": {
+  "desc": "BR-5 M20 hef 150 vertical + grampo U Ø10 no topo da ponta maciça (70 da ponta, 125 da face externa)",
+  "phiVn_sem_grampo": 12.8,
+  "phiVn": 49.5,
   "modo": "borda",
-  "phiVn_fora": 10.8,
-  "H_fora": 2.4,
-  "Nu": 5.6,
-  "interacao": 0.508
+  "uso": 0.566
  },
  "BR3_CT1P": {
-  "phiNn": 49.8,
-  "modo": "cone",
-  "Nu": 28.0,
-  "uso": 0.562
+  "desc": "2 BR-3 M16 hef 150 lado a lado (s 100), 75 da aresta externa, eixo 45 acima da aba horizontal",
+  "phiVn_dentro": 54.4,
+  "phiVn_fora": 10.5,
+  "uso": 0.515
  },
- "BR2_VM": {
-  "phiNn": 30.2,
-  "modo": "cone",
-  "Nu": 28.0,
-  "uso": 0.926
- },
- "CT1_aba": {
-  "M_kNm": 3.92,
-  "W_mm3": 84262,
-  "MRd_kNm": 19.15,
-  "uso": 0.205,
-  "sem_nervura_MRd_kNm": 0.89
- },
- "CT1P_chapa": {
-  "M_kNm": 5.88,
-  "W_mm3": 84262,
-  "MRd_kNm": 19.15,
-  "uso": 0.307
+ "CT1P_parafusos": {
+  "M_plano_kNm": 1.71,
+  "F_por_M16_kN": 22.1,
+  "phiVsa_bucha_kN": 27.6,
+  "uso_aco_bucha": 0.801
  },
  "parafusos": {
-  "M16_corte_2x_kN": 74.4,
-  "uso_M16": 0.376,
-  "M16_tracao_2x_kN": 139.6,
-  "M20_tracao_kN": 139.6,
-  "uso_M20": 0.201
+  "Fv_Rd_M16": 37.2,
+  "Ft_Rd_M20": 139.6,
+  "Fv_Rd_M20": 58.1,
+  "uso_M16_CT1": 0.376,
+  "uso_M20_CT1_tracao": 0.201,
+  "uso_M16_CT1P": 0.594,
+  "uso_M20_CT1P_corte": 0.482
  },
+ "uso_max": 0.859,
+ "ok": true,
  "BR3": {
   "d": 16,
-  "d_cabeca": 30,
   "hef": 150,
-  "s": 80
- },
- "ok": true
+  "s": 70.0,
+  "desc": "inserto rosqueado M16 (bucha de aço) hef 150 com barra transversal Ø10 — tipo de catálogo, carga de cálculo ≥ 30 kN ao corte"
+ }
 }

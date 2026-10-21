@@ -297,7 +297,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     e_mont = Q_MONT * TRIB * L / 2 * (x_laje - x_R) / (R_perm + Q_MONT * TRIB * L / 2)   # deslocamento da resultante com a montagem
     # neoprene NEO-5 centrado no eixo da peça (x = 20 cm). A resultante muda de lado durante a montagem: peça sozinha
     # (centroide a xc < 20 cm, gira para fora) e laje + capa (gira para dentro). O giro é impedido pela cantoneira CT-1
-    # parafusada (trilho do pilar + bucha no topo da alma, lado externo): NBR 9062:2017 11.1 (viga com torção ->
+    # parafusada (buchas BR-3 no pilar + BR-4/BR-5 na VM, sem trilho nem solda — DEC-038, calc_ct1.py): NBR 9062:2017 11.1 (viga com torção ->
     # dispositivo contra giro) e 7.2.2.2 (dispositivo parafusado). Binário: neoprene embaixo + CT-1 no topo.
     nucleo = PAD[1] / 6
     x_pad = B_TOT / 2

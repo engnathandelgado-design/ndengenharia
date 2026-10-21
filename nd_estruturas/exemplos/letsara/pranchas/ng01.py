@@ -186,8 +186,8 @@ N_PRODUCAO = [
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
     "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I130 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
-    "Sequência: pilares linha a linha (1 → 9), aprumados e travados com cunhas antes de soltar o guindaste, cálice grauteado no mesmo dia e vigas só 24 h depois (graute ≥ 15 MPa) — ND-LET-MON01; "
-    "mezanino: VM e cantoneiras CT-1, lajes, graute das juntas e bainhas, negativas e tela, 2º estágio e capa de uma vez, cura 7 dias, carregar com fck ≥ 20 MPa — ND-LET-MON02; cobertura metálica; placas fiada a fiada.",
+    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,15 e depois +6,55 (VM com CT-1 parafusada antes de soltar, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → TS-01 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
+    "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,45 m não passa entre a VB da linha 1 e a TS-01 da linha 2) e as paredes internas C e G antes da TS-01 da própria linha (o balancim não passa entre a TS-01 e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
 ]

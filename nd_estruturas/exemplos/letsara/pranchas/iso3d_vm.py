@@ -1,5 +1,5 @@
 """Isométrico 3D (PyVista) — ponta da VM meio vaso com dente Gerber no consolo CP-MEZ: pilar, consolo, NEO-5, pino PN-1,
-cantoneira CT-1, alças N9, 2º estágio (transparente) e laje alveolar. Gera ISO-VM-ponta.png (sem marca: projeto da fábrica)."""
+cantoneira CT-1 (parafusada nas buchas BR-3 do pilar e BR-4 da VM), alças N9, 2º estágio (transparente) e laje alveolar. Gera ISO-VM-ponta.png (sem marca: projeto da fábrica)."""
 import json, math, numpy as np, pyvista as pv
 pv.OFF_SCREEN = True
 P = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_meio_vaso.json"))["premissas"]
@@ -28,9 +28,15 @@ p.add_mesh(box(xa + LN, xa + MAC, ye, yi, zb, zb + REC), **conc)                
 p.add_mesh(box(xa + MAC, xa + LV, ye, yw, zb, zb + H), **conc)                                # alma
 p.add_mesh(box(xa + MAC, xa + LV, yw, yi, zb + H - HA, zb + H), **conc)                        # aba
 p.add_mesh(pv.Cylinder(center=(x0 + XP, 0.0, zb + HC + 0.30), direction=(0, 0, 1), radius=0.010, height=0.70), color="#444444")   # PN-1
-# CT-1 na face externa (lado da alma), parafusada no trilho do pilar e na bucha da viga
-p.add_mesh(box(x0, x0 + 0.152, ye - 0.0125, ye, zb + H - 0.15, zb + H), **aco)
-p.add_mesh(box(x0, x0 + 0.0125, ye - 0.102, ye, zb + H - 0.15, zb + H), **aco)
+# rev08 (DEC-038): CT-1 L 152×102×15,9 L=150 na face externa (lado da alma) — só parafusada, sem trilho e sem solda:
+# aba 102 na face do pilar com 2 M16 nas buchas BR-3 (5 cm da aresta, 4 e 11 abaixo do topo); aba 152 com 1 M20 na BR-4 da VM (8 cm da face do pilar)
+TC = 0.0159
+p.add_mesh(box(x0, x0 + 0.152, ye - TC, ye, zb + H - 0.15, zb + H), **aco)
+p.add_mesh(box(x0, x0 + TC, ye - 0.102, ye, zb + H - 0.15, zb + H), **aco)
+for dz in (0.040, 0.110):
+    p.add_mesh(pv.Cylinder(center=(x0 + TC + 0.008, ye - 0.050, zb + H - dz), direction=(1, 0, 0), radius=0.013, height=0.016), color="#555555")   # porca M16
+    p.add_mesh(pv.Cylinder(center=(x0 + TC + 0.002, ye - 0.050, zb + H - dz), direction=(1, 0, 0), radius=0.015, height=0.003), color="#777777")   # arruela
+p.add_mesh(pv.Cylinder(center=(x0 + 0.080, ye - TC - 0.009, zb + H - 0.075), direction=(0, 1, 0), radius=0.016, height=0.018), color="#555555")    # porca M20 (BR-4)
 # alças N9 (U invertido saindo 20 cm), a cada 15 cm
 x = xa + 0.075
 while x < xa + LV - 0.05:

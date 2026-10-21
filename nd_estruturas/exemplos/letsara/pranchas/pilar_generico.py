@@ -226,6 +226,13 @@ def prancha_pilar(P):
                 # rev08: rótulo em 2 linhas dentro da face, logo abaixo do consolo (a chamada para fora cruzava as cadeias de cota)
                 v.texto((W / 2, zc - h - 1.8 * ESC), c["tipo"], "nota", "TOP_CENTER")
                 v.texto((W / 2, zc - h - 4.8 * ESC), f"{larg/10:g}×{proj/10:g}×{h/10:g}" + (f"/{hp/10:g}" if hp != h else ""), "nota", "TOP_CENTER")
+                bc_ = buchas_ct(c, face, W)
+                for xb_, zb_ in bc_:                                                          # rev08 (DEC-038): BR-3 da CT-1 / CT-1P
+                    v.circulo((xb_, zb_), 11, "METALICA"); v.circulo((xb_, zb_), 6, "METALICA")
+                if bc_:
+                    xq_, zq_ = max(bc_, key=lambda q: (q[1], abs(q[0] - W / 2)))
+                    sg_ = -1 if xq_ > W / 2 else 1                                         # para dentro da face (fora das linhas de cota)
+                    v.chamada((xq_, zq_), (sg_ * 4, 6), "2 BR-3")
             elif c["face"] == OPOSTA[face]:
                 v.ret((W - larg) / 2, zc - h, larg, h, "OCULTA")
             else:                                                                            # lateral: projeção para fora
@@ -546,6 +553,43 @@ def prancha_pilar(P):
         print("  ", a)
 
 
+H_VM = round(_VMP["h_pm"] * 1000)
+
+
+def buchas_ct(c, face, W):
+    """rev08 (DEC-038): posições (x na vista da face, z) das 2 buchas BR-3 da peça antigiro da VM no consolo CP-MEZ `c`.
+    CT-1 (PF/PC/PM): na face do CP-MEZ, a 50 da aresta do lado externo da VM, 40 e 110 abaixo do topo da VM.
+    CT-1P (PL, no topo): na face do CP-MEZ acima da VM, lado a lado (s 100) com centro a 75 do eixo para o lado externo, 61 acima do topo."""
+    if c.get("tipo") != "CP-MEZ" or not c.get("ct_ext") or c["face"] != face:
+        return []
+    s_ = 1 if c["ct_ext"] == DIR[face] else -1 if c["ct_ext"] == ESQ[face] else 0
+    if not s_:
+        return []
+    zt = c["z"] - c["h"] + H_VM
+    if c.get("ct") == "CT-1P":
+        return [(W / 2 + s_ * (75 + d), zt + 61) for d in (-50, 50)]
+    return [(W / 2 + s_ * (W / 2 - 50), zt - dz) for dz in (40, 110)]
+
+
+def com_ct(cons, ext, tipo="CT-1"):
+    """marca nos consolos CP-MEZ a peça antigiro da VM e a face (deste pilar) do lado externo da VM.
+    ct_br: buchas BR-3 como (desvio do eixo da face para o lado externo, z) em mm — usado no isométrico."""
+    for c in cons:
+        if c["tipo"] == "CP-MEZ":
+            c["ct"], c["ct_ext"] = tipo, ext
+            zt = c["z"] - c["h"] + H_VM
+            c["ct_br"] = ([(75 + d, zt + 61) for d in (-50, 50)] if tipo == "CT-1P" else [(None, zt - dz) for dz in (40, 110)])
+    return cons
+
+
+def linha_br3(cons):
+    n = sum(1 for c in cons if c["tipo"] == "CP-MEZ")
+    tp = next((c.get("ct", "CT-1") for c in cons if c["tipo"] == "CP-MEZ"), "CT-1")
+    pos = ("face do CP-MEZ acima da VM: s 10 lado a lado, eixo 6,1 acima do topo da VM" if tp == "CT-1P"
+           else "face do CP-MEZ, 5 da aresta externa, 4 e 11 abaixo do topo da VM")
+    return ["BR-3", f"Inserto rosqueado M16 hef 150 + barra Ø10 ({tp}, sem trilho)", 2 * n, pos]
+
+
 def consolo(face, z_assento, tipo, larg, proj, h, hp, pino=("PN-1", 20, 700, 300, 175), neo=(300, 150, 10), tir=("3 Ø16", 3, 16.0)):
     return dict(face=face, z=z_assento + 1000, tipo=tipo, larg=larg, proj=proj, h=h, hp=hp, pino_nome=pino[0], pino_d=pino[1], pino_L=pino[2],
                 pino_emb=pino[3], pino_x=pino[4], neo=list(neo), tir=tir[0], n_tir=tir[1], d_tir=tir[2])
@@ -578,13 +622,13 @@ def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, 
 
 
 def dados_pc1():
-    cons = [I130("B"), MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
+    cons = com_ct([I130("B"), MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])], "B")
     return base("PC-01", 1, 600, 400, Z_TOP_C, cons, bars_ret(600, 400, 4, 3), "ND-LET-PC01",
                 "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 2 (P8A); 40 em x × 60 em y", "PILAR CENTRAL PC-01",
                 [["PC-01", "P8A (C2)", 1, "topo: 2 TS-01 (oblongo); CP-I130 (B); 2 CP-MEZ (A, C)", "6 CE-1 (B); 2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I130", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=700 — CP-MEZ", 4, "faces A e C"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
-                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I130"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", 4, "face do CP-MEZ"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
+                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I130"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["BR-3", "Inserto rosqueado M16 hef 150 + barra Ø10 (CT-1, sem trilho)", 8, "face do CP-MEZ, 5 da aresta externa, 4 e 11 abaixo do topo da VM"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada, fiadas 0 a 5"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"TS-01 da linha 2 apoiadas no topo do pilar (topo horizontal em 2 níveis: +{F(Z_TOP_C)} na metade do lado A e +{F(Z_TOP_CD)} na metade do lado E, degrau no eixo C), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, com os tubos TB-3 da viga preenchidos com mastique (sem graute: a viga desliza ±15 mm em x, o mezanino já trava o pilar); CP-I130 na face B (+{F(Z_I130)}) para a ponta da V407; CP-MEZ nas faces A e C para as VM dos dois níveis.",
@@ -620,15 +664,15 @@ def dados_pc3():
 
 
 def dados_pm():
-    cons = [MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
+    cons = com_ct([MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])], "B")
     return base("PM-01", 2, 600, 400, 6550, cons, bars_ret(600, 400, 4, 3), "ND-LET-PM01",
                 "PILARES DO MEZANINO PM-01 (P8 E P8B, 40×60) — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: linha 2, eixos B e D (P8 e P8B); 40 em x × 60 em y", "PILARES DO MEZANINO PM-01",
                 [["PM-01", "P8, P8B", 2, "2 CP-MEZ (A, C)", "6 CE-1 (B); 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["IP-02", "Trilho TR-2 40/22 L=250 vertical (CT-1)", 4, "face do CP-MEZ"],
+                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], ["BR-3", "Inserto rosqueado M16 hef 150 + barra Ø10 (CT-1, sem trilho)", 8, "face do CP-MEZ, 5 da aresta externa, 4 e 11 abaixo do topo da VM"],
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS,
-                 f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM meio vaso com dente Gerber: fundo do consolo = fundo da viga); pino PN-1 Ø20 no TB-1 do dente; trilho IP-02 para a cantoneira CT-1 antigiro.",
+                 f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM meio vaso com dente Gerber: fundo do consolo = fundo da viga); pino PN-1 Ø20 no TB-1 do dente; 2 buchas BR-3 M16 hef 150 por consolo para a cantoneira antigiro CT-1 L 152×102×15,9 L=150 (sem trilho, sem solda — DEC-038).",
                  "Topo do pilar em +6,550 (piso superior do mezanino). CE-1 na face B para as placas da parede interna da linha 2 (vista G)."],
                 ip01=[dict(face="B", z=IP_C)])
 

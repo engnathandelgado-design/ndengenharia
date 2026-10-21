@@ -293,7 +293,7 @@ notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos Ø15,2, p
          f"VM-01 e VM-02 em meio vaso 40 × 80 protendidas (alma 25 do lado da borda, aba 15 × 20 para dentro), dente Gerber 50 × 35 nos consolos CP-MEZ; topo da aba = apoio da laje (ND-LET-VM01).",
          "Apoio da laje 10 cm sobre fita de neoprene 10 × 50 contínua; ponta da laje a 5 cm da face da alma; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",
          "2º estágio sobre a alma das VM (largura 30, até o topo da laje) e capa concretados juntos, por quem executa a capa, depois de todo o nível montado; alças N9 Ø10 c/15 da alma ancoram o 2º estágio; negativas N11/N12 sobre os pilares (ND-LET-VM01) e N1 2 Ø10 sobre os apoios das lajes (ND-LET-LA01).",
-         "Lajes içadas só por garra mecânica nas 2 pontas; montar as lajes só depois das cantoneiras CT-1 das VM parafusadas (torção do meio vaso). Lajes e vigas sem escoramento.",
+         "Lajes içadas só por garra mecânica nas 2 pontas; montar as lajes só depois das cantoneiras antigiro CT-1/CT-1P das VM parafusadas nas buchas BR-3 (torção do meio vaso; sem solda). Lajes e vigas sem escoramento.",
          "Placas: H e J (laterais do anexo) e I (fachada da linha 1) por fora dos pilares; G (parede interna da linha 2) do lado do pavilhão; cada placa independente nos seus consoles (ND-LET-PP00).",
          "Sequência: ND-LET-MON02. Apoios como montados: ND-LET-CT04. Cotas em cm, níveis em m. Não medir no desenho.",
          "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]

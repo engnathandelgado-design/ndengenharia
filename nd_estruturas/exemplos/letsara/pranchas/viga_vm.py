@@ -160,7 +160,7 @@ d1.linha((-FOLGA - 600, H + 120), (1100, H + 120), "ARMADURA")                  
 d1.ret(-FOLGA - 400, H + 120 - 25, 400, 50, "OCULTA")
 d1.linha((-FOLGA - 600, H + NEOF + H2 + HCAPA - 30), (1300, H + NEOF + H2 + HCAPA - 30), "ARMADURA")   # N12 na capa
 d1.chapa(-FOLGA, H - 150, 152, 150, 0.4)                                                           # CT-1 (aba de 152 na face externa)
-d1.circulo((110, H - 75), 12, "METALICA")
+d1.circulo((50, H - 75), 12, "METALICA")                                                          # M20 na BR-4
 for x in range(150, LD - 50, 150):
     d1.linha((x, H), (x, H + 200), "ARM_TRANSV")
 d1.cota_h([-FOLGA, 0, X_TB, LN, -FOLGA + PROJ], 0, -14, total=False)
@@ -170,29 +170,54 @@ d1.chamada((-FOLGA + PROJ / 2, HC / 2), (-30, -14), f"CP-MEZ 40 × {PROJ/10:g} �
 d1.chamada((X_PAD - FOLGA, HC + 5), (50, -16), "NEO-5 300×150×10 (furo Ø30)")
 d1.chamada((X_TB, HC - 250), (30, -40), "PN-1 Ø20 L=700 (300 no consolo), grauteado")
 d1.chamada((-FOLGA / 2, REC + HD / 2), (-26, 10), "junta 3 cm grauteada (obra, antes da capa)")
-d1.chamada((60, H - 40), (10, 22), "CT-1 L 152×102×12,5 L=150 + 1 M20 (BR-2) — det. 2")
+d1.chamada((100, H - 40), (10, 22), "CT-1 L 152×102×15,9 L=150 + 1 M20 (BR-4) — det. 2 (nos PL: CT-1P, det. 3)")
 d1.chamada((-FOLGA - 300, H + 120), (-14, 14), "N11 6 Ø16 em 2 bainhas BA-1 Ø50 (obra)")
 d1.chamada((1200, H + NEOF + H2 + HCAPA - 30), (8, 14), "N12 8 Ø12,5 na capa (obra)")
 d1.chamada((800, H + 100), (10, 10), "2º estágio (obra)")
 
-# ------------------------------------------------------------------ DETALHE 2 — CT-1 em planta (mm)
-d2 = pr.vista("DETALHE 2", (Q[0] + 190, YR - 210), 4, titulo="DETALHE 2 — CANTONEIRA ANTIGIRO CT-1 (PLANTA)",
-              subtitulo="parafusada, sem solda; trava a torção de montagem (laje de um lado só)", unidade="mm")
-d2.ret(-400, -300, 400, 600, "CORTADO"); d2.hachura([(-400, -300), (0, -300), (0, 300), (-400, 300)], "AR-CONC", 0.02)   # pilar
+# ------------------------------------------------------------------ DETALHE 2 — CT-1 em planta (mm) — rev08 (DEC-038): sem trilho, sem solda
+CT1 = json.load(open(AQ + "ct1.json"))
+TC = 15.9                                                                                          # L 152×102×15,9 (5/8")
+d2 = pr.vista("DETALHE 2", (Q[0] + 190, YR - 210), 4, titulo="DETALHE 2 — CANTONEIRA ANTIGIRO CT-1 (PLANTA) — PILARES PF, PC E PM",
+              subtitulo="L 152×102×15,9 A36 L=150 laminada inteira, só parafusada (sem solda, sem trilho); trava a torção de montagem", unidade="mm")
+d2.ret(-400, -300, 400, 600, "CORTADO"); d2.hachura([(-400, -300), (0, -300), (0, 300), (-400, 300)], "AR-CONC", 0.02)   # pilar (10 cm além da VM)
 d2.ret(30, -200, 450, 400, "VISTA"); d2.interrupcao((480, -220), (480, 220))                                           # VM (face externa em y = −200)
-d2.chapa(0, -200 - 102, 12.5, 102, 0.4)                                                            # aba de 102 na face do pilar
-d2.chapa(0, -200 - 12.5, 152, 12.5, 0.4)                                                           # aba de 152 na face da VM
-d2.ret(-22, -260, 22, 40, "METALICA")                                                              # trilho TR-2 embutido
-d2.linha((-22, -240), (12.5, -240), "METALICA")
-d2.linha((110, -200 - 12.5), (110, -80), "METALICA")                                               # M20 na bucha BR-2
-d2.ret(100, -200, 20, 120, "OCULTA")
-d2.cota_h([0, 30, 110, 152], -330, -10, total=False)
+d2.chapa(0, -200 - 102, TC, 102, 0.4)                                                              # aba 102 na face do CP-MEZ
+d2.chapa(0, -200 - TC, 152, TC, 0.4)                                                               # aba 152 na face externa da VM
+d2.ret(-150, -258, 150, 16, "OCULTA"); d2.linha((-140, -280), (-140, -220), "OCULTA")             # BR-3 M16 hef 150 + barra Ø10 (2, s 70 vertical)
+d2.ret(TC, -258, 14, 16, "METALICA")                                                               # M16 8.8 + arruela + porca
+d2.ret(70, -200, 20, 200, "OCULTA"); d2.linha((40, -10), (120, -10), "OCULTA")                    # BR-4 M20 hef 200 + barra Ø10
+d2.ret(70, -200 - TC - 17, 20, 17, "METALICA")                                                     # M20 8.8 + arruela + porca
+d2.cota_h([0, 30, 80, 152], -330, -10, total=False)
 d2.cota_v([-302, -200, 200], 480, 10, total=False)
-d2.chamada((-11, -250), (-100, -12), "trilho TR-2 40/22 (IP-02) + 2 T M16")
-d2.chamada((76, -206), (14, -18), "CT-1: aba 152 com furo oblongo 22×40 horizontal")
-d2.chamada((110, -120), (16, 12), "bucha BR-2 M20 hef 120 + barra transversal")
+d2.cota_v([-300, -250, -200], -400, -10, total=False)
+d2.chamada((-75, -250), (-40, -16), f"2 BR-3 M16 hef {CT1['BR3']['hef']} + barra Ø10 (s 7 vertical, 4 e 11 abaixo do topo da VM)")
+d2.chamada((8, -290), (-10, -22), "aba 102: 2 oblongos 18×36 verticais")
+d2.chamada((120, -208), (14, -26), "CT-1 L 152×102×15,9 L=150 (A36 galvanizada)")
+d2.chamada((80, -100), (22, 8), "BR-4 M20 hef 200 + barra Ø10 (na VM, 7,5 abaixo do topo)")
+d2.chamada((80, -225), (40, -10), "M20 8.8; aba 152: oblongo 22×52 horizontal")
 d2.chamada((300, 100), (10, 32), "VM (alma 25 do lado da borda)")
 d2.chamada((-200, 0), (-10, 16), "pilar")
+
+# ------------------------------------------------------------------ DETALHE 3 — CT-1P (PL: pilar 40 = largura da VM, faces coplanares)
+d3 = pr.vista("DETALHE 3", (Q[0] + 472, Q[1] + 85), 5, titulo="DETALHE 3 — CANTONEIRA ANTIGIRO CT-1P (VISTA LATERAL) — PILARES PL",
+              subtitulo="mesma L 152×102×15,9 L=150 no TOPO da VM, sobre a alma; aba 102: 2 oblongos 18×36 verticais; aba 152: oblongo 22×52 na direção da viga; embutida no 2º estágio; sem solda", unidade="mm")
+d3.ret(-220, -200, 220, 400, "CORTADO"); d3.hachura([(-220, -200), (0, -200), (0, 200), (-220, 200)], "AR-CONC", 0.02)   # PL
+d3.poli([(500, -200), (30, -200), (30, 0), (500, 0)], "VISTA"); d3.interrupcao((500, -200), (500, 0))                 # VM (topo em z = 0)
+d3.poli([(0, 0), (500, 0), (500, 200), (0, 200)], "OCULTA", fechada=True)                                             # 2º estágio
+d3.chapa(0, 0, 152, TC, 0.4)                                                                       # aba 152 horizontal sobre a VM
+d3.chapa(0, TC, TC, 102 - TC, 0.4)                                                                 # aba 102 vertical na face do PL
+d3.ret(90, -150, 20, 150, "OCULTA"); d3.poli([(60, -150), (60, -130), (140, -130), (140, -150)], "OCULTA")            # BR-5 M20 hef 150 + grampo U Ø10
+d3.ret(90, TC, 20, 17, "METALICA")                                                                 # M20 8.8 + porca
+d3.ret(-150, 61 - 8, 150, 16, "OCULTA"); d3.linha((-140, 30), (-140, 92), "OCULTA")               # BR-3 M16 hef 150 + barra Ø10
+d3.ret(TC, 61 - 8, 14, 16, "METALICA")                                                             # M16 8.8 + porca
+d3.cota_h([0, 30, 100, 152], -200, -10, total=False)
+d3.cota_v([0, 61, 102], 152, 8, total=False)
+d3.chamada((-75, 61), (-30, 26), "2 BR-3 M16 hef 150 + barra Ø10 (lado a lado, s 10)")
+d3.chamada((100, -110), (8, -12), "BR-5 M20 hef 150 + grampo U Ø10")
+d3.chamada((140, 8), (10, 14), "CT-1P L 152×102×15,9 L=150")
+d3.texto((330, 150), "2º estágio (obra)", "nota", "MIDDLE_CENTER")
+d3.chamada((-150, -170), (8, 8), "PL")
 
 # ------------------------------------------------------------------ isométrico da ponta (iso3d_vm.py)
 import subprocess
@@ -200,7 +225,7 @@ subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_vm.py"], ch
 pr.imagem(Q[0] + 345, Q[1] + 150, Q[0] + 635, Q[1] + 262, "/home/claude/letsara/pranchas/ISO-VM-geral.png",
           titulo="ISOMÉTRICO — VM-02", subtitulo="peça inteira: alma 25, aba 15 × 20, dentes, alças N9 e AL-1")
 pr.imagem(Q[0] + 650, Q[1] + 40, Q[0] + 860, Q[1] + 265, "/home/claude/letsara/pranchas/ISO-VM-ponta.png",
-          titulo="ISOMÉTRICO — PONTA DA VM NO PILAR", subtitulo="dente no CP-MEZ (fundos alinhados), CT-1, PN-1, alças N9, 2º estágio (azul) e laje")
+          titulo="ISOMÉTRICO — PONTA DA VM NO PILAR", subtitulo="dente no CP-MEZ (fundos alinhados), CT-1 com buchas BR-3/BR-4, PN-1, alças N9, 2º estágio (azul) e laje")
 
 # ------------------------------------------------------------------ tabelas (coluna direita)
 y = Q[3] - 132
@@ -218,9 +243,11 @@ for k_, (yy, nn) in enumerate(_rows):
 tc = pr.tabela_cordoalhas(XC, y - 4, _cl, 60)
 y = tc["y_base"]
 ins = [["TB-1", f"Tubo Ø50×3,0 L={HD} a prumo no nariz do dente, sem solda", 2, f"a {X_TB/10:g} cm das pontas, no eixo"],
-       ["BR-2", "Bucha M20 hef 120 c/ barra transversal (CT-1)", 2, "face ext., 11 da ponta, 7,5 do topo"],
+       ["BR-4", "Bucha M20 hef 200 + barra Ø10 (CT-1)", "1–2", "face ext., 5 da ponta, 7,5 do topo"],
+       ["BR-5", "Bucha M20 hef 150 + grampo U Ø10 (CT-1P)", "0–1", "topo, 7 da ponta (só ponta no PL)"],
        ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas), não engraxada", 2, "a 110 cm das pontas"],
-       ["CT-1", "L 152×102×12,5 A36 L=150 + 1 M20 8.8 + 2 T M16", 2, "obra: trilho IP-02 do pilar × BR-2"],
+       ["CT-1", "L 152×102×15,9 A36 L=150 + 1 M20 + 2 M16 8.8", "1–2", "obra: BR-3 do pilar × BR-4 (PF, PC, PM)"],
+       ["CT-1P", "L 152×102×15,9 A36 L=150 + 1 M20 + 2 M16 8.8", "0–1", "obra: BR-3 do PL × BR-5 (topo)"],
        ["NEO-5", "Neoprene 300×150×10 (furo Ø30) — no pilar", 2, "sobre os consolos CP-MEZ"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VM-02) — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 92, 10, 50])
 obra = [["N11", "6 Ø16 L=600 em 2 bainhas BA-1 do pilar (negativa)", "apoios B, C, D"], ["N12", "8 Ø12,5 L=600 na capa (negativa)", "apoios B, C, D"],
@@ -234,7 +261,7 @@ notas = [
     f"MEIO VASO (padrão ND): peça pré-moldada termina no nível de apoio da laje (topo plano); acima da alma e até a ponta da laje vai o 2º ESTÁGIO, concretado junto com a capa POR QUEM EXECUTA A CAPA. Alças N9 Ø10 c/15 em toda a viga (interface NBR 9062:2017 6.3: τsd {f(R['interface']['tau_sd'], 2)} ≤ τRd {f(R['interface']['tau_rd'], 2)} MPa). Topo da peça rugoso (pente, ≥ 5 mm a cada 30 mm), limpo e saturado antes da concretagem.",
     "SEM ESCORAMENTO: a peça isolada leva peso próprio, laje, 2º estágio e capa frescos e 1 kN/m² de montagem (fase 1); revestimento e sobrecarga de 5 kN/m² na seção composta (fase 2).",
     f"Dente Gerber {HD/10:g} × 35 nas pontas maciças (NBR 9062:2017 7.4; MEF não linear): fundo do consolo CP-MEZ = fundo da viga (+{f(ZB[0]/1000, 2)} e +{f(ZB[1]/1000, 2)}). Pino PN-1 Ø20 grauteado no TB-1 numa ponta; na outra graute flexível.",
-    "TORÇÃO DE MONTAGEM (laje de um lado só): instalar a CT-1 nas duas pontas ANTES de soltar a viga do guindaste e antes de montar a laje (NBR 9062:2017 11.1); montar as lajes do vão a partir da VM; a CT-1 fica definitiva.",
+    f"TORÇÃO DE MONTAGEM (laje de um lado só): instalar a CT-1 (PF, PC, PM — det. 2) ou a CT-1P (PL — det. 3) nas duas pontas (VM-02: 2 CT-1; VM-01: 1 CT-1 + 1 CT-1P) ANTES de soltar a viga do guindaste e antes de montar a laje (NBR 9062:2017 11.1); Hd = {f(CT1['H_CT1_d_kN'])} kN no topo da VM. Cantoneira laminada inteira L 152×102×15,9 A36 galvanizada, só parafusada (sem solda, sem trilho): aba 152 M = {f(CT1['CT1_aba152']['M_kNm'], 2)} ≤ MRd = {f(CT1['CT1_aba152']['MRd_kNm'], 2)} kN·m; no pilar 2 buchas BR-3 M16 hef 150 + barra Ø10 (ACI 318-19 cap. 17: CT-1 {f(CT1['BR3_CT1']['interacao'], 2)}, CT-1P {f(CT1['BR3_CT1P']['uso'], 2)}); na VM BR-4 ({f(CT1['BR4_VM']['uso'], 2)}) ou BR-5 ({f(CT1['BR5_VM']['uso'], 2)}). Oblongos para ajuste; a peça fica definitiva.",
     "Obra (sequência): VM + CT-1 → lajes alveolares (apoio 10 cm, neoprene em fita) → grautear junta das pontas e bainhas BA-1 com N11 → limpar e saturar o topo → N12, tela e chavetas → 2º estágio + capa de uma vez → cura 7 dias; carregar com fck ≥ 20 MPa.",
     f"Protensão: {len(CORD)} cordoalhas Ø12,7 CP-190 RB aderentes (posição no corte A-A e na tabela), σpi = 1400 MPa; C1 isoladas 150 cm nas pontas; as 2 da aba equilibram a excentricidade lateral (resultante no centroide da seção T). Liberação GRADUAL e simétrica com fcj ≥ 32 MPa (lbpt = {f(R['ato']['lbpt_m'] * 100, 0)} cm; perdas pela NBR 6118 9.6.3 — total {f(R['protensao']['perdas']['perda_total_pct'])} %).",
     "Içar pelas 2 alças AL-1 (cabos ≥ 45°); estocar sobre 2 calços sob as alças, pressão ≤ 0,3 fcj; transportar apoiada nos mesmos pontos, travada contra tombamento.",

@@ -85,7 +85,7 @@ VISTAS = {
     "J": dict(titulo="VISTA J — LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
               fiadas=lambda k, b: k not in ESQ, esquadria=True),
 }
-ORDEM_VISTAS = ["I", "H", "J", "G", "E", "F", "C", "B", "D", "A"]      # anexo → área aberta → pavilhão → fachada da linha 9
+ORDEM_VISTAS = ["C", "G", "I", "H", "J", "E", "F", "B", "D", "A"]      # rev08 (MON03): internas C e G antes da TS-01 da própria linha; depois as externas
 
 
 def montar(V):
