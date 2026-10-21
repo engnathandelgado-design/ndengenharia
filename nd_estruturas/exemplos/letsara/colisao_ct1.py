@@ -1,4 +1,6 @@
-"""Checagem geométrica de colisão (caixas envolventes reais, não visual) das peças antigiro da VM com o modelo da obra (DEC-038).
+"""OBSOLETO (DEC-039, 21/10/2026): CT-1/CT-1P removidas do modelo; registro da DEC-038.
+
+Checagem geométrica de colisão (caixas envolventes reais, não visual) das peças antigiro da VM com o modelo da obra (DEC-038).
 
 Monta o modelo_bim.montar() SEM as CT-1 antigas e testa, em cada ponta de VM (2 níveis × 2 linhas × 4 vãos × 2 pontas = 32):
   A) CT-1 lateral (L 152×102 na face externa da VM, aba 102 na face do CP-MEZ do pilar) — a solução antiga;

@@ -191,11 +191,32 @@
    "nucleo_neoprene_m": 0.05,
    "T_peca_sozinha_k": -1.3,
    "T_F1_k": 14.8,
-   "sai_do_nucleo_sem_CT1": true,
-   "z_CT1_m": 0.695,
-   "H_CT1_d_kN": 27.6,
-   "CT1_cap_kN": "2 M16 8.8 ao corte: 2 x 37,2 = 74,4 kN",
-   "norma_CT1": "NBR 9062:2017 11.1 e 7.2.2.2"
+   "R_F1_k": 144.0,
+   "sai_do_nucleo_sem_travamento": true,
+   "z_binario_m": 0.695,
+   "H_topo_d_kN": 27.6,
+   "junta": {
+    "desc": "ponta concretada: junta VM × pilar 3 cm, do recorte do dente ao topo, graute/concreto fck ≥ 30 MPa (DEC-039)",
+    "h_junta_m": 0.5,
+    "b_m": 0.4,
+    "A_resistente_m2": 0.1,
+    "tau_sd_MPa": 0.276,
+    "tau_rd_fck30_MPa": 0.434,
+    "uso": 0.636,
+    "fcj_min_calc_MPa": 16,
+    "fcj_lajes_MPa": 20,
+    "tau_rd_fcj_MPa": 0.332,
+    "uso_fcj": 0.833,
+    "compressao_contato": "não há: H está no plano da junta",
+    "tracao_na_junta": "não há nos dois sentidos do giro; sem espera obrigatória",
+    "norma": "NBR 9062:2017 6.3.3 (Tab. 10, βs 0, βc 0,3) e 11.1"
+   },
+   "neoprene": {
+    "H_k_kN": 21.3,
+    "tg_gama": 0.472,
+    "lim": 0.7,
+    "norma": "NBR 9062:2017 7.2.1"
+   }
   },
   "negativa": {
    "Md_kNm": 413.6,
@@ -431,11 +452,32 @@
    "nucleo_neoprene_m": 0.05,
    "T_peca_sozinha_k": -1.3,
    "T_F1_k": 15.0,
-   "sai_do_nucleo_sem_CT1": true,
-   "z_CT1_m": 0.695,
-   "H_CT1_d_kN": 28.0,
-   "CT1_cap_kN": "2 M16 8.8 ao corte: 2 x 37,2 = 74,4 kN",
-   "norma_CT1": "NBR 9062:2017 11.1 e 7.2.2.2"
+   "R_F1_k": 145.8,
+   "sai_do_nucleo_sem_travamento": true,
+   "z_binario_m": 0.695,
+   "H_topo_d_kN": 28.0,
+   "junta": {
+    "desc": "ponta concretada: junta VM × pilar 3 cm, do recorte do dente ao topo, graute/concreto fck ≥ 30 MPa (DEC-039)",
+    "h_junta_m": 0.5,
+    "b_m": 0.4,
+    "A_resistente_m2": 0.1,
+    "tau_sd_MPa": 0.28,
+    "tau_rd_fck30_MPa": 0.434,
+    "uso": 0.644,
+    "fcj_min_calc_MPa": 16,
+    "fcj_lajes_MPa": 20,
+    "tau_rd_fcj_MPa": 0.332,
+    "uso_fcj": 0.843,
+    "compressao_contato": "não há: H está no plano da junta",
+    "tracao_na_junta": "não há nos dois sentidos do giro; sem espera obrigatória",
+    "norma": "NBR 9062:2017 6.3.3 (Tab. 10, βs 0, βc 0,3) e 11.1"
+   },
+   "neoprene": {
+    "H_k_kN": 21.5,
+    "tg_gama": 0.478,
+    "lim": 0.7,
+    "norma": "NBR 9062:2017 7.2.1"
+   }
   },
   "negativa": {
    "Md_kNm": 423.8,

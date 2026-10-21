@@ -1,4 +1,7 @@
-"""CT-1 / CT-1P — peças antigiro da VM meio vaso, SEM trilho e SEM solda (DEC-038, 21/10/2026).
+"""OBSOLETO (DEC-039, 21/10/2026): a CT-1/CT-1P foi REMOVIDA — o giro de montagem da VM é travado pela ponta concretada
+(calc_vm_meio_vaso.py, torcao_montagem.junta). Mantido só como registro da DEC-038.
+
+CT-1 / CT-1P — peças antigiro da VM meio vaso, SEM trilho e SEM solda (DEC-038, 21/10/2026).
 
 Força: H_CT1,d da torção de montagem (calc_vm_meio_vaso.py → vm_meio_vaso.json, NBR 9062:2017 11.1 e 7.2.2.2), no topo da VM.
 - CT-1 (24 un., pilares PF/PC/PM — pilar 10 cm mais largo que a VM do lado externo): cantoneira laminada L 152×102×15,9 L = 150

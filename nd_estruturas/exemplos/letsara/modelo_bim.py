@@ -381,7 +381,7 @@ def montar() -> ModeloBIM:
 
     # 5. mezanino (linhas 1–2), rev04: VM em MEIO VASO (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente
     #    Gerber nas pontas maciças; consolos CP-MEZ com fundo alinhado; 2º estágio (obra, com a capa) e alças N9 saindo da peça;
-    #    neoprene NEO-5, pino PN-1, cantoneira antigiro CT-1 (CT-1P no topo nos PL); folga real de 3 cm na ponta (NBR 9062:2017 3.1)
+    #    neoprene NEO-5, pino PN-1, junta da ponta concretada antes das lajes (DEC-039); folga real de 3 cm na ponta (NBR 9062:2017 3.1)
     VMP = json.loads((AQ / "vm_meio_vaso.json").read_text(encoding="utf-8"))["premissas"]
     hv, ba, bb, ha = VMP["h_pm"], VMP["b_alma"], VMP["b_aba"], VMP["h_aba"]
     DT_ = VMP["dente"]
@@ -418,22 +418,8 @@ def montar() -> ModeloBIM:
                     m.bloco("consolo", f"CP-MEZ 40×{prj*100:.0f}×{hcm*100:.0f}", (xf + sg * prj / 2, y, zb + hcm), prj, bt, hcm, "Consolos")
                     m.bloco("inserto", "NEO-5 300×150×10", (xf + sg * 0.186, y, zb + hcm + 0.01), 0.15, 0.30, 0.01, "Pinos, tubos e neoprenes")
                     m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * 0.186, y, zb + hcm + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
-                    # rev08 (DEC-038): sem trilho e sem solda — cantoneira laminada L 152×102×15,9 e buchas BR-3 (pilar) / BR-4, BR-5 (VM)
-                    t_, ye_ = 0.0159, y + so * bt / 2
-                    if xf in (0.30, LARG - 0.30):          # PL (40 em y = VM): CT-1P no topo, aba horizontal sobre a alma + aba vertical na face
-                        yc_ = y + so * (bt / 2 - 0.125)
-                        m.bloco("inserto", "CT-1P L152×102×15,9 (topo)", (xf + sg * 0.076, yc_, za + t_), 0.152, 0.15, t_, "Insertos metálicos")
-                        m.bloco("inserto", "CT-1P L152×102×15,9 (topo)", (xf + sg * t_ / 2, yc_, za + 0.102), t_, 0.15, 0.102 - t_, "Insertos metálicos")
-                        m.bloco("inserto", "BR-5 M20 hef 150 + grampo", (xf + sg * 0.100, yc_, za), 0.024, 0.024, 0.15, "Insertos metálicos")
-                        for dy_ in (-0.05, 0.05):
-                            m.linear("inserto", "BR-3 M16 hef 150", PerfilRetangular(0.02, 0.02), (xf, yc_ + dy_, za + 0.045 + t_), (xf - sg * 0.15, yc_ + dy_, za + 0.045 + t_), "Insertos metálicos", material="aco")
-                    else:                                    # PF/PC/PM: CT-1 lateral (aba 152 na VM, aba 102 na face do CP-MEZ)
-                        m.bloco("inserto", "CT-1 L152×102×15,9", (xf + sg * 0.076, ye_ + so * t_ / 2, za), 0.152, t_, 0.15, "Insertos metálicos")
-                        m.bloco("inserto", "CT-1 L152×102×15,9", (xf + sg * t_ / 2, ye_ + so * 0.051, za), t_, 0.102, 0.15, "Insertos metálicos")
-                        m.linear("inserto", "BR-4 M20 hef 200", PerfilRetangular(0.024, 0.024), (xf + sg * 0.080, ye_, za - 0.075), (xf + sg * 0.080, ye_ - so * 0.20, za - 0.075), "Insertos metálicos", material="aco")
-                        for dz_ in (-0.040, -0.110):
-                            m.linear("inserto", "BR-3 M16 hef 150", PerfilRetangular(0.02, 0.02), (xf, ye_ + so * 0.050, za + dz_), (xf - sg * 0.15, ye_ + so * 0.050, za + dz_), "Insertos metálicos", material="aco")
-                    m.bloco("inserto", "graute junta 3 cm", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
+                    # DEC-039: sem cantoneira antigiro — a junta da ponta é concretada antes das lajes e trava o giro de montagem
+                    m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
         for x0, b_, mk in PAINEIS_MEZ:                              # mesma paginação da ND-LET-LA01 (30 LA-01 + 2 LA-02 por nível)
             x = (x0 + b_ / 2) / 1000
             perf = LAJE if b_ == 1250 else PerfilRetangular(0.70, H_LAJE, "Laje alveolar 70")

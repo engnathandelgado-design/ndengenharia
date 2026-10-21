@@ -296,9 +296,10 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     x_R = ((g_pm * xc + g_2e * X_PONTA_LAJE / 2 + (g_laje + CAPA * TRIB) * x_laje + CAPA * B_TOT * B_TOT / 2) / g1)
     e_mont = Q_MONT * TRIB * L / 2 * (x_laje - x_R) / (R_perm + Q_MONT * TRIB * L / 2)   # deslocamento da resultante com a montagem
     # neoprene NEO-5 centrado no eixo da peça (x = 20 cm). A resultante muda de lado durante a montagem: peça sozinha
-    # (centroide a xc < 20 cm, gira para fora) e laje + capa (gira para dentro). O giro é impedido pela cantoneira CT-1
-    # parafusada (buchas BR-3 no pilar + BR-4/BR-5 na VM, sem trilho nem solda — DEC-038, calc_ct1.py): NBR 9062:2017 11.1 (viga com torção ->
-    # dispositivo contra giro) e 7.2.2.2 (dispositivo parafusado). Binário: neoprene embaixo + CT-1 no topo.
+    # (centroide a xc < 20 cm, gira para fora) e laje + capa (gira para dentro). DEC-039 (decisão do Nathan, 21/10): o giro
+    # é impedido pela PONTA CONCRETADA — antes de montar as lajes concretam-se as juntas VM × pilar das duas pontas (3 cm,
+    # do recorte do dente ao topo da VM, graute/concreto fck ≥ 30 MPa); sem cantoneira. Binário: neoprene embaixo
+    # (distorção) + junta concretada no topo (NBR 9062:2017 11.1, viga com torção -> dispositivo contra giro).
     nucleo = PAD[1] / 6
     x_pad = B_TOT / 2
     R_so = g_pm * L / 2
@@ -306,12 +307,23 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     R_f1 = (g1 + q_mont) * L / 2
     x_f1 = (g1 * x_R + q_mont * x_laje) / (g1 + q_mont)
     T_f1 = R_f1 * (x_f1 - x_pad)
-    z_ct = h - 0.10 - PAD[2] / 2                                  # da face do neoprene ao parafuso da CT-1
+    z_ct = h - 0.10 - PAD[2] / 2                                  # do plano do neoprene à resultante da junta no topo
     H_ct_d = 1.3 * max(abs(T_so), abs(T_f1)) / z_ct
-    # sem a CT-1 a resultante sairia do núcleo do neoprene (b/6):
-    sai_nucleo = max(abs(T_so) / R_so, abs(T_f1) / R_f1) > nucleo
-
-    # ---- içamento e estocagem (βa 1,3 — 5.3.2.2): 2 alças a 0,21 Lp; tensões no topo e na base
+    sai_nucleo = max(abs(T_so) / R_so, abs(T_f1) / R_f1) > nucleo   # sem travamento a resultante sairia do núcleo (b/6)
+    # junta concretada: a força H está no PLANO da junta (horizontal, transversal à viga) — não há compressão de contato
+    # nem tração atravessando a junta, nos dois sentidos do giro; ela trabalha ao cisalhamento na interface
+    # (NBR 9062:2017 6.3.3, Tab. 10 com ρ < 0,2 %: βs = 0, βc = 0,3; superfícies ásperas ≥ 5 mm a cada 30 mm).
+    # Área resistente: metade superior da junta (largura da ponta maciça B_TOT × (h − recorte)/2).
+    h_j = h - DENTE["recorte"]
+    A_j = B_TOT * h_j / 2
+    tau_j = H_ct_d / A_j / 1e3                                   # MPa
+    fctd_j = lambda fc: 0.7 * FCTM(fc) / GC_LOC
+    tau_rd_j = 0.3 * fctd_j(FCK2)
+    fc_lib = next(fc for fc in range(10, 31) if 0.3 * fctd_j(fc) >= tau_j)    # fcj mínimo da junta para montar as lajes
+    X_LIB = max(20, 5 * math.ceil(fc_lib / 5))
+    # embaixo: H pelo neoprene NEO-5 (distorção, G = 1 MPa; NBR 9062:2017 7.2.1: tg γ ≤ 0,7 sob ação de curta duração)
+    G_NEO = 1.0e3
+    tg_neo = (H_ct_d / 1.3) / (G_NEO * PAD[0] * PAD[1])    # ---- içamento e estocagem (βa 1,3 — 5.3.2.2): 2 alças a 0,21 Lp; tensões no topo e na base
     a_ic = A_ALCA                                             # alças dentro do trecho isolado (L_ISOL): força reduzida no balanço
     w_ic = 1.3 * g_pm
     M_bal = w_ic * a_ic ** 2 / 2
@@ -325,7 +337,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     lat = (Lp / B_TOT, Lp * h / B_TOT ** 2)
 
     x_res = sum(x for x, _ in pos) / n
-    ok_ct = H_ct_d <= 2 * 37.2                              # CT-1: 2 M16 8.8 ao corte (Fv,Rd 37,2 kN cada)
+    ok_ct = tau_j <= tau_rd_j and tg_neo <= 0.7               # DEC-039: junta concretada no topo + neoprene embaixo
     ok = dict(ELU_F1=MR1 >= M1d and xd1 <= 0.45, ELU_F2=MR2 >= M2d and xd2 <= 0.45, ELS_F=sF <= fctf, ELS_D=sD <= 0.0,
               ato=max(s_ato_topo, s_ato_iso_t) <= 1.2 * fctmj and min(s_ato_base, s_ato_meio_b, s_ato_iso_b) >= -0.7 * fcj,
               flecha=f_final <= lim_final, VRd2=Vd <= VRd2, interface=tau_sd <= tau_rd and tau_sd <= tau_max,
@@ -349,8 +361,15 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
                        b_int=b_int, norma="NBR 9062:2017 6.3.3 e Tab. 10"),
         torcao_montagem=dict(e_m=round(e_t, 3), t_kNm_m=round(t_k, 2), T_apoio_k=round(T_ap_k, 1), T_apoio_d=round(T_ap_d, 1), **tor,
                              x_resultante_perm_m=round(x_R, 3), desloc_resultante_montagem_m=round(e_mont, 3), nucleo_neoprene_m=round(nucleo, 3),
-                             T_peca_sozinha_k=round(T_so, 1), T_F1_k=round(T_f1, 1), sai_do_nucleo_sem_CT1=sai_nucleo, z_CT1_m=round(z_ct, 3),
-                             H_CT1_d_kN=round(H_ct_d, 1), CT1_cap_kN="2 M16 8.8 ao corte: 2 x 37,2 = 74,4 kN", norma_CT1="NBR 9062:2017 11.1 e 7.2.2.2"),
+                             T_peca_sozinha_k=round(T_so, 1), T_F1_k=round(T_f1, 1), R_F1_k=round(R_f1, 1), sai_do_nucleo_sem_travamento=sai_nucleo, z_binario_m=round(z_ct, 3),
+                             H_topo_d_kN=round(H_ct_d, 1),
+                             junta=dict(desc="ponta concretada: junta VM × pilar 3 cm, do recorte do dente ao topo, graute/concreto fck ≥ 30 MPa (DEC-039)",
+                                        h_junta_m=round(h_j, 3), b_m=B_TOT, A_resistente_m2=round(A_j, 3), tau_sd_MPa=round(tau_j, 3),
+                                        tau_rd_fck30_MPa=round(tau_rd_j, 3), uso=round(tau_j / tau_rd_j, 3), fcj_min_calc_MPa=fc_lib, fcj_lajes_MPa=X_LIB,
+                                        tau_rd_fcj_MPa=round(0.3 * fctd_j(X_LIB), 3), uso_fcj=round(tau_j / (0.3 * fctd_j(X_LIB)), 3),
+                                        compressao_contato="não há: H está no plano da junta", tracao_na_junta="não há nos dois sentidos do giro; sem espera obrigatória",
+                                        norma="NBR 9062:2017 6.3.3 (Tab. 10, βs 0, βc 0,3) e 11.1"),
+                             neoprene=dict(H_k_kN=round(H_ct_d / 1.3, 1), tg_gama=round(tg_neo, 3), lim=0.7, norma="NBR 9062:2017 7.2.1")),
         negativa=negativa(L, g2, q2, h),
         icamento=dict(a_alca_m=a_ic, sig_topo_balanco=round(s_ic_t_bal, 2), sig_base_vao=round(s_ic_b_vao, 2), lim_t=round(1.2 * fctmj, 2), F_alca_ruptura_kN=round(F_alca, 1),
                       lateral_L_bf=round(lat[0], 1), lateral_Lh_bf2=round(lat[1], 1)),
@@ -399,4 +418,4 @@ if __name__ == "__main__":
     (AQ / "vm_meio_vaso.json").write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
     for k in VAOS:
         r = out[k]
-        print(k, r["ok_geral"], {a: v for a, v in r["ok"].items() if not v}, r["ELU"], r["ELS"], r["ato"], r["torcao_montagem"]["H_CT1_d_kN"], r["negativa"])
+        print(k, r["ok_geral"], {a: v for a, v in r["ok"].items() if not v}, r["ELU"], r["ELS"], r["ato"], r["torcao_montagem"]["H_topo_d_kN"], r["negativa"])

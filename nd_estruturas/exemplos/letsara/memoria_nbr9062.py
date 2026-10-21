@@ -106,7 +106,7 @@ E += [PageBreak(), Paragraph("5. Vigas do mezanino — meio vaso com dente Gerbe
       P("As duas linhas (1 e 2) são de borda: a laje alveolar vence 9,65 m e apoia de um lado só. Seção: alma 25 do lado da borda + aba 15 × 20 para dentro; "
         "topo da peça = apoio da laje (10 cm na aba, neoprene em fita); 2º estágio C30 sobre a alma até a ponta da laje e capa de 5 cm, concretados por quem faz a capa; "
         "alças N9 da alma em toda a viga. Sem escoramento: fase 1 na peça isolada (peso próprio + laje + 2º estágio e capa frescos + 1 kN/m²), fase 2 na seção composta "
-        "(revestimento 1 + sobrecarga 5 kN/m²). Continuidade nos apoios B, C, D pela negativa do 2º estágio (5.1.2.10, tipologia 1). Torção de montagem: CT-1 parafusada.")]
+        "(revestimento 1 + sobrecarga 5 kN/m²). Continuidade nos apoios B, C, D pela negativa do 2º estágio (5.1.2.10, tipologia 1). Torção de montagem: pontas concretadas (junta VM × pilar) antes das lajes — DEC-039.")]
 lin = [["Varredura (alma × h × dente)", "cordoalhas", "dente τ (MPa) / tirante", "consolo h / tirante", "índice de custo"]]
 for r in VMD["ranking"][:8]:
     lin.append([f"{r['bw']*100:.0f} × {r['h']*100:.0f} × {r['hd']*100:.0f}", r["n_cord"], f"{f(r['dente']['tau'], 2)} / {r['dente']['tirante']}",
@@ -130,7 +130,7 @@ lin = [["Verificação (VM-02, h = %g cm)" % (H / 10), "valor", "limite / resist
        ["Ato da protensão (ponta / meio)", f"topo {f(r['ato']['topo_ponta'], 2)} / base {f(r['ato']['base_meio'], 2)} MPa", f"≤ {f(r['ato']['lim_t'], 2)} / ≥ {f(r['ato']['lim_c'], 1)} (fcj {f(r['ato']['fckj'], 0)})", ok(r["ok"]["ato"])],
        ["Flecha final (Tab. 9)", f"{f(r['flecha']['final_mm'])} mm", f"L/250 = {f(r['flecha']['lim_final_mm'])}", ok(r["ok"]["flecha"])],
        ["Interface 6.3 (alças N9 Ø10 c/15)", f"τsd {f(r['interface']['tau_sd'], 2)} MPa", f"τRd {f(r['interface']['tau_rd'], 2)} (βs {f(r['interface']['beta_s'], 2)}, βc {f(r['interface']['beta_c'], 2)})", ok(r["ok"]["interface"])],
-       ["Torção de montagem", f"Td {f(r['torcao_montagem']['T_apoio_d'])} kN·m", f"interação {f(r['torcao_montagem']['interacao'], 2)}; CT-1 Hd {f(r['torcao_montagem']['H_CT1_d_kN'])} ≤ 74 kN", ok(r["ok"]["torcao"] and r["ok"]["apoio"])],
+       ["Torção de montagem", f"Td {f(r['torcao_montagem']['T_apoio_d'])} kN·m", f"interação {f(r['torcao_montagem']['interacao'], 2)}; junta Hd {f(r['torcao_montagem']['H_topo_d_kN'])} kN: τ {f(r['torcao_montagem']['junta']['tau_sd_MPa'], 2)} ≤ {f(r['torcao_montagem']['junta']['tau_rd_fck30_MPa'], 2)} MPa", ok(r["ok"]["torcao"] and r["ok"]["apoio"])],
        ["Negativa de continuidade (face do pilar)", f"Md {f(r['negativa']['Md_kNm'])} kN·m", f"MRd {f(r['negativa']['MRd_kNm'])} · {f(r['negativa']['frac_no_pilar'] * 100, 0)} % no pilar", ok(r["negativa"]["ok"])],
        ["Içamento (alças a 1,0 m) e estabilidade lateral 6.1", f"σt {f(r['icamento']['sig_topo_balanco'], 2)} MPa", f"≤ {f(r['icamento']['lim_t'], 2)}; L/bf {f(r['icamento']['lateral_L_bf'])} ≤ 50", ok(r["ok"]["icamento"] and r["ok"]["lateral"])],
        ["Excentricidade lateral da protensão", f"{f(r['excentricidade_lateral_protensao_m'] * 1000)} mm", "2 cordoalhas na aba equilibram a seção T", "ok"]]
@@ -187,7 +187,7 @@ ic = N9["incendio_cobrimentos"]
 E += [Paragraph("8. Incêndio e cobrimentos (5.3.1.5, 9.2.1.1)", T2), P(ic["cobrimentos"]), P("Placas: " + ic["placas"] + ". Laje alveolar: " + ic["laje_alveolar"] + ". " + ic["metalicos"] + ". " + ic["TRRF"] + "."),
       Paragraph("9. Pendências para o cliente / fábrica", T2),
       P("(a) Fábrica: comprovar controle de pré-fabricado (12.1.2) para o cobrimento de 2 cm das placas e eventual redução de γc/γs. (b) TRRF exigido pelo Corpo de Bombeiros. "
-        "(c) Catálogo do trilho TR-1/TR-2 e das buchas BR-1/BR-2 (≥ 12,4 kN placas; ≥ 40 kN CT-1). (d) Cabeceira da pista para as novas grades de cordoalhas (TS-01 e VM). "
+        "(c) Catálogo do trilho TR-1/TR-2 e das buchas BR-1/BR-2 (≥ 12,4 kN placas). (d) Cabeceira da pista para as novas grades de cordoalhas (TS-01 e VM). "
         "(e) Projeto de fundações: colarinho dos cálices (7.7.4) com os esforços do modelo r04.")]
 doc.build(E)
 print("ok", doc.filename)

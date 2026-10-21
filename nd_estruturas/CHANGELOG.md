@@ -3,6 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
+- Letsara DEC-039 (decisão do Nathan): CT-1/CT-1P e buchas BR-3/BR-4/BR-5 removidas; o giro de montagem da VM é travado pela ponta concretada antes das lajes (calc_vm_meio_vaso.py: junta ao cisalhamento τ 0,28 ≤ 0,43 MPa; lajes com fcj ≥ 20 MPa); VM01 det. 2, pilares, CT02, CT04, MON02/03, LA01, NG01, quantitativos e 3D atualizados. DEC-038 substituída.
 - Letsara rev08 (DEC-038): cantoneira antigiro da VM sem trilho e sem solda — CT-1 L 152×102×15,9 L=150 laminada com o furo da VM perto do canto (uso 0,86; a antiga dava 2,94 na flexão da aba) e 2 buchas BR-3 M16 hef 150 no pilar; CT-1P no topo da VM nos PL; `calc_ct1.py` e checagem geométrica de colisão `colisao_ct1.py` (0 colisões); VM01, pilares, CT04, CT02, quantitativos e modelo 3D atualizados.
 - Laje alveolar: módulo laje_alveolar.py (seção com alvéolos e recorte, tração na alma EN 1168, VRd1, seção composta, frequência) com testes; Letsara LP20 + capa 5, 7 Ø12,7 (calc_laje_alveolar.py). Cargas na fundação (calc_cargas_fundacao.py, em andamento).
 - Letsara modelo 3D rev06 (revisão de obra): I130 com dente, maciço, NEO-2 e PN-2; ST-1P4 proposto nos beirais do eixo 2; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16; CE-1 12,5 e CS-1 de fábrica (CC-1) × de obra; PN-6 da VB; pendências atualizadas. Página 3D republicada.

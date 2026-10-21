@@ -1,4 +1,5 @@
 {
+ "OBSOLETO": "DEC-039 (21/10/2026): CT-1/CT-1P removidas; ver vm_meio_vaso.json torcao_montagem.junta",
  "H_CT1_d_kN": 28.0,
  "H_fora_kN": 2.4,
  "origem": "vm_meio_vaso.json VM-02 torcao_montagem (T_F1 15,0 kN·m, z 0,695 m)",
