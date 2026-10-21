@@ -230,7 +230,8 @@ def montar(cfg):
             za, zb = zf(xa) + 0.90 - VB_H / 2, zf(xb) + 0.90 - VB_H / 2
             ea, eb = no(xa, y, za, unico=True), no(xb, y, zb, unico=True)
             for e_, nm in ((ea, nomes[k]), (eb, nomes[k + 1])):
-                ops.equalDOF(at(nm, zf(XF[nomes.index(nm)]) + 0.30), e_, 1, 2, 3, 5)
+                solta = cfg.get("vb_solta") and e_ == (ea if cfg.get("vb_solta") == "baixa" else eb)   # estudo DEC-033: ponta solta em x (nicho sem graute)
+                ops.equalDOF(at(nm, zf(XF[nomes.index(nm)]) + 0.30), e_, *((2, 3, 5) if solta else (1, 2, 3, 5)))
             cadeia = [ea]
             for x in X_TER:
                 if xa + 0.05 < x < xb - 0.05:
