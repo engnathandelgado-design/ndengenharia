@@ -36,7 +36,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
 
 ## Depois
-- Letsara: ligação da VB presa nas 2 pontas para ±69 kN (decisão do Nathan sobre o tipo de ligação).
+- Letsara: VB mantida com uma ponta solta (DEC-033); se mudar de ideia, ligação presa nas 2 pontas para ±69 kN ou reforço da terça e das esperas ST-1P.
 - Letsara: pranchas de pilar e viga em A1 conforme o tamanho do desenho (pedido do Nathan: ajustar a prancha ao desenho).
 
 - Bases Gerdau pendências (DEC-017): identificar o modo de falha das PBR com placa pouco maior que o perfil (85 de 273 linhas; hoje coberto pelo limite tabelado); PBE com chumbadores tracionados a até 2,7 %; extrair as geometrias de todas as tabelas PBE (hoje 4 de 107); barra de cisalhamento (o manual não traz); conferir no texto da NBR 8800:2024 os itens 6.6.5, 6.7.1.5 e 6.7.2 (base "tipo 2").

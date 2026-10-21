@@ -3,6 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
+- DEC-033: decisões do Nathan na Letsara — PG sem mudança, dente da VM aceito com a carga a 1,0 m, VB com o detalhe atual.
 
 - Letsara: revisão de obra das pranchas — LOC01 com o X da DEC-024 (vãos 4-5 a 8-9; estava o arranjo antigo); MON01 com as marcas PG-03/PG-04 nos lugares certos, NEO-2 300×200×31, VB-01 a VB-08 escoradas contra tombamento, placas das paredes internas antes das TS-01, cunhas + graute no mesmo dia, plano de rigging e transporte especial; fcj de desforma e transporte nas pranchas dos pilares; datas das revisões; PDF único começando por locação, cortes e montagem.
 - Pranchas: textos exportados como texto real (fonte DejaVu embutida) no PDF, não como curvas — PDF único da Letsara de 61 MB para 8,5 MB, texto pesquisável (`prancha_nd._exportar_pdf`).
