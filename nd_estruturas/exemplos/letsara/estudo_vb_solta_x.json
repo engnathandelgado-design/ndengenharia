@@ -1,0 +1,183 @@
+{
+ "x12": {
+  "vaos_x": [
+   0,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "terca": {
+   "it": 0.975,
+   "linha": 31,
+   "x": 39.221,
+   "vao": "7-8",
+   "N": 12.8,
+   "My": -18.5,
+   "Mz": 0.13,
+   "transpasse": false
+  },
+  "ST1P": {
+   "it": 1.058,
+   "parafusos": 0.538,
+   "esperas": 1.058,
+   "linha": 0,
+   "x": 0.52,
+   "eixo": 2,
+   "Rz": -2.3,
+   "Fy": 48.9,
+   "Fx": -1.4
+  },
+  "grupoST1P": {
+   "it": 1.058,
+   "Fy_max": 48.9,
+   "Fx_max": 10.22,
+   "Rz_up": 24.67,
+   "Rz_down": 22.11,
+   "esperas": 2,
+   "parafusos": 0.538,
+   "esperas_it": 1.058,
+   "linha": 0,
+   "x": 0.52,
+   "Rz": -2.3,
+   "Fy": 48.9,
+   "Fx": -1.4
+  },
+  "n_reprov": 1,
+  "X": {
+   "max": 29.17,
+   "min": 0.0
+  },
+  "diag": {
+   "max": 11.84,
+   "min": 0.0
+  },
+  "usos": {
+   "corrente": 0.194,
+   "diagonal": 0.265,
+   "tirante": 0.009
+  }
+ },
+ "x23": {
+  "vaos_x": [
+   1,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "terca": {
+   "it": 0.982,
+   "linha": 31,
+   "x": 39.221,
+   "vao": "7-8",
+   "N": 13.3,
+   "My": -18.5,
+   "Mz": 0.13,
+   "transpasse": false
+  },
+  "ST1P": {
+   "it": 1.042,
+   "parafusos": 0.53,
+   "esperas": 1.042,
+   "linha": 0,
+   "x": 0.52,
+   "eixo": 2,
+   "Rz": -2.3,
+   "Fy": 48.5,
+   "Fx": -1.4
+  },
+  "grupoST1P": {
+   "it": 1.042,
+   "Fy_max": 48.54,
+   "Fx_max": 9.1,
+   "Rz_up": 24.67,
+   "Rz_down": 22.12,
+   "esperas": 2,
+   "parafusos": 0.53,
+   "esperas_it": 1.042,
+   "linha": 0,
+   "x": 0.52,
+   "Rz": -2.3,
+   "Fy": 48.5,
+   "Fx": -1.4
+  },
+  "n_reprov": 1,
+  "X": {
+   "max": 29.69,
+   "min": 0.0
+  },
+  "diag": {
+   "max": 13.17,
+   "min": 0.0
+  },
+  "usos": {
+   "corrente": 0.212,
+   "diagonal": 0.295,
+   "tirante": 0.009
+  }
+ },
+ "x1223": {
+  "vaos_x": [
+   0,
+   1,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "terca": {
+   "it": 0.982,
+   "linha": 31,
+   "x": 39.221,
+   "vao": "7-8",
+   "N": 13.4,
+   "My": -18.5,
+   "Mz": 0.13,
+   "transpasse": false
+  },
+  "ST1P": {
+   "it": 1.042,
+   "parafusos": 0.53,
+   "esperas": 1.042,
+   "linha": 0,
+   "x": 0.52,
+   "eixo": 2,
+   "Rz": -2.3,
+   "Fy": 48.5,
+   "Fx": -1.4
+  },
+  "grupoST1P": {
+   "it": 1.042,
+   "Fy_max": 48.54,
+   "Fx_max": 9.19,
+   "Rz_up": 24.67,
+   "Rz_down": 22.12,
+   "esperas": 2,
+   "parafusos": 0.53,
+   "esperas_it": 1.042,
+   "linha": 0,
+   "x": 0.52,
+   "Rz": -2.3,
+   "Fy": 48.5,
+   "Fx": -1.4
+  },
+  "n_reprov": 1,
+  "X": {
+   "max": 29.69,
+   "min": 0.0
+  },
+  "diag": {
+   "max": 13.33,
+   "min": 0.0
+  },
+  "usos": {
+   "corrente": 0.214,
+   "diagonal": 0.298,
+   "tirante": 0.009
+  }
+ }
+}
