@@ -57,6 +57,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] 2026-10-21 — Letsara: 3D revisado como executado (I130 com dente/NEO-2/PN-2, ST-1P4, correntes/tirantes/diagonais, CC-1) e republicado.
+
 - [x] Letsara rev06f (DEC-032): revisão de protensão (ato, ELS, ELU, perdas), dentes Gerber (biela, tirante, suspensão, MEF), ganchos/ancoragens, CC-1 nos pilares e padrão gráfico da usina.
 - [x] Letsara rev06e (DEC-031): consoles concretados na face C (CC-1), tolerância ±12, geometria e MEF refeitos, posição na fôrma nas pranchas dos pilares.
 - [x] Letsara rev06d (DEC-030): espessura de cada chapa e de cada solda da fixação pelo MEF (NC-1, CS-1, CE-1), aplicada em todas as pranchas, listas, IFC e páginas.

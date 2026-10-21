@@ -3,6 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
+- Letsara modelo 3D rev06 (revisão de obra): I130 com dente, maciço, NEO-2 e PN-2; ST-1P4 proposto nos beirais do eixo 2; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16; CE-1 12,5 e CS-1 de fábrica (CC-1) × de obra; PN-6 da VB; pendências atualizadas. Página 3D republicada.
 - DEC-033: decisões do Nathan na Letsara — PG sem mudança, dente da VM aceito com a carga a 1,0 m, VB com o detalhe atual.
 
 - Letsara: revisão de obra das pranchas — LOC01 com o X da DEC-024 (vãos 4-5 a 8-9; estava o arranjo antigo); MON01 com as marcas PG-03/PG-04 nos lugares certos, NEO-2 300×200×31, VB-01 a VB-08 escoradas contra tombamento, placas das paredes internas antes das TS-01, cunhas + graute no mesmo dia, plano de rigging e transporte especial; fcj de desforma e transporte nas pranchas dos pilares; datas das revisões; PDF único começando por locação, cortes e montagem.

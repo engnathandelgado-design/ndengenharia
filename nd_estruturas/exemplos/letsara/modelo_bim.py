@@ -60,6 +60,8 @@ PLACA = PerfilRetangular(E_PLACA, H_PLACA, "Placa e=10 h=125")
 
 
 CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))
+I1J = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))               # rev06 (DEC-032): arranjo das cordoalhas da I130
+GD_ = json.loads((AQ / "dentes.json").read_text(encoding="utf-8"))["I130"]["geometria"]
 hC = lambda t: CONS[t]["h_total_m"]
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import fechamento as FCH
@@ -100,14 +102,14 @@ def espera(m, marca, x, y, zc, d, hef, sai, grupo=GE, grampo=False, porcas=True)
         caixa(m, "grampo U Ø10", x - 0.045, x + 0.045, y - 0.005, y + 0.005, zc - 0.20, zc - 0.19, grupo)
 
 
-def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, grampo=False):
+def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, grampo=False, aba=0.150):
     """ST-1P / ST-1V / ST-1V-R / ST-1F: chapa dobrada 9,5 × 220 — aba vertical 290 contra a alma da terça (lado `lado` da
     alma) e aba horizontal 150 sobre o concreto, presa em `esperas` (x, y relativos à alma e ao eixo do apoio)."""
     t = 0.0095
     caixa(m, marca, xw, xw + lado * t, y - 0.11, y + 0.11, zc, zc + 0.290, GM, obs="chapa dobrada 9,5 × 220 A36 galv., aba vertical 290")
-    caixa(m, marca, xw + lado * t, xw + lado * 0.150, y - 0.11, y + 0.11, zc, zc + t, GM, obs="aba horizontal 150, oblongos")
+    caixa(m, marca, xw + lado * t, xw + lado * aba, y - 0.11, y + 0.11, zc, zc + t, GM, obs=f"aba horizontal {aba*1000:.0f}, oblongos")
     for dx, dy in esperas:
-        espera(m, marca.split()[0].replace("ST-1P", "ES-1").replace("ST-1V-R", "ES-1R").replace("ST-1V", "ES-1V").replace("ST-1F", "ES-1F"),
+        espera(m, marca.split()[0].replace("ST-1P4", "ES-1").replace("ST-1P", "ES-1").replace("ST-1V-R", "ES-1R").replace("ST-1V", "ES-1V").replace("ST-1F", "ES-1F"),
                xw + dx, y + dy, zc, d, hef, 0.12 if d < 0.02 else 0.12, grampo=grampo)
 
 
@@ -174,12 +176,24 @@ def montar() -> ModeloBIM:
     z_ass_i110 = LG["Z_ASS_I130"]
     for marca, ya, yb in I130_TRECHOS:
         y0, y1 = ya + meia[ya] + 0.075, yb - meia[yb] - 0.075
-        m.linear("viga", marca, I130, (X_C, y0, zc), (X_C, y1, zc), "Vigas centrais I130",
-                 obs=f"L = {y1 - y0:.3f} m; protendida 26 cord. Ø12,7 (V407: 16) + 4 Ø20 na mesa superior; dente 780 × 350")
+        arr = I1J[marca]["arranjo"]
+        ob_ = (f"L = {y1 - y0:.3f} m; protendida {arr['n_cord']} cord. Ø12,7 ({arr['n_inf']} embaixo + {arr['n_cord'] - arr['n_inf']} na mesa superior), "
+               f"σpi {I1J[marca]['perdas'].get('sig_pi', 1453):.0f} MPa, fckj 45; dente {GD_['hd']} × {GD_['ln']}, maciço {GD_['x_mac'] / 1000:.2f} m (DEC-032)")
+        ln_, mac_, hd_ = GD_["ln"] / 1000, GD_["x_mac"] / 1000, GD_["hd"] / 1000
+        m.linear("viga", marca, I130, (X_C, y0 + mac_, zc), (X_C, y1 - mac_, zc), "Vigas centrais I130", obs=ob_)
+        for ya_, yb_ in ((y0, y0 + mac_), (y1 - mac_, y1)):
+            ys_ = (ya_ + ln_, yb_) if ya_ == y0 else (ya_, yb_ - ln_)
+            m.linear("viga", f"{marca} ponta maciça", PerfilRetangular(0.40, H_I130), (X_C, ys_[0], zc), (X_C, ys_[1], zc), "Vigas centrais I130", obs=ob_)
+            yn_ = (y0, y0 + ln_) if ya_ == y0 else (y1 - ln_, y1)
+            m.linear("viga", f"{marca} nariz do dente", PerfilRetangular(0.40, hd_), (X_C, yn_[0], Z_I130_TOPO - hd_ / 2), (X_C, yn_[1], Z_I130_TOPO - hd_ / 2),
+                     "Vigas centrais I130", obs=ob_)
         m.linear("viga", f"{marca} degrau do topo", PerfilRetangular(0.20, LG["DEGRAU_C"]), (X_C + 0.10, y0, Z_I130_TOPO + LG["DEGRAU_C"] / 2), (X_C + 0.10, y1, Z_I130_TOPO + LG["DEGRAU_C"] / 2),
                  "Vigas centrais I130", obs="rev04: topo em 2 níveis — metade do lado E 12 mm acima (apoio horizontal das TS-01)")
         for yy, sg in ((ya, 1), (yb, -1)):
             m.bloco("consolo", f"CP-I130 {marca}", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110), 0.50, 0.40, hC("CP-I130"), "Consolos")
+            m.bloco("inserto", "NEO-2 300×200×31 fretado", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.031), 0.30, 0.20, 0.031, "Pinos, tubos e neoprenes")
+            m.bloco("inserto", "PN-2 pino Ø25 L=900 (350 no consolo; grauteado numa ponta só)", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.55), 0.025, 0.025, 0.90,
+                    "Pinos, tubos e neoprenes")
 
     # 3. TS-01: I90 inclinada, sem dentes (rev03)
     # rev04: elevação real na posição montada — pontas a prumo, cunhas de 30 cm no fundo das pontas (face de apoio horizontal,
@@ -217,7 +231,8 @@ def montar() -> ModeloBIM:
                 zt = z_vb(xb_) + 0.29                                                   # topo HORIZONTAL do CP-VB = face do dente − neoprene
                 m.bloco("consolo", "CP-VB 15×27×29", (xf + sg * 0.135, y, zt), 0.27, 0.15, 0.29, "Consolos")
                 m.bloco("inserto", "NEO-6 100×100×10", (xb_, y, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
-                m.bloco("inserto", "PN-6 Ø20 roscado + porca", (xb_, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "PN-6 Ø20 roscado + porca e contraporca (nicho grauteado só numa ponta; a outra livre — DEC-033)",
+                        (xb_, y, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
 
     # 4. terças Z 302 METSEC contínuas por transpasse (METLAP), ST-1V nas VB, parafusos do apoio e da emenda; e telha
     from shapely.geometry import LineString
@@ -332,6 +347,28 @@ def montar() -> ModeloBIM:
                     zc_b = zf(x2) + H_TS if k + 1 < len(Y_LIN) - 1 else zf(x2) + H_TS     # VB do eixo 9: topo da VB = topo da TS-01
                     orelha(m, x1, ya, zf(x1) + H_TS, ux, uy, dz)
                     orelha(m, x2, yb, zc_b, -ux, -uy, dz)
+    # rev06 (DEC-033): correntes Ø10 a L/4, L/2 e 3L/4 entre todas as terças; tirantes rígidos L 51×51×3,2 no 1º espaço de cada
+    # ponta da meia água; diagonais de ancoragem Ø16 do nó da corrente na 2ª terça até o ST-1 da 1ª terça (ND-LET-COB02, det. 6 e 7)
+    GC = "Correntes, tirantes rígidos e diagonais"
+    Z_COR_, Z_DG_T, Z_DG_S = PC_["furo_corrente_z_mm"] / 1000, 0.245, 0.255
+    R10, L51_ = PerfilRetangular(0.010, 0.010, "Ø10"), PerfilRetangular(0.051, 0.051, "L 51×51×3,2")
+    for xa, _ in PONTAS:
+        xws = [xa + s_ * C3 - 0.027 for s_ in LG["s_tercas"]]
+        nt_ = len(xws)
+        zb_ = lambda xw: zf(xw) + H_TS + 0.010
+        for k in range(len(Y_LIN) - 1):
+            ya, yb = Y_LIN[k], Y_LIN[k + 1]
+            Lk = yb - ya
+            for yq in (ya + Lk / 4, ya + Lk / 2, ya + 3 * Lk / 4):
+                for j in range(nt_ - 1):
+                    x1, x2 = xws[j] + 0.003, xws[j + 1] - 0.003
+                    rig = j in (0, nt_ - 2)
+                    m.linear("inserto", "R1 tirante rígido L 51×51×3,2" if rig else "C1 corrente flexível Ø10 (rosca M10)", L51_ if rig else R10,
+                             (x1, yq, zb_(x1) + Z_COR_), (x2, yq, zb_(x2) + Z_COR_), GC, material="aco")
+            for j0, j1 in ((1, 0), (nt_ - 2, nt_ - 1)):
+                for yq, ye in ((ya + Lk / 4, ya), (ya + 3 * Lk / 4, yb)):
+                    m.linear("inserto", "D diagonal de ancoragem Ø16 (2ª terça → ST-1 da 1ª)", BAR16, (xws[j0], yq, zb_(xws[j0]) + Z_DG_T),
+                             (xws[j1] + (0.02 if j1 == 0 else -0.02), ye + (0.12 if ye == ya else -0.12), zf(xws[j1]) + H_TS + Z_DG_S), GC, material="aco")
     # calha do eixo A (rev06, calc_calha.py / ND-LET-COB03): 300 × 150, de x = 0,02 a 0,32, borda 40 mm abaixo da telha
     zt_c = zf(0.517) + H_TS + 0.010 + 0.302 - 0.03 * (0.49 - 0.25) - 0.040
     t_c = 0.003
@@ -413,10 +450,15 @@ def montar() -> ModeloBIM:
             for dy in (-0.10, 0.10):
                 m.bloco("inserto", nome_, (xpin, y + dy, z_as + 0.31), dpin, dpin, 0.61, PIN)
             m.bloco("inserto", nome_, (xn, y, z_as + 0.010), neo[0], neo[1], 0.01, PIN)
-        for xa, _ in PONTAS:
+        nst = len(LG["s_tercas"])
+        for ip_, (xa, _) in enumerate(PONTAS):
             for k, s_ in enumerate(LG["s_tercas"]):
                 x = xa + s_ * C3 - 0.027
-                suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
+                if i == 2 and ((ip_ == 0 and k == 0) or (ip_ == 1 and k == nst - 1)):   # rev06 (DEC-033): beirais do eixo 2 — 4 esperas
+                    suporte_st(m, "ST-1P4 (TS-01 eixo 2, beiral; 4 esperas — proposto DEC-033)", x, y, zf(x) + H_TS, aba=0.200,
+                               esperas=((-0.150, -0.06), (-0.150, 0.06), (-0.070, -0.06), (-0.070, 0.06)), d=0.016, hef=0.150, grampo=True)
+                else:
+                    suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
     # rev06 (DEC-026): fixação das placas pelo sistema Trejor, como no PP00 — CE-1 no pilar (uma por fiada), console CS-1 soldado,
     # nicho NC-1 nas pontas da placa, pinos PT-1 nas juntas (panos contínuos até o baldrame) e trava de pé PT-2 (pacotes suspensos)
     def rasgo(V, c):
@@ -463,8 +505,11 @@ def montar() -> ModeloBIM:
                         P3 = np.vstack(so.faces)
                         x0_, y0_, z0_ = P3.min(0); x1_, y1_, z1_ = P3.max(0)
                         ua, ub = sorted(((uc + d * x0_) / 1000, (uc + d * x1_) / 1000))
-                        cx(ua, ub, -y1_ / 1000, -y0_ / 1000, zt + z0_ / 1000, zt + z1_ / 1000, f"{pref} {so.nome}", grupo,
-                           obs="solda de campo filete 6 E70XX nos 2 lados verticais (DEC-026)" if so.nome == "costas" else "")
+                        bw_c = next(b_ for sp, b_, _ in pil if abs(sp - min((q for q, _, _ in pil), key=lambda q: abs(q - uc))) < 1e-6)
+                        cc_ = GF.concretado(V, bw_c)
+                        mk_ = (f"CC-1 {pref} {so.nome} (de fábrica, face C)" if cc_ else f"{pref} {so.nome} (soldado na obra)") if pref == "CS-1" else f"{pref} {so.nome}"
+                        cx(ua, ub, -y1_ / 1000, -y0_ / 1000, zt + z0_ / 1000, zt + z1_ / 1000, mk_, grupo,
+                           obs=("solda de fábrica do CC-1, concretado com o pilar (DEC-031)" if cc_ else "solda de campo filete 5 E70XX nos 2 lados verticais (DEC-030)") if so.nome == "costas" else "")
                 # CE-1 do pilar (uma por pilar e fiada)
                 s_ax = min((sp for sp, _, _ in pil), key=lambda sp: abs(sp - uc)) / 1000
                 bw = next(b_ for sp, b_, _ in pil if abs(sp / 1000 - s_ax) < 1e-6) / 1000
@@ -472,10 +517,11 @@ def montar() -> ModeloBIM:
                     ce_feitas.add((s_ax, pc["k"]))
                     zce = z0p + FCH.Z_CE / 1000
                     ub = min(0.19, bw / 2 - 0.01)
-                    cx(s_ax - ub, s_ax + ub, 0.0, 0.016, zce - 0.165, zce + 0.165, "CE-1 chapa de espera 380×330×16", GE)
+                    tce = GF.TCE / 1000
+                    cx(s_ax - ub, s_ax + ub, 0.0, tce, zce - 0.165, zce + 0.165, f"CE-1 chapa de espera 380×330×{GF.TCE:g}".replace(".", ","), GE)
                     for du in (-0.12, 0.12):
                         for dz in (-0.14, 0.14):
-                            cx(s_ax + du - 0.008, s_ax + du + 0.008, 0.016, 0.166, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
+                            cx(s_ax + du - 0.008, s_ax + du + 0.008, tce, tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
             # pinos PT-1 (junta de baixo) ou travas de pé PT-2
             if pc["trava"] == "PT-1":
                 for xp in (pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"])):
@@ -500,13 +546,16 @@ def montar() -> ModeloBIM:
 
     pl = LG["platibanda"]
     m.pendente(f"Cobertura escondida (rev03): topo dos painéis solares junto ao P2 em +{pl['topo_painel_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00 (mínimo 150); junto ao P1 em +{pl['topo_painel_P1']:.3f}.")
-    m.pendente("Pórtico global rev04 (OpenSeesPy, P-Δ, sem VT): ELU ok, γz até 1,09; ELS frequente 9,9 mm em x — passa NBR 9062:2017 Tab. 7 (H/400 e Hi/750; uso 40 %).")
-    m.pendente("! Pé-direito: fundo da TS-01 em +7,19 junto ao eixo A (antes +7,46); mezanino superior (+6,55) com fundo das terças a +8,10 junto ao eixo A — conferir o uso.")
+    m.pendente("Modelo global integrado (OpenSeesPy, P-Δ, terças, correntes, X e laje como diafragma): pilares 0,66; terça mais carregada 0,97; ELS dentro da NBR 9062:2017 Tab. 7.")
+    m.pendente("! Folga na cabeça dos PG-01 a PG-04 mantida em 2 cm (decisão de 20/10): a TS-01 desce ~30 mm (PG-01/PG-03) e ~20 mm (PG-02/PG-04) depois de montada — a viga pode encostar no PG.")
+    m.pendente("! VB com o PN-6 grauteado só numa ponta (decisão de 20/10): o modelo global reprova só o ST-1P da 1ª terça do beiral no eixo 2 (1,06). Proposto o ST-1P4 com 4 esperas (0,26), no 3D em laranja — falta conferir o cone de arrancamento do grupo e a aprovação do Nathan.")
+    m.pendente("Dente Gerber da VM aceito com a carga a 1,0 m (Vu 533 kN = 1,10 Fd, decisão de 20/10).")
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
-    m.pendente("TS-01 sem dentes: apoio 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e 16,25 cm no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
-    m.pendente("Todas as ligações metálicas parafusadas (sem solda): ST-1P nas esperas ES-1 (4 M12 pelas 2 terças do transpasse), ST-1V nas ES-1V das VB, OR-X nas ES-2, sem mão-francesa; placas pelo sistema Trejor (DEC-026): consoles CS-1 soldados na obra nas CE-1 dos pilares — única solda de campo da obra.")
-    m.pendente("Ligações modeladas como na execução (COB01/COB02, PP00): ST-1P/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; OR-X com ES-2; X Ø16 com esticador; CE-1 + CS-1 + NC-1 + PT-1/PT-2 das placas (Trejor); CL-P dos pilares dos portões. Correntes, tirantes rígidos e rufos só nas pranchas.")
+    m.pendente("I130 (DEC-032): V405/V406 com 30 cordoalhas (28 embaixo + 2 na mesa), V407 com 20; σpi 1453 MPa, fckj 45; NEO-2 300×200×31 fretado e PN-2 Ø25 grauteado numa ponta só.")
+    m.pendente("TS-01 sem dentes: apoio no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
+    m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
+    m.pendente("Fora do 3D (só nas pranchas): armaduras, cordoalhas, alças de içamento AL-1/AL-2/AL-3, grampos e porcas das placas, furos de ventilação dos pilares.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:
         if not c["ok"] or c["obs"].startswith("!"):
