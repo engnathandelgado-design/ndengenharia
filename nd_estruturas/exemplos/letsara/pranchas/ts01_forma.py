@@ -5,6 +5,7 @@ cada ~1,20 m, todas as ligações da cobertura parafusadas em esperas de barra r
 import json
 from prancha_nd import Prancha
 from ts01_dados import P, L, H, DX, PASSO_T, sec, V, peso, ALCA_Fd, f
+import ts01_dados as T
 
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
@@ -187,7 +188,7 @@ def corte_I(nome, org, sub, no):
 
 va = corte_I("CORTE A-A", (118, 105), "apoio de terça: ES-1; COTAS EM CM", False)
 va.chamada((60, H + 60), (16, 20), "ES-1: 2 M16 A36 hef 15 + gancho, sai 12 (ST-1P)")
-va.chamada((40, P["y2"]), (20, 30), f"{P['n_cord']} cord. Ø12,7 (5 a 5,5 + 3 a 10 cm)")
+va.chamada((40, P["y2"]), (20, 30), f"{P['n_cord']} cord. Ø12,7 ({T.TXT_LINHAS})")
 
 vc = corte_I("CORTE C-C", (292, 105), "nó do X: ES-1 + 4 ES-2; COTAS EM CM", True)
 vc.chamada((140, H + 40), (14, 20), "ES-2: M16 hef 11 + grampo U Ø10")
@@ -329,7 +330,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo, lado do pilar P1/P2) com o plano do fundo.",
          "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
          f"CUNHAS no fundo das duas pontas (NBR 9062:2017 7.2.1.6 — aparelho de apoio horizontal): calço de aço em cunha 3 % fixado no fundo da fôrma, {LC/10:.0f} cm × 40 cm; ponta baixa rebaixo {EC} → 0 mm, ponta alta 0 → {EC} mm (degrau de {EC} mm). Na montagem a face de apoio fica horizontal sobre o neoprene e sobre o assento horizontal.",
-         "Cordoalhas: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); as 2 de 10 cm em x = ±4 isoladas com bainha nos 3,00 m de cada ponta (faixa de armação abaixo).",
+         f"Cordoalhas: {T.TXT_LINHAS} (x = 0, ±4, ±15,5 nas duas linhas); as {T.N_ISOL} de {P['y2']/10:g} cm em x = ±4 e ±15,5 isoladas com bainha nos {P['isol']['L']/1000:.2f} m de cada ponta (faixa de armação abaixo).".replace("3.00", "3,00"),
          "Esperas ES-1/ES-2 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",

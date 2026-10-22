@@ -1,6 +1,7 @@
 import renomear as RN
 """ND-LET-TS01-2 — TS-01: armação passiva e protensão (A1), com croquis de dobramento. Rev. 03: sem dentes."""
 from prancha_nd import Prancha
+import ts01_dados as T
 from ts01_dados import P, L, H, DX, sec, F_cord, Ap, f, peso, V, armacao_ts01, L_N9, LBPT, LBPT_BRUSCA, ATO
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
@@ -39,8 +40,8 @@ va.linha((0, P["y1"]), (L, P["y1"]), "ARM_PROT")
 va.linha((0, P["y2"]), (L, P["y2"]), "ARM_PROT")
 for a, b in ((0, ISO), (L - ISO, L)):
     va.ret(a, P["y2"] - 12, b - a, 24, "OCULTA")
-va.chamada((L * 0.3, P["y1"]), (-10, -16), "C1 — 6 cord. Ø12,7 aderentes")
-va.chamada((ISO / 2, P["y2"]), (10, 14), "C2 — 2 cord. Ø12,7, bainha plástica nos 3,00 m de cada ponta")
+va.chamada((L * 0.3, P["y1"]), (-10, -16), f"C1 — {T.N_ATIVAS} cord. Ø12,7 aderentes")
+va.chamada((ISO / 2, P["y2"]), (10, 14), f"C2 — {T.N_ISOL} cord. Ø12,7, bainha plástica nos 3,00 m de cada ponta")
 va.chamada((x_est[22], 500), (12, 24), f"N1 - {n1} Ø6,3 c/15 (1,5 m nas pontas) e c/25")
 va.cota_h([0, 1500, ISO, L - ISO, L - 1500, L], 0, -14)
 pr.posicoes_desenho.update({"N1", "N3", "N4", "N6", "N7", "N8", "N9", "C1", "C2"})
@@ -98,8 +99,8 @@ for x in (-165, 165):
 vc.poli([(-45, 30), (45, 30), (45, H - 30), (-45, H - 30)], "ARM_TRANSV", fechada=True)
 vc.poli([(-170, H - 30), (170, H - 30), (170, H - 100), (-170, H - 100)], "ARM_TRANSV", fechada=True)
 vc.poli([(-170, 30), (170, 30), (170, 130), (-170, 130)], "ARM_TRANSV", fechada=True)
-vc.chamada((155, P["y1"]), (22, -14), "C1 - 6 Ø12,7 (y 5,5: x 0, ±4, ±15,5; y 10: x 0)")
-vc.chamada((40, P["y2"]), (24, 10), "C2 - 2 Ø12,7 (y 10, x ±4)")
+vc.chamada((155, P["y1"]), (22, -14), f"C1 - {T.TXT_C1}")
+vc.chamada((40, P["y2"]), (24, 10), f"C2 - {T.N_ISOL} Ø12,7 (y 10, x ±4 e ±15,5)")
 vc.chamada((160, H - 45), (20, 8), "N2 - 4 Ø12,5")
 vc.chamada((165, 40), (20, 2), "N5 - 2 Ø10")
 vc.chamada((45, 450), (34, 6), "N1 Ø6,3")
@@ -139,8 +140,8 @@ d3.chamada((-100, 100), (-16, 30), "faixa dos tubos TB-3 (sem cordoalha)")
 # ------------------------------------------------------------------ coluna direita
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 ta = pr.tabela_croqui(x0, y, barras, h_lin=11.0)
-tc = pr.tabela_cordoalhas(x0, ta["y_base"] - 4, [dict(pos="C1", diam=12.7, qtd=6, y=(5 * P["y1"] + P["y2"]) / 6, forca=F_cord, isol=0),
-                                                  dict(pos="C2", diam=12.7, qtd=2, y=P["y2"], forca=F_cord, isol=ISO)], P["L_pista"])
+tc = pr.tabela_cordoalhas(x0, ta["y_base"] - 4, [dict(pos="C1", diam=12.7, qtd=T.N_ATIVAS, y=T.Y_ATIVAS, forca=F_cord, isol=0),
+                                                  dict(pos="C2", diam=12.7, qtd=T.N_ISOL, y=P["y2"], forca=F_cord, isol=ISO)], P["L_pista"])
 kg_cord = Ap * 1e4 * L / 1000 * 0.785
 notas = [f"Concreto C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj']} MPa (corpo de prova curado com a peça).",
          f"Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm (x = 0, ±4, ±15,5) e 3 a 10 cm (x = 0, ±4); σpi = {P['sig_pi']} MPa ({f(F_cord, 1)} kN por cordoalha no macaco); liberação GRADUAL e simétrica (lbpt = {f(LBPT * 100, 0)} cm; brusca daria {f(LBPT_BRUSCA * 100, 0)} cm, não permitida).",

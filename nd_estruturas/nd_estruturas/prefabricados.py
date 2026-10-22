@@ -415,7 +415,7 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
                                  n_cord: int, diam="12.7", y_cord=0.07, fckj=None,
                                  perda_dif=None, caa="II", gama_g=1.3, gama_q=1.4,
                                  isola_pontas=True, n_sup=0, y_sup=0.05, sig_pi=None, gama_p_ato=GAMA_P_ATO,
-                                 U=70.0, t0_dias=5.0, t_lib_dias=0.8, L_pista=60.0, t_g2_dias=60.0) -> ResultadoViga:
+                                 U=70.0, t0_dias=5.0, t_lib_dias=0.8, L_pista=60.0, t_g2_dias=60.0, nivel="limitada") -> ResultadoViga:
     """Viga biapoiada pré-tracionada, cordoalhas retas na mesa inferior (+ n_sup na mesa superior).
 
     Verifica: tensões no ato (meio do vão e apoio) com γp = 1,1 (NBR 6118:2023 17.2.4.3.2 a), ELS-F (freq.) e ELS-D
@@ -470,9 +470,13 @@ def verificar_viga_pretracionada(sec: Secao, L: float, carga: Carregamento, conc
 
     alfa = 1.3 if sec.largura_em(sec.h * 0.5) < 0.8 * sec.largura_em(0.01) else 1.5
     fct_f = alfa * conc.fctk_inf
-    # ELS-F frequente; ELS-D quase permanente (descompressão na fibra inferior)
-    si_f, ss_f = tensoes(Pinf, Mg1 + Mg2 + carga.psi1 * Mq)
-    si_d, _ = tensoes(Pinf, Mg1 + Mg2 + carga.psi2 * Mq)
+    # NBR 6118:2023 Tab. 13.4 — nível de protensão (pré-tração): "limitada" (CAA II): ELS-F frequente, ELS-D quase
+    # permanente; "completa" (nível 3): ELS-F na combinação RARA (ψ = 1) e ELS-D na FREQUENTE (ψ1). Descompressão na fibra inferior.
+    psi_f, psi_d = (1.0, carga.psi1) if nivel == "completa" else (carga.psi1, carga.psi2)
+    si_f, ss_f = tensoes(Pinf, Mg1 + Mg2 + psi_f * Mq)
+    si_d, _ = tensoes(Pinf, Mg1 + Mg2 + psi_d * Mq)
+    out["nivel_protensao"] = nivel
+    out["psi_F"], out["psi_D"] = psi_f, psi_d
     out["elsf_inf_MPa"] = round(si_f, 2)
     out["elsd_inf_MPa"] = round(si_d, 2)
     out["elsf_lim_MPa"] = round(fct_f, 2)

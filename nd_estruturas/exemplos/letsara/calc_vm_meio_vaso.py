@@ -61,6 +61,7 @@ PAD = (0.15, 0.30, 0.010)                                 # neoprene a (vão) x 
 X_PAD = 0.111 + PAD[0] / 2                                # rev04 com dente Gerber 35 × 35 (calc_vm_dente.py): centro do neoprene a
                                                           # 18,6 cm da face do pilar — a2 ≥ c + 3,5Ø (alças Ø16) no dente e no consolo
 DENTE = dict(hd=0.50, ln=0.35, recorte=0.30, consolo_h=0.29, consolo_proj=0.35, macico=1.00)
+NIVEL = "completa"                                        # DEC-043 (22/10/2026): protensão completa
 VAOS = {"VM-01": 9.37, "VM-02": 9.48}                     # entre faces de pilar (A–B: P1 60 / P3 40; B–C: 40 / 40)
 
 Y_LINHAS = (0.050, 0.120, 0.190)                         # linhas de cordoalhas: folga para os grampos N7 Ø12,5 do apoio a y = 85 mm
@@ -212,10 +213,12 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     rects2 = rects1 + [(0.0, X_PONTA_LAJE, h, h + H_LAJE, FCD2), (0.0, bf, h + H_LAJE, htot, FCD2)]
     MR2, x2, xd2 = MRd(rects2, [(AP1, y) for _, y in pos], [], htot, eps_inf)
 
-    # ---- ELS (protensão limitada, CAA II: ELS-F frequente e ELS-D quase permanente — NBR 6118:2023 tab. 13.4)
+    # ---- ELS (NBR 6118:2023 tab. 13.4): NIVEL "completa" (DEC-043) = ELS-F na rara (ψ 1) e ELS-D na frequente (ψ1 0,6);
+    #      "limitada" = ELS-F frequente e ELS-D quase permanente (0,4)
+    psi_F, psi_D = (1.0, 0.6) if NIVEL == "completa" else (0.6, 0.4)
     sig = lambda Mpm, Mcomp, P: (-P / A - P * ep / Wi + Mpm / Wi + Mcomp / Wci) / 1e3   # fibra inferior (+ tração)
-    sF = sig(M(g1), M(g2 + 0.6 * q2), Pinf)
-    sD = sig(M(g1), M(g2 + 0.4 * q2), Pinf)
+    sF = sig(M(g1), M(g2 + psi_F * q2), Pinf)
+    sD = sig(M(g1), M(g2 + psi_D * q2), Pinf)
     sR = sig(M(g1), M(g2 + q2), Pinf)
     fctk = 0.7 * FCTM(FCK)
     fctf = 1.2 * fctk                                    # NBR 6118:2023 17.3.4 (seção T: α 1,2)
@@ -350,7 +353,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
         protensao=dict(P0=round(P0, 1), Pinf=round(Pinf, 1), ep=round(ep, 4), F_macaco_kN=round(SIG_PI * AP1, 1), sigma_pi=1400, perdas={k: (round(v, 3) if isinstance(v, float) else v) for k, v in PP.items()}),
         ELU=dict(M1d=round(M1d, 1), MRd1=round(MR1, 1), xd1=round(xd1, 3), M2d=round(M2d, 1), MRd2=round(MR2, 1), xd2=round(xd2, 3),
                  norma="NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"),
-        ELS=dict(sig_F=round(sF, 2), lim_F=round(fctf, 2), sig_D=round(sD, 2), sig_rara=round(sR, 2), topo_F1=round(s_topo_F1, 2)),
+        ELS=dict(nivel=NIVEL, psi_F=psi_F, psi_D=psi_D, sig_F=round(sF, 2), lim_F=round(fctf, 2), sig_D=round(sD, 2), sig_rara=round(sR, 2), topo_F1=round(s_topo_F1, 2)),
         ato=dict(topo_ponta=round(s_ato_topo, 2), base_ponta=round(s_ato_base, 2), lim_t=round(1.2 * fctmj, 2), lim_c=-0.7 * fcj,
                  topo_meio=round(s_ato_meio_t, 2), base_meio=round(s_ato_meio_b, 2), topo_fim_isol=round(s_ato_iso_t, 2), base_fim_isol=round(s_ato_iso_b, 2),
                  x_fim_isol=round(x_iso, 2), lbpt_m=round(lbpt, 3), gama_p=GP, fckj=FCKJ, norma="NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"),
@@ -405,7 +408,7 @@ def negativa(L, g2, q2, h=0.65):
                 Rsec_kNm_rad=round(Rsec), Led_m=round(Led, 3), norma="NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)")
 
 
-H_PM, N_INF, N_SUP = 0.80, 8, 2                           # rev04 adotado: meio vaso h 80 com dente 50 × 35 (MEF Vu 484 kN ≥ 1,06·γn·Vd) — DEC-020
+H_PM, N_INF, N_SUP = 0.80, 10, 2                          # rev04 adotado: meio vaso h 80 com dente 50 × 35 (MEF Vu 484 kN ≥ 1,06·γn·Vd) — DEC-020
 
 if __name__ == "__main__":
     import sys

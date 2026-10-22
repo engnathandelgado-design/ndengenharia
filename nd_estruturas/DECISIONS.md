@@ -406,3 +406,14 @@ Pedidos do Nathan: (A) a platibanda tem carga menor — apoio e içamento fora d
 - Alças AL-2 e furo FI-1: já estavam no corpo (abaixo do recuo) em todas as marcas; nada muda no manuseio (DEC-040).
 - Planta-chave das folhas de pilar: cada peça da folha com círculo e chamada com o nome próprio.
 - Checagem geométrica (colisao_platibanda.py, caixas envolventes do modelo 3D): achados fora desta decisão, para o Nathan — (1) nas fachadas 1 e 9 o plano das placas segue a face dos PF (0,30 do eixo da linha), mas a face lateral dos pilares de canto está a 0,20: as CE-1/consoles de canto ficam 10 cm à frente do concreto; (2) paredes internas das linhas 2 e 4: as CE-1 ficam 15 a 25 cm à frente da face dos PL/PM/PC; (3) a zipada/TP-40 (borda em y = −0,15) entra 15 cm na cabeça dos PF; (4) X Ø16 toca 6 mm a cabeça dos PF da linha 9.
+
+## DEC-043 — Vigas protendidas em PROTENSÃO COMPLETA; VB 15×60 mantida; otimização das demais famílias = manter (22/10/2026)
+Decisão do Nathan: as vigas protendidas (I130 V400–V402, I90 de cobertura V407–V420, VM meio vaso V200–V207/V300–V307) são de protensão COMPLETA (NBR 6118:2023 Tab. 13.4, nível 3): ELS-D (descompressão) na combinação FREQUENTE (ψ1) e ELS-F (formação de fissuras, σ ≤ α·fctk,inf) na combinação RARA (ψ = 1). Antes estavam verificadas em protensão limitada (ELS-D quase permanente, ELS-F frequente). O nível entrou como parâmetro (`nivel="completa"`) em prefabricados.verificar_viga_pretracionada, calc_i110_r01.py e calc_vm_meio_vaso.py.
+Resultado (menor nº de cordoalhas que passa em completa + ELU + ato + manuseio, seções mantidas):
+- I90 de cobertura (14 peças): 8 → 10 cordoalhas Ø12,7 (5 a 5,5 + 5 a 10 cm, x 0/±4/±15,5); com 8 a descompressão na frequente dava +0,21 MPa. Ato: as 4 de 10 cm em x ±4 e ±15,5 isoladas 3,00 m (6 ativas nas pontas, como antes): topo 3,03 ≤ 3,85 MPa, As 6,04 ≤ 6,48 cm² (N2 + N9). ELS-D freq. −1,99, ELS-F rara −0,47 MPa.
+- I130 V400 (ex-V407): 20 → 17 (5+4+4+4, sem cordoalhas na mesa superior): ELS-D freq. −0,33 (folga MARGEM_D 0,25), ELS-F rara 0,61 ≤ 3,71 MPa.
+- I130 V401/V402 (ex-V406/V405): 30 → 32 (28 + 2 a 22 cm em x ±5, isoladas 4,0 m, + 2 na mesa superior); 28 + 2 dava +0,012 MPa na V401. Mesmo arranjo nas duas (dividem a pista de 60 m: 24,1 + 24,0 m). ELS-D freq. −1,02 / −1,22; ato topo 3,37 ≤ 4,55 MPa.
+- VM meio vaso h 80 (16 peças): 8 + 2 → 10 + 2 (4 a 5, 4 a 12, 2 a 19 cm + 2 na aba); 8 + 2 dava +0,37/+0,66 MPa na frequente. ELS-D freq. −1,82/−1,53, ELS-F rara 0,04/0,37 ≤ 2,95 MPa. h 80 mantido (dente validado pelo MEF).
+- Cordoalha da obra: 7.646 → ≈ 8.390 kg (+ ~740 kg).
+- VB 15×60 mantida (15×55 economizaria 122 kg de CA-50 mas baixa o CP-VB e muda o nível: Nathan manteve). Laje alveolar LP20 7 Ø12,7 inalterada (CAA I / parcial decidida antes).
+- Otimização das outras famílias (placas, lajes, consolos, fixação das placas, cobertura metálica): já no mínimo no critério atual (< 2 % de ganho) — manter (otimizar_resumo.json).

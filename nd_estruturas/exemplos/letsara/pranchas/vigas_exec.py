@@ -362,13 +362,13 @@ def _ext(e):
 
 # ------------------------------------------------------------------ famílias
 def ts01():
-    from ts01_dados import P, F_cord, LBPT, LBPT_BRUSCA, ATO, L_N9, L
+    from ts01_dados import P, F_cord, LBPT, LBPT_BRUSCA, ATO, L_N9, L, N_ATIVAS, N_ISOL, Y_ATIVAS, TXT_C1, TXT_C2
     S = AV.spec_ts01()
     ISO = P["isol"]["L"]
 
     def cord_tab(x, y):
-        tc = PR_ATUAL[0].tabela_cordoalhas(x, y, [dict(pos="C1", diam=12.7, qtd=6, y=(5 * P["y1"] + P["y2"]) / 6, forca=F_cord, isol=0),
-                                                  dict(pos="C2", diam=12.7, qtd=2, y=P["y2"], forca=F_cord, isol=ISO)], P["L_pista"])
+        tc = PR_ATUAL[0].tabela_cordoalhas(x, y, [dict(pos="C1", diam=12.7, qtd=N_ATIVAS, y=Y_ATIVAS, forca=F_cord, isol=0),
+                                                  dict(pos="C2", diam=12.7, qtd=N_ISOL, y=P["y2"], forca=F_cord, isol=ISO)], P["L_pista"])
         return tc["y_base"]
 
     def chave_tab(x, y):                                            # rev08: planta-chave com círculo + chamada em cada TS-01
@@ -379,7 +379,7 @@ def ts01():
                   subtitulo="vigas de cobertura desta folha")
         return y - 8 - alto - 26
     notas = [f"PROTENSÃO: C{P['fck']}; liberar as cordoalhas só com fckj ≥ {P['fckj']} MPa (corpo de prova curado com a peça). CP-190 RB Ø12,7, σpi = {P['sig_pi']} MPa ({f1(F_cord, 1)} kN por cordoalha no macaco); liberação GRADUAL e simétrica (lbpt = {f1(LBPT * 100, 0)} cm; brusca daria {f1(LBPT_BRUSCA * 100, 0)} cm, não permitida).",
-             f"C1: 6 cordoalhas aderentes (y 5,5: x 0, ±4, ±15,5; y 10: x 0). C2: 2 cordoalhas (y 10, x ±4) com bainha plástica estanque nos {f1(ISO / 1000, 2)} m de cada ponta, vedada com fita nas extremidades.",
+             f"C1: {TXT_C1}. C2: {TXT_C2} (bainha plástica estanque, vedada com fita nas extremidades). Protensão completa: descompressão na combinação frequente e sem fissuração na rara (NBR 6118:2023 Tab. 13.4, DEC-043).",
              f"N9 2 Ø10 no topo, {f1(L_N9 / 10, 0)} cm a partir de cada ponta: tração no topo no ato da protensão (NBR 6118:2023 17.2.4.3.2 c, As ≥ {f1(ATO['As_topo_cm2'], 1)} cm² com N2).",
              f"Pista de {P['L_pista']} m: até 3 peças por linha; alongamento a medir e tolerância na nota da tabela de cordoalhas."]
     return compor_ok("ND-LET-TS01-1", "TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO", "01/02",

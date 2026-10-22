@@ -32,6 +32,8 @@ FCKJ = 45.0                                             # liberação da protens
 SIG_PI = 1453.0                                         # MPa = 0,85 fpyk (9.6.1.2.1): 143,4 kN por cordoalha no macaco
 U, T0, T_G2 = 70.0, 5.0, 60.0                           # umidade (Ijuí/RS, a favor), idade fictícia na liberação, montagem das TS-01
 PSI1, PSI2 = 0.6, 0.4
+NIVEL = "completa"                                      # DEC-043 (22/10/2026): protensão COMPLETA (NBR 6118:2023 Tab. 13.4 nível 3):
+PSI_D, PSI_F = (PSI1, 1.0) if NIVEL == "completa" else (PSI2, PSI1)   # ELS-D na frequente (ψ1) e ELS-F na rara (ψ = 1)
 X_MAC, LN, HD = 1.40, 0.35, 0.78                        # maciço das pontas, dente 78 × 35
 N3 = (4, 20.0)                                          # 4 Ø20 CA-50 na mesa superior
 Y_N3 = H_I - 0.030 - 0.0063 - 0.010                     # eixo do N3 (cobrimento 3,0 + estribo N13 Ø6,3)
@@ -55,17 +57,24 @@ ISOL = (0, 0, 2000, 4000)                               # isolamento escalonado 
 TOPO = dict(y=1200, xs=[-100, 100])                     # 2 cordoalhas na mesa superior, aderentes (controle do ato nas pontas)
 
 
-def arranjo(por_linha, topo=True):
+LINHA5 = dict(y=220, xs=[-50, 50], isol=4000)          # DEC-043: 5ª linha (2 cordoalhas a 22 cm, x ±5, isoladas 4,0 m) — V405/V406
+
+
+def arranjo(por_linha, topo=True, linha5=False):
     lin = [dict(y=y, xs=(X7 if n == 7 else X5 if n == 5 else X4), isol=i) for y, n, i in zip(Y_LIN_C, por_linha, ISOL)]
+    if linha5:
+        lin.append(dict(LINHA5))
     if topo:
         lin.append(dict(y=TOPO["y"], xs=TOPO["xs"], isol=0))
     return lin
 
 
-# V405/V406: 28 + 2 (decisão do engenheiro); V407: menor arranjo da família que passa com folga de MARGEM_D no ELS-D
-# (16 cordoalhas passam com −0,03 MPa: sem folga para o peso ainda não confirmado dos painéis solares — TASKS)
-CANDIDATOS = {"V405": [((7, 7, 7, 7), True)], "V406": [((7, 7, 7, 7), True)],
-              "V407": [((4, 4, 4, 4), False), ((5, 5, 4, 4), False), ((5, 5, 4, 4), True), ((5, 5, 5, 5), True), ((7, 7, 7, 7), True)]}
+# DEC-043 (protensão completa): menor arranjo da família que passa (ELS-D na frequente, ELS-F na rara, ato, ELU, içamento)
+# com folga de MARGEM_D no ELS-D. V405/V406: 28 + 2 topo dá +0,012 MPa na V406 (não passa) → 28 + 2 (y 22) + 2 topo = 32,
+# as duas na mesma pista de 60 m (24,1 + 24,0 m) → mesmo arranjo. V407: 17 (5+4+4+4, sem topo). Antes (limitada): 30/30/20.
+CANDIDATOS = {"V405": [((7, 7, 7, 7), True, True)], "V406": [((7, 7, 7, 7), True, True)],
+              "V407": [((4, 4, 4, 4), False, False), ((5, 4, 4, 4), False, False), ((5, 5, 4, 4), False, False), ((5, 5, 4, 4), True, False),
+                       ((5, 5, 5, 5), True, False), ((7, 7, 7, 7), True, False)]}
 MARGEM_D = 0.25                                         # MPa (critério de escolha do arranjo, não da norma)
 
 
@@ -129,7 +138,7 @@ def verificar(nome, ya, yb, cargas, lin):
             F += f
             My += f * gr["y"]
         return F, (My / F if F else yp)
-    # ---- ELS ao longo da peça (protensão limitada, CAA II: ELS-F frequente e ELS-D quase permanente, NBR 6118 Tab. 13.4)
+    # ---- ELS ao longo da peça (NIVEL: "completa" = ELS-D frequente + ELS-F rara; "limitada" = ELS-D q.perm. + ELS-F freq.; NBR 6118 Tab. 13.4)
     fctk = C.fctk_inf
     lim_F = 1.3 * fctk                                  # 17.3.4: α = 1,3 seção I
     # ELS-D (descompressão) onde as cordoalhas inferiores já estão com a força toda (x ≥ face do dente + lbpt): é a
@@ -144,8 +153,8 @@ def verificar(nome, ya, yb, cargas, lin):
         F, yq = P_x(min(xp, Lp - xp), pp["sig_pinf"])
         Mg = M_g1(xx) + M_pont(P_g, xx)
         Mq = M_pont(P_q, xx)
-        sbD, _ = tensoes_secao(s.A, s.I, s.yc, s.h, F, yq, Mg + PSI2 * Mq)
-        sbF, stF = tensoes_secao(s.A, s.I, s.yc, s.h, F, yq, Mg + PSI1 * Mq)
+        sbD, _ = tensoes_secao(s.A, s.I, s.yc, s.h, F, yq, Mg + PSI_D * Mq)
+        sbF, stF = tensoes_secao(s.A, s.I, s.yc, s.h, F, yq, Mg + PSI_F * Mq)
         _, stG = tensoes_secao(s.A, s.I, s.yc, s.h, F, yq, Mg)
         if min(xp, Lp - xp) < x_plena:
             if sbD > els["D_base_transferencia"]:
@@ -157,7 +166,7 @@ def verificar(nome, ya, yb, cargas, lin):
         if stG > els["F_topo"]:
             els.update(F_topo=stG, x_Ft=xp)
     els = {k: round(v, 3) for k, v in els.items()}
-    els.update(lim_F=round(lim_F, 2), lim_D=0.0, psi1=PSI1, psi2=PSI2, x_cordoalhas_plenas=round(x_plena, 3),
+    els.update(lim_F=round(lim_F, 2), lim_D=0.0, psi1=PSI1, psi2=PSI2, nivel=NIVEL, psi_D=PSI_D, psi_F=PSI_F, x_cordoalhas_plenas=round(x_plena, 3),
                ok=els["D_base"] <= 0 and els["F_base"] <= lim_F and els["F_topo"] <= lim_F and els["D_base_transferencia"] <= lim_F)
     # ---- ELU flexão (seção de momento máximo, cordoalhas plenas)
     Md = 1.3 * (Mg1_m + M_pont(P_g, x_Mmax)) + 1.4 * M_pont(P_q, x_Mmax)
@@ -263,9 +272,9 @@ res = {}
 for nome, (ya, yb, cargas) in VIGAS.items():
     escolhido = None
     tent = []
-    for por_linha, topo in CANDIDATOS[nome]:
-        r = verificar(nome, ya, yb, cargas, arranjo(por_linha, topo))
-        tent.append(dict(arranjo=f"{'+'.join(map(str, por_linha))}" + (" + 2 topo" if topo else ""), n=r["arranjo"]["n_cord"], ok=r["ok"],
+    for por_linha, topo, l5 in CANDIDATOS[nome]:
+        r = verificar(nome, ya, yb, cargas, arranjo(por_linha, topo, l5))
+        tent.append(dict(arranjo=f"{'+'.join(map(str, por_linha))}" + (" + 2 (y 22)" if l5 else "") + (" + 2 topo" if topo else ""), n=r["arranjo"]["n_cord"], ok=r["ok"],
                          ELS_D=r["ELS"]["D_base"]))
         if r["ok_geral"] and r["ELS"]["D_base"] <= -MARGEM_D:
             escolhido = r

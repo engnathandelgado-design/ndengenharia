@@ -20,7 +20,7 @@ def zonas_txt(xs, pos, d, extra=""):
 
 # ================================================================== especificações por família
 def spec_ts01():
-    """TS-01 rev03: sem dentes; N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais) nas pontas; 8 cordoalhas (C2 isoladas)."""
+    """TS-01 rev03: sem dentes; N6 (estribos do maciço), N7 (grampos U) e N8 (estribos horizontais) nas pontas; cordoalhas de ts01_dados (C2 isoladas). DEC-043: 10."""
     import ts01_dados as T
     L, H, DX, P = T.L, T.H, T.DX, T.P
     sk = lambda h: h * DX / H
@@ -43,7 +43,7 @@ def spec_ts01():
               discos=[(x, H - 45, 12.5) for x in (-160, -60, 60, 160)] + [(x, 40, 10) for x in (-165, 165)],
               prot=prot,
               bolhas=[("N1", (45, 450), (8, 0)), ("N2", (160, H - 45), (8, 6)), ("N3", (-170, H - 65), (-8, 4)), ("N4", (-170, 80), (-8, -4)), ("N5", (165, 40), (8, -6))],
-              formas=["N1", "N3", "N4"], prot_txt=f"C1/C2 — {P['n_cord']} cord. Ø12,7")
+              formas=["N1", "N3", "N4"], prot_txt=f"C1/C2 — {P['n_cord']} cord. Ø12,7 ({T.TXT_LINHAS})")
     S2 = dict(nome="SEÇÃO S.2", sub="maciço da ponta (tubos TB-3 a y = ±10)", esc=10, contorno=[[(-200, 0), (200, 0), (200, H), (-200, H)]],
               ents=[([(-170, 30), (170, 30), (170, H - 30), (-170, H - 30)], "ARM_TRANSV", True),
                     ([(-125, 0), (-75, 0), (-75, H), (-125, H)], "OCULTA", True), ([(75, 0), (125, 0), (125, H), (75, H)], "OCULTA", True)],
@@ -65,7 +65,7 @@ def spec_ts01():
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 + 1500, "S.1"), (600, "S.2")], dets=[(350, "D1")],
                 longas=[("N2", 30), ("N5", 30), ("N9", 30)], blocos=[S1, S2, D1],
                 marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord, traspasse=TR)],
-                notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm e 3 a 10 cm; as 2 de 10 cm em x = ±4 isoladas 3,00 m nas pontas; σpi = {P['sig_pi']} MPa.",
+                notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: {T.TXT_LINHAS}; C2: {T.TXT_C2}; σpi = {P['sig_pi']} MPa. Protensão completa (NBR 6118:2023 Tab. 13.4, DEC-043).",
                        "Sem dentes: N6 (estribos verticais do maciço, fora da faixa dos tubos TB-3), N7 (grampos U horizontais) e N8 (estribos horizontais da mesa inferior) nas duas pontas.",
                        "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2 entre estribos, sem cortar armadura."] + ([nota_traspasse(TR)] if TR else []))
 

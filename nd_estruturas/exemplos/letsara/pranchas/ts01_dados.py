@@ -15,8 +15,10 @@ HD, LN = 0, 0                                         # rev03: sem dente Gerber 
 N_ESP = len(LG["s_tercas"]) - 1
 PASSO_T = round(LG["passo_tercas"] * 1000)
 P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,
-         fck=50, fckj=35, n_cord=8, y_cord=71.875, x_cord=[-155, -40, 0, 40, 155], x_cord2=[-40, 0, 40], y1=55, y2=100,
-         isol=dict(n=2, x=[-40, 40], L=3000),
+         # DEC-043 (22/10/2026): protensão COMPLETA (ELS-D na frequente, ELS-F na rara) → 10 cordoalhas: 5 a 5,5 cm + 5 a 10 cm
+         # (x = 0, ±4, ±15,5 nas duas linhas); as 4 de 10 cm em x = ±4 e ±15,5 isoladas 3,00 m nas pontas (ato). Antes: 8 (limitada).
+         fck=50, fckj=35, n_cord=10, y_cord=77.5, x_cord=[-155, -40, 0, 40, 155], x_cord2=[-155, -40, 0, 40, 155], y1=55, y2=100,
+         isol=dict(n=4, x=[-155, -40, 40, 155], L=3000),
          # rev03: cordoalhas fora das faixas dos tubos TB-3 (y = ±100, Ø50) dos 2 pinos de cada apoio: |x| ≤ 40 ou |x| = 155
          tb=dict(d=50, y=(-100, 100), s_ext=round(LG["PINO_TS"] * 1000, 1), s_cen=round(LG["PINO_TS"] * 1000, 1), L=900),   # rev04: simétrico
          cunha=dict(L=round(LG["CUNHA"] * 1000), e=round(LG["DEGRAU_CUNHA"] * 1000)),   # rev04: cunha no fundo das pontas (face de apoio horizontal)
@@ -32,16 +34,19 @@ CC = LG["cargas_cob"]
 G_COB = CC["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]
 car = Carregamento(sec.A * 25, G_COB * TRIB, CC["sobrecarga"] * TRIB, w=qv * TRIB, psi1=0.4, psi2=0.0)
 # DEC-032: perdas pela NBR 6118:2023 9.6.3 (U 70 %, t0 fictícia 5 dias, cobertura aplicada aos 60 dias) e γp 1,1 no ato
-R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"], sig_pi=P["sig_pi"])
+R = verificar_viga_pretracionada(sec, L_calc, car, C, P["n_cord"], y_cord=P["y_cord"] / 1000, fckj=P["fckj"], sig_pi=P["sig_pi"], nivel="completa")   # DEC-043
 Ap = P["n_cord"] * CORD["12.7"]
 V = sec.A * L / 1000 + (P["b"] * H / 1e6 - sec.A) * P["x_mac"] / 1000 * 2   # maciços de 1,20 m nas pontas
 peso = V * 25
 F_cord = P["sig_pi"] * 98.7 / 1000
 Md_neg = max(0.0, (1.4 * car.w - car.g1 - car.g2) * L_calc ** 2 / 8)
 ep = sec.yc - P["y_cord"] / 1000
-# pontos de içamento/estocagem a 2,10 m ficam dentro do trecho isolado (3,00 m): 6 cordoalhas ativas (5 a 60 + 1 a 110 mm)
-Y_ATIVAS = (5 * P["y1"] + P["y2"]) / 6
-TR = transitorias_viga(sec, L / 1000, GAMA_P_ATO * R.linhas["P0_kN"] * 6 / 8, sec.yc - Y_ATIVAS / 1000, C, P["fckj"],
+# pontos de içamento/estocagem a 2,10 m ficam dentro do trecho isolado (3,00 m): 6 cordoalhas ativas (5 a 55 + 1 a 100 mm)
+N_ISOL = P["isol"]["n"]
+N_ATIVAS = P["n_cord"] - N_ISOL
+N_C1_Y2 = len(P["x_cord2"]) - N_ISOL                                  # aderentes na 2ª linha (x = 0)
+Y_ATIVAS = (len(P["x_cord"]) * P["y1"] + N_C1_Y2 * P["y2"]) / N_ATIVAS
+TR = transitorias_viga(sec, L / 1000, GAMA_P_ATO * R.linhas["P0_kN"] * N_ATIVAS / P["n_cord"], sec.yc - Y_ATIVAS / 1000, C, P["fckj"],
                        [a / 1000 for a in P["alcas"]], [a / 1000 for a in P["estoque"]])
 # alça de cordoalha: 1 laço (2 pernas) Ø12,7 CP-190; trabalho = 2 × Fptk/4 × 0,7 (redução por curvatura do laço)
 FPTK1 = 98.7 * 1900 / 1000
@@ -59,7 +64,7 @@ SIG_P0 = R.linhas["sigma_p0_MPa"]
 LBPT, LBP, _ = lbpt_cordoalha(P["fckj"], SIG_P0, gradual=True)
 LBPT_BRUSCA = lbpt_cordoalha(P["fckj"], SIG_P0, gradual=False)[0]
 SEC_PONTA = secao_retangular(0.40, H / 1000)
-GRUPOS = [dict(n=5, y=P["y1"] / 1000, x0=0.0), dict(n=1, y=P["y2"] / 1000, x0=0.0), dict(n=2, y=P["y2"] / 1000, x0=P["isol"]["L"] / 1000)]
+GRUPOS = [dict(n=len(P["x_cord"]), y=P["y1"] / 1000, x0=0.0), dict(n=N_C1_Y2, y=P["y2"] / 1000, x0=0.0), dict(n=N_ISOL, y=P["y2"] / 1000, x0=P["isol"]["L"] / 1000)]
 ATO = ato_pretracao(sec, SEC_PONTA, P["x_mac"] / 1000, L / 1000, GRUPOS, SIG_P0, car.g1, P["fckj"], LBPT)
 AS_N2 = 4 * 1.227                                                       # N2 4 Ø12,5 no topo (cm²)
 # 17.2.4.3.2 c): As = R/250 MPa onde o topo está tracionado; complemento N9 nas pontas até cobrir As − N2 + lb
@@ -72,6 +77,12 @@ ATO["L_N9_mm"] = L_N9
 assert ATO["ok"] and ATO["As_topo_cm2"] <= AS_TOPO, (ATO["topo_max"], ATO["base_min"], ATO["As_topo_cm2"])
 SIG_TOPO_ISOL = max(p["topo"] for p in ATO["pontos"] if abs(p["x"] - (P["isol"]["L"] / 1000 + LBPT)) < 0.03)
 LIM_T_ATO = ATO["lim_t"]
+
+
+_cm = lambda v: f"{v / 10:g}".replace(".", ",")
+TXT_C1 = f"{N_ATIVAS} cord. Ø12,7 aderentes (y {_cm(P['y1'])}: x 0, ±4, ±15,5; y {_cm(P['y2'])}: x 0)"
+TXT_C2 = f"{N_ISOL} cord. Ø12,7 (y {_cm(P['y2'])}, x ±4 e ±15,5) com bainha nos {P['isol']['L'] / 1000:.2f} m de cada ponta".replace("3.00", "3,00")
+TXT_LINHAS = f"{len(P['x_cord'])} a {_cm(P['y1'])} + {len(P['x_cord2'])} a {_cm(P['y2'])} cm"
 
 
 def armacao_ts01():
