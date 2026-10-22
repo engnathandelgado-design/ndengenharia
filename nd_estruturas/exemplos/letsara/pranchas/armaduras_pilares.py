@@ -15,7 +15,9 @@ E50, E25 = 50.0, 25.0
 QW, QH = 485.0, 410.0
 
 
-def quadrante(A: Arm, P, qx, qy):
+def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
+    ESC_E = esc or E50
+    QH_ = qh or QH
     pr = A.pr
     B, H, L, LC, COB = P["B"], P["H"], P["L_TOT"], P["L_CAL"], P["COB"]
     REC, zr = P["rec"], P["z_rec"]
@@ -25,7 +27,7 @@ def quadrante(A: Arm, P, qx, qy):
     u0, u1 = -B / 2 + rd("D"), B / 2 - rd("B")
     bar = {b["pos"]: b for b in P["barras"]}
     xe, y0 = qx + 82, qy + 34
-    Pp = lambda w, z: (xe + w / E50, y0 + z / E50)
+    Pp = lambda w, z: (xe + w / ESC_E, y0 + z / ESC_E)
 
     # ------------------------------------------------ elevação (vista pela face D: A à direita, C à esquerda)
     A.pl([Pp(-H / 2, 0), Pp(H / 2, 0), Pp(H / 2, zr), Pp(w1, zr), Pp(w1, L), Pp(w0, L), Pp(w0, zr), Pp(-H / 2, zr)], "VISTA", True)
@@ -57,16 +59,16 @@ def quadrante(A: Arm, P, qx, qy):
     for z in P["z_cab"]:
         A.ln(Pp(w0 + COB, z), Pp(w1 - COB, z), "ARM_TRANSV")
     # cadeia das zonas de estribos (à direita, depois dos consolos da face A)
-    xch = xe + H / 2 / E50 + max(proj_A / E50 + 7, 19)
+    xch = xe + H / 2 / ESC_E + max(proj_A / ESC_E + 7, 19)
     n2 = bar["N2"]
     zs = zonas(P["z_est"])
     segs = []
     for z0_, z1_, n, s in zs:
-        segs.append((z0_, z1_, f"{n} N2 Ø{fd(n2['diam'])} C/{fd(s/10)}" + (" + N3" if "N3" in bar else "")))
+        segs.append((z0_, z1_, f"{n} N2 Ø{fd(n2['diam'])} C/{fd(s/10)}" + (" + N3" if "N3" in bar else "") + (" + N3A" if "N3A" in bar else "")))
     if P["z_cab"]:
         for z0_, z1_, n, s in zonas(P["z_cab"]):
-            segs.append((z0_, z1_, f"{n} N14 Ø8 C/{fd(s/10)}"))
-    ys = [y0 + segs[0][0] / E50] + [y0 + ((a[1] + b[0]) / 2) / E50 for a, b in zip(segs[:-1], segs[1:])] + [y0 + segs[-1][1] / E50]
+            segs.append((z0_, z1_, f"{n} N14 Ø{fd(bar['N14']['diam'])} C/{fd(s/10)}"))
+    ys = [y0 + segs[0][0] / ESC_E] + [y0 + ((a[1] + b[0]) / 2) / ESC_E for a, b in zip(segs[:-1], segs[1:])] + [y0 + segs[-1][1] / ESC_E]
     A.ln((xch, ys[0]), (xch, ys[-1]), "COTA")
     for y in ys:
         A.ln((xch - 1.2, y - 1.2), (xch + 1.2, y + 1.2), "COTA"); A.ln((xch - 2, y), (xch + 2, y), "COTA")
@@ -75,14 +77,14 @@ def quadrante(A: Arm, P, qx, qy):
             A.tx(xch + 1.0, (ya + yb) / 2, t, "min", "TOP_CENTER", rot=90)
         else:
             A.tx(xch + 3.0, (ya + yb) / 2, t, "min", "MIDDLE_LEFT")
-    A.tx(Pp(-H / 2 - 150, 0)[0] - 1, y0 + LC / E50, "±0,000", 1.5, "MIDDLE_RIGHT")
-    pr.posicoes_desenho.update({"N2"} | ({"N3"} if "N3" in bar else set()) | ({"N14"} if P["z_cab"] else set()))
+    A.tx(Pp(-H / 2 - 150, 0)[0] - 1, y0 + LC / ESC_E, "±0,000", 1.5, "MIDDLE_RIGHT")
+    pr.posicoes_desenho.update({"N2"} | ({"N3"} if "N3" in bar else set()) | ({"N3A"} if "N3A" in bar else set()) | ({"N14"} if P["z_cab"] else set()))
     # seções
     livres = [z for z in range(LC + 800, (zr if REC else L) - 600, 100) if all(not (c["z"] - c["h"] - 300 < z < c["z"] + 300) for c in P["cons"])]
     z_s1 = livres[len(livres) // 2] if livres else (LC + zr) / 2
-    A.corte(Pp(-H / 2, 0)[0] - 1, Pp(H / 2, 0)[0] + 1, y0 + z_s1 / E50, "S.1")
+    A.corte(Pp(-H / 2, 0)[0] - 1, Pp(H / 2, 0)[0] + 1, y0 + z_s1 / ESC_E, "S.1")
     if REC:
-        A.corte(Pp(w0, 0)[0] - 1, Pp(w1, 0)[0] + 1, y0 + (zr + L) / 2 / E50, "S.2")
+        A.corte(Pp(w0, 0)[0] - 1, Pp(w1, 0)[0] + 1, y0 + (zr + L) / 2 / ESC_E, "S.2")
 
     # ------------------------------------------------ barras longitudinais explodidas (esquerda)
     xb = qx + 14
@@ -93,18 +95,18 @@ def quadrante(A: Arm, P, qx, qy):
             g = dict(b["geo"])
             if g["k"] == "L":
                 g["dir"] = 1
-            A.barra_vertical(xb, y0 + zb / E50, b | {"geo": g}, E50)
-            A.bolha(xb, y0 + zb / E50 + g["a"] * 10 / E50 + 6, pos)
+            A.barra_vertical(xb, y0 + zb / ESC_E, b | {"geo": g}, ESC_E)
+            A.bolha(xb, y0 + zb / ESC_E + g["a"] * 10 / ESC_E + 6, pos)
             xb += 17
     # ------------------------------------------------ título do quadrante
     mk = P["marca"]
-    A.titulo(qx + 6, qy + 12, f"PILAR {mk} — {P['qtd']} {'UNIDADE' if P['qtd'] == 1 else 'UNIDADES'}",
-             f"{P['posicao'].replace('POSIÇÃO: ', '')} · ESC. 1:50 (seções e detalhes 1:25) · fôrma e insertos: {FORMA.get(mk, P['desenho'])}")
-    A.escala_grafica(qx + 6, qy + 2.5, E50)
+    A.titulo(qx + 6, qy + 12, (f"ARMAÇÃO — {mk}" if ref else f"PILAR {mk}") + f" — {P['qtd']} {'UNIDADE' if P['qtd'] == 1 else 'UNIDADES'}",
+             f"{P['posicao'].replace('POSIÇÃO: ', '')} · ESC. 1:{ESC_E:g} (seções 1:25, consolos 1:20) · fôrma e insertos: {ref or FORMA.get(mk, P['desenho'])}")
+    A.escala_grafica(qx + 6, qy + 2.5, ESC_E)
 
     # ------------------------------------------------ coluna do meio: seções e consolos
     xm = qx + 150
-    ytop = qy + QH - 10
+    ytop = qy + QH_ - 10
     # S.1
     sx, sy = xm + 4, ytop - 8 - B / E25
     R = lambda w, u, ox=sx, oy=sy: (ox + (w + H / 2) / E25, oy + (u + B / 2) / E25)
@@ -112,6 +114,8 @@ def quadrante(A: Arm, P, qx, qy):
     A.pl([R(-H / 2 + COB, -B / 2 + COB), R(H / 2 - COB, -B / 2 + COB), R(H / 2 - COB, B / 2 - COB), R(-H / 2 + COB, B / 2 - COB)], "ARM_TRANSV", True)
     for wg in P["grampos"]:
         A.ln(R(wg, -B / 2 + COB), R(wg, B / 2 - COB), "ARM_TRANSV")
+    for ug in P.get("grampos_h", []):                                      # DEC-040: grampos N3A na direção A–C
+        A.ln(R(-H / 2 + COB, ug), R(H / 2 - COB, ug), "ARM_TRANSV")
     for (u, w) in P["xy"]:
         A.disco(R(w, u), max(P["D1"] / 2 / E25, 0.55))
     s1t = "SEÇÃO S.1"
@@ -126,10 +130,17 @@ def quadrante(A: Arm, P, qx, qy):
     A.bolha_lider(R(-H / 2 + COB + 60, B / 2 - COB), R(-H / 2 + COB + 60, B / 2)[0] - 2, R(0, B / 2)[1] + 5, "N2")
     if "N3" in bar:
         A.bolha_lider(R(P["grampos"][-1], B / 2 - COB - 40), R(P["grampos"][-1], 0)[0] + 3, R(0, B / 2)[1] + 5, "N3")
+    if "N3A" in bar:
+        ug = P["grampos_h"][-1]
+        A.bolha_lider(R(H / 2 - COB - 60, ug), R(H / 2, 0)[0] + 5, R(0, ug)[1] - 4, "N3A")
     xs = R(H / 2, 0)[0] + 16
     bb = A.forma(xs, sy + 2, n2 | {"geo": n2["geo"]}, E25)
     if "N3" in bar:
-        A.forma(bb[2] + 10, sy + 6, bar["N3"], E25)
+        b3 = A.forma(bb[2] + 10, sy + 6, bar["N3"], E25)
+        bb = (bb[0], min(bb[1], b3[1]), max(bb[2], b3[2]), bb[3])
+    if "N3A" in bar:
+        b3 = A.forma(xs + 1.5, bb[1] - 6.5, bar["N3A"], E25)
+        bb = (bb[0], min(bb[1], b3[1]), max(bb[2], b3[2]), bb[3])
     yb_ = min(sy - 14, bb[1] - 4)
     # S.2 (cabeça)
     if REC:
@@ -189,13 +200,13 @@ def quadrante(A: Arm, P, qx, qy):
 
     # ------------------------------------------------ tabelas (direita)
     xt = qx + QW - 98
-    y = qy + QH - 8
+    y = qy + QH_ - 8
     y = A.tabela_ferros(xt, y, P["barras"], 1)
     y, kg1 = A.resumo(xt, y - 3, P["barras"], 1, fck=40, vol=P["V"], area=P["area_forma"])
     if P["qtd"] > 1:
         y = A.tabela_ferros(xt, y - 6, P["barras"], P["qtd"])
         y, kgn = A.resumo(xt, y - 3, P["barras"], P["qtd"], fck=40, vol=P["V"], area=P["area_forma"])
-    return dict(marca=mk, qtd=P["qtd"], kg=kg1, V=P["V"], area=P["area_forma"], ybase=min(y, yb_))
+    return dict(marca=mk, qtd=P["qtd"], kg=kg1, V=P["V"], area=P["area_forma"], ybase=min(y, yb_), ymeio=yb_, ytab=y)
 
 
 def folha(num, total, marcas):

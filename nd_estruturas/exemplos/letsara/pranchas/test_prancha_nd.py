@@ -35,7 +35,7 @@ p = Prancha("A3", D)
 r = p.tabela_cordoalhas(200, 280, [dict(pos="C1", diam=12.7, qtd=4, y=51, forca=137.0, isol=3350, local="CENTRO"),
                                    dict(pos="C2", diam=12.7, qtd=1, y=380, forca=150.0, isol=0)], 100)
 lin = [e.dxf.text for e in p.msp if e.dxftype() == "TEXT"]
-check("T5a ΔL = 712 mm (137 kN, 100 m, Ep 195 GPa, Ap 98,7)", "712" in lin)
+check("T5a ΔL medir = 712 + 6 cunhas = 718 mm (137 kN, 100 m, Ep 195 GPa, Ap 98,7)", "718" in lin)
 check("T5b σpi 1520 > 1454 MPa vira ERRO no verificar()", sum("C2: σpi" in m for n, m in p.verificar() if n == "ERRO") == 1)
 check("T5c cordoalha tabelada não acusa 'sem linha'", "C1" in p.posicoes_tabela)
 print(f"{sum(ok)}/{len(ok)} PASS")

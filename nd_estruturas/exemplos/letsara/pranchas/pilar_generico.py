@@ -113,7 +113,8 @@ def prancha_pilar(P):
     FI = furo_icamento(P, L_TOT, REC, cons)
     if not FI["livre"]:
         print(f"  ! {P['marca']}: FI-1 {FI['eixo']} com {FI['obst']} acima do furo nas faces das lingas (nenhum eixo livre)")
-    json.dump(dict(fi=FI, B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, al_face=P.get("al_face", "A"), marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2), rec=REC),
+    json.dump(dict(fi=FI, B=B, H=H, L_TOT=L_TOT, consolos=cons, ip01=P.get("ip01", []), al=AL, al_face=P.get("al_face", "A"), marca=P["marca"], z_topo=Z_TOP / 1000, zoom=P.get("zoom", 3.2), rec=REC,
+                   assento=P.get("assento"), pinos_topo=P.get("pinos_topo")),
               open(f"/home/claude/letsara/pranchas/{P['marca']}_geom.json", "w"))
     subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_pilar_gen.py", f"/home/claude/letsara/pranchas/{P['marca']}_geom.json",
                     "/home/claude/letsara/pranchas/"], check=True, capture_output=True)
@@ -195,12 +196,13 @@ def prancha_pilar(P):
                 for dy in AS["y_pinos"]:
                     v.ret(W / 2 + dy - AS["d"] / 2, z_rec - AS["emb"], AS["d"], AS["emb"], "OCULTA")
                     v.chapa(W / 2 + dy - AS["d"] / 2, z_rec + 10, AS["d"], AS["L"] - AS["emb"])
-                t_as = (f"assento TS-01:", f"{len(AS['y_pinos'])} {AS['pino'].split()[0]} + {AS['neo_nome'].split()[0]}")
+                t_as = (f"assento TS-01:", f"{len(AS['y_pinos'])} {AS['pino']}", f"sai {(AS['L'] - AS['emb']) / 10:g} + {AS['neo_nome'].split()[0]}")
                 z_C = z_rec + 0.62 * (L_TOT - z_rec)                                         # rev08: rótulo dentro da cabeça, abaixo do corte C-C
                 z_p = z_rec + 10 + AS["L"] - AS["emb"]
-                if z_p + 7.0 * ESC < z_C - 1.0 * ESC:                                          # logo acima dos pinos
-                    v.texto((W / 2, z_p + 4.4 * ESC), t_as[0], "min", "BOTTOM_CENTER")
-                    v.texto((W / 2, z_p + 1.8 * ESC), t_as[1], "min", "BOTTOM_CENTER")
+                if z_p + 9.6 * ESC < z_C - 1.0 * ESC:                                          # logo acima dos pinos
+                    v.texto((W / 2, z_p + 7.0 * ESC), t_as[0], "min", "BOTTOM_CENTER")
+                    v.texto((W / 2, z_p + 4.4 * ESC), t_as[1], "min", "BOTTOM_CENTER")
+                    v.texto((W / 2, z_p + 1.8 * ESC), t_as[2], "min", "BOTTOM_CENTER")
                 else:
                     v.chamada((W / 2 + AS["y_pinos"][-1], z_rec + 150), ((W / 2 - AS["y_pinos"][-1] + ext_face(face)[1]) / ESC + 11.5, (L_TOT - z_rec - 150) / ESC + 16), " ".join(t_as))
             elif dr or dl:                                                                   # lateral: degrau do recuo
@@ -211,6 +213,13 @@ def prancha_pilar(P):
                 xp_ = xa + sgn * AS["x_pino"]
                 v.ret(xp_ - AS["d"] / 2, z_rec - AS["emb"], AS["d"], AS["emb"], "OCULTA")
                 v.chapa(xp_ - AS["d"] / 2, z_rec + 10, AS["d"], AS["L"] - AS["emb"])
+        PT = P.get("pinos_topo")                                                             # DEC-040: pinos PN-5 no topo (TS-01 apoiada no topo)
+        if PT:
+            us = sorted({(q[1] if face in "AC" else q[0]) for q in PT["xy"]})
+            for u_ in us:
+                v.ret(W / 2 + u_ - PT["d"] / 2, L_TOT - PT["emb"], PT["d"], PT["emb"], "OCULTA")
+                v.chapa(W / 2 + u_ - PT["d"] / 2, L_TOT, PT["d"], PT["L"] - PT["emb"])
+            v.texto((W / 2, L_TOT + PT["L"] - PT["emb"] + 1.2 * ESC), f"{len(PT['xy'])} {PT['nome']} Ø{PT['d']:g} sai {(PT['L'] - PT['emb']) / 10:g}", "min", "BOTTOM_CENTER")
         v.linha((0, L_CAL), (W, L_CAL), "EIXO")
         for k in range(3):                                                                   # chaves de cisalhamento (frontal)
             v.ret(50, 150 + k * 300 + 40, W - 100, 120, "OCULTA")
@@ -226,6 +235,7 @@ def prancha_pilar(P):
                 # rev08: rótulo em 2 linhas dentro da face, logo abaixo do consolo (a chamada para fora cruzava as cadeias de cota)
                 v.texto((W / 2, zc - h - 1.8 * ESC), c["tipo"], "nota", "TOP_CENTER")
                 v.texto((W / 2, zc - h - 4.8 * ESC), f"{larg/10:g}×{proj/10:g}×{h/10:g}" + (f"/{hp/10:g}" if hp != h else ""), "nota", "TOP_CENTER")
+                v.texto((W / 2, zc - h - 7.6 * ESC), f"pino {c['pino_nome']} Ø{c['pino_d']:g}", "min", "TOP_CENTER")   # DEC-040: pino do apoio (saliência no DET. 1)
             elif c["face"] == OPOSTA[face]:
                 v.ret((W - larg) / 2, zc - h, larg, h, "OCULTA")
             else:                                                                            # lateral: projeção para fora
@@ -470,10 +480,12 @@ def prancha_pilar(P):
     barras = ([dict(pos="N1", diam=D1, qtd=len(xy_sobe), comp=L_N1, trechos=[f"{L_N1}"], geo=dict(k="R", a=L_N1))] if xy_sobe else []) + \
              ([dict(pos="N1A", diam=D1, qtd=len(xy_para), comp=L_N1A, forma=[(0, 0), (85, 0), (85, 8)], trechos=[f"{L_N1A - 15}", "15"], geo=dict(k="L", a=L_N1A - 15, g=15))] if xy_para else []) + \
              ([dict(pos="N13", diam=16.0, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - 600)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - 600)) / 10)}"], geo=dict(k="R", a=round((L_TOT - 40 - (z_rec - 600)) / 10)))] if xy_cab else []) + \
-             ([dict(pos="N14", diam=8.0, qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""], geo=dict(k="E", a=(HH - 60) / 10, b=(HB - 60) / 10))] if z_cab else []) + [
+             ([dict(pos="N14", diam=P.get("d_est", 8.0), qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""], geo=dict(k="E", a=(HH - 60) / 10, b=(HB - 60) / 10))] if z_cab else []) + [
               dict(pos="N2", diam=P.get("d_est", 8.0), qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""], geo=dict(k="E", a=EXT_H / 10, b=EXT_B / 10))]
     if P["grampos"]:
-        barras.append(dict(pos="N3", diam=8.0, qtd=len(P["grampos"]) * n_est, comp=round((EXT_B + 160) / 10), forma=[(0, 6), (0, 0), (EXT_B / 10, 0), (EXT_B / 10, 6)], trechos=["8", f"{EXT_B/10:g}", "8"], geo=dict(k="G", a=EXT_B / 10, g=8)))
+        barras.append(dict(pos="N3", diam=P.get("d_est", 8.0), qtd=len(P["grampos"]) * n_est, comp=round((EXT_B + 160) / 10), forma=[(0, 6), (0, 0), (EXT_B / 10, 0), (EXT_B / 10, 6)], trechos=["8", f"{EXT_B/10:g}", "8"], geo=dict(k="G", a=EXT_B / 10, g=8)))
+    if P.get("grampos_h"):                                                                 # DEC-040: grampos na direção A–C
+        barras.append(dict(pos="N3A", diam=P.get("d_est", 8.0), qtd=len(P["grampos_h"]) * n_est, comp=round((EXT_H + 160) / 10), forma=[(0, 6), (0, 0), (EXT_H / 10, 0), (EXT_H / 10, 6)], trechos=["8", f"{EXT_H/10:g}", "8"], geo=dict(k="G", a=EXT_H / 10, g=8)))
     n_ce = sum(len(i["z"]) for i in P.get("ip01", []))
     if n_ce:                                                                               # rev06b: N18 = 2 grampos U Ø10 por CE-1 (ND-LET-PP01 det. 5)
         barras.append(dict(pos="N18", diam=10.0, qtd=2 * n_ce, comp=96, forma=[(0, 45), (0, 0), (6, 0), (6, 45)], trechos=["45", "6", "45"], geo=dict(k="U", a=45, b=6, g=0)))
@@ -500,7 +512,7 @@ def prancha_pilar(P):
     area_f = (2 * (B + H) * z_rec + 2 * (HB + HH) * (L_TOT - z_rec) + B * H + (B * H - HB * HH) +
               sum(2 * c["proj"] * c["h"] + c["larg"] * c["h"] + c["larg"] * c["proj"] - c["larg"] * c["h"] for c in cons)) / 1e6
     json.dump(dict(marca=P["marca"], qtd=P["qtd"], desenho=P["desenho"], posicao=P["posicao"], B=B, H=H, L_TOT=L_TOT, L_CAL=L_CAL, Z_TOP=Z_TOP, COB=COB,
-                   rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, grampos=P["grampos"],
+                   rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, grampos=P["grampos"], grampos_h=P.get("grampos_h", []),
                    z_est=z_est, z_cab=z_cab, est=EST, d_est=P.get("d_est", 8.0), cons=[dict(face=c["face"], z=c["z"], tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c.get("incl", 0.03)) for c in cons],
                    arm_cons=arm_cons, barras=barras, V=V, area_forma=area_f, al=AL, n_ip=sum(len(i["z"]) for i in P.get("ip01", []))),
               open(f"/home/claude/letsara/pranchas/arm/{P['marca']}.json", "w"), ensure_ascii=False, indent=1)
@@ -575,10 +587,35 @@ def bars_ret(B, H, nb, nh, c=48):
     return sorted(pts)
 
 
+# DEC-040 (22/10/2026): armadura longitudinal redimensionada com o modelo integrado r05 (2ª ordem global + fluência e método geral
+# com as cargas nos níveis reais) e o manuseio — arranjo por marca em arranjo_pilares.json (Ø16; estribos Ø6,3; grampos onde a
+# barra fica a mais de 20 φt do canto do estribo, NBR 6118 18.2.4)
+ARR = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/arranjo_pilares.json"))
+D_EST = 6.3
+
+
+def nota_arm(marca):
+    a = ARR[marca]
+    gr = len(a["grampos"]["across_B"]) + len(a["grampos"]["across_H"])
+    return (f"Concreto C40; {a['n']} Ø{a['d']:g} longitudinais ({a['nb']} em cada face de {a['B']/10:g} e {a['nh']} em cada face de {a['H']/10:g}, cantos comuns), "
+            f"retos, sem emenda (barra mais longa < 12 m); estribos N2 Ø{D_EST:g} c/15 (c/10 nos 150 cm do cálice e das pontas)"
+            + (f" + {gr} grampo{'s' if gr > 1 else ''} por estribo (N3/N3A)" if gr else "") + ", ganchos 135° com ponta reta de 7 cm. "
+            "Armadura dimensionada no modelo global (DEC-040): 2ª ordem global P-Δ + fluência (NBR 6118:2023 15.8.4) e método geral (15.8.3.2) "
+            "com as cargas nos níveis reais; manuseio (desforma, transporte e verticalização, NBR 9062:2017 5.3.2) verificado.")
+
+
 def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, marcas, insertos, notas, ip01=(), d1=20.0, grampos=(), vistas=("A", "B", "C"), zoom=3.2):
+    grampos_h = []
+    if marca in ARR:                                                     # DEC-040: arranjo do dimensionamento
+        a = ARR[marca]
+        xy, d1, grampos, grampos_h = [tuple(p) for p in a["xy"]], a["d"], a["grampos"]["across_B"], a["grampos"]["across_H"]
+        notas = [nota_arm(marca)] + list(notas[1:])
     return dict(marca=marca, qtd=qtd, B=B, H=H, L_CAL=1000, Z_TOP=ztop, al=[ztop + 1000 - 2500, 1000 + 1500], consolos=cons, xy=xy, grampos=list(grampos),
-                est=EST_STD, vistas=list(vistas), ip01=list(ip01), d1=d1, zoom=zoom, desenho=desenho, conteudo=conteudo, posicao=posicao, familia=familia,
-                kp=KP_CEN, marcas=marcas, insertos=insertos, memoria=[], notas=notas)
+                grampos_h=list(grampos_h), d_est=D_EST, est=EST_STD, vistas=list(vistas), ip01=list(ip01), d1=d1, zoom=zoom, desenho=desenho, conteudo=conteudo,
+                posicao=posicao, familia=familia, kp=KP_CEN, marcas=marcas, insertos=insertos, memoria=[], notas=notas)
+
+
+PN5_TOPO = dict(nome="PN-5", d=20, L=600, emb=300, xy=[(sx * 115, sy * 100) for sx in (-1, 1) for sy in (-1, 1)])   # x ao longo de H (A–C), y ao longo de B
 
 
 def dados_pc1():
@@ -593,7 +630,7 @@ def dados_pc1():
                 ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  f"TS-01 da linha 2 apoiadas no topo do pilar (topo horizontal em 2 níveis: +{F(Z_TOP_C)} na metade do lado A e +{F(Z_TOP_CD)} na metade do lado E, degrau no eixo C), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, com os tubos TB-3 da viga preenchidos com mastique (sem graute: a viga desliza ±15 mm em x, o mezanino já trava o pilar); CP-I130 na face B (+{F(Z_I130)}) para a ponta da V407; CP-MEZ nas faces A e C para as VM dos dois níveis.",
                  f"Topo do pilar horizontal em 2 níveis: +{F(Z_TOP_C)} (metade do lado A) e +{F(Z_TOP_CD)} (metade do lado E), degrau de {Z_TOP_CD - Z_TOP_C} mm no eixo C, igual ao topo da I130. CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede interna da linha 2 (vista G)."],
-                ip01=[dict(face="B", z=IP_C)])
+                ip01=[dict(face="B", z=IP_C)]) | dict(pinos_topo=PN5_TOPO)
 
 
 def dados_pc2():
@@ -608,7 +645,7 @@ def dados_pc2():
                 ["Concreto C40; 8 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"CP-I130 nas faces B (V406) e D (V407), assento +{F(Z_I130)}; TS-01 da linha 4 apoiadas no topo (topo horizontal em 2 níveis: +{F(Z_TOP_C)} lado A / +{F(Z_TOP_CD)} lado E), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, grauteados nos tubos TB-3.",
                  "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede dos portões (vista C, fiadas até +7,50)."],
-                ip01=[dict(face="B", z=IP_C)])
+                ip01=[dict(face="B", z=IP_C)]) | dict(pinos_topo=PN5_TOPO)
 
 
 def dados_pc3():

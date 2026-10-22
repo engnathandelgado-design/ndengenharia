@@ -42,6 +42,22 @@ def cena(p, z0=0.0, z1=L, chaves=True):
     else:
         p.add_mesh(box(-H / 2, -B / 2, z0, H, B, z1 - z0), **conc)
     labs = []
+    VISTOS = set()
+    AS = G.get("assento")
+    if AS and R and z0 <= R["z"] / 1000 <= z1:                    # DEC-040: pinos PN-3 do assento da TS-01 no recuo
+        zr_ = R["z"] / 1000
+        xa_ = H / 2 - R["d"].get("A", 0) / 1000
+        sai = (AS["L"] - AS["emb"]) / 1000
+        for dy in AS["y_pinos"]:
+            p.add_mesh(pv.Cylinder(center=(xa_ + AS["x_pino"] / 1000, dy / 1000, zr_ + 0.01 + sai / 2), direction=(0, 0, 1), radius=AS["d"] / 2000, height=sai), color="#b03a2e")
+        p.add_mesh(box(xa_ + AS["x_neo"][0] / 1000, -AS["neo"][1] / 2000, zr_, (AS["x_neo"][1] - AS["x_neo"][0]) / 1000, AS["neo"][1] / 1000, 0.01), color="#202020")
+        labs.append(((xa_ + AS["x_pino"] / 1000, AS["y_pinos"][-1] / 1000, zr_ + 0.01 + sai), f"assento TS-01: {len(AS['y_pinos'])} {AS['pino']}"))
+    PT = G.get("pinos_topo")
+    if PT and z1 >= L - 0.01:                                        # DEC-040: pinos PN-5 no topo (TS-01 apoiada no topo)
+        sai = (PT["L"] - PT["emb"]) / 1000
+        for x_, y_ in PT["xy"]:
+            p.add_mesh(pv.Cylinder(center=(x_ / 1000, y_ / 1000, L + sai / 2), direction=(0, 0, 1), radius=PT["d"] / 2000, height=sai), color="#b03a2e")
+        labs.append(((PT["xy"][-1][0] / 1000, PT["xy"][-1][1] / 1000, L + sai), f"{len(PT['xy'])} pinos {PT['nome']} Ø{PT['d']:g} (TS-01)"))
     for c in G["consolos"]:
         nx, ny = FACE_N[c["face"]]
         zc = c["z"] / 1000
@@ -55,7 +71,10 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         p.add_mesh(prisma(poly, eu, ev, -larg / 2, larg / 2, (0, 0)), **conc)
         px = c["pino_x"] / 1000
         cx, cy = nx * (face_d + px), ny * (face_d + px)
-        p.add_mesh(pv.Cylinder(center=(cx, cy, zc + 0.05), direction=(0, 0, 1), radius=c["pino_d"] / 2000, height=c["pino_L"] / 1000), color="#444444")
+        sai = (c["pino_L"] - c["pino_emb"]) / 1000                 # DEC-040: só o trecho saliente aparece, em vermelho, com rótulo
+        p.add_mesh(pv.Cylinder(center=(cx, cy, zc + 0.01 + sai / 2), direction=(0, 0, 1), radius=c["pino_d"] / 2000, height=sai), color="#b03a2e")
+        if c["pino_nome"] not in VISTOS:
+            VISTOS.add(c["pino_nome"]); labs.append(((cx, cy, zc + 0.01 + sai), f"pino {c['pino_nome']} Ø{c['pino_d']:g}"))
         nw, nl = c["neo"][0] / 1000, c["neo"][1] / 1000
         p.add_mesh(box(nx * face_d + (0.025 if nx > 0 else -nl - 0.025 if nx < 0 else -nw / 2), ny * face_d + (0.025 if ny > 0 else -nl - 0.025 if ny < 0 else -nw / 2), zc,
                        nl if nx else nw, nw if nx else nl, 0.01), color="#202020")

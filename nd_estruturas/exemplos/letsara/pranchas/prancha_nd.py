@@ -221,7 +221,7 @@ class Prancha:
                         lin_r, [28, 24, 32, 30], destaque_ultima=True)
         return dict(total_kg=total, resumo=resumo, y_base=y)
 
-    def tabela_cordoalhas(self, x, y_topo, cordoalhas, L_pista_m, Ep=195e3, fptk=1900.0, nome="CORDOALHAS"):
+    def tabela_cordoalhas(self, x, y_topo, cordoalhas, L_pista_m, Ep=195e3, fptk=1900.0, nome="CORDOALHAS", cunha_mm=6.0, tol=0.05):
         """cordoalhas: dict(pos='C1', diam=12.7, qtd=2, y=51 (mm da base), forca=137 (kN/cordoalha na pista),
         isol=3350 (mm isolado, 0 = aderente) e local='CENTRO'|'PONTAS'). ΔL teórico = F·L_pista/(Ep·Ap) (mm).
         Confere σpi ≤ min(0,77 fptk; 0,85 fpyk), fpyk = 0,9 fptk (pré-tração, RB — NBR 6118 9.6.1.2.1, conferir).
@@ -230,7 +230,9 @@ class Prancha:
         for c in cordoalhas:
             Ap = AREA_CORD[float(c["diam"])]
             sig = c["forca"] * 1e3 / Ap
-            dL = c["forca"] * 1e3 * L_pista_m * 1e3 / (Ep * Ap)
+            dL0 = c["forca"] * 1e3 * L_pista_m * 1e3 / (Ep * Ap)          # alongamento elástico da pista inteira (cabeceira a cabeceira)
+            dL = dL0 + cunha_mm                                            # a medir no macaco: + acomodação das cunhas (perda a compensar)
+            c["_dL0"], c["_dL"] = dL0, dL
             if sig > lim + 1e-6:
                 av.append(("ERRO", f"{c['pos']}: σpi = {sig:.0f} MPa > {lim:.0f} MPa"))
             isol = f"{c['isol']:.0f} {c.get('local', 'PONTAS')}" if c.get("isol") else "ADERENTE"
@@ -238,8 +240,24 @@ class Prancha:
                            f"{c['forca']:.1f}".replace(".", ","), f"{dL:.0f}", isol])
             self.posicoes_tabela.add(c["pos"])
         y = self.tabela(x, y_topo, f"{nome} CP-{fptk/10:.0f} RB — PISTA {L_pista_m:g} m".replace(".", ","),
-                        ["POS", "Ø (mm)", "QUANT", "y (mm)", "F (kN)", "ΔL (mm)", "ISOLAM. (mm)"],
-                        linhas, [12, 14, 14, 14, 18, 18, 38])
+                        ["POS", "Ø (mm)", "QUANT", "y (mm)", "F (kN)", "ΔL MEDIR (mm)", "ISOLAM. (mm)"],
+                        linhas, [12, 14, 14, 14, 18, 22, 34])
+        # rev08 (22/10/2026, pedido do Nathan): alongamento para a pista de 60 m explicado embaixo da tabela
+        c0 = cordoalhas[0]
+        Ap0 = AREA_CORD[float(c0["diam"])]
+        txt = (f"Alongamento para a pista de {L_pista_m:g} m entre cabeceiras (todas as peças da pista protendidas juntas): "
+               f"ΔL = F·L/(Ep·Ap) = {c0['forca']:.1f} kN × {L_pista_m:g} m / ({Ep/1e3:g} GPa × {Ap0:g} mm²) = {c0['_dL0']:.0f} mm "
+               f"+ {cunha_mm:g} mm de acomodação das cunhas = {c0['_dL']:.0f} mm a medir por {'fio' if 'FIO' in nome.upper() else 'cordoalha'}, "
+               f"(Com pré-carga de 10 % para alinhar o cabo, o medido a partir dela é 0,9 × {c0['_dL0']:.0f} + {cunha_mm:g} = {0.9 * c0['_dL0'] + cunha_mm:.0f} mm.) "
+               f"Tolerância ±{tol*100:.0f} % entre o medido e o teórico (NBR 14931 — conferir); fora dela, parar e verificar atrito, manômetro e o Ep do certificado do lote. "
+               f"Se a pista usada tiver outro comprimento, ΔL é proporcional ao comprimento.").replace(".", ",").replace(",0 ", " ")
+        hh = ALTURAS["min"]
+        yt = yy = y - 2.5                                                 # 2,5 mm abaixo da tabela (folga mínima do verificar = 2 mm)
+        for k, lin in enumerate(quebrar(txt, 128, hh)):
+            self.texto(x, yy - hh, lin, "min")
+            yy -= hh * 1.55
+        self.blocos_livres.append((x, yy, x + 128, yt, "NOTA ALONGAMENTO"))
+        y = yy
         self.avisos_extra += av                     # entram no verificar()/salvar()
         return dict(y_base=y, avisos=av, sig_lim=lim)
 
