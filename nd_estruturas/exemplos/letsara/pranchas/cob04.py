@@ -242,6 +242,7 @@ pr.notas(XC, y - 4, [
     "Fixação no concreto (placas e cabeças): PAR Tapper 1/4\" × 2 3/4\" a cada 500 mm (250 nas peças de pilar), furos com broca de vídia, selante PU no topo dos contra-rufos. Não fixar a 50 mm das bordas das placas nem sobre as cordoalhas (eixo a 26 mm das faces).",
     "Sequência: calha e RF-2 → TP-40 → cartolas → lã → clipes → zipada (da linha 1 para a 9) → PG-1, veda-ondas e RF-3 → RB e RF-4 → RF-1 / RF-1C por último. Não pisar nos rufos; circular sobre as costuras da zipada.",
     f"Níveis: borda da calha +{f(AC.Z_TOP_CALHA, 3)}; zipada (fundo) +{f(AC.z_zip(AC.X_TELHA_A), 3)} no eixo A e +{f(AC.z_zip(AC.X_TELHA_E), 3)} no eixo E; platibanda +10,000.",
+    "DEC-042 — cantos (pilares P1, P9, P25 e P33): seção cheia 40 × 60 até +10,00, sem platibanda recuada — a face interna fica 30 cm mais para dentro que a cabeça dos demais pilares do eixo. RF-2C (eixo A) e RF-3P (eixo E) dos cantos acompanham essa face; a TP-40, a lã, a zipada e os painéis das faixas junto às fachadas 1 e 9 são recortados no canto (x de 0,31 a 39,19 m até 21 cm do eixo da linha) e o RF-4, o RF-4C e o RB vão de face a face dos cantos (x 0,31 a 39,19 m).",
     "Calha, descidas e extravasores: ND-LET-COB03. Terças e apoios: ND-LET-COB01. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-COB04")
 print("COB04", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:16])

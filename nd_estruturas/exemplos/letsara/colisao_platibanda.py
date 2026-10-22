@@ -22,6 +22,9 @@ def main():
     pecas = [(p, aabb(p)) for p in m.pecas]
     conc = [(p, bb) for p, bb in pecas if p.grupo == "Pilares"]
     cab = [(p, bb) for p, bb in conc if p.marca.endswith(" cabeça")]
+    # DEC-042: cantos de seção cheia — a parte acima de +8,50 conta como "cabeça" (região da platibanda)
+    cab += [(p, ((a[0], a[1], max(a[2], 8.50)), b)) for p, (a, b) in conc
+            if not p.marca.endswith(" cabeça") and b[2] > 9.99 and a[2] < 8.0 and (a[1] < 0.5 or b[1] > MB.COMP - 0.5) and (a[0] < 0.5 or b[0] > MB.LARG - 0.5)]
     ce = [(p, bb) for p, bb in pecas if p.marca.startswith("CE-1 chapa")]
     res = dict(ce1_fora=[], colisoes=[], n_ce1=len(ce), n_cabecas=len(cab))
     # 1) CE-1 dentro de uma face de concreto

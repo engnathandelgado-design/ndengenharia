@@ -1,3 +1,4 @@
+import math
 """Fechamento em placas protendidas 125 × 10 (rev03; antes 125 × 15) — conforme as VISTAS DO FECHAMENTO LATERAL do R01 (vistas A a J).
 
 Gera:

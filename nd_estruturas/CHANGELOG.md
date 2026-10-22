@@ -3,7 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
-- Letsara DEC-042: cabeça 40 × 40 nos pilares de canto, armadura própria da cabeça (vento da platibanda) com traspasse, CE-1 na aresta da face C em ponta de parede, planta-chave com círculo e nome de cada peça; checagem de colisão da platibanda (colisao_platibanda.py).
+- Letsara DEC-042: pilares de canto de seção cheia 40 × 60 até o topo (decisão do Nathan), última terça do lado E no ST-1FL com 2 ES-1FL M20 na face lateral, armadura própria da cabeça (vento da platibanda) com traspasse, CE-1 na aresta da face C em ponta de parede, planta-chave com círculo e nome de cada peça; checagem de colisão da platibanda (colisao_platibanda.py).
 - Letsara DEC-039 (decisão do Nathan): CT-1/CT-1P e buchas BR-3/BR-4/BR-5 removidas; o giro de montagem da VM é travado pela ponta concretada antes das lajes (calc_vm_meio_vaso.py: junta ao cisalhamento τ 0,28 ≤ 0,43 MPa; lajes com fcj ≥ 20 MPa); VM01 det. 2, pilares, CT02, CT04, MON02/03, LA01, NG01, quantitativos e 3D atualizados. DEC-038 substituída.
 - Letsara rev08 (DEC-038): cantoneira antigiro da VM sem trilho e sem solda — CT-1 L 152×102×15,9 L=150 laminada com o furo da VM perto do canto (uso 0,86; a antiga dava 2,94 na flexão da aba) e 2 buchas BR-3 M16 hef 150 no pilar; CT-1P no topo da VM nos PL; `calc_ct1.py` e checagem geométrica de colisão `colisao_ct1.py` (0 colisões); VM01, pilares, CT04, CT02, quantitativos e modelo 3D atualizados.
 - Laje alveolar: módulo laje_alveolar.py (seção com alvéolos e recorte, tração na alma EN 1168, VRd1, seção composta, frequência) com testes; Letsara LP20 + capa 5, 7 Ø12,7 (calc_laje_alveolar.py). Cargas na fundação (calc_cargas_fundacao.py, em andamento).

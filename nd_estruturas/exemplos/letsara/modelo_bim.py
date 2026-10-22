@@ -113,6 +113,24 @@ def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, gra
                xw + dx, y + dy, zc, d, hef, 0.12 if d < 0.02 else 0.12, grampo=grampo)
 
 
+def suporte_fl(m, marca, xw, y_face, sy, zc):
+    """ST-1FL (DEC-042): chapa dobrada 9,5 × 290 — aba de 190 encostada na face lateral do pilar de canto (plano y = y_face,
+    normal sy), presa por 2 ES-1FL M20 horizontais (hef 150 + grampo U Ø10) a 70 e 150 mm da face A; aba de 100 contra a
+    alma da terça (lado −x), 2 M12 8.8. A terça termina 10 mm antes da face."""
+    t, LARG_ = 0.0095, xw + 0.3065
+    x0, x1 = xw - t, LARG_ - 0.30 + 0.175                    # aba na face: da alma até 2,5 cm além da 2ª espera
+    caixa(m, marca, x0, x1, y_face, y_face + sy * t, zc, zc + 0.290, GM, obs="chapa dobrada 9,5 × 290 A36 galv., aba 190 na face lateral, 2 furos Ø22")
+    ya, yb = sorted((y_face + sy * t, y_face + sy * 0.100))
+    caixa(m, marca, xw - t, xw, ya, yb, zc, zc + 0.290, GM, obs="aba 100 contra a alma da terça, 2 furos Ø14 (M12)")
+    zm = zc + 0.145
+    for xe in (LARG_ - 0.30 + 0.070, LARG_ - 0.30 + 0.150):
+        m.linear("inserto", "ES-1FL barra roscada M20 A36 L=400 (horizontal)", PerfilRetangular(0.020, 0.020, "M20"),
+                 (xe, y_face - sy * 0.320, zm), (xe, y_face + sy * 0.080, zm), GE, material="aco",
+                 obs="hef 150 + grampo U Ø10; 80 mm saliente (arruela + porca + contraporca)")
+        caixa(m, "grampo U Ø10", xe - 0.045, xe + 0.045, *sorted((y_face - sy * 0.13, y_face - sy * 0.14)), zm - 0.005, zm + 0.005, GE)
+        caixa(m, "porca M20", xe - 0.016, xe + 0.016, *sorted((y_face + sy * t, y_face + sy * (t + 0.018))), zm - 0.016, zm + 0.016, GM)
+
+
 def orelha(m, x, y, zc, ux, uy, h_furo):
     """OR-X L 102×76×6,3 L = 80 girada ⊥ ao tirante (direção ux, uy saindo do nó), na espera ES-2 a 45 mm atrás."""
     px, py = -uy, ux
@@ -139,11 +157,11 @@ def montar() -> ModeloBIM:
         for lado, x0, sg in (("P1", 0.0, 1), ("P2", LARG, -1)):
             zr = rec_vb(x0) if canto else REC[0 if sg > 0 else 1]
             nome = f"{lado}{'C' if canto else ''}-L{i}"
+            if canto:      # DEC-042 (decisão do Nathan, 22/10): canto SEM platibanda recuada — seção cheia 40×60 até o topo
+                m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, TOPO_PLAT, obs="40×60, seção cheia até o topo (sem platibanda recuada; DEC-042)")
+                continue
             m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, zr, obs=f"40×60; cabeça recuada acima de +{zr:.2f}".replace(".", ","))
-            if canto:      # DEC-042: canto sem recuo lateral e recuo A de 20 cm → cabeça 40 × 40 (CE-1/CC-1 de 380 nas duas faces externas)
-                m.pilar(nome + " cabeça", x0 - sg * 0.10, y, 0.40, 0.40, zr, TOPO_PLAT, obs="cabeça 40×40 (recuo de 20 cm na face A; DEC-042)")
-            else:
-                m.pilar(nome + " cabeça", x0 - sg * 0.15, y, 0.30, 0.40, zr, TOPO_PLAT, obs="cabeça recuada 40×30")
+            m.pilar(nome + " cabeça", x0 - sg * 0.15, y, 0.30, 0.40, zr, TOPO_PLAT, obs="cabeça recuada 40×30")
     # pilares das fachadas 1 e 9 (60 ⊥ fachada) com cabeça recuada acima da VB
     for j, x in enumerate(X_FACH[1:-1]):
         for nome, y, sg in ((["P3", "P4", "P5"][j], 0.0, 1), (["P3", "P14", "P5"][j], COMP, -1)):
@@ -253,24 +271,31 @@ def montar() -> ModeloBIM:
         for s in LG["s_tercas"]:
             xw = xa + s * C3 - 0.027                                 # alma da terça na face +x do ST-1P (linha das terças)
             zb = zf(xw) + H_TS + 0.010                               # fundo da terça
+            ult_E = xw > LARG - 0.325 - 0.04                         # DEC-042: última terça do lado E encosta na face lateral do canto (seção cheia)
             for k in range(n_v):
                 e0 = EXT_F if k == 0 else A_TR
                 e1 = EXT_F if k == n_v - 1 else A_TR
                 dk = t_z if k % 2 else 0.0                           # vãos alternados: perfil encaixado por fora no transpasse
                 ya, yb = Y_LIN[k] - e0, Y_LIN[k + 1] + e1
+                if ult_E and k == 0:
+                    ya = Y_LIN[0] + 0.21
+                if ult_E and k == n_v - 1:
+                    yb = Y_LIN[-1] - 0.21
                 pk = next(p_ for p_ in PC_["por_vao"] if p_["vao"] == f"{k+1}-{k+2}")
                 m.extrusao_y("terca", f"Z302 vão {k+1}-{k+2} L={pk['L_mm']}", z_contorno(xw + dk, zb + dk), (ya + yb) / 2, yb - ya,
                              "Terças metálicas", material="aco", obs="Z 302×90/82×2,30 METSEC, contínua por transpasse")
             for j, yl in enumerate(Y_LIN):
                 ys = (-0.06, 0.06) if j in (0, n_v) else (-0.06, 0.06, -(A_TR - B_TR), A_TR - B_TR)
+                if ult_E and j in (0, n_v):
+                    ys = ((0.26 if j == 0 else -0.26),)                  # M12 da aba do ST-1FL, fora do pilar
                 for dy in ys:
                     for zz in (ZF1, ZF2):
                         m.linear("inserto", "M12 8.8 (apoio/emenda da terça)", PARAF, (xw - 0.012, yl + dy, zb + zz), (xw + 0.016, yl + dy, zb + zz),
                                  "Parafusos da cobertura", material="aco")
                 if j in (0, n_v):
                     zc = zb - 0.010
-                    if xw > LARG - 0.325 - 0.04:                     # última terça do lado E: no recuo do pilar de canto (ST-1F espelhado)
-                        suporte_st(m, f"ST-1F (pilar de canto, eixo {j+1})", xw, yl, zc, lado=+1, esperas=((0.075, 0.0), (0.135, 0.0)), d=0.020, hef=0.150)
+                    if ult_E:                                        # DEC-042: ST-1FL na face lateral do canto, 2 ES-1FL M20 horizontais (padrão Mitsubishi)
+                        suporte_fl(m, f"ST-1FL (pilar de canto, eixo {j+1})", xw, yl + (0.20 if j == 0 else -0.20), 1 if j == 0 else -1, zc)
                     elif j == n_v:                                   # eixo 9: ST-1V-R, 2 M20 hef 400 + grampo
                         suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
                     else:
@@ -285,11 +310,21 @@ def montar() -> ModeloBIM:
         for k in range(nfx):
             y = y0_ + (k + 0.5) * bfx
             pz = (dz0 + dz1) / 2
-            xbk = xb_ - (0.06 if k in (0, nfx - 1) else 0.0)        # DEC-042: faixa junto às fachadas recortada 6 cm na cabeça 40 × 40 dos cantos do eixo E
-            m.linear("placa", nome_, PerfilRetangular(bfx - 0.002, dz1 - dz0, nome_), (xa_, y, AC.z_terca_topo(xa_) + pz), (xbk, y, AC.z_terca_topo(xbk) + pz), grp_, material="aco")
+            # DEC-042: cantos de seção cheia (x < 0,30 e x > LARG − 0,30, |y − linha| < 0,20) — faixa junto às fachadas recortada no canto
+            yk0, yk1 = y0_ + k * bfx, y0_ + (k + 1) * bfx
+            yc_ = Y_LIN[0] + 0.21 if k == 0 else (Y_LIN[-1] - 0.21 if k == nfx - 1 else None)
+            trechos = [(yk0, yk1, xa_, xb_)]
+            if yc_ is not None:
+                ya_c, yb_c = (yk0, yc_) if k == 0 else (yc_, yk1)
+                yo_a, yo_b = (yc_, yk1) if k == 0 else (yk0, yc_)
+                trechos = [(ya_c, yb_c, 0.31, LARG - 0.31), (yo_a, yo_b, xa_, xb_)]
+            for t0, t1, xa_k, xb_k in trechos:
+                yk = (t0 + t1) / 2
+                m.linear("placa", nome_, PerfilRetangular(t1 - t0 - 0.002, dz1 - dz0, nome_), (xa_k, yk, AC.z_terca_topo(xa_k) + pz), (xb_k, yk, AC.z_terca_topo(xb_k) + pz), grp_, material="aco")
     for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
         xc_ = xt_ - 0.027 - 0.045                         # cartola centrada na aba superior (90) da terça
-        m.linear("placa", "perfil cartola #0,65", PerfilRetangular(0.12, 0.04, "cartola"), (xc_, y0_, AC.z_terca_topo(xc_) + 0.06), (xc_, y1_, AC.z_terca_topo(xc_) + 0.06), "Telhas", material="aco")
+        yc0, yc1 = (Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21) if xc_ + 0.06 > LARG - 0.30 else (y0_, y1_)   # DEC-042: última cartola do lado E entre os cantos
+        m.linear("placa", "perfil cartola #0,65", PerfilRetangular(0.12, 0.04, "cartola"), (xc_, yc0, AC.z_terca_topo(xc_) + 0.06), (xc_, yc1, AC.z_terca_topo(xc_) + 0.06), "Telhas", material="aco")
     SEC = AC.secoes()
 
     def chapa_contorno(pts, t=0.002):
@@ -317,7 +352,7 @@ def montar() -> ModeloBIM:
     for ya, yb in tre:
         rufo_y("RF-2", ya, yb); rufo_y("RF-3", ya, yb); rufo_y("CR-1", ya, yb)
     for yp in PIL_Y:
-        dc = 0.10 if yp in (PIL_Y[0], PIL_Y[-1]) else 0.0                 # DEC-042: face da cabeça 40 × 40 dos cantos 10 cm para dentro
+        dc = 0.30 if yp in (PIL_Y[0], PIL_Y[-1]) else 0.0                 # DEC-042: canto de seção cheia — face A 30 cm para dentro
         rufo_y("RF-2C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u + d_, v)); rufo_y("RF-3P", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u - d_, v))
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
@@ -327,8 +362,8 @@ def montar() -> ModeloBIM:
     zl_ = AC.z_zip(LARG / 2) + AC.PAC["zipada"]
     za_r, zb_r = AC.z_zip(xa_) + AC.PAC["zipada"], AC.z_zip(xb_) + AC.PAC["zipada"]
     for yface, sg in ((AC.Y_PLACA_1, 1), (AC.Y_PLACA_9, -1)):
-        for mk in ("RF-4", "RF-4C", "RB-1/2"):                          # DEC-042: param 6 cm antes, na cabeça 40 × 40 do canto do eixo E
-            rufo_x(mk, xa_, xb_ - 0.06, za_r, AC.z_zip(xb_ - 0.06) + AC.PAC["zipada"], lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
+        for mk in ("RF-4", "RF-4C", "RB-1/2"):                          # DEC-042: entre as faces A dos cantos de seção cheia (x 0,31 … LARG − 0,31)
+            rufo_x(mk, 0.31, LARG - 0.31, AC.z_zip(0.31) + AC.PAC["zipada"], AC.z_zip(LARG - 0.31) + AC.PAC["zipada"], lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
         rufo_x("RF-1", AC.X_PLACA_A - 0.10, AC.X_PLACA_E + 0.10, 0.0, 0.0, lambda u, v, yf=yface, s_=sg: (yf - s_ * 0.100 + s_ * u, v))
     # contraventamento em X Ø16 (rev06, DEC-024/025): vãos 4-5 a 8-9, nós nas terças 0, 8, 15 de cada meia água
     BAR16 = PerfilRetangular(0.016, 0.016, "Ø16")
@@ -377,7 +412,7 @@ def montar() -> ModeloBIM:
     cal = [(0.02, zt_c + 0.12), (0.02, zt_c - 0.15), (0.32, zt_c - 0.15), (0.32, zt_c), (0.32 - t_c, zt_c), (0.32 - t_c, zt_c - 0.15 + t_c),
            (0.02 + t_c, zt_c - 0.15 + t_c), (0.02 + t_c, zt_c + 0.12)]
     m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP - 2 * 0.22, "Calha e descidas", material="aco",
-                 obs="NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a 22 cm do eixo das linhas 1 e 9 (cabeça 40 × 40 dos cantos)")
+                 obs="NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a 22 cm do eixo das linhas 1 e 9 (canto de seção cheia)")
     for yl in Y_LIN:
         yd = yl + (0.35 if yl < COMP else -0.35)
         m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
@@ -561,7 +596,7 @@ def montar() -> ModeloBIM:
     m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
     m.pendente("I130 (DEC-032): V405/V406 com 30 cordoalhas (28 embaixo + 2 na mesa), V407 com 20; σpi 1453 MPa, fckj 45; NEO-2 300×200×31 fretado e PN-2 Ø25 grauteado numa ponta só.")
     m.pendente("TS-01 sem dentes: apoio no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
-    m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1F em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
+    m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1FL em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
     m.pendente("Fora do 3D (só nas pranchas): armaduras, cordoalhas, alças de içamento AL-1/AL-2/AL-3, grampos e porcas das placas, furos de içamento dos pilares.")
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
     for c in cx:

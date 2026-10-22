@@ -93,7 +93,8 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         for z in ip["z"]:
             z = z / 1000
             if z0 <= z <= z1:
-                p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0125 if nx < 0 else -0.19), ny * fd + (0 if ny > 0 else -0.0125 if ny < 0 else -0.19), z - 0.165,
+                x_lat = (-H / 2 + 0.005) if ip.get("aresta_C") else -0.19             # DEC-042: CE-1 junto à aresta da face C (ponta de parede)
+                p.add_mesh(box(nx * fd + (0 if nx > 0 else -0.0125 if nx < 0 else x_lat), ny * fd + (0 if ny > 0 else -0.0125 if ny < 0 else -0.19), z - 0.165,
                                0.0125 if nx else 0.38, 0.0125 if ny else 0.38, 0.33), **aco)       # rev06e: CE-1 380 × 330 × 12,5
                 for k_, z_ in enumerate(ip["z"]):                                          # rev06e (DEC-031): CS-1 do CC-1 (face C, x−)
                     if ip["face"] != "C" or not ip.get("lados") or abs(z_ / 1000 - z) > 1e-6:

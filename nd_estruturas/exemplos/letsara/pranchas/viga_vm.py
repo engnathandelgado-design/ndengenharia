@@ -58,7 +58,7 @@ def _rot_vm(n):
     p = CH._P[n]
     xm_, y_ = (p["x0"] + p["x1"]) / 2, p["y0"]
     return f"{RN.viga_em('+3,15', xm_, y_)} / {RN.viga_em('+6,55', xm_, y_)}"
-kp = CH.planta(pr, (XC - 120, Q[3] - 125), 1000, _vm, subtitulo="VM nas linhas 1 e 2: nome do nível +3,15 / nível +6,55", y_max=Y_LIN[2], rotulo=_rot_vm)
+kp = CH.planta(pr, (XC - 160, Q[3] - 100), 400, _vm, subtitulo="VM nas linhas 1 e 2: nome do nível +3,15 / nível +6,55", y_max=Y_LIN[2], rotulo=_rot_vm)
 XF = [X_EIXO[k] for k in "ABCDE"]
 kp.ret(M(0), M(0) + 200, M(XF[-1]), M(Y_LIN[1]) - 400, "OCULTA")
 

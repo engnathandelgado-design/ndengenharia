@@ -63,7 +63,7 @@ pr.cabecalho_peca("\x01" + _mk, f"VIGA DE BORDA 15 × 60 cm COM DENTE — L = {L
 
 # planta-chave (rev08): círculo + chamada em cada VB, com o nome de cada peça
 import chave as CH
-CH.planta(pr, (Q[0] + 545, Q[3] - 118), 1000, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="vigas de borda nas fachadas 1 e 9")
+CH.planta(pr, (Q[0] + 556, Q[3] - 96), 1300, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="fachadas 1 e 9", numeros=(1, 9))
 M = lambda v: v * 1000
 Y_LIN = Y_LIN_R01
 
@@ -225,7 +225,7 @@ notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimen
          "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V, com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",
          "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). Ponta baixa sempre no lado A; folga de 2,5 cm nas pontas.",
          "Sucção do vento na cobertura levanta a VB no apoio (28 kN de cálculo): pino PN-6 Ø20 roscado com porca, contraporca e arruela no nicho do topo do dente, apertado depois do neoprene assentado; graute do nicho só numa ponta (a outra livre para dilatar).",
-         "VB-05 a 08 (fachada 9): mesma fôrma e armação; ES-1R M20 hef 400 + grampo U Ø10 no lugar das ES-1V (escora das terças, até 49 kN) e ES-2V das orelhas do X (tabela). Última terça do lado E apoiada no recuo do pilar de canto (ST-1F, PL-07/PL-08).",
+         "VB-05 a 08 (fachada 9): mesma fôrma e armação; ES-1R M20 hef 400 + grampo U Ø10 no lugar das ES-1V (escora das terças, até 49 kN) e ES-2V das orelhas do X (tabela). Última terça do lado E apoiada na face lateral do pilar de canto, de seção cheia (ST-1FL em 2 ES-1FL M20 embutidas na face, PL-07/PL-08).",
          "Placas por fora da viga, fixadas nos pilares (a VB não recebe carga das placas). Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Concreto em cm, chaparia em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 y = pr.legenda_armadura(XC, y - 4, False)

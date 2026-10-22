@@ -14,6 +14,7 @@ pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T; OR-1 SOLDADA NA CH-MF")
 pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1; SEM DENTES")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS POR TRANSPASSE: SEM MÃO-FRANCESA (SAEM ES-3, CMF-1, MF-1); ST-1P COM 4 M12")
 pr.revisao("06", "17/10/2026", "X NOS VÃOS 4-5 A 8-9: ES-2 NOS 3 NÓS; GRAMPO NAS ES-1; ST-1V-R, ST-1F E CL-P")
+pr.revisao("08", "22/10/2026", "DEC-042: ST-1F → ST-1FL NA FACE LATERAL DO PILAR DE CANTO (SEÇÃO CHEIA)")
 pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
 nt, nn = len(P["tercas"]), len(P["nos"])
@@ -152,7 +153,7 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
          ["ST-1P4", "chapa dobrada 9,5 × 220 (200 + 290), 4 oblongos", "-", 2, "8,0"],
          ["ST-1V", "igual ao ST-1P, 2 oblongos no eixo (VB eixo 1)", "-", 2 * nt - 1, "7,4"],
          ["ST-1V-R", "como o ST-1V, oblongos 22×44 (VB eixo 9, M20)", "-", 2 * nt - 1, "7,4"],
-         ["ST-1F", "como o ST-1V, no recuo do pilar de canto (lado E)", "-", 2, "7,4"],
+         ["ST-1FL", "chapa dobrada 9,5 × 290 (190 na face lateral do pilar de canto, 2 furos Ø22 p/ ES-1FL M20 + 100 na alma da terça, 2 M12)", "-", 2, "6,3"],
          ["OR-X", "L 102×76×6,3 L=80", "-", 80, "0,7"],
          ["CL-P", "L 102×102×9,5 L=250 (pilar do portão × TS-01A)", "-", 8, "3,6"],
          ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 28, "2,3"],
@@ -161,7 +162,8 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
          ["NEO-3", "neoprene 100×300×10, 2 furos Ø30", "-", 14, "-"]]
 y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
               [16, 92, 18, 22, 32])
-notas = ["Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
+notas = ["ST-1FL (DEC-042): os pilares de canto P1 e P9 têm seção cheia até o topo; a última terça do lado E encosta na face lateral interna e apoia no ST-1FL (chapa dobrada, aba de 100 parafusada na alma com 2 M12), preso por 2 barras roscadas M20 A36 horizontais embutidas na face (ES-1FL, hef 150 + grampo U Ø10, a 7 e 15 cm da face A). ACI 318-19 cap. 17, C40, borda 70 mm: φNcbg ≈ 122 kN e aço ≈ 147 kN para ≈ 69 kN de demanda (envoltória do ST-1V-R).",
+         "Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
          "ST-1P4 (DEC-036): igual ao ST-1P com aba horizontal de 200 e 4 oblongos, nas 4 ES-1 da 1ª terça do beiral do eixo 2 (TS-01B: +2 ES-1 com grampo na 1ª e na última terça, peça simétrica). ACI 318-19 cap. 17, C50: interação 0,59 com os grampos U Ø10.",
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
          "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",

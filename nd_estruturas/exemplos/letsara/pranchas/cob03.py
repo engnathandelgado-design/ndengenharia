@@ -136,6 +136,7 @@ notas = [f"Dimensionamento (NBR 10844:1989): intensidade I = {CH['chuva']['I_mm_
          f"Descidas Ø200 nas 9 linhas: capacidade da saída {de['Q_cap_L_s']} L/s ≥ {cc['Q_saida_L_s']} L/s (uso {de['uso']}); descida aparente ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01), presa por abraçadeiras em buchas, até a caixa de areia (projeto de drenagem).",
          "Espaço livre de 40 cm entre a face da cabeça dos pilares P1 e a aba da 1ª terça (ND-LET-COB01); a calha fica de 20 a 320 mm do eixo A. A telha avança 150 mm além da aba da terça, com pingadeira 100 mm dentro da calha.",
          "Extravasores Ø100 nas duas pontas da calha (fachadas 1 e 9), 50 mm abaixo da borda, para a água sair pela fachada se uma saída entupir.",
+         "DEC-042: os pilares de canto (linhas 1 e 9) têm seção cheia 40 × 60 até +10,00: a calha começa e termina a 22 cm do eixo das linhas 1 e 9, com a cabeceira a 2 cm da face lateral do pilar; o extravasor da cabeceira sai em −x, entre o pilar de canto e o pilar seguinte, atravessando a placa do eixo A logo depois do canto (furo na placa a confirmar com a Trejor).",
          "Juntas de dilatação da calha a cada ≈ 20 m (sobre as linhas 3, 5 e 7), com tampa e selante; emendas rebitadas e vedadas com PU (sem solda).",
          "Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada dupla com lã de rocha): ND-LET-COB04 (RF-2/RF-2C da calha no det. 1 e 2 de lá).",
          "Carga da calha cheia na 1ª terça (0,12 kN/m de chapa + 0,45 kN/m de água) considerada no modelo integrado r05.",

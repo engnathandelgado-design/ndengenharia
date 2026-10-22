@@ -134,15 +134,20 @@ def prancha_pilar(P):
         xy_sobe = [p_ for p_ in xy if dentro(*p_) and (sw is None or p_[1] <= sw)]
         xy_para = [p_ for p_ in xy if p_ not in xy_sobe]
         cantos = [(u, w) for u in (u0 + COB + 18, u1 - COB - 18) for w in (w0 + COB + 18, w1 - COB - 18)]
-        n_in = P.get("n13_inner", 0)
+        CABP = P.get("cabeca")                                          # DEC-042: armadura própria da cabeça (cabeca_pilares_r05.py)
+        n_in = 0 if CABP else P.get("n13_inner", 0)
         if n_in:
             cantos += [(u0 + COB + 18 + k * (u1 - u0 - 2 * (COB + 18)) / (n_in - 1), w1 - COB - 16) for k in range(n_in)]
         xy_cab = []
+        if CABP:
+            cantos = [tuple(p_) for p_ in CABP["xy_cab"]]
         for c_ in cantos:
             if all(math.hypot(c_[0] - a, c_[1] - b) > 40 for a, b in xy_sobe + xy_cab):
                 xy_cab.append((round(c_[0]), round(c_[1])))
     else:
         z_cab, xy_sobe, xy_para, xy_cab = [], xy, [], []
+    D13 = (P.get("cabeca") or {}).get("phi", 16.0)
+    EMB13 = (P.get("cabeca") or {}).get("emb", 600)
     n_est = len(z_est)
     pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=P["conteudo"], desenho=P["desenho"], folha="01/01", fase="PARA APROVAÇÃO",
@@ -151,7 +156,7 @@ def prancha_pilar(P):
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM CP-VT; CONSOLOS COM ALÇAS; NEOPRENES REVISTOS; CP-MEZ P/ DENTE DA VM; CP-VB 15×27×29 P/ DENTE DA VB; PL 14 Ø20")
     r06 = ["CE-1 DOS CONSOLES CS-1 DAS PLACAS (TREJOR) NO LUGAR DOS TRILHOS TR-1"]
     if P["marca"] in ("PL-07", "PL-08"):
-        r06.insert(0, "ESPERAS ES-1F DO APOIO ST-1F DA ÚLTIMA TERÇA")
+        r06.insert(0, "ESPERAS ES-1FL (FACE LATERAL) DO APOIO ST-1FL DA ÚLTIMA TERÇA")
     if P["marca"].startswith("PG"):
         r06.insert(0, "CABEÇA A 2 cm DA TS-01; INSERTOS IL-1 (LIGAÇÃO EM y COM A TS-01)")
     if any(ip["face"] == "C" for ip in P.get("ip01", [])):
@@ -160,6 +165,9 @@ def prancha_pilar(P):
         r06.append("CE-1 12,5")
     pr.revisao("06", "19/10/2026", "; ".join(r06))
     pr.revisao("07", "21/10/2026", "FÔRMA E ARMAÇÃO NA MESMA FOLHA (PADRÃO USINA)")
+    if P.get("cabeca") or not P.get("rec") and P["marca"] in ("PL-03", "PL-04", "PL-07", "PL-08"):
+        pr.revisao("08", "22/10/2026", "DEC-042: " + ("SEÇÃO CHEIA ATÉ O TOPO (SEM PLATIBANDA RECUADA)" + ("; ES-1FL NA FACE LATERAL" if P["marca"] in ("PL-07", "PL-08") else "")
+                   if not P.get("rec") else "CABEÇA COM ARMADURA PRÓPRIA (N13 POR TRASPASSE)") + "; PLANTA-CHAVE COM NOMES")
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -259,8 +267,11 @@ def prancha_pilar(P):
             F_ = ip["face"]                                                                # das placas, centrada (consoles CS-1 soldados)
             cc = F_ == "C" and ip.get("lados")                                               # rev06e (DEC-031): CC-1 = CE-1 + CS-1 de fábrica
             if F_ == face:
+                x_ce = (W - 380) / 2
+                if ip.get("aresta_C"):                                                     # DEC-042: ponta de parede — CE-1 a 5 mm da aresta da face C
+                    x_ce = (W - 385) if DIR[face] == "C" else 5
                 for k_, z in enumerate(ip["z"]):
-                    v.chapa((W - 380) / 2, z - 165, 380, 330)
+                    v.chapa(x_ce, z - 165, 380, 330)
                     if cc:
                         for ld in ip["lados"][k_]:                                           # vista de fora: E à esquerda, D à direita
                             xc = W / 2 + (-XC_CS if ld == "E" else XC_CS)
@@ -301,11 +312,25 @@ def prancha_pilar(P):
         if face == P.get("al_face", "A"):                                                  # rev06e: AL-2 na face de cima da fôrma
             for z in AL:
                 v.linha((W / 2 - 50, z), (W / 2 + 50, z), "METALICA"); v.circulo((W / 2 - 50, z), 6.35, "METALICA"); v.circulo((W / 2 + 50, z), 6.35, "METALICA")
+        for es in P.get("esperas_face", []):                                               # DEC-042: barras roscadas embutidas na face (padrão Mitsubishi)
+            if face == "A" and es["face"] not in P["vistas"]:                               # face lateral sem vista: barras vistas de lado na face A
+                x_e, sg_ = (W, 1) if DIR["A"] == es["face"] else (0, -1)
+                v.linha((x_e, es["z"]), (x_e - sg_ * es["emb"], es["z"]), "OCULTA")
+                v.chapa(min(x_e, x_e + sg_ * es["sai"]), es["z"] - es["d"] / 2, es["sai"], es["d"])
+                v.chamada((x_e - sg_ * 60, es["z"]), (-4 * sg_, (L_TOT - es["z"]) / ESC + 6), f"{es['rot']} (face {es['face']})")
+            if es["face"] == face:
+                xA = (lambda a: W - a) if DIR[face] == "A" else (lambda a: a)
+                for a in es["da"]:
+                    v.circulo((xA(a), es["z"]), es["d"] / 2, "METALICA")
+                    v.circulo((xA(a), es["z"]), es["d"] / 2 + 10, "OCULTA")
+                sg_ = 1 if DIR[face] == "A" else -1                                        # chamada para fora, do lado da face A
+                v.chamada((xA(es["da"][0]), es["z"]), (9 * sg_, (L_TOT - es["z"]) / ESC + 6), es["rot"])   # texto acima do topo do pilar
         cf = [c for c in cons if c["face"] == face]
-        zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]))
+        zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]
+                    + [es["z"] for es in P.get("esperas_face", []) if es["face"] == face or (face == "A" and es["face"] not in P["vistas"])]))
         v.cota_v(zs, -EXT[-1], -9)
         v.zs_cota = list(zs)
-        ords = sorted(set([0, L_CAL] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
+        ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
         v.zs_ords = list(ords) if len(ords) > 3 else []
         if len(ords) > 3:
             v.cota_v(ords, W + EXT[1], 9)                                                    # rev06e: cadeia + total (usina), sem acumuladas
@@ -402,7 +427,7 @@ def prancha_pilar(P):
     if xp > XD:
         print(f"  ! {P['marca']}: faces passam da coluna da fôrma ({xp:.0f} > {XD:.0f})")
     # planta-chave 1:750
-    kp = pr.vista("PLANTA-CHAVE", (XD + 62, YT - 120), 750, titulo="PLANTA-CHAVE", subtitulo=f"{P['marca']} hachurado", unidade="cm")
+    kp = pr.vista("PLANTA-CHAVE", (XD + 62, YT - 120), 750, titulo="PLANTA-CHAVE", subtitulo="peças desta folha circuladas", unidade="cm")
     Xm = lambda m: m * 1000
     for y in Y_LIN:
         kp.linha((Xm(-2.5 + 1.1), Xm(y)), (Xm(42.0), Xm(y)), "EIXO")                    # rev06e: eixo para na bolha
@@ -412,15 +437,25 @@ def prancha_pilar(P):
         kp.circulo((Xm(-2.5), Xm(y)), 1100, "VISTA"); kp.texto((Xm(-2.5), Xm(y)), str(i), "nota", "MIDDLE_CENTER")
     for j, x in enumerate(X_FACH):
         kp.circulo((Xm(x), Xm(85.5)), 1100, "VISTA"); kp.texto((Xm(x), Xm(85.5)), "ABCDE"[j], "nota", "MIDDLE_CENTER")
-    rot_kp = {}
+    sel = []
     for nome, x, y, bx, by, mk in P["kp"]:
         pts = [(Xm(x) - bx / 2, Xm(y) - by / 2), (Xm(x) + bx / 2, Xm(y) - by / 2), (Xm(x) + bx / 2, Xm(y) + by / 2), (Xm(x) - bx / 2, Xm(y) + by / 2)]
         kp.poli(pts, "CORTADO", fechada=True)
         if mk == P["marca"]:
             kp.hachura(pts, "ANSI31", 0.3)
-            rot_kp.setdefault(round(y, 2), []).append(nome)
-    for y, nomes in rot_kp.items():                                                     # rev08: fora da malha (não cruza eixo), um rótulo por linha
-        kp.texto((Xm(42.0) + 600, Xm(y)), f"{' / '.join(nomes)} {P['marca']}", "min", "MIDDLE_LEFT")
+            sel.append((x, y))
+    # rev08 (regra do Nathan, 22/10/2026): cada peça desta folha com CÍRCULO e CHAMADA com o nome próprio (P1, P2...),
+    # rótulos fora da malha, à direita, um por posição (não cruzam eixos nem textos)
+    NM = [q for q in json.load(open("/home/claude/letsara/pranchas/nomes.json", encoding="utf-8"))["pecas"] if q["tipo"] == "pilar"]
+    import renomear as RN_
+    nome_de = lambda x, y: RN_.MARCA_NOVO + min(NM, key=lambda q: math.hypot(q["x"] - x, q["y"] - y))["nome"]   # nome já novo: protegido da renomeação (P9 velho ≠ P9 novo)
+    y_ocup = []
+    for x, y in sorted(sel, key=lambda t: (t[1], t[0])):
+        yl = Xm(y) / 750 + 2.5                                                          # papel (mm) relativo ao modelo
+        while any(abs(yl - q) < 4.0 for q in y_ocup):
+            yl += 4.0
+        y_ocup.append(yl)
+        kp.destaque((Xm(x), Xm(y)), nome_de(x, y), desloc_papel=((Xm(43.0) - Xm(x)) / 750, yl - Xm(y) / 750), r_papel=1.7)
 
     # ------------------------------------------------------------ CORTE A-A (1:10)
     YS = YT - 178 - H / 20
@@ -484,7 +519,7 @@ def prancha_pilar(P):
     L_N1A = round((z_rec - 30 - 40) / 10 + 15)
     barras = ([dict(pos="N1", diam=D1, qtd=len(xy_sobe), comp=L_N1, trechos=[f"{L_N1}"], geo=dict(k="R", a=L_N1))] if xy_sobe else []) + \
              ([dict(pos="N1A", diam=D1, qtd=len(xy_para), comp=L_N1A, forma=[(0, 0), (85, 0), (85, 8)], trechos=[f"{L_N1A - 15}", "15"], geo=dict(k="L", a=L_N1A - 15, g=15))] if xy_para else []) + \
-             ([dict(pos="N13", diam=16.0, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - 600)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - 600)) / 10)}"], geo=dict(k="R", a=round((L_TOT - 40 - (z_rec - 600)) / 10)))] if xy_cab else []) + \
+             ([dict(pos="N13", diam=D13, qtd=len(xy_cab), comp=round((L_TOT - 40 - (z_rec - EMB13)) / 10), trechos=[f"{round((L_TOT - 40 - (z_rec - EMB13)) / 10)}"], geo=dict(k="R", a=round((L_TOT - 40 - (z_rec - EMB13)) / 10)))] if xy_cab else []) + \
              ([dict(pos="N14", diam=P.get("d_est", 8.0), qtd=len(z_cab), comp=round((2 * (HB - 60 + HH - 60) + 160) / 10), forma=[(0, 0), ((HB - 60) / 10, 0), ((HB - 60) / 10, (HH - 60) / 10), (0, (HH - 60) / 10), (0, 0), (2, 2)], trechos=[f"{(HB-60)/10:g}", f"{(HH-60)/10:g}", "", ""], geo=dict(k="E", a=(HH - 60) / 10, b=(HB - 60) / 10))] if z_cab else []) + [
               dict(pos="N2", diam=P.get("d_est", 8.0), qtd=n_est, comp=round((2 * (EXT_B + EXT_H) + 160) / 10), forma=[(0, 0), (EXT_B / 10, 0), (EXT_B / 10, EXT_H / 10), (0, EXT_H / 10), (0, 0), (2, 2)], trechos=[f"{EXT_B/10:g}", f"{EXT_H/10:g}", "", ""], geo=dict(k="E", a=EXT_H / 10, b=EXT_B / 10))]
     if P["grampos"]:
@@ -517,7 +552,7 @@ def prancha_pilar(P):
     area_f = (2 * (B + H) * z_rec + 2 * (HB + HH) * (L_TOT - z_rec) + B * H + (B * H - HB * HH) +
               sum(2 * c["proj"] * c["h"] + c["larg"] * c["h"] + c["larg"] * c["proj"] - c["larg"] * c["h"] for c in cons)) / 1e6
     json.dump(dict(marca=P["marca"], qtd=P["qtd"], desenho=P["desenho"], posicao=P["posicao"], B=B, H=H, L_TOT=L_TOT, L_CAL=L_CAL, Z_TOP=Z_TOP, COB=COB,
-                   rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, grampos=P["grampos"], grampos_h=P.get("grampos_h", []),
+                   rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, emb13=EMB13, d13=D13, grampos=P["grampos"], grampos_h=P.get("grampos_h", []),
                    z_est=z_est, z_cab=z_cab, est=EST, d_est=P.get("d_est", 8.0), cons=[dict(face=c["face"], z=c["z"], tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c.get("incl", 0.03)) for c in cons],
                    arm_cons=arm_cons, barras=barras, V=V, area_forma=area_f, al=AL, n_ip=sum(len(i["z"]) for i in P.get("ip01", []))),
               open(f"/home/claude/letsara/pranchas/arm/{P['marca']}.json", "w"), ensure_ascii=False, indent=1)
@@ -770,7 +805,7 @@ def posicao_forma(pr, P, cons, x, y):
     v.texto((xb - 30, yc / 2), "B", "nota", "MIDDLE_CENTER"); v.texto((-xb + 30, yc / 2), "D", "nota", "MIDDLE_CENTER")
     v.texto((0, -80), "FUNDO DA FÔRMA", "nota", "TOP_CENTER")
     if P.get("rec"):
-        v.texto((0, -125), "cabeça: calço 30 cm no fundo", "nota", "TOP_CENTER")
+        v.texto((0, -125), f"cabeça: calço {P['rec']['d'].get('A', 300) / 10:g} cm no fundo", "nota", "TOP_CENTER")
 
 
 if __name__ == "__main__":

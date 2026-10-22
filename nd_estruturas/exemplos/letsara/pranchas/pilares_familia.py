@@ -1,6 +1,6 @@
 """Pranchas individuais das marcas da família 40×60 (PL-02 a PL-12, PF-01 a PF-06) — mesma armação do PL-01 (ND-LET-PIL-A01),
 cabeça recuada, consolos e insertos da marca. Rodar: python pilares_familia.py [PL-02 ...]"""
-import math, re, sys
+import json, math, re, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import pilar_generico as G
 import geo_fixacao as GF
@@ -76,7 +76,8 @@ def ip_marca(txt, nome=None):
             kk = consoles_fch(nome, fc, extra)
             assert len(kk) == n, (nome, fc, n, kk)
             zs, lados = [Z_PL[k] for k in kk], list(kk.values())
-        out.append(dict(face=fc, z=zs, obs=extra, lados=lados))
+        out.append(dict(face=fc, z=zs, obs=extra, lados=lados,
+                        aresta_C=bool(fc in "BD" and lados and all(len(l_) == 1 for l_ in lados))))     # DEC-042: ponta de parede
     return out
 
 
@@ -95,6 +96,10 @@ def kp_familia():
 
 
 KP = kp_familia()
+CABJ = json.load(open("/home/claude/letsara/pranchas/cabeca_pilares.json", encoding="utf-8"))   # DEC-042 (cabeca_pilares_r05.py)
+# DEC-042: fundo da última terça do lado E na linha 1/9 (mm a partir da base do pilar, base em −1,00)
+_xw_ult = G.LG["x_tercas_esq"][-1] + (2 * X_EIXO["C"] - G.LG["X_PONTA_CEN"]) - G.LG["X_PONTA_ESQ"] - 0.027
+ZB_ULT = round((G.LG["Z0_TS"] + 0.03 * _xw_ult + 0.90 + 0.010 + 1.0) * 1000)
 
 
 def NOTA_LAT(cons, ips):
@@ -125,9 +130,8 @@ def dados(mk):
     else:
         zr = rec_vb(39.50 if lado_e else 0.0) if canto else (G.LG and round(G.LG["REC"][1 if lado_e else 0] * 1000))
     d = {"A": 300}
-    if canto:
-        fc = re.search(r"recuo A e ([BD])", cons_t).group(1)
-        d[fc] = 100
+    if canto:                                                                # DEC-042 (decisão do Nathan 22/10): canto SEM platibanda recuada,
+        d = {}                                                               # seção cheia 40 × 60 até +10,00
     cons = cons_marca(cons_t, "P2" if lado_e else "P1")
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
@@ -155,8 +159,10 @@ def dados(mk):
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar)", 2, "assento TS-01, y ±100, 102,5 da cabeça"])
         ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
-    if mk in ("PL-07", "PL-08"):                                              # rev06: última terça do lado E apoia no recuo do canto
-        ins.append(["ES-1F", "2 barras roscadas M20 A36 L=520 c/ gancho (ST-1F da última terça)", 2, "topo do recuo, x = −22,3 e −16,3 cm do eixo E, no eixo da linha"])
+    if mk in ("PL-07", "PL-08"):                                              # DEC-042: canto de seção cheia — a última terça do lado E apoia na face lateral
+        f_int = "D" if mk == "PL-07" else "B"                                 # interna (padrão Mitsubishi: barras roscadas embutidas na face)
+        ins.append(["ES-1FL", "2 barras roscadas M20 A36 L=400 c/ gancho + grampo U Ø10, horizontais (ST-1FL da última terça)", 2,
+                    f"face {f_int}, a 7 e 15 cm da aresta da face A, nível +{(ZB_ULT + 135) / 1000 - 1.0:.2f}".replace(".", ",")])
     zce_c = [z for ip in ips if ip["face"] == "C" for z in ip["z"]]
     def livre(alvo):                                                          # rev06e: AL-2 na face C (de cima na fôrma), fora das CE-1/CC-1
         for d_ in sorted(range(-1500, 1501, 50), key=abs):
@@ -169,22 +175,45 @@ def dados(mk):
                 f"face C: {(11000 - AL2[0]) / 10:g} do topo, {AL2[1] / 10:g} da base"])
     tipos = sorted(set(c["tipo"] for c in cons))
     lin = "fachada " + ("1" if "L1" in pos else "9") if mk.startswith("PF") else ("eixo E" if lado_e else "eixo A")
-    cab = f"{(400 - d.get('B', 0) - d.get('D', 0))/10:g} × {(600 - 300)/10:g}"
+    cab = f"{(400 - d.get('B', 0) - d.get('D', 0))/10:g} × {(600 - d.get('A', 0))/10:g}"
+    pos_txt = (f"POSIÇÃO: {pos} ({lin}); seção cheia 40 × 60 até +10,00 (sem platibanda recuada)" if canto else
+               f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","))
+    cab_txt = ("SEM PLATIBANDA RECUADA (DEC-042, decisão do Nathan): pilar de canto com a seção cheia 40 × 60 até +10,00 — as chapas CE-1/CC-1 das duas faces externas ficam na face inteira; "
+               "a VB apoia no CP-VB da face A (abaixo do topo) e as barras do corpo vão inteiras até o topo." +
+               (" A última terça do lado E encosta na face lateral interna e apoia no ST-1FL, parafusado em 2 barras roscadas M20 embutidas na face (ES-1FL, padrão Mitsubishi)." if mk in ("PL-07", "PL-08") else "")
+               if canto else
+               f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda.")
     P = G.base(mk, qt, 400, 600, 10000, cons, XY, f"ND-LET-{mk.replace('-', '')}",
                f"PILAR PRÉ-MOLDADO {mk} (FAMÍLIA 40×60) — {pos} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-               f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","), "FAMÍLIA DE PILARES 40×60",
+               pos_txt, "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
                 G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
-                f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda." +
+                cab_txt +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
-                "Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face C (placas) para cima e a face A no fundo da fôrma (detalhe POSIÇÃO NA FÔRMA, DEC-031): CC-1 na face de cima, preso em gabarito apoiado nas laterais; CE-1 das faces B/D rente e parafusada na lateral da fôrma; consolos da face A em caixão no fundo; calço de 30 cm no fundo sob a cabeça recuada. Alças AL-2 na face C (de cima), fora das chapas, cortadas rente após a montagem e antes das placas. CE-1 do CC-1 com 4 furos Ø20 de respiro: lançar e vibrar o concreto até sair pelos furos.",
-                f"CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × {GF.TCE:g}".replace(".", ",") + " com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), centrada no pilar, uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm). Face C (DEC-031): sai da metalúrgica com os consoles CS-1 já soldados (CC-1 com 2 consoles; CC-1E/CC-1D com 1, nas pontas de parede) e é concretada com o pilar — posição ±5 mm pelo gabarito; o parafuso de nível absorve ±12 mm. Faces laterais: CE-1 rente e CS-1 soldado na obra (ND-LET-PP00 det. 2 e 4; fabricação PP03/PP04). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
+                f"Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face C (placas) para cima e a face A no fundo da fôrma (detalhe POSIÇÃO NA FÔRMA, DEC-031): CC-1 na face de cima, preso em gabarito apoiado nas laterais; CE-1 das faces B/D rente e parafusada na lateral da fôrma; consolos da face A em caixão no fundo{"" if canto else f"; calço de {d.get('A', 300) / 10:g} cm no fundo sob a cabeça recuada"}. Alças AL-2 na face C (de cima), fora das chapas, cortadas rente após a montagem e antes das placas. CE-1 do CC-1 com 4 furos Ø20 de respiro: lançar e vibrar o concreto até sair pelos furos.",
+                f"CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × {GF.TCE:g}".replace(".", ",") + " com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), centrada no pilar (nas faces laterais em ponta de parede, a 5 mm da aresta da face C, sob o console — DEC-042), uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm). Face C (DEC-031): sai da metalúrgica com os consoles CS-1 já soldados (CC-1 com 2 consoles; CC-1E/CC-1D com 1, nas pontas de parede) e é concretada com o pilar — posição ±5 mm pelo gabarito; o parafuso de nível absorve ±12 mm. Faces laterais: CE-1 rente e CS-1 soldado na obra (ND-LET-PP00 det. 2 e 4; fabricação PP03/PP04). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
-               ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
+               ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"], aresta_C=ip["aresta_C"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL"):
         P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25")
-    P.update(rec=dict(z=zr + 1000, d=d), sobe_w=-240, n13_inner=4, kp=KP, al=AL2, al_face="C",
+    if canto:
+        P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
+                 faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
+        if mk in ("PL-07", "PL-08"):
+            f_int = "D" if mk == "PL-07" else "B"
+            P["esperas_face"] = [dict(face=f_int, da=[70, 150], z=ZB_ULT + 135, d=20, emb=320, sai=80, rot="ES-1FL 2 M20")]
+        return P
+    cb = CABJ[mk]["depois"]
+    v_ = lambda x: f"{x:g}".replace(".", ",")
+    P["notas"] = list(P["notas"]) + [
+        f"CABEÇA (platibanda, DEC-042): balanço de {v_(CABJ[mk]['h_cabeca'] / 10)} cm acima do recuo, dimensionado para o vento nas placas da platibanda "
+        f"(sucção e sobrepressão nos consoles das fiadas acima do recuo, cp 1,6) e o peso das placas excêntrico: Md = {v_(cb['Md_in'])} kN·m (tração na face do recuo)"
+        + (f" e {v_(cb['Md_L'])} kN·m na outra direção (canto)" if cb["Md_L"] else "") +
+        f". Armadura: as barras do corpo da fileira da face C sobem até o topo; N13 {cb['n_in'] + cb['n_cx']} Ø{v_(cb['phi'])} próprias da cabeça "
+        f"({cb['n_in']} junto à face do recuo" + (f" + {cb['n_cx']} intercaladas na face C" if cb["n_cx"] else "") +
+        f"), ancoradas {v_(cb['emb'] / 10)} cm no corpo (traspasse NBR 6118:2023 9.5.2.2, α0t 2,0, má aderência). Alças AL-2 e furo FI-1 no corpo, fora da platibanda."]
+    P.update(rec=dict(z=zr + 1000, d=d), sobe_w=-240, n13_inner=4, kp=KP, al=AL2, al_face="C", cabeca=dict(cb),
              secao_txt=f"60 × 40 cm (A–C × B–D), cabeça {cab}", faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
     return P
 

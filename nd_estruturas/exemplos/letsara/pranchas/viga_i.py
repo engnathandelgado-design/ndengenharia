@@ -95,32 +95,15 @@ def prancha_viga(P):
         pr.revisao(*rv)
     Q = pr.quadro
     XC = Q[2] - 190
-    # cabeçalho
-    pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + (500 if A1 else 600), Q[3] - 4, "CARIMBO")
+    # cabeçalho (rev08: motor padrão; nomes de cada peça por extenso)
     import renomear as RN
-    from prancha_nd import _wtext as _wt, ALTURAS as _AL
-    _mk = RN.lista([n for m in ("V405", "V406", "V407") for n in RN.nomes_de(m)])      # rev08: V400 a V402 (as 3 I130)
-    pr.texto(Q[0] + 10, Q[3] - 24, RN.novo(_mk), "grande", "TITULO")
-    pr.texto(Q[0] + 10 + _wt(_mk, _AL["grande"]) + 8, Q[3] - 24, P["titulo"], "titulo", "TITULO")
-    pr.texto(Q[0] + 10, Q[3] - 14, P["subtitulo"] + f"   ·   PESO {f(peso/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {n_cord} cord. Ø12,7 CP-190 RB", "nota", "TEXTO")
+    import chave as CH
+    _ms = sorted({rot for *_, rot in P["kp_pecas"]})
+    _nomes = [n for m in _ms for n in RN.nomes_de(m)]
+    pr.cabecalho_peca("\x01" + RN.lista(_nomes), P["titulo"], P["subtitulo"] + f"   ·   PESO {f(peso/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {n_cord} cord. Ø12,7 CP-190 RB")
 
-    # ------------------------------------------------------------ planta-chave (posição das marcas) 1:1000
-    kp = pr.vista("PLANTA-CHAVE", (Q[0] + (560 if A1 else 880), Q[3] - (112 if A1 else 165)), 1000 if A1 else 600, titulo="PLANTA-CHAVE", subtitulo=P["kp_sub"], unidade="cm")
-    M = lambda v: v * 1000
-    for y in Y_LIN:
-        kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
-    for x in X_FACH:
-        kp.linha((M(x), M(-2)), (M(x), M(79)), "EIXO")
-    for i, y in enumerate(Y_LIN, 1):
-        kp.texto((M(-3.5), M(y)), str(i), "min", "MIDDLE_RIGHT")
-    for j, x in enumerate(X_FACH):
-        kp.texto((M(x), M(80)), "ABCDE"[j], "min", "BOTTOM_CENTER")
-    for (x0, y0, x1, y1, rot) in P["kp_pecas"]:
-        kp.ret(M(min(x0, x1)) - 200, M(min(y0, y1)) - 200, abs(M(x1 - x0)) + 400, abs(M(y1 - y0)) + 400, "CORTADO")
-        ym = (y0 + y1) / 2
-        if any(abs(ym - y) < 1.5 for y in Y_LIN):                                    # rótulo fora da linha de eixo
-            ym += 2.5
-        kp.texto((M((x0 + x1) / 2) + 500, M(ym)), rot, "min", "MIDDLE_LEFT")
+    # ------------------------------------------------------------ planta-chave: círculo + chamada em cada peça (rev08)
+    CH.planta(pr, (Q[0] + (560 if A1 else 880), Q[3] - (112 if A1 else 165)), 1000 if A1 else 600, _nomes, subtitulo=P["kp_sub"], lado_fixo=-1)
 
     # ------------------------------------------------------------ ELEVAÇÃO DE FÔRMA
     ve = pr.vista("ELEVAÇÃO", (Q[0] + 40, Q[3] - (165 if A1 else 225)), ESC, titulo=f"ELEVAÇÃO DE FÔRMA — {P['marca']}", subtitulo="vista lateral; ponta esquerda = ponta 1", unidade="cm")
@@ -426,7 +409,7 @@ def dados_i110():
         n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
         titulo=f"VIGA CENTRAL I130 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","),
         subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I130 (assento +{Fz(za)}); TS-01 apoiadas no topo horizontal em 2 níveis (+{Fz(zt)} lado A / +{Fz(ztd)} lado E) nas linhas 3, 5, 6, 7 e 8",
-        kp_sub="V405/406/407 no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
+        kp_sub="vigas centrais no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
         marcas=[["V407", f"C: PC-01 → PC-02; TS-01 na L3 ({I1J['V407']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V407'] / 10, 1)],
                 ["V406", "C: PC-02 → PC-03; TS-01 nas L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V406'] / 10, 1)],
                 ["V405", "C: PC-03 → PF-04; TS-01 nas L7, L8", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V405'] / 10, 1)]],

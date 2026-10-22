@@ -53,7 +53,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
         A.pl([Pp(wp, 40), Pp(wp, zr - 40), Pp(wp - 150, zr - 40)])
     if P["xy_cab"]:
         wc = max(p[1] for p in P["xy_cab"])
-        A.ln(Pp(wc, zr - 600), Pp(wc, L - 40))
+        A.ln(Pp(wc, zr - P.get("emb13", 600)), Pp(wc, L - 40))
     for z in P["z_est"]:
         A.ln(Pp(-H / 2 + COB, z), Pp(H / 2 - COB, z), "ARM_TRANSV")
     for z in P["z_cab"]:
@@ -91,7 +91,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     for pos in ("N1", "N1A", "N13"):
         if pos in bar:
             b = bar[pos]
-            zb = 40 if pos != "N13" else zr - 600
+            zb = 40 if pos != "N13" else zr - P.get("emb13", 600)
             g = dict(b["geo"])
             if g["k"] == "L":
                 g["dir"] = 1
@@ -239,7 +239,7 @@ def folha(num, total, marcas):
         "Aço CA-50 (NBR 7480). Comprimentos C= já com dobras; RESUMO com +10% de perdas.",
         "Dobramento: pino de dobra 5Ø (Ø < 20) e 8Ø (Ø 20) nas barras; 3Ø nos estribos (NBR 6118:2023 tab. 9.1).",
         "Estribos com ganchos 135° e ponta reta de 10Ø (mín. 7 cm); grampos N3 a cada estribo.",
-        "N1 e N1A sem emenda (barras inteiras). N1A param no recuo da cabeça com gancho 90°; N13 ancoram 60 cm no corpo.",
+        f"N1 e N1A sem emenda (barras inteiras). N1A param no recuo da cabeça com gancho 90°; N13 (armadura da cabeça, Ø{P.get('d13', 16):g}) ancoram {P.get('emb13', 600) / 10:g} cm no corpo (traspasse NBR 6118:2023 9.5.2.2, α0t 2,0, má aderência).",
         "Consolos: tirante N em U por cima do pino, costura N horizontal e estribos verticais (NBR 9062:2017 7.3).",
         "Fôrma, insertos (IP-01, pinos PN, neoprene) e alças de içamento AL-2: ver a prancha de fôrma de cada marca indicada no título.",
         "Concreto C40; desforma e içamento com fcj ≥ 21 MPa. Pilar concretado deitado, face A para cima.",

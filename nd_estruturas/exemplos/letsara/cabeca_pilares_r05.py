@@ -35,7 +35,7 @@ FCK, FYK = 40.0, 500.0
 FYD = FYK / 1.15
 AREA = {10.0: 78.5, 12.5: 122.7, 16.0: 201.1}
 KG_M = {10.0: 0.617, 12.5: 0.963, 16.0: 1.578}
-RECUO_CANTO = {"A": 200}                                      # DEC-042: canto sem recuo lateral; recuo A 30 → 20 cm
+CANTOS = ("PL-03", "PL-04", "PL-07", "PL-08")                 # DEC-042 (Nathan, 22/10): canto SEM platibanda recuada — seção cheia 40×60 até o topo
 
 
 def lb_ma(phi):
@@ -94,7 +94,7 @@ def mrd(bars, u0, u1, w0, w1, eixo, tracao_interna):
 
 def dimensionar(mk, g, canto):
     B, H = g["B"], g["H"]
-    rec = dict(z=g["rec"]["z"], d=dict(RECUO_CANTO) if canto else dict(g["rec"]["d"]))
+    rec = dict(z=g["rec"]["z"], d=dict(g["rec"]["d"]))
     u0, u1, w0, w1 = secao_cabeca(B, H, rec)
     hc = g["L_TOT"] - rec["z"]
     a = ARR[mk]
@@ -172,14 +172,41 @@ def antes(mk, g):
     return dict(n13=len(cab), kg=round(len(cab) * KG_M[16.0] * L13 / 1000, 1), usos=[round(x, 2) for x in us], secao=f"{u1 - u0:.0f}×{w1 - w0:.0f}")
 
 
+def canto_cheio(mk, g):
+    """canto de seção cheia: sem cabeça e sem N13 — confere só que a parte acima do apoio da VB (CP-VB) resiste ao vento das
+    placas com as barras do corpo, que vão inteiras até o topo."""
+    B, H = g["B"], g["H"]
+    z_ap = max(c["z"] for c in g["consolos"] if c["tipo"] == "CP-VB")
+    rec = dict(z=z_ap, d={})
+    F = forcas(g, rec)
+    a = ARR[mk]
+    bars = [(u, w, AREA[float(a["d"])]) for u, w in a["xy"]]
+    u0, u1, w0, w1 = secao_cabeca(B, H, rec)
+    Md_C = F["C"]["Mv"] + F["C"]["Mg_d"]
+    Md_L = F["L"]["Mv"] + F["L"]["Mg_d"]
+    us = [round(Md_C / mrd(bars, u0, u1, w0, w1, "w", True), 2), round(Md_L / mrd(bars, u0, u1, w0, w1, "u", True), 2) if Md_L else 0.0]
+    return dict(sem_cabeca=True, secao="400×600", z_ref=z_ap, h_acima=g["L_TOT"] - z_ap, Md_C=round(Md_C, 1), Md_L=round(Md_L, 1), usos=us,
+                n_barras=len(bars), phi_corpo=a["d"], kg=0.0)
+
+
 if __name__ == "__main__":
+    try:
+        _old = json.loads((PR / "cabeca_pilares.json").read_text())
+        ANTES_CANTO = {k: _old[k].get("antes") for k in CANTOS if k in _old}
+    except Exception:
+        ANTES_CANTO = {}
     res = {}
     print(f"{'marca':6s} {'cabeça':>9s} {'h':>5s} | antes: N13 kg usos | depois: N13 kg emb usos | Md_in Md_C Md_L | AL-2 / FI-1 no corpo?")
     for f in sorted(PR.glob("P[LF]-*_geom.json")):
         g = json.loads(f.read_text())
         mk = g["marca"]
-        canto = mk in ("PL-03", "PL-04", "PL-07", "PL-08")
-        rec, hc, F, best = dimensionar(mk, g, canto)
+        if mk in CANTOS:
+            r_ = canto_cheio(mk, g)
+            res[mk] = dict(rec=None, sem_cabeca=True, secao="400×600", antes=ANTES_CANTO.get(mk), depois=r_,
+                           AL2_no_corpo=True, FI1_no_corpo=True, z_AL2=g["al"], z_FI1=g["fi"]["z"])
+            print(f"{mk:6s} seção cheia 40×60 até o topo — sem N13; acima do CP-VB ({r_['h_acima']} mm): Md_C {r_['Md_C']} Md_L {r_['Md_L']} usos {r_['usos']}")
+            continue
+        rec, hc, F, best = dimensionar(mk, g, False)
         av = antes(mk, g)
         al_ok = all(z < rec["z"] - 165 for z in g["al"])
         fi_ok = g["fi"]["z"] + g["fi"]["d"] / 2 < rec["z"]

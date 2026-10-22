@@ -3,6 +3,7 @@ Modelo em mm reais; papel em mm. Cada Vista: P_papel = origem + P_modelo / escal
 """
 from __future__ import annotations
 import math
+import re
 import os, datetime
 import ezdxf
 from ezdxf import bbox
@@ -266,7 +267,8 @@ class Prancha:
                f"+ {cunha_mm:g} mm de acomodação das cunhas = {c0['_dL']:.0f} mm a medir por {'fio' if 'FIO' in nome.upper() else 'cordoalha'}, "
                f"(Com pré-carga de 10 % para alinhar o cabo, o medido a partir dela é 0,9 × {c0['_dL0']:.0f} + {cunha_mm:g} = {0.9 * c0['_dL0'] + cunha_mm:.0f} mm.) "
                f"Tolerância ±{tol*100:.0f} % entre o medido e o teórico (NBR 14931 — conferir); fora dela, parar e verificar atrito, manômetro e o Ep do certificado do lote. "
-               f"Se a pista usada tiver outro comprimento, ΔL é proporcional ao comprimento.").replace(".", ",").replace(",0 ", " ")
+               f"Se a pista usada tiver outro comprimento, ΔL é proporcional ao comprimento.")
+        txt = re.sub(r"(?<=\d)\.(?=\d)", ",", txt).replace(",0 ", " ")          # só a vírgula decimal (o ponto final fica)
         hh = ALTURAS["min"]
         yt = yy = y - 2.5                                                 # 2,5 mm abaixo da tabela (folga mínima do verificar = 2 mm)
         for k, lin in enumerate(quebrar(txt, 128, hh)):
