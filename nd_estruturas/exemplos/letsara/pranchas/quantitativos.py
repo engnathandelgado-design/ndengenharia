@@ -142,6 +142,7 @@ def soma_cord(f_):
         raise KeyError((f_, "CORDOALHAS"))
     n = sum(int(l[2]) for l in t["linhas"]); return n, num(t["linhas"][0][1])
 import renomear as _RNq
+PROTEGIDAS = set()
 for nome, f_, L, qt in ((_RNq.MARCA_NOVO + _RNq.lista(_RNq.TS_TODAS), "TS01-1", LGQ["L_TS"], 14), (_RNq.MARCA_NOVO + _RNq.lista(_RNq.nomes_de("VM-01") + _RNq.nomes_de("VM-02")), "VM01", 9.33, 16)):   # DEC-041: nomes por extenso
     n, d = soma_cord(f_)
     cord.append((nome, d, n, L, qt, ""))
@@ -223,8 +224,8 @@ _n01 = _kg01["n"]
 assert _n01["CS1"] == _n_cs and _n01["CE1"] == len(_ce), (_n01, _n_cs, len(_ce))
 _TCE = __import__("geo_fixacao").TCE
 ins += [("ND-LET-PP03", "Placas PP (obra)", "CS-1 obra", f"Console soldado A572-50 (costas, almas, mesa, 2 dentes, ponta) + M16 de nível + prisioneiro, soldado na obra na CE-1 lateral — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n01["CS1_obra"]),
-        ("ND-LET-PP06", "Placas PP (obra)", "CS-1C", f"CS-1 (dos acima) + caixa de calço 120×330×100 ch. 9,5 soldada nas costas na fábrica (cantos A/I, P1B/P2B) — +{__import__('geo_fixacao').FX['calcos']['CS-1C']['kg_caixa']:.1f} kg/un (DEC-044)".replace(".", ","), 1, _n01["CS1C"]),
-        ("ND-LET-PP06", "Placas PP (obra)", "CS-1D", f"CS-1 (dos acima) + caixa de calço 120×330×75 ch. 9,5 (P10 da vista C) — +{__import__('geo_fixacao').FX['calcos']['CS-1D']['kg_caixa']:.1f} kg/un (DEC-044)".replace(".", ","), 1, _n01["CS1D"]),
+        ("ND-LET-PP06", "Placas PP (obra)", "CS-1C", f"CS-1 (dos acima) + caixa de calço 120×330×100 chapa 9,5 soldada nas costas na fábrica (cantos A/I, PL-02/PL-06) — +{__import__('geo_fixacao').FX['calcos']['CS-1C']['kg_caixa']:.1f} kg/un (DEC-044)".replace(".", ","), 1, _n01["CS1C"]),
+        ("ND-LET-PP06", "Placas PP (obra)", "CS-1D", f"CS-1 (dos acima) + caixa de calço 120×330×75 chapa 9,5 (PG-02/PG-04 da vista C) — +{__import__('geo_fixacao').FX['calcos']['CS-1D']['kg_caixa']:.1f} kg/un (DEC-044)".replace(".", ","), 1, _n01["CS1D"]),
         ("ND-LET-PP06", "Pilares (fábrica)", "CE-1L", f"Chapa de espera A36 840×330×{_TCE:g} com asas + 4 pinos Ø16×150 + 2 N18 (P8A e P11, fiada +6,25; das CE-1 acima) — DEC-044".replace(".", ","), 1, _n01["CE1L"]),
         ("ND-LET-PP03", "Pilares (fábrica)", "CS-1 fábrica", f"Console CS-1 soldado na fábrica do pilar sobre a CE-1 (compõe o CC-1) — {_kg01['kg_CS1']:.2f} kg/un".replace(".", ","), 1, _n01["CS1_fabrica"]),
         ("ND-LET-PP04", "Pilares (fábrica)", "CC-1", "CE-1 + 2 CS-1 soldados na fábrica, concretados na face C (DEC-031)", 1, _n01["CC1"]),
@@ -262,6 +263,9 @@ def gerar_xlsx(SAIDA=SAIDA):
 
     def linha(ws, r, vals, fmts=None, entrada=()):
         for j, v in enumerate(vals, 1):
+            if isinstance(v, str) and v.startswith("\x01"):                 # nome novo já resolvido (renomear.MARCA_NOVO): o passe final não mexe
+                v = _RNq.renomear(v); x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR
+                PROTEGIDAS.add((ws.title, r, j)); continue
             x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR
             if fmts and fmts.get(j):
                 x.number_format = fmts[j]
@@ -417,7 +421,7 @@ def gerar_xlsx(SAIDA=SAIDA):
     for ws_ in wb.worksheets:
         for row_ in ws_.iter_rows():
             for c_ in row_:
-                if isinstance(c_.value, str):
+                if isinstance(c_.value, str) and (ws_.title, c_.row, c_.column) not in PROTEGIDAS:
                     c_.value = _RN.renomear(c_.value)
     wb.save(SAIDA)
     print("ok", SAIDA, len(pecas), "marcas;", sum(p[5] for p in pecas), "peças")

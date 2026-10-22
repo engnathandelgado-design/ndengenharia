@@ -273,8 +273,6 @@ def prancha_pilar(P):
                 for k_, z in enumerate(ip["z"]):
                     b_ce = ip.get("largo", {}).get(k_, 380)                               # DEC-044: CE-1L 840 (asas além do pilar) na fiada 5 dos PC
                     v.chapa(x_ce - (b_ce - 380) / 2, z - 165, b_ce, 330)
-                    if b_ce != 380:
-                        v.texto((W / 2, z - 175), "CE-1L (PP06)", "min", "TOP_CENTER")
                     if cc:
                         for ld in ip["lados"][k_]:                                           # vista de fora: E à esquerda, D à direita
                             xc = W / 2 + (-XC_CS if ld == "E" else XC_CS)

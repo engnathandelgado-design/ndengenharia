@@ -220,7 +220,7 @@ def desenhar_elev(pr, V, origem, esc):
         vv.poli(poligono_placa(p), "VISTA", fechada=True)
         if p.get("rec"):
             xr = p["s1"] - REC_B if p["rec"] == "s1" else p["s0"] + REC_B
-            vv.chamada((xr, p["z0"] + REC_Z0 + 400), (-14 if p["rec"] == "s1" else 14, 10), f"recorte {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} (I130 + CP-I130) — {TIPO[p['Lk']]}, PP06")
+            vv.chamada((xr, p["z0"] + REC_Z0 + 400), (-6 if p["rec"] == "s1" else 6, 8), f"recorte {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} — PP06")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.6), p["id"], "nota", "MIDDLE_CENTER")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.22), TIPO[p["Lk"]], "min", "MIDDLE_CENTER")
     for (s, z) in ca1:                                                              # rev06: nichos NC-1 / consoles CS-1 (atrás da placa)
