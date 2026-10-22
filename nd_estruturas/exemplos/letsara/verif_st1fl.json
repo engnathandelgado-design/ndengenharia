@@ -1,0 +1,29 @@
+{
+ "reacoes_kN": {
+  "Fy": 15.74,
+  "Fx": 4.01,
+  "Rz": 8.21,
+  "x": 39.22
+ },
+ "N_kN": 27.9,
+ "V_kN": 9.1,
+ "phiNsa": 147.0,
+ "phiNcbg": 57.6,
+ "phiVsa": 76.4,
+ "phiVcb_perp": 11.2,
+ "phiVcb_par": 22.3,
+ "uso_tracao": 0.484,
+ "uso_corte": 0.368,
+ "interacao": 0.852,
+ "limite_interacao": 1.2,
+ "chapa": {
+  "M_kNm": 0.94,
+  "Mrd_kNm": 1.37,
+  "uso": 0.687
+ },
+ "M12": {
+  "V_parafuso": 9.1,
+  "Vb_Rd": 16.7,
+  "uso": 0.545
+ }
+}

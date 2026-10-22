@@ -78,13 +78,7 @@
    "folga_lateral_mm": 0,
    "A_aba102_com_pilar_atras": false,
    "A_colisoes": [],
-   "B_colisoes": [
-    {
-     "peca": "DE-1 descida Ø200 (envelope)",
-     "grupo": "Calha e descidas",
-     "penetracao_mm": 15.9
-    }
-   ],
+   "B_colisoes": [],
    "C_colisoes": []
   },
   "+3.15 L2 x=9.67": {
@@ -228,13 +222,7 @@
    "folga_lateral_mm": 0,
    "A_aba102_com_pilar_atras": false,
    "A_colisoes": [],
-   "B_colisoes": [
-    {
-     "peca": "DE-1 descida Ø200 (envelope)",
-     "grupo": "Calha e descidas",
-     "penetracao_mm": 15.9
-    }
-   ],
+   "B_colisoes": [],
    "C_colisoes": []
   },
   "+6.55 L2 x=9.67": {
@@ -306,11 +294,9 @@
    "pontas": 8,
    "A_sem_apoio": 8,
    "A_colide": 0,
-   "B_colide": 2,
+   "B_colide": 0,
    "C_colide": 0,
-   "exemplos_B": [
-    "DE-1 descida Ø200 (envelope)"
-   ],
+   "exemplos_B": [],
    "exemplos_C": [],
    "exemplos_A": []
   },

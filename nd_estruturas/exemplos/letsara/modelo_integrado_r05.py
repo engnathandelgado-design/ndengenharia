@@ -563,6 +563,7 @@ def coletar(cfg):
     n_falha = 0
     n_esp9 = cfg.get("esperas_eixo9", 4)                  # rev05 (DEC-024): ST-1V-R com 4 esperas no eixo 9
     por_grupo = {}
+    x_ponta = {e_: max(c["x"] for c in CLEAT if c["eixo"] == e_) for e_ in (0, 8)}   # 22/10 (DEC-042): terça de ponta do lado E nos cantos → ST-1FL
     for c in CLEAT:
         f = ops.eleResponse(c["tag"], "force")
         Rz, Fy, Fx = f[2], f[1], f[0]
@@ -580,6 +581,11 @@ def coletar(cfg):
         pg = por_grupo.setdefault(gr_, dict(it=0.0, Fy_max=0.0, Fx_max=0.0, Rz_up=0.0, Rz_down=0.0, esperas=ne))
         pg["Fy_max"] = max(pg["Fy_max"], round(abs(Fy), 2)); pg["Fx_max"] = max(pg["Fx_max"], round(abs(Fx), 2))
         pg["Rz_up"] = max(pg["Rz_up"], round(-Rz, 2)); pg["Rz_down"] = max(pg["Rz_down"], round(Rz, 2))
+        if c["eixo"] in (0, 8) and abs(c["x"] - x_ponta[c["eixo"]]) < 1e-6:
+            fl = por_grupo.setdefault("ST-1FL canto", dict(it=0.0, Fy_max=0.0, Fx_max=0.0, Rz_up=0.0, Rz_down=0.0, V_max=0.0, x=round(c["x"], 2)))
+            fl["Fy_max"] = max(fl["Fy_max"], round(abs(Fy), 2)); fl["Fx_max"] = max(fl["Fx_max"], round(abs(Fx), 2))
+            fl["Rz_up"] = max(fl["Rz_up"], round(-Rz, 2)); fl["Rz_down"] = max(fl["Rz_down"], round(Rz, 2))
+            fl["V_max"] = max(fl["V_max"], round(math.sqrt(Rz ** 2 + Fy ** 2 + Fx ** 2), 2))
         if it > pg["it"]:
             pg.update(it=round(it, 3), parafusos=round(it_b, 3), esperas_it=round(it_e, 3), linha=c["linha"], x=round(c["x"], 2), Rz=round(Rz, 1),
                       Fy=round(Fy, 1), Fx=round(Fx, 1))
@@ -647,10 +653,11 @@ def envoltoria(res):
     for r in res.values():
         for k_, v_ in r["ST1P_verif"]["por_grupo"].items():
             e_ = env["ST1P_grupos"].setdefault(k_, dict(v_))
-            for c_ in ("Fy_max", "Fx_max", "Rz_up", "Rz_down"):
-                e_[c_] = max(e_[c_], v_[c_])
+            for c_ in ("Fy_max", "Fx_max", "Rz_up", "Rz_down", "V_max"):
+                if c_ in v_:
+                    e_[c_] = max(e_[c_], v_[c_])
             if v_["it"] > e_["it"]:
-                e_.update({c_: v_[c_] for c_ in v_ if c_ not in ("Fy_max", "Fx_max", "Rz_up", "Rz_down")})
+                e_.update({c_: v_[c_] for c_ in v_ if c_ not in ("Fy_max", "Fx_max", "Rz_up", "Rz_down", "V_max")})
     env["portoes"] = {k_: max(r["portoes"].get(k_, 0.0) for r in res.values()) for k_ in ("P9", "P10a", "P10b", "P12")}
     env["TS01_M_lateral"] = max(r["grupos"]["TS-01"]["max"] for r in res.values())
     env["usos"] = dict(corrente=round(env["corrente"]["max"] / NT10, 3), diagonal=round(env["diagonal de ancoragem"]["max"] / NT16, 3),

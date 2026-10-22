@@ -80,8 +80,8 @@ def secoes():
                    "rufo de acabamento de borda sobre a última onda (RB-1 no início, RB-2 no fim da montagem)")
     # topo da platibanda: u = da face externa da placa para dentro, v = z
     s["RF-1"] = ("plat", [(-0.020 - 0.015, PLAT - 0.070 - 0.015), (-0.020, PLAT - 0.070), (-0.020, PLAT + 0.012), (0.120, PLAT + 0.005),
-                          (0.120, PLAT - 0.100), (0.120 + 0.015, PLAT - 0.100 - 0.015)],
-                  "rufo chapéu da platibanda sobre a placa de 10 cm, caimento 5 % para dentro, pingadeiras dos 2 lados (manual p. 46)")
+                          (0.120, PLAT - 0.100), (0.120, PLAT - 0.100 - 0.015)],
+                  "rufo chapéu da platibanda sobre a placa de 10 cm, caimento 5 % para dentro; pingadeira externa dobrada, interna a prumo (5 mm livres da face do pilar; manual p. 46)")
     s["RF-1C"] = ("plat", [(-0.020 - 0.015, PLAT - 0.070 - 0.015), (-0.020, PLAT - 0.070), (-0.020, PLAT + 0.025), (0.445, PLAT + 0.005),
                            (0.445, PLAT - 0.100), (0.445 + 0.015, PLAT - 0.100 - 0.015)],
                    "rufo chapéu sobre a cabeça do pilar + placa (largura 100 + 25 + 300), peça de 600 sobre cada cabeça")
@@ -96,7 +96,7 @@ def quantitativos():
     S = secoes()
     n_pil_A = len(Y_LIN)                                  # P1 de cada linha (eixo A) e P2 (eixo E)
     perim = 2 * (Y_PLACA_9 - Y_PLACA_1) + 2 * (X_PLACA_E - X_PLACA_A)
-    L = {"RF-2": COMP - n_pil_A * 0.40, "RF-2C": n_pil_A * 0.60, "PG-1": COMP + 0.30, "RF-3": COMP - n_pil_A * 0.40,
+    L = {"RF-2": COMP - n_pil_A * 0.40, "RF-2C": n_pil_A * 0.60, "PG-1": COMP - 0.42, "RF-3": COMP - n_pil_A * 0.40,
          "CR-1": COMP - n_pil_A * 0.40, "RF-3P": n_pil_A * 0.60, "RF-4": 2 * (X_TELHA_E - X_TELHA_A) / math.cos(math.atan(I)),
          "RF-4C": 2 * (X_PLACA_E - X_PLACA_A) / math.cos(math.atan(I)), "RB-1/2": 2 * (X_TELHA_E - X_TELHA_A) / math.cos(math.atan(I)),
          "RF-1": perim - 2 * n_pil_A * 0.60, "RF-1C": 2 * n_pil_A * 0.60}

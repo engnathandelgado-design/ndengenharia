@@ -1,0 +1,81 @@
+{
+ "atual": {
+  "n": 8,
+  "y_mm": 71.875
+ },
+ "tent": [
+  {
+   "n": 4,
+   "y_mm": 55.0,
+   "ok": false,
+   "R_ok": false,
+   "transit": true,
+   "linhas": {
+    "ato_meio_inf_MPa": -2.11,
+    "ato_meio_sup_MPa": -3.39,
+    "ato_apoio_inf_MPa": -7.73,
+    "ato_apoio_sup_MPa": 2.47,
+    "ato_ok": true,
+    "elsf_inf_MPa": 5.26,
+    "elsd_inf_MPa": 4.24,
+    "elsf_lim_MPa": 3.71,
+    "vento_sup_MPa": -6.2,
+    "els_ok": false,
+    "Md_kNm": 812.4,
+    "MRd_kNm": 533.7,
+    "x_d": 0.079,
+    "sigma_pd_MPa": 1652
+   },
+   "kg_por_viga": 62.4
+  },
+  {
+   "n": 6,
+   "y_mm": 70.0,
+   "ok": false,
+   "R_ok": false,
+   "transit": true,
+   "linhas": {
+    "ato_meio_inf_MPa": -5.55,
+    "ato_meio_sup_MPa": -2.5,
+    "ato_apoio_inf_MPa": -11.17,
+    "ato_apoio_sup_MPa": 3.36,
+    "ato_ok": true,
+    "elsf_inf_MPa": 2.69,
+    "elsd_inf_MPa": 1.67,
+    "elsf_lim_MPa": 3.71,
+    "vento_sup_MPa": -5.54,
+    "els_ok": false,
+    "Md_kNm": 812.4,
+    "MRd_kNm": 764.3,
+    "x_d": 0.12,
+    "sigma_pd_MPa": 1633
+   },
+   "kg_por_viga": 93.6
+  },
+  {
+   "n": 8,
+   "y_mm": 66.2,
+   "ok": false,
+   "R_ok": true,
+   "transit": false,
+   "linhas": {
+    "ato_meio_inf_MPa": -9.2,
+    "ato_meio_sup_MPa": -1.33,
+    "ato_apoio_inf_MPa": -14.82,
+    "ato_apoio_sup_MPa": 4.53,
+    "ato_ok": true,
+    "elsf_inf_MPa": 0.12,
+    "elsd_inf_MPa": -0.9,
+    "elsf_lim_MPa": 3.71,
+    "vento_sup_MPa": -4.71,
+    "els_ok": true,
+    "Md_kNm": 812.4,
+    "MRd_kNm": 983.0,
+    "x_d": 0.155,
+    "sigma_pd_MPa": 1592
+   },
+   "kg_por_viga": 124.8
+  }
+ ],
+ "melhor": null
+}

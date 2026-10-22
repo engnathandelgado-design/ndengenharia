@@ -110,6 +110,13 @@ def main():
                 gi, gj = P[i].grupo, P[j].grupo
                 if frozenset((gi, gj)) in PARES_OK:
                     continue
+                mi, mj = P[i].marca.lower(), P[j].marca.lower()
+                if ("pt-1" in mi + mj and "piso" in mi + mj) or (("pt-1" in mi + mj or "pt-2" in mi + mj) and ("rf-4" in mi + mj)):
+                    continue                    # PT-1 da 1ª fiada embutida no piso; aba do RF-4/RF-4C recortada em volta do PT-1/PT-2 (nota ND-LET-COB04)
+                if "lã de rocha" in mi + mj and "pg-1" in mi + mj:
+                    continue                    # PG-1 sob a ponta da zipada assenta na lã (compressível, 40 mm)
+                if gi == gj and P[i].marca.split()[:2] == P[j].marca.split()[:2]:
+                    continue                    # partes da mesma peça (alma × mesa, trechos de uma laje com recorte)
                 (l1, h1), (l2, h2) = bb[i], bb[j]
                 if np.any(l1 > h2 + TOL) or np.any(l2 > h1 + TOL):
                     continue

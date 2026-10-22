@@ -1,4 +1,4 @@
-"""Imagens sombreadas (PNG) do CS-1 e do NC-1 para a metalúrgica — montado, explodido e conjunto encaixado. Marca 'projeto da ND Engenharia'."""
+"""Imagens sombreadas (PNG) do CS-1 e do NC-1 para a metalúrgica — montado, explodido e conjunto encaixado."""
 import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import numpy as np
@@ -35,7 +35,7 @@ def render(solidos, arq, elev=24, azim=-58, titulo="", rotulos=False, alpha_conc
                 feito.add(s.item)
                 p = s.centro
                 ax.text(p[0], p[1], p[2], "  " + ROT[s.item].split()[0], fontsize=8, color="#a9470c", weight="bold")
-    fig.text(0.02, 0.02, "projeto da ND Engenharia", fontsize=9, style="italic", color="#5d6870")
+    pass                                                        # Letsara: projeto da fábrica, sem marca nas imagens
     if titulo:
         fig.text(0.02, 0.95, titulo, fontsize=12, weight="bold", color="#1d2327")
     plt.subplots_adjust(0, 0, 1, 1)

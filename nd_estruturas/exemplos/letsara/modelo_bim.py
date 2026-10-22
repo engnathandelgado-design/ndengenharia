@@ -182,8 +182,9 @@ def montar() -> ModeloBIM:
         yl4 = Y_LIN[LINHA_PORTOES]
         for sx in (-1, 1):
             xf_ = x + sx * b_ / 2
-            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.0095, yl4 - 0.125, yl4 + 0.125, zf(x) - 0.102, zf(x), GM, obs="aba no pilar, 1 M16 em oblongo vertical")
-            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.102, yl4 - 0.125, yl4 + 0.125, zf(x) - 0.0095, zf(x), GM, obs="aba sob a TS-01A, 2 M16 nos IT-P")
+            zcl = zf(min(xf_, xf_ + sx * 0.102))              # 22/10: aba encostada no fundo da TS-01A no ponto mais baixo (3 %)
+            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.0095, yl4 - 0.125, yl4 + 0.125, zcl - 0.102, zcl, GM, obs="aba no pilar, 1 M16 em oblongo vertical")
+            caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.102, yl4 - 0.125, yl4 + 0.125, zcl - 0.0095, zcl, GM, obs="aba sob a TS-01A, 2 M16 nos IT-P")
             m.linear("inserto", "M16 8.8 (IL-1)", PerfilRetangular(0.016, 0.016), (xf_ - sx * 0.10, yl4, zf(x) - 0.06), (xf_ + sx * 0.03, yl4, zf(x) - 0.06), GM, material="aco")
             for dy in (-0.0975, 0.0975):
                 barra_v(m, "M16 8.8 + IT-P (fundo da TS-01A)", xf_ + sx * 0.06, yl4 + dy, zf(x) - 0.03, zf(x) + 0.08, 0.016, GM)
@@ -345,6 +346,10 @@ def montar() -> ModeloBIM:
             for t0, t1 in _bandas_fachada(yk0, yk1):
                 for xa_k, xb_k in _livres(t0, t1, xa_, xb_):
                     trechos.append((t0, t1, xa_k, xb_k))
+            if nome_.startswith("painéis"):
+                # 22/10 (colisão): campo de painéis recuado 0,15 m das bordas y e 0,30 / 0,60 m das bordas x (A / E), livre dos rufos RB / RF-3P
+                trechos = [(max(y0_ + 0.15, yk0), min(y1_ - 0.15, yk1), xa_ + 0.30, xb_ - 0.60)]
+                trechos = [t for t in trechos if t[1] - t[0] > 0.05]
             for t0, t1, xa_k, xb_k in trechos:
                 yk = (t0 + t1) / 2
                 m.linear("placa", nome_, PerfilRetangular(t1 - t0 - 0.002, dz1 - dz0, nome_), (xa_k, yk, AC.z_terca_topo(xa_k) + pz), (xb_k, yk, AC.z_terca_topo(xb_k) + pz), grp_, material="aco")
@@ -380,10 +385,14 @@ def montar() -> ModeloBIM:
         rufo_y("RF-2", ya, yb); rufo_y("RF-3", ya, yb); rufo_y("CR-1", ya, yb)
     for yp in PIL_Y:
         dc = 0.30 if yp in (PIL_Y[0], PIL_Y[-1]) else 0.0                 # DEC-042: canto de seção cheia — face A 30 cm para dentro
-        rufo_y("RF-2C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u + d_, v)); rufo_y("RF-3P", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u - d_, v))
-        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
-        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
-    rufo_y("PG-1", y0_, y1_)
+        # 22/10 (colisão): no canto de seção cheia o RF-2C / RF-3P vai só até a face lateral do pilar (y = linha ± 0,20); dali segue o RF-2 / RF-3
+        ya_c, yb_c = (yp - 0.30, yp + 0.20) if yp == PIL_Y[0] else (yp - 0.20, yp + 0.30) if yp == PIL_Y[-1] else (yp - 0.30, yp + 0.30)
+        rufo_y("RF-2C", ya_c, yb_c, lambda u, v, d_=dc: (min(u + d_, AC.X_CAB_A + d_ + 0.005) if d_ else u, v));   # canto: pé do RF-2C rente à face (a telha começa em 0,31)
+        rufo_y("RF-3P", ya_c, yb_c, lambda u, v, d_=dc: (u - d_, v))
+        # 22/10 (colisão): nos cantos de seção cheia o chapéu RF-1C cobre os 60 cm do topo (aba interna na face A, a 0,30 do eixo)
+        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (AC.X_PLACA_A - 0.100 + (u + d_ if u > 0.44 else u), v))
+        rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (AC.X_PLACA_E + 0.100 - (u + d_ if u > 0.44 else u), v))
+    rufo_y("PG-1", Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21)                    # 22/10: entre as faces laterais dos cantos de seção cheia
     rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
     rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
     zl_ = AC.z_zip(LARG / 2) + AC.PAC["zipada"]
@@ -443,6 +452,8 @@ def montar() -> ModeloBIM:
                  obs="NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a 22 cm do eixo das linhas 1 e 9 (canto de seção cheia)")
     for yl in Y_LIN:
         yd = yl + (0.35 if yl < COMP else -0.35)
+        if yl == Y_LIN[1]:
+            yd = yl + 0.535                                   # 22/10 (colisão): na linha 2 a parede G ocupa y = linha + 0,325 a 0,425 → descida na frente dela
         m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
 
     # 5. mezanino (linhas 1–2), rev04: VM em MEIO VASO (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente
@@ -489,7 +500,28 @@ def montar() -> ModeloBIM:
         for x0, b_, mk in PAINEIS_MEZ:                              # mesma paginação da ND-LET-LA01 (30 LA-01 + 2 LA-02 por nível)
             x = (x0 + b_ / 2) / 1000
             perf = LAJE if b_ == 1250 else PerfilRetangular(0.70, H_LAJE, "Laje alveolar 70")
-            m.linear("laje", f"{mk} {nivel:+.2f}", perf, (x, Y_LIN[0] + 0.10, nivel - H_LAJE / 2), (x, Y_LIN[1] - 0.10, nivel - H_LAJE / 2), "Laje alveolar")
+            xa_l, xb_l, ya_l, yb_l = x0 / 1000, (x0 + b_) / 1000, Y_LIN[0] + 0.10, Y_LIN[1] - 0.10
+            # 22/10 (colisão): LA-01R — recorte de fábrica nas pontas junto aos pilares (ND-LET-LA01), com 2 cm de folga
+            furos = []
+            for q in m.pecas:
+                if q.grupo == "Pilares" and q.tipo == "pilar" and min(q.p0[2], q.p1[2]) < nivel and max(q.p0[2], q.p1[2]) > nivel - H_LAJE:
+                    qx, qy, bx_, by_ = q.p0[0], q.p0[1], q.perfil.b, q.perfil.h
+                    fx0, fx1, fy0, fy1 = qx - bx_ / 2 - 0.02, qx + bx_ / 2 + 0.02, qy - by_ / 2 - 0.02, qy + by_ / 2 + 0.02
+                    if fx0 < xb_l and fx1 > xa_l and fy0 < yb_l and fy1 > ya_l:
+                        furos.append((fx0, fx1, fy0, fy1))
+            if not furos:
+                m.linear("laje", f"{mk} {nivel:+.2f}", perf, (x, ya_l, nivel - H_LAJE / 2), (x, yb_l, nivel - H_LAJE / 2), "Laje alveolar")
+            else:
+                ys_ = sorted({ya_l, yb_l} | {v for f in furos for v in (f[2], f[3]) if ya_l < v < yb_l})
+                for t0, t1 in zip(ys_[:-1], ys_[1:]):
+                    tm = (t0 + t1) / 2
+                    xs_ = [(xa_l, xb_l)]
+                    for fx0, fx1, fy0, fy1 in furos:
+                        if fy0 <= tm <= fy1:
+                            xs_ = [seg for a, b in xs_ for seg in ((a, min(b, fx0)), (max(a, fx1), b)) if seg[1] - seg[0] > 0.01]
+                    for a, b in xs_:
+                        m.linear("laje", f"{mk} {nivel:+.2f}", PerfilRetangular(b - a, H_LAJE, f"Laje alveolar (recorte) {b - a:.2f}"),
+                                 ((a + b) / 2, t0, nivel - H_LAJE / 2), ((a + b) / 2, t1, nivel - H_LAJE / 2), "Laje alveolar")
 
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
@@ -610,7 +642,8 @@ def montar() -> ModeloBIM:
                 cx(uf, uf + d * 0.102, -0.025, -0.0155, zpp - 0.075, zpp + 0.075, "PT-2 L 102×102×9,5 L=150 (aba na placa)")
 
     # 8. piso e fundações (indicativos): piso de concreto 15 cm e blocos de fundação com cálice sob cada pilar
-    m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(LARG + 1.0, 0.15), (LARG / 2, -0.5, -0.075), (LARG / 2, COMP + 0.5, -0.075), "Piso e fundações")
+    m.linear("laje", "PISO e=15 (indicativo)", PerfilRetangular(AC.X_PLACA_E - AC.X_PLACA_A, 0.15), ((AC.X_PLACA_A + AC.X_PLACA_E) / 2, AC.Y_PLACA_1, -0.075),
+             ((AC.X_PLACA_A + AC.X_PLACA_E) / 2, AC.Y_PLACA_9, -0.075), "Piso e fundações")        # 22/10: até a face interna das placas
     for peca in list(m.pecas):
         if peca.tipo == "pilar":
             x, y, _ = peca.p0

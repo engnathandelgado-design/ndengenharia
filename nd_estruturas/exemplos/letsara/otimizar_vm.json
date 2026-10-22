@@ -1,0 +1,479 @@
+{
+ "VM-01": {
+  "atual": {
+   "h": 0.8,
+   "n_inf": 8,
+   "n_sup": 2
+  },
+  "melhor": {
+   "h": 0.8,
+   "n_inf": 8,
+   "n_sup": 2,
+   "ok": true,
+   "falhas": [],
+   "kg_cord": 73.7,
+   "vol": null
+  },
+  "tent": [
+   {
+    "h": 0.7,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F1",
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.5,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F1",
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D",
+     "ato"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_D",
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 73.7,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.5,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_D",
+     "ato"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 73.7,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.5,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 44.2,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.0,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": true,
+    "falhas": [],
+    "kg_cord": 73.7,
+    "vol": null
+   }
+  ]
+ },
+ "VM-02": {
+  "atual": {
+   "h": 0.8,
+   "n_inf": 8,
+   "n_sup": 2
+  },
+  "melhor": {
+   "h": 0.8,
+   "n_inf": 8,
+   "n_sup": 2,
+   "ok": true,
+   "falhas": [],
+   "kg_cord": 74.6,
+   "vol": null
+  },
+  "tent": [
+   {
+    "h": 0.7,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F1",
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.8,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F1",
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D",
+     "ato"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_D",
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.7,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 74.6,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.8,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F1",
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.75,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 74.6,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 4,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 29.8,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 4,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELU_F2",
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 6,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ELS_D"
+    ],
+    "kg_cord": 44.8,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 6,
+    "n_sup": 2,
+    "ok": false,
+    "falhas": [
+     "ELS_F",
+     "ELS_D"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 8,
+    "n_sup": 0,
+    "ok": false,
+    "falhas": [
+     "ato",
+     "icamento"
+    ],
+    "kg_cord": 59.7,
+    "vol": null
+   },
+   {
+    "h": 0.8,
+    "n_inf": 8,
+    "n_sup": 2,
+    "ok": true,
+    "falhas": [],
+    "kg_cord": 74.6,
+    "vol": null
+   }
+  ]
+ }
+}

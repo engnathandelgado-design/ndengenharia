@@ -101,7 +101,7 @@ pp.ret(-400, -300, 100, Y3 + 300, "CORTADO")
 for y in YLmm[:2]:
     pp.ret(-300, y - 200, 600, 400, "CORTADO")
     pp.ret(25, y - 200, 1500, 400, "VISTA")
-    pp.circulo((XC0 + 150, y + 350), 100, "METALICA")
+    pp.circulo((XC0 + 150, y + (535 if y == YLmm[1] else 350)), 100, "METALICA")   # 22/10: linha 2 — na frente da parede G
     pp.linha((-900, y), (2000, y), "EIXO")
 pp.ret(XC0, -150, BC, Y3 + 150, "METALICA")
 pp.linha((X_T0 - B_TERCA, -110), (X_T0 - B_TERCA, Y3), "METALICA"); pp.linha((X_T0 + B_INF, -110), (X_T0 + B_INF, Y3), "METALICA")
@@ -110,7 +110,7 @@ for y0, y1 in zip(YLmm[:1], YLmm[1:2]):
     pp.linha((XC0 + 150, ym - 1500), (XC0 + 150, y0 + 900), "INDICACAO"); pp.linha((XC0 + 150, ym + 1500), (XC0 + 150, y1 - 900), "INDICACAO")
     pp.texto((XC0 + 150, ym), "i = 0,5 %", "min", "MIDDLE_CENTER", rot=90)
 pp.chamada((XC0 + 150, YLmm[1] + 350), (30, 6), "saída / descida Ø200 (9 no total)")
-pp.chamada((-350, YLmm[0] - 200), (20, -12), "extravasor Ø100 na placa da fachada 1 (e 9)")
+pp.chamada((-350, YLmm[0] - 200), (20, -12), "extravasor Ø100 (saída por dentro da obra)")
 pp.chamada((XC0 + BC, YLmm[1] + 2400), (14, 24), f"calha {BC}×{HC} contínua, juntas a cada ≈ 20 m")
 
 # ------------------------------------------------------------------ DETALHE SC-1 e RUFOS
@@ -129,14 +129,14 @@ lin = [["CA-1", f"{ca['L_m']:.0f} m", f"calha {BC}×{HC}, chapa galv. 1,25, dese
        ["SC-1", f"{su['n']}", "suporte ferro chato 38×6,35 A36 galv. + 2 M10", "c/750, na 1ª terça"],
        ["BO-1", f"{de['n']}", "bocal de saída Ø200 com ralo hemisférico", "junto aos pilares P1"],
        ["DE-1", f"{math.ceil(L_desc / 6)} barras", f"tubo PVC Ø200 série R (≈ {L_desc:.0f} m em barras de 6 m)".replace(".", ","), "descidas até a caixa de areia"],
-       ["EX-1", "2", "extravasor Ø100 (tubo + flange) através da placa", "pontas da calha, fachadas 1 e 9"]]
+       ["EX-1", "2", "extravasor Ø100 (tubo + flange); furo na placa feito na obra", "pontas da calha, fachadas 1 e 9"]]
 y = pr.tabela(x0, y, "LISTA DE MATERIAIS — CALHA E DESCIDAS (RUFOS NA ND-LET-COB04)", ["MARCA", "QT", "DESCRIÇÃO", "ONDE"], lin, [16, 24, 100, 56])
 notas = [f"Dimensionamento (NBR 10844:1989): intensidade I = {CH['chuva']['I_mm_h']:.0f} mm/h (T = 5 anos) — CONFIRMAR com a tabela 5 / dados da cidade da obra; área de contribuição {cc['A_por_m_m2']} m² por metro de calha (água de 39,50 m a 3 %), {cc['area_total_m2']:.0f} m² no total.",
          f"Calha {BC} × {HC}, i = 0,5 %, n = 0,011: capacidade {ca['Q_cap_L_s']} L/s com lâmina de 100 mm ≥ {cc['Q_lado_L_s']} L/s que chega a cada saída por lado (uso {ca['uso']}). Fundo com caimento de 0,5 % para as saídas (25 mm por meio vão), dado pelos berços dos SC-1.",
-         f"Descidas Ø200 nas 9 linhas: capacidade da saída {de['Q_cap_L_s']} L/s ≥ {cc['Q_saida_L_s']} L/s (uso {de['uso']}); descida aparente ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01), presa por abraçadeiras em buchas, até a caixa de areia (projeto de drenagem).",
+         f"Descidas Ø200 nas 9 linhas: capacidade da saída {de['Q_cap_L_s']} L/s ≥ {cc['Q_saida_L_s']} L/s (uso {de['uso']}); descida aparente ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01; na linha 2, y = linha + 0,535 m, na frente da parede interna G, que ocupa a faixa de 0,325 a 0,425 m), presa por abraçadeiras em buchas, até a caixa de areia (projeto de drenagem).",
          "Espaço livre de 40 cm entre a face da cabeça dos pilares P1 e a aba da 1ª terça (ND-LET-COB01); a calha fica de 20 a 320 mm do eixo A. A telha avança 150 mm além da aba da terça, com pingadeira 100 mm dentro da calha.",
          "Extravasores Ø100 nas duas pontas da calha (fachadas 1 e 9), 50 mm abaixo da borda, para a água sair pela fachada se uma saída entupir.",
-         "DEC-042: os pilares de canto (linhas 1 e 9) têm seção cheia 40 × 60 até +10,00: a calha começa e termina a 22 cm do eixo das linhas 1 e 9, com a cabeceira a 2 cm da face lateral do pilar; o extravasor da cabeceira sai em −x, entre o pilar de canto e o pilar seguinte, atravessando a placa do eixo A logo depois do canto (furo na placa a confirmar com a Trejor).",
+         "DEC-042: os pilares de canto (linhas 1 e 9) têm seção cheia 40 × 60 até +10,00: a calha começa e termina a 22 cm do eixo das linhas 1 e 9, com a cabeceira a 2 cm da face lateral do pilar; saída do extravasor por dentro da obra; furo na placa executado na obra.",
          "Juntas de dilatação da calha a cada ≈ 20 m (sobre as linhas 3, 5 e 7), com tampa e selante; emendas rebitadas e vedadas com PU (sem solda).",
          "Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada dupla com lã de rocha): ND-LET-COB04 (RF-2/RF-2C da calha no det. 1 e 2 de lá).",
          "Carga da calha cheia na 1ª terça (0,12 kN/m de chapa + 0,45 kN/m de água) considerada no modelo integrado r05.",
