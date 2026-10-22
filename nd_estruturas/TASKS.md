@@ -36,7 +36,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
 
 ## Depois
-- Letsara (DEC-042, colisão): plano das placas das fachadas 1/9 × face lateral dos cantos (10 cm); CE-1 das paredes internas das linhas 2 e 4 à frente da face dos pilares (15–25 cm); zipada entrando 15 cm na cabeça dos PF; X Ø16 tocando a cabeça dos PF da linha 9; furo do extravasor na placa do eixo A junto aos cantos (Trejor); reações da terça de ponta para fechar o ST-1FL — decidir com o Nathan.
+- Letsara (DEC-042, colisão): plano das placas das fachadas 1/9 × face lateral dos cantos (10 cm); CE-1 das paredes internas das linhas 2 e 4 à frente da face dos pilares (15–25 cm); zipada entrando 15 cm na cabeça dos PF; X Ø16 tocando a cabeça dos PF da linha 9; reações da terça de ponta para fechar o ST-1FL — decidir com o Nathan.
 - Letsara: VB mantida com uma ponta solta (DEC-033); se mudar de ideia, ligação presa nas 2 pontas para ±69 kN ou reforço da terça e das esperas ST-1P.
 - Letsara: pranchas de pilar e viga em A1 conforme o tamanho do desenho (pedido do Nathan: ajustar a prancha ao desenho).
 

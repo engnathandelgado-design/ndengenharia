@@ -107,6 +107,10 @@ def quantitativos():
         n3 = round(comp / 0.6) if mk in ("RF-2C", "RF-3P", "RF-1C") else math.ceil(comp / 2.8)   # peças de 600 nos pilares; demais de 3 m com 200 de transpasse
         linhas.append(dict(marca=mk, borda=borda, desenv_mm=round(d / 10) * 10 + 10, comprimento_m=round(comp, 1), pecas=n3,
                            chapa="#1,25 galv." if mk == "CR-1" else "#0,65 pré-pintado", descricao=desc))
+    # 22/10 (colisão): RF-4P — rufo de recorte em volta das 6 cabeças 40 × 30 dos pilares de fachada (B, C, D das linhas 1 e 9):
+    # peça de 600 dobrada nas 3 faces (16 + 42 + 16 cm de contorno), aba de 150 subindo na cabeça + 60 sobre a zipada
+    linhas.append(dict(marca="RF-4P", borda="1/9", desenv_mm=210, comprimento_m=round(6 * 0.74, 1), pecas=6, chapa="#0,65 pré-pintado",
+                       descricao="rufo de recorte nas cabeças dos pilares de fachada (peça de 600 dobrada nas 3 faces, rebitada e selada)"))
     n_zip = math.ceil((Y_TELHA_9 - Y_TELHA_1) / 0.455)                    # telhas zipadas (455 úteis)
     tapper = math.ceil((L["RF-2"] + L["RF-2C"] + L["CR-1"] + L["RF-3P"] + L["RF-4C"] + L["RF-1"] + L["RF-1C"]) / 0.5)
     costuras = sum(2 * max(l["pecas"] - 1, 0) for l in linhas) + math.ceil((L["RF-3"] + L["RF-4"] + L["PG-1"]) / 0.5)

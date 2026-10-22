@@ -300,6 +300,33 @@ def montar() -> ModeloBIM:
                         suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
                     else:
                         suporte_st(m, "ST-1V (VB eixo 1)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.016, hef=0.150)
+    # 22/10 (colisão): zonas ocupadas pelo concreto acima da cobertura junto às fachadas 1 e 9 —
+    # cantos de seção cheia (|y − linha| ≤ 0,20, x < 0,31 / x > LARG − 0,31) e cabeças 40 × 30 dos pilares de fachada
+    # (x = eixo ± 0,21; y entre a face externa e a face da cabeça, que fica no eixo da linha: ≤ 0,01 do eixo)
+    _XPF = [x for x in X_FACH[1:-1]]
+
+    def _bandas_fachada(t0, t1):
+        cortes = sorted({t0, t1} | {c for c in (Y_LIN[0] + 0.01, Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21, Y_LIN[-1] - 0.01) if t0 < c < t1})
+        return list(zip(cortes[:-1], cortes[1:]))
+
+    def _livres(t0, t1, xa_k, xb_k):
+        ym = (t0 + t1) / 2
+        ocup = []
+        if ym < Y_LIN[0] + 0.21 or ym > Y_LIN[-1] - 0.21:
+            ocup += [(-9.0, 0.31), (LARG - 0.31, LARG + 9.0)]
+        if ym < Y_LIN[0] + 0.01 or ym > Y_LIN[-1] - 0.01:
+            ocup += [(x - 0.21, x + 0.21) for x in _XPF]
+        out, x = [], xa_k
+        for a, b in sorted(ocup):
+            if b <= x or a >= xb_k:
+                continue
+            if a > x:
+                out.append((x, a))
+            x = max(x, b)
+        if x < xb_k:
+            out.append((x, xb_k))
+        return [(a, b) for a, b in out if b - a > 0.02]
+
     # rev06c: cobertura Kingspan zipada dupla com lã de rocha (manual p. 28) em camadas, cartolas sobre as terças e rufos (ND-LET-COB04)
     xa_, xb_ = AC.X_TELHA_A, AC.X_TELHA_E
     y0_, y1_ = AC.Y_TELHA_1, AC.Y_TELHA_9
@@ -311,13 +338,13 @@ def montar() -> ModeloBIM:
             y = y0_ + (k + 0.5) * bfx
             pz = (dz0 + dz1) / 2
             # DEC-042: cantos de seção cheia (x < 0,30 e x > LARG − 0,30, |y − linha| < 0,20) — faixa junto às fachadas recortada no canto
+            # 22/10 (colisão): recorte também nas cabeças 40 × 30 dos pilares de fachada (B, C, D das linhas 1 e 9), até 1 cm da face
+            # da cabeça (eixo da linha) — RF-4P de 600 dobrado em volta da cabeça (ND-LET-COB04)
             yk0, yk1 = y0_ + k * bfx, y0_ + (k + 1) * bfx
-            yc_ = Y_LIN[0] + 0.21 if k == 0 else (Y_LIN[-1] - 0.21 if k == nfx - 1 else None)
-            trechos = [(yk0, yk1, xa_, xb_)]
-            if yc_ is not None:
-                ya_c, yb_c = (yk0, yc_) if k == 0 else (yc_, yk1)
-                yo_a, yo_b = (yc_, yk1) if k == 0 else (yk0, yc_)
-                trechos = [(ya_c, yb_c, 0.31, LARG - 0.31), (yo_a, yo_b, xa_, xb_)]
+            trechos = []
+            for t0, t1 in _bandas_fachada(yk0, yk1):
+                for xa_k, xb_k in _livres(t0, t1, xa_, xb_):
+                    trechos.append((t0, t1, xa_k, xb_k))
             for t0, t1, xa_k, xb_k in trechos:
                 yk = (t0 + t1) / 2
                 m.linear("placa", nome_, PerfilRetangular(t1 - t0 - 0.002, dz1 - dz0, nome_), (xa_k, yk, AC.z_terca_topo(xa_k) + pz), (xb_k, yk, AC.z_terca_topo(xb_k) + pz), grp_, material="aco")
@@ -363,7 +390,8 @@ def montar() -> ModeloBIM:
     za_r, zb_r = AC.z_zip(xa_) + AC.PAC["zipada"], AC.z_zip(xb_) + AC.PAC["zipada"]
     for yface, sg in ((AC.Y_PLACA_1, 1), (AC.Y_PLACA_9, -1)):
         for mk in ("RF-4", "RF-4C", "RB-1/2"):                          # DEC-042: entre as faces A dos cantos de seção cheia (x 0,31 … LARG − 0,31)
-            rufo_x(mk, 0.31, LARG - 0.31, AC.z_zip(0.31) + AC.PAC["zipada"], AC.z_zip(LARG - 0.31) + AC.PAC["zipada"], lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
+            for xa_r, xb_r in _livres(Y_LIN[0] - 0.1, Y_LIN[0] - 0.05, 0.31, LARG - 0.31):   # 22/10: interrompidos nas cabeças dos PF (RF-4P)
+                rufo_x(mk, xa_r, xb_r, AC.z_zip(xa_r) + AC.PAC["zipada"], AC.z_zip(xb_r) + AC.PAC["zipada"], lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
         rufo_x("RF-1", AC.X_PLACA_A - 0.10, AC.X_PLACA_E + 0.10, 0.0, 0.0, lambda u, v, yf=yface, s_=sg: (yf - s_ * 0.100 + s_ * u, v))
     # contraventamento em X Ø16 (rev06, DEC-024/025): vãos 4-5 a 8-9, nós nas terças 0, 8, 15 de cada meia água
     BAR16 = PerfilRetangular(0.016, 0.016, "Ø16")
@@ -466,7 +494,7 @@ def montar() -> ModeloBIM:
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
     o_ext, o_c = 0.30 + 0.025 + 0.05, 0.20 + 0.025 + 0.05
-    pos = {"A": ("x", COMP + o_ext), "I": ("x", -o_ext), "G": ("x", Y_LIN[1] + o_ext), "C": ("x", Y_LIN[LINHA_PORTOES] + o_c),
+    pos = {"A": ("x", COMP + o_ext), "I": ("x", -o_ext), "G": ("x", Y_LIN[1] + o_ext), "C": ("x", Y_LIN[LINHA_PORTOES] - o_c),   # 22/10: parede C do lado −y da linha 4 (área aberta), como na ND-LET-CM01
            "B": ("y", -o_ext), "E": ("y", -o_ext), "H": ("y", -o_ext), "D": ("y", LARG + o_ext), "F": ("y", LARG + o_ext), "J": ("y", LARG + o_ext)}
     for V, (pecas, ca1, _) in FCH.DADOS.items():
         ax, c = pos[V]
@@ -499,9 +527,12 @@ def montar() -> ModeloBIM:
                     suporte_st(m, "ST-1P (TS-01)", x, y, zf(x) + H_TS, esperas=((-0.075, -0.06), (-0.075, 0.06)), d=0.016, hef=0.150, grampo=True)
     # rev06 (DEC-026): fixação das placas pelo sistema Trejor, como no PP00 — CE-1 no pilar (uma por fiada), console CS-1 soldado,
     # nicho NC-1 nas pontas da placa, pinos PT-1 nas juntas (panos contínuos até o baldrame) e trava de pé PT-2 (pacotes suspensos)
+    LINHA_PAREDE = {"A": COMP, "I": 0.0, "G": Y_LIN[1], "C": Y_LIN[LINHA_PORTOES], "B": 0.0, "E": 0.0, "H": 0.0, "D": LARG, "F": LARG, "J": LARG}
+
     def rasgo(V, c):
-        """normal da parede: (eixo do pilar, sentido para fora) a partir da posição da placa."""
-        return (1 if (c > COMP / 2 if pos[V][0] == "x" else c > LARG / 2) else -1)
+        """sentido da normal da parede, do eixo dos pilares para a placa (22/10: pela linha da parede — antes pela metade da
+        obra, o que punha a CE-1/CS-1 das paredes internas G e C do lado errado do pilar)."""
+        return 1 if c > LINHA_PAREDE[V] else -1
     for V, (pecas, ca1, _) in FCH.DADOS.items():
         ax, c = pos[V]
         out = rasgo(V, c)
