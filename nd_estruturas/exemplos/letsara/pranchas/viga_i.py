@@ -97,8 +97,11 @@ def prancha_viga(P):
     XC = Q[2] - 190
     # cabeçalho
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + (500 if A1 else 600), Q[3] - 4, "CARIMBO")
-    pr.texto(Q[0] + 10, Q[3] - 24, P["marca"], "grande", "TITULO")
-    pr.texto(Q[0] + 60, Q[3] - 24, P["titulo"], "titulo", "TITULO")
+    import renomear as RN
+    from prancha_nd import _wtext as _wt, ALTURAS as _AL
+    _mk = RN.lista([n for m in ("V405", "V406", "V407") for n in RN.nomes_de(m)])      # rev08: V400 a V402 (as 3 I130)
+    pr.texto(Q[0] + 10, Q[3] - 24, RN.novo(_mk), "grande", "TITULO")
+    pr.texto(Q[0] + 10 + _wt(_mk, _AL["grande"]) + 8, Q[3] - 24, P["titulo"], "titulo", "TITULO")
     pr.texto(Q[0] + 10, Q[3] - 14, P["subtitulo"] + f"   ·   PESO {f(peso/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {n_cord} cord. Ø12,7 CP-190 RB", "nota", "TEXTO")
 
     # ------------------------------------------------------------ planta-chave (posição das marcas) 1:1000

@@ -228,7 +228,23 @@ def gerar():
     # ---------- materiais (coluna 2, abaixo)
     ym = pr.tabela(xa, yt - 445, "MATERIAIS E RESISTÊNCIAS POR PEÇA (MPa, cm)", ["PEÇA", "CONCRETO", "fcj LIBERAÇÃO", "fcj DESFORMA/IÇAMENTO", "PROTENSÃO (força no macaco por cabo)", "COBRIMENTO", "CAA"],
                    MATERIAIS, [64, 20, 26, 40, 96, 42, 18], h_lin=5.2)
-    pr.notas(xa, ym - 4, [NORMAS], 306, "NORMAS")
+    yn = pr.notas(xa, ym - 4, [NORMAS], 306, "NORMAS")
+    # ---------- rev08: nomenclatura das peças × projeto do cliente (R01)
+    import renomear as RN
+    pil = [p for p in RN._D["pecas"] if p["tipo"] == "pilar"]
+    por_lado = {}
+    for p in pil:
+        base = p["ref_R01"].split()[0]
+        por_lado.setdefault(base if base in ("P1", "P2") and " L" in p["ref_R01"] else p["ref_R01"], []).append(p["nome"])
+    lin_n = [[RN.novo(RN.lista(v)), RN.novo(f"{k} L1 a L9 (pilares laterais do eixo {'A' if k == 'P1' else 'E'})" if k in ("P1", "P2") else k)]
+             for k, v in sorted(por_lado.items(), key=lambda kv: int(kv[1][0][1:]))]
+    grp = lambda *mks: RN.lista([n for m in mks for n in RN.nomes_de(m)])
+    lin_n += [[RN.novo(grp("V407")), RN.novo("V407 (I130, linhas 2–4)")], [RN.novo(grp("V406")), RN.novo("V406 (I130, linha 4 → P13)")],
+              [RN.novo(grp("V405")), RN.novo("V405 (I130, P13 → linha 9)")],
+              [RN.novo(grp("VM-01", "VM-02")), RN.novo("vigas do mezanino (+3,15 e +6,55)")],
+              [RN.novo(grp(*[f"VB-0{k}" for k in range(1, 9)])), RN.novo("vigas de borda das fachadas 1 e 9")],
+              [RN.novo(grp("TS-01", "TS-01A", "TS-01B")), RN.novo("vigas de cobertura das linhas 2 a 8")]]
+    pr.tabela(xa, yn - 6, "NOMENCLATURA — NOME DA PEÇA × PROJETO DO CLIENTE (R01)", ["NOME (este projeto)", "NO R01 / DESCRIÇÃO"], lin_n, [130, 176], h_lin=4.8)
     # ---------- notas (colunas 3 e 4)
     xn1, xn2 = x0 + 600, x0 + 880
     y = pr.notas(xn1, yt + 6, N_GERAIS, 270, "NOTAS GERAIS")

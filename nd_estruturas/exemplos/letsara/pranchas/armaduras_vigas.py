@@ -8,7 +8,7 @@ import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha, _wtext, ALTURAS
-from arm_nd import Arm, zonas, fd, f1
+from arm_nd import Arm, zonas, fd, f1, dividir_barras, nota_traspasse, aderencia_boa
 
 COB = 30
 KG_CORD = 0.775                                     # kg/m, cordoalha Ø12,7 CP-190 (98,7 mm²)
@@ -25,6 +25,7 @@ def spec_ts01():
     L, H, DX, P = T.L, T.H, T.DX, T.P
     sk = lambda h: h * DX / H
     x_est, _, barras = T.armacao_ts01()
+    barras, TR = dividir_barras(barras, P['fck'], boa={'N2': aderencia_boa(H - 45, H), 'N5': aderencia_boa(40, H)})   # barras de usina de 12 m
     X_N6 = [40, 90, 190, 240, 290, 340, 390, 440]
     cont = [(0, 0), (L, 0), (L + DX, H), (DX, H)]
     ents = [([(x + sk(40), 40), (x + sk(H - 40), H - 40)], "ARM_TRANSV") for x in x_est]
@@ -63,10 +64,10 @@ def spec_ts01():
     return dict(fam="TS-01", titulo="VIGA DE COBERTURA TS-01 (I90 PROTENDIDA, SEM DENTES)", forma="ND-LET-TS01-1", fck=50, L=L, H=H, esc=40,
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 + 1500, "S.1"), (600, "S.2")], dets=[(350, "D1")],
                 longas=[("N2", 30), ("N5", 30), ("N9", 30)], blocos=[S1, S2, D1],
-                marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord)],
+                marcas=[dict(marca="TS-01", qtd=P["qtd"], L=L, barras=barras, V=V, area=area, cord=cord, traspasse=TR)],
                 notas=[f"Concreto C{P['fck']}; liberar as cordoalhas com fckj ≥ {P['fckj']} MPa. Cordoalhas CP-190 RB Ø12,7: 5 a 5,5 cm e 3 a 10 cm; as 2 de 10 cm em x = ±4 isoladas 3,00 m nas pontas; σpi = {P['sig_pi']} MPa.",
                        "Sem dentes: N6 (estribos verticais do maciço, fora da faixa dos tubos TB-3), N7 (grampos U horizontais) e N8 (estribos horizontais da mesa inferior) nas duas pontas.",
-                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2 entre estribos, sem cortar armadura."])
+                       "Estribos N1 a prumo na fôrma (ponta inclinada 3 %); alças AL-1 e esperas ES-1/ES-2 entre estribos, sem cortar armadura."] + ([nota_traspasse(TR)] if TR else []))
 
 
 def spec_i(qual):
@@ -136,27 +137,31 @@ def spec_i(qual):
               bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (8, -8)), ("N8", (100, H - 100), (-16, 10))],
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
     marcas = []
+    BOA_I = {"N3": aderencia_boa(H - cob - 15, H), "N4": aderencia_boa(max(P.get("pele") or [0]), H), "N12": aderencia_boa(cob + 5, H),
+             "N10": aderencia_boa(H + 160, H)}
     if qual == "i110":
         for mk in ("V407", "V406", "V405"):
             Lm = round(VI.I1J[mk]["L_peca"] * 1000)
             _, bm = VI.armacao_i(P, Lm)
+            bm, TRm = dividir_barras(bm, P["fck"], boa=BOA_I)                     # barras de usina de 12 m
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
             nc_mk = VI.I1J[mk]["arranjo"]["n_cord"] if "arranjo" in VI.I1J[mk] else n_cord
-            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000)))
+            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000), traspasse=TRm))
         fam, tit, forma = "I130", "VIGAS CENTRAIS I130 PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
         for mk, Lm in (("VM-01", L1), ("VM-02", L)):
             _, bm = VI.armacao_i(P, Lm)
+            bm, TRm = dividir_barras(bm, P["fck"], boa=BOA_I)
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
-            marcas.append(dict(marca=mk, qtd=8, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(n_cord, n_cord * Lm / 1000)))
+            marcas.append(dict(traspasse=TRm, marca=mk, qtd=8, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(n_cord, n_cord * Lm / 1000)))
         fam, tit, forma = "VM", "VIGAS DO MEZANINO I90 PROTENDIDAS — VM-01, VM-02", "ND-LET-VM01"
     longas = [("N3", cob)] + ([("N4", cob)] if P.get("pele") else []) + [("N12", LN + cob)] + ([("N10", 100)] if SEG else [])
     return dict(fam=fam, titulo=tit, forma=forma, fck=P["fck"], L=L, H=H, esc=40 if L > 13000 else 20, rep=P["marca"],
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2, "S.1")], dets=[(LN, "D1")], longas=longas, blocos=[S1, D1], marcas=marcas,
-                notas=[n for n in P["notas"][:3]] + ["N11/N13: estribos das mesas c/25 (N11 envolve as cordoalhas; N13 o N3). N12: 2 Ø10 nos cantos da mesa inferior (porta-estribos).",
+                notas=[n for n in P["notas"][:3]] + [t for t in (nota_traspasse(*[m.get("traspasse") for m in marcas]),) if t] + ["N11/N13: estribos das mesas c/25 (N11 envolve as cordoalhas; N13 o N3). N12: 2 Ø10 nos cantos da mesa inferior (porta-estribos).",
                                                      "No trecho dos dentes os estribos N2 são substituídos pelos N8 (dente) e N6 (suspensão)."])
 
 
@@ -406,13 +411,13 @@ def bloco(A: Arm, b, bar, x, ytop):
         A.ln(T((cx, ymin - 60)), T((cx, ymax + 60)), "CARIMBO_FINO")
     for pos, alvo, (dx, dy) in b["bolhas"]:
         p = T(alvo)
-        A.bolha_lider(p, p[0] + dx, p[1] + dy, pos)
+        A.bolha_lider(p, p[0] + dx, p[1] + dy, pos, registrar=pos in bar)   # barra emendada: as posições dos trechos vêm da elevação
     x_dir = T((xmax, 0))[0] + 14
     yb = oy + ymin / esc
     # barras explodidas em coluna à direita (1:20)
     y = ytop - 6
     xr_max = x_dir
-    for pos in b["formas"]:
+    for pos in [p for p in b["formas"] if p in bar]:
         g = bar[pos]["geo"]
         hgt = (g.get("b", 0) + (g.get("g", 0) if g["k"] in ("U", "L") else 0)) * 10 / escf
         bb = A.forma(x_dir, y - hgt - (0 if g["k"] != "U" or not g.get("g") else g["g"] * 10 / escf), bar[pos], escf)

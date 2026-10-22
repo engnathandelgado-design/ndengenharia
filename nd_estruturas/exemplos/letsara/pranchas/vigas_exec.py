@@ -124,6 +124,36 @@ def run_script(nome):
     return r
 
 
+def _longa_emendada(A, E, xs0, pos, tr, bar, esc, y):
+    """desenha os trechos de uma barra emendada por traspasse: grupo A numa linha e grupo B (defasado) na de baixo;
+    trechos alternados 1,2 mm para a sobreposição aparecer; cota do traspasse embaixo de cada emenda."""
+    l0t = tr["l0t"]
+    for ig, (grupo, qg) in enumerate(zip(tr["grupos"], tr["qtd"])):
+        if not grupo or not qg:
+            continue
+        yl, ymin = y, y
+        for i, (pn, x0, c) in enumerate(grupo):
+            b = bar[pn]
+            yy = yl - (1.2 if i % 2 else 0)
+            xa = E((xs0 + x0 * 10, 0))[0]
+            bb = A.forma(xa, yy, b, esc, rotulo=False)
+            A.tx(xa + (1.5 if i % 2 else 0), max(bb[3], yy + 2.6) + 0.6 + (3.2 if i % 2 else 0), Arm.rotulo(b, n=qg), "min", "BOTTOM_LEFT")
+            ymin = min(ymin, bb[1], yy)
+            if i:                                            # emenda com o trecho anterior: cota do traspasse
+                xe0 = xa
+                xe1 = xa + l0t * 10 / esc
+                yc_ = yl - 4.0
+                A.ln((xe0, yc_), (xe1, yc_), "COTA")
+                for xx in (xe0, xe1):
+                    A.ln((xx, yc_ - 1.0), (xx, yc_ + 1.0), "COTA")
+                A.tx((xe0 + xe1) / 2, yc_ - 0.8, f"traspasse {l0t:.0f}", 1.5, "TOP_CENTER")
+                ymin = min(ymin, yc_ - 3.5)
+        A.bolha(E((xs0, 0))[0] - 6, yl, pos, registrar=False)
+        A.tx(E((xs0, 0))[0] - 10, yl, "A" if ig == 0 else "B", 1.6, "MIDDLE_RIGHT")
+        y = ymin - 10
+    return y - 2
+
+
 # ------------------------------------------------------------------ faixa de armação (corpo de armaduras_vigas.folha, sem a folha)
 XMAX_FAIXA = 1179 - 190          # a faixa de armação não passa da coluna do carimbo (x = 989)
 
@@ -178,7 +208,11 @@ def fase_armacao(pr, S, x0=None, esc=None):
             alt = 1 - alt
     pr.posicoes_desenho.update({z[2].split()[1] for z in zs})
     y = yc - 14
+    TR = rep.get("traspasse") or {}
     for pos, xs0 in S["longas"]:
+        if pos in TR:                                       # barra emendada (usina 12 m): trechos na posição real, um grupo por linha
+            y = _longa_emendada(A, E, xs0, pos, TR[pos], bar, esc, y)
+            continue
         b = bar[pos]
         g = b["geo"]
         if g["k"] == "C" and g.get("dir", 1) > 0:
@@ -207,8 +241,15 @@ def fase_armacao(pr, S, x0=None, esc=None):
         else:
             xt, yy = XT + 98 * k, Q[3] - 8
         cordm = [("CORD. CP-190 Ø12,7", m["cord"][1], m["cord"][1] * AV.KG_CORD)] if m.get("cord") else None
-        A.tx(xt, yy - 4, f"{m['marca']} — L = {fd(m['L']/10)} cm — {m['qtd']} {'UNIDADE' if m['qtd'] == 1 else 'UNIDADES'}", "sub", lay="TITULO")
-        y_ini = yy - 8
+        # rev08: nomes das peças desta marca (V200, V203…) + comprimento e quantidade; quebra na largura da coluna
+        import renomear as RN
+        from prancha_nd import quebrar as _qb
+        wcol = (196 if (tab_baixo and m["qtd"] > 1 and xt + 200 <= XMAX_FAIXA) else 94)
+        cab_ = f"{RN.renomear(m['marca'])} — L = {fd(m['L']/10)} cm — {m['qtd']} {'UNIDADE' if m['qtd'] == 1 else 'UNIDADES IGUAIS'}"
+        lin_ = _qb(cab_, wcol, ALTURAS["sub"])
+        for kk, t_ in enumerate(lin_):
+            A.tx(xt, yy - 4 - kk * 4.8, RN.novo(t_), "sub", lay="TITULO")
+        y_ini = yy - 8 - (len(lin_) - 1) * 4.8
         yy = A.tabela_ferros(xt, y_ini, m["barras"], 1)
         yy, kg = A.resumo(xt, yy - 3, m["barras"], 1, fck=S["fck"], vol=m["V"], area=m["area"], cordoalhas=cordm)
         m["kg"] = kg
@@ -285,6 +326,12 @@ def compor(desenho, conteudo, folha, runner, S, extras_col=(), notas_extra=(), p
         return None, falta
     # cordoalhas: desenhadas nas seções (círculos vazados) e cotadas no texto do bloco — a posição conta como desenhada
     pr.posicoes_desenho.update(p for p in pr.posicoes_tabela if p[:1] == "C" and p[1:].isdigit())
+    # barras emendadas (usina 12 m): a posição original não existe mais — valem os trechos (N3a, N3b…) das tabelas de ferros
+    emend = {p for m in S["marcas"] for p in (m.get("traspasse") or {})}
+    pr.posicoes_tabela -= emend
+    pr.posicoes_desenho -= emend
+    # as demais marcas têm a mesma armação da representativa (elevação desenhada): os trechos delas valem como chamados
+    pr.posicoes_desenho |= {pn for m in S["marcas"] for t in (m.get("traspasse") or {}).values() for g in t["grupos"] for pn, _, _ in g}
     av = pr.salvar(PR + desenho)
     err = [a for a in av if a[0] == "ERRO"]
     sob = [a for a in av if "sobrep" in a[1] or "cruza" in a[1] or "encosta" in a[1]]

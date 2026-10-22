@@ -53,7 +53,9 @@ for nome, xx in X_FACH.items():
 def pilar(x, y, bx, by, marca, lado=1, dy=0):
     pts = [(x - bx / 2, y - by / 2), (x + bx / 2, y - by / 2), (x + bx / 2, y + by / 2), (x - bx / 2, y + by / 2)]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "SOLID", 1, "CORTADO")
-    v.texto((x + lado * (bx / 2 + 250), y + dy), marca, "min", "MIDDLE_LEFT" if lado > 0 else "MIDDLE_RIGHT")
+    import renomear as RN
+    nm = RN.pilar_em(y / 1000, x / 1000)                                  # rev08: nome da peça na posição (planta: x = linha, y = eixo)
+    v.texto((x + lado * (bx / 2 + 250), y + dy), RN.novo(nm) if nm else marca, "min", "MIDDLE_LEFT" if lado > 0 else "MIDDLE_RIGHT")
 PL = {1: ("PL-03", "PL-07"), 2: ("PL-02", "PL-06"), 3: ("PL-09", "PL-11"), 4: ("PL-10", "PL-12"), 9: ("PL-04", "PL-08")}
 for i, yl in enumerate(Y_LIN, 1):
     a, b = PL.get(i, ("PL-01", "PL-05"))
@@ -80,7 +82,9 @@ for i in range(2, 9):
     for lado, (xa, xb) in zip("ab", PONTAS):
         v.ret(y - 200, M(xa), 400, M(xb - xa), "VISTA")
         xm = M((xa + xb) / 2)
-        v.texto((y - 450, xm + 2600), f"TS-01 L{i}{lado}", "min", "MIDDLE_CENTER", rot=90)     # fora do eixo B / D
+        import renomear as RN
+        nm = RN.viga_em("cobertura", (xa + xb) / 2, Y_LIN[i - 1])
+        v.texto((y - 450, xm + 2600), RN.novo(nm or f"TS-01 L{i}{lado}"), "min", "MIDDLE_CENTER", rot=90)     # fora do eixo B / D
         # seta do caimento (3 % subindo para E)
         v.poli([(y, xm - 1500), (y, xm + 1500), (y - 150, xm + 1200), (y, xm + 1500), (y + 150, xm + 1200)], "COTA")
         for xd in (M(xa) + 140, M(xb) - 77.5):                                     # pinos (2 por ponta)
@@ -91,7 +95,9 @@ xs = list(X_FACH.values())
 for y in (0.0, Y_LIN[-1]):
     for k, (xa, xb) in enumerate(zip(xs[:-1], xs[1:]), 1):
         v.ret(M(y) - 75, M(xa) + 250, 150, M(xb - xa) - 500, "VISTA")
-        v.texto((M(y) + (-400 if y == 0 else 400), M((xa + xb) / 2)), f"VB-0{k}", "min", "MIDDLE_CENTER", rot=90)
+        import renomear as RN
+        nm = RN.viga_em("cobertura", (xa + xb) / 2, y)
+        v.texto((M(y) + (-400 if y == 0 else 400), M((xa + xb) / 2)), RN.novo(nm or f"VB-0{k}"), "min", "MIDDLE_CENTER", rot=90)
 # níveis dos assentos
 v.texto((M((Y_LIN[4] + Y_LIN[5]) / 2), -1500), f"assento no recuo, eixo A: +{f(Z_AS['P1'])}", "min", "MIDDLE_CENTER")
 v.texto((M((Y_LIN[4] + Y_LIN[5]) / 2), Ly + 1500), f"assento no recuo, eixo E: +{f(Z_AS['P2'])}", "min", "MIDDLE_CENTER")

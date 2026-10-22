@@ -409,6 +409,12 @@ def gerar_xlsx(SAIDA=SAIDA):
               RODAPE]:
         ws.cell(k, 1, t).font = F; k += 1
     SAIDA.parent.mkdir(parents=True, exist_ok=True)
+    import renomear as _RN                                   # rev08: nomes novos das peças (P1…, V200…) nas listas
+    for ws_ in wb.worksheets:
+        for row_ in ws_.iter_rows():
+            for c_ in row_:
+                if isinstance(c_.value, str):
+                    c_.value = _RN.renomear(c_.value)
     wb.save(SAIDA)
     print("ok", SAIDA, len(pecas), "marcas;", sum(p[5] for p in pecas), "peças")
 
@@ -432,7 +438,8 @@ def listas_pdf(caminho):
     Nn = ParagraphStyle("n", parent=ss["Normal"], fontName="DV", fontSize=7.6, leading=9.6)
     T1 = ParagraphStyle("t1", parent=Nn, fontName="DVB", fontSize=12, leading=15, spaceAfter=4)
     T2 = ParagraphStyle("t2", parent=Nn, fontName="DVB", fontSize=9.5, leading=12, spaceBefore=6, spaceAfter=3)
-    Pp = lambda t: Paragraph(str(t), Nn)
+    import renomear as _RN
+    Pp = lambda t: Paragraph(_RN.renomear(str(t)), Nn)
     fm = lambda v, d=1: f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     def tb(lin, larg, tot=False):

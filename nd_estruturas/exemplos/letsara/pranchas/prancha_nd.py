@@ -39,6 +39,12 @@ _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
 
+try:                                                       # nomenclatura nova da obra (P1…, V200…): troca no texto desenhado
+    from renomear import renomear as _RENOMEAR, MARCA_NOVO as _MNOVO
+except Exception:                                          # obra sem nomes.json: texto como veio
+    _RENOMEAR, _MNOVO = (lambda t: t), "\x01"
+
+
 def _emissao_txt(s):
     if EMISSAO and isinstance(s, str):
         for a in _NOTAS_ANTIGAS:
@@ -155,7 +161,7 @@ class Prancha:
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
-        s = _emissao_txt(s)
+        s = _RENOMEAR(_emissao_txt(s))
         t = self.msp.add_text(s, height=hh, rotation=rot, dxfattribs={"layer": camada, "style": "ND"})
         t.set_placement((x, y), align=TextEntityAlignment[alinh])
         return t
@@ -182,14 +188,24 @@ class Prancha:
         self.ret(x, y - 8, x + W, y, "TABELA")
         self.texto(x + W / 2, y - 4, titulo, "sub", "TITULO", "MIDDLE_CENTER")
         y -= 8
+        hn = ALTURAS["nota"]
         for row_i, row in enumerate([cab] + linhas):
             camada = "TABELA" if row_i == 0 or (destaque_ultima and row_i == len(linhas)) else "TABELA_FINA"
-            self.linha((x, y - h_lin), (x + W, y - h_lin), camada)
-            xx = x
+            # rev08: texto que não cabe na coluna quebra em linhas dentro da célula (a linha da tabela cresce)
+            cel = []
             for c, w in zip(row, larg):
-                self.texto(xx + w / 2, y - h_lin / 2, str(c), "nota", "TEXTO", "MIDDLE_CENTER")
+                t = _RENOMEAR(_emissao_txt(str(c)))
+                cel.append(quebrar(t, w - 1.6, hn) if _wtext(t, hn) > w - 1.6 else [t])
+            nl = max(len(c) for c in cel)
+            hr = h_lin if nl == 1 else max(h_lin, nl * hn * 1.45 + 1.6)
+            self.linha((x, y - hr), (x + W, y - hr), camada)
+            xx = x
+            for ls, w in zip(cel, larg):
+                for k, t in enumerate(ls):
+                    yk = y - hr / 2 + (len(ls) - 1) * hn * 1.45 / 2 - k * hn * 1.45
+                    self.texto(xx + w / 2, yk, _MNOVO + t, "nota", "TEXTO", "MIDDLE_CENTER")
                 xx += w
-            y -= h_lin
+            y -= hr
         xx = x
         for w in larg[:-1]:
             xx += w
@@ -278,12 +294,12 @@ class Prancha:
     def notas(self, x, y_topo, linhas, largura=170, titulo="NOTAS"):
         """Notas numeradas, quebra pela largura real. Use f-strings com os parâmetros (nota paramétrica)."""
         h = ALTURAS["nota"]
-        linhas = [_emissao_txt(t) for t in linhas]
+        linhas = [_RENOMEAR(_emissao_txt(t)) for t in linhas]   # troca antes de quebrar; as linhas quebradas não passam de novo
         self.texto(x, y_topo - ALTURAS["sub"], titulo, "sub", "TITULO")
         y = y_topo - ALTURAS["sub"] - 4
         for i, s in enumerate(linhas, 1):
             for k, p in enumerate(quebrar(f"{i}. {s}", largura - 6, h)):
-                self.texto(x + (0 if k == 0 else 4), y - h, p, "nota")
+                self.texto(x + (0 if k == 0 else 4), y - h, _MNOVO + p, "nota")
                 y -= h * 1.6
             y -= h * 0.4
         self.blocos_livres.append((x, y, x + largura, y_topo, titulo))
@@ -374,7 +390,8 @@ class Prancha:
         """Quadro no canto superior esquerdo: marca grande, título (seção, comprimento) e linha de dados — padrão de produção."""
         Q = self.quadro
         self.ret(Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CARIMBO")
-        self.texto(Q[0] + 10, Q[3] - 24, marca, "grande", "TITULO")
+        marca = _RENOMEAR(marca)                            # rev08: nomes das peças (P1…, V200…) antes de medir
+        self.texto(Q[0] + 10, Q[3] - 24, _MNOVO + marca, "grande", "TITULO")
         self.texto(Q[0] + 10 + _wtext(marca, ALTURAS["grande"]) + 8, Q[3] - 24, titulo, "titulo", "TITULO")
         self.texto(Q[0] + 10, Q[3] - 14, linha2, "nota", "TEXTO")
         self.blocos_livres.append((Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CABEÇALHO"))
@@ -415,19 +432,27 @@ class Prancha:
         h3 = 14
         self.ret(cx0, y, cx1, y + h3)
         self.texto(cx0 + 1.5, y + h3 - 2.5, "CONTEÚDO", "min")
-        parts = quebrar(d["conteudo"], L - 8, ALTURAS["sub"])[:2]
+        parts = quebrar(_RENOMEAR(d["conteudo"]), L - 8, ALTURAS["sub"])[:2]
         for k, p in enumerate(parts):
-            self.texto(cx0 + L / 2, y + (5.5 if len(parts) == 1 else 7.6 - k * 4.6), p, "sub", "TITULO", "MIDDLE_CENTER")
+            self.texto(cx0 + L / 2, y + (5.5 if len(parts) == 1 else 7.6 - k * 4.6), _MNOVO + p, "sub", "TITULO", "MIDDLE_CENTER")
         y += h3
         if d.get("marca"):                                  # faixa da peça (prancha de produção): marca, quantidade, peso
             h35 = 8
             self.ret(cx0, y, cx1, y + h35)
-            for a, b, lab, val in [(0, 50, "MARCA", d["marca"]), (50, 90, "QUANTIDADE", str(d.get("qtd", "-"))),
+            for a, b, lab, val in [(0, 50, "PEÇAS" if len(_RENOMEAR(str(d["marca"])).split(",")) > 1 or " a " in _RENOMEAR(str(d["marca"])) else "PEÇA", d["marca"]), (50, 90, "QUANTIDADE", str(d.get("qtd", "-"))),
                                    (90, 135, "PESO (kN)", str(d.get("peso", "-"))), (135, 180, "VOLUME (m³)", str(d.get("volume", "-")))]:
                 if a:
                     self.linha((cx0 + a, y), (cx0 + a, y + h35))
                 self.texto(cx0 + a + 1.5, y + h35 - 2.5, lab, "min")
-                self.texto(cx0 + (a + b) / 2, y + 2.2, val, "nota", "TITULO", "MIDDLE_CENTER")
+                val = _RENOMEAR(str(val))
+                if _wtext(val, ALTURAS["nota"]) > b - a - 3:              # rev08: lista de peças longa → 2 linhas menores
+                    ls = quebrar(val, b - a - 3, ALTURAS["min"])
+                    if len(ls) > 2:
+                        ls = [ls[0], ls[1].rstrip(",") + " …"]
+                    for kk, t in enumerate(ls):
+                        self.texto(cx0 + (a + b) / 2, y + (3.9 if len(ls) > 1 else 2.2) - kk * 2.6, _MNOVO + t, "min", "TITULO", "MIDDLE_CENTER")
+                else:
+                    self.texto(cx0 + (a + b) / 2, y + 2.2, _MNOVO + val, "nota", "TITULO", "MIDDLE_CENTER")
             y += h35
         h4 = 22                                             # cliente / obra / local + campo da logo do cliente
         self.ret(cx0, y, cx1, y + h4)
@@ -464,7 +489,7 @@ class Prancha:
             self.ret(cx0, y, cx1, y + 5, "CARIMBO_FINO")
             self.texto(cx0 + 7, y + 1.5, r, "min", alinh="BOTTOM_CENTER")
             self.texto(cx0 + 27, y + 1.5, dt, "min", alinh="BOTTOM_CENTER")
-            self.texto(cx0 + 41.5, y + 1.5, ds[:70], "min")
+            self.texto(cx0 + 41.5, y + 1.5, _MNOVO + ds[:70], "min")   # histórico de revisões fica como foi emitido
             y += 5
         sx, sy = cx0 - 22, cy0 + 6   # símbolo 1º diedro
         self.msp.add_circle((sx + 15, sy + 5), 4, dxfattribs={"layer": "CARIMBO"})

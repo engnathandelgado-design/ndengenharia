@@ -66,25 +66,38 @@ for mk, pos, x, y, bx, by, tp, ref in pil:
         v.poli(pts, "OCULTA", True)
         continue
     v.poli(pts, "CORTADO", True); v.hachura(pts, "SOLID", 1)
-# rótulos: marca (sub) + posição e seção (min)
+# rev08 (22/10/2026): nome de cada peça (P1…P33, sentido de leitura — nomes.json) + seção e folha de detalhamento
+import renomear as RN
+_NOMES = {(round(p["x"] * 1000), round(p["y"] * 1000)): p for p in RN._D["pecas"] if p["tipo"] == "pilar"}
+
+
+def nome_em(x, y):
+    """x, y da planta (x = linhas, obra y; y = eixos, obra x) → peça de nomes.json."""
+    return _NOMES[(round(y), round(x))]
+
+
 def rot(x, y, bx, by, l1, l2, dx, dy, al):
-    v.texto((x + dx, y + dy), l1, "nota", al)
-    v.texto((x + dx, y + dy - 380), l2, "min", al)
+    v.texto((x + dx, y + dy), RN.novo(l1), "nota", al)
+    v.texto((x + dx, y + dy - 380), RN.novo(l2), "min", al)
 for mk, pos, x, y, bx, by, tp, ref in pil:
     sec = f"{min(bx, by) // 10}×{max(bx, by) // 10}" if bx != by else f"{bx // 10}×{by // 10}"
+    if tp != "fora":
+        pn = nome_em(x, y)
+        mk, pos = pn["nome"], f"{sec} · {pn['folha'].replace('ND-LET-', '')}"
+        sec = ""
     if tp == "lat":
         yy = y + (by / 2 + 500 if ref == "P1" else -by / 2 - 900)
         if ref == "P1":
-            rot(x + 250, -by / 2 - 450, bx, by, mk, f"{pos} · {sec}", 0, 0, "BOTTOM_LEFT")
+            rot(x + 250, -by / 2 - 450, bx, by, mk, pos, 0, 0, "BOTTOM_LEFT")
         else:
-            rot(x + 250, Ly + by / 2 + 750, bx, by, mk, f"{pos} · {sec}", 0, 0, "BOTTOM_LEFT")
+            rot(x + 250, Ly + by / 2 + 750, bx, by, mk, pos, 0, 0, "BOTTOM_LEFT")
     elif tp == "fach":
         if ref == "L1":
-            rot(x + bx / 2 + 250, y + 1100, bx, by, mk, f"{pos} · {sec}", 0, 0, "BOTTOM_LEFT")
+            rot(x + bx / 2 + 250, y + 1100, bx, by, mk, pos, 0, 0, "BOTTOM_LEFT")
         else:                                                                  # linha 9: rótulo para dentro (esquerda)
-            rot(x - bx / 2 - 250, y + 1100, bx, by, mk, f"{pos} · {sec}", 0, 0, "BOTTOM_RIGHT")
+            rot(x - bx / 2 - 250, y + 1100, bx, by, mk, pos, 0, 0, "BOTTOM_RIGHT")
     elif tp == "int":
-        rot(x + bx / 2 + 250, y + by / 2 + 350, bx, by, mk, f"{pos} · {sec}", 0, 0, "BOTTOM_LEFT")
+        rot(x + bx / 2 + 250, y + by / 2 + 350, bx, by, mk, pos, 0, 0, "BOTTOM_LEFT")
     else:
         pass
 v.texto((10600, 34700), "P6 / P7 (anexo, tracejados): fora do projeto até definição", "min", "BOTTOM_LEFT")
@@ -136,33 +149,31 @@ def det(nome, org, titulo, bx, by, chamadas, sub):
     return d
 X0d, Y0d = 95, 250
 det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
-    [((0, -300), (-14, -8), "face C (placas) — P1: lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 40×60, 60 na direção A–E")
+    [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 40×60, 60 na direção A–E")
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
     [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40×60, 60 na direção 1–9")
 det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 600, 600, [((-300, -200), (-12, -8), "PC-03 60×60")], "PC-03 60×60 (PC-01/PM-01 40×60, PC-02 40×40)")
 det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×25")
 
-# ------------------------------------------------------------------ quadro de pilares
-cont = {}
-for mk, pos, x, y, bx, by, tp, ref in pil:
-    if tp == "fora":
+# ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01
+grupos = {}
+for p in RN._D["pecas"]:
+    if p["tipo"] != "pilar":
         continue
-    sec = f"{min(bx, by) // 10}×{max(bx, by) // 10}"
-    c_ = cont.setdefault(mk, [0, [], sec])
-    c_[0] += 1; c_[1].append(pos)
-ordem = sorted(cont, key=lambda m: (m[:2] != "PL", m[:2] != "PF", m[:2] != "PC", m[:2] != "PM", m))
+    g = grupos.setdefault(p["folha"], dict(nomes=[], sec=p["secao"], r01=[]))
+    g["nomes"].append(p["nome"]); g["r01"].append(p["ref_R01"])
 lin = []
-for mk in ordem:
-    n, poss, sec = cont[mk]
-    lin.append([mk, sec, str(n), ", ".join(poss)])
-lin.append(["TOTAL", "", str(sum(cont[m][0] for m in cont)), "P6 e P7 (anexo) fora do projeto"])
+for fl, g in sorted(grupos.items(), key=lambda kv: int(kv[1]["nomes"][0][1:])):
+    lin.append([RN.novo(RN.lista(g["nomes"])), g["sec"], str(len(g["nomes"])), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
+lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", RN.novo("P6 e P7 do R01 (anexo) fora do projeto")])
 x0 = 360
-y = pr.tabela(x0, 318, "QUADRO DE PILARES — MARCA × POSIÇÃO", ["MARCA", "SEÇÃO (cm)", "QT", "POSIÇÕES"], lin, [20, 20, 9, 130], h_lin=5.2, destaque_ultima=True)
+y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm)", "QT", "FOLHA", "NOME NO R01"], lin,
+              [40, 18, 9, 18, 95], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
     "Todos os pilares são centrados nos eixos, exceto PG-02 e PG-04 (linha 4, portões) e PC-03 (entre as linhas 6 e 7): posições cotadas na planta.",
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
-    "Marca = peça de fabricação (folhas ND-LET-PL/PF/PC/PM/PG); posição = pilar no R01 (P1-L5 = pilar P1 na linha 5).",
+    RN.novo("Nomes P1 a P33: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
     "Tolerância de locação (NBR 9062:2017 5.2.2.6): ±1,0 cm entre apoios consecutivos, acumulado ≤ 0,1 % do comprimento; prumo ±H/300 até 2,5 cm.",
     "Cargas na fundação: ND-LET-CG01. Cortes: ND-LET-CT01 a CT04 (planta-chave dos cortes na CT03). Montagem: ND-LET-MON01 a MON03.",
     "Cotas em cm; níveis em m a partir do piso acabado (±0,00).",

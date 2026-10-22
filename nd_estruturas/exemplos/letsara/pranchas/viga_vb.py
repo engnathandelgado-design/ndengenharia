@@ -57,8 +57,11 @@ pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA; VB-05 A 08 COM ES-1R M20 
 Q = pr.quadro
 XC = Q[2] - 190
 pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
-pr.texto(Q[0] + 10, Q[3] - 24, "VB-02", "grande", "TITULO")
-pr.texto(Q[0] + 62, Q[3] - 24, f"VIGA DE BORDA 15 × 60 cm COM DENTE — VB-02 (L = {L/10:.0f} cm) · VB-01 A VB-08 (VB-05 A VB-08 ESPELHADAS)", "titulo", "TITULO")
+import renomear as RN
+from prancha_nd import _wtext as _wt, ALTURAS as _AL
+_mk = RN.lista([n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")])            # rev08: V403 a V406, V421 a V424
+pr.texto(Q[0] + 10, Q[3] - 24, RN.novo(_mk), "grande", "TITULO")
+pr.texto(Q[0] + 10 + _wt(_mk, _AL["grande"]) + 8, Q[3] - 24, f"VIGA DE BORDA 15 × 60 cm COM DENTE — VB-02 (L = {L/10:.0f} cm) · VB-01 A VB-08 (VB-05 A VB-08 ESPELHADAS)", "titulo", "TITULO")
 pr.texto(Q[0] + 10, Q[3] - 14, f"fachadas 1 e 9, entre os pilares de fachada; dente 30 × 27 nos consolos CP-VB (escondidos) com pino PN-6 roscado   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   C40, CA-50", "nota", "TEXTO")
 
 # planta-chave

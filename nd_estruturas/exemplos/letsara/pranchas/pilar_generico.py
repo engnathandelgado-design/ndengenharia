@@ -17,7 +17,8 @@ def tabela_q(pr, x, y_topo, titulo, cab, linhas, larg, h_lin=6.0, h_sub=4.2):
     pr.texto(x + W / 2, y - 4, titulo, "sub", "TITULO", "MIDDLE_CENTER")
     y -= 8
     for row_i, row in enumerate([cab] + [list(l) for l in linhas]):
-        cel = [quebrar(str(c), w - 2.0, hn) or [""] for c, w in zip(row, larg)]
+        import renomear as _RN
+        cel = [quebrar(_RN.renomear(str(c)), w - 2.0, hn) or [""] for c, w in zip(row, larg)]   # nomes novos antes de medir
         n = max(len(c) for c in cel)
         hr = h_lin if n == 1 else h_lin + (n - 1) * h_sub
         pr.linha((x, y - hr), (x + W, y - hr), "TABELA" if row_i == 0 else "TABELA_FINA")
@@ -25,7 +26,7 @@ def tabela_q(pr, x, y_topo, titulo, cab, linhas, larg, h_lin=6.0, h_sub=4.2):
         for c, w in zip(cel, larg):
             y0 = y - hr / 2 + (len(c) - 1) * h_sub / 2
             for k, t in enumerate(c):
-                pr.texto(xx + w / 2, y0 - k * h_sub, t, "nota", "TEXTO", "MIDDLE_CENTER")
+                pr.texto(xx + w / 2, y0 - k * h_sub, "\x01" + t, "nota", "TEXTO", "MIDDLE_CENTER")
             xx += w
         y -= hr
     xx = x
@@ -164,8 +165,12 @@ def prancha_pilar(P):
     Y0 = 92
     ESC = 20
     pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 560, Q[3] - 4, "CARIMBO")
-    pr.texto(Q[0] + 10, Q[3] - 24, P["marca"], "grande", "TITULO")
-    pr.texto(Q[0] + 62, Q[3] - 24, f"PILAR PRÉ-MOLDADO  {P.get('secao_txt', f'{H/10:g} × {B/10:g} cm (x × y)')}   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {P['qtd']} {'peça' if P['qtd'] == 1 else 'peças'}", "titulo", "TITULO")
+    import renomear as RN
+    from prancha_nd import _wtext as _wt, ALTURAS as _AL
+    nm_ = RN.renomear(P["marca"])                                        # rev08: nomes das peças que esta folha detalha (P1…P33)
+    pr.texto(Q[0] + 10, Q[3] - 24, RN.novo(nm_), "grande", "TITULO")
+    qtxt = f"{P['qtd']} {'PEÇA' if P['qtd'] == 1 else 'PEÇAS IGUAIS'}"
+    pr.texto(Q[0] + 10 + _wt(nm_, _AL["grande"]) + 8, Q[3] - 24, RN.novo(f"{'PILAR' if P['qtd'] == 1 else 'PILARES'} PRÉ-MOLDADOS  {P.get('secao_txt', f'{H/10:g} × {B/10:g} cm (x × y)')}   ·   L = {L_TOT/10:g} cm (cálice {L_CAL/10:g} + {Z_TOP/10:g})   ·   C40   ·   {qtxt}".replace("PILAR PRÉ-MOLDADOS", "PILAR PRÉ-MOLDADO")), "titulo", "TITULO")
     pr.texto(Q[0] + 10, Q[3] - 14, P["posicao"] + f"   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   {P.get('faces_txt', 'FACES: A = x+, B = y+, C = x−, D = y−')}   ·   desenhado em pé, como montado", "nota", "TEXTO")
 
     # ------------------------------------------------------------ vistas das faces (em pé)
@@ -196,7 +201,7 @@ def prancha_pilar(P):
                 for dy in AS["y_pinos"]:
                     v.ret(W / 2 + dy - AS["d"] / 2, z_rec - AS["emb"], AS["d"], AS["emb"], "OCULTA")
                     v.chapa(W / 2 + dy - AS["d"] / 2, z_rec + 10, AS["d"], AS["L"] - AS["emb"])
-                t_as = (f"assento TS-01:", f"{len(AS['y_pinos'])} {AS['pino']}", f"sai {(AS['L'] - AS['emb']) / 10:g} + {AS['neo_nome'].split()[0]}")
+                t_as = (f"apoio da viga:", f"{len(AS['y_pinos'])} {AS['pino']}", f"sai {(AS['L'] - AS['emb']) / 10:g} + {AS['neo_nome'].split()[0]}")
                 z_C = z_rec + 0.62 * (L_TOT - z_rec)                                         # rev08: rótulo dentro da cabeça, abaixo do corte C-C
                 z_p = z_rec + 10 + AS["L"] - AS["emb"]
                 if z_p + 9.6 * ESC < z_C - 1.0 * ESC:                                          # logo acima dos pinos

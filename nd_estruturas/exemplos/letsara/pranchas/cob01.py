@@ -155,7 +155,7 @@ e.chamada((Y_COL, ZB[0]), (-30, -ZB[0] / E10 - 30), "apoio: 4 M12 8.8 (2 colunas
 e.chamada((-ST1["larg"] / 2 + 10, 230), (-40, 26), "ST-1P 9,5×220×290 (A36) atrás das almas")
 e.chamada((-XL + 100, Z_TERCA + 60), (-8, -29), "terça do vão da esquerda")
 e.chamada((XL - 100, Z_TERCA + 60), (8, -40), "terça do vão da direita")
-e.chamada((60, -100), (4, -12), "2 esperas ES-1 M16 (y = ±60), na TS-01")
+e.chamada((60, -100), (4, -12), "2 esperas ES-1 M16 (y = ±60) na viga")
 
 c = pr.vista("CORTE A-A", (415, 385), E5, titulo="CORTE A-A", subtitulo="apoio interno: ST-1P + 2 Z encaixados no transpasse")
 c.ret(-250, -150, 500, 150, "CORTADO"); c.hachura([(-250, -150), (250, -150), (250, 0), (-250, 0)], "AR-CONC", 0.03)

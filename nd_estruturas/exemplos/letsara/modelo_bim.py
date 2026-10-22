@@ -563,10 +563,49 @@ def montar() -> ModeloBIM:
     return m
 
 
+def renomear_pecas(modelo):
+    """rev08 (22/10/2026): nome de cada pilar e viga pela nomenclatura nova (P1…P33, V200…/V300…/V400…, sentido de
+    leitura — pranchas/nomes.json). A parte da peça (cabeça, mesa, alma, ponta maciça) fica depois do nome."""
+    import dataclasses
+    sys.path.insert(0, "/home/claude/letsara/pranchas")
+    import renomear as RN
+    GV = {"Vigas centrais I130", "Vigas I90 de cobertura", "Vigas de borda", "Vigas de mezanino (meio vaso)"}
+    novos = []
+    for p in modelo.pecas:
+        nm = None
+        if p.grupo == "Pilares":
+            nm = RN.pilar_em(p.p0[0], p.p0[1], tol=0.5)
+        elif p.grupo in GV:
+            pts = getattr(p.perfil, "pontos", None)
+            if pts and abs(p.p0[0] - p.p1[0]) < 1e-9 and abs(p.p0[1] - p.p1[1]) > 1e-9 and isinstance(p.perfil, PerfilPoligono):
+                us = [u for u, _ in pts]
+                xm, ym, zm = p.p0[0] + (min(us) + max(us)) / 2, (p.p0[1] + p.p1[1]) / 2, p.p0[2] + sum(v for _, v in pts) / len(pts)
+            else:
+                xm, ym, zm = (p.p0[0] + p.p1[0]) / 2, (p.p0[1] + p.p1[1]) / 2, (p.p0[2] + p.p1[2]) / 2
+            niv = "cobertura" if p.grupo != "Vigas de mezanino (meio vaso)" else ("+3,15" if zm < 4.8 else "+6,55")
+            fam = {"Vigas centrais I130": ("V405", "V406", "V407"), "Vigas I90 de cobertura": ("TS",), "Vigas de borda": ("VB",),
+                   "Vigas de mezanino (meio vaso)": ("VM",)}[p.grupo]
+            nm = RN.viga_em(niv, xm, ym, tol=0.8, marcas=fam)
+        if not nm and isinstance(p.marca, str):                       # insertos e afins: texto com a nomenclatura nova
+            novos.append(dataclasses.replace(p, marca=RN.renomear(p.marca), obs=RN.renomear(p.obs or "")))
+            continue
+        if nm:
+            parte = ""
+            for k in ("cabeça", "mesa inf.", "alma", "mesa sup.", "ponta maciça", "dente", "nariz", "maciço inf.", "maciço A", "maciço E", "maciço"):
+                if k in p.marca:
+                    parte = " " + k
+                    break
+            fl = next((q["folha"] for q in RN._D["pecas"] if q["nome"] == nm), "")
+            p = dataclasses.replace(p, marca=nm + parte, obs=RN.renomear((p.obs + f" · folha {fl}").strip(" ·")))
+        novos.append(p)
+    modelo.pecas[:] = novos
+
+
 if __name__ == "__main__":
     saida = Path(sys.argv[1] if len(sys.argv) > 1 else AQ / "saidas")
     saida.mkdir(parents=True, exist_ok=True)
     modelo = montar()
+    renomear_pecas(modelo)
     q = quantitativos(modelo)
     ifc = gravar_ifc(modelo, saida / "letsara.ifc")
     malha = ler_malha_ifc(ifc)

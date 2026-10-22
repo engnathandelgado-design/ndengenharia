@@ -13,7 +13,7 @@ pr.revisao("02", "12/10/2026", "ST-1 SOLDADO NA CH-T; OR-1 SOLDADA NA CH-MF")
 pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1; SEM DENTES")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS POR TRANSPASSE: SEM MÃO-FRANCESA (SAEM ES-3, CMF-1, MF-1); ST-1P COM 4 M12")
 pr.revisao("06", "17/10/2026", "X NOS VÃOS 4-5 A 8-9: ES-2 NOS 3 NÓS; GRAMPO NAS ES-1; ST-1V-R, ST-1F E CL-P")
-pr.cabecalho_peca("TS-01", f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
+pr.cabecalho_peca("\x01V407 a V420", f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
 nt, nn = len(P["tercas"]), len(P["nos"])
 
@@ -75,7 +75,7 @@ v.ret(-12.5, -300, 25, 600, "METALICA")
 v.ret(60 - 10, -300, 20, 600, "METALICA")
 v.linha((-60, 0), (100, 0), "EIXO")
 v.cota_v([-300, 0, 300], -12.5, -8, total=False)
-v.chamada((0, 150), (-8, 10), "PN-3 Ø25 L=600 (P1/P2)")
+v.chamada((0, 150), (-8, 10), "PN-3 Ø25 L=600 (laterais)")
 v.chamada((0, -150), (-8, -10), "PN-5 Ø20 L=600 (I130/centro)")
 v.chamada((-60, 0), (-6, 4), "topo do apoio")
 

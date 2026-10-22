@@ -63,14 +63,17 @@ def planta(nome, origem, nivel, assento):
     for y in (Y1, Y2):
         for marca, xa, xb, L in VM:
             v.ret(M(xa), M(y) - 200, M(xb - xa), 400, "CORTADO")
-            v.texto((M((xa + xb) / 2), M(y) + (-500 if y == Y1 else 500)), f"{marca} (meio vaso, L {f(L, 2)} m)", "min", "TOP_CENTER" if y == Y1 else "BOTTOM_CENTER")
+            import renomear as RN
+            nv = RN.viga_em("+3,15" if nivel < 5 else "+6,55", (xa + xb) / 2, y) or marca        # rev08: nome da peça (V2xx / V3xx)
+            v.texto((M((xa + xb) / 2), M(y) + (-500 if y == Y1 else 500)), RN.novo(f"{nv} (meio vaso, L {f(L, 2)} m)"), "min", "TOP_CENTER" if y == Y1 else "BOTTOM_CENTER")
             for xd in (M(xa) + 150, M(xb) - 150):
                 v.circulo((xd, M(y)), 50, "VISTA")
     # pilares
     for (marca, x, bx, by), y in [(p, Y1) for p in PIL1] + [(p, Y2) for p in PIL2]:
         pts = [(M(x) - bx / 2, M(y) - by / 2), (M(x) + bx / 2, M(y) - by / 2), (M(x) + bx / 2, M(y) + by / 2), (M(x) - bx / 2, M(y) + by / 2)]
         v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "SOLID", 1, "CORTADO")
-        v.texto((M(x) + bx / 2 + 150, M(y) + (-700 if y == Y1 else 700)), marca, "min", "MIDDLE_LEFT")
+        import renomear as RN
+        v.texto((M(x) + bx / 2 + 150, M(y) + (-700 if y == Y1 else 700)), RN.novo(RN.pilar_em(x, y) or marca), "min", "MIDDLE_LEFT")
     v.cota_h([M(x) for _, x in X_FACH], -2400, -8)
     v.cota_v([M(Y1), M(Y2)], Lx + 2400, 8, total=False)
     return v

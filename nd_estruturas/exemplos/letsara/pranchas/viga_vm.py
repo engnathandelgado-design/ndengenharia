@@ -45,7 +45,7 @@ pr.revisao("04", "16/10/2026", f"NBR 9062: MEIO VASO 40 × {H/10:g} (ALMA 25 + A
 pr.revisao("06", "19/10/2026", "DEC-032: PERDAS 9.6.3 E γp 1,1 NO ATO; DENTE VERIFICADO POR MEF COM A ARMAÇÃO DA PRANCHA (γn 1,2); LIBERAÇÃO GRADUAL")
 Q = pr.quadro
 XC = Q[2] - 200
-pr.cabecalho_peca("VM-02", f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+ 2º ESTÁGIO 26 cm) — L = {L/10:g} cm  ·  VM-01: L = {L1/10:g} cm".replace(".", ","),
+pr.cabecalho_peca("\x01V200 a V207, V300 a V307", f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+ 2º ESTÁGIO 26 cm) — L = {L/10:g} cm  ·  VM-01: L = {L1/10:g} cm".replace(".", ","),
                   f"linhas 1 e 2, pisos +3,15 e +6,55; fundo da viga e do consolo +{f(ZB[0]/1000, 2)} / +{f(ZB[1]/1000, 2)}; alma 25 do lado da borda, aba 15 × 20 para dentro (apoio da laje)   ·   "
                   f"PESO {f(PESO_TOT, 2)} t   ·   VOLUME {f(V_TOT, 2)} m³   ·   C40, {len(CORD)} Ø12,7 CP-190 RB", largura=XC - Q[0] - 12)
 
@@ -64,7 +64,12 @@ for n, x in zip("ABCDE", XF):
 for y in Y_LIN[:2]:
     for k in range(4):
         kp.ret(M(XF[k]) + 300, M(y) - 200, M(XF[k + 1] - XF[k]) - 600, 400, "CORTADO")
-        kp.texto((M((XF[k] + XF[k + 1]) / 2), M(y) + (-700 if y == 0 else 700)), "VM-01" if k in (0, 3) else "VM-02", "min", "TOP_CENTER" if y == 0 else "BOTTOM_CENTER")
+        import renomear as RN                                            # rev08: nomes dos dois níveis na mesma posição
+        xm_ = (XF[k] + XF[k + 1]) / 2
+        n1_, n2_ = RN.viga_em('+3,15', xm_, y), RN.viga_em('+6,55', xm_, y)
+        for kk, t_ in enumerate((n1_, n2_) if y != 0 else (n1_, n2_)):            # +3,15 em cima, +6,55 embaixo (2 linhas)
+            dy_ = (-700 - kk * 2200) if y == 0 else (700 + (1 - kk) * 2200)
+            kp.texto((M(xm_), M(y) + dy_), RN.novo(t_), "min", "TOP_CENTER" if y == 0 else "BOTTOM_CENTER")
 kp.ret(M(0), M(0) + 200, M(XF[-1]), M(Y_LIN[1]) - 400, "OCULTA")
 
 # ------------------------------------------------------------------ ELEVAÇÃO DE FÔRMA 1:20 (vista de dentro, lado da aba)

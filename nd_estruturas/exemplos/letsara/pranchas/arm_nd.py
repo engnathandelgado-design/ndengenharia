@@ -140,12 +140,14 @@ class Arm:
         elif k in ("R", "L"):
             A = g["a"] * s
             pts = [(x, y), (x + A, y)]
+            esq = k == "L" and g.get("lado") == "esq"                  # trecho de barra emendada: gancho na ponta esquerda
             if k == "L":
-                pts.append((x + A, y + g["g"] * s))
-                self.tx(x + A + 0.8, y + g["g"] * s / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_LEFT")
+                xg = x if esq else x + A
+                pts = [(xg, y + g["g"] * s)] + pts if esq else pts + [(xg, y + g["g"] * s)]
+                self.tx(xg + (-0.8 if esq else 0.8), y + g["g"] * s / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_RIGHT" if esq else "MIDDLE_LEFT")
             self.pl(pts, "ARMADURA")
             self.tx(x + A / 2, y + 0.7, f"{g['a']:.0f}", "min", "BOTTOM_CENTER")
-            bb = [x, y - 0.5, x + A + (3 if k == "L" else 0), y + 0.7 + hmin + (g["g"] * s if k == "L" else 0)]
+            bb = [x - (3 if esq else 0), y - 0.5, x + A + (3 if k == "L" and not esq else 0), y + 0.7 + hmin + (g["g"] * s if k == "L" else 0)]
         else:
             raise ValueError(k)
         if rotulo:
@@ -246,3 +248,146 @@ def zonas(zs):
         else:
             res.append(z)
     return res
+
+
+# ------------------------------------------------------------------ barras de usina (12 m) e traspasse — NBR 6118:2023 9.4 / 9.5.2
+LMAX_BARRA = 1200          # cm — comprimento comercial das barras da usina usado pela fábrica (regra do Nathan, 22/10/2026)
+
+
+def lb_cm(diam, fck, boa=True, gc=1.4, gs=1.15, fyk=500.0):
+    """comprimento de ancoragem básico lb (cm), 9.4.2.4: lb = φ/4 · fyd/fbd; fbd = η1 η2 η3 fctd (9.3.2.1),
+    η1 2,25 (nervurada), η2 1,0 boa / 0,7 má aderência, η3 1,0 (φ < 32); fctd = 0,21 fck^(2/3)/γc. Mínimo 25 φ."""
+    fctd = 0.21 * fck ** (2 / 3) / gc
+    fbd = 2.25 * (1.0 if boa else 0.7) * fctd
+    return max(diam / 4 * (fyk / gs) / fbd, 25 * diam) / 10
+
+
+def _alfa0t(frac):
+    """Tab. 9.4 — proporção de barras emendadas na mesma seção → α0t."""
+    for lim, a in ((0.20, 1.2), (0.25, 1.4), (1 / 3 + 1e-9, 1.6), (0.50, 1.8)):
+        if frac <= lim + 1e-9:
+            return a
+    return 2.0
+
+
+def aderencia_boa(y_mm, H_mm):
+    """9.3.1: barra horizontal com boa aderência se h < 60 cm e a no máximo 30 cm da face inferior, ou h ≥ 60 cm e a
+    pelo menos 30 cm abaixo da face superior; senão má aderência."""
+    return y_mm <= 300 if H_mm < 600 else y_mm <= H_mm - 300
+
+
+def dividir_barras(barras, fck, boa=None, Lmax=LMAX_BARRA, gc=1.4):
+    """Divide toda barra reta/gancho (geo R, L ou C) com comprimento de corte > Lmax em trechos ≤ Lmax com traspasse
+    (NBR 6118:2023 9.5.2.2: l0t = α0t · lb,nec ≥ l0t,mín = máx(0,3 α0t lb; 15 φ; 200 mm), lb,nec = lb (As,calc = As,ef,
+    a favor da segurança). Metade das barras emenda num ponto e a outra metade espelhada (emendas defasadas ≥ 1,3 l0t
+    entre centros → 50 % por seção, α0t 1,8; com 1 barra só, 100 %, α0t 2,0). Traspasse não é usado para φ > 32 mm
+    (9.5.2.1), nem em tirante — o chamador não deve passar essas barras.
+    boa: dict pos → bool (aderência; padrão boa). Retorna (barras_novas, mapa) com
+    mapa[pos] = dict(l0t, lb, alfa, boa, n, grupos=[[(pos_nova, x0_cm, comp_cm), ...] grupo A, [...] grupo B], qtd=(qA, qB))."""
+    novas, mapa = [], {}
+    for b in barras:
+        g = b.get("geo", {})
+        if b["comp"] <= Lmax or g.get("k") not in ("R", "L", "C"):
+            novas.append(b)
+            continue
+        if b["diam"] > 32:
+            raise ValueError(f"{b['pos']}: Ø{b['diam']} > 32 mm não admite traspasse (NBR 6118 9.5.2.1) — usar luva")
+        k, a = g["k"], g["a"]
+        gE = g.get("g", 0) if k == "C" else 0                       # gancho na ponta esquerda
+        gD = g.get("g", 0) if k in ("C", "L") else 0                # gancho na ponta direita
+        q = b["qtd"]
+        qA, qB = (q + 1) // 2, q // 2
+        alfa = _alfa0t(qA / q)
+        bo = True if boa is None else boa.get(b["pos"], True)
+        lb = lb_cm(b["diam"], fck, bo, gc)
+        l0t = max(alfa * lb, 0.3 * alfa * lb, 15 * b["diam"] / 10, 20.0)
+        l0t = math.ceil(l0t / 5) * 5
+        n = 2
+        while n * Lmax - (n - 1) * l0t < b["comp"]:
+            n += 1
+
+        def gan(nn):
+            return [gE] + [0] * (nn - 2) + [gD]
+
+        def montar(primeiro, nn=n):
+            """retas dos trechos (cm): o 1º com `primeiro` e os demais iguais, com o restante; nenhum trecho menor que 2 l0t."""
+            g0 = gan(nn)
+            tot = a + (nn - 1) * l0t
+            resto = (tot - primeiro) / (nn - 1)
+            retas = [primeiro] + [round(resto)] * (nn - 1)
+            retas[-1] += round(tot - sum(retas))
+            ok = all(r + gg <= Lmax + 1e-6 for r, gg in zip(retas, g0)) and min(retas) >= 2 * l0t
+            return retas, ok
+
+        def centros(retas):
+            x, cs = 0.0, []
+            for r in retas[:-1]:
+                x += r
+                cs.append(x - l0t / 2)
+                x -= l0t
+            return cs
+
+        tot_ = a + (n - 1) * l0t
+        rA, _ = montar(math.ceil(tot_ / n / 5) * 5)                     # grupo A: trechos iguais (múltiplos de 5 cm)
+        cA = centros(rA)
+        rB = None
+        if qB:
+            for nn in (n, n + 1):                                       # se não defasar com n trechos, o grupo B ganha 1 trecho
+                melhor = None
+                for f in range(int(Lmax - gE), int(2 * l0t) - 1, -5):
+                    r, ok = montar(f, nn)
+                    if ok and all(abs(ca - cb) >= 1.3 * l0t for ca in cA for cb in centros(r)):
+                        if melhor is None or min(r) > min(melhor):           # o arranjo defasado com o menor trecho mais longo
+                            melhor = r
+                rB = melhor
+                if rB:
+                    break
+            if rB is None:                                              # não deu para defasar: 100 % na mesma seção
+                alfa = _alfa0t(1.0)
+                rB = rA
+        gA, gB = gan(len(rA)), gan(len(rB)) if rB else None
+        tipos, grupos = {}, []
+        letras = iter("abcdefghij")
+        for retas, gks, qg in ((rA, gA, qA), (rB, gB, qB)):
+            if not qg:
+                grupos.append([])
+                continue
+            x, lst = 0.0, []
+            for i, r in enumerate(retas):
+                hE = gks[0] if (i == 0) else 0
+                hD = gks[-1] if (i == len(retas) - 1) else 0
+                chave = (round(r), hE, hD)
+                if chave not in tipos:
+                    pn = b["pos"] + next(letras)
+                    if hE and hD:
+                        geo = dict(k="C", a=round(r), g=hE, dir=g.get("dir", 1))
+                    elif hE or hD:
+                        geo = dict(k="L", a=round(r), g=hE or hD, lado="esq" if hE else "dir", dir=g.get("dir", 1))
+                    else:
+                        geo = dict(k="R", a=round(r))
+                    nb = {kk: vv for kk, vv in b.items() if kk not in ("forma", "trechos", "geo", "qtd", "comp", "pos")}
+                    nb.update(pos=pn, qtd=0, comp=round(r) + hE + hD, geo=geo, trechos=[f"{round(r)}"],
+                              traspasse=dict(orig=b["pos"], l0t=l0t))
+                    tipos[chave] = nb
+                tipos[chave]["qtd"] += qg
+                lst.append((tipos[chave]["pos"], x, round(r) + hE + hD))
+                x += r - l0t
+            grupos.append(lst)
+        novas += list(tipos.values())
+        mapa[b["pos"]] = dict(l0t=l0t, lb=round(lb, 1), alfa=alfa, boa=bo, n=n, grupos=grupos, qtd=(qA, qB), diam=b["diam"], comp_orig=b["comp"])
+    return novas, mapa
+
+
+def nota_traspasse(*mapas):
+    """texto curto para as notas da folha (aceita os mapas de várias marcas)."""
+    tud = {}
+    for mp in mapas:
+        for p, m in (mp or {}).items():
+            t = tud.setdefault(p, dict(m, ns=set()))
+            t["ns"].add(m["n"])
+    if not tud:
+        return None
+    partes = [f"{p} Ø{fd(m['diam'])}: {'/'.join(str(n) for n in sorted(m['ns']))} trechos, traspasse l0t = {m['l0t']:.0f} cm"
+              f" ({'boa' if m['boa'] else 'má'} aderência, α0t {fd(m['alfa'])})" for p, m in tud.items()]
+    return ("Barras de usina de 12 m — emendas por traspasse (NBR 6118:2023 9.5.2): " + "; ".join(partes) + ". Metade das barras "
+            "emendada em cada ponto, emendas defasadas ≥ 1,3 l0t entre centros (cotas na elevação de armação); amarrar os trechos encostados.")
