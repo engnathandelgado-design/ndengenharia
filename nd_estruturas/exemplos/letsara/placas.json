@@ -1,4 +1,36 @@
 {
+ "recorte": {
+  "tipos": "PP-05RE, PP-05RD (G-17, G-11), PP-08RE, PP-08RD (C-17, C-11)",
+  "b_mm": 260.0,
+  "z0_mm": 120.0,
+  "h_rec_mm": 1130.0,
+  "folga_consolo_mm": 66,
+  "x_console_mm": 330.0,
+  "nicho_mm": [
+   260.0,
+   400.0
+  ],
+  "fios_cortados": "os 10 fios param na face do recorte (x = 260): lbpt conta a partir dela; o dente Gerber (N3–N7) é o da PP01 com a ponta na face do recorte",
+  "desforma": {
+   "sig_face_MPa": 0.74,
+   "sig_toco_MPa": 0.079,
+   "sig_ponto_desforma_MPa": -1.29,
+   "lim_MPa": 1.2,
+   "ok": true,
+   "obs": "4 pontos com balancim a 0,104 L e 0,396 L (como a típica); face do recorte sem protensão"
+  },
+  "montada": {
+   "L_vao_m": 9.46,
+   "sig_MPa": -1.03,
+   "ok": true
+  },
+  "toco": {
+   "As_min_cm2": 0.18,
+   "armadura": "2 Ø8 de borda (C = 60) + 2 Ø8 diagonais a 45° no canto reentrante (C = 80) + 3 estribos Ø6,3 c/ 8",
+   "ok": true
+  },
+  "ok": true
+ },
  "secao": {
   "b_m": 1.25,
   "h_m": 0.1,

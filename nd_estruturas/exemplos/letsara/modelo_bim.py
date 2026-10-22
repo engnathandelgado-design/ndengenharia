@@ -532,6 +532,15 @@ def montar() -> ModeloBIM:
         ax, c = pos[V]
         for pc in pecas:
             s0, s1, z = pc["s0"] / 1000, pc["s1"] / 1000, (pc["z0"] + pc["z1"]) / 2000
+            if pc.get("rec"):                                            # DEC-044: placa recortada na ponta do eixo C (toco 260 × 120 embaixo)
+                rb, rz = FCH.REC_B / 1000, FCH.REC_Z0 / 1000
+                (a0, a1), (b0, b1) = ((s0, s1 - rb), (s1 - rb, s1)) if pc["rec"] == "s1" else ((s0 + rb, s1), (s0, s0 + rb))
+                z0p = pc["z0"] / 1000
+                for (u0, u1, zc, prf, nm) in ((a0, a1, z, PL, ""), (b0, b1, z0p + rz / 2, PerfilRetangular(0.10, rz, "Placa 125×10 — toco do recorte"), " toco do recorte")):
+                    p0, p1 = ((u0, c, zc), (u1, c, zc)) if ax == "x" else ((c, u0, zc), (c, u1, zc))
+                    m.linear("placa", f"{pc['id']} (vista {V}){nm}", prf, p0, p1, "Placas de fechamento",
+                             obs=f"L = {pc['L']} mm; {FCH.TIPO[pc['Lk']]}: recorte {FCH.REC_B} × {FCH.H_PL - FCH.REC_Z0} na ponta do eixo C (DEC-044, ND-LET-PP06); apoio: {pc['apoio']}")
+                continue
             p0, p1 = ((s0, c, z), (s1, c, z)) if ax == "x" else ((c, s0, z), (c, s1, z))
             m.linear("placa", f"{pc['id']} (vista {V})", PL, p0, p1, "Placas de fechamento", obs=f"L = {pc['L']} mm; apoio: {pc['apoio']}")
     # rev04: sem vigas de travamento VT (não há ponte rolante — NBR 9062:2017 5.1.2.1 e regra ND)
@@ -593,11 +602,12 @@ def montar() -> ModeloBIM:
         for pc in pecas:
             z0p = pc["z0"] / 1000
             zt = z0p + (FCH.Z_NC + FCH.NC_H / 2 - GF.N["t_teto"] - GF.T["G"]) / 1000   # topo da mesa do CS-1 (rev06c, PP03)
-            for (t, d) in ((pc["s0"], 1), (pc["s1"], -1)):
-                uc = t + d * FCH.X_CS
+            for (t, d, xcs_, e_cal) in ((pc["s0"], 1, pc["xcs"][0], pc["calco"][0]), (pc["s1"], -1, pc["xcs"][1], pc["calco"][1])):
+                uc = t + d * xcs_                                          # DEC-044: 330 da ponta nas placas recortadas
                 if (round(uc), round(pc["z0"] + FCH.Z_NC)) not in cons:
                     continue                                               # ponta da porta: sem console
                 u = uc / 1000
+                ecal = e_cal / 1000                                        # DEC-044: calço CS-1C/CS-1D — a face real do pilar fica ecal atrás do plano dos consoles
                 # NC-1 / NC-1' e CS-1 com a geometria das pranchas PP02/PP03 (geo_fixacao, caixas envolventes de cada peça)
                 for sol, grupo, pref in ((GF.nc1_no_console(0), GE, "NC-1"), (GF.cs1_solidos(0), GP, "CS-1")):
                     for so in sol:
@@ -609,8 +619,14 @@ def montar() -> ModeloBIM:
                         bw_c = next(b_ for sp, b_, _ in pil if abs(sp - min((q for q, _, _ in pil), key=lambda q: abs(q - uc))) < 1e-6)
                         cc_ = GF.concretado(V, bw_c)
                         mk_ = (f"CC-1 {pref} {so.nome} (de fábrica, face C)" if cc_ else f"{pref} {so.nome} (soldado na obra)") if pref == "CS-1" else f"{pref} {so.nome}"
+                        if ecal and pref == "CS-1":
+                            mk_ = f"{FCH.CALCO_MARCA[e_cal]} {so.nome} (CS-1 com calço {e_cal:g}, DEC-044)"
                         cx(ua, ub, -y1_ / 1000, -y0_ / 1000, zt + z0_ / 1000, zt + z1_ / 1000, mk_, grupo,
                            obs=("solda de fábrica do CC-1, concretado com o pilar (DEC-031)" if cc_ else "solda de campo filete 5 E70XX nos 2 lados verticais (DEC-030)") if so.nome == "costas" else "")
+                if ecal:                                                   # caixa do calço 120 × 330 × e (chapa 9,5), entre as costas do CS-1 e a CE-1
+                    zce_ = z0p + FCH.Z_CE / 1000
+                    cx(u - 0.06, u + 0.06, 0.0, ecal, zce_ - 0.165, zce_ + 0.165, f"{FCH.CALCO_MARCA[e_cal]} caixa de calço 120×330×{e_cal:g} ch. 9,5", GP,
+                       obs="soldada na fábrica nas costas do CS-1; fundo soldado na CE-1 na obra (filete 6, 2 × 330) — DEC-044, ND-LET-PP06")
                 # CE-1 do pilar (uma por pilar e fiada)
                 s_ax = min((sp for sp, _, _ in pil), key=lambda sp: abs(sp - uc)) / 1000
                 bw = next(b_ for sp, b_, _ in pil if abs(sp / 1000 - s_ax) < 1e-6) / 1000
@@ -620,13 +636,17 @@ def montar() -> ModeloBIM:
                     ub = min(0.19, bw / 2 - 0.01)
                     tce = GF.TCE / 1000
                     c_ce = s_ax
-                    if abs(u - s_ax) + 0.06 > ub - 0.005:                    # DEC-042: ponta de parede — CE-1 a 5 mm da aresta, sob o console
+                    nome_ce = f"CE-1 chapa de espera 380×330×{GF.TCE:g}".replace(".", ",")
+                    if pc.get("rec") and abs(u - s_ax) > 0.25:              # DEC-044: CE-1L com asas (console a 340 do eixo do pilar)
+                        ub = FCH.CE1L_B / 2000
+                        nome_ce = f"CE-1L chapa de espera {FCH.CE1L_B}×330×{GF.TCE:g} (asas de 220 além do pilar)".replace(".", ",")
+                    elif abs(u - s_ax) + 0.06 > ub - 0.005:                  # DEC-042: ponta de parede — CE-1 a 5 mm da aresta, sob o console
                         c_ce = s_ax + math.copysign(bw / 2 - 0.005 - 0.19, u - s_ax)
                         ub = 0.19
-                    cx(c_ce - ub, c_ce + ub, 0.0, tce, zce - 0.165, zce + 0.165, f"CE-1 chapa de espera 380×330×{GF.TCE:g}".replace(".", ","), GE)
+                    cx(c_ce - ub, c_ce + ub, ecal, ecal + tce, zce - 0.165, zce + 0.165, nome_ce, GE)
                     for du in (-0.12, 0.12):
                         for dz in (-0.14, 0.14):
-                            cx(c_ce + du - 0.008, c_ce + du + 0.008, tce, tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
+                            cx(c_ce + du - 0.008, c_ce + du + 0.008, ecal + tce, ecal + tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
             # pinos PT-1 (junta de baixo) ou travas de pé PT-2
             if pc["trava"] == "PT-1":
                 for xp in (pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"])):

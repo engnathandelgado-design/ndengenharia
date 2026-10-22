@@ -3,6 +3,7 @@
 Mudanças relevantes do nd_estruturas. Formato Keep a Changelog, versões semânticas.
 
 ## [Não lançado]
+- Letsara DEC-044 (decisão do Nathan): placas G-11/G-17/C-11/C-17 recortadas no I130 (PP-05RE/RD, PP-08RE/RD), console a 330 da ponta em CE-1L 840 × 330; CS-1C/CS-1D com caixa de calço 120 × 330 × 100/75 nos cantos, P1B/P2B e P10; nova folha ND-LET-PP06; calc_placas.py (`recorte`) e calc_fixacao_placas.py (`CE1L`, `calcos`); PP00/PP01/PP03/PP04/MT01, pilares PC-01/PC-02/PG-02/PG-04/PL-02/03/04/06/07/08, quantitativos e modelo 3D (colisao_modelo.py = 0). Listas de protensão com os nomes das peças por extenso.
 - Letsara: checagem de colisão do modelo inteiro e correções do modelo 3D (22/10); ST-1FL verificado com reações reais.
 - Letsara DEC-042: pilares de canto de seção cheia 40 × 60 até o topo (decisão do Nathan), última terça do lado E no ST-1FL com 2 ES-1FL M20 na face lateral, armadura própria da cabeça (vento da platibanda) com traspasse, CE-1 na aresta da face C em ponta de parede, planta-chave com círculo e nome de cada peça; checagem de colisão da platibanda (colisao_platibanda.py).
 - Letsara DEC-039 (decisão do Nathan): CT-1/CT-1P e buchas BR-3/BR-4/BR-5 removidas; o giro de montagem da VM é travado pela ponta concretada antes das lajes (calc_vm_meio_vaso.py: junta ao cisalhamento τ 0,28 ≤ 0,43 MPa; lajes com fcj ≥ 20 MPa); VM01 det. 2, pilares, CT02, CT04, MON02/03, LA01, NG01, quantitativos e 3D atualizados. DEC-038 substituída.

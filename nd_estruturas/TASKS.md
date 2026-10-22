@@ -57,7 +57,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
-- 22/10 Letsara colisões: checagem do modelo inteiro (colisao_modelo.py, OBB + sólidos exatos); CE-1/CS-1 das paredes internas e parede C no lado certo; recortes da cobertura nas cabeças dos PF + RF-4P; lajes com recorte nos pilares; RF-1 com pingadeira interna a prumo; piso até as placas; ST-1FL com as reações reais da terça de ponta (verif_st1fl.py). Pendente decisão: offset das CE-1 nos pilares de 40 (cantos, PL-02/06, PG-02/04) e I130 V406/V407 atravessando as paredes G e C.
+- 22/10 Letsara colisões: checagem do modelo inteiro (colisao_modelo.py, OBB + sólidos exatos); CE-1/CS-1 das paredes internas e parede C no lado certo; recortes da cobertura nas cabeças dos PF + RF-4P; lajes com recorte nos pilares; RF-1 com pingadeira interna a prumo; piso até as placas; ST-1FL com as reações reais da terça de ponta (verif_st1fl.py). Resolvido em DEC-044 (22/10): recorte nas placas + CE-1L e calços CS-1C/CS-1D (ND-LET-PP06). Pendente decisão: P8/P8B (PM-01) terminam em +6,55 e a CE-1 da fiada +6,25 fica acima do topo — subir o PM-01 a +7,45/+7,50?
 - [x] 2026-10-22 — Letsara DEC-042: cabeça dos pilares (cantos de seção cheia + ST-1FL, armadura da cabeça para o vento da platibanda, CE-1 em ponta de parede, planta-chave com nomes).
 
 - [x] 2026-10-21 — Letsara DEC-039: CT-1 removida; ponta da VM concretada antes das lajes trava o giro de montagem (junta verificada ao cisalhamento; fcj ≥ 20 MPa); pranchas e 3D regerados (substitui a DEC-038).

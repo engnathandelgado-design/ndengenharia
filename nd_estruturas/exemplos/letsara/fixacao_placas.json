@@ -531,6 +531,82 @@
    "h": 330.0
   }
  },
+ "CE1L": {
+  "peca": "CE-1L 840 × 330 × 12,5 A36 + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 — asas de 220 além das faces do pilar (2 peças: PC-01 e PC-02, fiada +6,25)",
+  "onde": "placas recortadas PP-05RE/RD (parede G) e PP-08RE/RD (parede C): console a 330 da ponta da placa = 340 do eixo do pilar",
+  "asa": {
+   "balanco_mm": 140.0,
+   "M_kNm": 3.75,
+   "sigma_MPa": 16.5,
+   "T_kNm": 1.45,
+   "tau_MPa": 90.7,
+   "von_mises_MPa": 158.0,
+   "lim_MPa": 227.3,
+   "uso": 0.695,
+   "rotacao_rad": 0.0122,
+   "flecha_ponta_console_mm": 0.78
+  },
+  "pinos": "iguais à CE-1 (2 consoles, V e M iguais; os momentos no plano das 2 asas se anulam) — interação 0.877",
+  "ok": true
+ },
+ "calcos": {
+  "CS-1C": {
+   "peca": "CS-1C = CS-1 + caixa de calço 120 × 330 × 100 em chapa 9,5 A36 (2 laterais 330 × 100, topo e fundo 101 × 100, frente e fundo 120 × 330), soldada na fábrica nas costas do CS-1",
+   "e_mm": 100.0,
+   "braco_mm": 154.0,
+   "M_kNm": 4.13,
+   "kg_caixa": 12.3,
+   "CE1_1_console": {
+    "T_linha_sup_kN": 21.6,
+    "phiN_linha_kN": 47.3,
+    "interacao": 0.607,
+    "flexao_chapa_MPa": 144.1,
+    "lim_MPa": 227.3
+   },
+   "caixa": {
+    "sigma_MPa": 6.4,
+    "tau_MPa": 4.3,
+    "von_mises_MPa": 9.8,
+    "lim_MPa": 227.3
+   },
+   "solda_campo": {
+    "filete_mm": 6.0,
+    "cordoes": "2 × 330 verticais (fundo da caixa × CE-1)",
+    "f_res_MPa": 33.1,
+    "fw_Rd_MPa": 215.6,
+    "uso": 0.154
+   },
+   "ok": true
+  },
+  "CS-1D": {
+   "peca": "CS-1D = CS-1 + caixa de calço 120 × 330 × 75 em chapa 9,5 A36 (2 laterais 330 × 75, topo e fundo 101 × 75, frente e fundo 120 × 330), soldada na fábrica nas costas do CS-1",
+   "e_mm": 75.0,
+   "braco_mm": 129.0,
+   "M_kNm": 3.46,
+   "kg_caixa": 10.7,
+   "CE1_1_console": {
+    "T_linha_sup_kN": 19.3,
+    "phiN_linha_kN": 47.3,
+    "interacao": 0.565,
+    "flexao_chapa_MPa": 120.7,
+    "lim_MPa": 227.3
+   },
+   "caixa": {
+    "sigma_MPa": 5.4,
+    "tau_MPa": 4.3,
+    "von_mises_MPa": 9.1,
+    "lim_MPa": 227.3
+   },
+   "solda_campo": {
+    "filete_mm": 6.0,
+    "cordoes": "2 × 330 verticais (fundo da caixa × CE-1)",
+    "f_res_MPa": 29.0,
+    "fw_Rd_MPa": 215.6,
+    "uso": 0.135
+   },
+   "ok": true
+  }
+ },
  "cargas_por_console": {
   "G_k_kN": 15.86,
   "Vd_kN": 26.8,

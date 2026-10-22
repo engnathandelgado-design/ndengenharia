@@ -494,6 +494,60 @@ M_ce_loc = T_topo * 40 / 2
 R["CE1"]["flexao_chapa"] = dict(t_mm=T_CE, sigma_MPa=round(6 * M_ce_loc / (100 * T_CE ** 2), 1), lim_MPa=round(FY36 / GA1, 1))
 assert 6 * M_ce_loc / (100 * T_CE ** 2) <= FY36 / GA1
 
+# ------------------------------------------------------------------ DEC-044 (22/10/2026): CE-1L (asas) e calços CS-1C / CS-1D
+# (a) CE-1L 840 × 330 × 12,5 nos pilares do eixo C das paredes G (PC-01, fiada +6,25) e C (PC-02, fiada +6,25): placas recortadas com o
+# console a 330 da ponta → eixo do console a 340 do eixo do pilar (largura 400): asa de 220 além da face, console a 140 da aresta.
+# A asa é um balanço de chapa no próprio plano (flexão no plano + torção pelo braço Y_NIV + 8); os 4 pinos são os da CE-1 (cargas iguais: 2 consoles).
+B_CE1L, A_ASA, X_CONS_ASA = 840.0, 140.0, 340.0
+M_asa = Vd_N * A_ASA                                     # N·mm, flexão no plano da chapa
+W_asa = T_CE * 330.0 ** 2 / 6
+sig_asa = M_asa / W_asa
+T_asa = Vd_N * (Y_NIV + 8.0)                             # torção da faixa 330 × 12,5 (J = b t³/3; τ = 3T / (b t²))
+tau_asa = 3 * T_asa / (330.0 * T_CE ** 2) + Vd_N / (330.0 * T_CE)
+vm_asa = math.sqrt(sig_asa ** 2 + 3 * tau_asa ** 2)
+G_ACO = 77000.0
+rot_asa = T_asa * A_ASA / (G_ACO * 330.0 * T_CE ** 3 / 3)
+R["CE1L"] = dict(peca=f"CE-1L {B_CE1L:g} × 330 × {T_CE:g} A36".replace(".", ",") + " + 4 pinos Ø16 × 150 c/ cabeça Ø32 (a 240 × 280) + 2 grampos U Ø10 — asas de 220 além das faces do pilar (2 peças: PC-01 e PC-02, fiada +6,25)",
+                 onde="placas recortadas PP-05RE/RD (parede G) e PP-08RE/RD (parede C): console a 330 da ponta da placa = 340 do eixo do pilar",
+                 asa=dict(balanco_mm=A_ASA, M_kNm=round(M_asa / 1e6, 2), sigma_MPa=round(sig_asa, 1), T_kNm=round(T_asa / 1e6, 2), tau_MPa=round(tau_asa, 1),
+                          von_mises_MPa=round(vm_asa, 1), lim_MPa=round(FY36 / GA1, 1), uso=round(vm_asa / (FY36 / GA1), 3), rotacao_rad=round(rot_asa, 4),
+                          flecha_ponta_console_mm=round(rot_asa * Y_PONTA, 2)),
+                 pinos="iguais à CE-1 (2 consoles, V e M iguais; os momentos no plano das 2 asas se anulam) — interação " + f"{ri:.3f}",
+                 ok=vm_asa <= FY36 / GA1 and ok_i)
+assert vm_asa <= FY36 / GA1
+# (b) calço entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles: CS-1C (e = 100: cantos e P1B/P2B da parede G) e CS-1D (e = 75: P10 da parede C).
+# Caixa fechada de chapas 9,5 (120 × 330 × e, a altura toda da CE-1) soldada na fábrica nas costas do CS-1 (pela chapa da frente); na obra, a chapa
+# de fundo da caixa é soldada na CE-1 (filete 6 nos 2 lados verticais de 330). O binário do console passa pela caixa com braço 2/3 · 330 (não mais
+# 2/3 · 130 da costas), o que mantém a flexão local da CE-1 e a solda de campo dentro do limite. Nesses pilares a CE-1 recebe 1 console só.
+H_CX, B_CX, T_CX = 330.0, 120.0, 9.5
+R["calcos"] = {}
+for marca_c, e_c in (("CS-1C", 100.0), ("CS-1D", 75.0)):
+    lever = Y_NIV + 8.0 + e_c                                 # braço do console até o plano médio da CE-1
+    M_c = Vd_N * lever                                        # N·mm
+    # CE-1 com 1 console: pinos (linha superior) e flexão local da chapa (tração do topo da caixa levada ao pino a 40 mm)
+    T_lin_c = M_c / 1e3 / z_ce + Ry_d / 2
+    ri_c, ok_c = interacao(T_lin_c, phiN_linha, Vd, v["phiVn_kN"])
+    T_topo_c = M_c / (2 / 3 * H_CX)
+    sig_loc_c = 6 * (T_topo_c * 40 / 2) / (100 * T_CE ** 2)
+    # caixa do calço: seção 120 × 330 (paredes 9,5) à flexão + corte
+    I_cx = 2 * (T_CX * H_CX ** 3 / 12) + 2 * ((B_CX - 2 * T_CX) * T_CX) * (H_CX / 2 - T_CX / 2) ** 2
+    sig_cx = M_c * (H_CX / 2) / I_cx
+    tau_cx = Vd_N / (2 * T_CX * H_CX)
+    vm_cx = math.sqrt(sig_cx ** 2 + 3 * tau_cx ** 2)
+    # solda de campo fundo da caixa × CE-1: filete 6 nos 2 lados verticais de 330 (método vetorial elástico, NBR 8800:2008 6.2.5.1)
+    a_c, L_wc = 6.0, H_CX
+    tw_c = 0.707 * a_c
+    Aw_c = 2 * L_wc * tw_c
+    Iw_c = 2 * tw_c * L_wc ** 3 / 12
+    f_res_c = math.sqrt((Vd_N / Aw_c) ** 2 + (M_c * (L_wc / 2) / Iw_c + Fy_N / Aw_c) ** 2)
+    kg_cx = 7850e-9 * T_CX * (2 * H_CX * e_c + 2 * (B_CX - 2 * T_CX) * e_c + 2 * B_CX * H_CX)
+    R["calcos"][marca_c] = dict(peca=f"{marca_c} = CS-1 + caixa de calço {B_CX:g} × {H_CX:g} × {e_c:g} em chapa {T_CX:g} A36 (2 laterais {H_CX:g} × {e_c:g}, topo e fundo {B_CX - 2 * T_CX:g} × {e_c:g}, frente e fundo {B_CX:g} × {H_CX:g}), soldada na fábrica nas costas do CS-1".replace(".", ","),
+                                e_mm=e_c, braco_mm=lever, M_kNm=round(M_c / 1e6, 2), kg_caixa=round(kg_cx, 1),
+                                CE1_1_console=dict(T_linha_sup_kN=round(T_lin_c, 1), phiN_linha_kN=round(phiN_linha, 1), interacao=round(ri_c, 3), flexao_chapa_MPa=round(sig_loc_c, 1), lim_MPa=round(FY36 / GA1, 1)),
+                                caixa=dict(sigma_MPa=round(sig_cx, 1), tau_MPa=round(tau_cx, 1), von_mises_MPa=round(vm_cx, 1), lim_MPa=round(FY36 / GA1, 1)),
+                                solda_campo=dict(filete_mm=a_c, cordoes=f"2 × {L_wc:g} verticais (fundo da caixa × CE-1)", f_res_MPa=round(f_res_c, 1), fw_Rd_MPa=round(fw_Rd, 1), uso=round(f_res_c / fw_Rd, 3)),
+                                ok=ok_c and sig_loc_c <= FY36 / GA1 and vm_cx <= FY36 / GA1 and f_res_c <= fw_Rd)
+    assert R["calcos"][marca_c]["ok"], marca_c
 R["cargas_por_console"] = dict(G_k_kN=round(Rz_k, 2), Vd_kN=round(Vd, 2), vento_d_kN=round(Ry_d, 2),
                                obs="placa PP-01 (L 10,165 m, 3,24 t); Vd com γf 1,3 × βa 1,3 de montagem (NBR 9062:2017 5.3.2), maior que 1,4 da fase final")
 (Path(os.environ.get("CS1_SAIDA", AQ / "fixacao_placas.json"))).write_text(json.dumps(R, indent=1, ensure_ascii=False, default=float), encoding="utf-8")

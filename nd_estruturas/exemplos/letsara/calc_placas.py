@@ -124,7 +124,34 @@ Ft_M20 = 0.75 * 314e-6 * 800e3 / 1.35
 Fv_M20 = 0.4 * 245e-6 * 800e3 / 1.35
 int_ca = (T_ca / Ft_M20) ** 2 + (V_ca / Fv_M20) ** 2
 
+# ---------------------------------------------------------------- DEC-044 (22/10/2026): placas recortadas PP-05RE/RD (parede G, L 9,86) e PP-08RE/RD (parede C, L 4,535)
+# O consolo CP-I130 (50 × 40, fundo 226 mm acima da base da fiada +6,25) e o nariz do I130 atravessam a parede: recorte de REC_B × (h − REC_Z0)
+# na ponta do eixo C. O console CS-1 dessa ponta vai para X_CS_R = 330 mm da ponta (nicho NC-1 de 260 a 400, aberto na face do recorte):
+# o dente Gerber (N3–N7, ND-LET-PP01) fica igual ao típico, com a "ponta" na face do recorte. Abaixo sobra um toco 260 × 120 sem protensão.
+REC_B, REC_Z0, X_CS_R = 0.260, 0.120, 0.330
+FOLGA_CONSOLO = 0.226 - REC_Z0 - 0.040           # fundo do consolo − toco − janela de montagem (40) ≥ folga 20
+L_rec = 9.860
+w_desf = pp * 1.3 * 1.2                          # desforma deitada (βa 1,3, sucção 1,2)
+x_iz = 0.104 * L_rec                             # 1º ponto de desforma (balancim)
+M_face = w_desf * (x_iz - REC_B) ** 2 / 2 + w_desf * REC_Z0 / b * REC_B * (x_iz - REC_B / 2)   # balanço até a face do recorte (seção cheia, sem protensão: dentro de lbpt)
+sig_face = M_face / W_fora / 1e3
+M_toco = w_desf * REC_Z0 / b * REC_B ** 2 / 2
+sig_toco = M_toco / (REC_Z0 * h ** 2 / 6) / 1e3
+sig_desf_rec = -GAMA_P_FAV * P0 / A / 1e3 * min(1.0, (x_iz - REC_B) / LBPT) + w_desf * 0.0054 * L_rec ** 2 / W_fora / 1e3   # no ponto de desforma: protensão parcial (lbpt a partir da face)
+L_vao_rec = L_rec - 0.070 - X_CS_R
+sig_montada_rec = sig_cp_inf + pp * L_vao_rec ** 2 / 8 / W_plano / 1e3
+# toco em balanço na peça montada (no plano): só o próprio peso — 2 Ø8 de borda + 2 Ø8 diagonais no canto reentrante (controle de fissura) + 3 estribos Ø6,3
+As_min_toco = 0.0015 * REC_Z0 * h * 1e4           # cm² (mínima de borda, NBR 6118:2023 17.3.5.2.1)
+REC = dict(tipos="PP-05RE, PP-05RD (G-17, G-11), PP-08RE, PP-08RD (C-17, C-11)", b_mm=REC_B * 1000, z0_mm=REC_Z0 * 1000, h_rec_mm=(b - REC_Z0) * 1000,
+           folga_consolo_mm=round(FOLGA_CONSOLO * 1000), x_console_mm=X_CS_R * 1000, nicho_mm=[REC_B * 1000, REC_B * 1000 + 140],
+           fios_cortados="os 10 fios param na face do recorte (x = 260): lbpt conta a partir dela; o dente Gerber (N3–N7) é o da PP01 com a ponta na face do recorte",
+           desforma=dict(sig_face_MPa=round(sig_face, 2), sig_toco_MPa=round(sig_toco, 3), sig_ponto_desforma_MPa=round(sig_desf_rec, 2), lim_MPa=round(fctk_j / 1.5, 2),
+                         ok=max(sig_face, sig_toco, sig_desf_rec) <= fctk_j / 1.5, obs="4 pontos com balancim a 0,104 L e 0,396 L (como a típica); face do recorte sem protensão"),
+           montada=dict(L_vao_m=round(L_vao_rec, 3), sig_MPa=round(sig_montada_rec, 2), ok=sig_montada_rec <= 0),
+           toco=dict(As_min_cm2=round(As_min_toco, 2), armadura="2 Ø8 de borda (C = 60) + 2 Ø8 diagonais a 45° no canto reentrante (C = 80) + 3 estribos Ø6,3 c/ 8", ok=2 * 0.503 >= As_min_toco),
+           ok=max(sig_face, sig_toco, sig_desf_rec) <= fctk_j / 1.5 and sig_montada_rec <= 0 and FOLGA_CONSOLO >= 0.020)
 R = dict(
+    recorte=REC,
     secao=dict(b_m=b, h_m=h, A_m2=A, pp_kNm=round(pp, 2), L_max_m=L, peso_t=round(peso_t, 2), fck=fck, fckj=fckj, Ec_MPa=round(Ec)),
     protensao=dict(cordoalhas=f"{n_c} fios Ø{D_CORD:g} CP-175 RB ({n_c // 2} por face, alinhados, eixo a {d_c * 100:.2f} cm das faces)".replace(".", ","), aco=ACO, fptk=FPTK_P, diam_mm=D_CORD, n=n_c,
                    por_face=n_c // 2, z_mm=Z_CORD, eixo_face_mm=round(d_c * 1000, 1), Ap_mm2=round(n_c * Ap1 * 1e6, 1),
