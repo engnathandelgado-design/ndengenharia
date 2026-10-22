@@ -48,6 +48,10 @@ for (V, s_, w_, z), xs in _grp.items():
     else:
         N_CE_OBRA += 1; N_CS_OBRA += len(xs)
 N_CS_FAB = N_CS - N_CS_OBRA
+# DEC-044: CS-1 com calço (CS-1C 100 / CS-1D 75) — todos em CE-1 de obra; CE-1L (asas) nos pilares do eixo C das paredes G e C (fiada +6,25)
+N_CAL = {m_: len(v_) for m_, v_ in FCH.CALCOS.items()}
+N_CE1L = len({(V, p["k"]) for V, p in FCH.RECORTADAS})
+KG_CAL = {m_: FX["calcos"][m_]["kg_caixa"] for m_ in N_CAL}
 # NC-1 só nas pontas com console (as pontas do lado da porta da vista I não têm console nem nicho): NC-1 na ponta inicial (s0)
 # e NC-1' (espelhado) na ponta final (s1) do comprimento da placa, como nas pranchas PP-x e no IFC
 N_NC_E = N_NC_D = 0
@@ -267,14 +271,17 @@ rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET
         ["CC-1", "CE-1 + 2 CS-1 soldados na fábrica (face C, concretado)", "PP03/PP04", N_CC["CC2"], f(kg_ce + 2 * kg_cs, 2), f((kg_ce + 2 * kg_cs) * N_CC["CC2"], 0)],
         ["CC-1E", "CE-1 + 1 CS-1 à esquerda (face C, concretado)", "PP03/PP04", N_CC["CC1E"], f(kg_ce + kg_cs, 2), f((kg_ce + kg_cs) * N_CC["CC1E"], 0)],
         ["CC-1D", "CE-1 + 1 CS-1 à direita (face C, concretado)", "PP03/PP04", N_CC["CC1D"], f(kg_ce + kg_cs, 2), f((kg_ce + kg_cs) * N_CC["CC1D"], 0)],
-        ["CE-1", "chapa de espera + 4 pinos (faces laterais, rente)", "ND-LET-PP04", N_CE_OBRA, f(kg_ce, 2), f(kg_ce * N_CE_OBRA, 0)],
-        ["CS-1", "console soldado na obra na CE-1 lateral", "ND-LET-PP03", N_CS_OBRA, f(kg_cs, 2), f(kg_cs * N_CS_OBRA, 0)],
+        ["CE-1", "chapa de espera + 4 pinos (faces laterais, rente)", "ND-LET-PP04", N_CE_OBRA - N_CE1L, f(kg_ce, 2), f(kg_ce * (N_CE_OBRA - N_CE1L), 0)],
+        ["CE-1L", "CE-1 840 × 330 com asas (P8A e P11, fiada +6,25; DEC-044)", "ND-LET-PP06", N_CE1L, f(kg_ce + kg_ch(840 - 380, 330, GF.TCE), 2), f((kg_ce + kg_ch(840 - 380, 330, GF.TCE)) * N_CE1L, 0)],
+        ["CS-1", "console soldado na obra na CE-1 lateral", "ND-LET-PP03", N_CS_OBRA - sum(N_CAL.values()), f(kg_cs, 2), f(kg_cs * (N_CS_OBRA - sum(N_CAL.values())), 0)],
+        ["CS-1C", "CS-1 + caixa de calço 100 (cantos, P1B/P2B; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1C", 0), f(kg_cs + KG_CAL.get("CS-1C", 0), 2), f((kg_cs + KG_CAL.get("CS-1C", 0)) * N_CAL.get("CS-1C", 0), 0)],
+        ["CS-1D", "CS-1 + caixa de calço 75 (P10 da parede C; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1D", 0), f(kg_cs + KG_CAL.get("CS-1D", 0), 2), f((kg_cs + KG_CAL.get("CS-1D", 0)) * N_CAL.get("CS-1D", 0), 0)],
         ["PT-1", "cartola + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT1, f(kg_pt1, 2), f(kg_pt1 * N_PT1, 0)],
         ["PT-2", "cantoneira + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT2, f(kg_pt2, 2), f(kg_pt2 * N_PT2, 0)]]
 OMJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
 kg_om = OMJ["kg_un"] + 0.94 + 0.32 * 2 + 0.25 * 2 + 0.10 * 2
 rows.append(["OM-1", "ombreira em U + base + CL-1 (porta da vista I)", "ND-LET-PP05", 2, f(kg_om, 2), f(kg_om * 2, 0)])
-tot = kg_nc * N_NC + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt2 * N_PT2 + kg_om * 2
+tot = kg_nc * N_NC + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt2 * N_PT2 + kg_om * 2 + sum(KG_CAL[m_] * N_CAL[m_] for m_ in N_CAL) + kg_ch(840 - 380, 330, GF.TCE) * N_CE1L
 rows.append(["", "total da fixação (sem luvas e buchas)", "", "", "", f(tot, 0)])
 y = pr.tabela(XC, y - 8, "RESUMO DAS PEÇAS METÁLICAS — OBRA", ["MARCA", "COMPOSIÇÃO", "FOLHA", "QT", "kg/un", "kg"], rows, [24, 76, 26, 14, 20, 30], h_lin=5.2, destaque_ultima=True)
 MO = FX["montagem_CS1_NC1"]
@@ -301,7 +308,7 @@ pr.notas(XC, y - 2, [
     f"Barras da ponta no plano médio, entre os {FCH.PRT_} (eixo a {f(FCH.EX_ / 10, 2)} cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
     "Medidas das peças Trejor (CS-1, NC-1, cartola) de pré-dimensionamento: confirmar com o catálogo 09 da Trejor antes da compra.",
     "Cotas metálicas em mm; concreto em cm."], 190)
-json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CE1=N_CE, CE1_obra=N_CE_OBRA, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT2=N_PT2)),
+json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CS1C=N_CAL.get("CS-1C", 0), CS1D=N_CAL.get("CS-1D", 0), CE1=N_CE, CE1_obra=N_CE_OBRA, CE1L=N_CE1L, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT2=N_PT2)),
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")
 print("PP01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

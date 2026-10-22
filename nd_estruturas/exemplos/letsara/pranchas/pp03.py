@@ -201,6 +201,7 @@ pr.notas(XC, y - 4, [
     "Galvanização a fogo após a soldagem (NBR 6323, ≥ 85 µm); porcas soldadas com rosca sobremedida (repassar a rosca depois da galvanização). Parafusos galvanizados a fogo, prisioneiro zincado.",
     f"Solda costas × CE-1 (na fábrica do pilar nos CC-1 da face C; na obra nas CE-1 laterais): filete {FXJ['solda']['filete_mm']:g} E70XX nos 2 lados verticais ({co["z1"] - co["z0"]:g} mm), soldador qualificado, inspeção visual 100 % e líquido penetrante em 10 %; galvanização a frio no cordão. Nível do topo da mesa pela topografia (±3).",
     f"Folgas verificadas no pior caso das tolerâncias (afastamento {T['a']:g} ± {T['a_tol']:g}, G {G0:g} ± {T['G_tol']:g}, posição ± {T['x_tol']:g}): engate aba × dente ≥ {MO['folgas_mm']['engate aba–dente com G máximo (z)']:g}, rosca do nível ≥ 16 fios-mm, janela de montagem ≥ 15 (memória ND-LET-MC07).",
+    f"DEC-044: nos pilares cuja face fica atrás do plano dos consoles (cantos das vistas A e I, P1B/P2B da vista G, P10 da vista C) o CS-1 vai com caixa de calço 120 × 330 × 100 (CS-1C, {PP01['n']['CS1C']} pç) ou × 75 (CS-1D, {PP01['n']['CS1D']} pç) soldada nas costas na fábrica — ND-LET-PP06. Nas placas recortadas das paredes G e C o console fica a 330 da ponta, numa CE-1L (PP06).",
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP03")
 print("PP03", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

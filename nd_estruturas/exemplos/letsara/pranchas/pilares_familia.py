@@ -4,6 +4,7 @@ import json, math, re, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 import pilar_generico as G
 import geo_fixacao as GF
+import fechamento as FCH
 from familia_pl import MARCAS
 from geometria import Y_LIN, X_EIXO, X_FACH
 
@@ -63,7 +64,20 @@ def consoles_fch(nome, face, extra):
             s_, b_, n_ = min(FCH.VISTAS[V]["pil"], key=lambda q: abs(q[0] - x))
             if n_ == n:
                 ks.setdefault(round((z - FCH.Z_NC) / FCH.H_PL), set()).add("E" if x < s_ else "D")
-    return {k: "".join(sorted(v)) for k, v in sorted(ks.items())}
+    if not extra.startswith("__"):
+        return {k: "".join(sorted(v)) for k, v in sorted(ks.items())}
+    return alvo
+
+
+def calco_fch(nome, face, extra):
+    """DEC-044: calço do CS-1 (100 / 75 mm) nos pilares cuja face fica atrás do plano dos consoles — fonte: fechamento.CALCO."""
+    import fechamento as FCH
+    for V, n in consoles_fch(nome, face, "__" + extra):
+        idx = next((i for i, (_, _, n_) in enumerate(FCH.VISTAS[V]["pil"]) if n_ == n), None)
+        e = FCH.CALCO.get((V, idx), 0)
+        if e:
+            return e
+    return 0
 
 
 def ip_marca(txt, nome=None):
@@ -76,7 +90,7 @@ def ip_marca(txt, nome=None):
             kk = consoles_fch(nome, fc, extra)
             assert len(kk) == n, (nome, fc, n, kk)
             zs, lados = [Z_PL[k] for k in kk], list(kk.values())
-        out.append(dict(face=fc, z=zs, obs=extra, lados=lados,
+        out.append(dict(face=fc, z=zs, obs=extra, lados=lados, calco=calco_fch(nome, fc, extra) if nome else 0,
                         aresta_C=bool(fc in "BD" and lados and all(len(l_) == 1 for l_ in lados))))     # DEC-042: ponta de parede
     return out
 
@@ -154,7 +168,9 @@ def dados(mk):
     if n_mez and len({c["face"] for c in cons if c["tipo"] == "CP-MEZ"}) == 2:      # apoio interno: continuidade da VM atravessa o pilar
         ins.append(["BA-1", "Bainha corrugada Ø50 horizontal (N11)", n_mez, "12 cm acima da VM"])
     for ip in ips:
-        ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 (CS-1 na obra)").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
+        cal_ = ip.get("calco", 0)
+        txt_cs = f"CS-1 na obra" if not cal_ else f"{FCH.CALCO_MARCA[cal_]} na obra: CS-1 com calço de {cal_:g} mm, a face fica {cal_:g} atrás do plano dos consoles — PP06"
+        ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 ({txt_cs})").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
         ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
     if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar)", 2, "assento TS-01, y ±100, 102,5 da cabeça"])

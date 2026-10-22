@@ -52,7 +52,7 @@ ORDEM = (["ND-LET-NG01", "ND-LET-PR01", "ND-LET-LOC01", "ND-LET-CG01", "ND-LET-C
          + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)]
          + [f"ND-LET-PC{k:02d}" for k in range(1, 4)] + ["ND-LET-PM01"] + [f"ND-LET-PG{k:02d}" for k in range(1, 5)]
          + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01", "ND-LET-LA01"]
-         + [f"ND-LET-PP{k:02d}" for k in range(0, 6)] + [f"ND-LET-PP-{v}" for v in ("A", "B", "C", "D", "EF", "G", "HJ", "I")]
+         + [f"ND-LET-PP{k:02d}" for k in range(0, 7)] + [f"ND-LET-PP-{v}" for v in ("A", "B", "C", "D", "EF", "G", "HJ", "I")]
          + ["ND-LET-CM01", "ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-MT01-1", "ND-LET-MT01-2"])
 PREVISTAS = {"ND-LET-NG01": "FOLHA DE ROSTO, ÍNDICE DAS FOLHAS E NOTAS GERAIS DO PROJETO EXECUTIVO",
              "ND-LET-PR01": "QUADRO DE PRODUÇÃO E CONCRETAGEM DAS PEÇAS — POR MARCA",
