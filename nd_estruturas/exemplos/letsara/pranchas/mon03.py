@@ -182,7 +182,7 @@ pz = lambda mks: max(PQ[m][7] for m in mks)
 Lz = lambda mks: max(PQ[m][4] for m in mks)
 pil = [m for m in PQ if m[:2] in ("PL", "PF", "PC", "PM", "PG")]
 ica = [["Pilares", fd(pz(pil), 1), fd(Lz(pil), 2), "2 alças AL-2 (desforma) + furo FI-1 (verticalizar e montar)", "pino passante + 2 manilhas"],
-       ["I130 (V405 a V407)", fd(pz(["V405", "V406", "V407"]), 1), fd(Lz(["V405", "V406", "V407"]), 2), "2 alças AL-3 (3 laços cada)", "balancim"],
+       ["I130 (V405, V406, V407)", fd(pz(["V405", "V406", "V407"]), 1), fd(Lz(["V405", "V406", "V407"]), 2), "2 alças AL-3 (3 laços cada)", "balancim"],
        ["TS-01", fd(pz(["TS-01"]), 1), fd(Lz(["TS-01"]), 2), "4 alças AL-1", "2 balancins, cabos verticais"],
        ["VM-01 / VM-02", fd(pz(["VM-01", "VM-02"]), 1), fd(Lz(["VM-01", "VM-02"]), 2), "2 alças AL-1", "cabos ≥ 45°"],
        ["VB-01 a VB-08", fd(pz([f"VB-0{k}" for k in range(1, 9)]), 1), fd(Lz([f"VB-0{k}" for k in range(1, 9)]), 2), "2 alças AL-1", "escorar após montar"],

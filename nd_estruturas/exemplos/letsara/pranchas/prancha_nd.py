@@ -387,14 +387,27 @@ class Prancha:
         return dict(total_kg=total, resumo=resumo, y_base=y)
 
     def cabecalho_peca(self, marca, titulo, linha2, largura=500):
-        """Quadro no canto superior esquerdo: marca grande, título (seção, comprimento) e linha de dados — padrão de produção."""
+        """Quadro no canto superior esquerdo: nomes das peças (grande), título (seção, comprimento) e linha de dados.
+        rev08: os nomes vêm por extenso (P29, P30, P31, P32); se nomes + título não cabem numa linha, o título desce para
+        uma 2ª linha e o quadro cresce (a altura usada fica em self.cab_y0 para quem desenha abaixo)."""
         Q = self.quadro
-        self.ret(Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CARIMBO")
         marca = _RENOMEAR(marca)                            # rev08: nomes das peças (P1…, V200…) antes de medir
-        self.texto(Q[0] + 10, Q[3] - 24, _MNOVO + marca, "grande", "TITULO")
-        self.texto(Q[0] + 10 + _wtext(marca, ALTURAS["grande"]) + 8, Q[3] - 24, titulo, "titulo", "TITULO")
-        self.texto(Q[0] + 10, Q[3] - 14, linha2, "nota", "TEXTO")
-        self.blocos_livres.append((Q[0] + 4, Q[3] - 30, Q[0] + largura, Q[3] - 4, "CABEÇALHO"))
+        wm, wt = _wtext(marca, ALTURAS["grande"]), _wtext(titulo, ALTURAS["titulo"])
+        duas = wm + 8 + wt > largura - 16
+        larg = max(largura, (max(wm, wt) if duas else wm + 8 + wt) + 16)     # o quadro acompanha o texto mais longo
+        y0 = Q[3] - 30                                                    # altura fixa: nada abaixo precisa mudar
+        self.ret(Q[0] + 4, y0, Q[0] + larg, Q[3] - 4, "CARIMBO")
+        if duas:                                                          # linha de dados, nomes e título em 3 linhas
+            self.texto(Q[0] + 10, Q[3] - 10, linha2, "nota", "TEXTO")
+            self.texto(Q[0] + 10, Q[3] - 18.5, _MNOVO + marca, "grande", "TITULO")
+            self.texto(Q[0] + 10, Q[3] - 26.5, titulo, "titulo", "TITULO")
+        else:
+            self.texto(Q[0] + 10, Q[3] - 14, linha2, "nota", "TEXTO")
+            self.texto(Q[0] + 10, Q[3] - 24, _MNOVO + marca, "grande", "TITULO")
+            self.texto(Q[0] + 10 + wm + 8, Q[3] - 24, titulo, "titulo", "TITULO")
+        largura = larg
+        self.cab_y0 = y0
+        self.blocos_livres.append((Q[0] + 4, y0, Q[0] + largura, Q[3] - 4, "CABEÇALHO"))
 
     def revisao(self, rev, data, descricao):
         self.revisoes.append((rev, data, descricao))
@@ -601,14 +614,15 @@ class Prancha:
         self._moldura_carimbo()
         avisos = self.verificar()
         import os, json as _json
-        if os.environ.get("AVISOS_LOG"):
-            with open(os.environ["AVISOS_LOG"], "a", encoding="utf-8") as fh:
-                fh.write(_json.dumps({"folha": os.path.basename(base), "avisos": avisos}, ensure_ascii=False) + "\n")
         with open(base + ".tabelas.json", "w", encoding="utf-8") as fh:
             _json.dump(dict(folha=os.path.basename(base), dados=getattr(self, "dados", {}), tabelas=self.__dict__.get("_tabs", []),
                             aco=self.__dict__.get("_aco", [])), fh, ensure_ascii=False, indent=1, default=str)
         self.doc.saveas(base + ".dxf")
         _exportar_pdf(self.doc, base + ".pdf", self.W, self.H, self.cor)
+        import os as _os
+        for *_, cam in self.imagens:                   # rev08: imagem que falta é ERRO (antes a folha saía com o quadro vazio)
+            if not _os.path.exists(cam):
+                avisos.append(("ERRO", f"imagem não encontrada: {cam}"))
         try:
             import pymupdf
             k = 72 / 25.4
@@ -616,13 +630,23 @@ class Prancha:
                 pdf = pymupdf.open(base + ".pdf")
                 pg = pdf[0]
                 for x0, y0, x1, y1, cam in self.imagens:
+                    if not _os.path.exists(cam):
+                        continue
                     pg.insert_image(pymupdf.Rect(x0 * k + 1, (self.H - y1) * k + 1, x1 * k - 1, (self.H - y0) * k - 1),
                                     filename=cam, keep_proportion=True)
                 pdf.save(base + ".pdf", incremental=True, encryption=0)
                 pdf.close()
+                chk = pymupdf.open(base + ".pdf")
+                n_img = len(chk[0].get_images())
+                if n_img < len({c for *_, c in self.imagens if _os.path.exists(c)}):
+                    avisos.append(("ERRO", f"PDF saiu com {n_img} imagens de {len(self.imagens)} previstas"))
+                chk.close()
             pymupdf.open(base + ".pdf")[0].get_pixmap(dpi=png_dpi).save(base + ".png")
-        except Exception:
-            pass
+        except Exception as e:
+            avisos.append(("ERRO", f"falha ao inserir imagens/PNG: {e}"))
+        if os.environ.get("AVISOS_LOG"):                 # rev08: log depois das imagens, para os erros delas entrarem
+            with open(os.environ["AVISOS_LOG"], "a", encoding="utf-8") as fh:
+                fh.write(_json.dumps({"folha": os.path.basename(base), "avisos": avisos}, ensure_ascii=False) + "\n")
         return avisos
 
 
@@ -693,7 +717,7 @@ def _exportar_pdf(doc, caminho, W, H, cor=True):
         F = pymupdf.Font(fontfile=ttf)
         pg.insert_font(fontname="ND", fontfile=ttf)
         for s, x, y, h, rot, ha, va, c in _textos_pdf(doc, ctx, cor):
-            s = s.replace("\n", " ").replace("\P", " ")
+            s = s.replace("\n", " ").replace("\\P", " ")
             if not s.strip():
                 continue
             fs = h / _CAP * k
@@ -864,6 +888,21 @@ class Vista:
         sh_ = self.pr.msp.add_solid([(x0, y0), (bx_ - uy_ * 0.3, by_ + ux_ * 0.3), (bx_ + uy_ * 0.3, by_ - ux_ * 0.3)], dxfattribs={"layer": "CHAMADA"})
         self._add(sh_)
         return self._add(self.pr.texto(x1 + lado, y1 + 0.8, texto, h, "TEXTO", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT"))
+
+    def destaque(self, p_modelo, nome, desloc_papel=(8, 6), r_papel=3.0, p_fim=None):
+        """Planta-chave (regra do Nathan, 22/10/2026): marca a peça com CÍRCULO em volta e LINHA DE CHAMADA com o nome,
+        para ficar claro onde ela está. Pilar: p_modelo = centro. Viga: p_modelo e p_fim = pontas (círculo no meio + traço
+        grosso ao longo da viga)."""
+        if p_fim is not None:
+            self._add(self.pr.msp.add_lwpolyline([self.P(p_modelo), self.P(p_fim)], dxfattribs={"layer": "INDICACAO", "const_width": 0.7}))
+            c = ((p_modelo[0] + p_fim[0]) / 2, (p_modelo[1] + p_fim[1]) / 2)
+        else:
+            c = p_modelo
+        self._add(self.pr.msp.add_circle(self.P(c), r_papel, dxfattribs={"layer": "INDICACAO"}))
+        dx, dy = desloc_papel
+        d = math.hypot(dx, dy) or 1.0
+        p0 = (c[0] + dx / d * r_papel * self.esc, c[1] + dy / d * r_papel * self.esc)     # chamada sai da borda do círculo
+        return self.chamada(p0, (dx - dx / d * r_papel, dy - dy / d * r_papel), nome, "sub")
 
     def barra(self, pts, pos, n, diam, espac=None, comp_cm=None, ponto_rotulo=None, desloc=(10, 8), camada="ARMADURA"):
         """Armadura em vista longitudinal + rótulo NBR 7191: 'N1 - 8 Ø16 c/15 C=250'. camada: ARMADURA (longitudinal) ou ARM_TRANSV."""

@@ -98,7 +98,7 @@ quadros = []
 for k, (arq, tit) in enumerate(IM):
     cx = Q2[0] + 8 + (k % 3) * (W_IM + 8)
     cy = Q2[3] - 40 - (k // 3 + 1) * (H_IM + 8)
-    p2.ret(cx, cy, cx + W_IM, cy + H_IM, "VISTA")
+    p2.imagem(cx, cy + 16, cx + W_IM, cy + H_IM, "/home/claude/letsara/pranchas/img/" + arq, titulo=tit)   # rev08: pelo motor (entra no PDF da folha)
     quadros.append((arq, cx, cy))
 # plano de corte (chapas por espessura)
 corte = {}
@@ -125,13 +125,9 @@ p2.notas(Q2[2] - 250, y - 6, [
 av2 = p2.salvar("/home/claude/letsara/pranchas/ND-LET-MT01-2")
 print("MT01-2", len([a for a in av2 if a[0] == "ERRO"]), "erros,", len(av2), "avisos", [a for a in av2 if a[0] == "ERRO" or "sobrep" in a[1]][:10])
 
-# imagens nos quadros (PDF) e PDF único das 2 folhas
+# rev08 (22/10/2026): as imagens entram pelo motor (Prancha.imagem) no próprio ND-LET-MT01-2.pdf. Antes eram coladas
+# só no PDF de entrega da metalúrgica (ND-LET-MT01-rev06.pdf) e o PDF único das pranchas pegava a folha sem imagens.
 d2 = fitz.open("/home/claude/letsara/pranchas/ND-LET-MT01-2.pdf")
-pg = d2[0]
-sx, sy = pg.rect.width / 841.0, pg.rect.height / 594.0
-for arq, cx, cy in quadros:
-    r = fitz.Rect((cx + 1) * sx, (594 - (cy + H_IM - 1)) * sy, (cx + W_IM - 1) * sx, (594 - (cy + 1)) * sy)
-    pg.insert_image(r, filename="/home/claude/letsara/pranchas/img/" + arq, keep_proportion=True)
 out = fitz.open()
 out.insert_pdf(fitz.open("/home/claude/letsara/pranchas/ND-LET-MT01-1.pdf"))
 out.insert_pdf(d2)

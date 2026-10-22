@@ -20,17 +20,15 @@ def _num(n):
 
 
 def lista(nomes, sep=", "):
-    """['V409','V410','V413',...,'V420'] → 'V409, V410, V413 a V420' (sequências de 3 ou mais viram 'a')."""
+    """['V409','V410','V413',...,'V420'] → 'V409, V410, V413, V414, …, V420'.
+    Regra do Nathan (22/10/2026): SEMPRE o nome de cada peça escrito por extenso — nunca "P29 a P32" (a fôrma confunde)."""
     ns = sorted(set(nomes), key=lambda n: (n[0], _num(n)))
     out, i = [], 0
     while i < len(ns):
         j = i
         while j + 1 < len(ns) and ns[j + 1][0] == ns[i][0] and _num(ns[j + 1]) == _num(ns[j]) + 1:
             j += 1
-        if j - i >= 2:
-            out.append(f"{ns[i]} a {ns[j]}")
-        else:
-            out += ns[i:j + 1]
+        out += ns[i:j + 1]
         i = j + 1
     return sep.join(out)
 

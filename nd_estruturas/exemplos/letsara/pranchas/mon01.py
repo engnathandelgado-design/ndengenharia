@@ -157,7 +157,7 @@ def grupo(mks, desc, apoio):
     qt = sum(PQ[m][5] for m in mks)
     pesos = sorted({PQ[m][7] for m in mks})
     pz = fp(pesos[0]) if len(pesos) == 1 else f"{fp(pesos[0])} a {fp(pesos[-1])}"
-    nome = mks[0] if len(mks) == 1 else f"{mks[0]} a {mks[-1]}" if len(mks) > 2 else " / ".join(mks)
+    nome = ", ".join(mks)                                  # rev08: nome de cada peça por extenso (regra do Nathan)
     return [nome, desc, str(qt), pz, apoio]
 pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40×60 lateral (L3 a L8), L 1100, cabeça recuada", "cálice −1,00; topo +10,00"),
          grupo(["PL-02", "PL-06"], "Pilar 40×60 lateral c/ 2 CP-MEZ (L2)", "cálice −1,00; topo +10,00"),

@@ -1,3 +1,4 @@
+import sys; sys.path.insert(0, "/home/claude/letsara/pranchas"); import renomear as RN
 """ND-LET-VM01 rev04 — vigas do mezanino VM-01 / VM-02 em MEIO VASO (padrão ND: vigas de apoio de laje alveolar), com
 dente Gerber 35 × 35 na ponta maciça (fundo do consolo CP-MEZ alinhado ao fundo da viga). Fôrma, 2º estágio, apoio,
 ponta concretada (trava de montagem), insertos, protensão (posição e força no macaco) e notas da NBR 9062:2017 5.6.1.2.
@@ -45,31 +46,20 @@ pr.revisao("04", "16/10/2026", f"NBR 9062: MEIO VASO 40 × {H/10:g} (ALMA 25 + A
 pr.revisao("06", "19/10/2026", "DEC-032: PERDAS 9.6.3 E γp 1,1 NO ATO; DENTE VERIFICADO POR MEF COM A ARMAÇÃO DA PRANCHA (γn 1,2); LIBERAÇÃO GRADUAL")
 Q = pr.quadro
 XC = Q[2] - 200
-pr.cabecalho_peca("\x01V200 a V207, V300 a V307", f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+ 2º ESTÁGIO 26 cm) — L = {L/10:g} cm  ·  VM-01: L = {L1/10:g} cm".replace(".", ","),
+pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("VM-01") + RN.nomes_de("VM-02")), f"VIGA DO MEZANINO — MEIO VASO 40 × {H/10:g} cm (+ 2º ESTÁGIO 26 cm) — L = {L/10:g} cm  ·  VM-01: L = {L1/10:g} cm".replace(".", ","),
                   f"linhas 1 e 2, pisos +3,15 e +6,55; fundo da viga e do consolo +{f(ZB[0]/1000, 2)} / +{f(ZB[1]/1000, 2)}; alma 25 do lado da borda, aba 15 × 20 para dentro (apoio da laje)   ·   "
                   f"PESO {f(PESO_TOT, 2)} t   ·   VOLUME {f(V_TOT, 2)} m³   ·   C40, {len(CORD)} Ø12,7 CP-190 RB", largura=XC - Q[0] - 12)
 
 # ------------------------------------------------------------------ planta-chave
 M = lambda v: v * 1000
-kp = pr.vista("PLANTA-CHAVE", (XC - 120, Q[3] - 125), 1000, titulo="PLANTA-CHAVE", subtitulo="VM nas linhas 1 e 2 (2 níveis); laje h20 + 5 entre as linhas", unidade="cm")
+import chave as CH                                               # rev08: círculo + chamada em cada VM (2 níveis na mesma posição)
+_vm = RN.nomes_de("VM-01") + RN.nomes_de("VM-02")
+def _rot_vm(n):
+    p = CH._P[n]
+    xm_, y_ = (p["x0"] + p["x1"]) / 2, p["y0"]
+    return f"{RN.viga_em('+3,15', xm_, y_)} / {RN.viga_em('+6,55', xm_, y_)}"
+kp = CH.planta(pr, (XC - 120, Q[3] - 125), 1000, _vm, subtitulo="VM nas linhas 1 e 2: nome do nível +3,15 / nível +6,55", y_max=Y_LIN[2], rotulo=_rot_vm)
 XF = [X_EIXO[k] for k in "ABCDE"]
-for y in Y_LIN[:3]:
-    kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
-for x in XF:
-    kp.linha((M(x), M(-2)), (M(x), M(22)), "EIXO")
-for i, y in enumerate(Y_LIN[:3], 1):
-    kp.texto((M(-3.5), M(y)), str(i), "min", "MIDDLE_RIGHT")
-for n, x in zip("ABCDE", XF):
-    kp.texto((M(x), M(23)), n, "min", "BOTTOM_CENTER")
-for y in Y_LIN[:2]:
-    for k in range(4):
-        kp.ret(M(XF[k]) + 300, M(y) - 200, M(XF[k + 1] - XF[k]) - 600, 400, "CORTADO")
-        import renomear as RN                                            # rev08: nomes dos dois níveis na mesma posição
-        xm_ = (XF[k] + XF[k + 1]) / 2
-        n1_, n2_ = RN.viga_em('+3,15', xm_, y), RN.viga_em('+6,55', xm_, y)
-        for kk, t_ in enumerate((n1_, n2_) if y != 0 else (n1_, n2_)):            # +3,15 em cima, +6,55 embaixo (2 linhas)
-            dy_ = (-700 - kk * 2200) if y == 0 else (700 + (1 - kk) * 2200)
-            kp.texto((M(xm_), M(y) + dy_), RN.novo(t_), "min", "TOP_CENTER" if y == 0 else "BOTTOM_CENTER")
 kp.ret(M(0), M(0) + 200, M(XF[-1]), M(Y_LIN[1]) - 400, "OCULTA")
 
 # ------------------------------------------------------------------ ELEVAÇÃO DE FÔRMA 1:20 (vista de dentro, lado da aba)

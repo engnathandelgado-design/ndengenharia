@@ -56,31 +56,16 @@ pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADA
 pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA; VB-05 A 08 COM ES-1R M20 + GRAMPO E ES-2V DO X; TABELA DE ESPERAS POR MARCA")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.ret(Q[0] + 4, Q[3] - 30, Q[0] + 500, Q[3] - 4, "CARIMBO")
 import renomear as RN
-from prancha_nd import _wtext as _wt, ALTURAS as _AL
-_mk = RN.lista([n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")])            # rev08: V403 a V406, V421 a V424
-pr.texto(Q[0] + 10, Q[3] - 24, RN.novo(_mk), "grande", "TITULO")
-pr.texto(Q[0] + 10 + _wt(_mk, _AL["grande"]) + 8, Q[3] - 24, f"VIGA DE BORDA 15 × 60 cm COM DENTE — VB-02 (L = {L/10:.0f} cm) · VB-01 A VB-08 (VB-05 A VB-08 ESPELHADAS)", "titulo", "TITULO")
-pr.texto(Q[0] + 10, Q[3] - 14, f"fachadas 1 e 9, entre os pilares de fachada; dente 30 × 27 nos consolos CP-VB (escondidos) com pino PN-6 roscado   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   C40, CA-50", "nota", "TEXTO")
+_mk = RN.lista([n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")])            # rev08: nome de cada peça por extenso
+pr.cabecalho_peca("\x01" + _mk, f"VIGA DE BORDA 15 × 60 cm COM DENTE — L = {L/10:.0f} cm (fachada 9 espelhada)",
+                  f"fachadas 1 e 9, entre os pilares de fachada; dente 30 × 27 nos consolos CP-VB (escondidos) com pino PN-6 roscado   ·   PESO {f(PESO/10, 2)} t   ·   VOLUME {f(V, 2)} m³   ·   C40, CA-50")
 
-# planta-chave
-kp = pr.vista("PLANTA-CHAVE", (Q[0] + 545, Q[3] - 118), 1000, titulo="PLANTA-CHAVE", subtitulo="VB nas fachadas 1 e 9", unidade="cm")
+# planta-chave (rev08): círculo + chamada em cada VB, com o nome de cada peça
+import chave as CH
+CH.planta(pr, (Q[0] + 545, Q[3] - 118), 1000, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="vigas de borda nas fachadas 1 e 9")
 M = lambda v: v * 1000
 Y_LIN = Y_LIN_R01
-for y in Y_LIN:
-    kp.linha((M(-2), M(y)), (M(42), M(y)), "EIXO")
-for _, x in X_FACH:
-    kp.linha((M(x), M(-2)), (M(x), M(81)), "EIXO")
-for i, y in enumerate(Y_LIN, 1):
-    kp.texto((M(-3.5), M(y)), str(i), "min", "MIDDLE_RIGHT")
-for j, (n, x) in enumerate(X_FACH):
-    kp.texto((M(x), M(82)), n, "min", "BOTTOM_CENTER")
-for mk, _, _, Lm, _x0 in MARCAS:
-    k = (int(mk[-1]) - 1) % 4
-    for y in ((0.0,) if int(mk[-1]) <= 4 else (Y_LIN[-1],)):
-        kp.ret(M(X_FACH[k][1]) + 250, M(y) - 150, Lm, 300, "CORTADO")
-        kp.texto((M((X_FACH[k][1] + X_FACH[k + 1][1]) / 2), M(y) + (600 if y == 0 else -600)), mk, "min", "BOTTOM_CENTER" if y == 0 else "TOP_CENTER")
 
 # ELEVAÇÃO 1:20 (cm)
 ESC = 20

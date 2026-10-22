@@ -1,3 +1,4 @@
+import renomear as RN
 """ND-LET-TS01-1 — TS-01: fôrma, insertos e manuseio (A0). Padrão de prancha de peça pré-moldada (cast unit).
 Rev. 03 (14/10/2026): sem dentes Gerber (apoio direto: assento do pilar lateral e topo da I130 / pilar central), terças a
 cada ~1,20 m, todas as ligações da cobertura parafusadas em esperas de barra roscada (sem solda), 8 cordoalhas."""
@@ -15,7 +16,7 @@ pr.revisao("03", "14/10/2026", "SEM DENTES (APOIO DIRETO), TERÇAS c/1,20 m, ESP
 pr.revisao("04", "16/10/2026", "NBR 9062: TOLERÂNCIA DE COMPRIMENTO ±10 mm (FOLGA CENTRAL 19 mm); ESTABILIDADE LATERAL")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
 pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA (1ª A 40 cm DA CALHA); ES-2 SÓ NOS 3 NÓS DO X; GRAMPO NAS ES-1; TS-01A COM IT-P")
-pr.cabecalho_peca("\x01V407 a V420", f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
+pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
 TER, NOS, ALC, EST = P["tercas"], P["nos"], P["alcas"], P["estoque"]
