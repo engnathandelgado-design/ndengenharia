@@ -1,0 +1,1658 @@
+{
+ "ce1_fora": [
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    0.757
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    2.007
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    3.257
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    4.507
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    5.757
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    7.007
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    8.257
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    79.637,
+    8.257
+   ],
+   "xyz_max": [
+    10.06,
+    79.65,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    79.637,
+    9.507
+   ],
+   "xyz_max": [
+    0.085,
+    79.65,
+    9.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    0.757
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    2.007
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    3.257
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    4.507
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    5.757
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    7.007
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    8.257
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    79.637,
+    9.507
+   ],
+   "xyz_max": [
+    39.795,
+    79.65,
+    9.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    29.61,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    29.99,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    39.535,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    39.915,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    49.535,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    49.915,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    59.535,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    59.915,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    69.535,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    69.915,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    0.085,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    10.06,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    0.085,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    10.06,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    0.085,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    10.06,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    0.085,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    10.06,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    0.085,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    10.06,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    15.075,
+    30.15,
+    7.007
+   ],
+   "xyz_max": [
+    15.455,
+    30.163,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    30.15,
+    7.007
+   ],
+   "xyz_max": [
+    19.94,
+    30.163,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    24.045,
+    30.15,
+    7.007
+   ],
+   "xyz_max": [
+    24.425,
+    30.163,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    0.757
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    2.007
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    3.257
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    4.507
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    5.757
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    30.15,
+    7.007
+   ],
+   "xyz_max": [
+    29.82,
+    30.163,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    30.15,
+    7.007
+   ],
+   "xyz_max": [
+    39.795,
+    30.163,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    29.61,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    29.99,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    39.535,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    39.915,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    49.535,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    49.915,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    59.535,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    59.915,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    69.535,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    69.915,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    9.46,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    9.84,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    19.535,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    19.915,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    29.61,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    29.99,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    10.1,
+    0.757
+   ],
+   "xyz_max": [
+    0.085,
+    10.112,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    0.757
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    10.1,
+    2.007
+   ],
+   "xyz_max": [
+    0.085,
+    10.112,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    2.007
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    10.1,
+    3.257
+   ],
+   "xyz_max": [
+    0.085,
+    10.112,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    3.257
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    10.1,
+    4.507
+   ],
+   "xyz_max": [
+    0.085,
+    10.112,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    4.507
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    10.1,
+    5.757
+   ],
+   "xyz_max": [
+    0.085,
+    10.112,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    5.757
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    0.757
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    2.007
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    3.257
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    4.507
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    5.757
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    10.1,
+    7.007
+   ],
+   "xyz_max": [
+    10.06,
+    10.112,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    19.56,
+    10.1,
+    7.007
+   ],
+   "xyz_max": [
+    19.94,
+    10.112,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    0.757
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    2.007
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    3.257
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    4.507
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    5.757
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    29.44,
+    10.1,
+    7.007
+   ],
+   "xyz_max": [
+    29.82,
+    10.112,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    0.757
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    2.007
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    2.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    3.257
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    4.507
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    5.757
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    6.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    10.1,
+    7.007
+   ],
+   "xyz_max": [
+    39.795,
+    10.112,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.3,
+    9.46,
+    7.007
+   ],
+   "xyz_max": [
+    -0.287,
+    9.84,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    0.757
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    3.257
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    4.507
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    7.007
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    8.257
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    9.68,
+    -0.3,
+    8.257
+   ],
+   "xyz_max": [
+    10.06,
+    -0.287,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    -0.295,
+    -0.3,
+    9.507
+   ],
+   "xyz_max": [
+    0.085,
+    -0.287,
+    9.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    0.757
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    1.087
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    3.257
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    3.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    4.507
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    4.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    7.007
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    7.337
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    8.257
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    8.587
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.415,
+    -0.3,
+    9.507
+   ],
+   "xyz_max": [
+    39.795,
+    -0.287,
+    9.837
+   ]
+  },
+  {
+   "peca": "CE-1 chapa de espera 380×330×12,5",
+   "xyz_min": [
+    39.787,
+    9.46,
+    8.257
+   ],
+   "xyz_max": [
+    39.8,
+    9.84,
+    8.587
+   ]
+  }
+ ],
+ "colisoes": [
+  {
+   "cabeca": "P3-L1 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L1 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L1 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L1 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "X Ø16 A36 (trecho A + B)",
+   "grupo": "Contraventamento",
+   "penetracao_mm": 5.9
+  },
+  {
+   "cabeca": "P3-L9 cabeça",
+   "peca": "X Ø16 A36 (trecho A + B)",
+   "grupo": "Contraventamento",
+   "penetracao_mm": 5.9
+  },
+  {
+   "cabeca": "P4-L1 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P4-L1 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P4-L1 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P4-L1 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P14-L9 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P14-L9 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P14-L9 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P14-L9 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L1 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L1 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L1 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L1 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "TP-40 STD #0,65",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "lã de rocha FSR 32",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "zipada 455 #0,50",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "painéis solares (envelope)",
+   "grupo": "Telhas",
+   "penetracao_mm": 149.0
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "X Ø16 A36 (trecho A + B)",
+   "grupo": "Contraventamento",
+   "penetracao_mm": 5.9
+  },
+  {
+   "cabeca": "P5-L9 cabeça",
+   "peca": "X Ø16 A36 (trecho A + B)",
+   "grupo": "Contraventamento",
+   "penetracao_mm": 5.9
+  }
+ ],
+ "n_ce1": 271,
+ "n_cabecas": 24
+}

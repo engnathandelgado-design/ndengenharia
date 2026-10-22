@@ -36,6 +36,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
 
 ## Depois
+- Letsara (DEC-042, colisão): plano das placas das fachadas 1/9 × face lateral dos cantos (10 cm); CE-1 das paredes internas das linhas 2 e 4 à frente da face dos pilares (15–25 cm); zipada entrando 15 cm na cabeça dos PF; X Ø16 tocando a cabeça dos PF da linha 9 — decidir com o Nathan.
 - Letsara: VB mantida com uma ponta solta (DEC-033); se mudar de ideia, ligação presa nas 2 pontas para ±69 kN ou reforço da terça e das esperas ST-1P.
 - Letsara: pranchas de pilar e viga em A1 conforme o tamanho do desenho (pedido do Nathan: ajustar a prancha ao desenho).
 
@@ -56,6 +57,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+- [x] 2026-10-22 — Letsara DEC-042: cabeça dos pilares (cantos 40 × 40, armadura da cabeça para o vento da platibanda, CE-1 em ponta de parede, planta-chave com nomes).
 
 - [x] 2026-10-21 — Letsara DEC-039: CT-1 removida; ponta da VM concretada antes das lajes trava o giro de montagem (junta verificada ao cisalhamento; fcj ≥ 20 MPa); pranchas e 3D regerados (substitui a DEC-038).
 - [x] 2026-10-21 — Letsara: 3D revisado como executado (I130 com dente/NEO-2/PN-2, ST-1P4, correntes/tirantes/diagonais, CC-1) e republicado.

@@ -140,8 +140,8 @@ def montar() -> ModeloBIM:
             zr = rec_vb(x0) if canto else REC[0 if sg > 0 else 1]
             nome = f"{lado}{'C' if canto else ''}-L{i}"
             m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, zr, obs=f"40×60; cabeça recuada acima de +{zr:.2f}".replace(".", ","))
-            if canto:      # canto: só o quarto externo (30 × 30) sobe
-                m.pilar(nome + " cabeça", x0 - sg * 0.15, y + (-0.05 if i == 1 else 0.05), 0.30, 0.30, zr, TOPO_PLAT, obs="cabeça recuada nas duas faces internas")
+            if canto:      # DEC-042: canto sem recuo lateral e recuo A de 20 cm → cabeça 40 × 40 (CE-1/CC-1 de 380 nas duas faces externas)
+                m.pilar(nome + " cabeça", x0 - sg * 0.10, y, 0.40, 0.40, zr, TOPO_PLAT, obs="cabeça 40×40 (recuo de 20 cm na face A; DEC-042)")
             else:
                 m.pilar(nome + " cabeça", x0 - sg * 0.15, y, 0.30, 0.40, zr, TOPO_PLAT, obs="cabeça recuada 40×30")
     # pilares das fachadas 1 e 9 (60 ⊥ fachada) com cabeça recuada acima da VB
@@ -285,7 +285,8 @@ def montar() -> ModeloBIM:
         for k in range(nfx):
             y = y0_ + (k + 0.5) * bfx
             pz = (dz0 + dz1) / 2
-            m.linear("placa", nome_, PerfilRetangular(bfx - 0.002, dz1 - dz0, nome_), (xa_, y, AC.z_terca_topo(xa_) + pz), (xb_, y, AC.z_terca_topo(xb_) + pz), grp_, material="aco")
+            xbk = xb_ - (0.06 if k in (0, nfx - 1) else 0.0)        # DEC-042: faixa junto às fachadas recortada 6 cm na cabeça 40 × 40 dos cantos do eixo E
+            m.linear("placa", nome_, PerfilRetangular(bfx - 0.002, dz1 - dz0, nome_), (xa_, y, AC.z_terca_topo(xa_) + pz), (xbk, y, AC.z_terca_topo(xbk) + pz), grp_, material="aco")
     for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
         xc_ = xt_ - 0.027 - 0.045                         # cartola centrada na aba superior (90) da terça
         m.linear("placa", "perfil cartola #0,65", PerfilRetangular(0.12, 0.04, "cartola"), (xc_, y0_, AC.z_terca_topo(xc_) + 0.06), (xc_, y1_, AC.z_terca_topo(xc_) + 0.06), "Telhas", material="aco")
@@ -316,7 +317,8 @@ def montar() -> ModeloBIM:
     for ya, yb in tre:
         rufo_y("RF-2", ya, yb); rufo_y("RF-3", ya, yb); rufo_y("CR-1", ya, yb)
     for yp in PIL_Y:
-        rufo_y("RF-2C", yp - 0.30, yp + 0.30); rufo_y("RF-3P", yp - 0.30, yp + 0.30)
+        dc = 0.10 if yp in (PIL_Y[0], PIL_Y[-1]) else 0.0                 # DEC-042: face da cabeça 40 × 40 dos cantos 10 cm para dentro
+        rufo_y("RF-2C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u + d_, v)); rufo_y("RF-3P", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (u - d_, v))
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
     rufo_y("PG-1", y0_, y1_)
@@ -325,8 +327,8 @@ def montar() -> ModeloBIM:
     zl_ = AC.z_zip(LARG / 2) + AC.PAC["zipada"]
     za_r, zb_r = AC.z_zip(xa_) + AC.PAC["zipada"], AC.z_zip(xb_) + AC.PAC["zipada"]
     for yface, sg in ((AC.Y_PLACA_1, 1), (AC.Y_PLACA_9, -1)):
-        for mk in ("RF-4", "RF-4C", "RB-1/2"):
-            rufo_x(mk, xa_, xb_, za_r, zb_r, lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
+        for mk in ("RF-4", "RF-4C", "RB-1/2"):                          # DEC-042: param 6 cm antes, na cabeça 40 × 40 do canto do eixo E
+            rufo_x(mk, xa_, xb_ - 0.06, za_r, AC.z_zip(xb_ - 0.06) + AC.PAC["zipada"], lambda u, v, yf=yface, s_=sg: (yf + s_ * u, v - zl_))
         rufo_x("RF-1", AC.X_PLACA_A - 0.10, AC.X_PLACA_E + 0.10, 0.0, 0.0, lambda u, v, yf=yface, s_=sg: (yf - s_ * 0.100 + s_ * u, v))
     # contraventamento em X Ø16 (rev06, DEC-024/025): vãos 4-5 a 8-9, nós nas terças 0, 8, 15 de cada meia água
     BAR16 = PerfilRetangular(0.016, 0.016, "Ø16")
@@ -374,7 +376,8 @@ def montar() -> ModeloBIM:
     t_c = 0.003
     cal = [(0.02, zt_c + 0.12), (0.02, zt_c - 0.15), (0.32, zt_c - 0.15), (0.32, zt_c), (0.32 - t_c, zt_c), (0.32 - t_c, zt_c - 0.15 + t_c),
            (0.02 + t_c, zt_c - 0.15 + t_c), (0.02 + t_c, zt_c + 0.12)]
-    m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP, "Calha e descidas", material="aco", obs="NBR 10844; i = 0,5 % para as saídas")
+    m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP - 2 * 0.22, "Calha e descidas", material="aco",
+                 obs="NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a 22 cm do eixo das linhas 1 e 9 (cabeça 40 × 40 dos cantos)")
     for yl in Y_LIN:
         yd = yl + (0.35 if yl < COMP else -0.35)
         m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
@@ -518,10 +521,14 @@ def montar() -> ModeloBIM:
                     zce = z0p + FCH.Z_CE / 1000
                     ub = min(0.19, bw / 2 - 0.01)
                     tce = GF.TCE / 1000
-                    cx(s_ax - ub, s_ax + ub, 0.0, tce, zce - 0.165, zce + 0.165, f"CE-1 chapa de espera 380×330×{GF.TCE:g}".replace(".", ","), GE)
+                    c_ce = s_ax
+                    if abs(u - s_ax) + 0.06 > ub - 0.005:                    # DEC-042: ponta de parede — CE-1 a 5 mm da aresta, sob o console
+                        c_ce = s_ax + math.copysign(bw / 2 - 0.005 - 0.19, u - s_ax)
+                        ub = 0.19
+                    cx(c_ce - ub, c_ce + ub, 0.0, tce, zce - 0.165, zce + 0.165, f"CE-1 chapa de espera 380×330×{GF.TCE:g}".replace(".", ","), GE)
                     for du in (-0.12, 0.12):
                         for dz in (-0.14, 0.14):
-                            cx(s_ax + du - 0.008, s_ax + du + 0.008, tce, tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
+                            cx(c_ce + du - 0.008, c_ce + du + 0.008, tce, tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
             # pinos PT-1 (junta de baixo) ou travas de pé PT-2
             if pc["trava"] == "PT-1":
                 for xp in (pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"])):

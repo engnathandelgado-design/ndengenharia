@@ -140,7 +140,8 @@ def dimensionar(mk, g, canto):
                 melhores.append(dict(phi=phi, n_in=n_in, n_cx=n_cx, emb=emb, L13=round(L13), kg=round(kg, 1), usos=[round(x, 2) for x in usos],
                                      Md_in=round(Md_in, 1), Md_C=round(Md_C, 1), Md_L=round(F["L"]["Mv"] + F["L"]["Mg_d"], 1) if F["L"]["n"] else 0.0,
                                      MRd_in=round(M_in, 1), MRd_C=round(M_C, 1), n_sobe=len(sobe), us_in=[round(u) for u in us_in],
-                                     us_cx=[round(u) for u in livres[:n_cx]]))
+                                     us_cx=[round(u) for u in livres[:n_cx]],
+                                     xy_cab=[[round(u), round(w_in)] for u in us_in] + [[round(u), round(w0 + cobr + phi / 2)] for u in livres[:n_cx]]))
     if not melhores:
         raise ValueError(f"{mk}: nenhuma armadura de cabeça passa")
     best = min(melhores, key=lambda r: (r["kg"], r["n_in"] + r["n_cx"]))

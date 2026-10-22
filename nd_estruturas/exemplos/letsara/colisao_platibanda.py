@@ -1,0 +1,63 @@
+"""DEC-042 — checagem geométrica de colisão na região da platibanda (cabeça dos pilares), com as caixas envolventes reais do
+modelo 3D (modelo_bim.montar()), não visual.
+
+1) CE-1 (chapa de espera 380 × 330) apoiada no concreto: a chapa tem de ficar inteira dentro da face do pilar onde está
+   (corpo ou cabeça), com folga ≥ 4 mm até a aresta; acusa a chapa que sai do concreto (caso dos cantos antes da DEC-042).
+2) Interpenetração (> 1 mm) entre a cabeça de concreto de cada pilar e qualquer peça que não seja embutida nela
+   (telhas, calha, terças, suportes ST, cantoneiras, rufos, placas, VB, TS-01, consoles CS-1).
+Saída: colisao_platibanda.json."""
+import json, sys
+from pathlib import Path
+AQ = Path(__file__).parent
+sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ.parent.parent))
+import modelo_bim as MB
+from colisao_ct1 import aabb, pen
+
+EMBUTIDAS = ("pino", "espera", "ES-", "bucha", "chumbador", "PN-", "N18", "grampo", "BR-", "barra roscada", "porca", "TB-", "tubo",
+             "neoprene", "NEO", "alça", "AL-", "FI-1", "M16", "M20", "M12", "graute", "junta", "CE-1")
+
+
+def main():
+    m = MB.montar()
+    pecas = [(p, aabb(p)) for p in m.pecas]
+    conc = [(p, bb) for p, bb in pecas if p.grupo == "Pilares"]
+    cab = [(p, bb) for p, bb in conc if p.marca.endswith(" cabeça")]
+    ce = [(p, bb) for p, bb in pecas if p.marca.startswith("CE-1 chapa")]
+    res = dict(ce1_fora=[], colisoes=[], n_ce1=len(ce), n_cabecas=len(cab))
+    # 1) CE-1 dentro de uma face de concreto
+    for p, (a, b) in ce:
+        ok = False
+        for q, (c, d) in conc:
+            # a chapa encosta numa face (uma dimensão quase zero de folga) e cabe nas outras duas
+            for ax in range(3):
+                toca = min(abs(a[ax] - d[ax]), abs(b[ax] - c[ax]), abs(b[ax] - d[ax]), abs(a[ax] - c[ax])) < 0.003   # encostada ou rente
+                if not toca:
+                    continue
+                outros = [i for i in range(3) if i != ax]
+                if all(a[i] >= c[i] + 0.004 - 1e-6 and b[i] <= d[i] - 0.004 + 1e-6 for i in outros):
+                    ok = True
+                    break
+            if ok:
+                break
+        if not ok:
+            res["ce1_fora"].append(dict(peca=p.marca, xyz_min=[round(v, 3) for v in a], xyz_max=[round(v, 3) for v in b]))
+    # 2) cabeça × demais peças
+    for q, cb in cab:
+        for p, bb in pecas:
+            if p is q or p.grupo in ("Pilares", "Rufos e acabamentos") or any(t.lower() in p.marca.lower() for t in EMBUTIDAS):
+                continue                                         # rufos: chapas dobradas sobre a cabeça (a caixa envolvente engloba o concreto)
+                continue
+            e = pen(cb, bb)
+            if e > 0.001:
+                res["colisoes"].append(dict(cabeca=q.marca, peca=p.marca, grupo=p.grupo, penetracao_mm=round(e * 1000, 1)))
+    (AQ / "colisao_platibanda.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"CE-1: {len(ce)} chapas, {len(res['ce1_fora'])} fora do concreto | cabeças: {len(cab)}, colisões: {len(res['colisoes'])}")
+    for r in res["ce1_fora"][:12]:
+        print("  CE-1 fora:", r)
+    for r in res["colisoes"][:20]:
+        print("  colisão:", r)
+    return res
+
+
+if __name__ == "__main__":
+    main()
