@@ -34,3 +34,20 @@ Y_P13 = 54.575
 LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
 X_L4 = [0.0, 9.87, 15.195, 19.75, 24.305, 29.63, 39.50]      # P1, P9, P10, P11, P10, P12, P2
 X_L2 = [0.0, 9.87, 19.75, 29.63, 36.175, 39.50]              # P1B, P8, P8A, P8B, P6, P2B
+
+# ------------------------------------------------------------------ rev09 (23/10/2026) — decisões do Nathan
+# Níveis do mezanino pelo corte AA' do R01 (360 + 30 + 310 + 30): TOPO DA CAPA +3,90 e +7,30 (antes +3,15 / +6,55, errado).
+# A laje de cima (+7,30) é a cobertura do bloco, sem uso (arquitetônico: "Nível Cobertura"), sem escada.
+Z_PISOS = (3.90, 7.30)
+NIV_TXT = ("+3,90", "+7,30")
+H_LAJE_TOT = 0.25                       # alveolar h20 + capa 5
+Z_APOIO_LAJE = tuple(round(z - H_LAJE_TOT - 0.01, 3) for z in Z_PISOS)   # topo das vigas do mezanino (fita de neoprene 1 cm)
+# pilares do anexo da escada (R01): P6 25×40 em (36,175; 3,79) e na linha 2; P7 40×60 no eixo E em 3,79
+P6_ESC, P7_ESC, P6_L2 = (36.175, 3.79), (39.50, 3.79), (36.175, Y_LIN[1])
+# abertura da escada SÓ na laje +3,90 (DEC-045): de P6 ao eixo E, da viga P6–P7 à linha 2
+ABERTURA = dict(nivel=Z_PISOS[0], x0=36.00, x1=39.20, y0=3.99, y1=Y_LIN[1] - 0.20)
+# escada metálica em U (arquitetônico R01: 22 degraus H 17,72 B 28, patamar +1,95, lances de 2,80, patamar 1,60)
+ESCADA = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, z_patamar=Z_PISOS[0] / 2,
+              x_face_P6=36.30, x_face_E=39.20, y_patamar=(3.99, 5.55), y_lances=(5.55, 8.35), y_chegada=(8.35, Y_LIN[1] - 0.20))
+# cobertura metálica da linha 2 (DEC-046): W contínua sobre montantes, do eixo A ao E, topo na inclinação da TS-01
+X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)

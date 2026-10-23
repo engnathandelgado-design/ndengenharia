@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES
+from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -44,7 +44,7 @@ PONTAS = [(X0P, X0P + L_TS), (LARG - X0P - L_TS, LARG - X0P)]
 Z_I130_TOPO, H_I130 = LG["Z_TOPO_I130"], LG["H_I130"]
 CENTRAIS = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13)]
 I130_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])]   # V405 vai até a linha 9 (P14)
-NIVEIS_MEZ, H_LAJE = [3.15, 6.55], 0.20 + 0.05
+NIVEIS_MEZ, H_LAJE = list(Z_PISOS), 0.20 + 0.05          # rev09 (DEC-045): topo da capa +3,90 / +7,30
 
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
 I130 = PerfilI(h=1.30, b=0.40, tw=0.15, tf=0.25, nome="I130")
@@ -67,7 +67,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 import fechamento as FCH
 import geo_fixacao as GF
 import numpy as np
-from lajes_placas import paineis_mez
+from lajes_placas import paineis_mez, paineis_nivel
 PAINEIS_MEZ = paineis_mez()[0]                                                   # placas: mesma fonte das pranchas PP (vistas do R01)
 
 
@@ -171,10 +171,14 @@ def montar() -> ModeloBIM:
     # centrais (R01): P8A 40×60, P11 40×40, P13 60×60 — topo +8,88 (topo da I130)
     for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.60, 0.60))):
         m.pilar(marca, X_C, y, bx, by, Z_CALICE, Z_I130_TOPO, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01; topo em 2 níveis")
-        if marca != "P13":                                     # rev04: metade do lado E 12 mm mais alta (assentos horizontais das TS-01)
+        if marca == "P11":                                     # rev04: metade do lado E 12 mm mais alta (assentos das TS-01); rev09: P8A sem TS-01
             m.bloco("pilar", f"{marca} degrau do topo", (X_C + bx / 4, y, LG["Z_TOPO_I130_DIR"]), bx / 2, by, LG["DEGRAU_C"], "Pilares")
     for marca, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
-        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino 40×60")
+        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, NIVEIS_MEZ[1], obs="mezanino 40×60; topo +7,30 com o montante da W 310 (rev09)")
+    # rev09 (DEC-045): pilares da escada do R01 — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7); P6 da linha 2 até o +7,30
+    m.pilar("P6", P6_ESC[0], P6_ESC[1], 0.25, 0.40, Z_CALICE, NIVEIS_MEZ[0], obs="25×40, escada: viga P6–P7 no +3,90 e patamar +1,95")
+    m.pilar("P7", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_CALICE, NIVEIS_MEZ[0], obs="40×60 no eixo E, escada: viga P6–P7 no +3,90 e patamar +1,95")
+    m.pilar("P6 (linha 2)", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_CALICE, NIVEIS_MEZ[1], obs="25×40, linha 2: vigas D–P6 e P6–E, montante da W 310 no topo")
     # pilares dos portões (linha 4), rev06 (DEC-024): cabeça a 2 cm do fundo da TS-01, ligada em y por 2 cantoneiras CL-P
     for nome, x, b_ in (("P9 (PG-01)", 9.87, 0.40), ("P10 (PG-02)", 15.195, 0.25), ("P10 (PG-04)", 24.305, 0.25), ("P12 (PG-03)", 29.63, 0.40)):
         zt_ = round(zf(x) - 0.02, 2)
@@ -219,7 +223,7 @@ def montar() -> ModeloBIM:
     # NBR 9062:2017 7.2.1.6), mesas, alma e maciços de 50 cm; ponta baixa sempre no lado A (as 14 peças são a mesma marca)
     CUN, HV, TI, TSUP, MAC = LG["CUNHA"], H_TS / C3, 0.15, 0.12, 0.50
     zt = lambda x: zf(x) + HV
-    for i in range(2, 9):
+    for i in range(3, 9):                                  # rev09 (DEC-048): linha 2 com cobertura metálica (abaixo)
         y = Y_LIN[i - 1]
         for lado, (xa, xb) in zip("ab", PONTAS):
             ob = f"inclinada 3 %, pontas a prumo, cunhas de apoio {CUN*100:.0f} cm; L {LG['L_TS']:.2f} m; 8 cord. Ø12,7"
@@ -456,52 +460,60 @@ def montar() -> ModeloBIM:
             yd = yl + 0.535                                   # 22/10 (colisão): na linha 2 a parede G ocupa y = linha + 0,325 a 0,425 → descida na frente dela
         m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
 
-    # 5. mezanino (linhas 1–2), rev04: VM em MEIO VASO (alma do lado da borda, aba para dentro, topo = apoio da laje) com dente
-    #    Gerber nas pontas maciças; consolos CP-MEZ com fundo alinhado; 2º estágio (obra, com a capa) e alças N9 saindo da peça;
-    #    neoprene NEO-5, pino PN-1, junta da ponta concretada antes das lajes (DEC-039); folga real de 3 cm na ponta (NBR 9062:2017 3.1)
-    VMP = json.loads((AQ / "vm_meio_vaso.json").read_text(encoding="utf-8"))["premissas"]
-    hv, ba, bb, ha = VMP["h_pm"], VMP["b_alma"], VMP["b_aba"], VMP["h_aba"]
+    # 5. mezanino (linhas 1–2), rev09 (DEC-047/048): VM RETANGULAR PROTENDIDA 25 × 80 com dente Gerber 35 × 40 nas pontas; laje
+    #    apoiada 10 cm no topo da viga (fita 1 cm), 2º estágio de obra na faixa restante até o topo da capa, alças N9 saindo da
+    #    peça; consolos CP-MEZ 25 × 40 × 42,9 com fundo alinhado; NEO-5F fretado; junta da ponta concretada antes das lajes (DEC-039).
+    #    +3,90: abertura da escada (P6 → E, viga P6–P7 → linha 2), sem viga P6 → E na linha 2; +7,30: laje contínua.
+    VMJ_ = json.loads((AQ / "vm_retangular.json").read_text(encoding="utf-8"))
+    VMP = VMJ_["premissas"]
+    hv, bt = VMP["h_pm"], VMP["b"]
     DT_ = VMP["dente"]
-    hd, ln, rec, hcm, prj, mac = DT_["hd"], DT_["ln"], DT_["recorte"], DT_["consolo_h"], DT_["consolo_proj"], DT_["macico"]
-    bt = ba + bb
+    hd, ln, rec, hcm, prj = DT_["hd"], DT_["ln"], DT_["recorte"], DT_["consolo_h"], DT_["consolo_proj"]
     FOL = 0.03
-    faces = [(0.30, X_EIXO["B"] - 0.20), (X_EIXO["B"] + 0.20, X_C - 0.20), (X_C + 0.20, X_EIXO["D"] - 0.20), (X_EIXO["D"] + 0.20, LARG - 0.30)]
-    E2, VMG = "Concreto de 2º estágio (obra, com a capa)", "Vigas de mezanino (meio vaso)"
-    for nivel in NIVEIS_MEZ:
+    E2, VMG = "Concreto de 2º estágio (obra, com a capa)", "Vigas de mezanino (retangulares protendidas)"
+    meia_x = lambda nm: {"P1": 0.30, "P2": 0.30, "P6": 0.125}.get(nm, 0.20)
+    fila1 = [("P1", 0.0), ("P3", X_EIXO["B"]), ("P4", X_EIXO["C"]), ("P5", X_EIXO["D"]), ("P2", LARG)]
+    fila2 = [("P1", 0.0), ("P8", X_EIXO["B"]), ("P8A", X_EIXO["C"]), ("P8B", X_EIXO["D"]), ("P6", P6_L2[0]), ("P2", LARG)]
+    MK_VM = {9.37: "VM-01", 9.48: "VM-02", 6.22: "VM-03", 2.90: "VM-04"}
+    for iz, nivel in enumerate(NIVEIS_MEZ):
         za = nivel - H_LAJE - 0.01                          # topo da peça = apoio da laje (fita de neoprene 1 cm)
         zb = za - hv
-        for y, so in ((Y_LIN[0], -1), (Y_LIN[1], 1)):      # so: lado da borda (alma) — linha 1 para fora (−y), linha 2 para o pavilhão (+y)
-            y_alma = y + so * (bt / 2 - ba / 2)
-            y_aba = y - so * (bt / 2 - bb / 2)
-            for fa, fb in faces:
-                xa, xb = fa + FOL, fb - FOL
-                L_ = xb - xa
-                mk = "VM-01" if fa < 1 or fb > LARG - 1 else "VM-02"
-                ob = f"meio vaso {bt*100:.0f}×{hv*100:.0f}, dente {hd*100:.0f}×{ln*100:.0f}, L = {L_:.2f} m"
-                m.linear("viga", f"{mk} alma {nivel:+.2f}", PerfilRetangular(ba, hv - rec), (xa, y_alma, zb + rec + (hv - rec) / 2), (xb, y_alma, zb + rec + (hv - rec) / 2), VMG, obs=ob)
-                m.linear("viga", f"{mk} alma inf. {nivel:+.2f}", PerfilRetangular(ba, rec), (xa + ln, y_alma, zb + rec / 2), (xb - ln, y_alma, zb + rec / 2), VMG, obs=ob)
-                m.linear("viga", f"{mk} aba {nivel:+.2f}", PerfilRetangular(bb, ha), (xa, y_aba, za - ha / 2), (xb, y_aba, za - ha / 2), VMG, obs=ob)
-                for x0_, x1_ in ((xa, xa + mac), (xb - mac, xb)):      # pontas maciças (enchimento sob a aba) e nariz do dente
-                    m.linear("viga", f"{mk} maciço {nivel:+.2f}", PerfilRetangular(bb, hd - ha), (x0_, y_aba, zb + rec + (hd - ha) / 2), (x1_, y_aba, zb + rec + (hd - ha) / 2), VMG, obs="ponta maciça")
-                    xr0, xr1 = (xa + ln, xa + mac) if x0_ == xa else (xb - mac, xb - ln)
-                    m.linear("viga", f"{mk} maciço inf. {nivel:+.2f}", PerfilRetangular(bb, rec), (xr0, y_aba, zb + rec / 2), (xr1, y_aba, zb + rec / 2), VMG, obs="ponta maciça")
-                m.linear("viga", f"2º estágio {nivel:+.2f}", PerfilRetangular(bt - 0.10, 0.21), (fa, y + so * 0.05, za + 0.105), (fb, y + so * 0.05, za + 0.105), E2,
-                         obs="C30, concretado com a capa por quem faz a capa")
-                xx = xa + 0.15
-                while xx < xb - 0.10:                                      # alças N9 da alma saindo 20 cm (a cada 15 cm; uma a cada 30 cm no 3D)
-                    m.bloco("inserto", "alça N9 Ø10", (xx, y_alma, za + 0.20), 0.012, ba - 0.06, 0.20, "Alças N9 (2º estágio)")
-                    xx += 0.30
-                for xf, sg in ((fa, 1), (fb, -1)):
-                    m.bloco("consolo", f"CP-MEZ 40×{prj*100:.0f}×{hcm*100:.0f}", (xf + sg * prj / 2, y, zb + hcm), prj, bt, hcm, "Consolos")
-                    m.bloco("inserto", "NEO-5 300×150×10", (xf + sg * 0.186, y, zb + hcm + 0.01), 0.15, 0.30, 0.01, "Pinos, tubos e neoprenes")
-                    m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * 0.186, y, zb + hcm + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
-                    # DEC-039: sem cantoneira antigiro — a junta da ponta é concretada antes das lajes e trava o giro de montagem
-                    m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
-        for x0, b_, mk in PAINEIS_MEZ:                              # mesma paginação da ND-LET-LA01 (30 LA-01 + 2 LA-02 por nível)
+        vigas = []                                          # (y, so, fa, fb): so = lado da laje (+1 para +y)
+        for (pa, xa), (pb, xb) in zip(fila1[:-1], fila1[1:]):
+            vigas.append((Y_LIN[0], 1, xa + meia_x(pa), xb - meia_x(pb)))
+        for (pa, xa), (pb, xb) in zip(fila2[:-1], fila2[1:]):
+            if iz == 0 and pa == "P6":
+                continue                                    # +3,90: abertura da escada (sem viga P6 → E)
+            vigas.append((Y_LIN[1], -1, xa + meia_x(pa), xb - meia_x(pb)))
+        if iz == 0:
+            vigas.append((P6_ESC[1], -1, P6_ESC[0] + 0.125, P7_ESC[0] - 0.30))      # viga P6–P7 (laje curta do lado da linha 1)
+        for y, so, fa, fb in vigas:
+            xa, xb = fa + FOL, fb - FOL
+            L_ = xb - xa
+            mk = MK_VM[min(MK_VM, key=lambda k: abs(k - (fb - fa)))]
+            ob = f"retangular protendida {bt*100:.0f}×{hv*100:.0f}, dente {hd*100:.0f}×{ln*100:.0f}, L = {L_:.2f} m"
+            m.linear("viga", f"{mk} corpo {nivel:+.2f}", PerfilRetangular(bt, hv), (xa + ln, y, zb + hv / 2), (xb - ln, y, zb + hv / 2), VMG, obs=ob)
+            for x0_, x1_ in ((xa, xa + ln), (xb - ln, xb)):
+                m.linear("viga", f"{mk} nariz {nivel:+.2f}", PerfilRetangular(bt, hd), (x0_, y, za - hd / 2), (x1_, y, za - hd / 2), VMG, obs=ob)
+            b2 = bt - 0.10 - 0.02                            # faixa de 2º estágio: largura − apoio 10 − folga 2
+            y2 = y - so * (bt / 2 - b2 / 2)
+            m.linear("viga", f"2º estágio {nivel:+.2f}", PerfilRetangular(b2, nivel - za), (fa, y2, (za + nivel) / 2), (fb, y2, (za + nivel) / 2), E2,
+                     obs="C30, concretado com a capa por quem faz a capa (faixa de 2º estágio sobre a viga)")
+            m.bloco("inserto", "NEO-L fita 10 × 100", ((xa + xb) / 2, y + so * (bt / 2 - 0.05), za + 0.01), L_, 0.10, 0.01, "Pinos, tubos e neoprenes")
+            xx = xa + 0.15
+            while xx < xb - 0.10:                                      # alças N9 da viga saindo 20 cm (a cada 15 cm; uma a cada 30 cm no 3D)
+                m.bloco("inserto", "alça N9 Ø10", (xx, y2, za + 0.20), 0.012, max(b2 - 0.05, 0.05), 0.20, "Alças N9 (2º estágio)")
+                xx += 0.30
+            for xf, sg in ((fa, 1), (fb, -1)):
+                m.bloco("consolo", f"CP-MEZ {bt*100:.0f}×{prj*100:.0f}×{hcm*100:.0f}", (xf + sg * prj / 2, y, zb + hcm), prj, bt, hcm, "Consolos")
+                m.bloco("inserto", "NEO-5F 200×200 fretado", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.021), 0.20, 0.20, 0.021, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
+        for x0, b_, mk, yl0_, yl1_ in paineis_nivel(iz):           # mesma paginação da ND-LET-LA01 (+3,90 com LA-03 / LA-04 no vão da escada)
             x = (x0 + b_ / 2) / 1000
+            xa_l, xb_l = x0 / 1000, (x0 + b_) / 1000
+            ya_l, yb_l = yl0_ / 1000, yl1_ / 1000
             perf = LAJE if b_ == 1250 else PerfilRetangular(0.70, H_LAJE, "Laje alveolar 70")
-            xa_l, xb_l, ya_l, yb_l = x0 / 1000, (x0 + b_) / 1000, Y_LIN[0] + 0.10, Y_LIN[1] - 0.10
-            # 22/10 (colisão): LA-01R — recorte de fábrica nas pontas junto aos pilares (ND-LET-LA01), com 2 cm de folga
             furos = []
             for q in m.pecas:
                 if q.grupo == "Pilares" and q.tipo == "pilar" and min(q.p0[2], q.p1[2]) < nivel and max(q.p0[2], q.p1[2]) > nivel - H_LAJE:
@@ -522,6 +534,79 @@ def montar() -> ModeloBIM:
                     for a, b in xs_:
                         m.linear("laje", f"{mk} {nivel:+.2f}", PerfilRetangular(b - a, H_LAJE, f"Laje alveolar (recorte) {b - a:.2f}"),
                                  ((a + b) / 2, t0, nivel - H_LAJE / 2), ((a + b) / 2, t1, nivel - H_LAJE / 2), "Laje alveolar")
+
+    # 5b. rev09 (DEC-048): cobertura metálica da linha 2 — W 310 contínua (topo na inclinação da cobertura) sobre montantes W 150
+    #     nos pilares (A recuo, B, C, D, P6, E recuo); emendas parafusadas; ST-W das terças e mão-francesa em toda terça
+    CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))
+    GL2 = "Cobertura metálica da linha 2"
+    from nd_estruturas import metalica_laminada as _ML
+    W_, WM_ = _ML.perfil(CB2["perfil"]), _ML.perfil(CB2["montante"])
+    PW = PerfilI(h=W_.d / 1000, b=W_.bf / 1000, tw=W_.tw / 1000, tf=W_.tf / 1000, nome=CB2["perfil"])
+    PM_ = PerfilI(h=WM_.d / 1000, b=WM_.bf / 1000, tw=WM_.tw / 1000, tf=WM_.tf / 1000, nome=CB2["montante"])
+    y2 = Y_LIN[1]
+    z_top = lambda x: zf(x) + H_TS / C3
+    zc_w = lambda x: z_top(x) - W_.d / 2000
+    cortes = [0.025] + CB2["emendas_x"] + [LARG - 0.025]
+    for k_, (x0w, x1w) in enumerate(zip(cortes[:-1], cortes[1:])):
+        m.linear("viga", f"W-L2 módulo {k_ + 1} ({CB2['perfil']})", PW, (x0w + 0.002, y2, zc_w(x0w + 0.002)), (x1w - 0.002, y2, zc_w(x1w - 0.002)), GL2, material="aco",
+                 obs=f"{CB2['perfil']} A572-50, L = {x1w - x0w:.2f} m; topo na inclinação da cobertura (3 %)")
+    for xe in CB2["emendas_x"]:
+        for dz in (W_.d / 2000 + 0.0063, -W_.d / 2000 - 0.0063):
+            m.linear("inserto", "TL-1 tala de mesa 12,5 × 100 × 400 + 8 M16", PerfilRetangular(0.10, 0.0125), (xe - 0.20, y2, zc_w(xe) + dz), (xe + 0.20, y2, zc_w(xe) + dz), GL2, material="aco")
+        for dy in (-W_.tw / 2000 - 0.005, W_.tw / 2000 + 0.005):
+            m.linear("inserto", "TL-2 tala de alma 9,5 × 200 × 300 + 6 M16", PerfilRetangular(0.0095, 0.20), (xe - 0.15, y2 + dy, zc_w(xe)), (xe + 0.15, y2 + dy, zc_w(xe)), GL2, material="aco")
+    for a_ in CB2["apoios"]:
+        xm, z0m = a_["x"], a_["z_apoio"]
+        z1m = z_top(xm) - W_.d / 1000 - 0.0125
+        m.linear("pilar", f"MT-{a_['nome']} montante {CB2['montante']}", PM_, (xm, y2, z0m + 0.019), (xm, y2, z1m), GL2, cima=(1.0, 0.0, 0.0), material="aco",
+                 obs=f"{a_['onde']}; h = {z1m - z0m - 0.019:.2f} m")
+        caixa(m, f"CB-{a_['nome']} chapa de base 250×250×19", xm - 0.125, xm + 0.125, y2 - 0.125, y2 + 0.125, z0m, z0m + 0.019, GL2)
+        caixa(m, f"CT-{a_['nome']} chapa de topo 12,5", xm - 0.09, xm + 0.09, y2 - 0.08, y2 + 0.08, z1m, z1m + 0.0125, GL2)
+        for dx in (-0.075, 0.075):
+            for dy in (-0.075, 0.075):
+                barra_v(m, "BR-M20 barra roscada M20 8.8 embutida 400 + grampo (padrão Mitsubishi)", xm + dx, y2 + dy, z0m - 0.40, z0m + 0.08, 0.020, GE)
+    for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
+        xw = xt_ - 0.027
+        zc = z_top(xw)
+        suporte_st(m, "ST-W (terça na W 310 da linha 2; 2 M12 na mesa)", xw, y2, zc, esperas=())
+        for dy in (-0.06, 0.06):
+            m.linear("inserto", "M12 8.8 (ST-W × mesa da W)", PARAF, (xw - 0.075, y2 + dy, zc - 0.02), (xw - 0.075, y2 + dy, zc + 0.02), "Parafusos da cobertura", material="aco")
+        for sy in (-1, 1):                                   # mão-francesa L 51 × 51 × 4,8: da terça (fundo) à mesa inferior da W
+            pa = (xw + 0.03, y2 + sy * 0.30, zc + 0.010 + 0.05)
+            pb = (xw + 0.03, y2 + sy * (W_.bf / 2000 + 0.01), zc - W_.d / 1000 + W_.tf / 1000)
+            m.linear("inserto", "MF-1 mão-francesa L 51×51×4,8 (1 M12 em cada ponta)", PerfilRetangular(0.051, 0.051), pa, pb, GL2, material="aco")
+
+    # 5c. rev09 (DEC-045): escada metálica em U (só até o +3,90), longarinas U 152 parafusadas nos patamares, degraus em chapa xadrez
+    ESJ = json.loads((AQ / "escada_metalica.json").read_text(encoding="utf-8"))
+    GES = "Escada metálica"
+    EG = ESJ["geometria"]
+    x6, xE = EG["x_faces"]
+    bl = EG["largura_lance"]
+    lances = [((x6 + 0.0, x6 + bl), EG["y_lances"][1], EG["y_lances"][0], 0.0, EG["z_patamar"]),           # lance 1: sobe de y 8,35 a 5,55
+              ((xE - bl, xE), EG["y_lances"][0], EG["y_lances"][1], EG["z_patamar"], Z_PISOS[0])]         # lance 2: sobe de 5,55 a 8,35
+    U152 = PerfilRetangular(0.0485, 0.152, "U 152 × 12,2")
+    for (xl0, xl1), y0e, y1e, z0e, z1e in lances:
+        for xs_ in (xl0 + 0.025, xl1 - 0.025):
+            m.linear("viga", "LG-1 longarina U 152 × 12,2", U152, (xs_, y0e, z0e + 0.09), (xs_, y1e, z1e - 0.10), GES, material="aco")
+        n_ = round((z1e - z0e) / EG["espelho_m"])
+        sgy = 1 if y1e > y0e else -1
+        for k_ in range(1, n_):
+            yk = y0e + sgy * (k_ - 0.5) * EG["piso_m"]
+            zk = z0e + k_ * EG["espelho_m"]
+            m.linear("placa", "DG-1 degrau chapa xadrez 4,75", PerfilRetangular(EG["piso_m"] + 0.03, 0.00475), (xl0 + 0.05, yk, zk - 0.0024), (xl1 - 0.05, yk, zk - 0.0024), GES, material="aco")
+    PW15 = PerfilI(h=0.152, b=0.152, tw=0.0058, tf=0.0066, nome="W 150 × 22,5")
+    zp = EG["z_patamar"]
+    for (ya_p, yb_p), zz, nome_p in ((EG["y_patamar"], zp, "patamar +1,95"), (EG["y_chegada"], Z_PISOS[0], "chegada +3,90")):
+        for yv in (ya_p + 0.08, yb_p - 0.08):
+            m.linear("viga", f"VP-1 viga W 150 × 22,5 ({nome_p})", PW15, (x6 + 0.01, yv, zz - 0.0063 - 0.076), (xE - 0.01, yv, zz - 0.0063 - 0.076), GES, material="aco")
+        m.linear("placa", f"CH-P chapa xadrez 6,3 ({nome_p})", PerfilRetangular(yb_p - ya_p, 0.0063), (x6 + 0.01, (ya_p + yb_p) / 2, zz - 0.0032), (xE - 0.01, (ya_p + yb_p) / 2, zz - 0.0032), GES, material="aco")
+        y_front = yb_p - 0.08 if nome_p.startswith("patamar") else ya_p + 0.08
+        for xp_ in (x6 + 0.09, xE - 0.09):
+            m.linear("pilar", f"PL-{1 if nome_p.startswith('patamar') else 2} pilarete W 150 × 22,5 ({nome_p})", PW15, (xp_, y_front, 0.0125), (xp_, y_front, zz - 0.0063 - 0.152), GES,
+                     cima=(1.0, 0.0, 0.0), material="aco")
+            caixa(m, "chapa de base 200×200×12,5 + 4 chumbadores químicos M12", xp_ - 0.10, xp_ + 0.10, y_front - 0.10, y_front + 0.10, 0.0, 0.0125, GES)
+    for xs_ in (x6 + 0.025, x6 + bl - 0.025):                    # pé do lance 1 (1º degrau com apoio próprio no piso)
+        caixa(m, "pé da longarina: chapa 200×150×12,5 + 2 chumbadores químicos M12", xs_ - 0.10, xs_ + 0.10, EG["y_lances"][1] - 0.075, EG["y_lances"][1] + 0.075, 0.0, 0.0125, GES)
 
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
@@ -547,7 +632,7 @@ def montar() -> ModeloBIM:
 
     # 7. insertos e ligações (conferência no 3D)
     INS, PIN = "Insertos metálicos", "Pinos, tubos e neoprenes"
-    for i in range(2, 9):
+    for i in range(3, 9):                                  # rev09: linha 2 sem TS-01 (W 310 + ST-W, mais abaixo)
         y = Y_LIN[i - 1]
         AP, PT = LG["apoios_ts"], LG["PINO_TS"]                 # rev04: assentos horizontais; pinos a 7,75 cm das 4 pontas
         for (xn, z_as), xpin, nome_, neo, dpin in (((AP["P1"]["x_neo"], AP["P1"]["z"]), PONTAS[0][0] + PT, "2 PN-3 Ø25 + NEO-4", (0.20, 0.30), 0.025),
@@ -675,9 +760,9 @@ def montar() -> ModeloBIM:
     m.pendente("Modelo global integrado (OpenSeesPy, P-Δ, terças, correntes, X e laje como diafragma): pilares 0,66; terça mais carregada 0,97; ELS dentro da NBR 9062:2017 Tab. 7.")
     m.pendente("! Folga na cabeça dos PG-01 a PG-04 mantida em 2 cm (decisão de 20/10): a TS-01 desce ~30 mm (PG-01/PG-03) e ~20 mm (PG-02/PG-04) depois de montada — a viga pode encostar no PG.")
     m.pendente("! VB com o PN-6 grauteado só numa ponta (decisão de 20/10): o modelo global reprova só o ST-1P da 1ª terça do beiral no eixo 2 (1,06). Proposto o ST-1P4 com 4 esperas (0,26), no 3D em laranja — falta conferir o cone de arrancamento do grupo e a aprovação do Nathan.")
-    m.pendente("Dente Gerber da VM aceito com a carga a 1,0 m (Vu 533 kN = 1,10 Fd, decisão de 20/10).")
+    m.pendente("rev09 (DEC-047/048): VM retangulares protendidas 25 × 80 com dente 35 × 35; cobertura da linha 2 em W 310 sobre montantes nos pilares.")
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
-    m.pendente("! Pilares P6 e P7 do R01 (anexo) sem função definida: fora do modelo e das pranchas até confirmação.")
+    m.pendente("rev09 (DEC-045): P6, P7 e P6 da linha 2 do R01 são os pilares da escada metálica (abertura só no +3,90).")
     m.pendente("I130 (DEC-032): V405/V406 com 30 cordoalhas (28 embaixo + 2 na mesa), V407 com 20; σpi 1453 MPa, fckj 45; NEO-2 300×200×31 fretado e PN-2 Ø25 grauteado numa ponta só.")
     m.pendente("TS-01 sem dentes: apoio no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
     m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1FL em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
@@ -695,7 +780,7 @@ def renomear_pecas(modelo):
     import dataclasses
     sys.path.insert(0, "/home/claude/letsara/pranchas")
     import renomear as RN
-    GV = {"Vigas centrais I130", "Vigas I90 de cobertura", "Vigas de borda", "Vigas de mezanino (meio vaso)"}
+    GV = {"Vigas centrais I130", "Vigas I90 de cobertura", "Vigas de borda", "Vigas de mezanino (retangulares protendidas)"}
     novos = []
     for p in modelo.pecas:
         nm = None
@@ -708,16 +793,16 @@ def renomear_pecas(modelo):
                 xm, ym, zm = p.p0[0] + (min(us) + max(us)) / 2, (p.p0[1] + p.p1[1]) / 2, p.p0[2] + sum(v for _, v in pts) / len(pts)
             else:
                 xm, ym, zm = (p.p0[0] + p.p1[0]) / 2, (p.p0[1] + p.p1[1]) / 2, (p.p0[2] + p.p1[2]) / 2
-            niv = "cobertura" if p.grupo != "Vigas de mezanino (meio vaso)" else ("+3,15" if zm < 4.8 else "+6,55")
+            niv = "cobertura" if p.grupo != "Vigas de mezanino (retangulares protendidas)" else ("+3,90" if zm < 5.5 else "+7,30")
             fam = {"Vigas centrais I130": ("V405", "V406", "V407"), "Vigas I90 de cobertura": ("TS",), "Vigas de borda": ("VB",),
-                   "Vigas de mezanino (meio vaso)": ("VM",)}[p.grupo]
+                   "Vigas de mezanino (retangulares protendidas)": ("VM",)}[p.grupo]
             nm = RN.viga_em(niv, xm, ym, tol=0.8, marcas=fam)
         if not nm and isinstance(p.marca, str):                       # insertos e afins: texto com a nomenclatura nova
             novos.append(dataclasses.replace(p, marca=RN.renomear(p.marca), obs=RN.renomear(p.obs or "")))
             continue
         if nm:
             parte = ""
-            for k in ("cabeça", "mesa inf.", "alma", "mesa sup.", "ponta maciça", "dente", "nariz", "maciço inf.", "maciço A", "maciço E", "maciço"):
+            for k in ("cabeça", "mesa inf.", "alma", "mesa sup.", "ponta maciça", "dente", "nariz", "maciço inf.", "maciço A", "maciço E", "maciço", "corpo"):
                 if k in p.marca:
                     parte = " " + k
                     break

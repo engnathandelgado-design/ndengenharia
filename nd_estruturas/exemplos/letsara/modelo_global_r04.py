@@ -40,7 +40,7 @@ import openseespy.opensees as ops
 AQ = Path(__file__).parent
 sys.path.insert(0, str(AQ.parents[1]))
 from nd_estruturas.prefabricados import Concreto, pressao_vento
-from geometria import Y_LIN, X_EIXO, Y_P13, LINHA_PORTOES
+from geometria import Y_LIN, X_EIXO, Y_P13, LINHA_PORTOES, Z_PISOS
 
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 C40 = Concreto(40)
@@ -49,10 +49,11 @@ Z0, I = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + I * x
 REC = tuple(LG["REC"])                    # assento da TS-01 no recuo dos pilares P1 / P2 (rev03, sem dente)
 Z_TOP_C = LG["Z_TOPO_I130"]                  # topo da I130 e dos pilares P8A/P11/P13 (TS-01 apoiada no topo)
-Z_MEZ = (3.15, 6.55)
+Z_MEZ = Z_PISOS                             # rev09 (DEC-045): +3,90 / +7,30
 Z_VT = ()                                  # rev04: sem VT (NBR 9062 + regra ND: só com ponte rolante)
 PLACAS = False                             # variante: fiada superior das placas ligada aos pilares (furo redondo)
-A_VM, G_2E = 0.1925, 1.5                   # VM meio vaso (calc_vm_meio_vaso.py) e 2º estágio (kN/m)
+A_VM, G_2E = 0.25 * 0.80, 0.15 * 0.21 * 25   # rev09: VM retangular 25 × 80 (calc_vm_retangular.py) e faixa de 2º estágio (kN/m)
+CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
 Z_I130 = LG["Z_ASS_I130"]                 # assento da I130 nos consolos CP-I130 (rev03)
 NOS = LG["nos_contraventamento_x_esq"]
 NOS_D = [round(x + (2 * XC - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"], 3) for x in NOS]
@@ -310,8 +311,9 @@ def cargas_basicas():
             n = at(nome, Z_I130)
             add("G", n, [0, 0, -Rg, 0, 0, 0]); add("Qc", n, [0, 0, -Rq, 0, 0, 0])
     # VT e VB (peso), mezanino (VM + laje + capa + revestimento; sobrecarga) — reações nos pilares
-    gm, qm = 2.8 + 1.25 + 1.0, 5.0
-    for z in Z_MEZ:
+    for iz, z in enumerate(Z_MEZ):
+        c_ = CM["piso_390" if iz == 0 else "laje_730"]               # rev09: +7,30 sem uso (cargas_mezanino.json)
+        gm, qm = 2.8 + 1.35 + c_["revestimento"], c_["sobrecarga"]
         for row, y in ((("P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1"), 0.0), (("P1-L2", "P8", "P8A", "P8B", "P2-L2"), Y_LIN[1])):
             for k, nm in enumerate(row):
                 larg = TRIB_X[k]

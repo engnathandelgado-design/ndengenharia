@@ -25,7 +25,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 from nd_estruturas.prefabricados import Concreto, secao_I
 
 J = lambda n: json.loads((AQ / n).read_text(encoding="utf-8"))
-MG, MGP, VM, I1J, DT, LG = J("modelo_global_r04.json"), J("modelo_global_r04_placas.json"), J("vm_meio_vaso.json"), J("i110_r01.json"), J("dentes.json"), J("ligacoes.json")
+MG, MGP, VM, I1J, DT, LG = J("modelo_global_r04.json"), J("modelo_global_r04_placas.json"), J("vm_retangular.json"), J("i110_r01.json"), J("dentes.json"), J("ligacoes.json")
 import ts01_dados as TS
 
 FYD = 500 / 1.15                     # MPa
@@ -137,7 +137,7 @@ thq_i = theta(v["q_equiv"], v["L_calc"], EI_i)
 Ng_i = v["linhas"]["peso_kN_m"] * v["L_calc"] / 2 + v["cargas_concentradas_kN"]["g"]
 Nq_i = v["cargas_concentradas_kN"]["q"]
 ah_i = 40e-5 * v["L_peca"] / 2 * 1000
-# --- VM meio vaso (VM-02)
+# --- VM retangular 25 × 80 (VM-02) — rev09 DEC-048
 m = VM["VM-02"]
 EI_vm1, EI_vm2 = C40.Ecs * m["secao"]["I"], C40.Ecs * m["secao"]["I_comp"]
 Lv = m["L_calculo"]
@@ -159,7 +159,7 @@ NEO = [
     neo_simples("NEO-3 100×300×10 (simples)", 100, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I130 / P8A / P11"),
     neo_fretado("NEO-2 300×250 fretado (rev03)", 250, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130"),
     neo_fretado("NEO-2 200×300 fretado (rev04)", 200, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130 — rev04 (a2 do consolo)"),
-    neo_simples("NEO-5 150×300×10 (simples)", 150, 300, 10, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM meio vaso (dente 35 × 35) nos consolos CP-MEZ"),
+    neo_fretado("NEO-5F 200×200 fretado (rev09)", 200, 200, 10, 2, 2.5, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM retangular 25 × 80 (dente 35 × 35) nos consolos CP-MEZ 25"),
     neo_simples("NEO-6 100×100×10 (rev04)", 100, 100, 10, Ng_vb, Nq_vb, 1.4, th_vb, thq_vb, "VB 15×60 (dente 30) nos consolos CP-VB — rev04"),
 ]
 OUT["aparelhos"] = NEO
@@ -217,8 +217,8 @@ HD_VM = VM["premissas"]["dente"]["hd"]
 CON = [
     consolo("CP-I130", "P8A, P11, P13, P14 — I130 (dente 78 × 35), NEO-2 200×300", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
             max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1),       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
-    consolo("CP-MEZ", "pilares das linhas 1 e 2 — dente 35 × 35 da VM meio vaso, NEO-5 150×300; h = recorte − neoprene (fundo alinhado)", 0.40, 0.35, 0.29, 0.186, 0.15, 0.30, m["cortante"]["Vd"], 1.1),
-    consolo("DENTE VM", f"nariz do dente Gerber da VM (ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f}), h {HD_VM*100:.0f}, LN 35 — 7.4 = consolo 7.3", 0.40, 0.35, HD_VM, 0.194, 0.15, 0.30, m["cortante"]["Vd"], 1.1),
+    consolo("CP-MEZ", "pilares das linhas 1 e 2 e da escada — dente 35 × 35 da VM retangular 25 × 80, NEO-5F 200×200 fretado; h = recorte − neoprene (fundo alinhado)", VM["premissas"]["b"], VM["premissas"]["dente"]["consolo_proj"], VM["premissas"]["dente"]["consolo_h"], VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.1),
+    consolo("DENTE VM", f"nariz do dente Gerber da VM retangular 25 × {VM['premissas']['h_pm']*100:.0f}, h {HD_VM*100:.0f}, LN {VM['premissas']['dente']['ln']*100:.0f} — 7.4 = consolo 7.3", VM["premissas"]["b"], VM["premissas"]["dente"]["ln"], HD_VM, 0.03 + VM["premissas"]["dente"]["ln"] - VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.1),
     consolo("CP-VB", "pilares das fachadas 1 e 9 — dente 30 × 27 da VB 15×60, NEO-6 100×100", 0.15, 0.27, 0.29, 0.135, 0.10, 0.10, VBD["Vd"], 1.1),
 ]
 OUT["consolos"] = CON
@@ -237,7 +237,7 @@ def cintamento(nome, b_pil, a_pad, b_pad, Fd, gn=1.1, c=0.03):
 
 Fd_ts = 1.3 * Ng_ts + 1.4 * Nq_ts
 OUT["cintamento"] = [cintamento("P1/P2 — recuo (cabeça 30 × 40), TS-01 em NEO-4", 0.30, 0.15, 0.30, Fd_ts),
-                     cintamento("P8A / P11 — topo, 2 TS-01 em NEO-3", 0.40, 0.10, 0.30, 2 * Fd_ts)]
+                     cintamento("P11 — topo, 2 TS-01 em NEO-3 (rev09: P8A sem TS-01, montante da W 310)", 0.40, 0.10, 0.30, 2 * Fd_ts)]
 
 # ================================================================== 4 apoios sem recorte (7.5) e dente (7.4)
 def sem_recorte(nome, Fd, prov):
@@ -251,16 +251,16 @@ OUT["apoios_sem_recorte"] = [
     sem_recorte("TS-01 (pontas)", TS.R.linhas["Vd_kN"], "Asd: 3 grampos N7 Ø10 por ponta = 6 ramos = 4,71 cm²; Ash/Asv: N6 8 Ø8 + N8 2 Ø10 por ponta"),
     # VM rev04: apoio por dente Gerber (item dente_VM), não sem recorte
 ]
-_mf = AQ / f"mef_vm_dente_{round(VM['premissas']['h_pm'] * 1000)}_{round(VM['premissas']['dente']['hd'] * 1000)}{VM['premissas'].get('mef_suf', '')}.json"
+_mf = AQ / f"mef_vm_ret_dente_{round(VM['premissas']['h_pm'] * 1000)}_{round(VM['premissas']['dente']['hd'] * 1000)}{VM['premissas'].get('mef_suf', '')}.json"
 MV = json.loads(_mf.read_text(encoding="utf-8")) if _mf.exists() else None
 _GN_VM = MV.get("gama_n", 1.2) if MV else 1.2                       # DEC-032: γn 1,2 (parcela variável ≈ 50 %, 7.3.1.1)
 _FD_VM = MV["Vd"] if MV else round(_GN_VM * m["cortante"]["Vd"], 1)
-OUT["dente_VM"] = dict(geometria=f"dente {HD_VM*100:.0f} × 35 (nariz), recorte 30, ponta maciça 40 × {VM['premissas']['h_pm']*100:.0f} em 1,00 m", Fd_kN=_FD_VM, gama_n=_GN_VM,
+OUT["dente_VM"] = dict(geometria=f"dente {HD_VM*100:.0f} × 35 (nariz), recorte {VM['premissas']['dente']['recorte']*100:.0f}, seção retangular 25 × {VM['premissas']['h_pm']*100:.0f}", Fd_kN=_FD_VM, gama_n=_GN_VM,
                        Vd_reacao_kN=round(m["cortante"]["Vd"], 1),
                        MEF_Vu_kN=(MV["mef"]["Vu_kN"] if MV else None), ok_MEF=(MV["mef"]["Vu_kN"] >= 1.06 * _FD_VM if MV else None),
                        armacao_MEF=(MV["mef"].get("armacao") if MV else None), adotado=(MV["calculo"]["adotado"] if MV else None),
                        suspensao=f"{math.ceil(_FD_VM / 43.5 / 4.02)} estribos fechados Ø16 (2 ramos) junto ao recorte (fyd ≤ 435 MPa, 7.4)",
-                       norma="NBR 9062:2017 7.4 + MEF não linear (mef_vm_dente.py)")
+                       norma="NBR 9062:2017 7.4 + MEF não linear (mef_vm_ret_dente.py)")
 OUT["dente_VB"] = dict(geometria="VB 15 × 60: dente 30 (nariz 27), recorte 30; consolo CP-VB 15 × 27 × 29 escondido, fundo alinhado ao fundo da viga",
                        Vd_kN=VBD["Vd"], Fd_kN=round(1.1 * VBD["Vd"], 1), dente=VBD["dente"], consolo_calc=VBD["consolo"], suspensao=VBD["suspensao"],
                        levantamento=dict(R_up_d_kN=VBD["R_up_d"], pino="PN-1 Ø20 roscado com porca e arruela no topo do dente", cap_kN=VBD["pino"]["cap_PN1_d"]),
@@ -303,7 +303,7 @@ trans = []
 for nome, L, bf, h, w, Iy, Jt, fcj in (
         ("TS-01", TS.L / 1000, 0.40, 0.90, TS.car.g1, 0.12 * 0.40 ** 3 / 12 + 0.15 * 0.40 ** 3 / 12, 0.4 * 0.12 ** 3 / 3 + 0.4 * 0.15 ** 3 / 3 + 0.63 * 0.15 ** 3 / 3, 35),
         ("I130 (V406)", v["L_peca"], 0.40, 1.30, v["linhas"]["peso_kN_m"], 0.22 * 0.4 ** 3 / 12 + 0.25 * 0.4 ** 3 / 12, 0.4 * 0.22 ** 3 / 3 + 0.4 * 0.25 ** 3 / 3 + 0.83 * 0.15 ** 3 / 3, 35),
-        ("VM meio vaso", m["L_peca"], 0.40, 0.65, m["cargas"]["g_pm"], 0.45 * 0.25 ** 3 / 12 + 0.20 * 0.40 ** 3 / 12, 0.45 * 0.25 ** 3 / 3 + 0.4 * 0.2 ** 3 / 3, 32),
+        ("VM retangular 25 × 80", m["L_peca"], 0.25, 0.80, m["cargas"]["g_pm"], 0.80 * 0.25 ** 3 / 12, 0.80 * 0.25 ** 3 / 3 * (1 - 0.63 * 0.25 / 0.80), 32),
         ("VB 15×60", 9.43, 0.15, 0.60, 2.25, 0.60 * 0.15 ** 3 / 12, 0.60 * 0.15 ** 3 / 3 * (1 - 0.63 * 0.15 / 0.60), 25),
         ("Placa 125×10 (içada na vertical)", 10.15, 0.10, 1.25, 3.12, 1.25 * 0.10 ** 3 / 12, 1.25 * 0.10 ** 3 / 3 * 0.95, 25)):
     r1, r2 = L / bf, L * h / bf ** 2
@@ -324,7 +324,7 @@ OUT["flechas"] = [
     dict(peca="TS-01 (cobertura, i = 3 %, sem empoçamento)", final_mm=TS.R.linhas["flecha_final_mm"], lim_mm=round(TS.L_calc * 1000 / 250, 1), regra="Tab. 8: L/250",
          contraflecha_mm=round(Pts * ets * TS.L_calc ** 2 / (8 * EI_ts) * 1000, 1), lim_contraflecha_mm=round(TS.L_calc * 1000 / 150, 1)),
     dict(peca="I130 V406 (linear, L > 20 m)", final_mm=v["linhas"]["flecha_final_mm"], lim_mm=round(v["L_calc"] * 1000 / 350, 1), regra="Tab. 9: L/350"),
-    dict(peca="VM meio vaso (piso, solidarizada)", final_mm=m["flecha"]["final_mm"], lim_mm=m["flecha"]["lim_final_mm"], regra="Tab. 9: L/250 (L ≤ 15 m)",
+    dict(peca="VM retangular 25 × 80 (piso, solidarizada)", final_mm=m["flecha"]["final_mm"], lim_mm=m["flecha"]["lim_final_mm"], regra="Tab. 9: L/250 (L ≤ 15 m)",
          montagem_mm=m["flecha"]["montagem_mm"], lim_montagem_mm=m["flecha"]["lim_montagem_L500"]),
 ]
 
@@ -346,7 +346,7 @@ OUT["folgas"] = [
     folga("TS-01 — ponta no pilar lateral (face da platibanda)", 19.70, 25, 275, 200),
     folga("TS-01 — ponta central (metade do vão de 38; tolerância de projeto do comprimento ±10 mm)", 19.70, 19, 162, 100, tex_proj=10),
     folga("I130 — ponta no pilar central (dente no CP-I130)", 24.13, 25, 350, 200),
-    folga("VM meio vaso — ponta no pilar (consolo CP-MEZ 35)", m["L_peca"], 30, 350 - 30, 200),
+    folga("VM retangular — ponta no pilar (consolo CP-MEZ 40)", m["L_peca"], 30, 400 - 30, 200),
     folga("VB 15×60 — ponta no pilar (dente no CP-VB)", 9.43, 25, 270, 100),
     folga("Placa 125×10 — junta vertical no eixo do pilar (rev03: 10 mm)", 10.15, 10, None, 0, tex_proj=5),
     folga("Placa 125×10 — junta vertical no eixo do pilar (rev04: 20 mm, tolerância de projeto ±5)", 10.15, 20, None, 0, tex_proj=5),

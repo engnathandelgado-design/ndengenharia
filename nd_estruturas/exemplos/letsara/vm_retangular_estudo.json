@@ -1,0 +1,7283 @@
+{
+ "ranking": [
+  {
+   "b": 0.25,
+   "h": 0.8,
+   "custo_total": 115542,
+   "cord": {
+    "VM-01": 12,
+    "VM-02": 12,
+    "VM-03": 6,
+    "VM-04": 6
+   },
+   "hd": {
+    "VM-01": 0.35,
+    "VM-02": 0.35,
+    "VM-03": 0.25,
+    "VM-04": 0.25
+   },
+   "faixa_2e_m": 0.13,
+   "fundo_390": 2.84
+  },
+  {
+   "b": 0.3,
+   "h": 0.75,
+   "custo_total": 127002,
+   "cord": {
+    "VM-01": 12,
+    "VM-02": 12,
+    "VM-03": 8,
+    "VM-04": 6
+   },
+   "hd": {
+    "VM-01": 0.3,
+    "VM-02": 0.3,
+    "VM-03": 0.25,
+    "VM-04": 0.25
+   },
+   "faixa_2e_m": 0.18,
+   "fundo_390": 2.89
+  },
+  {
+   "b": 0.4,
+   "h": 0.65,
+   "custo_total": 146464,
+   "cord": {
+    "VM-01": 14,
+    "VM-02": 14,
+    "VM-03": 8,
+    "VM-04": 6
+   },
+   "hd": {
+    "VM-01": 0.25,
+    "VM-02": 0.25,
+    "VM-03": 0.25,
+    "VM-04": 0.25
+   },
+   "faixa_2e_m": 0.28,
+   "fundo_390": 2.99
+  }
+ ],
+ "solucoes": {
+  "0.25x0.80": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.25,
+    "h": 0.8,
+    "hd": 0.35,
+    "recorte": 0.45,
+    "n_inf": 10,
+    "n_sup": 2,
+    "n_cord": 12,
+    "casos": [
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2784,
+       "yc_comp": 0.5625,
+       "I_comp": 0.029829,
+       "bf_capa": 1.15,
+       "peso_t": 4.65,
+       "volume_m3": 1.862
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 5.05,
+       "q2": 25.25
+      },
+      "protensao": {
+       "P0": 1524.6,
+       "Pinf": 1226.5,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.132,
+        "sig_p0": 1287.265,
+        "P0": 1524.636,
+        "perda_imediata_pct": 8.053,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.718,
+        "fases": [
+         {
+          "dM": 207.49556150124994,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.6311723262718743
+         },
+         {
+          "dM": 34.190066949511944,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.5983261716164591
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 251.683,
+        "d_prog_9_6_3_4_3": 280.82,
+        "d_prog": 251.683,
+        "sig_pinf": 1035.582,
+        "Pinf": 1226.543,
+        "perda_progressiva_pct": 17.977,
+        "perda_total_pct": 26.03
+       }
+      },
+      "ELU": {
+       "M1d": 402.0,
+       "MRd1": 827.7,
+       "xd1": 0.431,
+       "M2d": 790.6,
+       "MRd2": 1335.1,
+       "xd2": 0.331,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 0.74,
+       "lim_F": 2.95,
+       "sig_D": -1.18,
+       "sig_rara": 0.74,
+       "topo_F1": -9.14
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.46,
+       "base_meio": -18.23,
+       "topo_fim_isol": 1.81,
+       "base_fim_isol": -18.58,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -6.8,
+       "montagem_mm": -0.4,
+       "final_mm": 3.9,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 387.7,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 5.12
+      },
+      "interface": {
+       "tau_sd": 0.784,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 407.6,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.9,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 69.8,
+       "lateral_L_bf": 37.2,
+       "lateral_Lh_bf2": 119.2
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2784,
+       "yc_comp": 0.5625,
+       "I_comp": 0.029829,
+       "bf_capa": 1.15,
+       "peso_t": 4.65,
+       "volume_m3": 1.862
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 8.58,
+       "q2": 5.05
+      },
+      "protensao": {
+       "P0": 1524.6,
+       "Pinf": 1231.2,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.132,
+        "sig_p0": 1287.265,
+        "P0": 1524.636,
+        "perda_imediata_pct": 8.053,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.718,
+        "fases": [
+         {
+          "dM": 207.49556150124994,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.6311723262718743
+         },
+         {
+          "dM": 58.1231138141703,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 1.0171544917479802
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 247.724,
+        "d_prog_9_6_3_4_3": 280.82,
+        "d_prog": 247.724,
+        "sig_pinf": 1039.54,
+        "Pinf": 1231.232,
+        "perda_progressiva_pct": 17.695,
+        "perda_total_pct": 25.747
+       }
+      },
+      "ELU": {
+       "M1d": 402.0,
+       "MRd1": 827.6,
+       "xd1": 0.431,
+       "M2d": 554.5,
+       "MRd2": 1335.2,
+       "xd2": 0.331,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -2.49,
+       "lim_F": 2.95,
+       "sig_D": -2.88,
+       "sig_rara": -2.49,
+       "topo_F1": -9.13
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.46,
+       "base_meio": -18.23,
+       "topo_fim_isol": 1.81,
+       "base_fim_isol": -18.58,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -6.8,
+       "montagem_mm": -0.4,
+       "final_mm": 2.1,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 256.5,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.353,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 173.4,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.9,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 69.8,
+       "lateral_L_bf": 37.2,
+       "lateral_Lh_bf2": 119.2
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2784,
+       "yc_comp": 0.5625,
+       "I_comp": 0.029829,
+       "bf_capa": 1.15,
+       "peso_t": 4.65,
+       "volume_m3": 1.862
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 13.94,
+       "q2": 7.66
+      },
+      "protensao": {
+       "P0": 1524.6,
+       "Pinf": 1238.3,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.132,
+        "sig_p0": 1287.265,
+        "P0": 1524.636,
+        "perda_imediata_pct": 8.053,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.718,
+        "fases": [
+         {
+          "dM": 207.49556150124994,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.6311723262718743
+         },
+         {
+          "dM": 94.35052171954351,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 1.6511341300920115
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 241.732,
+        "d_prog_9_6_3_4_3": 280.82,
+        "d_prog": 241.732,
+        "sig_pinf": 1045.533,
+        "Pinf": 1238.329,
+        "perda_progressiva_pct": 17.267,
+        "perda_total_pct": 25.319
+       }
+      },
+      "ELU": {
+       "M1d": 402.0,
+       "MRd1": 827.4,
+       "xd1": 0.431,
+       "M2d": 667.4,
+       "MRd2": 1335.3,
+       "xd2": 0.332,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.06,
+       "lim_F": 2.95,
+       "sig_D": -1.64,
+       "sig_rara": -1.06,
+       "topo_F1": -9.12
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.46,
+       "base_meio": -18.23,
+       "topo_fim_isol": 1.81,
+       "base_fim_isol": -18.58,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -6.9,
+       "montagem_mm": -0.5,
+       "final_mm": 4.3,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 319.2,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.559,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 274.1,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.9,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 69.8,
+       "lateral_L_bf": 37.2,
+       "lateral_Lh_bf2": 119.2
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 426.5,
+     "dente": {
+      "h": 0.35,
+      "d": 0.3,
+      "a_d": 0.65,
+      "As": 8.89,
+      "tirante": "3 alças Ø16 (12.07 cm²)",
+      "tau": 5.69,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.44000000000000006,
+      "d": 0.39,
+      "a_d": 0.48,
+      "As": 7.17,
+      "tirante": "3 alças Ø12.5 (7.36 cm²)",
+      "tau": 4.37,
+      "tau_u": 5.95,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 9.8,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 9.8",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 1.783,
+    "peso_t": 4.46,
+    "kg_cord": 86.6,
+    "kg_aco": 222.5,
+    "custo_indice": 6511,
+    "h_final": 1.06,
+    "fundo": [
+     2.84,
+     6.24
+    ]
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.25,
+    "h": 0.8,
+    "hd": 0.35,
+    "recorte": 0.45,
+    "n_inf": 10,
+    "n_sup": 2,
+    "n_cord": 12,
+    "casos": [
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2789,
+       "yc_comp": 0.5633,
+       "I_comp": 0.029928,
+       "bf_capa": 1.16,
+       "peso_t": 4.71,
+       "volume_m3": 1.884
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 5.05,
+       "q2": 25.25
+      },
+      "protensao": {
+       "P0": 1524.8,
+       "Pinf": 1228.2,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.006,
+        "sig_p0": 1287.391,
+        "P0": 1524.786,
+        "perda_imediata_pct": 8.043,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.698,
+        "fases": [
+         {
+          "dM": 212.59981264500001,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.7204967212875006
+         },
+         {
+          "dM": 34.992057277064745,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.6123610023486331
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 250.439,
+        "d_prog_9_6_3_4_3": 280.588,
+        "d_prog": 250.439,
+        "sig_pinf": 1036.952,
+        "Pinf": 1228.166,
+        "perda_progressiva_pct": 17.889,
+        "perda_total_pct": 25.932
+       }
+      },
+      "ELU": {
+       "M1d": 411.9,
+       "MRd1": 827.7,
+       "xd1": 0.431,
+       "M2d": 810.1,
+       "MRd2": 1337.8,
+       "xd2": 0.329,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 1.09,
+       "lim_F": 2.95,
+       "sig_D": -0.88,
+       "sig_rara": 1.09,
+       "topo_F1": -9.42
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.41,
+       "base_meio": -18.18,
+       "topo_fim_isol": 1.79,
+       "base_fim_isol": -18.56,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.0,
+       "montagem_mm": -0.3,
+       "final_mm": 4.7,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 392.5,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 5.26
+      },
+      "interface": {
+       "tau_sd": 0.793,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 417.6,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.86,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 70.7,
+       "lateral_L_bf": 37.7,
+       "lateral_Lh_bf2": 120.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2789,
+       "yc_comp": 0.5633,
+       "I_comp": 0.029928,
+       "bf_capa": 1.16,
+       "peso_t": 4.71,
+       "volume_m3": 1.884
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 8.58,
+       "q2": 5.05
+      },
+      "protensao": {
+       "P0": 1524.8,
+       "Pinf": 1233.0,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.006,
+        "sig_p0": 1287.391,
+        "P0": 1524.786,
+        "perda_imediata_pct": 8.043,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.698,
+        "fases": [
+         {
+          "dM": 212.59981264500001,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.7204967212875006
+         },
+         {
+          "dM": 59.48649737101007,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 1.0410137039926763
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 246.388,
+        "d_prog_9_6_3_4_3": 280.588,
+        "d_prog": 246.388,
+        "sig_pinf": 1041.003,
+        "Pinf": 1232.964,
+        "perda_progressiva_pct": 17.599,
+        "perda_total_pct": 25.643
+       }
+      },
+      "ELU": {
+       "M1d": 411.9,
+       "MRd1": 827.6,
+       "xd1": 0.431,
+       "M2d": 568.2,
+       "MRd2": 1337.8,
+       "xd2": 0.33,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -2.22,
+       "lim_F": 2.95,
+       "sig_D": -2.61,
+       "sig_rara": -2.22,
+       "topo_F1": -9.41
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.41,
+       "base_meio": -18.18,
+       "topo_fim_isol": 1.79,
+       "base_fim_isol": -18.56,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.0,
+       "montagem_mm": -0.3,
+       "final_mm": 2.8,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 259.6,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.357,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 177.6,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.86,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 70.7,
+       "lateral_L_bf": 37.7,
+       "lateral_Lh_bf2": 120.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        50,
+        190
+       ],
+       [
+        200,
+        190
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2789,
+       "yc_comp": 0.5633,
+       "I_comp": 0.029928,
+       "bf_capa": 1.16,
+       "peso_t": 4.71,
+       "volume_m3": 1.884
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 13.94,
+       "q2": 7.66
+      },
+      "protensao": {
+       "P0": 1524.8,
+       "Pinf": 1240.2,
+       "ep": 0.1867,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 72.006,
+        "sig_p0": 1287.391,
+        "P0": 1524.786,
+        "perda_imediata_pct": 8.043,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.698,
+        "fases": [
+         {
+          "dM": 212.59981264500001,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 3.7204967212875006
+         },
+         {
+          "dM": 96.56368514886269,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 1.689864490105097
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 240.255,
+        "d_prog_9_6_3_4_3": 280.588,
+        "d_prog": 240.255,
+        "sig_pinf": 1047.136,
+        "Pinf": 1240.228,
+        "perda_progressiva_pct": 17.161,
+        "perda_total_pct": 25.205
+       }
+      },
+      "ELU": {
+       "M1d": 411.9,
+       "MRd1": 827.4,
+       "xd1": 0.431,
+       "M2d": 683.8,
+       "MRd2": 1338.0,
+       "xd2": 0.33,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.75,
+       "lim_F": 2.95,
+       "sig_D": -1.35,
+       "sig_rara": -0.75,
+       "topo_F1": -9.4
+      },
+      "ato": {
+       "topo_ponta": 1.08,
+       "base_ponta": -15.06,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.41,
+       "base_meio": -18.18,
+       "topo_fim_isol": 1.79,
+       "base_fim_isol": -18.56,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.876,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.1,
+       "montagem_mm": -0.3,
+       "final_mm": 5.1,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 323.1,
+       "VRd2": 1355.4,
+       "Vc0": 220.2,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.566,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 280.9,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.23,
+       "sig_base_vao": -16.86,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 70.7,
+       "lateral_L_bf": 37.7,
+       "lateral_Lh_bf2": 120.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 431.8,
+     "dente": {
+      "h": 0.35,
+      "d": 0.3,
+      "a_d": 0.65,
+      "As": 9.0,
+      "tirante": "3 alças Ø16 (12.07 cm²)",
+      "tau": 5.76,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.44000000000000006,
+      "d": 0.39,
+      "a_d": 0.48,
+      "As": 7.26,
+      "tirante": "3 alças Ø12.5 (7.36 cm²)",
+      "tau": 4.43,
+      "tau_u": 5.95,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 9.93,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 9.9",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 1.805,
+    "peso_t": 4.51,
+    "kg_cord": 87.6,
+    "kg_aco": 225.2,
+    "custo_indice": 6590,
+    "h_final": 1.06,
+    "fundo": [
+     2.84,
+     6.24
+    ]
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.25,
+    "h": 0.8,
+    "hd": 0.25,
+    "recorte": 0.55,
+    "n_inf": 4,
+    "n_sup": 2,
+    "n_cord": 6,
+    "casos": [
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2651,
+       "yc_comp": 0.5394,
+       "I_comp": 0.026849,
+       "bf_capa": 0.83,
+       "peso_t": 3.08,
+       "volume_m3": 1.232
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 5.05,
+       "q2": 25.25
+      },
+      "protensao": {
+       "P0": 787.9,
+       "Pinf": 666.6,
+       "ep": 0.1167,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 28.998,
+        "sig_p0": 1330.399,
+        "P0": 787.862,
+        "perda_imediata_pct": 4.972,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.711,
+        "fases": [
+         {
+          "dM": 87.64589121999998,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.9586269352187502
+         },
+         {
+          "dM": 18.825823924898927,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.20590744917858209
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 204.742,
+        "d_prog_9_6_3_4_3": 198.924,
+        "d_prog": 204.742,
+        "sig_pinf": 1125.657,
+        "Pinf": 666.614,
+        "perda_progressiva_pct": 14.624,
+        "perda_total_pct": 19.596
+       }
+      },
+      "ELU": {
+       "M1d": 169.8,
+       "MRd1": 421.9,
+       "xd1": 0.205,
+       "M2d": 334.0,
+       "MRd2": 689.9,
+       "xd2": 0.14,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 0.44,
+       "lim_F": 2.95,
+       "sig_D": -0.43,
+       "sig_rara": 0.44,
+       "topo_F1": -5.31
+      },
+      "ato": {
+       "topo_ponta": -0.54,
+       "base_ponta": -8.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -1.34,
+       "base_meio": -7.32,
+       "topo_fim_isol": -1.39,
+       "base_fim_isol": -7.28,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.905,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.0,
+       "montagem_mm": 0.2,
+       "final_mm": 1.8,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 252.0,
+       "VRd2": 1242.0,
+       "Vc0": 201.8,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.557,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 172.2,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.39,
+       "sig_base_vao": -7.06,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 46.2,
+       "lateral_L_bf": 24.6,
+       "lateral_Lh_bf2": 78.8
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2651,
+       "yc_comp": 0.5394,
+       "I_comp": 0.026849,
+       "bf_capa": 0.83,
+       "peso_t": 3.08,
+       "volume_m3": 1.232
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 13.94,
+       "q2": 7.66
+      },
+      "protensao": {
+       "P0": 787.9,
+       "Pinf": 668.8,
+       "ep": 0.1167,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 28.998,
+        "sig_p0": 1330.399,
+        "P0": 787.862,
+        "perda_imediata_pct": 4.972,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.711,
+        "fases": [
+         {
+          "dM": 87.64589121999998,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.9586269352187502
+         },
+         {
+          "dM": 51.95153059329803,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.5682198658641975
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 201.079,
+        "d_prog_9_6_3_4_3": 198.924,
+        "d_prog": 201.079,
+        "sig_pinf": 1129.319,
+        "Pinf": 668.783,
+        "perda_progressiva_pct": 14.363,
+        "perda_total_pct": 19.334
+       }
+      },
+      "ELU": {
+       "M1d": 169.8,
+       "MRd1": 421.9,
+       "xd1": 0.205,
+       "M2d": 281.9,
+       "MRd2": 689.9,
+       "xd2": 0.14,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.33,
+       "lim_F": 2.95,
+       "sig_D": -0.59,
+       "sig_rara": -0.33,
+       "topo_F1": -5.32
+      },
+      "ato": {
+       "topo_ponta": -0.54,
+       "base_ponta": -8.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -1.34,
+       "base_meio": -7.32,
+       "topo_fim_isol": -1.39,
+       "base_fim_isol": -7.28,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.905,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.0,
+       "montagem_mm": 0.2,
+       "final_mm": 1.9,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 207.5,
+       "VRd2": 1242.0,
+       "Vc0": 201.8,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.397,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 115.8,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.39,
+       "sig_base_vao": -7.06,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 46.2,
+       "lateral_L_bf": 24.6,
+       "lateral_Lh_bf2": 78.8
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 277.2,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 7.84,
+      "tirante": "2 alças Ø16 (8.04 cm²)",
+      "tau": 5.54,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.54,
+      "d": 0.49,
+      "a_d": 0.38,
+      "As": 4.66,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 2.26,
+      "tau_u": 4.57,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 6.37,
+     "suspensao": "2 estribos fechados Ø16 (2 ramos) = 8.0 cm² ≥ 6.4",
+     "n_sus": 2,
+     "ok": true
+    },
+    "V_m3": 1.136,
+    "peso_t": 2.84,
+    "kg_cord": 28.6,
+    "kg_aco": 146.0,
+    "custo_indice": 3788,
+    "h_final": 1.06,
+    "fundo": [
+     2.84,
+     6.24
+    ]
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.25,
+    "h": 0.8,
+    "hd": 0.25,
+    "recorte": 0.55,
+    "n_inf": 4,
+    "n_sup": 2,
+    "n_cord": 6,
+    "casos": [
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2512,
+       "yc_comp": 0.5124,
+       "I_comp": 0.023367,
+       "bf_capa": 0.5,
+       "peso_t": 1.42,
+       "volume_m3": 0.568
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 4.89,
+       "g_capa": 2.49,
+       "g_2e": 0.75,
+       "q_mont": 2.0,
+       "g1": 13.13,
+       "g2": 2.0,
+       "q2": 9.98
+      },
+      "protensao": {
+       "P0": 787.2,
+       "Pinf": 658.0,
+       "ep": 0.1167,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 30.142,
+        "sig_p0": 1329.255,
+        "P0": 787.185,
+        "perda_imediata_pct": 5.053,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.897,
+        "fases": [
+         {
+          "dM": 6.494434527999999,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.07103287765000002
+         },
+         {
+          "dM": 1.428369792081543,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.015622794600891882
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 218.209,
+        "d_prog_9_6_3_4_3": 201.172,
+        "d_prog": 218.209,
+        "sig_pinf": 1111.045,
+        "Pinf": 657.961,
+        "perda_progressiva_pct": 15.586,
+        "perda_total_pct": 20.64
+       }
+      },
+      "ELU": {
+       "M1d": 15.7,
+       "MRd1": 422.1,
+       "xd1": 0.204,
+       "M2d": 28.1,
+       "MRd2": 622.3,
+       "xd2": 0.245,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -5.57,
+       "lim_F": 2.95,
+       "sig_D": -5.64,
+       "sig_rara": -5.57,
+       "topo_F1": -0.86
+      },
+      "ato": {
+       "topo_ponta": -0.54,
+       "base_ponta": -8.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.69,
+       "base_meio": -7.97,
+       "topo_fim_isol": -0.64,
+       "base_fim_isol": -8.02,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.905,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.2,
+       "final_mm": -0.6,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 48.1,
+       "VRd2": 1242.0,
+       "Vc0": 201.8,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.095,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 12.7,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.39,
+       "sig_base_vao": -7.51,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 21.3,
+       "lateral_L_bf": 11.4,
+       "lateral_Lh_bf2": 36.4
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90 P6–P7"
+     },
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.8,
+      "h_final": 1.05,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        75,
+        750
+       ],
+       [
+        175,
+        750
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.2,
+       "yc": 0.4,
+       "xc": 0.125,
+       "I": 0.010667,
+       "Ac_hom": 0.2512,
+       "yc_comp": 0.5124,
+       "I_comp": 0.023367,
+       "bf_capa": 0.5,
+       "peso_t": 1.42,
+       "volume_m3": 0.568
+      },
+      "cargas": {
+       "g_pm": 5.0,
+       "g_laje": 13.44,
+       "g_capa": 6.31,
+       "g_2e": 0.75,
+       "q_mont": 5.05,
+       "g1": 25.5,
+       "g2": 13.94,
+       "q2": 7.66
+      },
+      "protensao": {
+       "P0": 787.2,
+       "Pinf": 659.2,
+       "ep": 0.1167,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 30.142,
+        "sig_p0": 1329.255,
+        "P0": 787.185,
+        "perda_imediata_pct": 5.053,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 19.048,
+        "phi": 3.075,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.897,
+        "fases": [
+         {
+          "dM": 16.378381119999997,
+          "t_dias": 60.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.17913854350000005
+         },
+         {
+          "dM": 9.977770025203121,
+          "t_dias": 90.0,
+          "phi": 2.05,
+          "d_sigma_c": 0.10913185965065918
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 216.171,
+        "d_prog_9_6_3_4_3": 201.172,
+        "d_prog": 216.171,
+        "sig_pinf": 1113.084,
+        "Pinf": 659.168,
+        "perda_progressiva_pct": 15.441,
+        "perda_total_pct": 20.494
+       }
+      },
+      "ELU": {
+       "M1d": 31.7,
+       "MRd1": 422.1,
+       "xd1": 0.204,
+       "M2d": 52.7,
+       "MRd2": 622.3,
+       "xd2": 0.245,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -5.04,
+       "lim_F": 2.95,
+       "sig_D": -5.09,
+       "sig_rara": -5.04,
+       "topo_F1": -1.33
+      },
+      "ato": {
+       "topo_ponta": -0.54,
+       "base_ponta": -8.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.69,
+       "base_meio": -7.97,
+       "topo_fim_isol": -0.64,
+       "base_fim_isol": -8.02,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.905,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.1,
+       "final_mm": -0.5,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 89.7,
+       "VRd2": 1242.0,
+       "Vc0": 201.8,
+       "Asw_req_cm2m": 3.51
+      },
+      "interface": {
+       "tau_sd": 0.172,
+       "tau_rd": 3.601,
+       "tau_max": 5.36,
+       "rho_alcas": 0.698,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.15,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 21.6,
+       "MRd_kNm": 558.0,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.196,
+       "x_d": 0.295,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.39,
+       "sig_base_vao": -7.51,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 21.3,
+       "lateral_L_bf": 11.4,
+       "lateral_Lh_bf2": 36.4
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 98.7,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 2.79,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 1.97,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.54,
+      "d": 0.49,
+      "a_d": 0.38,
+      "As": 3.92,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.81,
+      "tau_u": 4.57,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 2.27,
+     "suspensao": "1 estribos fechados Ø16 (2 ramos) = 4.0 cm² ≥ 2.3",
+     "n_sus": 1,
+     "ok": true
+    },
+    "V_m3": 0.472,
+    "peso_t": 1.18,
+    "kg_cord": 13.2,
+    "kg_aco": 59.1,
+    "custo_indice": 1579,
+    "h_final": 1.06,
+    "fundo": [
+     2.84,
+     6.24
+    ]
+   }
+  },
+  "0.30x0.75": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.3,
+    "recorte": 0.45,
+    "n_inf": 10,
+    "n_sup": 2,
+    "n_cord": 12,
+    "casos": [
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.3155,
+       "yc_comp": 0.5313,
+       "I_comp": 0.030194,
+       "bf_capa": 1.2,
+       "peso_t": 5.24,
+       "volume_m3": 2.095
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 5.08,
+       "q2": 25.38
+      },
+      "protensao": {
+       "P0": 1530.7,
+       "Pinf": 1245.3,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 67.053,
+        "sig_p0": 1292.344,
+        "P0": 1530.652,
+        "perda_imediata_pct": 7.69,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.893,
+        "fases": [
+         {
+          "dM": 209.63351723187498,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.726818084122222
+         },
+         {
+          "dM": 32.893640252791165,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.5847758267162875
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 240.949,
+        "d_prog_9_6_3_4_3": 270.501,
+        "d_prog": 240.949,
+        "sig_pinf": 1051.394,
+        "Pinf": 1245.271,
+        "perda_progressiva_pct": 17.211,
+        "perda_total_pct": 24.9
+       }
+      },
+      "ELU": {
+       "M1d": 413.3,
+       "MRd1": 820.4,
+       "xd1": 0.388,
+       "M2d": 804.6,
+       "MRd2": 1327.2,
+       "xd2": 0.293,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 1.06,
+       "lim_F": 2.95,
+       "sig_D": -0.74,
+       "sig_rara": 1.06,
+       "topo_F1": -8.54
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.72,
+       "base_meio": -16.68,
+       "topo_fim_isol": 2.09,
+       "base_fim_isol": -17.06,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.0,
+       "montagem_mm": -0.3,
+       "final_mm": 4.1,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 393.8,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.32
+      },
+      "interface": {
+       "tau_sd": 0.609,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 409.6,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.52,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 78.6,
+       "lateral_L_bf": 31.0,
+       "lateral_Lh_bf2": 77.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.3155,
+       "yc_comp": 0.5313,
+       "I_comp": 0.030194,
+       "bf_capa": 1.2,
+       "peso_t": 5.24,
+       "volume_m3": 2.095
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 8.63,
+       "q2": 5.08
+      },
+      "protensao": {
+       "P0": 1530.7,
+       "Pinf": 1249.9,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 67.053,
+        "sig_p0": 1292.344,
+        "P0": 1530.652,
+        "perda_imediata_pct": 7.69,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.893,
+        "fases": [
+         {
+          "dM": 209.63351723187498,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.726818084122222
+         },
+         {
+          "dM": 55.91918842974497,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.9941189054176885
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 237.064,
+        "d_prog_9_6_3_4_3": 270.501,
+        "d_prog": 237.064,
+        "sig_pinf": 1055.28,
+        "Pinf": 1249.873,
+        "perda_progressiva_pct": 16.933,
+        "perda_total_pct": 24.623
+       }
+      },
+      "ELU": {
+       "M1d": 413.3,
+       "MRd1": 820.3,
+       "xd1": 0.388,
+       "M2d": 567.3,
+       "MRd2": 1327.3,
+       "xd2": 0.293,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.97,
+       "lim_F": 2.95,
+       "sig_D": -2.33,
+       "sig_rara": -1.97,
+       "topo_F1": -8.53
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.72,
+       "base_meio": -16.68,
+       "topo_fim_isol": 2.09,
+       "base_fim_isol": -17.06,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.1,
+       "montagem_mm": -0.4,
+       "final_mm": 2.3,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 261.9,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.274,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 174.2,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.52,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 78.6,
+       "lateral_L_bf": 31.0,
+       "lateral_Lh_bf2": 77.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.3155,
+       "yc_comp": 0.5313,
+       "I_comp": 0.030194,
+       "bf_capa": 1.2,
+       "peso_t": 5.24,
+       "volume_m3": 2.095
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 13.98,
+       "q2": 7.69
+      },
+      "protensao": {
+       "P0": 1530.7,
+       "Pinf": 1256.8,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 67.053,
+        "sig_p0": 1292.344,
+        "P0": 1530.652,
+        "perda_imediata_pct": 7.69,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.893,
+        "fases": [
+         {
+          "dM": 209.63351723187498,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.726818084122222
+         },
+         {
+          "dM": 90.60122403734596,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 1.610688427330595
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 231.212,
+        "d_prog_9_6_3_4_3": 270.501,
+        "d_prog": 231.212,
+        "sig_pinf": 1061.132,
+        "Pinf": 1256.805,
+        "perda_progressiva_pct": 16.515,
+        "perda_total_pct": 24.205
+       }
+      },
+      "ELU": {
+       "M1d": 413.3,
+       "MRd1": 820.2,
+       "xd1": 0.388,
+       "M2d": 680.2,
+       "MRd2": 1327.5,
+       "xd2": 0.293,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.63,
+       "lim_F": 2.95,
+       "sig_D": -1.18,
+       "sig_rara": -0.63,
+       "topo_F1": -8.51
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.72,
+       "base_meio": -16.68,
+       "topo_fim_isol": 2.09,
+       "base_fim_isol": -17.06,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.1,
+       "montagem_mm": -0.4,
+       "final_mm": 4.5,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 324.6,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.433,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 275.0,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.52,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 78.6,
+       "lateral_L_bf": 31.0,
+       "lateral_Lh_bf2": 77.6
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 433.2,
+     "dente": {
+      "h": 0.3,
+      "d": 0.25,
+      "a_d": 0.78,
+      "As": 10.32,
+      "tirante": "3 alças Ø16 (12.07 cm²)",
+      "tau": 5.78,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.44,
+      "d": 0.39,
+      "a_d": 0.48,
+      "As": 7.29,
+      "tirante": "3 alças Ø12.5 (7.36 cm²)",
+      "tau": 3.7,
+      "tau_u": 5.46,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 9.96,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 10.0",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 2.0,
+    "peso_t": 5.0,
+    "kg_cord": 86.6,
+    "kg_aco": 248.2,
+    "custo_indice": 7133,
+    "h_final": 1.01,
+    "fundo": [
+     2.89,
+     6.29
+    ]
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.3,
+    "recorte": 0.45,
+    "n_inf": 10,
+    "n_sup": 2,
+    "n_cord": 12,
+    "casos": [
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.316,
+       "yc_comp": 0.5319,
+       "I_comp": 0.030285,
+       "bf_capa": 1.21,
+       "peso_t": 5.3,
+       "volume_m3": 2.119
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 5.08,
+       "q2": 25.38
+      },
+      "protensao": {
+       "P0": 1530.8,
+       "Pinf": 1247.0,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 66.908,
+        "sig_p0": 1292.489,
+        "P0": 1530.824,
+        "perda_imediata_pct": 7.679,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.869,
+        "fases": [
+         {
+          "dM": 214.79036064750005,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.8184953004000013
+         },
+         {
+          "dM": 33.66493955522146,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.5984878143150483
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 239.643,
+        "d_prog_9_6_3_4_3": 270.235,
+        "d_prog": 239.643,
+        "sig_pinf": 1052.845,
+        "Pinf": 1246.99,
+        "perda_progressiva_pct": 17.117,
+        "perda_total_pct": 24.797
+       }
+      },
+      "ELU": {
+       "M1d": 423.5,
+       "MRd1": 820.4,
+       "xd1": 0.388,
+       "M2d": 824.4,
+       "MRd2": 1329.8,
+       "xd2": 0.29,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 1.4,
+       "lim_F": 2.95,
+       "sig_D": -0.45,
+       "sig_rara": 1.4,
+       "topo_F1": -8.81
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.67,
+       "base_meio": -16.64,
+       "topo_fim_isol": 2.07,
+       "base_fim_isol": -17.03,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.2,
+       "montagem_mm": -0.2,
+       "final_mm": 5.0,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 398.6,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.47
+      },
+      "interface": {
+       "tau_sd": 0.616,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 419.7,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.47,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 79.5,
+       "lateral_L_bf": 31.4,
+       "lateral_Lh_bf2": 78.5
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.316,
+       "yc_comp": 0.5319,
+       "I_comp": 0.030285,
+       "bf_capa": 1.21,
+       "peso_t": 5.3,
+       "volume_m3": 2.119
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 8.63,
+       "q2": 5.08
+      },
+      "protensao": {
+       "P0": 1530.8,
+       "Pinf": 1251.7,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 66.908,
+        "sig_p0": 1292.489,
+        "P0": 1530.824,
+        "perda_imediata_pct": 7.679,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.869,
+        "fases": [
+         {
+          "dM": 214.79036064750005,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.8184953004000013
+         },
+         {
+          "dM": 57.23039724387649,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 1.017429284335582
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 235.667,
+        "d_prog_9_6_3_4_3": 270.235,
+        "d_prog": 235.667,
+        "sig_pinf": 1056.822,
+        "Pinf": 1251.7,
+        "perda_progressiva_pct": 16.833,
+        "perda_total_pct": 24.513
+       }
+      },
+      "ELU": {
+       "M1d": 423.5,
+       "MRd1": 820.3,
+       "xd1": 0.388,
+       "M2d": 581.3,
+       "MRd2": 1329.9,
+       "xd2": 0.29,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.7,
+       "lim_F": 2.95,
+       "sig_D": -2.07,
+       "sig_rara": -1.7,
+       "topo_F1": -8.8
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.67,
+       "base_meio": -16.64,
+       "topo_fim_isol": 2.07,
+       "base_fim_isol": -17.03,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.2,
+       "montagem_mm": -0.2,
+       "final_mm": 3.1,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 265.1,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.277,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 178.5,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.47,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 79.5,
+       "lateral_L_bf": 31.4,
+       "lateral_Lh_bf2": 78.5
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 12,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        200,
+        120
+       ],
+       [
+        250,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.316,
+       "yc_comp": 0.5319,
+       "I_comp": 0.030285,
+       "bf_capa": 1.21,
+       "peso_t": 5.3,
+       "volume_m3": 2.119
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 13.98,
+       "q2": 7.69
+      },
+      "protensao": {
+       "P0": 1530.8,
+       "Pinf": 1258.8,
+       "ep": 0.1875,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 66.908,
+        "sig_p0": 1292.489,
+        "P0": 1530.824,
+        "perda_imediata_pct": 7.679,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 10.869,
+        "fases": [
+         {
+          "dM": 214.79036064750005,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 3.8184953004000013
+         },
+         {
+          "dM": 92.72566694978423,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 1.6484563013294975
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 229.677,
+        "d_prog_9_6_3_4_3": 270.235,
+        "d_prog": 229.677,
+        "sig_pinf": 1062.811,
+        "Pinf": 1258.794,
+        "perda_progressiva_pct": 16.406,
+        "perda_total_pct": 24.085
+       }
+      },
+      "ELU": {
+       "M1d": 423.5,
+       "MRd1": 820.2,
+       "xd1": 0.388,
+       "M2d": 696.9,
+       "MRd2": 1330.0,
+       "xd2": 0.29,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.33,
+       "lim_F": 2.95,
+       "sig_D": -0.89,
+       "sig_rara": -0.33,
+       "topo_F1": -8.78
+      },
+      "ato": {
+       "topo_ponta": 1.75,
+       "base_ponta": -14.22,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 1.67,
+       "base_meio": -16.64,
+       "topo_fim_isol": 2.07,
+       "base_fim_isol": -17.03,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.88,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -7.3,
+       "montagem_mm": -0.3,
+       "final_mm": 5.4,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 328.6,
+       "VRd2": 1579.5,
+       "Vc0": 256.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.439,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 281.8,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 1.9,
+       "sig_base_vao": -15.47,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 79.5,
+       "lateral_L_bf": 31.4,
+       "lateral_Lh_bf2": 78.5
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 438.5,
+     "dente": {
+      "h": 0.3,
+      "d": 0.25,
+      "a_d": 0.78,
+      "As": 10.45,
+      "tirante": "3 alças Ø16 (12.07 cm²)",
+      "tau": 5.85,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.44,
+      "d": 0.39,
+      "a_d": 0.48,
+      "As": 7.38,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.75,
+      "tau_u": 6.28,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 10.08,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 10.1",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 2.025,
+    "peso_t": 5.06,
+    "kg_cord": 87.6,
+    "kg_aco": 251.3,
+    "custo_indice": 7221,
+    "h_final": 1.01,
+    "fundo": [
+     2.89,
+     6.29
+    ]
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.25,
+    "recorte": 0.5,
+    "n_inf": 6,
+    "n_sup": 2,
+    "n_cord": 8,
+    "casos": [
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 8,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.3022,
+       "yc_comp": 0.5118,
+       "I_comp": 0.027466,
+       "bf_capa": 0.88,
+       "peso_t": 3.46,
+       "volume_m3": 1.386
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 5.08,
+       "q2": 25.38
+      },
+      "protensao": {
+       "P0": 1041.2,
+       "Pinf": 865.7,
+       "ep": 0.1537,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 40.695,
+        "sig_p0": 1318.702,
+        "P0": 1041.247,
+        "perda_imediata_pct": 5.807,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 6.611,
+        "fases": [
+         {
+          "dM": 88.54896131,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 1.2908470804302223
+         },
+         {
+          "dM": 15.74372224358389,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.22950848426202297
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 222.304,
+        "d_prog_9_6_3_4_3": 221.022,
+        "d_prog": 222.304,
+        "sig_pinf": 1096.398,
+        "Pinf": 865.716,
+        "perda_progressiva_pct": 15.879,
+        "perda_total_pct": 21.686
+       }
+      },
+      "ELU": {
+       "M1d": 174.6,
+       "MRd1": 559.5,
+       "xd1": 0.252,
+       "M2d": 339.9,
+       "MRd2": 886.6,
+       "xd2": 0.21,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -2.15,
+       "lim_F": 2.95,
+       "sig_D": -2.96,
+       "sig_rara": -2.15,
+       "topo_F1": -3.89
+      },
+      "ato": {
+       "topo_ponta": -0.87,
+       "base_ponta": -6.77,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 0.32,
+       "base_meio": -10.5,
+       "topo_fim_isol": 0.27,
+       "base_fim_isol": -10.45,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.897,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.7,
+       "montagem_mm": -0.5,
+       "final_mm": -1.0,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 255.9,
+       "VRd2": 1513.9,
+       "Vc0": 245.9,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.413,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 173.0,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.71,
+       "sig_base_vao": -9.97,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 52.0,
+       "lateral_L_bf": 20.5,
+       "lateral_Lh_bf2": 51.3
+      },
+      "excentricidade_lateral_protensao_m": -0.0125,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 8,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.3022,
+       "yc_comp": 0.5118,
+       "I_comp": 0.027466,
+       "bf_capa": 0.88,
+       "peso_t": 3.46,
+       "volume_m3": 1.386
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 13.98,
+       "q2": 7.69
+      },
+      "protensao": {
+       "P0": 1041.2,
+       "Pinf": 868.9,
+       "ep": 0.1537,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 40.695,
+        "sig_p0": 1318.702,
+        "P0": 1041.247,
+        "perda_imediata_pct": 5.807,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 6.611,
+        "fases": [
+         {
+          "dM": 88.54896131,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 1.2908470804302223
+         },
+         {
+          "dM": 43.364020984319446,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.6321510614603013
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 218.313,
+        "d_prog_9_6_3_4_3": 221.022,
+        "d_prog": 218.313,
+        "sig_pinf": 1100.389,
+        "Pinf": 868.867,
+        "perda_progressiva_pct": 15.594,
+        "perda_total_pct": 21.401
+       }
+      },
+      "ELU": {
+       "M1d": 174.6,
+       "MRd1": 559.4,
+       "xd1": 0.253,
+       "M2d": 287.3,
+       "MRd2": 886.7,
+       "xd2": 0.21,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -2.88,
+       "lim_F": 2.95,
+       "sig_D": -3.13,
+       "sig_rara": -2.88,
+       "topo_F1": -3.89
+      },
+      "ato": {
+       "topo_ponta": -0.87,
+       "base_ponta": -6.77,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 0.32,
+       "base_meio": -10.5,
+       "topo_fim_isol": 0.27,
+       "base_fim_isol": -10.45,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.897,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.7,
+       "montagem_mm": -0.5,
+       "final_mm": -0.8,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 211.0,
+       "VRd2": 1513.9,
+       "Vc0": 245.9,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.294,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 116.2,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.71,
+       "sig_base_vao": -9.97,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 52.0,
+       "lateral_L_bf": 20.5,
+       "lateral_Lh_bf2": 51.3
+      },
+      "excentricidade_lateral_protensao_m": -0.0125,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 281.5,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 7.96,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 4.69,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.49,
+      "d": 0.44,
+      "a_d": 0.42,
+      "As": 4.74,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 2.13,
+      "tau_u": 4.45,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 6.47,
+     "suspensao": "2 estribos fechados Ø16 (2 ramos) = 8.0 cm² ≥ 6.5",
+     "n_sus": 2,
+     "ok": true
+    },
+    "V_m3": 1.281,
+    "peso_t": 3.2,
+    "kg_cord": 38.2,
+    "kg_aco": 161.7,
+    "custo_indice": 4334,
+    "h_final": 1.01,
+    "fundo": [
+     2.89,
+     6.29
+    ]
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.25,
+    "recorte": 0.5,
+    "n_inf": 4,
+    "n_sup": 2,
+    "n_cord": 6,
+    "casos": [
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.2883,
+       "yc_comp": 0.4893,
+       "I_comp": 0.024319,
+       "bf_capa": 0.55,
+       "peso_t": 1.6,
+       "volume_m3": 0.639
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 4.89,
+       "g_capa": 2.56,
+       "g_2e": 1.0,
+       "q_mont": 2.04,
+       "g1": 14.07,
+       "g2": 2.04,
+       "q2": 10.22
+      },
+      "protensao": {
+       "P0": 789.2,
+       "Pinf": 664.2,
+       "ep": 0.1083,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 26.713,
+        "sig_p0": 1332.684,
+        "P0": 789.215,
+        "perda_imediata_pct": 4.808,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.34,
+        "fases": [
+         {
+          "dM": 6.744074528000001,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.06927246922587656
+         },
+         {
+          "dM": 1.4563355875323578,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.014958903812678047
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 211.033,
+        "d_prog_9_6_3_4_3": 193.885,
+        "d_prog": 211.033,
+        "sig_pinf": 1121.651,
+        "Pinf": 664.241,
+        "perda_progressiva_pct": 15.074,
+        "perda_total_pct": 19.882
+       }
+      },
+      "ELU": {
+       "M1d": 16.7,
+       "MRd1": 400.9,
+       "xd1": 0.186,
+       "M2d": 29.5,
+       "MRd2": 615.5,
+       "xd2": 0.21,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -4.91,
+       "lim_F": 2.95,
+       "sig_D": -4.98,
+       "sig_rara": -4.91,
+       "topo_F1": -0.85
+      },
+      "ato": {
+       "topo_ponta": -0.51,
+       "base_ponta": -7.2,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.67,
+       "base_meio": -7.04,
+       "topo_fim_isol": -0.62,
+       "base_fim_isol": -7.1,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.907,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.1,
+       "final_mm": -0.6,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 50.3,
+       "VRd2": 1425.6,
+       "Vc0": 231.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.077,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 13.0,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.36,
+       "sig_base_vao": -6.69,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 24.0,
+       "lateral_L_bf": 9.5,
+       "lateral_Lh_bf2": 23.7
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90 P6–P7"
+     },
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.75,
+      "h_final": 1.0,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        100,
+        700
+       ],
+       [
+        200,
+        700
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.225,
+       "yc": 0.375,
+       "xc": 0.15,
+       "I": 0.010547,
+       "Ac_hom": 0.2883,
+       "yc_comp": 0.4893,
+       "I_comp": 0.024319,
+       "bf_capa": 0.55,
+       "peso_t": 1.6,
+       "volume_m3": 0.639
+      },
+      "cargas": {
+       "g_pm": 5.62,
+       "g_laje": 13.37,
+       "g_capa": 6.34,
+       "g_2e": 1.0,
+       "q_mont": 5.08,
+       "g1": 26.34,
+       "g2": 13.98,
+       "q2": 7.69
+      },
+      "protensao": {
+       "P0": 789.2,
+       "Pinf": 665.4,
+       "ep": 0.1083,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 26.713,
+        "sig_p0": 1332.684,
+        "P0": 789.215,
+        "perda_imediata_pct": 4.808,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 21.429,
+        "phi": 3.059,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 4.34,
+        "fases": [
+         {
+          "dM": 16.547137760000002,
+          "t_dias": 60.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.16996566192987658
+         },
+         {
+          "dM": 9.954657520847377,
+          "t_dias": 90.0,
+          "phi": 2.0455357142857142,
+          "d_sigma_c": 0.10225030934993849
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 209.127,
+        "d_prog_9_6_3_4_3": 193.885,
+        "d_prog": 209.127,
+        "sig_pinf": 1123.557,
+        "Pinf": 665.37,
+        "perda_progressiva_pct": 14.938,
+        "perda_total_pct": 19.746
+       }
+      },
+      "ELU": {
+       "M1d": 32.6,
+       "MRd1": 400.9,
+       "xd1": 0.186,
+       "M2d": 53.7,
+       "MRd2": 615.5,
+       "xd2": 0.21,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -4.42,
+       "lim_F": 2.95,
+       "sig_D": -4.47,
+       "sig_rara": -4.42,
+       "topo_F1": -1.29
+      },
+      "ato": {
+       "topo_ponta": -0.51,
+       "base_ponta": -7.2,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.67,
+       "base_meio": -7.04,
+       "topo_fim_isol": -0.62,
+       "base_fim_isol": -7.1,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.907,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.1,
+       "final_mm": -0.5,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 91.2,
+       "VRd2": 1425.6,
+       "Vc0": 231.6,
+       "Asw_req_cm2m": 4.21
+      },
+      "interface": {
+       "tau_sd": 0.135,
+       "tau_rd": 2.918,
+       "tau_max": 5.36,
+       "rho_alcas": 0.524,
+       "beta_s": 0.9,
+       "beta_c": 0.6,
+       "b_int": 0.19999999999999998,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 21.7,
+       "MRd_kNm": 570.4,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.163,
+       "x_d": 0.245,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.36,
+       "sig_base_vao": -6.69,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 24.0,
+       "lateral_L_bf": 9.5,
+       "lateral_Lh_bf2": 23.7
+      },
+      "excentricidade_lateral_protensao_m": 0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 100.3,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 2.84,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 1.67,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.49,
+      "d": 0.44,
+      "a_d": 0.42,
+      "As": 4.22,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.76,
+      "tau_u": 4.45,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 2.31,
+     "suspensao": "1 estribos fechados Ø16 (2 ramos) = 4.0 cm² ≥ 2.3",
+     "n_sus": 1,
+     "ok": true
+    },
+    "V_m3": 0.534,
+    "peso_t": 1.33,
+    "kg_cord": 13.2,
+    "kg_aco": 65.8,
+    "custo_indice": 1751,
+    "h_final": 1.01,
+    "fundo": [
+     2.89,
+     6.29
+    ]
+   }
+  },
+  "0.40x0.65": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.4,
+    "h": 0.65,
+    "hd": 0.25,
+    "recorte": 0.4,
+    "n_inf": 12,
+    "n_sup": 2,
+    "n_cord": 14,
+    "casos": [
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3747,
+       "yc_comp": 0.4734,
+       "I_comp": 0.028507,
+       "bf_capa": 1.3,
+       "peso_t": 6.05,
+       "volume_m3": 2.421
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 5.13,
+       "q2": 25.63
+      },
+      "protensao": {
+       "P0": 1781.9,
+       "Pinf": 1449.6,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.819,
+        "sig_p0": 1289.578,
+        "P0": 1781.939,
+        "perda_imediata_pct": 7.887,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.342,
+        "fases": [
+         {
+          "dM": 213.90942869312497,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.005846639158593
+         },
+         {
+          "dM": 31.070515508687876,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.5818524264582944
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 240.51,
+        "d_prog_9_6_3_4_3": 273.203,
+        "d_prog": 240.51,
+        "sig_pinf": 1049.068,
+        "Pinf": 1449.602,
+        "perda_progressiva_pct": 17.179,
+        "perda_total_pct": 25.067
+       }
+      },
+      "ELU": {
+       "M1d": 431.0,
+       "MRd1": 838.9,
+       "xd1": 0.403,
+       "M2d": 827.3,
+       "MRd2": 1409.3,
+       "xd2": 0.301,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 0.7,
+       "lim_F": 2.95,
+       "sig_D": -1.02,
+       "sig_rara": 0.7,
+       "topo_F1": -8.52
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.06,
+       "base_meio": -17.13,
+       "topo_fim_isol": 2.49,
+       "base_fim_isol": -17.57,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.6,
+       "montagem_mm": -0.5,
+       "final_mm": 3.7,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 403.7,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.447,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 413.6,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.98,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 90.8,
+       "lateral_L_bf": 23.3,
+       "lateral_Lh_bf2": 37.8
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3747,
+       "yc_comp": 0.4734,
+       "I_comp": 0.028507,
+       "bf_capa": 1.3,
+       "peso_t": 6.05,
+       "volume_m3": 2.421
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 8.71,
+       "q2": 5.13
+      },
+      "protensao": {
+       "P0": 1781.9,
+       "Pinf": 1454.9,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.819,
+        "sig_p0": 1289.578,
+        "P0": 1781.939,
+        "perda_imediata_pct": 7.887,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.342,
+        "fases": [
+         {
+          "dM": 213.90942869312497,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.005846639158593
+         },
+         {
+          "dM": 52.8198763647694,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.9891491249791008
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 236.684,
+        "d_prog_9_6_3_4_3": 273.203,
+        "d_prog": 236.684,
+        "sig_pinf": 1052.895,
+        "Pinf": 1454.89,
+        "perda_progressiva_pct": 16.906,
+        "perda_total_pct": 24.793
+       }
+      },
+      "ELU": {
+       "M1d": 431.0,
+       "MRd1": 838.9,
+       "xd1": 0.403,
+       "M2d": 587.6,
+       "MRd2": 1409.5,
+       "xd2": 0.302,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -2.2,
+       "lim_F": 2.95,
+       "sig_D": -2.54,
+       "sig_rara": -2.2,
+       "topo_F1": -8.51
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.06,
+       "base_meio": -17.13,
+       "topo_fim_isol": 2.49,
+       "base_fim_isol": -17.57,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.7,
+       "montagem_mm": -0.6,
+       "final_mm": 1.8,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 270.6,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.201,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 176.0,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.98,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 90.8,
+       "lateral_L_bf": 23.3,
+       "lateral_Lh_bf2": 37.8
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-01",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.37,
+      "L_peca": 9.31,
+      "L_calculo": 8.998,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3747,
+       "yc_comp": 0.4734,
+       "I_comp": 0.028507,
+       "bf_capa": 1.3,
+       "peso_t": 6.05,
+       "volume_m3": 2.421
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 14.06,
+       "q2": 7.74
+      },
+      "protensao": {
+       "P0": 1781.9,
+       "Pinf": 1462.8,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.819,
+        "sig_p0": 1289.578,
+        "P0": 1781.939,
+        "perda_imediata_pct": 7.887,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.342,
+        "fases": [
+         {
+          "dM": 213.90942869312497,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.005846639158593
+         },
+         {
+          "dM": 85.26005800123157,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 1.596651063421204
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 230.976,
+        "d_prog_9_6_3_4_3": 273.203,
+        "d_prog": 230.976,
+        "sig_pinf": 1058.603,
+        "Pinf": 1462.777,
+        "perda_progressiva_pct": 16.498,
+        "perda_total_pct": 24.386
+       }
+      },
+      "ELU": {
+       "M1d": 431.0,
+       "MRd1": 838.8,
+       "xd1": 0.404,
+       "M2d": 700.5,
+       "MRd2": 1409.6,
+       "xd2": 0.302,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.94,
+       "lim_F": 2.95,
+       "sig_D": -1.46,
+       "sig_rara": -0.94,
+       "topo_F1": -8.49
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.06,
+       "base_meio": -17.13,
+       "topo_fim_isol": 2.49,
+       "base_fim_isol": -17.57,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.7,
+       "montagem_mm": -0.6,
+       "final_mm": 4.0,
+       "lim_final_mm": 36.0,
+       "lim_montagem_L500": 18.0,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 333.3,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.317,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 276.7,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.98,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 90.8,
+       "lateral_L_bf": 23.3,
+       "lateral_Lh_bf2": 37.8
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 444.1,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 12.56,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.55,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.39,
+      "d": 0.34,
+      "a_d": 0.55,
+      "As": 8.24,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.27,
+      "tau_u": 6.48,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 10.21,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 10.2",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 2.309,
+    "peso_t": 5.77,
+    "kg_cord": 101.0,
+    "kg_aco": 285.3,
+    "custo_indice": 8238,
+    "h_final": 0.91,
+    "fundo": [
+     2.99,
+     6.39
+    ]
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.4,
+    "h": 0.65,
+    "hd": 0.25,
+    "recorte": 0.4,
+    "n_inf": 12,
+    "n_sup": 2,
+    "n_cord": 14,
+    "casos": [
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3752,
+       "yc_comp": 0.4739,
+       "I_comp": 0.028582,
+       "bf_capa": 1.31,
+       "peso_t": 6.12,
+       "volume_m3": 2.449
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 5.13,
+       "q2": 25.63
+      },
+      "protensao": {
+       "P0": 1782.2,
+       "Pinf": 1451.8,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.643,
+        "sig_p0": 1289.754,
+        "P0": 1782.182,
+        "perda_imediata_pct": 7.875,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.314,
+        "fases": [
+         {
+          "dM": 219.17145665250004,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.104387770070877
+         },
+         {
+          "dM": 31.800843030412793,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.5955291496689569
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 239.092,
+        "d_prog_9_6_3_4_3": 272.886,
+        "d_prog": 239.092,
+        "sig_pinf": 1050.662,
+        "Pinf": 1451.805,
+        "perda_progressiva_pct": 17.078,
+        "perda_total_pct": 24.953
+       }
+      },
+      "ELU": {
+       "M1d": 441.6,
+       "MRd1": 838.9,
+       "xd1": 0.403,
+       "M2d": 847.6,
+       "MRd2": 1411.7,
+       "xd2": 0.299,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": 1.04,
+       "lim_F": 2.95,
+       "sig_D": -0.72,
+       "sig_rara": 1.04,
+       "topo_F1": -8.81
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.0,
+       "base_meio": -17.08,
+       "topo_fim_isol": 2.46,
+       "base_fim_isol": -17.54,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.8,
+       "montagem_mm": -0.4,
+       "final_mm": 4.6,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 408.7,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.453,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 423.8,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.93,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 91.8,
+       "lateral_L_bf": 23.5,
+       "lateral_Lh_bf2": 38.3
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3752,
+       "yc_comp": 0.4739,
+       "I_comp": 0.028582,
+       "bf_capa": 1.31,
+       "peso_t": 6.12,
+       "volume_m3": 2.449
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 8.71,
+       "q2": 5.13
+      },
+      "protensao": {
+       "P0": 1782.2,
+       "Pinf": 1457.2,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.643,
+        "sig_p0": 1289.754,
+        "P0": 1782.182,
+        "perda_imediata_pct": 7.875,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.314,
+        "fases": [
+         {
+          "dM": 219.17145665250004,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.104387770070877
+         },
+         {
+          "dM": 54.06143315170175,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 1.0123995544372266
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 235.175,
+        "d_prog_9_6_3_4_3": 272.886,
+        "d_prog": 235.175,
+        "sig_pinf": 1054.579,
+        "Pinf": 1457.217,
+        "perda_progressiva_pct": 16.798,
+        "perda_total_pct": 24.673
+       }
+      },
+      "ELU": {
+       "M1d": 441.6,
+       "MRd1": 838.8,
+       "xd1": 0.403,
+       "M2d": 602.1,
+       "MRd2": 1411.8,
+       "xd2": 0.299,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.92,
+       "lim_F": 2.95,
+       "sig_D": -2.27,
+       "sig_rara": -1.92,
+       "topo_F1": -8.8
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.0,
+       "base_meio": -17.08,
+       "topo_fim_isol": 2.46,
+       "base_fim_isol": -17.54,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.9,
+       "montagem_mm": -0.4,
+       "final_mm": 2.7,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 273.9,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.204,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 180.3,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.93,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 91.8,
+       "lateral_L_bf": 23.5,
+       "lateral_Lh_bf2": 38.3
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 1"
+     },
+     {
+      "marca": "VM-02",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 14,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        200,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        50,
+        120
+       ],
+       [
+        350,
+        120
+       ],
+       [
+        100,
+        120
+       ],
+       [
+        300,
+        120
+       ],
+       [
+        150,
+        120
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 9.48,
+      "L_peca": 9.42,
+      "L_calculo": 9.108,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3752,
+       "yc_comp": 0.4739,
+       "I_comp": 0.028582,
+       "bf_capa": 1.31,
+       "peso_t": 6.12,
+       "volume_m3": 2.449
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 14.06,
+       "q2": 7.74
+      },
+      "protensao": {
+       "P0": 1782.2,
+       "Pinf": 1465.3,
+       "ep": 0.1714,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 69.643,
+        "sig_p0": 1289.754,
+        "P0": 1782.182,
+        "perda_imediata_pct": 7.875,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 11.314,
+        "fases": [
+         {
+          "dM": 219.17145665250004,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 4.104387770070877
+         },
+         {
+          "dM": 87.26413697587078,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 1.6341811202972099
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 229.333,
+        "d_prog_9_6_3_4_3": 272.886,
+        "d_prog": 229.333,
+        "sig_pinf": 1060.421,
+        "Pinf": 1465.29,
+        "perda_progressiva_pct": 16.381,
+        "perda_total_pct": 24.256
+       }
+      },
+      "ELU": {
+       "M1d": 441.6,
+       "MRd1": 838.7,
+       "xd1": 0.404,
+       "M2d": 717.7,
+       "MRd2": 1412.0,
+       "xd2": 0.3,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -0.63,
+       "lim_F": 2.95,
+       "sig_D": -1.16,
+       "sig_rara": -0.63,
+       "topo_F1": -8.78
+      },
+      "ato": {
+       "topo_ponta": 2.73,
+       "base_ponta": -15.66,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 2.0,
+       "base_meio": -17.08,
+       "topo_fim_isol": 2.46,
+       "base_fim_isol": -17.54,
+       "x_fim_isol": 2.38,
+       "lbpt_m": 0.878,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -8.9,
+       "montagem_mm": -0.4,
+       "final_mm": 5.0,
+       "lim_final_mm": 36.4,
+       "lim_montagem_L500": 18.2,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 337.4,
+       "VRd2": 1934.7,
+       "Vc0": 314.3,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.321,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 283.5,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": 2.92,
+       "sig_base_vao": -15.93,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 91.8,
+       "lateral_L_bf": 23.5,
+       "lateral_Lh_bf2": 38.3
+      },
+      "excentricidade_lateral_protensao_m": -0.0036,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 449.6,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 12.72,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.62,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.39,
+      "d": 0.34,
+      "a_d": 0.55,
+      "As": 8.35,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.31,
+      "tau_u": 6.48,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 10.33,
+     "suspensao": "3 estribos fechados Ø16 (2 ramos) = 12.1 cm² ≥ 10.3",
+     "n_sus": 3,
+     "ok": true
+    },
+    "V_m3": 2.337,
+    "peso_t": 5.84,
+    "kg_cord": 102.2,
+    "kg_aco": 288.8,
+    "custo_indice": 8340,
+    "h_final": 0.91,
+    "fundo": [
+     2.99,
+     6.39
+    ]
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.4,
+    "h": 0.65,
+    "hd": 0.25,
+    "recorte": 0.4,
+    "n_inf": 6,
+    "n_sup": 2,
+    "n_cord": 8,
+    "casos": [
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 8,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3615,
+       "yc_comp": 0.4586,
+       "I_comp": 0.026287,
+       "bf_capa": 0.98,
+       "peso_t": 4.0,
+       "volume_m3": 1.602
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 5.13,
+       "q2": 25.63
+      },
+      "protensao": {
+       "P0": 1045.4,
+       "Pinf": 879.3,
+       "ep": 0.1375,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 35.471,
+        "sig_p0": 1323.926,
+        "P0": 1045.372,
+        "perda_imediata_pct": 5.434,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 5.762,
+        "fases": [
+         {
+          "dM": 90.35510149,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 1.3571772185571234
+         },
+         {
+          "dM": 15.044451117860548,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.2259749143784243
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 210.341,
+        "d_prog_9_6_3_4_3": 209.473,
+        "d_prog": 210.341,
+        "sig_pinf": 1113.586,
+        "Pinf": 879.287,
+        "perda_progressiva_pct": 15.024,
+        "perda_total_pct": 20.458
+       }
+      },
+      "ELU": {
+       "M1d": 182.1,
+       "MRd1": 499.8,
+       "xd1": 0.226,
+       "M2d": 349.4,
+       "MRd2": 836.0,
+       "xd2": 0.164,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.19,
+       "lim_F": 2.95,
+       "sig_D": -1.95,
+       "sig_rara": -1.19,
+       "topo_F1": -4.06
+      },
+      "ato": {
+       "topo_ponta": -0.51,
+       "base_ponta": -6.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 0.2,
+       "base_meio": -9.05,
+       "topo_fim_isol": 0.15,
+       "base_fim_isol": -8.99,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.901,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.8,
+       "montagem_mm": -0.3,
+       "final_mm": -0.2,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 262.4,
+       "VRd2": 1846.8,
+       "Vc0": 300.0,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.305,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 174.7,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.33,
+       "sig_base_vao": -8.72,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 60.1,
+       "lateral_L_bf": 15.4,
+       "lateral_Lh_bf2": 25.0
+      },
+      "excentricidade_lateral_protensao_m": -0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90"
+     },
+     {
+      "marca": "VM-03",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 8,
+      "isoladas_pontas": 2,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        150,
+        50
+       ],
+       [
+        250,
+        50
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 6.22,
+      "L_peca": 6.16,
+      "L_calculo": 5.848,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3615,
+       "yc_comp": 0.4586,
+       "I_comp": 0.026287,
+       "bf_capa": 0.98,
+       "peso_t": 4.0,
+       "volume_m3": 1.602
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 14.06,
+       "q2": 7.74
+      },
+      "protensao": {
+       "P0": 1045.4,
+       "Pinf": 882.4,
+       "ep": 0.1375,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 35.471,
+        "sig_p0": 1323.926,
+        "P0": 1045.372,
+        "perda_imediata_pct": 5.434,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 5.762,
+        "fases": [
+         {
+          "dM": 90.35510149,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 1.3571772185571234
+         },
+         {
+          "dM": 41.28321509653807,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.6200938089147731
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 206.426,
+        "d_prog_9_6_3_4_3": 209.473,
+        "d_prog": 206.426,
+        "sig_pinf": 1117.5,
+        "Pinf": 882.378,
+        "perda_progressiva_pct": 14.745,
+        "perda_total_pct": 20.179
+       }
+      },
+      "ELU": {
+       "M1d": 182.1,
+       "MRd1": 499.8,
+       "xd1": 0.226,
+       "M2d": 295.9,
+       "MRd2": 836.1,
+       "xd2": 0.164,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -1.88,
+       "lim_F": 2.95,
+       "sig_D": -2.11,
+       "sig_rara": -1.88,
+       "topo_F1": -4.06
+      },
+      "ato": {
+       "topo_ponta": -0.51,
+       "base_ponta": -6.12,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": 0.2,
+       "base_meio": -9.05,
+       "topo_fim_isol": 0.15,
+       "base_fim_isol": -8.99,
+       "x_fim_isol": 2.4,
+       "lbpt_m": 0.901,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -1.8,
+       "montagem_mm": -0.3,
+       "final_mm": -0.1,
+       "lim_final_mm": 23.4,
+       "lim_montagem_L500": 11.7,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 216.6,
+       "VRd2": 1846.8,
+       "Vc0": 300.0,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.216,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 116.9,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.33,
+       "sig_base_vao": -8.72,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 60.1,
+       "lateral_L_bf": 15.4,
+       "lateral_Lh_bf2": 25.0
+      },
+      "excentricidade_lateral_protensao_m": -0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 288.6,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 8.17,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.61,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.39,
+      "d": 0.34,
+      "a_d": 0.55,
+      "As": 5.36,
+      "tirante": "3 alças Ø12.5 (7.36 cm²)",
+      "tau": 2.12,
+      "tau_u": 6.48,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 6.64,
+     "suspensao": "2 estribos fechados Ø16 (2 ramos) = 8.0 cm² ≥ 6.6",
+     "n_sus": 2,
+     "ok": true
+    },
+    "V_m3": 1.49,
+    "peso_t": 3.72,
+    "kg_cord": 38.2,
+    "kg_aco": 184.3,
+    "custo_indice": 4913,
+    "h_final": 0.91,
+    "fundo": [
+     2.99,
+     6.39
+    ]
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.4,
+    "h": 0.65,
+    "hd": 0.25,
+    "recorte": 0.4,
+    "n_inf": 4,
+    "n_sup": 2,
+    "n_cord": 6,
+    "casos": [
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3475,
+       "yc_comp": 0.4419,
+       "I_comp": 0.023763,
+       "bf_capa": 0.65,
+       "peso_t": 1.85,
+       "volume_m3": 0.738
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 4.89,
+       "g_capa": 2.68,
+       "g_2e": 1.5,
+       "q_mont": 2.15,
+       "g1": 15.57,
+       "g2": 2.15,
+       "q2": 10.72
+      },
+      "protensao": {
+       "P0": 791.5,
+       "Pinf": 671.7,
+       "ep": 0.0917,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 22.891,
+        "sig_p0": 1336.506,
+        "P0": 791.479,
+        "perda_imediata_pct": 4.535,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 3.719,
+        "fases": [
+         {
+          "dM": 7.243354527999999,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.07253245317068732
+         },
+         {
+          "dM": 1.5017626043776813,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.015038132588215297
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 202.291,
+        "d_prog_9_6_3_4_3": 185.211,
+        "d_prog": 202.291,
+        "sig_pinf": 1134.216,
+        "Pinf": 671.683,
+        "perda_progressiva_pct": 14.449,
+        "perda_total_pct": 18.985
+       }
+      },
+      "ELU": {
+       "M1d": 18.4,
+       "MRd1": 351.0,
+       "xd1": 0.167,
+       "M2d": 31.8,
+       "MRd2": 579.9,
+       "xd2": 0.162,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -4.14,
+       "lim_F": 2.95,
+       "sig_D": -4.2,
+       "sig_rara": -4.14,
+       "topo_F1": -0.9
+      },
+      "ato": {
+       "topo_ponta": -0.52,
+       "base_ponta": -6.18,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.7,
+       "base_meio": -6.0,
+       "topo_fim_isol": -0.63,
+       "base_fim_isol": -6.06,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.91,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.1,
+       "final_mm": -0.5,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 54.0,
+       "VRd2": 1728.0,
+       "Vc0": 280.7,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.059,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 13.7,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.33,
+       "sig_base_vao": -5.79,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 27.7,
+       "lateral_L_bf": 7.1,
+       "lateral_Lh_bf2": 11.5
+      },
+      "excentricidade_lateral_protensao_m": -0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+3,90 P6–P7"
+     },
+     {
+      "marca": "VM-04",
+      "h_premoldado": 0.65,
+      "h_final": 0.9,
+      "cordoalhas": 6,
+      "isoladas_pontas": 0,
+      "pos_cordoalhas_mm": [
+       [
+        50,
+        50
+       ],
+       [
+        350,
+        50
+       ],
+       [
+        100,
+        50
+       ],
+       [
+        300,
+        50
+       ],
+       [
+        150,
+        600
+       ],
+       [
+        250,
+        600
+       ]
+      ],
+      "L_faces": 2.9,
+      "L_peca": 2.84,
+      "L_calculo": 2.528,
+      "secao": {
+       "A": 0.26,
+       "yc": 0.325,
+       "xc": 0.2,
+       "I": 0.009154,
+       "Ac_hom": 0.3475,
+       "yc_comp": 0.4419,
+       "I_comp": 0.023763,
+       "bf_capa": 0.65,
+       "peso_t": 1.85,
+       "volume_m3": 0.738
+      },
+      "cargas": {
+       "g_pm": 6.5,
+       "g_laje": 13.23,
+       "g_capa": 6.41,
+       "g_2e": 1.5,
+       "q_mont": 5.13,
+       "g1": 27.64,
+       "g2": 14.06,
+       "q2": 7.74
+      },
+      "protensao": {
+       "P0": 791.5,
+       "Pinf": 672.8,
+       "ep": 0.0917,
+       "F_macaco_kN": 138.2,
+       "sigma_pi": 1400,
+       "perdas": {
+        "sig_pi": 1400.0,
+        "d_cravacao": 19.5,
+        "d_relax_inicial": 21.103,
+        "d_elastica": 22.891,
+        "sig_p0": 1336.506,
+        "P0": 791.479,
+        "perda_imediata_pct": 4.535,
+        "alfa_p_j": 6.156,
+        "Eci_j_MPa": 31678.384,
+        "U": 70.0,
+        "t0_dias": 5.0,
+        "t_lib_dias": 0.8,
+        "h_fic_cm": 24.762,
+        "phi": 3.021,
+        "eps_cs": -0.0,
+        "sig_c_p0g": 3.719,
+        "fases": [
+         {
+          "dM": 16.88465104,
+          "t_dias": 60.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.16907707004096503
+         },
+         {
+          "dM": 9.846117716101427,
+          "t_dias": 90.0,
+          "phi": 2.0351190476190477,
+          "d_sigma_c": 0.098595625741571
+         }
+        ],
+        "processo": "9.6.3.4.2 com fases (superposição)",
+        "d_prog_9_6_3_4_2": 200.463,
+        "d_prog_9_6_3_4_3": 185.211,
+        "d_prog": 200.463,
+        "sig_pinf": 1136.043,
+        "Pinf": 672.765,
+        "perda_progressiva_pct": 14.319,
+        "perda_total_pct": 18.854
+       }
+      },
+      "ELU": {
+       "M1d": 34.0,
+       "MRd1": 351.0,
+       "xd1": 0.167,
+       "M2d": 55.3,
+       "MRd2": 579.9,
+       "xd2": 0.162,
+       "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+      },
+      "ELS": {
+       "nivel": "completa",
+       "psi_F": 1.0,
+       "psi_D": 0.6,
+       "sig_F": -3.67,
+       "lim_F": 2.95,
+       "sig_D": -3.72,
+       "sig_rara": -3.67,
+       "topo_F1": -1.33
+      },
+      "ato": {
+       "topo_ponta": -0.52,
+       "base_ponta": -6.18,
+       "lim_t": 3.63,
+       "lim_c": -22.4,
+       "topo_meio": -0.7,
+       "base_meio": -6.0,
+       "topo_fim_isol": -0.63,
+       "base_fim_isol": -6.06,
+       "x_fim_isol": 2.41,
+       "lbpt_m": 0.91,
+       "gama_p": 1.1,
+       "fckj": 32.0,
+       "norma": "NBR 6118:2023 17.2.4.3.2 (γp 1,1; 0,7 fckj; 1,2 fctm,j)"
+      },
+      "flecha": {
+       "contraflecha_mm": -0.2,
+       "montagem_mm": -0.1,
+       "final_mm": -0.4,
+       "lim_final_mm": 10.1,
+       "lim_montagem_L500": 5.1,
+       "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+      },
+      "cortante": {
+       "Vd": 93.6,
+       "VRd2": 1728.0,
+       "Vc0": 280.7,
+       "Asw_req_cm2m": 5.61
+      },
+      "interface": {
+       "tau_sd": 0.1,
+       "tau_rd": 1.329,
+       "tau_max": 5.36,
+       "rho_alcas": 0.349,
+       "beta_s": 0.45,
+       "beta_c": 0.45,
+       "b_int": 0.30000000000000004,
+       "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
+      },
+      "negativa": {
+       "Md_kNm": 21.8,
+       "MRd_kNm": 585.9,
+       "secao": "face do pilar: nariz 40 × 35 + 2º estágio + capa",
+       "d_pilar_m": 0.62,
+       "d_capa_m": 0.72,
+       "x_m": 0.122,
+       "x_d": 0.184,
+       "adotado": "N11: 6 Ø16 em 2 bainhas corrugadas Ø50 no pilar (3 em cada, graute) + N12: 8 Ø12,5 na capa; L = 600 cm (armadura de obra)",
+       "As_ef_cm2": 21.88,
+       "frac_no_pilar": 0.55,
+       "ok": true,
+       "Rsec_kNm_rad": 247591,
+       "Led_m": 0.586,
+       "norma": "NBR 9062:2017 5.1.2.9 e 5.1.2.10 (tipologia 1)"
+      },
+      "icamento": {
+       "a_alca_m": 1.1,
+       "sig_topo_balanco": -0.33,
+       "sig_base_vao": -5.79,
+       "lim_t": 3.63,
+       "F_alca_ruptura_kN": 27.7,
+       "lateral_L_bf": 7.1,
+       "lateral_Lh_bf2": 11.5
+      },
+      "excentricidade_lateral_protensao_m": -0.0,
+      "ok": {
+       "ELU_F1": true,
+       "ELU_F2": true,
+       "ELS_F": true,
+       "ELS_D": true,
+       "ato": true,
+       "flecha": true,
+       "VRd2": true,
+       "interface": true,
+       "icamento": true,
+       "lateral": true
+      },
+      "ok_geral": true,
+      "caso": "+7,30 linha 2"
+     }
+    ],
+    "dente": {
+     "Fd": 103.0,
+     "dente": {
+      "h": 0.25,
+      "d": 0.2,
+      "a_d": 0.97,
+      "As": 2.91,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 1.29,
+      "tau_u": 6.48,
+      "a2_cm": 8.1,
+      "ok": true
+     },
+     "consolo": {
+      "h": 0.39,
+      "d": 0.34,
+      "a_d": 0.55,
+      "As": 4.35,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.76,
+      "tau_u": 6.48,
+      "a2_cm": 8.9,
+      "ok": true
+     },
+     "As_sus": 2.37,
+     "suspensao": "1 estribos fechados Ø16 (2 ramos) = 4.0 cm² ≥ 2.4",
+     "n_sus": 1,
+     "ok": true
+    },
+    "V_m3": 0.626,
+    "peso_t": 1.57,
+    "kg_cord": 13.2,
+    "kg_aco": 75.7,
+    "custo_indice": 2007,
+    "h_final": 0.91,
+    "fundo": [
+     2.99,
+     6.39
+    ]
+   }
+  }
+ }
+}

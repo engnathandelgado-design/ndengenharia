@@ -17,14 +17,15 @@ ATRAVESSA = ("pino", "espera", "es-", "bucha", "chumbador", "pn-", "n18", "gramp
              "neoprene", "neo-", "alça", "al-", "fi-1", "m12", "m16", "m20", "graute", "junta", "ce-1", "parafuso", "prisioneiro", "luva",
              "tsa", "par tapper", "rebite", "esticador", "or-x", "insertos")
 PARES_OK = {frozenset(("Fixação das placas", "Placas de fechamento")), frozenset(("Telhas",)), frozenset(("Terças metálicas",)),
-            frozenset(("Laje alveolar", "Concreto de 2º estágio (obra, com a capa)")), frozenset(("Vigas de mezanino (meio vaso)", "Concreto de 2º estágio (obra, com a capa)")),
-            frozenset(("Vigas de mezanino (meio vaso)",)), frozenset(("Vigas centrais I130",)), frozenset(("Pilares",)),
+            frozenset(("Laje alveolar", "Concreto de 2º estágio (obra, com a capa)")), frozenset(("Vigas de mezanino (retangulares protendidas)", "Concreto de 2º estágio (obra, com a capa)")),
+            frozenset(("Vigas de mezanino (retangulares protendidas)",)), frozenset(("Vigas centrais I130",)), frozenset(("Pilares",)),
             frozenset(("Fixação das placas",)), frozenset(("Ligações da cobertura",)), frozenset(("Calha e descidas",)),
             frozenset(("Pilares", "Consolos")), frozenset(("Piso e fundações", "Pilares")), frozenset(("Piso e fundações",)),
             frozenset(("Rufos e acabamentos",)), frozenset(("Alças N9 (2º estágio)", "Concreto de 2º estágio (obra, com a capa)")),
-            frozenset(("Alças N9 (2º estágio)", "Vigas de mezanino (meio vaso)")), frozenset(("Contraventamento",)),
+            frozenset(("Alças N9 (2º estágio)", "Vigas de mezanino (retangulares protendidas)")), frozenset(("Contraventamento",)),
             frozenset(("Correntes, tirantes rígidos e diagonais",)),
-            frozenset(("Esperas e insertos embutidos", "Placas de fechamento"))}      # NC-1: nicho embutido na placa
+            frozenset(("Esperas e insertos embutidos", "Placas de fechamento")),
+            frozenset(("Cobertura metálica da linha 2",)), frozenset(("Escada metálica",))}       # rev09: perfis e chapas parafusados entre si      # NC-1: nicho embutido na placa
 # tolerância de contato por par (mm): telhas modeladas como lâminas planas entre os apoios (seguem a reta do topo das terças) —
 # ficam até 6 mm "dentro" do Z302 no meio; barras, correntes e suportes encostados na terça com folga de modelagem ≤ 3 mm
 TOL_PAR = {frozenset(("Telhas", "Terças metálicas")): 7.0}

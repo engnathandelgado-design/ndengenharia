@@ -2,8 +2,8 @@
  "PL-01": {
   "B": 400,
   "H": 600,
-  "nb": 5,
-  "nh": 4,
+  "nb": 6,
+  "nh": 3,
   "n": 14,
   "d": 16.0,
   "xy": [
@@ -13,38 +13,42 @@
    ],
    [
     -156,
-    -85
-   ],
-   [
-    -156,
-    85
+    0
    ],
    [
     -156,
     256
    ],
    [
-    -78,
+    -93,
     -256
    ],
    [
-    -78,
+    -93,
     256
    ],
    [
-    0,
+    -31,
     -256
    ],
    [
-    0,
+    -31,
     256
    ],
    [
-    78,
+    31,
     -256
    ],
    [
-    78,
+    31,
+    256
+   ],
+   [
+    93,
+    -256
+   ],
+   [
+    93,
     256
    ],
    [
@@ -53,11 +57,7 @@
    ],
    [
     156,
-    -85
-   ],
-   [
-    156,
-    85
+    0
    ],
    [
     156,
@@ -67,43 +67,40 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -85,
-    85
-   ],
-   "across_H": [
     0
-   ]
+   ],
+   "across_H": []
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 322.1,
+    "MRd0": 322.6,
     "uso": 0.21,
-    "sigma_s": 101,
+    "sigma_s": 85,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 34.8,
     "Md": 58.9,
-    "MRd0": 322.1,
+    "MRd0": 322.6,
     "uso": 0.18,
-    "sigma_s": 90,
+    "sigma_s": 75,
     "ok": true
    }
   ],
-  "tipo": "T14-4",
+  "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.969,
+  "uso_secao": 0.988,
   "lambda_u": 1.02
  },
  "PL-09": {
   "B": 400,
   "H": 600,
-  "nb": 2,
-  "nh": 5,
+  "nb": 4,
+  "nh": 3,
   "n": 10,
   "d": 16.0,
   "xy": [
@@ -113,18 +110,26 @@
    ],
    [
     -156,
-    -128
-   ],
-   [
-    -156,
     0
    ],
    [
     -156,
-    128
+    256
    ],
    [
-    -156,
+    -52,
+    -256
+   ],
+   [
+    -52,
+    256
+   ],
+   [
+    52,
+    -256
+   ],
+   [
+    52,
     256
    ],
    [
@@ -133,15 +138,7 @@
    ],
    [
     156,
-    -128
-   ],
-   [
-    156,
     0
-   ],
-   [
-    156,
-    128
    ],
    [
     156,
@@ -151,9 +148,7 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -128,
-    0,
-    128
+    0
    ],
    "across_H": []
   },
@@ -162,31 +157,31 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 35.9,
     "Md": 60.7,
-    "MRd0": 231.9,
+    "MRd0": 233.2,
     "uso": 0.26,
-    "sigma_s": 232,
+    "sigma_s": 116,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 34.8,
     "Md": 58.9,
-    "MRd0": 231.9,
+    "MRd0": 233.2,
     "uso": 0.25,
-    "sigma_s": 225,
+    "sigma_s": 113,
     "ok": true
    }
   ],
-  "tipo": "T10-5",
+  "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.918,
-  "lambda_u": 1.02
+  "uso_secao": 0.89,
+  "lambda_u": 1.1
  },
  "PL-10": {
   "B": 400,
   "H": 600,
-  "nb": 4,
-  "nh": 5,
+  "nb": 6,
+  "nh": 3,
   "n": 14,
   "d": 16.0,
   "xy": [
@@ -196,51 +191,51 @@
    ],
    [
     -156,
-    -128
-   ],
-   [
-    -156,
     0
    ],
    [
     -156,
-    128
-   ],
-   [
-    -156,
     256
    ],
    [
-    -52,
+    -93,
     -256
    ],
    [
-    -52,
+    -93,
     256
    ],
    [
-    52,
+    -31,
     -256
    ],
    [
-    52,
+    -31,
+    256
+   ],
+   [
+    31,
+    -256
+   ],
+   [
+    31,
+    256
+   ],
+   [
+    93,
+    -256
+   ],
+   [
+    93,
     256
    ],
    [
     156,
     -256
-   ],
-   [
-    156,
-    -128
    ],
    [
     156,
     0
-   ],
-   [
-    156,
-    128
    ],
    [
     156,
@@ -250,9 +245,7 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -128,
-    0,
-    128
+    0
    ],
    "across_H": []
   },
@@ -261,25 +254,25 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 320.8,
+    "MRd0": 322.6,
     "uso": 0.21,
-    "sigma_s": 127,
+    "sigma_s": 85,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 34.8,
     "Md": 58.9,
-    "MRd0": 320.8,
+    "MRd0": 322.6,
     "uso": 0.18,
-    "sigma_s": 113,
+    "sigma_s": 75,
     "ok": true
    }
   ],
-  "tipo": "T14-5",
+  "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.947,
-  "lambda_u": 1.02
+  "uso_secao": 0.964,
+  "lambda_u": 1.04
  },
  "PL-02": {
   "B": 400,
@@ -341,81 +334,16 @@
     "ok": true
    }
   ],
-  "tipo": "T6",
+  "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.854,
-  "lambda_u": 1.18
+  "uso_secao": 0.769,
+  "lambda_u": 1.07
  },
  "PL-03": {
   "B": 400,
   "H": 600,
-  "nb": 2,
+  "nb": 5,
   "nh": 3,
-  "n": 6,
-  "d": 16.0,
-  "xy": [
-   [
-    -156,
-    -256
-   ],
-   [
-    -156,
-    0
-   ],
-   [
-    -156,
-    256
-   ],
-   [
-    156,
-    -256
-   ],
-   [
-    156,
-    0
-   ],
-   [
-    156,
-    256
-   ]
-  ],
-  "c": 44.3,
-  "grampos": {
-   "across_B": [
-    0
-   ],
-   "across_H": []
-  },
-  "manuseio": [
-   {
-    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
-    "Mk": 35.9,
-    "Md": 60.7,
-    "MRd0": 143.3,
-    "uso": 0.42,
-    "sigma_s": 232,
-    "ok": true
-   },
-   {
-    "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 36.3,
-    "Md": 61.4,
-    "MRd0": 143.3,
-    "uso": 0.43,
-    "sigma_s": 235,
-    "ok": true
-   }
-  ],
-  "tipo": "T6",
-  "As_cm2": 12.06,
-  "uso_secao": 0.71,
-  "lambda_u": 1.3
- },
- "PL-04": {
-  "B": 400,
-  "H": 600,
-  "nb": 3,
-  "nh": 5,
   "n": 12,
   "d": 16.0,
   "xy": [
@@ -425,18 +353,18 @@
    ],
    [
     -156,
-    -128
-   ],
-   [
-    -156,
     0
    ],
    [
     -156,
-    128
+    256
    ],
    [
-    -156,
+    -78,
+    -256
+   ],
+   [
+    -78,
     256
    ],
    [
@@ -448,20 +376,20 @@
     256
    ],
    [
+    78,
+    -256
+   ],
+   [
+    78,
+    256
+   ],
+   [
     156,
     -256
    ],
    [
     156,
-    -128
-   ],
-   [
-    156,
     0
-   ],
-   [
-    156,
-    128
    ],
    [
     156,
@@ -471,9 +399,98 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -128,
+    0
+   ],
+   "across_H": [
+    0
+   ]
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 35.9,
+    "Md": 60.7,
+    "MRd0": 277.9,
+    "uso": 0.22,
+    "sigma_s": 93,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 BD)",
+    "Mk": 86.7,
+    "Md": 146.6,
+    "MRd0": 277.9,
+    "uso": 0.53,
+    "sigma_s": 224,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 24.13,
+  "uso_secao": 0.462,
+  "lambda_u": 1.46
+ },
+ "PL-04": {
+  "B": 400,
+  "H": 600,
+  "nb": 5,
+  "nh": 3,
+  "n": 12,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -256
+   ],
+   [
+    -156,
+    0
+   ],
+   [
+    -156,
+    256
+   ],
+   [
+    -78,
+    -256
+   ],
+   [
+    -78,
+    256
+   ],
+   [
     0,
-    128
+    -256
+   ],
+   [
+    0,
+    256
+   ],
+   [
+    78,
+    -256
+   ],
+   [
+    78,
+    256
+   ],
+   [
+    156,
+    -256
+   ],
+   [
+    156,
+    0
+   ],
+   [
+    156,
+    256
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [
+    0
    ],
    "across_H": [
     0
@@ -484,31 +501,31 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 276.4,
+    "MRd0": 277.9,
     "uso": 0.24,
-    "sigma_s": 169,
+    "sigma_s": 101,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 36.3,
-    "Md": 61.4,
-    "MRd0": 276.4,
-    "uso": 0.22,
-    "sigma_s": 156,
+    "Mk": 86.7,
+    "Md": 146.6,
+    "MRd0": 277.9,
+    "uso": 0.53,
+    "sigma_s": 224,
     "ok": true
    }
   ],
-  "tipo": "T12-5",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.911,
-  "lambda_u": 1.03
+  "uso_secao": 0.903,
+  "lambda_u": 1.02
  },
  "PL-05": {
   "B": 400,
   "H": 600,
-  "nb": 4,
-  "nh": 4,
+  "nb": 5,
+  "nh": 3,
   "n": 12,
   "d": 16.0,
   "xy": [
@@ -518,30 +535,34 @@
    ],
    [
     -156,
-    -85
-   ],
-   [
-    -156,
-    85
+    0
    ],
    [
     -156,
     256
    ],
    [
-    -52,
+    -78,
     -256
    ],
    [
-    -52,
+    -78,
     256
    ],
    [
-    52,
+    0,
     -256
    ],
    [
-    52,
+    0,
+    256
+   ],
+   [
+    78,
+    -256
+   ],
+   [
+    78,
     256
    ],
    [
@@ -550,11 +571,7 @@
    ],
    [
     156,
-    -85
-   ],
-   [
-    156,
-    85
+    0
    ],
    [
     156,
@@ -564,34 +581,35 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -85,
-    85
+    0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 277.6,
+    "MRd0": 277.9,
     "uso": 0.24,
-    "sigma_s": 127,
+    "sigma_s": 101,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 58.7,
     "Md": 99.2,
-    "MRd0": 277.6,
+    "MRd0": 277.9,
     "uso": 0.36,
-    "sigma_s": 190,
+    "sigma_s": 152,
     "ok": true
    }
   ],
-  "tipo": "T12-4",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.908,
+  "uso_secao": 0.922,
   "lambda_u": 1.1
  },
  "PL-11": {
@@ -670,16 +688,16 @@
     "ok": true
    }
   ],
-  "tipo": "T10",
+  "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.693,
-  "lambda_u": 1.38
+  "uso_secao": 0.68,
+  "lambda_u": 1.42
  },
  "PL-12": {
   "B": 400,
   "H": 600,
-  "nb": 4,
-  "nh": 4,
+  "nb": 5,
+  "nh": 3,
   "n": 12,
   "d": 16.0,
   "xy": [
@@ -689,30 +707,34 @@
    ],
    [
     -156,
-    -85
-   ],
-   [
-    -156,
-    85
+    0
    ],
    [
     -156,
     256
    ],
    [
-    -52,
+    -78,
     -256
    ],
    [
-    -52,
+    -78,
     256
    ],
    [
-    52,
+    0,
     -256
    ],
    [
-    52,
+    0,
+    256
+   ],
+   [
+    78,
+    -256
+   ],
+   [
+    78,
     256
    ],
    [
@@ -721,11 +743,7 @@
    ],
    [
     156,
-    -85
-   ],
-   [
-    156,
-    85
+    0
    ],
    [
     156,
@@ -735,34 +753,35 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -85,
-    85
+    0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 277.6,
+    "MRd0": 277.9,
     "uso": 0.24,
-    "sigma_s": 127,
+    "sigma_s": 101,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 58.7,
     "Md": 99.2,
-    "MRd0": 277.6,
+    "MRd0": 277.9,
     "uso": 0.36,
-    "sigma_s": 190,
+    "sigma_s": 152,
     "ok": true
    }
   ],
-  "tipo": "T12-4",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.847,
+  "uso_secao": 0.866,
   "lambda_u": 1.14
  },
  "PL-06": {
@@ -841,97 +860,16 @@
     "ok": true
    }
   ],
-  "tipo": "T10",
+  "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.564,
-  "lambda_u": 1.69
+  "uso_secao": 0.458,
+  "lambda_u": 1.94
  },
  "PL-07": {
   "B": 400,
   "H": 600,
-  "nb": 4,
+  "nb": 5,
   "nh": 3,
-  "n": 10,
-  "d": 16.0,
-  "xy": [
-   [
-    -156,
-    -256
-   ],
-   [
-    -156,
-    0
-   ],
-   [
-    -156,
-    256
-   ],
-   [
-    -52,
-    -256
-   ],
-   [
-    -52,
-    256
-   ],
-   [
-    52,
-    -256
-   ],
-   [
-    52,
-    256
-   ],
-   [
-    156,
-    -256
-   ],
-   [
-    156,
-    0
-   ],
-   [
-    156,
-    256
-   ]
-  ],
-  "c": 44.3,
-  "grampos": {
-   "across_B": [
-    0
-   ],
-   "across_H": []
-  },
-  "manuseio": [
-   {
-    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
-    "Mk": 35.9,
-    "Md": 60.7,
-    "MRd0": 233.2,
-    "uso": 0.26,
-    "sigma_s": 116,
-    "ok": true
-   },
-   {
-    "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 63.0,
-    "Md": 106.5,
-    "MRd0": 233.2,
-    "uso": 0.46,
-    "sigma_s": 204,
-    "ok": true
-   }
-  ],
-  "tipo": "T10",
-  "As_cm2": 20.11,
-  "uso_secao": 0.474,
-  "lambda_u": 1.69
- },
- "PL-08": {
-  "B": 400,
-  "H": 600,
-  "nb": 4,
-  "nh": 4,
   "n": 12,
   "d": 16.0,
   "xy": [
@@ -941,30 +879,34 @@
    ],
    [
     -156,
-    -85
-   ],
-   [
-    -156,
-    85
+    0
    ],
    [
     -156,
     256
    ],
    [
-    -52,
+    -78,
     -256
    ],
    [
-    -52,
+    -78,
     256
    ],
    [
-    52,
+    0,
     -256
    ],
    [
-    52,
+    0,
+    256
+   ],
+   [
+    78,
+    -256
+   ],
+   [
+    78,
     256
    ],
    [
@@ -973,11 +915,7 @@
    ],
    [
     156,
-    -85
-   ],
-   [
-    156,
-    85
+    0
    ],
    [
     156,
@@ -987,34 +925,126 @@
   "c": 44.3,
   "grampos": {
    "across_B": [
-    -85,
-    85
+    0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 35.9,
+    "Md": 60.7,
+    "MRd0": 277.9,
+    "uso": 0.22,
+    "sigma_s": 93,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 BD)",
+    "Mk": 86.7,
+    "Md": 146.6,
+    "MRd0": 277.9,
+    "uso": 0.53,
+    "sigma_s": 224,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 24.13,
+  "uso_secao": 0.303,
+  "lambda_u": 1.96
+ },
+ "PL-08": {
+  "B": 400,
+  "H": 600,
+  "nb": 5,
+  "nh": 3,
+  "n": 12,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -256
+   ],
+   [
+    -156,
+    0
+   ],
+   [
+    -156,
+    256
+   ],
+   [
+    -78,
+    -256
+   ],
+   [
+    -78,
+    256
+   ],
+   [
+    0,
+    -256
+   ],
+   [
+    0,
+    256
+   ],
+   [
+    78,
+    -256
+   ],
+   [
+    78,
+    256
+   ],
+   [
+    156,
+    -256
+   ],
+   [
+    156,
+    0
+   ],
+   [
+    156,
+    256
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [
+    0
+   ],
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 277.6,
+    "MRd0": 277.9,
     "uso": 0.24,
-    "sigma_s": 127,
+    "sigma_s": 101,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 63.0,
-    "Md": 106.5,
-    "MRd0": 277.6,
-    "uso": 0.38,
-    "sigma_s": 204,
+    "Mk": 86.7,
+    "Md": 146.6,
+    "MRd0": 277.9,
+    "uso": 0.53,
+    "sigma_s": 224,
     "ok": true
    }
   ],
-  "tipo": "T12-4",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.811,
+  "uso_secao": 0.789,
   "lambda_u": 1.12
  },
  "PF-01": {
@@ -1095,10 +1125,10 @@
     "ok": true
    }
   ],
-  "tipo": "T10-5",
+  "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.81,
-  "lambda_u": 1.28
+  "uso_secao": 0.684,
+  "lambda_u": 1.45
  },
  "PF-02": {
   "B": 400,
@@ -1178,10 +1208,10 @@
     "ok": true
    }
   ],
-  "tipo": "T10-5",
+  "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.805,
-  "lambda_u": 1.82
+  "uso_secao": 0.599,
+  "lambda_u": 1.73
  },
  "PF-03": {
   "B": 400,
@@ -1268,10 +1298,10 @@
     "ok": true
    }
   ],
-  "tipo": "T12-6",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.783,
-  "lambda_u": 1.8
+  "uso_secao": 0.527,
+  "lambda_u": 1.92
  },
  "PF-05": {
   "B": 400,
@@ -1368,10 +1398,10 @@
     "ok": true
    }
   ],
-  "tipo": "T14-6",
+  "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.944,
-  "lambda_u": 1.0
+  "uso_secao": 0.932,
+  "lambda_u": 1.02
  },
  "PF-04": {
   "B": 400,
@@ -1461,10 +1491,10 @@
     "ok": true
    }
   ],
-  "tipo": "T12-5",
+  "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.441,
-  "lambda_u": 1.98
+  "uso_secao": 0.491,
+  "lambda_u": 1.78
  },
  "PF-06": {
   "B": 400,
@@ -1561,17 +1591,17 @@
     "ok": true
    }
   ],
-  "tipo": "T14-6",
+  "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.893,
-  "lambda_u": 1.06
+  "uso_secao": 0.871,
+  "lambda_u": 1.08
  },
  "PC-01": {
   "B": 600,
   "H": 400,
   "nb": 3,
-  "nh": 3,
-  "n": 8,
+  "nh": 2,
+  "n": 6,
   "d": 16.0,
   "xy": [
    [
@@ -1580,10 +1610,6 @@
    ],
    [
     -256,
-    0
-   ],
-   [
-    -256,
     156
    ],
    [
@@ -1597,10 +1623,6 @@
    [
     256,
     -156
-   ],
-   [
-    256,
-    0
    ],
    [
     256,
@@ -1609,9 +1631,7 @@
   ],
   "c": 44.3,
   "grampos": {
-   "across_B": [
-    0
-   ],
+   "across_B": [],
    "across_H": [
     0
    ]
@@ -1621,32 +1641,32 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 20.6,
     "Md": 34.8,
-    "MRd0": 122.2,
-    "uso": 0.28,
+    "MRd0": 93.8,
+    "uso": 0.37,
     "sigma_s": 139,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 AC)",
-    "Mk": 40.9,
-    "Md": 69.1,
-    "MRd0": 188.4,
-    "uso": 0.37,
-    "sigma_s": 176,
+    "Mk": 29.0,
+    "Md": 49.0,
+    "MRd0": 143.3,
+    "uso": 0.34,
+    "sigma_s": 187,
     "ok": true
    }
   ],
-  "tipo": "T8",
-  "As_cm2": 16.08,
-  "uso_secao": 0.516,
-  "lambda_u": 1.6
+  "tipo": null,
+  "As_cm2": 12.06,
+  "uso_secao": 0.57,
+  "lambda_u": 1.43
  },
  "PC-02": {
   "B": 400,
   "H": 400,
-  "nb": 5,
+  "nb": 6,
   "nh": 3,
-  "n": 12,
+  "n": 14,
   "d": 16.0,
   "xy": [
    [
@@ -1662,27 +1682,35 @@
     156
    ],
    [
-    -78,
+    -93,
     -156
    ],
    [
-    -78,
+    -93,
     156
    ],
    [
-    0,
+    -31,
     -156
    ],
    [
-    0,
+    -31,
     156
    ],
    [
-    78,
+    31,
     -156
    ],
    [
-    78,
+    31,
+    156
+   ],
+   [
+    93,
+    -156
+   ],
+   [
+    93,
     156
    ],
    [
@@ -1703,34 +1731,32 @@
    "across_B": [
     0
    ],
-   "across_H": [
-    0
-   ]
+   "across_H": []
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 13.7,
     "Md": 23.2,
-    "MRd0": 173.0,
-    "uso": 0.13,
-    "sigma_s": 55,
+    "MRd0": 200.2,
+    "uso": 0.12,
+    "sigma_s": 46,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 AC)",
     "Mk": 27.3,
     "Md": 46.1,
-    "MRd0": 170.8,
-    "uso": 0.27,
+    "MRd0": 191.2,
+    "uso": 0.24,
     "sigma_s": 183,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 24.13,
-  "uso_secao": 0.405,
-  "lambda_u": 1.13
+  "As_cm2": 28.15,
+  "uso_secao": 0.363,
+  "lambda_u": 1.02
  },
  "PC-03": {
   "B": 600,
@@ -1846,9 +1872,9 @@
  "PM-01": {
   "B": 600,
   "H": 400,
-  "nb": 3,
+  "nb": 5,
   "nh": 2,
-  "n": 6,
+  "n": 10,
   "d": 16.0,
   "xy": [
    [
@@ -1860,11 +1886,27 @@
     156
    ],
    [
+    -128,
+    -156
+   ],
+   [
+    -128,
+    156
+   ],
+   [
     0,
     -156
    ],
    [
     0,
+    156
+   ],
+   [
+    128,
+    -156
+   ],
+   [
+    128,
     156
    ],
    [
@@ -1880,7 +1922,9 @@
   "grampos": {
    "across_B": [],
    "across_H": [
-    0
+    -128,
+    0,
+    128
    ]
   },
   "manuseio": [
@@ -1888,25 +1932,25 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 20.6,
     "Md": 34.8,
-    "MRd0": 93.8,
-    "uso": 0.37,
-    "sigma_s": 139,
+    "MRd0": 149.6,
+    "uso": 0.23,
+    "sigma_s": 83,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 30.6,
-    "Md": 51.7,
-    "MRd0": 93.8,
-    "uso": 0.55,
-    "sigma_s": 206,
+    "Mk": 50.1,
+    "Md": 84.7,
+    "MRd0": 149.6,
+    "uso": 0.57,
+    "sigma_s": 202,
     "ok": true
    }
   ],
-  "tipo": "T6",
-  "As_cm2": 12.06,
-  "uso_secao": 0.58,
-  "lambda_u": 1.37
+  "tipo": null,
+  "As_cm2": 20.11,
+  "uso_secao": 0.541,
+  "lambda_u": 1.48
  },
  "PG-01": {
   "B": 400,
@@ -1970,8 +2014,8 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.522,
-  "lambda_u": 1.7
+  "uso_secao": 0.5,
+  "lambda_u": 1.76
  },
  "PG-02": {
   "B": 250,
@@ -2025,8 +2069,8 @@
   ],
   "tipo": null,
   "As_cm2": 8.04,
-  "uso_secao": 0.567,
-  "lambda_u": 1.54
+  "uso_secao": 0.556,
+  "lambda_u": 1.56
  },
  "PG-03": {
   "B": 400,
@@ -2096,8 +2140,8 @@
   ],
   "tipo": null,
   "As_cm2": 16.08,
-  "uso_secao": 0.397,
-  "lambda_u": 2.16
+  "uso_secao": 0.375,
+  "lambda_u": 2.26
  },
  "PG-04": {
   "B": 250,
@@ -2159,7 +2203,208 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.427,
-  "lambda_u": 1.98
+  "uso_secao": 0.418,
+  "lambda_u": 2.0
+ },
+ "PE-01": {
+  "B": 400,
+  "H": 250,
+  "nb": 2,
+  "nh": 2,
+  "n": 4,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -81
+   ],
+   [
+    -156,
+    81
+   ],
+   [
+    156,
+    -81
+   ],
+   [
+    156,
+    81
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [],
+   "across_H": []
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 7.9,
+    "Md": 13.4,
+    "MRd0": 36.3,
+    "uso": 0.37,
+    "sigma_s": 138,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 BD)",
+    "Mk": 6.6,
+    "Md": 11.1,
+    "MRd0": 36.3,
+    "uso": 0.31,
+    "sigma_s": 115,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 8.04,
+  "uso_secao": 0.454,
+  "lambda_u": 1.88
+ },
+ "PE-02": {
+  "B": 400,
+  "H": 600,
+  "nb": 2,
+  "nh": 3,
+  "n": 6,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -256
+   ],
+   [
+    -156,
+    0
+   ],
+   [
+    -156,
+    256
+   ],
+   [
+    156,
+    -256
+   ],
+   [
+    156,
+    0
+   ],
+   [
+    156,
+    256
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [
+    0
+   ],
+   "across_H": []
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 19.0,
+    "Md": 32.1,
+    "MRd0": 143.3,
+    "uso": 0.22,
+    "sigma_s": 123,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 BD)",
+    "Mk": 15.8,
+    "Md": 26.7,
+    "MRd0": 143.3,
+    "uso": 0.19,
+    "sigma_s": 102,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 12.06,
+  "uso_secao": 0.85,
+  "lambda_u": 1.16
+ },
+ "PE-03": {
+  "B": 400,
+  "H": 250,
+  "nb": 5,
+  "nh": 2,
+  "n": 10,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -81
+   ],
+   [
+    -156,
+    81
+   ],
+   [
+    -78,
+    -81
+   ],
+   [
+    -78,
+    81
+   ],
+   [
+    0,
+    -81
+   ],
+   [
+    0,
+    81
+   ],
+   [
+    78,
+    -81
+   ],
+   [
+    78,
+    81
+   ],
+   [
+    156,
+    -81
+   ],
+   [
+    156,
+    81
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [],
+   "across_H": [
+    0
+   ]
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 8.6,
+    "Md": 14.5,
+    "MRd0": 80.1,
+    "uso": 0.18,
+    "sigma_s": 60,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 BD)",
+    "Mk": 20.9,
+    "Md": 35.3,
+    "MRd0": 80.1,
+    "uso": 0.44,
+    "sigma_s": 146,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 20.11,
+  "uso_secao": 0.654,
+  "lambda_u": 1.07
  }
 }

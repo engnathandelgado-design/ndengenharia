@@ -18,13 +18,15 @@ from nd_estruturas.laje_alveolar import SecaoAlveolar, composta, vrd_tracao_alma
 
 EP = 195000.0                                   # MPa
 # ---------------------------------------------------------------- dados da obra (iguais ao modelo e às pranchas)
-L_PECA = 9.45                                   # comprimento da laje (eixo 1 + 0,10 a eixo 2 − 0,10), modelo_bim / LA01
+_VR = json.loads((AQ / "vm_retangular.json").read_text(encoding="utf-8"))["premissas"]   # rev09 (DEC-047/048): vigas retangulares 25
+L_PECA = _VR["vao_laje"]                         # rev09: 9,60 = eixo a eixo − 2 × (b/2 − apoio 10) com as VM retangulares de 25
 A_APOIO = 0.10                                  # apoio nominal na aba da VM (fita de neoprene 10 mm)
 L = L_PECA - A_APOIO                            # vão de cálculo entre centros de apoio = 9,35 m
 B_MOD = 1.25                                    # largura de influência por painel (1245 + junta 5)
 H_CAPA = 0.05                                   # NBR 9062:2017 7.2.4.1.4.1: capa nominal 5 cm (≥ 3 cm em qualquer ponto)
 FCK_LAJE, FCK_CAPA = 50.0, 30.0
-G_REV, Q = 1.0, 5.0                             # kN/m² — revestimento; sobrecarga (academia / escritório)
+_CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))   # fonte única das cargas (rev09)
+G_REV, Q = _CM["piso_390"]["revestimento"], _CM["piso_390"]["sobrecarga"]      # +3,90 governa (o +7,30 é laje sem uso: 1,7 + 1,0)
 Q_MONT = 1.0                                    # kN/m² — montagem (pessoal, equipamento leve, concretagem da capa)
 PSI1, PSI2 = 0.6, 0.4                           # NBR 6118 Tab. 11.2 — locais com elevada concentração de pessoas
 G_REJ = 0.10                                    # kN/m² — rejunte das chavetas (graute)
@@ -44,7 +46,7 @@ GEOMETRIAS = {
     "LP26,5": dict(b=1.245, h=0.265, n=5, d=0.190, passo=0.240),        # 6 nervuras (2 de borda 47,5 + 4 internas 50)
 }
 OPCOES = {   # cordoalhas por nervura, da esquerda para a direita (uma por nervura, simétrico)
-    "LP20": [["12.7"] * 7, ["9.5"] + ["12.7"] * 5 + ["9.5"], ["9.5", "9.5"] + ["12.7"] * 3 + ["9.5", "9.5"], ["9.5"] * 7],
+    "LP20": [["15.2"] + ["12.7"] * 5 + ["15.2"], ["15.2", "12.7", "12.7", "15.2", "12.7", "12.7", "15.2"], ["12.7"] * 7, ["9.5"] + ["12.7"] * 5 + ["9.5"], ["9.5", "9.5"] + ["12.7"] * 3 + ["9.5", "9.5"], ["9.5"] * 7],
     "LP26,5": [["12.7"] * 6, ["9.5"] + ["12.7"] * 4 + ["9.5"], ["9.5"] * 6],
 }
 FCKJ_OPC = (30.0, 35.0)                          # liberação ≥ 30 MPa (lbpt curto: cortante na ponta e transferência)
@@ -319,7 +321,34 @@ if __name__ == "__main__":
     R = analisar(geo, arr, esc["fckj"])
     R["estudo_alternativas"] = estudos
     R["normas"] = ["NBR 14861:2022", "NBR 6118:2023", "NBR 9062:2017", "EN 1168:2005+A3:2011 (referência)", "EN 1992-1-1:2004 (referência)", "PCI Design Handbook 8ª ed. (flechas)"]
+    # rev09: laje de cima (+7,30, sem uso) com a mesma peça — conferência; e laje curta LA-03/LA-04 (escada, +3,90)
+    G_REV, Q = _CM["laje_730"]["revestimento"], _CM["laje_730"]["sobrecarga"]
+    R730 = analisar(geo, arr, esc["fckj"])
+    R["nivel_730"] = dict(ok=R730["ok"], uso_max=R730["uso_max"], cargas=R730["cargas"], flechas_mm=R730["flechas_mm"],
+                          falhas=[k for k, v in R730["verif"].items() if not v["ok"]], obs="mesma marca LA-01 (o +3,90 governa)")
+    G_REV, Q = _CM["piso_390"]["revestimento"], _CM["piso_390"]["sobrecarga"]
+    L_LONGA = L_PECA
+    L_PECA = round(3.79 - 0.25 / 2 + A_APOIO - (0.25 / 2 - A_APOIO), 3)       # linha 1 (eixo + 2,5) à viga P6–P7 (eixo − 2,5)
+    L = L_PECA - A_APOIO
+    curta = None
+    for a_ in sorted(OPCOES[geo], key=lambda a: sum(CORD[d] for d in a)):
+        for fj in FCKJ_OPC:
+            rc = analisar(geo, a_, fj)
+            if rc["ok"]:
+                curta = (a_, fj, rc)
+                break
+        if curta:
+            break
+    if curta:
+        a_, fj, rc = curta
+        R["LA03"] = dict(L_peca=L_PECA, arranjo=" + ".join(f"{a_.count(d)} Ø{d.replace('.', ',')}" for d in sorted(set(a_), reverse=True)), fckj=fj,
+                         cordoalhas=rc["cordoalhas"], ok=rc["ok"], uso_max=rc["uso_max"], flechas_mm=rc["flechas_mm"], peso_t=rc["icamento"]["peso_t"] if "peso_t" in rc["icamento"] else None,
+                         obs="laje curta entre a linha 1 e a viga P6–P7 (+3,90), só no vão da escada")
+    else:
+        R["LA03"] = dict(L_peca=L_PECA, ok=False)
+    L_PECA = L_LONGA; L = L_PECA - A_APOIO
     (AQ / "laje_alveolar.json").write_text(json.dumps(R, indent=1, ensure_ascii=False), encoding="utf-8")
+    print("\n+7,30:", R["nivel_730"]["ok"], R["nivel_730"]["falhas"], " LA-03:", R["LA03"].get("arranjo"), R["LA03"]["ok"], R["LA03"].get("uso_max"))
     print("\nADOTADA:", geo, esc["arranjo"], "fckj", esc["fckj"])
     for k, v in R["verif"].items():
         print(f"  {k:40s} {v['valor']:9.3f}  lim {v['limite']:9.3f}  uso {v['uso']:.2f}  {'ok' if v['ok'] else 'NÃO'}")

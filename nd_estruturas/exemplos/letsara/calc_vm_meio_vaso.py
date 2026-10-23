@@ -322,7 +322,7 @@ def analisar(h, n, nome, L_faces, cont=True, n_isol=2, n_top=0):
     tau_j = H_ct_d / A_j / 1e3                                   # MPa
     fctd_j = lambda fc: 0.7 * FCTM(fc) / GC_LOC
     tau_rd_j = 0.3 * fctd_j(FCK2)
-    fc_lib = next(fc for fc in range(10, 31) if 0.3 * fctd_j(fc) >= tau_j)    # fcj mínimo da junta para montar as lajes
+    fc_lib = next((fc for fc in range(10, 31) if 0.3 * fctd_j(fc) >= tau_j), 30)    # fcj mínimo da junta para montar as lajes
     X_LIB = max(20, 5 * math.ceil(fc_lib / 5))
     # embaixo: H pelo neoprene NEO-5 (distorção, G = 1 MPa; NBR 9062:2017 7.2.1: tg γ ≤ 0,7 sob ação de curta duração)
     G_NEO = 1.0e3

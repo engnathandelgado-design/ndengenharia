@@ -1,0 +1,6 @@
+{
+ "obs": "Fonte única das cargas do mezanino (kN/m², NBR 6120:2019). Trocar aqui e regerar (calc_vm_retangular, calc_laje_alveolar, modelo_integrado_r05, cargas de fundação).",
+ "piso_390": {"sobrecarga": 5.0, "revestimento": 1.0, "uso": "2º pavimento — escritório/depósito do arquitetônico; sobrecarga 5,0 CONFIRMADA pelo Nathan em 23/10/2026 (depósito, NBR 6120:2019)"},
+ "laje_730": {"sobrecarga": 1.0, "revestimento": 1.7, "uso": "laje de cobertura do bloco, sem uso (NBR 6120:2019 Tab. 10: acesso só para manutenção 1,0); regularização + impermeabilização 8 cm (γ 21)"},
+ "escada": {"sobrecarga": 3.0, "revestimento": 0.0, "uso": "escada metálica (NBR 6120:2019: escadas com acesso público 3,0)"}
+}

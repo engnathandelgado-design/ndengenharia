@@ -28,12 +28,14 @@ GRUPOS = {   # marca → pilares do modelo
     "PF-01": ["P3-L1"], "PF-02": ["P4-L1"], "PF-03": ["P5-L1"], "PF-05": ["P3-L9"], "PF-04": ["P14-L9"], "PF-06": ["P5-L9"],
     "PC-01": ["P8A"], "PC-02": ["P11"], "PC-03": ["P13"], "PM-01": ["P8", "P8B"],
     "PG-01": ["P9"], "PG-02": ["P10a"], "PG-03": ["P12"], "PG-04": ["P10b"],
+    "PE-01": ["P6E"], "PE-02": ["P7E"], "PE-03": ["P6-L2"],            # rev09 (DEC-045): pilares da escada
 }
 ATUAL = {"PL": (5, 4, 20.0), "PF": (5, 4, 20.0), "PC-01": (5, 7, 20.0), "PC-02": (4, 4, 20.0), "PC-03": (6, 6, 20.0),
-         "PM-01": (3, 4, 20.0), "PG-01": (3, 3, 16.0), "PG-03": (3, 3, 16.0), "PG-02": (2, 2, 16.0), "PG-04": (2, 2, 16.0)}
+         "PM-01": (3, 4, 20.0), "PG-01": (3, 3, 16.0), "PG-03": (3, 3, 16.0), "PG-02": (2, 2, 16.0), "PG-04": (2, 2, 16.0),
+         "PE-01": (2, 3, 16.0), "PE-02": (3, 3, 16.0), "PE-03": (2, 3, 16.0)}
 COB, PHI_T = 0.030, 0.0063
 # método geral do pilar isolado em balanço (N no topo) só onde a força normal entra no topo: nos pilares do mezanino a carga
-# entra em +3,15/+6,55 e nos dos portões o topo está ligado à TS-01 — ali vale a 2ª ordem global do r05 + fluência e_cc
+# entra em +3,90/+7,30 e nos dos portões o topo está ligado à TS-01 — ali vale a 2ª ordem global do r05 + fluência e_cc
 BITOLAS = tuple(float(x) for x in __import__("os").environ.get("BITOLAS", "16").split(","))
 SEM_MG = set()          # rev: método geral com as cargas nos níveis reais em todas as marcas
 

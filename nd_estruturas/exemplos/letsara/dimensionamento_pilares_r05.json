@@ -1,8 +1,8 @@
 {
  "PL-01": {
   "e_cc_cm": {
-   "x": 0.95,
-   "y": 0.55
+   "x": 0.96,
+   "y": 0.58
   },
   "pilares": [
    "P1-L5",
@@ -17,7 +17,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.595,
+  "uso_atual": 0.609,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -26,23 +26,23 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.21,
-      "sigma_s": 101
+      "sigma_s": 85
      },
      {
       "caso": "verticalização FI-1 BD",
       "Mk": 34.8,
       "uso": 0.18,
-      "sigma_s": 90
+      "sigma_s": 75
      }
     ]
    },
-   "tipo": "T14-4",
-   "nx": 4,
-   "ny": 5,
+   "tipo": null,
+   "nx": 3,
+   "ny": 6,
    "d": 16.0,
    "n": 14,
    "As_cm2": 28.15,
-   "uso_secao": 0.969,
+   "uso_secao": 0.988,
    "comb_secao": [
     "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P1-L5"
@@ -50,7 +50,7 @@
    "lambda_u": 1.02,
    "mg_governa": [
     "x",
-    "ELU V90 Cpi mín e-1 G1,3",
+    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P1-L5"
    ],
    "As_min_cm2": 9.6,
@@ -59,8 +59,8 @@
  },
  "PL-09": {
   "e_cc_cm": {
-   "x": 0.89,
-   "y": 0.54
+   "x": 0.91,
+   "y": 0.56
   },
   "pilares": [
    "P1-L3"
@@ -72,7 +72,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.387,
+  "uso_atual": 0.379,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -81,31 +81,31 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 35.9,
       "uso": 0.26,
-      "sigma_s": 232
+      "sigma_s": 116
      },
      {
       "caso": "verticalização FI-1 BD",
       "Mk": 34.8,
       "uso": 0.25,
-      "sigma_s": 225
+      "sigma_s": 113
      }
     ]
    },
-   "tipo": "T10-5",
-   "nx": 5,
-   "ny": 2,
+   "tipo": null,
+   "nx": 3,
+   "ny": 4,
    "d": 16.0,
    "n": 10,
    "As_cm2": 20.11,
-   "uso_secao": 0.918,
+   "uso_secao": 0.89,
    "comb_secao": [
     "ELU V90 Cpi mín e-1 G1,3",
     "P1-L3"
    ],
-   "lambda_u": 1.02,
+   "lambda_u": 1.1,
    "mg_governa": [
     "x",
-    "ELU V90 Cpi mín e-1 G1,3",
+    "ELU V90 Cpi mín e-1 G1,0",
     "P1-L3"
    ],
    "As_min_cm2": 9.6,
@@ -114,8 +114,8 @@
  },
  "PL-10": {
   "e_cc_cm": {
-   "x": 1.02,
-   "y": 0.55
+   "x": 1.04,
+   "y": 0.58
   },
   "pilares": [
    "P1-L4"
@@ -127,7 +127,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.581,
+  "uso_atual": 0.598,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -136,28 +136,28 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.21,
-      "sigma_s": 127
+      "sigma_s": 85
      },
      {
       "caso": "verticalização FI-1 BD",
       "Mk": 34.8,
       "uso": 0.18,
-      "sigma_s": 113
+      "sigma_s": 75
      }
     ]
    },
-   "tipo": "T14-5",
-   "nx": 5,
-   "ny": 4,
+   "tipo": null,
+   "nx": 3,
+   "ny": 6,
    "d": 16.0,
    "n": 14,
    "As_cm2": 28.15,
-   "uso_secao": 0.947,
+   "uso_secao": 0.964,
    "comb_secao": [
     "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P1-L4"
    ],
-   "lambda_u": 1.02,
+   "lambda_u": 1.04,
    "mg_governa": [
     "x",
     "ELU V90 Cpi mín e-1 G1,3",
@@ -169,8 +169,8 @@
  },
  "PL-02": {
   "e_cc_cm": {
-   "x": 1.36,
-   "y": 3.44
+   "x": 0.92,
+   "y": 2.16
   },
   "pilares": [
    "P1-L2"
@@ -182,7 +182,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.306,
+  "uso_atual": 0.29,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -201,21 +201,21 @@
      }
     ]
    },
-   "tipo": "T6",
+   "tipo": null,
    "nx": 3,
    "ny": 2,
    "d": 16.0,
    "n": 6,
    "As_cm2": 12.06,
-   "uso_secao": 0.854,
+   "uso_secao": 0.769,
    "comb_secao": [
-    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P1-L2"
    ],
-   "lambda_u": 1.18,
+   "lambda_u": 1.07,
    "mg_governa": [
-    "x",
-    "ELU V90 Cpi mín e-1 G1,0",
+    "y",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P1-L2"
    ],
    "As_min_cm2": 9.6,
@@ -224,8 +224,8 @@
  },
  "PL-03": {
   "e_cc_cm": {
-   "x": 1.2,
-   "y": 2.57
+   "x": 0.99,
+   "y": 2.04
   },
   "pilares": [
    "P1C-L1"
@@ -237,7 +237,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.272,
+  "uso_atual": 0.286,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -245,41 +245,41 @@
      {
       "caso": "deitado nas 2 AL-2",
       "Mk": 35.9,
-      "uso": 0.42,
-      "sigma_s": 232
+      "uso": 0.22,
+      "sigma_s": 93
      },
      {
       "caso": "verticalização FI-1 BD",
-      "Mk": 36.3,
-      "uso": 0.43,
-      "sigma_s": 235
+      "Mk": 86.7,
+      "uso": 0.53,
+      "sigma_s": 224
      }
     ]
    },
-   "tipo": "T6",
+   "tipo": null,
    "nx": 3,
-   "ny": 2,
+   "ny": 5,
    "d": 16.0,
-   "n": 6,
-   "As_cm2": 12.06,
-   "uso_secao": 0.71,
+   "n": 12,
+   "As_cm2": 24.13,
+   "uso_secao": 0.462,
    "comb_secao": [
-    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P1C-L1"
    ],
-   "lambda_u": 1.3,
+   "lambda_u": 1.46,
    "mg_governa": [
-    "x",
-    "ELU V90 Cpi mín e-1 G1,0",
+    "y",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P1C-L1"
    ],
    "As_min_cm2": 9.6,
-   "taxa_pct": 0.5
+   "taxa_pct": 1.01
   }
  },
  "PL-04": {
   "e_cc_cm": {
-   "x": 0.13,
+   "x": 0.14,
    "y": 0.44
   },
   "pilares": [
@@ -292,7 +292,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.493,
+  "uso_atual": 0.486,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -301,28 +301,28 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.24,
-      "sigma_s": 169
+      "sigma_s": 101
      },
      {
       "caso": "verticalização FI-1 BD",
-      "Mk": 36.3,
-      "uso": 0.22,
-      "sigma_s": 156
+      "Mk": 86.7,
+      "uso": 0.53,
+      "sigma_s": 224
      }
     ]
    },
-   "tipo": "T12-5",
-   "nx": 5,
-   "ny": 3,
+   "tipo": null,
+   "nx": 3,
+   "ny": 5,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.911,
+   "uso_secao": 0.903,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P1C-L9"
    ],
-   "lambda_u": 1.03,
+   "lambda_u": 1.02,
    "mg_governa": [
     "y",
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
@@ -334,8 +334,8 @@
  },
  "PL-05": {
   "e_cc_cm": {
-   "x": 0.75,
-   "y": 0.57
+   "x": 0.76,
+   "y": 0.58
   },
   "pilares": [
    "P2-L5",
@@ -350,7 +350,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.468,
+  "uso_atual": 0.476,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -359,23 +359,23 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.24,
-      "sigma_s": 127
+      "sigma_s": 101
      },
      {
       "caso": "verticalização FI-1 BD",
       "Mk": 58.7,
       "uso": 0.36,
-      "sigma_s": 190
+      "sigma_s": 152
      }
     ]
    },
-   "tipo": "T12-4",
-   "nx": 4,
-   "ny": 4,
+   "tipo": null,
+   "nx": 3,
+   "ny": 5,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.908,
+   "uso_secao": 0.922,
    "comb_secao": [
     "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P2-L5"
@@ -383,7 +383,7 @@
    "lambda_u": 1.1,
    "mg_governa": [
     "x",
-    "ELU V90 Cpi mín e-1 G1,3",
+    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P2-L5"
    ],
    "As_min_cm2": 9.6,
@@ -392,7 +392,7 @@
  },
  "PL-11": {
   "e_cc_cm": {
-   "x": 0.7,
+   "x": 0.72,
    "y": 0.56
   },
   "pilares": [
@@ -405,7 +405,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.299,
+  "uso_atual": 0.292,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -424,18 +424,18 @@
      }
     ]
    },
-   "tipo": "T10",
+   "tipo": null,
    "nx": 3,
    "ny": 4,
    "d": 16.0,
    "n": 10,
    "As_cm2": 20.11,
-   "uso_secao": 0.693,
+   "uso_secao": 0.68,
    "comb_secao": [
     "ELU V90 Cpi mín e-1 G1,0",
     "P2-L3"
    ],
-   "lambda_u": 1.38,
+   "lambda_u": 1.42,
    "mg_governa": [
     "x",
     "ELU V90 Cpi mín e-1 G1,3",
@@ -447,8 +447,8 @@
  },
  "PL-12": {
   "e_cc_cm": {
-   "x": 0.81,
-   "y": 0.58
+   "x": 0.82,
+   "y": 0.6
   },
   "pilares": [
    "P2-L4"
@@ -460,7 +460,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.445,
+  "uso_atual": 0.456,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -469,25 +469,25 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.24,
-      "sigma_s": 127
+      "sigma_s": 101
      },
      {
       "caso": "verticalização FI-1 BD",
       "Mk": 58.7,
       "uso": 0.36,
-      "sigma_s": 190
+      "sigma_s": 152
      }
     ]
    },
-   "tipo": "T12-4",
-   "nx": 4,
-   "ny": 4,
+   "tipo": null,
+   "nx": 3,
+   "ny": 5,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.847,
+   "uso_secao": 0.866,
    "comb_secao": [
-    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,3",
+    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P2-L4"
    ],
    "lambda_u": 1.14,
@@ -502,8 +502,8 @@
  },
  "PL-06": {
   "e_cc_cm": {
-   "x": 1.38,
-   "y": 3.45
+   "x": 0.32,
+   "y": 0.41
   },
   "pilares": [
    "P2-L2"
@@ -515,7 +515,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.312,
+  "uso_atual": 0.206,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -534,21 +534,21 @@
      }
     ]
    },
-   "tipo": "T10",
+   "tipo": null,
    "nx": 3,
    "ny": 4,
    "d": 16.0,
    "n": 10,
    "As_cm2": 20.11,
-   "uso_secao": 0.564,
+   "uso_secao": 0.458,
    "comb_secao": [
-    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "ELU V90 Cpi mín e-1 G1,3",
     "P2-L2"
    ],
-   "lambda_u": 1.69,
+   "lambda_u": 1.94,
    "mg_governa": [
-    "y",
-    "ELU V0 Cpi mín e+1 G1,3",
+    "x",
+    "ELU V90 Cpi mín e-1 G1,3",
     "P2-L2"
    ],
    "As_min_cm2": 9.6,
@@ -557,8 +557,8 @@
  },
  "PL-07": {
   "e_cc_cm": {
-   "x": 1.14,
-   "y": 2.59
+   "x": 0.68,
+   "y": 1.62
   },
   "pilares": [
    "P2C-L1"
@@ -570,7 +570,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.269,
+  "uso_atual": 0.189,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -578,42 +578,42 @@
      {
       "caso": "deitado nas 2 AL-2",
       "Mk": 35.9,
-      "uso": 0.26,
-      "sigma_s": 116
+      "uso": 0.22,
+      "sigma_s": 93
      },
      {
       "caso": "verticalização FI-1 BD",
-      "Mk": 63.0,
-      "uso": 0.46,
-      "sigma_s": 204
+      "Mk": 86.7,
+      "uso": 0.53,
+      "sigma_s": 224
      }
     ]
    },
-   "tipo": "T10",
+   "tipo": null,
    "nx": 3,
-   "ny": 4,
+   "ny": 5,
    "d": 16.0,
-   "n": 10,
-   "As_cm2": 20.11,
-   "uso_secao": 0.474,
+   "n": 12,
+   "As_cm2": 24.13,
+   "uso_secao": 0.303,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
     "P2C-L1"
    ],
-   "lambda_u": 1.69,
+   "lambda_u": 1.96,
    "mg_governa": [
     "y",
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,3",
     "P2C-L1"
    ],
    "As_min_cm2": 9.6,
-   "taxa_pct": 0.84
+   "taxa_pct": 1.01
   }
  },
  "PL-08": {
   "e_cc_cm": {
    "x": 0.73,
-   "y": 0.2
+   "y": 0.21
   },
   "pilares": [
    "P2C-L9"
@@ -625,7 +625,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.445,
+  "uso_atual": 0.432,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -634,23 +634,23 @@
       "caso": "deitado nas 2 AL-2",
       "Mk": 39.2,
       "uso": 0.24,
-      "sigma_s": 127
+      "sigma_s": 101
      },
      {
       "caso": "verticalização FI-1 BD",
-      "Mk": 63.0,
-      "uso": 0.38,
-      "sigma_s": 204
+      "Mk": 86.7,
+      "uso": 0.53,
+      "sigma_s": 224
      }
     ]
    },
-   "tipo": "T12-4",
-   "nx": 4,
-   "ny": 4,
+   "tipo": null,
+   "nx": 3,
+   "ny": 5,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.811,
+   "uso_secao": 0.789,
    "comb_secao": [
     "ELU V180 Cpi mín e+1 G1,3",
     "P2C-L9"
@@ -667,8 +667,8 @@
  },
  "PF-01": {
   "e_cc_cm": {
-   "x": 11.85,
-   "y": 1.95
+   "x": 7.23,
+   "y": 1.56
   },
   "pilares": [
    "P3-L1"
@@ -680,7 +680,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.542,
+  "uso_atual": 0.429,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -699,21 +699,21 @@
      }
     ]
    },
-   "tipo": "T10-5",
+   "tipo": null,
    "nx": 2,
    "ny": 5,
    "d": 16.0,
    "n": 10,
    "As_cm2": 20.11,
-   "uso_secao": 0.81,
+   "uso_secao": 0.684,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P3-L1"
    ],
-   "lambda_u": 1.28,
+   "lambda_u": 1.45,
    "mg_governa": [
-    "x",
-    "ELU V90 Cpi mín e-1 G1,3",
+    "y",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P3-L1"
    ],
    "As_min_cm2": 9.6,
@@ -722,8 +722,8 @@
  },
  "PF-02": {
   "e_cc_cm": {
-   "x": 11.73,
-   "y": 1.94
+   "x": 7.19,
+   "y": 1.55
   },
   "pilares": [
    "P4-L1"
@@ -735,7 +735,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.541,
+  "uso_atual": 0.379,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -754,21 +754,21 @@
      }
     ]
    },
-   "tipo": "T10-5",
+   "tipo": null,
    "nx": 2,
    "ny": 5,
    "d": 16.0,
    "n": 10,
    "As_cm2": 20.11,
-   "uso_secao": 0.805,
+   "uso_secao": 0.599,
    "comb_secao": [
-    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,3",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P4-L1"
    ],
-   "lambda_u": 1.82,
+   "lambda_u": 1.73,
    "mg_governa": [
     "y",
-    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P4-L1"
    ],
    "As_min_cm2": 9.6,
@@ -777,8 +777,8 @@
  },
  "PF-03": {
   "e_cc_cm": {
-   "x": 11.65,
-   "y": 1.97
+   "x": 6.84,
+   "y": 1.53
   },
   "pilares": [
    "P5-L1"
@@ -790,7 +790,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.565,
+  "uso_atual": 0.356,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -809,18 +809,18 @@
      }
     ]
    },
-   "tipo": "T12-6",
+   "tipo": null,
    "nx": 2,
    "ny": 6,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.783,
+   "uso_secao": 0.527,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,3",
     "P5-L1"
    ],
-   "lambda_u": 1.8,
+   "lambda_u": 1.92,
    "mg_governa": [
     "y",
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
@@ -845,7 +845,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.564,
+  "uso_atual": 0.557,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -864,18 +864,18 @@
      }
     ]
    },
-   "tipo": "T14-6",
+   "tipo": null,
    "nx": 3,
    "ny": 6,
    "d": 16.0,
    "n": 14,
    "As_cm2": 28.15,
-   "uso_secao": 0.944,
+   "uso_secao": 0.932,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P3-L9"
    ],
-   "lambda_u": 1.0,
+   "lambda_u": 1.02,
    "mg_governa": [
     "y",
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
@@ -887,7 +887,7 @@
  },
  "PF-04": {
   "e_cc_cm": {
-   "x": 1.45,
+   "x": 1.44,
    "y": 0.44
   },
   "pilares": [
@@ -900,7 +900,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.245,
+  "uso_atual": 0.272,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -919,21 +919,21 @@
      }
     ]
    },
-   "tipo": "T12-5",
+   "tipo": null,
    "nx": 3,
    "ny": 5,
    "d": 16.0,
    "n": 12,
    "As_cm2": 24.13,
-   "uso_secao": 0.441,
+   "uso_secao": 0.491,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P14-L9"
    ],
-   "lambda_u": 1.98,
+   "lambda_u": 1.78,
    "mg_governa": [
     "y",
-    "ELU V0 Cpi mín e+1 G1,3",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P14-L9"
    ],
    "As_min_cm2": 9.6,
@@ -943,7 +943,7 @@
  "PF-06": {
   "e_cc_cm": {
    "x": 0.64,
-   "y": 0.13
+   "y": 0.12
   },
   "pilares": [
    "P5-L9"
@@ -955,7 +955,7 @@
    "d": 20.0,
    "As": 44.0
   },
-  "uso_atual": 0.534,
+  "uso_atual": 0.521,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -974,18 +974,18 @@
      }
     ]
    },
-   "tipo": "T14-6",
+   "tipo": null,
    "nx": 3,
    "ny": 6,
    "d": 16.0,
    "n": 14,
    "As_cm2": 28.15,
-   "uso_secao": 0.893,
+   "uso_secao": 0.871,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
     "P5-L9"
    ],
-   "lambda_u": 1.06,
+   "lambda_u": 1.08,
    "mg_governa": [
     "y",
     "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
@@ -997,8 +997,8 @@
  },
  "PC-01": {
   "e_cc_cm": {
-   "x": 4.94,
-   "y": 1.12
+   "x": 2.91,
+   "y": 0.8
   },
   "pilares": [
    "P8A"
@@ -1010,7 +1010,7 @@
    "d": 20.0,
    "As": 62.8
   },
-  "uso_atual": 0.27,
+  "uso_atual": 0.231,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1018,42 +1018,42 @@
      {
       "caso": "deitado nas 2 AL-2",
       "Mk": 20.6,
-      "uso": 0.28,
+      "uso": 0.37,
       "sigma_s": 139
      },
      {
       "caso": "verticalização FI-1 AC",
-      "Mk": 40.9,
-      "uso": 0.37,
-      "sigma_s": 176
+      "Mk": 29.0,
+      "uso": 0.34,
+      "sigma_s": 187
      }
     ]
    },
-   "tipo": "T8",
-   "nx": 3,
+   "tipo": null,
+   "nx": 2,
    "ny": 3,
    "d": 16.0,
-   "n": 8,
-   "As_cm2": 16.08,
-   "uso_secao": 0.516,
+   "n": 6,
+   "As_cm2": 12.06,
+   "uso_secao": 0.57,
    "comb_secao": [
-    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P8A"
    ],
-   "lambda_u": 1.6,
+   "lambda_u": 1.43,
    "mg_governa": [
-    "x",
-    "ELU V90 Cpi mín e-1 G1,3",
+    "y",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P8A"
    ],
    "As_min_cm2": 9.6,
-   "taxa_pct": 0.67
+   "taxa_pct": 0.5
   }
  },
  "PC-02": {
   "e_cc_cm": {
    "x": 3.61,
-   "y": 2.71
+   "y": 2.7
   },
   "pilares": [
    "P11"
@@ -1065,7 +1065,7 @@
    "d": 20.0,
    "As": 37.7
   },
-  "uso_atual": 0.303,
+  "uso_atual": 0.312,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1073,41 +1073,41 @@
      {
       "caso": "deitado nas 2 AL-2",
       "Mk": 13.7,
-      "uso": 0.13,
-      "sigma_s": 55
+      "uso": 0.12,
+      "sigma_s": 46
      },
      {
       "caso": "verticalização FI-1 AC",
       "Mk": 27.3,
-      "uso": 0.27,
+      "uso": 0.24,
       "sigma_s": 183
      }
     ]
    },
    "tipo": null,
    "nx": 3,
-   "ny": 5,
+   "ny": 6,
    "d": 16.0,
-   "n": 12,
-   "As_cm2": 24.13,
-   "uso_secao": 0.405,
+   "n": 14,
+   "As_cm2": 28.15,
+   "uso_secao": 0.363,
    "comb_secao": [
-    "ELU V90 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "ELU V90 Cpi mín e-1 G1,3",
     "P11"
    ],
-   "lambda_u": 1.13,
+   "lambda_u": 1.02,
    "mg_governa": [
     "y",
-    "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
+    "ELU V180 Cpi mín e-1 G1,3",
     "P11"
    ],
    "As_min_cm2": 6.4,
-   "taxa_pct": 1.51
+   "taxa_pct": 1.76
   }
  },
  "PC-03": {
   "e_cc_cm": {
-   "x": 0.78,
+   "x": 0.79,
    "y": 0.4
   },
   "pilares": [
@@ -1120,7 +1120,7 @@
    "d": 20.0,
    "As": 62.8
   },
-  "uso_atual": 0.467,
+  "uso_atual": 0.466,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1162,21 +1162,21 @@
  },
  "PM-01": {
   "e_cc_cm": {
-   "x": 1.46,
-   "y": 0.46
+   "x": 1.91,
+   "y": 0.58
   },
   "pilares": [
    "P8",
    "P8B"
   ],
   "secao": "40×60",
-  "H": 6.55,
+  "H": 7.3,
   "atual": {
    "n": 10,
    "d": 20.0,
    "As": 31.4
   },
-  "uso_atual": 0.325,
+  "uso_atual": 0.382,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1184,42 +1184,42 @@
      {
       "caso": "deitado nas 2 AL-2",
       "Mk": 20.6,
-      "uso": 0.37,
-      "sigma_s": 139
+      "uso": 0.23,
+      "sigma_s": 83
      },
      {
       "caso": "verticalização FI-1 BD",
-      "Mk": 30.6,
-      "uso": 0.55,
-      "sigma_s": 206
+      "Mk": 50.1,
+      "uso": 0.57,
+      "sigma_s": 202
      }
     ]
    },
-   "tipo": "T6",
+   "tipo": null,
    "nx": 2,
-   "ny": 3,
+   "ny": 5,
    "d": 16.0,
-   "n": 6,
-   "As_cm2": 12.06,
-   "uso_secao": 0.58,
+   "n": 10,
+   "As_cm2": 20.11,
+   "uso_secao": 0.541,
    "comb_secao": [
-    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
-    "P8B"
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "P8"
    ],
-   "lambda_u": 1.37,
+   "lambda_u": 1.48,
    "mg_governa": [
     "y",
-    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
-    "P8B"
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "P8"
    ],
    "As_min_cm2": 9.6,
-   "taxa_pct": 0.5
+   "taxa_pct": 0.84
   }
  },
  "PG-01": {
   "e_cc_cm": {
    "x": 0.05,
-   "y": 0.05
+   "y": 0.06
   },
   "pilares": [
    "P9"
@@ -1231,7 +1231,7 @@
    "d": 16.0,
    "As": 16.1
   },
-  "uso_atual": 0.386,
+  "uso_atual": 0.369,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1256,12 +1256,12 @@
    "d": 16.0,
    "n": 6,
    "As_cm2": 12.06,
-   "uso_secao": 0.522,
+   "uso_secao": 0.5,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P9"
    ],
-   "lambda_u": 1.7,
+   "lambda_u": 1.76,
    "mg_governa": [
     "y",
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
@@ -1274,7 +1274,7 @@
  "PG-02": {
   "e_cc_cm": {
    "x": 0.13,
-   "y": 0.14
+   "y": 0.13
   },
   "pilares": [
    "P10a"
@@ -1286,7 +1286,7 @@
    "d": 16.0,
    "As": 8.0
   },
-  "uso_atual": 0.567,
+  "uso_atual": 0.556,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1311,12 +1311,12 @@
    "d": 16.0,
    "n": 4,
    "As_cm2": 8.04,
-   "uso_secao": 0.567,
+   "uso_secao": 0.556,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
     "P10a"
    ],
-   "lambda_u": 1.54,
+   "lambda_u": 1.56,
    "mg_governa": [
     "y",
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
@@ -1341,7 +1341,7 @@
    "d": 16.0,
    "As": 16.1
   },
-  "uso_atual": 0.396,
+  "uso_atual": 0.374,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1366,12 +1366,12 @@
    "d": 16.0,
    "n": 8,
    "As_cm2": 16.08,
-   "uso_secao": 0.397,
+   "uso_secao": 0.375,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
     "P12"
    ],
-   "lambda_u": 2.16,
+   "lambda_u": 2.26,
    "mg_governa": [
     "y",
     "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
@@ -1396,7 +1396,7 @@
    "d": 16.0,
    "As": 8.0
   },
-  "uso_atual": 0.647,
+  "uso_atual": 0.632,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1421,12 +1421,12 @@
    "d": 16.0,
    "n": 6,
    "As_cm2": 12.06,
-   "uso_secao": 0.427,
+   "uso_secao": 0.418,
    "comb_secao": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P10b"
    ],
-   "lambda_u": 1.98,
+   "lambda_u": 2.0,
    "mg_governa": [
     "y",
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
@@ -1434,6 +1434,171 @@
    ],
    "As_min_cm2": 2.5,
    "taxa_pct": 1.93
+  }
+ },
+ "PE-01": {
+  "e_cc_cm": {
+   "x": 0.22,
+   "y": 0.06
+  },
+  "pilares": [
+   "P6E"
+  ],
+  "secao": "25×40",
+  "H": 5.0,
+  "atual": {
+   "n": 6,
+   "d": 16.0,
+   "As": 12.1
+  },
+  "uso_atual": 0.309,
+  "proposto": {
+   "manuseio": {
+    "ok": true,
+    "casos": [
+     {
+      "caso": "deitado nas 2 AL-2",
+      "Mk": 7.9,
+      "uso": 0.37,
+      "sigma_s": 138
+     },
+     {
+      "caso": "verticalização FI-1 BD",
+      "Mk": 6.6,
+      "uso": 0.31,
+      "sigma_s": 115
+     }
+    ]
+   },
+   "tipo": null,
+   "nx": 2,
+   "ny": 2,
+   "d": 16.0,
+   "n": 4,
+   "As_cm2": 8.04,
+   "uso_secao": 0.454,
+   "comb_secao": [
+    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,3",
+    "P6E"
+   ],
+   "lambda_u": 1.88,
+   "mg_governa": [
+    "y",
+    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
+    "P6E"
+   ],
+   "As_min_cm2": 4.0,
+   "taxa_pct": 0.8
+  }
+ },
+ "PE-02": {
+  "e_cc_cm": {
+   "x": 0.08,
+   "y": 0.03
+  },
+  "pilares": [
+   "P7E"
+  ],
+  "secao": "60×40",
+  "H": 5.0,
+  "atual": {
+   "n": 8,
+   "d": 16.0,
+   "As": 16.1
+  },
+  "uso_atual": 0.64,
+  "proposto": {
+   "manuseio": {
+    "ok": true,
+    "casos": [
+     {
+      "caso": "deitado nas 2 AL-2",
+      "Mk": 19.0,
+      "uso": 0.22,
+      "sigma_s": 123
+     },
+     {
+      "caso": "verticalização FI-1 BD",
+      "Mk": 15.8,
+      "uso": 0.19,
+      "sigma_s": 102
+     }
+    ]
+   },
+   "tipo": null,
+   "nx": 3,
+   "ny": 2,
+   "d": 16.0,
+   "n": 6,
+   "As_cm2": 12.06,
+   "uso_secao": 0.85,
+   "comb_secao": [
+    "ELU V90 Cpi mín e-1 G1,3",
+    "P7E"
+   ],
+   "lambda_u": 1.16,
+   "mg_governa": [
+    "x",
+    "ELU V90 Cpi mín e-1 G1,3",
+    "P7E"
+   ],
+   "As_min_cm2": 9.6,
+   "taxa_pct": 0.5
+  }
+ },
+ "PE-03": {
+  "e_cc_cm": {
+   "x": 14.27,
+   "y": 1.58
+  },
+  "pilares": [
+   "P6-L2"
+  ],
+  "secao": "25×40",
+  "H": 7.3,
+  "atual": {
+   "n": 6,
+   "d": 16.0,
+   "As": 12.1
+  },
+  "uso_atual": 0.88,
+  "proposto": {
+   "manuseio": {
+    "ok": true,
+    "casos": [
+     {
+      "caso": "deitado nas 2 AL-2",
+      "Mk": 8.6,
+      "uso": 0.18,
+      "sigma_s": 60
+     },
+     {
+      "caso": "verticalização FI-1 BD",
+      "Mk": 20.9,
+      "uso": 0.44,
+      "sigma_s": 146
+     }
+    ]
+   },
+   "tipo": null,
+   "nx": 2,
+   "ny": 5,
+   "d": 16.0,
+   "n": 10,
+   "As_cm2": 20.11,
+   "uso_secao": 0.654,
+   "comb_secao": [
+    "ELU V0 Cpi mín e+1 G1,3",
+    "P6-L2"
+   ],
+   "lambda_u": 1.07,
+   "mg_governa": [
+    "x",
+    "ELU V90 Cpi mín e-1 G1,3",
+    "P6-L2"
+   ],
+   "As_min_cm2": 4.0,
+   "taxa_pct": 2.01
   }
  }
 }

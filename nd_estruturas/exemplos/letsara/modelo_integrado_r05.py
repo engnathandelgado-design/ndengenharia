@@ -25,7 +25,7 @@ sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ.parents[1]))
 from nd_estruturas.prefabricados import Concreto
 from nd_estruturas import vento_nbr6123 as VNT
 from nd_estruturas.metalica_fria import PerfilZ, barra_redonda_tracao_Rd, compressao_laminado_Rd
-from geometria import Y_LIN, X_EIXO, Y_P13, LINHA_PORTOES
+from geometria import Y_LIN, X_EIXO, Y_P13, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2
 
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 CB = json.loads((AQ / "cobertura_metalica.json").read_text(encoding="utf-8"))
@@ -40,8 +40,10 @@ XF = [X_EIXO[k] for k in "ABCDE"]
 Z0, INCL = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + INCL * x                 # fundo da TS-01
 REC = tuple(LG["REC"]); Z_TOP_C = LG["Z_TOPO_I130"]; Z_I130 = LG["Z_ASS_I130"]
-Z_MEZ = (3.15, 6.55)
-A_VM, G_2E = 0.1925, 1.5
+Z_MEZ = Z_PISOS                               # rev09 (DEC-045): topo da capa +3,90 / +7,30 (corte AA' do R01)
+A_VM, G_2E = 0.25 * 0.80, (0.25 - 0.10) * 0.21 * 25   # rev09 (DEC-047/048): VM retangular 25 × 80 + faixa de 2º estágio
+CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
+CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))   # rev09 (DEC-048): W 310 da linha 2 sobre montantes nos pilares
 X_PORTOES = [9.87, 15.195, 24.305, 29.63]      # pilares P9, P10a, P10b, P12 da linha 4 (portões)
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
 # terças: posições x (linha da alma) — mesmas do modelo r04 / pranchas
@@ -164,6 +166,10 @@ def montar(cfg):
     pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I130])
     for nome, x in (("P8", XF[1]), ("P8B", XF[3])):
         pilar(nome, x, Y[1], 0.40, 0.60, Z_MEZ[1], list(Z_MEZ))
+    # rev09 (DEC-045): pilares da escada (R01) — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7), P6 da linha 2 até o +7,30
+    pilar("P6E", P6_ESC[0], P6_ESC[1], 0.25, 0.40, Z_MEZ[0], [Z_MEZ[0]])
+    pilar("P7E", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_MEZ[0], [Z_MEZ[0]])
+    pilar("P6-L2", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_MEZ[1], list(Z_MEZ))
     for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
         # rev05 (DEC-024): cabeça dos pilares dos portões a 2 cm do fundo da TS-01 (ligação em y por 2 chapas parafusadas)
         pilar(nome, x, Y[LINHA_PORTOES], b, b, round(zf(x) - 0.02, 3) if cfg.get("ligar_portoes", True) else 7.50, [6.25, 7.40])
@@ -171,7 +177,7 @@ def montar(cfg):
     # ---------------- TS-01 (linhas 2 a 8): vigas 3D no CG (fundo + 0,45), nós em todas as terças
     A_TS, Iy_TS, Iz_TS, J_TS = 0.2225, 0.0198, 0.00177, 0.0016
     lin_cen = {}
-    for i in range(1, 8):
+    for i in range(2, 8):                      # rev09 (DEC-048): linha 2 sem TS-01 (cobertura metálica abaixo)
         y = Y[i]
         for lado, xs, (xa, xb) in (("E", X_ESQ, (0.0, XC)), ("D", X_DIR, (XC, LARG))):
             cadeia = []
@@ -191,6 +197,27 @@ def montar(cfg):
                 ops.equalDOF(at(f"P2-L{i+1}", REC[1]), n1, 1, 2, 3, 4)
                 ncen = n0
             lin_cen.setdefault(i, []).append(ncen)
+    # ---------------- rev09 (DEC-048): linha 2 — W 310 contínua (topo na inclinação da cobertura) sobre montantes W 150 nos pilares
+    from nd_estruturas import metalica_laminada as _ML
+    _W, _WM = _ML.perfil(CB2["perfil"]), _ML.perfil(CB2["montante"])
+    A_W, IX_W, IY_W, J_W = _W.A * 1e-4, _W.Ix * 1e-8, _W.Iy * 1e-8, _W.It * 1e-8
+    A_M, IX_M, IY_M, J_M = _WM.A * 1e-4, _WM.Ix * 1e-8, _WM.Iy * 1e-8, _WM.It * 1e-8
+    z_cg_w = lambda x: zf(x) + 0.90 - _W.d / 2000
+    apo_w = {a["nome"]: a for a in CB2["apoios"]}
+    xs_w = sorted(set([0.15, LARG - 0.15] + X_TER + [a["x"] for a in CB2["apoios"]]))
+    cadeia = []
+    for x in xs_w:
+        n = no(x, Y[1], z_cg_w(x), unico=True)
+        cadeia.append(n)
+        NO_TS[(1, round(x, 3))] = n
+    for a, b in zip(cadeia[:-1], cadeia[1:]):
+        viga(a, b, A_W, IX_W, IY_W, J_W, "W linha 2", TR_X, E=ES, G=GS)
+    base_m = {"A": ("P1-L2", REC[0]), "B": ("P8", Z_MEZ[1]), "C": ("P8A", Z_TOP_C), "D": ("P8B", Z_MEZ[1]), "P6": ("P6-L2", Z_MEZ[1]), "E": ("P2-L2", REC[1])}
+    for nm, (pn, zb) in base_m.items():
+        x = apo_w[nm]["x"]
+        nb = at(pn, zb)
+        nt = cadeia[xs_w.index(x)]
+        viga(nb, nt, A_M, IX_M, IY_M, J_M, "montante linha 2", TR_Z, E=ES, G=GS)
     # I130: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14 (viga 3D nos consolos dos pilares)
     A_I, Iy_I, Iz_I, J_I = 0.32, 0.0626, 0.0029, 0.0030
     pts_i = [("P8A", Y[1]), ("L3", Y[2]), ("P11", Y[3]), ("L5", Y[4]), ("L6", Y[5]), ("P13", Y_P13), ("L7", Y[6]), ("L8", Y[7]), ("P14-L9", COMP)]
@@ -204,9 +231,7 @@ def montar(cfg):
     # TS-01 no centro: linha 2 sobre o P8A (oblongo em x), linha 4 sobre o P11, demais sobre a I130
     for i, ns in lin_cen.items():
         for n in ns:
-            if i == 1:
-                ops.equalDOF(at("P8A", Z_TOP_C), n, 2, 3)
-            elif i == 3:
+            if i == 3:
                 ops.equalDOF(at("P11", Z_TOP_C), n, 1, 2, 3)
             else:
                 ops.equalDOF(ni[f"L{i+1}"], n, 1, 2, 3)
@@ -328,15 +353,16 @@ def montar(cfg):
                 barra(nts(k, b), nts(k + 1, a), cfg.get("A_x", math.pi * 0.016 ** 2 / 4), "X", 10, extra=dict(vao=f"{k+1}-{k+2}"))
 
     # ---------------- mezanino: VM + laje alveolar como diafragma rígido
-    for z in Z_MEZ:
+    for iz, z in enumerate(Z_MEZ):
         l1 = [at(n, z) for n in ("P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1")]
-        l2 = [at(n, z) for n in ("P1-L2", "P8", "P8A", "P8B", "P2-L2")]
+        l2 = [at(n, z) for n in ("P1-L2", "P8", "P8A", "P8B", "P6-L2", "P2-L2")]
+        esc = [at(n, z) for n in ("P6E", "P7E")] if iz == 0 else []
         for row in (l1, l2):
             for a, b in zip(row[:-1], row[1:]):
-                barra(a, b, 0.2225, "VM", 20)
+                barra(a, b, A_VM, "VM", 20)
         mestre = no(XC, Y[1] / 2, z, unico=True)
         ops.fix(mestre, 0, 0, 1, 1, 1, 0)
-        ops.rigidDiaphragm(3, mestre, *(l1 + l2))
+        ops.rigidDiaphragm(3, mestre, *(l1 + l2 + esc))
     montar.at = at
 
 
@@ -441,6 +467,44 @@ def cpe_cob(d, x, y):
     return CPE_C["barlavento"] if dist <= prof else CPE_C["sotavento"]
 
 
+def cargas_mezanino():
+    """rev09: reações (kN, característicos G e Q) das vigas do mezanino nos pilares, por nível — +3,90 com a abertura da escada
+    (lajes curtas na linha 1 até a viga P6–P7) e o +7,30 contínuo; laje 2,8 + capa/rejunte 1,35 + revestimento (cargas_mezanino.json)."""
+    out = []
+    for iz, z in enumerate(Z_MEZ):
+        c = CM["piso_390" if iz == 0 else "laje_730"]
+        gl, ql = 2.8 + 1.35 + c["revestimento"], c["sobrecarga"]
+        fila1 = [("P1C-L1", 0.0), ("P3-L1", XF[1]), ("P4-L1", XF[2]), ("P5-L1", XF[3]), ("P2C-L1", LARG)]
+        fila2 = [("P1-L2", 0.0), ("P8", XF[1]), ("P8A", XF[2]), ("P8B", XF[3]), ("P6-L2", P6_L2[0]), ("P2-L2", LARG)]
+        def vao_laje(x, fila):                                  # vão da laje que chega na viga desta fila em x
+            if iz == 0 and x > 36.0:
+                return 3.79 if fila == 1 else 0.0               # abertura da escada no +3,90
+            return 9.65
+        for fila, pts in ((1, fila1), (2, fila2)):
+            for (pa, xa), (pb, xb) in zip(pts[:-1], pts[1:]):
+                if iz == 0 and fila == 2 and xa >= P6_L2[0] - 1e-6:
+                    continue                                    # +3,90: sem viga P6 → E na linha 2 (abertura)
+                n_ = 21
+                for k in range(n_):
+                    x = xa + (k + 0.5) * (xb - xa) / n_
+                    Lv = vao_laje(x, fila)
+                    dx = (xb - xa) / n_
+                    G_ = (gl * Lv / 2 + A_VM * 25 + G_2E) * dx
+                    Q_ = ql * Lv / 2 * dx
+                    fb = (x - xa) / (xb - xa)
+                    out += [(pa, z, G_ * (1 - fb), Q_ * (1 - fb)), (pb, z, G_ * fb, Q_ * fb)]
+        if iz == 0:                                             # viga P6–P7 (lajes curtas de 3,79 m) e a escada metálica
+            L67 = P7_ESC[0] - P6_ESC[0]
+            G_ = (gl * 3.79 / 2 + A_VM * 25 + G_2E) * L67
+            Q_ = ql * 3.79 / 2 * L67
+            ESC_ = json.loads((AQ / "escada_metalica.json").read_text(encoding="utf-8"))
+            Rf = ESC_["patamar_fundo"]["R_apoio_d"] / 1.45              # patamar +1,95: viga de fundo nas faces do P6 e do P7
+            Rc = ESC_["chegada_fundo"]["R_apoio_d"] / 1.45              # chegada +3,90: viga de fundo no P6-L2 e no P2-L2
+            out += [("P6E", z, G_ / 2 + 0.3 * Rf, Q_ / 2 + 0.7 * Rf), ("P7E", z, G_ / 2 + 0.3 * Rf, Q_ / 2 + 0.7 * Rf),
+                    ("P6-L2", z, 0.3 * Rc, 0.7 * Rc), ("P2-L2", z, 0.3 * Rc, 0.7 * Rc)]
+    return out
+
+
 def aplicar(caso, fatores, desaprumo):
     """Aplica as cargas do caso: G, Qc, Qm (com fatores) e o vento (d, ecc, interno) com fator."""
     ops.timeSeries("Linear", 1)
@@ -460,6 +524,8 @@ def aplicar(caso, fatores, desaprumo):
     for e in ele:
         if e["grupo"] in ("TS-01", "I130", "VB"):
             ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, -e["A"] * 25 * fG)
+        elif e["grupo"] == "W linha 2":
+            ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, -e["A"] * 78.5 * fG)
     # terças: peso + pacote + sobrecarga + vento na cobertura
     for e in TER_ELE:
         x = X_TER[e["linha"]]; ym = (e["y0"] + e["y1"]) / 2
@@ -475,11 +541,8 @@ def aplicar(caso, fatores, desaprumo):
         ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, w)
     # mezanino (reações nos pilares, como r04)
     at = montar.at
-    gm, qm = 2.8 + 1.25 + 1.0, 5.0
-    for z in Z_MEZ:
-        for row in (("P1C-L1", "P3-L1", "P4-L1", "P5-L1", "P2C-L1"), ("P1-L2", "P8", "P8A", "P8B", "P2-L2")):
-            for k, nm in enumerate(row):
-                addn(at(nm, z), [0, 0, -(gm * 9.65 / 2 + A_VM * 25 + G_2E) * TRIB_X[k] * fG - qm * 9.65 / 2 * TRIB_X[k] * fQm, 0, 0, 0])
+    for P_, z, G_, Q_ in cargas_mezanino():
+        addn(at(P_, z), [0, 0, -G_ * fG - Q_ * fQm, 0, 0, 0])
     if fW and caso:
         for n, f in vento_paredes(*caso).items():
             addn(n, [v * fW for v in f])
@@ -535,12 +598,12 @@ def coletar(cfg):
                 pior = dict(it=round(it, 3), linha=e["linha"], x=X_TER[e["linha"]], vao=e["vao"], N=round(N, 1), My=round(My, 2), Mz=round(Mz, 2),
                             transpasse=e["transpasse"])
     R["terca"] = pior
-    for g in ("corrente", "tirante rígido", "diagonal de ancoragem", "X", "TS-01", "VB", "I130"):
+    for g in ("corrente", "tirante rígido", "diagonal de ancoragem", "X", "TS-01", "VB", "I130", "W linha 2", "montante linha 2"):
         vals = []
         for e in ele:
             if e["grupo"] != g:
                 continue
-            if g in ("TS-01", "VB", "I130"):
+            if g in ("TS-01", "VB", "I130", "W linha 2", "montante linha 2"):
                 f = ops.eleResponse(e["tag"], "localForce")
                 vals.append(max(abs(f[5]), abs(f[11])))          # momento lateral (eixo fraco: plano da cobertura)
             else:

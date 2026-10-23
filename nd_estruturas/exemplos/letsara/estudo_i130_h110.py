@@ -224,51 +224,62 @@ for nome, (pl, l5, tp) in HOJE.items():
     print("HOJE", NOMES[nome], r["arranjo"], r["n_cord"], r["ok_geral"], {k: v for k, v in r["ok"].items() if not v}, r["flechas"]["e1_liberacao"], r["flechas"]["e4_final_qp"])
 
 # ------------------------------------------------------------------ h 110: busca do menor arranjo
+# Correção 23/10: a 1ª versão só variava bw e Ø com o isolamento e as alças de hoje, e gravava em "tentativas" as falhas do
+# arranjo MÁXIMO (7+7+7+7+4+2), que reprova por excesso (ato/içamento) — isso dava a falsa impressão de que nem a V407
+# passava. Com h 110 a janela entre ELS-D (pede mais cordoalha) e ato/içamento (pede menos) é estreita: a busca agora
+# varia também o isolamento (linha inferior sempre aderente) e a posição das alças, e grava a tentativa com MENOS falhas.
 combos = sorted({c for c in itertools.product((7, 5, 4, 0), repeat=4) if c[0] >= c[1] >= c[2] >= c[3] and c[0] > 0 and c[1] > 0})
+ISOL0, ALCA0 = ns["ISOL"], ns["ALCA_A"]
+ISOLS = [ISOL0, (0, 2000, 2000, 4000), (0, 2000, 4000, 6000), (0, 3000, 3000, 6000)]   # 1º = o de hoje
+ALCAS = [ALCA0, 1.50]
 GRUPOS = {"V407": ["V407"], "V406+V405": ["V406", "V405"]}   # V401 e V402 na mesma pista de 60 m → mesmo arranjo
+
+
+def _nfal(rs):
+    return sorted({k for r in rs for k, v in r["ok"].items() if not v})
+
+
 for grupo, membros in GRUPOS.items():
-    achados = []
+    achados, melhor_falha = [], None
     for diam in (12.7, 15.2):
         for bw in (0.15, 0.20, 0.25):
-            cand = []
-            for pl in combos:
-                for l5 in (0, 2, 4):
-                    for tp in (False, True):
-                        n = sum(pl) + l5 + 2 * tp
-                        cand.append((n, pl, l5, tp))
-            cand.sort(key=lambda c: (c[0], -c[1][0]))
-            for n, pl, l5, tp in cand:
-                try:
-                    rs = [rodar(m, 1.10, bw, diam, pl, l5, tp) for m in membros]
-                except Exception as e:
-                    continue
-                if all(r["ok_geral"] for r in rs):
-                    achados.append(dict(diam=diam, bw=bw, n=n, pl=pl, l5=l5, tp=tp, rs=rs))
-                    print("h110", grupo, f"Ø{diam} bw {bw}", rs[0]["arranjo"], n, "OK")
-                    break
-            else:
-                print("h110", grupo, f"Ø{diam} bw {bw}", "nenhum arranjo passa")
-                ult = [rodar(m, 1.10, bw, diam, (7, 7, 7, 7), 4, True) for m in membros]
-                res["tentativas"][f"{grupo} Ø{diam} bw{bw*100:.0f} (máx 7+7+7+7+4+2)"] = {r["viga"]: {k: v for k, v in r["ok"].items() if not v} for r in ult}
-    res["tentativas"][grupo] = [dict(cord=f"Ø{a['diam']:g}", bw_cm=round(a["bw"] * 100), arranjo=a["rs"][0]["arranjo"], n=a["n"],
-                                     kg=sum(r["kg_cordoalha"] for r in a["rs"]), m3=sum(r["m3"] for r in a["rs"])) for a in achados]
-    # escolha: menor alma (menos concreto/peso), depois menor custo de cordoalha
+            for io, isol in enumerate(ISOLS):
+                for ia, alca in enumerate(ALCAS):
+                    ns["ISOL"], ns["ALCA_A"] = isol, alca
+                    cand = sorted(((sum(pl) + l5 + 2 * tp, pl, l5, tp) for pl in combos for l5 in (0, 2, 4) for tp in (False, True)),
+                                  key=lambda c: (c[0], -c[1][0]))
+                    for n, pl, l5, tp in cand:
+                        if len(membros) > 1 and n < 20:          # V406/V405: com menos de 20 o ELS-D não fecha nem em h 130
+                            continue
+                        try:
+                            rs = [rodar(m, 1.10, bw, diam, pl, l5, tp) for m in membros]
+                        except Exception:
+                            continue
+                        fal = _nfal(rs)
+                        if not fal:
+                            achados.append(dict(diam=diam, bw=bw, n=n, pl=pl, l5=l5, tp=tp, isol=isol, alca=alca, nivel=io + ia, rs=rs))
+                            print("h110", grupo, f"Ø{diam} bw {bw} isol {isol} alça {alca}", rs[0]["arranjo"], n, "OK", flush=True)
+                            break
+                        if melhor_falha is None or (len(fal), n) < (len(melhor_falha["falhas"]), melhor_falha["n"]):
+                            melhor_falha = dict(diam=diam, bw=bw, n=n, isol=isol, alca=alca, falhas=fal,
+                                                rs={r["viga"]: dict(arranjo=r["arranjo"], cordoalha=r["cordoalha"], bw_cm=r["bw_cm"], usos=r["usos"],
+                                                                     flechas={k: r["flechas"][k] for k in ("e1_liberacao", "e2_montagem", "e3_apos_cobertura", "e4_final_qp", "lim")})
+                                                    for r in rs})
+    ns["ISOL"], ns["ALCA_A"] = ISOL0, ALCA0
+    res["tentativas"][grupo] = dict(
+        solucoes=[dict(cord=f"Ø{a['diam']:g}", bw_cm=round(a["bw"] * 100), arranjo=a["rs"][0]["arranjo"], n=a["n"], isolamento_mm=a["isol"],
+                       alca_m=a["alca"], kg=sum(r["kg_cordoalha"] for r in a["rs"]), m3=sum(r["m3"] for r in a["rs"])) for a in achados],
+        melhor_tentativa_reprovada=melhor_falha)
+    # escolha: o mínimo de mudanças em relação a hoje (isolamento e alças), depois a menor alma, depois o menor peso de cordoalha
     if achados:
-        best = min(achados, key=lambda a: (a["bw"], sum(r["kg_cordoalha"] for r in a["rs"])))
+        best = min(achados, key=lambda a: (a["nivel"], a["bw"], sum(r["kg_cordoalha"] for r in a["rs"])))
         for r in best["rs"]:
+            r["isolamento_mm"], r["alca_m"] = list(best["isol"]), best["alca"]
             res["h110"][r["viga"]] = r
 
-# ------------------------------------------------------------------ V401/V402: o que falta nas melhores tentativas
-res["V401_V402_tentativas"] = []
-for diam, bw, pl, l5, tp, n3 in [(12.7, 0.25, (7, 7, 7, 7), 4, True, (4, 20.0)), (15.2, 0.25, (7, 7, 5, 5), 0, True, (4, 20.0)),
-                                 (15.2, 0.25, (7, 7, 7, 7), 2, True, (4, 20.0)), (15.2, 0.25, (7, 7, 7, 7), 2, True, (6, 25.0)),
-                                 (15.2, 0.40, (7, 7, 7, 7), 4, True, (6, 25.0))]:
-    ns["N3"] = n3
-    r = rodar("V406", 1.10, bw, diam, pl, l5, tp)
-    res["V401_V402_tentativas"].append(dict(cord=r["cordoalha"], bw_cm=r["bw_cm"], arranjo=r["arranjo"], n=r["n_cord"], N3=f"{n3[0]} Ø{n3[1]:g}",
-                                           peso_t=r["peso_t"], falhas=[k for k, v in r["ok"].items() if not v], usos=r["usos"],
-                                           flechas={k: r["flechas"][k] for k in ("e1_liberacao", "e2_montagem", "e3_apos_cobertura", "e4_final_qp", "lim")}))
-ns["N3"] = (4, 20.0)
+# V406/V405 com protensão LIMITADA (ELS-D na quase permanente, ELS-F na frequente) também foi testada à parte em 23/10
+# (Ø12,7 e Ø15,2, bw 15/20/25, N3 4Ø20 e 6Ø25, 4 isolamentos, alças 2,5 e 1,5): nenhum arranjo passa → não muda a conclusão.
+res["V406_V405_protensao_limitada"] = "testada à parte (23/10): nenhum arranjo passa com h 110"
 
 # ------------------------------------------------------------------ dente com h 110 (MEF)
 res["dente_h110"] = {}
