@@ -1,0 +1,306 @@
+{
+ "hoje": {
+  "V406": {
+   "h": 130,
+   "bw": 15,
+   "cord": "Ø12.7",
+   "arr": "7+7+7+7 + 2 (y 22) + 2 topo",
+   "n": 32,
+   "Fmac": 143.4,
+   "Ftot": 4589,
+   "peso": 21.41,
+   "m3": 8.4,
+   "kg": 611.4,
+   "N3": "4 Ø20",
+   "isol": null,
+   "alca": null,
+   "e1": -38.8,
+   "e2": -83.9,
+   "e3": -48.2,
+   "e4": -2.5,
+   "e5": 5.2,
+   "lim": {
+    "fabricacao_L300": 79.2,
+    "peca_isolada_montagem_L500": 47.5,
+    "montagem_L250": 95.1,
+    "final": "L/350",
+    "final_mm": 67.9
+   },
+   "phi": [
+    3.08,
+    1.54
+   ],
+   "ELU": 0.72,
+   "xd": 0.443,
+   "ELSD": -1.016,
+   "ELSF": 0.679,
+   "limF": 3.71,
+   "ato": [
+    3.37,
+    -29.79,
+    "4.55 / -31.5"
+   ],
+   "icam": [
+    3.91,
+    4.55
+   ],
+   "V": 0.43,
+   "dente_Fd": 610.5,
+   "lat": 11.8,
+   "Lc": 23.775
+  },
+  "V405": {
+   "h": 130,
+   "bw": 15,
+   "cord": "Ø12.7",
+   "arr": "7+7+7+7 + 2 (y 22) + 2 topo",
+   "n": 32,
+   "Fmac": 143.4,
+   "Ftot": 4589,
+   "peso": 21.33,
+   "m3": 8.37,
+   "kg": 608.9,
+   "N3": "4 Ø20",
+   "isol": null,
+   "alca": null,
+   "e1": -38.5,
+   "e2": -83.4,
+   "e3": -47.6,
+   "e4": -1.9,
+   "e5": 5.2,
+   "lim": {
+    "fabricacao_L300": 78.9,
+    "peca_isolada_montagem_L500": 47.4,
+    "montagem_L250": 94.7,
+    "final": "L/350",
+    "final_mm": 67.6
+   },
+   "phi": [
+    3.08,
+    1.54
+   ],
+   "ELU": 0.71,
+   "xd": 0.443,
+   "ELSD": -1.22,
+   "ELSF": 0.669,
+   "limF": 3.71,
+   "ato": [
+    3.37,
+    -29.8,
+    "4.55 / -31.5"
+   ],
+   "icam": [
+    3.91,
+    4.55
+   ],
+   "V": 0.43,
+   "dente_Fd": 610.5,
+   "lat": 11.95,
+   "Lc": 23.675
+  }
+ },
+ "opcao_A_dente_fckj50": {
+  "desc": "h 120 com dente 78×35, protensão limitada, fck 50 / fckj 50 na liberação, bw 15, Ø15,2",
+  "V406": {
+   "arranjo": "7+5+5+5 + 2 topo",
+   "n": 24,
+   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 203.4,
+   "F_total_kN": 4882,
+   "peso_t": 20.38,
+   "m3": 8.0,
+   "kg": 638.1,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5,
+   "L_calc": 23.775,
+   "e1": -42.3,
+   "e2": -92.6,
+   "e3": -48.2,
+   "e4": 13.0,
+   "lim": {
+    "fabricacao_L300": 79.2,
+    "peca_isolada_montagem_L500": 47.5,
+    "montagem_L250": 95.1,
+    "final": "L/350",
+    "final_mm": 67.9
+   },
+   "ELU": 0.72,
+   "x_d": 0.366,
+   "ELS_D": -0.391,
+   "ELS_F": 0.803,
+   "lim_F": 3.71,
+   "ato": [
+    3.98,
+    -31.78,
+    "4.89 / -35.0"
+   ],
+   "icam": [
+    4.12,
+    4.89
+   ],
+   "V": 0.47,
+   "lat": 12.45,
+   "Fd": 610.5
+  },
+  "V405": {
+   "arranjo": "7+5+5+5 + 2 topo",
+   "n": 24,
+   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 203.4,
+   "F_total_kN": 4882,
+   "peso_t": 20.3,
+   "m3": 7.96,
+   "kg": 635.4,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5,
+   "L_calc": 23.675,
+   "e1": -42.0,
+   "e2": -92.0,
+   "e3": -47.6,
+   "e4": 13.7,
+   "lim": {
+    "fabricacao_L300": 78.9,
+    "peca_isolada_montagem_L500": 47.4,
+    "montagem_L250": 94.7,
+    "final": "L/350",
+    "final_mm": 67.6
+   },
+   "ELU": 0.72,
+   "x_d": 0.366,
+   "ELS_D": -0.615,
+   "ELS_F": 0.791,
+   "lim_F": 3.71,
+   "ato": [
+    3.98,
+    -31.79,
+    "4.89 / -35.0"
+   ],
+   "icam": [
+    4.12,
+    4.89
+   ],
+   "V": 0.46,
+   "lat": 12.61,
+   "Fd": 610.5
+  }
+ },
+ "opcao_B_sem_dente_fckj45": {
+  "desc": "h 120 sem dente (consolo CP-I130 rebaixado 39 cm), protensão limitada, fckj 45, bw 15, Ø15,2",
+  "V406": {
+   "arranjo": "7+7+4+4 + 2 topo",
+   "n": 24,
+   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 203.4,
+   "F_total_kN": 4882,
+   "peso_t": 20.68,
+   "m3": 8.12,
+   "kg": 638.1,
+   "isol": [
+    0,
+    2000,
+    4000,
+    6000
+   ],
+   "alca": 2.5,
+   "L_calc": 23.775,
+   "e1": -41.9,
+   "e2": -90.0,
+   "e3": -45.6,
+   "e4": 17.4,
+   "lim": {
+    "fabricacao_L300": 79.2,
+    "peca_isolada_montagem_L500": 47.5,
+    "montagem_L250": 95.1,
+    "final": "L/350",
+    "final_mm": 67.9
+   },
+   "ELU": 0.72,
+   "x_d": 0.366,
+   "ELS_D": -0.52,
+   "ELS_F": 0.321,
+   "lim_F": 3.71,
+   "ato": [
+    1.39,
+    -31.05,
+    "4.55 / -31.5"
+   ],
+   "icam": [
+    3.32,
+    4.55
+   ],
+   "V": 0.47,
+   "lat": 12.06,
+   "Fd": 610.5
+  },
+  "V405": {
+   "arranjo": "7+7+4+4 + 2 topo",
+   "n": 24,
+   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 203.4,
+   "F_total_kN": 4882,
+   "peso_t": 20.6,
+   "m3": 8.08,
+   "kg": 635.4,
+   "isol": [
+    0,
+    2000,
+    4000,
+    6000
+   ],
+   "alca": 2.5,
+   "L_calc": 23.675,
+   "e1": -41.6,
+   "e2": -89.4,
+   "e3": -45.0,
+   "e4": 18.1,
+   "lim": {
+    "fabricacao_L300": 78.9,
+    "peca_isolada_montagem_L500": 47.4,
+    "montagem_L250": 94.7,
+    "final": "L/350",
+    "final_mm": 67.6
+   },
+   "ELU": 0.71,
+   "x_d": 0.366,
+   "ELS_D": -0.743,
+   "ELS_F": 0.092,
+   "lim_F": 3.71,
+   "ato": [
+    1.41,
+    -31.07,
+    "4.55 / -31.5"
+   ],
+   "icam": [
+    3.32,
+    4.55
+   ],
+   "V": 0.46,
+   "lat": 12.21,
+   "Fd": 610.5
+  }
+ },
+ "opcao_C_centralizado": "nenhuma variante passa: vão de cálculo 23,78 → 24,52 m; melhor tentativa ELS-D +0,94 MPa (bw 15, Ø15,2, com dente)",
+ "com_dente_fckj45": "não passa: melhor bw 25 Ø15,2 27 cordoalhas, só o ato da base −31,57 > −31,5 MPa; bw 30 só o içamento",
+ "completa_h120": "não passa (estudo_i130_hmin)",
+ "h115_limitada": "não passa (ELS-D +1,35 a +2,8 MPa)",
+ "mef_dente_h120": {
+  "nota": "MEF não convergiu desde o 1º passo (fissuração da protensão Ø15,2 equivalente na extremidade artificial do modelo): resultado não utilizável; o nariz 78×35 e Fd 610,5 kN são os de hoje (τwd/PCI iguais ao dente aprovado); MEF com h 110 deu FS 1,16 → refazer antes do executivo",
+  "bruto": {
+   "Vu_kN": 32.0,
+   "FS": 0.05,
+   "ok": false,
+   "protensao_ok": true
+  }
+ },
+ "nivel": "limitada: CAA II + pré-tração, NBR 6118:2023 Tab. 13.4 nível 2 (ELS-F frequente, ELS-D quase permanente, folga ≤ −0,25 MPa)"
+}

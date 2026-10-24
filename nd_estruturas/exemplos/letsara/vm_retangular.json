@@ -750,12 +750,12 @@
      "g_2e": 1.0,
      "q_mont": 5.08,
      "g1": 26.34,
-     "g2": 8.63,
-     "q2": 5.08
+     "g2": 14.11,
+     "q2": 7.98
     },
     "protensao": {
      "P0": 1530.6,
-     "Pinf": 1249.1,
+     "Pinf": 1256.1,
      "ep": 0.1875,
      "F_macaco_kN": 138.2,
      "sigma_pi": 1400,
@@ -784,28 +784,28 @@
         "d_sigma_c": 3.6855148666222215
        },
        {
-        "dM": 55.32787552703605,
+        "dM": 90.45798650069291,
         "t_dias": 90.0,
         "phi": 2.0455357142857142,
-        "d_sigma_c": 0.9836066760361966
+        "d_sigma_c": 1.6081419822345409
        }
       ],
       "processo": "9.6.3.4.2 com fases (superposição)",
-      "d_prog_9_6_3_4_2": 237.694,
+      "d_prog_9_6_3_4_2": 231.766,
       "d_prog_9_6_3_4_3": 270.621,
-      "d_prog": 237.694,
-      "sig_pinf": 1054.585,
-      "Pinf": 1249.05,
-      "perda_progressiva_pct": 16.978,
-      "perda_total_pct": 24.673
+      "d_prog": 231.766,
+      "sig_pinf": 1060.513,
+      "Pinf": 1256.071,
+      "perda_progressiva_pct": 16.555,
+      "perda_total_pct": 24.249
      }
     },
     "ELU": {
      "M1d": 408.7,
-     "MRd1": 820.3,
+     "MRd1": 820.2,
      "xd1": 0.388,
-     "M2d": 561.0,
-     "MRd2": 1326.1,
+     "M2d": 678.4,
+     "MRd2": 1326.3,
      "xd2": 0.294,
      "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
     },
@@ -813,11 +813,11 @@
      "nivel": "completa",
      "psi_F": 1.0,
      "psi_D": 0.6,
-     "sig_F": -2.09,
+     "sig_F": -0.69,
      "lim_F": 2.95,
-     "sig_D": -2.45,
-     "sig_rara": -2.09,
-     "topo_F1": -8.4
+     "sig_D": -1.25,
+     "sig_rara": -0.69,
+     "topo_F1": -8.39
     },
     "ato": {
      "topo_ponta": 1.75,
@@ -836,20 +836,20 @@
     },
     "flecha": {
      "contraflecha_mm": -7.0,
-     "montagem_mm": -0.4,
-     "final_mm": 2.0,
+     "montagem_mm": -0.5,
+     "final_mm": 4.2,
      "lim_final_mm": 35.8,
      "lim_montagem_L500": 17.9,
      "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
     },
     "cortante": {
-     "Vd": 260.5,
+     "Vd": 326.1,
      "VRd2": 1579.5,
      "Vc0": 256.6,
      "Asw_req_cm2m": 4.21
     },
     "interface": {
-     "tau_sd": 0.272,
+     "tau_sd": 0.439,
      "tau_rd": 2.918,
      "tau_max": 5.36,
      "rho_alcas": 0.524,
@@ -859,7 +859,7 @@
      "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
     },
     "negativa": {
-     "Md_kNm": 172.4,
+     "Md_kNm": 277.5,
      "MRd_kNm": 551.4,
      "secao": "face do pilar: nariz 30 × 45 + 2º estágio + capa",
      "d_pilar_m": 0.57,
@@ -895,9 +895,21 @@
      "interface": true,
      "icamento": true,
      "lateral": true,
-     "negativa": true
+     "negativa": true,
+     "succao_montante": true
     },
     "ok_geral": true,
+    "montante": {
+     "Pg_k": 25.5,
+     "Pq_k": 13.5,
+     "Pup_d": 77.3,
+     "w_eq_g": 5.48,
+     "w_eq_q": 2.9,
+     "M_up_d": 172.9,
+     "M_peso_fav": 263.6,
+     "ok_succao": true,
+     "obs": "momento da sucção do montante menor que o do peso próprio: a seção não inverte; topo menos tracionado que no ato (só peça)"
+    },
     "caso": "+7,30 linha 2"
    }
   ],
@@ -1731,12 +1743,12 @@
      "g_2e": 1.0,
      "q_mont": 5.08,
      "g1": 26.34,
-     "g2": 8.63,
-     "q2": 5.08
+     "g2": 13.64,
+     "q2": 7.73
     },
     "protensao": {
      "P0": 1530.7,
-     "Pinf": 1250.9,
+     "Pinf": 1257.4,
      "ep": 0.1875,
      "F_macaco_kN": 138.2,
      "sigma_pi": 1400,
@@ -1765,40 +1777,40 @@
         "d_sigma_c": 3.7766857467888895
        },
        {
-        "dM": 56.632635006106966,
+        "dM": 89.52331837107211,
         "t_dias": 90.0,
         "phi": 2.0455357142857142,
-        "d_sigma_c": 1.0068024001085683
+        "d_sigma_c": 1.591525659930171
        }
       ],
       "processo": "9.6.3.4.2 com fases (superposição)",
-      "d_prog_9_6_3_4_2": 236.304,
+      "d_prog_9_6_3_4_2": 230.754,
       "d_prog_9_6_3_4_3": 270.356,
-      "d_prog": 236.304,
-      "sig_pinf": 1056.119,
-      "Pinf": 1250.867,
-      "perda_progressiva_pct": 16.879,
-      "perda_total_pct": 24.563
+      "d_prog": 230.754,
+      "sig_pinf": 1061.669,
+      "Pinf": 1257.44,
+      "perda_progressiva_pct": 16.482,
+      "perda_total_pct": 24.167
      }
     },
     "ELU": {
      "M1d": 418.8,
-     "MRd1": 820.3,
+     "MRd1": 820.2,
      "xd1": 0.388,
-     "M2d": 574.9,
-     "MRd2": 1328.7,
-     "xd2": 0.291,
+     "M2d": 685.0,
+     "MRd2": 1328.9,
+     "xd2": 0.292,
      "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
     },
     "ELS": {
      "nivel": "completa",
      "psi_F": 1.0,
      "psi_D": 0.6,
-     "sig_F": -1.82,
+     "sig_F": -0.51,
      "lim_F": 2.95,
-     "sig_D": -2.19,
-     "sig_rara": -1.82,
-     "topo_F1": -8.68
+     "sig_D": -1.07,
+     "sig_rara": -0.51,
+     "topo_F1": -8.66
     },
     "ato": {
      "topo_ponta": 1.75,
@@ -1818,19 +1830,19 @@
     "flecha": {
      "contraflecha_mm": -7.2,
      "montagem_mm": -0.3,
-     "final_mm": 2.8,
+     "final_mm": 4.9,
      "lim_final_mm": 36.2,
      "lim_montagem_L500": 18.1,
      "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
     },
     "cortante": {
-     "Vd": 263.7,
+     "Vd": 324.4,
      "VRd2": 1579.5,
      "Vc0": 256.6,
      "Asw_req_cm2m": 4.21
     },
     "interface": {
-     "tau_sd": 0.276,
+     "tau_sd": 0.43,
      "tau_rd": 2.918,
      "tau_max": 5.36,
      "rho_alcas": 0.524,
@@ -1840,7 +1852,7 @@
      "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
     },
     "negativa": {
-     "Md_kNm": 176.7,
+     "Md_kNm": 275.1,
      "MRd_kNm": 551.4,
      "secao": "face do pilar: nariz 30 × 45 + 2º estágio + capa",
      "d_pilar_m": 0.57,
@@ -1876,9 +1888,21 @@
      "interface": true,
      "icamento": true,
      "lateral": true,
-     "negativa": true
+     "negativa": true,
+     "succao_montante": true
     },
     "ok_geral": true,
+    "montante": {
+     "Pg_k": 23.6,
+     "Pq_k": 12.5,
+     "Pup_d": 44.5,
+     "w_eq_g": 5.01,
+     "w_eq_q": 2.65,
+     "M_up_d": 100.8,
+     "M_peso_fav": 270.1,
+     "ok_succao": true,
+     "obs": "momento da sucção do montante menor que o do peso próprio: a seção não inverte; topo menos tracionado que no ato (só peça)"
+    },
     "caso": "+7,30 linha 2"
    }
   ],
@@ -2412,12 +2436,12 @@
      "g_2e": 1.0,
      "q_mont": 5.08,
      "g1": 26.34,
-     "g2": 8.63,
-     "q2": 5.08
+     "g2": 12.91,
+     "q2": 7.35
     },
     "protensao": {
      "P0": 789.9,
-     "Pinf": 673.3,
+     "Pinf": 674.3,
      "ep": 0.1083,
      "F_macaco_kN": 138.2,
      "sigma_pi": 1400,
@@ -2446,27 +2470,27 @@
         "d_sigma_c": 0.8940534281595064
        },
        {
-        "dM": 31.51212040385254,
+        "dM": 47.16577958530018,
         "t_dias": 90.0,
         "phi": 2.0455357142857142,
-        "d_sigma_c": 0.3236800515556212
+        "d_sigma_c": 0.4844682545057994
        }
       ],
       "processo": "9.6.3.4.2 com fases (superposição)",
-      "d_prog_9_6_3_4_2": 196.858,
+      "d_prog_9_6_3_4_2": 195.228,
       "d_prog_9_6_3_4_3": 191.553,
-      "d_prog": 196.858,
-      "sig_pinf": 1137.012,
-      "Pinf": 673.339,
-      "perda_progressiva_pct": 14.061,
-      "perda_total_pct": 18.785
+      "d_prog": 195.228,
+      "sig_pinf": 1138.642,
+      "Pinf": 674.304,
+      "perda_progressiva_pct": 13.945,
+      "perda_total_pct": 18.668
      }
     },
     "ELU": {
      "M1d": 171.6,
      "MRd1": 400.8,
      "xd1": 0.186,
-     "M2d": 235.6,
+     "M2d": 274.1,
      "MRd2": 672.8,
      "xd2": 0.117,
      "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
@@ -2475,10 +2499,10 @@
      "nivel": "completa",
      "psi_F": 1.0,
      "psi_D": 0.6,
-     "sig_F": -0.58,
+     "sig_F": -0.07,
      "lim_F": 2.95,
-     "sig_D": -0.74,
-     "sig_rara": -0.58,
+     "sig_D": -0.3,
+     "sig_rara": -0.07,
      "topo_F1": -5.09
     },
     "ato": {
@@ -2499,19 +2523,19 @@
     "flecha": {
      "contraflecha_mm": -0.9,
      "montagem_mm": 0.2,
-     "final_mm": 1.7,
+     "final_mm": 2.1,
      "lim_final_mm": 23.2,
      "lim_montagem_L500": 11.6,
      "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
     },
     "cortante": {
-     "Vd": 168.8,
+     "Vd": 202.1,
      "VRd2": 1425.6,
      "Vc0": 231.6,
      "Asw_req_cm2m": 4.21
     },
     "interface": {
-     "tau_sd": 0.196,
+     "tau_sd": 0.29,
      "tau_rd": 2.918,
      "tau_max": 5.36,
      "rho_alcas": 0.524,
@@ -2521,7 +2545,7 @@
      "norma": "NBR 9062:2017 6.3.3 e Tab. 10"
     },
     "negativa": {
-     "Md_kNm": 72.4,
+     "Md_kNm": 106.9,
      "MRd_kNm": 551.4,
      "secao": "face do pilar: nariz 30 × 45 + 2º estágio + capa",
      "d_pilar_m": 0.57,
@@ -2557,9 +2581,21 @@
      "interface": true,
      "icamento": true,
      "lateral": true,
-     "negativa": true
+     "negativa": true,
+     "succao_montante": true
     },
     "ok_geral": true,
+    "montante": {
+     "Pg_k": 13.2,
+     "Pq_k": 7.0,
+     "Pup_d": 31.4,
+     "w_eq_g": 4.29,
+     "w_eq_q": 2.27,
+     "M_up_d": 45.5,
+     "M_peso_fav": 110.7,
+     "ok_succao": true,
+     "obs": "momento da sucção do montante menor que o do peso próprio: a seção não inverte; topo menos tracionado que no ato (só peça)"
+    },
     "caso": "+7,30 linha 2"
    }
   ],

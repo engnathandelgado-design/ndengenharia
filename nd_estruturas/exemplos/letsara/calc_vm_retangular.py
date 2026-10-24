@@ -15,7 +15,9 @@ Casos (kN/m² nas lajes; NBR 6120:2019):
   +3,90 piso (escritório/depósito do arquitetônico): sobrecarga 5,0, revestimento 1,0;
   +7,30 laje de cobertura do bloco SEM USO: Tabela 10 "coberturas com acesso apenas para manutenção" 1,0; revestimento
         (regularização + impermeabilização 8 cm do arquitetônico, γ 21) 1,7;
-  linha 2 do +7,30: + cobertura metálica da linha 2 (W 150 sobre montantes, cob_linha2.json) como carga equivalente.
+  linha 2 do +7,30 (DEC-052): montante da W 200 × 15,0 da cobertura no MEIO do vão das VM-01, VM-02 e VM-03 (cob_linha2.json,
+        reações características G e Q com apoio rígido) — entra como carga uniforme equivalente pelo momento no meio do vão
+        (w = 2P/L: mesmo M, cortante e flecha a favor da segurança); sucção do montante (Pup,d) verificada contra o peso próprio.
 Marcas: VM-01 (vãos de ponta A–B / D–E, 9,37 entre faces), VM-02 (B–C / C–D, 9,48), VM-03 (linha 2, D → P6, 6,22),
 VM-04 (P6 → E na linha 2 do +7,30 e P6–P7 da escada no +3,90, 2,90). Mesma seção em todas (largura única = largura da
 laje igual em toda a obra); cordoalhas pela marca mais carregada de cada comprimento.
@@ -49,9 +51,9 @@ VAOS = {"VM-01": 9.37, "VM-02": 9.48, "VM-03": 6.22, "VM-04": 2.90}
 TRIB_L2 = (9.65 + 10.075) / 2
 _LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 G_COB = _LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / _LG["passo_tercas"]
-G_ROOF = G_COB * TRIB_L2 + 0.221 + 0.05                    # W 150 × 22,5 + montantes (média)
+G_ROOF = G_COB * TRIB_L2 + 0.221 + 0.05                    # (histórico DEC-046; não usado desde a DEC-048)
 Q_ROOF = _LG["cargas_cob"]["sobrecarga"] * TRIB_L2
-F_PONTUAL = 1.06                                           # montante no meio do vão (PL/4) × carga distribuída (wL²/8)
+CARGA_MONT = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8")).get("carga_vm", {})   # DEC-052: P no meio do vão por marca
 
 # DEC-047: sobrecarga do 2º pavimento (+3,90, "Depósito" no arquitetônico) — 5,0 kN/m² CONFIRMADA PELO NATHAN (23/10/2026); valor único da obra
 _CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
@@ -59,7 +61,7 @@ Q_PISO_390 = _CM["piso_390"]["sobrecarga"]
 CASOS = {
     "+3,90": dict(q=Q_PISO_390, rev=_CM["piso_390"]["revestimento"], roof=False),
     "+7,30 linha 1": dict(q=_CM["laje_730"]["sobrecarga"], rev=_CM["laje_730"]["revestimento"], roof=False),
-    "+7,30 linha 2": dict(q=_CM["laje_730"]["sobrecarga"], rev=_CM["laje_730"]["revestimento"], roof=False),     # DEC-048 (opção 2): cobertura da linha 2 nos pilares, não na viga
+    "+7,30 linha 2": dict(q=_CM["laje_730"]["sobrecarga"], rev=_CM["laje_730"]["revestimento"], roof=True),      # DEC-052: montante da W no meio do vão
     "+3,90 P6–P7": dict(q=Q_PISO_390, rev=_CM["piso_390"]["revestimento"], roof=False, trib=(3.79 - 0.25) / 2),
 }
 # quais casos cada marca enfrenta
@@ -91,7 +93,7 @@ def cordoalhas_ret(n, h, n_top=0, b=None):
     return pos + top
 
 
-def preparar(b, caso):
+def preparar(b, caso, marca=None):
     """Seção retangular b (aba zerada) e cargas do caso."""
     M.B_ALMA, M.B_ABA, M.H_ABA = b, 0.0, 0.0
     M.B_TOT = b
@@ -100,8 +102,9 @@ def preparar(b, caso):
     M.TRIB = CASOS[caso].get("trib", M.VAO_LAJE / 2)
     c = CASOS[caso]
     larg = M.TRIB + b
-    extra_g = (G_ROOF * F_PONTUAL / larg) if c["roof"] else 0.0
-    extra_q = (Q_ROOF * F_PONTUAL / larg) if c["roof"] else 0.0
+    cm_ = CARGA_MONT.get(marca) if c["roof"] else None
+    extra_g = (2 * cm_["Pg"] / cm_["L"] / larg) if cm_ else 0.0          # kN/m² equivalentes na largura de influência
+    extra_q = (2 * cm_["Pq"] / cm_["L"] / larg) if cm_ else 0.0
     M.REV, M.Q_MEZ = c["rev"] + extra_g, c["q"] + extra_q
     M.cordoalhas = lambda n, h, n_top=0: cordoalhas_ret(n, h, n_top, b)
     M.retangulos = lambda h: [(0.0, b, 0.0, h)]
@@ -130,10 +133,20 @@ def negativa_ret(L, g2, q2, h=0.80, n12=9):
 
 
 def analisar(b, h, n, marca, caso, n_top=2):
-    preparar(b, caso)
+    preparar(b, caso, marca)
     r = M.analisar(h, n, marca, VAOS[marca], n_top=n_top, n_isol=2 if n >= 6 else 0)
+    cm_ = CARGA_MONT.get(marca) if CASOS[caso]["roof"] else None
+    if cm_:                                                # DEC-052: montante no meio do vão — carga e sucção
+        Lc = r["L_calculo"]
+        M_up = cm_["Pup_d"] * Lc / 4                       # sucção de cálculo (1,0 G + 1,4 W) puxando o meio do vão para cima
+        M_gfav = 1.0 * r["cargas"]["g1"] * Lc ** 2 / 8      # só o peso próprio da fase 1 (peça + laje + capa), G favorável
+        r["montante"] = dict(Pg_k=cm_["Pg"], Pq_k=cm_["Pq"], Pup_d=cm_["Pup_d"], w_eq_g=round(2 * cm_["Pg"] / cm_["L"], 2), w_eq_q=round(2 * cm_["Pq"] / cm_["L"], 2),
+                             M_up_d=round(M_up, 1), M_peso_fav=round(M_gfav, 1), ok_succao=M_up < M_gfav,
+                             obs="momento da sucção do montante menor que o do peso próprio: a seção não inverte; topo menos tracionado que no ato (só peça)")
     r["negativa"] = negativa_ret(r["L_calculo"], r["cargas"]["g2"], r["cargas"]["q2"], h)
     r["ok"]["negativa"] = r["negativa"]["ok"]
+    if "montante" in r:
+        r["ok"]["succao_montante"] = r["montante"]["ok_succao"]
     # sem torção de montagem (pontas concretadas dos dois lados antes das lajes — DEC-039): fora da verificação
     for k in ("torcao", "apoio"):
         r["ok"].pop(k, None)

@@ -2322,5 +2322,1023 @@
    ],
    "alca": 2.5
   }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+4+4+4 + 4 (y 26) + 2 topo",
+   "n": 25,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.353,
+   "x_d": 0.399,
+   "ato_base": -30.99,
+   "ato_topo": 3.28,
+   "icam": 4.19,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.3,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "5+5+5+5 + 4 (y 26) + 2 topo",
+   "n": 26,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.207,
+   "x_d": 0.393,
+   "ato_base": -28.81,
+   "ato_topo": 2.66,
+   "icam": 4.27,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "5+5+5+5 + 4 (y 26) + 2 topo",
+   "n": 26,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.542,
+   "x_d": 0.41,
+   "ato_base": -30.34,
+   "ato_topo": 2.32,
+   "icam": 3.91,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.35,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.755,
+   "x_d": 0.397,
+   "ato_base": -27.8,
+   "ato_topo": 1.77,
+   "icam": 4.09,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.4,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+4 + 2 (y 26) + 4 topo",
+   "n": 29,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.79,
+   "x_d": 0.404,
+   "ato_base": -27.45,
+   "ato_topo": 1.79,
+   "icam": 4.47,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.15,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 50.0,
+  "solucao": {
+   "V406": {
+    "viga": "V406",
+    "h_cm": 120,
+    "bw_cm": 15,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+5+5 + 2 topo",
+    "n_cord": 24,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 4882,
+    "peso_t": 20.38,
+    "peso_kN": 199.9,
+    "m3": 8.0,
+    "kg_cordoalha": 638.1,
+    "L_peca": 24.125,
+    "L_calc": 23.775,
+    "usos": {
+     "ELU_Md_MRd": 0.72,
+     "x_d": 0.366,
+     "cortante_Vd_VRd2": 0.47,
+     "cortante_Asw": "5.79/6.70 cm²/m",
+     "ELS_D_MPa": -0.391,
+     "ELS_F_MPa": 0.803,
+     "ELS_F_topo_MPa": 1.026,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.788,
+     "ato_topo_MPa": 3.98,
+     "ato_base_MPa": -31.78,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.73 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.12,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.5,
+     "total": 30.2
+    },
+    "lbpt_m": 0.787,
+    "sig_pinf": 1013.9,
+    "dente": {
+     "lado": "B",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 540.2,
+     "Fg_d": 468.1,
+     "Fq_d": 86.9,
+     "parcela_variavel": 0.157,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 261.0,
+       "q": 38.8
+      },
+      "B": {
+       "g": 350.5,
+       "q": 60.4
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.08,
+     "phi_montagem": 1.54,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.8,
+     "e1_liberacao": -42.3,
+     "e2_montagem": -92.6,
+     "e3_apos_cobertura": -48.2,
+     "e4_final_qp": 13.0,
+     "e5_sobrecarga_freq": 6.4,
+     "sobrecarga_total": 10.7,
+     "fg2_cobertura": 44.4,
+     "lim": {
+      "fabricacao_L300": 79.2,
+      "peca_isolada_montagem_L500": 47.5,
+      "montagem_L250": 95.1,
+      "final": "L/350",
+      "final_mm": 67.9
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.3,
+     "Lh_bf2": 181,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.77,
+       "FS_lebelle": 12.45
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.12,
+       "FS_lebelle": 23.91
+      }
+     },
+     "FS_min": 12.45,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   },
+   "V405": {
+    "viga": "V405",
+    "h_cm": 120,
+    "bw_cm": 15,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+5+5 + 2 topo",
+    "n_cord": 24,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 4882,
+    "peso_t": 20.3,
+    "peso_kN": 199.1,
+    "m3": 7.96,
+    "kg_cordoalha": 635.4,
+    "L_peca": 24.025,
+    "L_calc": 23.675,
+    "usos": {
+     "ELU_Md_MRd": 0.72,
+     "x_d": 0.366,
+     "cortante_Vd_VRd2": 0.46,
+     "cortante_Asw": "5.54/6.70 cm²/m",
+     "ELS_D_MPa": -0.615,
+     "ELS_F_MPa": 0.791,
+     "ELS_F_topo_MPa": 0.949,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.776,
+     "ato_topo_MPa": 3.98,
+     "ato_base_MPa": -31.79,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.74 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.12,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.5,
+     "total": 30.3
+    },
+    "lbpt_m": 0.786,
+    "sig_pinf": 1012.1,
+    "dente": {
+     "lado": "A",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 530.0,
+     "Fg_d": 468.5,
+     "Fq_d": 86.5,
+     "parcela_variavel": 0.156,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 344.2,
+       "q": 59.0
+      },
+      "B": {
+       "g": 266.4,
+       "q": 40.2
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.08,
+     "phi_montagem": 1.54,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.9,
+     "e1_liberacao": -42.0,
+     "e2_montagem": -92.0,
+     "e3_apos_cobertura": -47.6,
+     "e4_final_qp": 13.7,
+     "e5_sobrecarga_freq": 6.4,
+     "sobrecarga_total": 10.7,
+     "fg2_cobertura": 44.4,
+     "lim": {
+      "fabricacao_L300": 78.9,
+      "peca_isolada_montagem_L500": 47.4,
+      "montagem_L250": 94.7,
+      "final": "L/350",
+      "final_mm": 67.6
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.1,
+     "Lh_bf2": 180,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.67,
+       "FS_lebelle": 12.61
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.02,
+       "FS_lebelle": 24.29
+      }
+     },
+     "FS_min": 12.61,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   }
+  },
+  "melhor_falha": {
+   "arranjo": "7+7+4+4",
+   "n": 22,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 15,
+   "falhas": [
+    "flechas"
+   ],
+   "ELS_D": -0.259,
+   "x_d": 0.337,
+   "ato_base": -31.76,
+   "ato_topo": 4.79,
+   "icam": 4.51,
+   "isol": [
+    0,
+    2000,
+    4000,
+    6000
+   ],
+   "alca": 1.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 50.0,
+  "solucao": {
+   "V406": {
+    "viga": "V406",
+    "h_cm": 120,
+    "bw_cm": 20,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+4+4 + 4 (y 26) + 2 topo",
+    "n_cord": 26,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5288,
+    "peso_t": 22.15,
+    "peso_kN": 217.3,
+    "m3": 8.69,
+    "kg_cordoalha": 691.2,
+    "L_peca": 24.125,
+    "L_calc": 23.775,
+    "usos": {
+     "ELU_Md_MRd": 0.71,
+     "x_d": 0.417,
+     "cortante_Vd_VRd2": 0.37,
+     "cortante_Asw": "4.22/6.70 cm²/m",
+     "ELS_D_MPa": -0.698,
+     "ELS_F_MPa": 0.814,
+     "ELS_F_topo_MPa": 0.931,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.8,
+     "ato_topo_MPa": 3.87,
+     "ato_base_MPa": -32.07,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.39 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.65,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.4,
+     "total": 30.2
+    },
+    "lbpt_m": 0.787,
+    "sig_pinf": 1014.3,
+    "dente": {
+     "lado": "B",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 551.3,
+     "Fg_d": 469.9,
+     "Fq_d": 85.1,
+     "parcela_variavel": 0.153,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 269.5,
+       "q": 38.8
+      },
+      "B": {
+       "g": 359.0,
+       "q": 60.4
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.07,
+     "phi_montagem": 1.52,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.8,
+     "e1_liberacao": -42.6,
+     "e2_montagem": -92.4,
+     "e3_apos_cobertura": -48.9,
+     "e4_final_qp": 10.0,
+     "e5_sobrecarga_freq": 6.3,
+     "sobrecarga_total": 10.5,
+     "fg2_cobertura": 43.4,
+     "lim": {
+      "fabricacao_L300": 79.2,
+      "peca_isolada_montagem_L500": 47.5,
+      "montagem_L250": 95.1,
+      "final": "L/350",
+      "final_mm": 67.9
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.3,
+     "Lh_bf2": 181,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.77,
+       "FS_lebelle": 13.57
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.12,
+       "FS_lebelle": 26.07
+      }
+     },
+     "FS_min": 13.57,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   },
+   "V405": {
+    "viga": "V405",
+    "h_cm": 120,
+    "bw_cm": 20,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+4+4 + 4 (y 26) + 2 topo",
+    "n_cord": 26,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5288,
+    "peso_t": 22.06,
+    "peso_kN": 216.4,
+    "m3": 8.66,
+    "kg_cordoalha": 688.4,
+    "L_peca": 24.025,
+    "L_calc": 23.675,
+    "usos": {
+     "ELU_Md_MRd": 0.7,
+     "x_d": 0.417,
+     "cortante_Vd_VRd2": 0.36,
+     "cortante_Asw": "3.96/6.70 cm²/m",
+     "ELS_D_MPa": -0.928,
+     "ELS_F_MPa": 0.803,
+     "ELS_F_topo_MPa": 0.854,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.788,
+     "ato_topo_MPa": 3.87,
+     "ato_base_MPa": -32.08,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.41 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.65,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.5,
+     "total": 30.3
+    },
+    "lbpt_m": 0.787,
+    "sig_pinf": 1012.4,
+    "dente": {
+     "lado": "A",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 541.1,
+     "Fg_d": 470.3,
+     "Fq_d": 84.7,
+     "parcela_variavel": 0.153,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 352.7,
+       "q": 59.0
+      },
+      "B": {
+       "g": 274.9,
+       "q": 40.2
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.07,
+     "phi_montagem": 1.52,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.8,
+     "e1_liberacao": -42.3,
+     "e2_montagem": -91.8,
+     "e3_apos_cobertura": -48.4,
+     "e4_final_qp": 10.7,
+     "e5_sobrecarga_freq": 6.3,
+     "sobrecarga_total": 10.5,
+     "fg2_cobertura": 43.4,
+     "lim": {
+      "fabricacao_L300": 78.9,
+      "peca_isolada_montagem_L500": 47.4,
+      "montagem_L250": 94.7,
+      "final": "L/350",
+      "final_mm": 67.6
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.1,
+     "Lh_bf2": 180,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.67,
+       "FS_lebelle": 13.74
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.02,
+       "FS_lebelle": 26.48
+      }
+     },
+     "FS_min": 13.74,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   }
+  },
+  "melhor_falha": {
+   "arranjo": "7+5+5+4 + 2 (y 26) + 2 topo",
+   "n": 25,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS_D_margem"
+   ],
+   "ELS_D": -0.166,
+   "x_d": 0.383,
+   "ato_base": -31.05,
+   "ato_topo": 3.88,
+   "icam": 4.74,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 50.0,
+  "solucao": {
+   "V406": {
+    "viga": "V406",
+    "h_cm": 120,
+    "bw_cm": 25,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+5+4 + 4 (y 26) + 2 topo",
+    "n_cord": 27,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5492,
+    "peso_t": 23.91,
+    "peso_kN": 234.6,
+    "m3": 9.38,
+    "kg_cordoalha": 717.8,
+    "L_peca": 24.125,
+    "L_calc": 23.775,
+    "usos": {
+     "ELU_Md_MRd": 0.7,
+     "x_d": 0.421,
+     "cortante_Vd_VRd2": 0.3,
+     "cortante_Asw": "4.07/6.70 cm²/m",
+     "ELS_D_MPa": -0.717,
+     "ELS_F_MPa": 0.828,
+     "ELS_F_topo_MPa": 0.857,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.814,
+     "ato_topo_MPa": 3.77,
+     "ato_base_MPa": -31.7,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.08 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.45,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.3,
+     "total": 29.6
+    },
+    "lbpt_m": 0.789,
+    "sig_pinf": 1022.5,
+    "dente": {
+     "lado": "B",
+     "Vd": 562.4,
+     "Vd_cargas_atuais": 562.4,
+     "Fg_d": 477.8,
+     "Fq_d": 84.6,
+     "parcela_variavel": 0.15,
+     "gama_n": 1.1,
+     "Fd": 618.6,
+     "Hd": 99.0,
+     "reacao_k": {
+      "A": {
+       "g": 278.0,
+       "q": 38.8
+      },
+      "B": {
+       "g": 367.5,
+       "q": 60.4
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.04,
+     "phi_montagem": 1.49,
+     "phi_inf_cobertura_60d": 2.04,
+     "perda_progressiva_ate_montagem_pct": 9.5,
+     "e1_liberacao": -43.1,
+     "e2_montagem": -92.5,
+     "e3_apos_cobertura": -50.0,
+     "e4_final_qp": 6.0,
+     "e5_sobrecarga_freq": 6.1,
+     "sobrecarga_total": 10.2,
+     "fg2_cobertura": 42.5,
+     "lim": {
+      "fabricacao_L300": 79.2,
+      "peca_isolada_montagem_L500": 47.5,
+      "montagem_L250": 95.1,
+      "final": "L/350",
+      "final_mm": 67.9
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.3,
+     "Lh_bf2": 181,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.77,
+       "FS_lebelle": 15.56
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 21.12,
+       "FS_lebelle": 22.19
+      }
+     },
+     "FS_min": 15.56,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 1.5,
+    "N3": "6 Ø25"
+   },
+   "V405": {
+    "viga": "V405",
+    "h_cm": 120,
+    "bw_cm": 25,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+5+5+4 + 4 (y 26) + 2 topo",
+    "n_cord": 27,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5492,
+    "peso_t": 23.81,
+    "peso_kN": 233.6,
+    "m3": 9.34,
+    "kg_cordoalha": 714.8,
+    "L_peca": 24.025,
+    "L_calc": 23.675,
+    "usos": {
+     "ELU_Md_MRd": 0.69,
+     "x_d": 0.421,
+     "cortante_Vd_VRd2": 0.29,
+     "cortante_Asw": "4.07/6.70 cm²/m",
+     "ELS_D_MPa": -0.953,
+     "ELS_F_MPa": 0.816,
+     "ELS_F_topo_MPa": 0.781,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": 0.802,
+     "ato_topo_MPa": 3.77,
+     "ato_base_MPa": -31.71,
+     "ato_lim": "4.89 / -35.0",
+     "ato_As_topo": "7.09 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 4.45,
+     "icamento_lim_t": 4.89
+    },
+    "perdas_pct": {
+     "imediata": 10.3,
+     "total": 29.8
+    },
+    "lbpt_m": 0.788,
+    "sig_pinf": 1020.6,
+    "dente": {
+     "lado": "A",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 552.1,
+     "Fg_d": 472.0,
+     "Fq_d": 83.0,
+     "parcela_variavel": 0.15,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 361.2,
+       "q": 59.0
+      },
+      "B": {
+       "g": 283.4,
+       "q": 40.2
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 36628,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.04,
+     "phi_montagem": 1.49,
+     "phi_inf_cobertura_60d": 2.04,
+     "perda_progressiva_ate_montagem_pct": 9.5,
+     "e1_liberacao": -42.8,
+     "e2_montagem": -91.9,
+     "e3_apos_cobertura": -49.5,
+     "e4_final_qp": 6.7,
+     "e5_sobrecarga_freq": 6.1,
+     "sobrecarga_total": 10.2,
+     "fg2_cobertura": 42.4,
+     "lim": {
+      "fabricacao_L300": 78.9,
+      "peca_isolada_montagem_L500": 47.4,
+      "montagem_L250": 94.7,
+      "final": "L/350",
+      "final_mm": 67.6
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.1,
+     "Lh_bf2": 180,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.67,
+       "FS_lebelle": 15.76
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 21.02,
+       "FS_lebelle": 22.5
+      }
+     },
+     "FS_min": 15.76,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "alca_m": 1.5,
+    "N3": "6 Ø25"
+   }
+  },
+  "melhor_falha": {
+   "arranjo": "7+5+5+4 + 4 (y 26) + 2 topo",
+   "n": 27,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "icamento"
+   ],
+   "ELS_D": -0.717,
+   "x_d": 0.421,
+   "ato_base": -31.7,
+   "ato_topo": 3.77,
+   "icam": 5.21,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
  }
 ]
