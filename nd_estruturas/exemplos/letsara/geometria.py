@@ -39,6 +39,7 @@ X_L2 = [0.0, 9.87, 19.75, 29.63, 36.175, 39.50]              # P1B, P8, P8A, P8B
 # Níveis do mezanino pelo corte AA' do R01 (360 + 30 + 310 + 30): TOPO DA CAPA +3,90 e +7,30 (antes +3,15 / +6,55, errado).
 # A laje de cima (+7,30) é a cobertura do bloco, sem uso (arquitetônico: "Nível Cobertura"), sem escada.
 Z_PISOS = (3.90, 7.30)
+Z_PISO_PRONTO = 3.95                   # DEC-055 (24/10): 2º pav. = topo da capa +3,90; piso pronto ~+3,95 (revestimento 5 cm) — chegada das escadas
 NIV_TXT = ("+3,90", "+7,30")
 H_LAJE_TOT = 0.25                       # alveolar h20 + capa 5
 Z_APOIO_LAJE = tuple(round(z - H_LAJE_TOT - 0.01, 3) for z in Z_PISOS)   # topo das vigas do mezanino (fita de neoprene 1 cm)
@@ -47,7 +48,7 @@ P6_ESC, P7_ESC, P6_L2 = (36.175, 3.79), (39.50, 3.79), (36.175, Y_LIN[1])
 # abertura da escada SÓ na laje +3,90 (DEC-045): de P6 ao eixo E, da viga P6–P7 à linha 2
 ABERTURA = dict(nivel=Z_PISOS[0], x0=36.00, x1=39.20, y0=3.99, y1=Y_LIN[1] - 0.20)
 # escada metálica em U (arquitetônico R01: 22 degraus H 17,72 B 28, patamar +1,95, lances de 2,80, patamar 1,60)
-ESCADA = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, z_patamar=Z_PISOS[0] / 2,
+ESCADA = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28, z_patamar=11 * Z_PISO_PRONTO / 22,   # DEC-055: espelho 17,95
               x_face_P6=36.30, x_face_E=39.20, y_patamar=(3.99, 5.55), y_lances=(5.55, 8.35), y_chegada=(8.35, Y_LIN[1] - 0.20))
 # cobertura metálica da linha 2 (DEC-046; DEC-050 sem montantes, W direto na cabeça dos pilares): do eixo A ao E, topo na inclinação da TS-01
 X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)
@@ -56,6 +57,7 @@ X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)
 # piso 28, 22 espelhos (5 no lance de baixo, ao longo de x; 17 no de cima, ao longo da fachada), patamar 1,50 × 1,50 na quina e
 # patamar de chegada de 0,20 a 2,44 (y). Deslocada 15 cm para fora em relação ao arquitetônico para passar livre das placas
 # (face externa das placas −0,425; folga 25 mm): face interna da escada em x = −0,45.
-ESCADA_EXT = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, n_baixo=5, n_cima=17, largura=1.50,
+ESCADA_EXT = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28,   # DEC-055: espelho 17,95, chegada no piso pronto +3,95
+                  n_baixo=5, n_cima=17, largura=1.50,
                   x_int=-0.45, x_ext=-1.95, y_chegada=(0.20, 2.44), y_lance_cima=(2.44, 6.92), y_patamar=(6.92, 8.42),
                   x_lance_baixo=(-1.95, -3.07), porta_y=(0.89, 1.79), porta_h=2.14)

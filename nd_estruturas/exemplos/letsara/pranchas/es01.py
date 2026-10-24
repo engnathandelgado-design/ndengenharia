@@ -1,5 +1,5 @@
-"""ND-LET-ES01 — escada metálica do mezanino (rev09, DEC-045): escada em U do térreo ao piso +3,90, 22 espelhos de 17,73 × piso 28,
-patamar intermediário +1,95 e patamar de chegada +3,90 junto à linha 2. Longarinas U 152 × 12,2, degraus em chapa xadrez dobrada
+"""ND-LET-ES01 — escada metálica do mezanino (rev09, DEC-045): escada em U do térreo ao piso pronto +3,95, 22 espelhos de 17,95 × piso 28,
+patamar intermediário +1,975 e patamar de chegada +3,95 junto à linha 2. Longarinas U 152 × 12,2, degraus em chapa xadrez dobrada
 sobre cantoneiras, vigas W 150 × 22,5 dos patamares parafusadas nas faces dos pilares (barras roscadas M16 embutidas), pilaretes
 com chumbador químico; tudo parafusado na obra. Geometria e verificações de geometria.ESCADA e escada_metalica.json
 (calc_escada_metalica.py). Cotas em mm. A1."""
@@ -21,20 +21,21 @@ YP0, YP1 = (M(v) for v in G["y_patamar"])
 YL0, YL1 = (M(v) for v in G["y_lances"])
 YC0, YC1 = (M(v) for v in G["y_chegada"])
 ESP, PISO = G["espelho_m"] * 1000, G["piso_m"] * 1000
-ZP, ZC = M(G["z_patamar"]), 3900
+ZP, ZC = M(G["z_patamar"]), 3950                    # DEC-055: chegada no piso pronto +3,95 (capa +3,90 + revestimento)
 N1 = round(ZP / ESP)                                   # espelhos por lance (11)
 CH = EJ["chegada_apoios"]
 XT, XW = M(CH["x_tubo"]), M(CH["x_W"])
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="ESCADA METÁLICA DO MEZANINO (TÉRREO → +3,90) — PLANTAS, CORTE, LIGAÇÕES PARAFUSADAS E LISTA DE MATERIAL",
+                        conteudo="ESCADA METÁLICA DO MEZANINO (TÉRREO → +3,95) — PLANTAS, CORTE, LIGAÇÕES PARAFUSADAS E LISTA DE MATERIAL",
                         desenho="ND-LET-ES01", folha="01/01", fase="PARA APROVAÇÃO", rev="00"))
 pr.revisao("00", "23/10/2026", "EMISSÃO INICIAL (DEC-045): ESCADA EM U, PATAMAR +1,95 E CHEGADA +3,90")
 pr.revisao("01", "24/10/2026", "BASE METÁLICA BM-1 NO TÉRREO (PÉ DO LANCE 1 E 1º DEGRAU); LIGAÇÕES SEM SOLDA (CANTONEIRAS)")
 pr.revisao("02", "24/10/2026", "SEM TABELA DE VERIFICAÇÕES (MEMÓRIA MC09); REFERÊNCIA À ESCADA EXTERNA ND-LET-ES02")
+pr.revisao("03", "24/10/2026", "DEC-055: CHEGADA NO PISO PRONTO +3,95 — 22 ESPELHOS DE 17,95, PATAMAR +1,975")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.cabecalho_peca("ES", "ESCADA METÁLICA EM U — 2 LANCES DE 11 ESPELHOS (17,73 × 28) — PATAMAR +1,95 E CHEGADA +3,90",
+pr.cabecalho_peca("ES", "ESCADA METÁLICA EM U — 2 LANCES DE 11 ESPELHOS (17,95 × 28) — PATAMAR +1,975 E CHEGADA +3,95",
                   f"entre o PE-01 (P6 25 × 40), o PE-02 (P7 40 × 60) e a linha 2 · lance {f(BL / 10, 0)} cm · massa {EJ['massa_kg']} kg · aço ASTM A36 / A572-50, galvanizado · tudo parafusado na obra",
                   largura=XC - Q[0] - 10)
 
@@ -48,9 +49,9 @@ def wplanta(v, x0, x1, y, cam="METALICA"):
     v.ret(x0, y - 76, x1 - x0, 152, cam)
 
 
-# ------------------------------------------------------------------ PLANTAS (1:50): +1,95 (lance 1 e patamar) e +3,90 (lance 2 e chegada)
-for k, (xo, titulo, sub) in enumerate(((Q[0] + 45, "PLANTA NO PATAMAR +1,95", "lance 1 e patamar +1,95"),
-                                       (Q[0] + 198, "PLANTA NA CHEGADA +3,90", "lance 2 e chegada +3,90"))):
+# ------------------------------------------------------------------ PLANTAS (1:50): +1,975 (lance 1 e patamar) e +3,90 (lance 2 e chegada)
+for k, (xo, titulo, sub) in enumerate(((Q[0] + 45, "PLANTA NO PATAMAR +1,975", "lance 1 e patamar +1,975"),
+                                       (Q[0] + 198, "PLANTA NA CHEGADA +3,95", "lance 2 e chegada +3,95"))):
     v = pr.vista(f"PLANTA {k + 1}", (xo - (X6 - 1900) / 50, Q[3] - 205 - 3300 / 50), 50, titulo=titulo, subtitulo=sub, unidade="mm")
     for yy, nm in ((M(Y_LIN[1]), "2"),):
         v.eixo((X6 - 1200, yy), (XE + 1200, yy), 400)
@@ -102,7 +103,7 @@ for k, (xo, titulo, sub) in enumerate(((Q[0] + 45, "PLANTA NO PATAMAR +1,95", "l
 
 # ------------------------------------------------------------------ CORTE A-A (1:50): lance 1 em vista, lance 2 ao fundo
 c = pr.vista("CORTE A-A", (Q[0] + 350 - (YP0 - 1300) / 50, Q[3] - 175), 50, titulo="CORTE A-A — PELO LANCE 1 (OLHANDO PARA O EIXO E)",
-             subtitulo="longarinas U 152, degraus, patamar +1,95 e chegada +3,90; lance 2 ao fundo (oculto)", unidade="mm")
+             subtitulo="longarinas U 152, degraus, patamar +1,975 e chegada +3,95; lance 2 ao fundo (oculto)", unidade="mm")
 c.linha((YP0 - 1200, 0), (YC1 + 1200, 0), "TERRENO")
 for j in range(N1):                                     # lance 1 (de y 8,35 para 5,55): degraus em vista
     y_ = YL1 - j * PISO
@@ -125,8 +126,8 @@ c.ret(M(Y_LIN[1]) - 200, -300, 400, ZC + 600, "VISTA"); c.interrupcao((M(Y_LIN[1
 c.ret(M(P6_ESC[1]) - 200 - 1000, ZC - 250, 1000, 250, "CORTADO")                # laje +3,90 do lado da linha 1 (LA-03 / VM-04)
 c.cota_v([0, ZP, ZC], YC1 + 700, 10, total=False)
 c.cota_h([YP0, YP1, YL1, YC1], -300, -10, total=True)
-c.texto(((YP0 + YP1) / 2, ZP + 150), "patamar +1,95", "min", "BOTTOM_CENTER")
-c.texto(((YC0 + YC1) / 2, ZC + 150), "chegada +3,90", "min", "BOTTOM_CENTER")
+c.texto(((YP0 + YP1) / 2, ZP + 150), "patamar +1,975", "min", "BOTTOM_CENTER")
+c.texto(((YC0 + YC1) / 2, ZC + 150), "chegada +3,95", "min", "BOTTOM_CENTER")
 
 # ------------------------------------------------------------------ DETALHES 1:5
 d1 = pr.vista("DETALHE 1", (Q[0] + 50, Q[1] + 150), 5, titulo="DETALHE 1 — DEGRAU", subtitulo="DG-1 sobre L 38; 2 M10 por ponta", unidade="mm")
@@ -191,7 +192,7 @@ ver = [["Longarina LG-1 (flexão, NBR 8800)", f(EJ["longarina"]["uso"], 2), f"fl
 # rev09c: sem tabela de verificações na prancha do cliente (fica na memória MC09)
 # y = pr.tabela(XC, y - 4, "VERIFICAÇÕES (calc_escada_metalica.py)", ["ELEMENTO", "USO", "OBS."], ver, [70, 16, 84])
 notas = [f"Cargas (NBR 6120:2019): sobrecarga {f(EJ['cargas']['q_kN_m2'])} kN/m² (escada com acesso público); peso próprio dos degraus {f(EJ['cargas']['g_degraus'], 2)} e dos patamares {f(EJ['cargas']['g_patamar'], 2)} kN/m². ELU 1,4 G + 1,5 Q; flecha L/350 (NBR 8800:2024 Anexo B).",
-         f"Geometria: {G['n_espelhos']} espelhos de {f(ESP / 10, 2)} cm e piso de {f(PISO / 10, 0)} cm (2e + p = {f(G['blondel_m'] * 100, 1)} cm, NBR 9050 / NBR 9077); lance de {f(BL / 10, 0)} cm; patamar intermediário +1,95 e chegada no piso +3,90 do mezanino (abertura da laje entre o P6, o P7 e a linha 2 — ND-LET-LA01).",
+         f"Geometria: {G['n_espelhos']} espelhos de {f(ESP / 10, 2)} cm e piso de {f(PISO / 10, 0)} cm (2e + p = {f(G['blondel_m'] * 100, 1)} cm, NBR 9050 / NBR 9077); lance de {f(BL / 10, 0)} cm; patamar intermediário +1,975 e chegada no piso pronto +3,95 do mezanino (capa +3,90) (abertura da laje entre o P6, o P7 e a linha 2 — ND-LET-LA01).",
          "Ligações todas parafusadas, SEM SOLDA (M10/M12/M16 8.8 galvanizados): vigas nas faces dos pilares e topo/base dos pilaretes por cantoneiras. Barras roscadas M16 das faces do P6, do P7, do P6 da linha 2 e do P2 concretadas na fábrica dos pilares (ND-LET-PE01, PE02, PE03 e PL).",
          f"BASE METÁLICA BM-1 (det. 4): soleira U 152 × 12,2 L 1500 em pé no piso do térreo, sob o bocel do 1º degrau, fixada por 3 pares de L 76 × 76 × 6,3 com chumbador químico M12 hef 100 e graute de nivelamento; o pé das 2 longarinas do lance 1 é parafusado na alma da soleira e o 1º degrau apoia na aba de cima. Piso do térreo: {EJ['base_metalica']['piso']}.",
          "Aço: perfis W em ASTM A572 Gr. 50; U, cantoneiras, chapas e tubos em ASTM A36; galvanização a fogo após a fabricação. Chapa xadrez antiderrapante.",

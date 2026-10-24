@@ -1,6 +1,6 @@
 """ND-LET-ES02 — escada metálica EXTERNA da fachada A (rev09c, DEC-053, decisão do Nathan 24/10: opção B — entra no projeto).
-Escada em L do pátio à porta do 2º pavimento (+3,90): 5 espelhos ao longo de x, patamar +0,89 na quina, 17 espelhos ao longo da
-fachada A e patamar de chegada +3,90 em frente à porta (90 × 214, y 0,89 a 1,79). Longarinas U, degraus em chapa xadrez dobrada,
+Escada em L do pátio à porta do 2º pavimento (piso pronto +3,95): 5 espelhos ao longo de x, patamar +0,90 na quina, 17 espelhos ao longo da
+fachada A e patamar de chegada +3,95 em frente à porta (90 × 214, y 0,89 a 1,79). Longarinas U, degraus em chapa xadrez dobrada,
 vigas e pilaretes W 150 × 13,0 sobre blocos próprios BE-1 (não apoia nas placas), trava no P28 e X de contraventamento; porta nas
 placas da vista H com ombreiras OM-2 internas. Tudo parafusado, galvanizado. Dados de geometria.ESCADA_EXT e escada_externa.json
 (calc_escada_externa.py). Cotas em mm. A1."""
@@ -26,12 +26,12 @@ PY0, PY1 = (M(v) for v in G["porta_y"])
 LC, LB = EJ["longarina_cima"], EJ["longarina_baixo"]
 
 pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="ESCADA METÁLICA EXTERNA DA FACHADA A (PÁTIO → +3,90) — PLANTA, CORTES, BASES, PORTA E LISTA DE MATERIAL",
+                        conteudo="ESCADA METÁLICA EXTERNA DA FACHADA A (PÁTIO → +3,95) — PLANTA, CORTES, BASES, PORTA E LISTA DE MATERIAL",
                         desenho="ND-LET-ES02", folha="01/01", fase="PARA APROVAÇÃO", rev="00"))
-pr.revisao("00", "24/10/2026", "EMISSÃO INICIAL (DEC-053): ESCADA EXTERNA EM L NA FACHADA A, PORTA DO 2º PAV. NA VISTA H E OMBREIRAS OM-2")
+pr.revisao("00", "24/10/2026", "EMISSÃO INICIAL (DEC-053/055): ESCADA EXTERNA EM L NA FACHADA A, CHEGADA NO PISO PRONTO +3,95, PORTA NA VISTA H E OMBREIRAS OM-2")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.cabecalho_peca("ES", "ESCADA METÁLICA EXTERNA EM L — 22 ESPELHOS (17,73 × 28) — PATAMAR +0,89 E CHEGADA +3,90 NA PORTA DO 2º PAV.",
+pr.cabecalho_peca("ES", "ESCADA METÁLICA EXTERNA EM L — 22 ESPELHOS (17,95 × 28) — PATAMAR +0,90 E CHEGADA +3,95 NA PORTA DO 2º PAV.",
                   f"fachada A do anexo, entre a linha 1 e a linha 2 · largura {f(G['largura'] * 100, 0)} cm · massa {EJ['massa_kg']} kg · aço ASTM A36 / A572-50 galvanizado a fogo · tudo parafusado",
                   largura=XC - Q[0] - 10)
 
@@ -43,7 +43,7 @@ def pilar(v, x, y, bx, by):
 
 # ------------------------------------------------------------------ PLANTA (1:50) — eixo x da obra na horizontal, y na vertical
 v = pr.vista("PLANTA", (136, 505), 50, titulo="PLANTA DA ESCADA EXTERNA (FACHADA A)",
-             subtitulo="lance de baixo, patamar +0,89, lance de cima ao longo da fachada e chegada +3,90 na porta", unidade="mm")
+             subtitulo="lance de baixo, patamar +0,90, lance de cima ao longo da fachada e chegada +3,95 na porta", unidade="mm")
 P_ = lambda x, y: (x, -y)                                # planta com a linha 1 em cima (y cresce para baixo)
 for yy, nm in ((0, "1"), (M(Y_LIN[1]), "2")):
     v.eixo(P_(-3800, yy), P_(1500, yy), 400); v.circulo(P_(-4300, yy), 300, "VISTA"); v.texto(P_(-4300, yy), nm, "nota", "MIDDLE_CENTER")
@@ -68,46 +68,48 @@ xm = (XI + XEX) / 2
 v.poli([P_(xm, YL1 - 150), P_(xm, YL0 + 150)], "COTA"); v.poli([P_(xm - 60, YL0 + 300), P_(xm, YL0 + 150), P_(xm + 60, YL0 + 300)], "COTA")
 v.texto(P_(XEX - 250, (YL0 + YL1) / 2), "SOBE (17)", "min", "MIDDLE_CENTER", rot=90)
 v.texto(P_((XB0 + XB1) / 2, YP0 - 250), "SOBE (5)", "min", "MIDDLE_CENTER")
-v.texto(P_(xm, (YC0 + YC1) / 2), "chegada +3,90", "min", "MIDDLE_CENTER")
-v.texto(P_(xm, (YP0 + YP1) / 2), "patamar +0,89", "min", "MIDDLE_CENTER")
+v.texto(P_(xm, (YC0 + YC1) / 2), "chegada +3,95", "min", "MIDDLE_CENTER")
+v.texto(P_(xm, (YP0 + YP1) / 2), "patamar +0,90", "min", "MIDDLE_CENTER")
 for (ya, yb) in ((YC0, YC1), (YP0, YP1)):
     for xp in (XI - 50, XEX + 50):
-        for yp in (ya + 60, yb - (120 if ya == YC0 else 60)):
+        for yp in (ya + 60, yb - (140 if ya == YC0 else 60)):
             v.ret(*P_(xp - 50, yp + 74), 100, 148, "CORTADO")
-            v.ret(*P_(xp - 300, yp + 300), 600, 600, "OCULTA")
+            eb = 100 if (ya == YC0 and yp > ya + 100) else 0                   # BE-1 10 cm excêntrico (livre da cartola PT-1)
+            v.ret(*P_(xp - 300, yp + 300 + eb), 600, 600, "OCULTA")
 v.chamada(P_(XEX + 50, YC0 + 60), (-14, 8), "PE-1 + bloco BE-1 (det. 2)")
 v.chamada(P_(XEX + 50, YP1 - 60), (-14, -8), "PE-2 + bloco BE-1")
 v.linha(P_(XI - 50, YC0 + 60), P_(XI - 50, 20), "METALICA")
 v.chamada(P_(XI - 50, 110), (12, 10), "TR-1 trava no P28 (det. 3)")
-v.linha(P_(XEX + 50, YC1 - 120), P_(XEX + 50, YP0 + 60), "OCULTA")
+v.linha(P_(XEX + 50, YC1 - 140), P_(XEX + 50, YP0 + 60), "OCULTA")
 v.cota_h([XB1, XEX, XI, 0], -(YP1 + 700), -8, total=True)
 v.cota_v([-YC0, -YC1, -YL1, -YP1], XB1 - 700, -10, total=True)
 v.cota_v([-PY0, -PY1], 700, 8, total=False)
 
 # ------------------------------------------------------------------ CORTE A-A (1:50) — ao longo da fachada (plano x = −1,20)
 c = pr.vista("CORTE A-A", (218, 418), 50, titulo="CORTE A-A — LANCE DE CIMA (OLHANDO PARA A FACHADA A)",
-             subtitulo="longarinas LE-1, degraus, patamar +0,89 e chegada +3,90; porta do 2º pav. ao fundo", unidade="mm")
+             subtitulo="longarinas LE-1, degraus, patamar +0,90 e chegada +3,95; porta do 2º pav. ao fundo", unidade="mm")
 c.linha((-600, 0), (YP1 + 1200, 0), "TERRENO")
-for j in range(17):                                     # lance de cima: de y 6,92 (+0,89) a 2,44 (+3,90)
+for j in range(17):                                     # lance de cima: de y 6,92 (+0,90) a 2,44 (+3,90)
     y_ = YL1 - j * PISO
     z_ = ZP + (j + 1) * ESP
     c.poli([(y_, z_ - ESP), (y_, z_), (y_ - PISO, z_)], "VISTA")
 c.linha((YL1, ZP + 50), (YL0, ZC - 150), "METALICA"); c.linha((YL1, ZP + 50 - LC["kg_m"] * 0 - 203), (YL0, ZC - 150 - 203), "METALICA")
 for (ya, yb), z in (((YC0, YC1), ZC), ((YP0, YP1), ZP)):
     c.ret(ya, z - 6, yb - ya, 6, "METALICA")
-    for yp in (ya + 60, yb - (120 if ya == YC0 else 60)):
+    for yp in (ya + 60, yb - (140 if ya == YC0 else 60)):
         c.ret(yp - 50, 12, 100, z - 160, "METALICA")
-        c.ret(yp - 300, -620, 600, 600, "CORTADO"); c.hachura([(yp - 300, -620), (yp + 300, -620), (yp + 300, -20), (yp - 300, -20)], "AR-CONC", 0.03)
+        eb = 100 if (ya == YC0 and yp > ya + 100) else 0
+        c.ret(yp - 300 + eb, -620, 600, 600, "CORTADO"); c.hachura([(yp - 300 + eb, -620), (yp + 300 + eb, -620), (yp + 300 + eb, -20), (yp - 300 + eb, -20)], "AR-CONC", 0.03)
 c.ret(PY0, ZC, PY1 - PY0, 2140, "OCULTA"); c.texto(((PY0 + PY1) / 2, ZC + 1070), "porta", "min", "MIDDLE_CENTER", rot=90)
 c.ret(-200, -300, 400, ZC + 1500, "VISTA"); c.texto((0, ZC + 1600), "P28", "min", "BOTTOM_CENTER")
-c.linha((YC0 + 60, ZC - 160), (YC1 - 120, 400), "OCULTA"); c.linha((YC0 + 60, 400), (YC1 - 120, ZC - 160), "OCULTA")
+c.linha((YC0 + 60, ZC - 160), (YC1 - 140, 400), "OCULTA"); c.linha((YC0 + 60, 400), (YC1 - 140, ZC - 160), "OCULTA")
 c.cota_v([0, ZP, ZC], YP1 + 700, 10, total=False)
 c.cota_h([YC0, YC1, YL1, YP1], -900, -10, total=True)
-c.texto(((YC0 + YC1) / 2, ZC + 150), "chegada +3,90", "min", "BOTTOM_CENTER")
-c.texto(((YP0 + YP1) / 2, ZP + 150), "patamar +0,89", "min", "BOTTOM_CENTER")
+c.texto(((YC0 + YC1) / 2, ZC + 150), "chegada +3,95", "min", "BOTTOM_CENTER")
+c.texto(((YP0 + YP1) / 2, ZP + 150), "patamar +0,90", "min", "BOTTOM_CENTER")
 
 # ------------------------------------------------------------------ CORTE B-B (1:50) — lance de baixo (plano y = 7,67)
-b = pr.vista("CORTE B-B", (507, 424), 50, titulo="CORTE B-B — LANCE DE BAIXO", subtitulo="5 espelhos, do pátio ao patamar +0,89", unidade="mm")
+b = pr.vista("CORTE B-B", (507, 424), 50, titulo="CORTE B-B — LANCE DE BAIXO", subtitulo="5 espelhos, do pátio ao patamar +0,90", unidade="mm")
 b.linha((XB1 - 800, 0), (XI + 600, 0), "TERRENO")
 for j in range(5):
     x_ = XB1 + j * PISO
@@ -173,7 +175,7 @@ y = pr.tabela(XC, y, "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", ["ITEM"
 lin2 = [["BE-1", "bloco de concreto C25 60 × 60 × 60 sob cada pilarete (malha Ø8 c/15 + 4 Ø8)", "8", f(8 * 0.216, 2) + " m³"]]
 y = pr.tabela(XC, y - 4, "CONCRETO DE OBRA — BASES DA ESCADA", ["ITEM", "DESCRIÇÃO", "QT", "VOLUME"], lin2, [14, 110, 12, 34])
 notas = [f"Cargas consideradas (NBR 6120:2019): sobrecarga {f(EJ['cargas']['q_kN_m2'])} kN/m² (escada com acesso público); guarda-corpo {f(EJ['cargas']['guarda_corpo_kN_m'])} kN/m horizontal no topo (NBR 14718:2019); peso próprio dos degraus {f(EJ['cargas']['g_degraus'], 2)} e dos patamares {f(EJ['cargas']['g_patamar'], 2)} kN/m².",
-         f"Geometria do arquitetônico: {22} espelhos de {f(ESP / 10, 2)} cm e piso de {f(PISO / 10, 0)} cm (2e + p = {f(G['blondel_m'] * 100, 1)} cm); 5 espelhos no lance de baixo, patamar +0,89 na quina, 17 no lance de cima; chegada +3,90 em frente à porta. A escada fica 15 cm mais afastada da fachada que no arquitetônico, para passar livre das placas (face interna da escada a 2,5 cm da face externa das placas).",
+         f"Geometria do arquitetônico: {22} espelhos de {f(ESP / 10, 2)} cm e piso de {f(PISO / 10, 0)} cm (2e + p = {f(G['blondel_m'] * 100, 1)} cm); 5 espelhos no lance de baixo, patamar +0,90 na quina, 17 no lance de cima; chegada +3,95 em frente à porta. A escada fica 15 cm mais afastada da fachada que no arquitetônico, para passar livre das placas (face interna da escada a 2,5 cm da face externa das placas).",
          "A escada não apoia nas placas de fechamento: pilaretes em blocos próprios BE-1 (tensão no solo adotada 150 kPa — CONFIRMAR com a sondagem; se menor, aumentar o bloco); estabilidade pela trava TR-1 no P28 e pelo X de barras Ø12,5 com esticador no plano externo.",
          "PORTA DO 2º PAV. (vista H, ND-LET-PP-H): a fiada +3,75/+5,00 é cortada entre y 0,87 e 1,81 (placas H-03 PP-11 e H-04 PP-10); a faixa +5,00/+6,25 já é de esquadria. A ponta de cada placa junto ao vão apoia no console da ombreira OM-2 interna (U 152 do piso do térreo a +5,00, travada no P28 a +3,90 e +4,90) — nenhuma placa apoia em outra.",
          "Ligações todas parafusadas, SEM SOLDA (M10/M12/M16 8.8 galvanizados). Barras roscadas M16 da face externa do P28 (trava TR-1 e travas da OM-2) concretadas na fábrica do pilar (ND-LET-PL03).",

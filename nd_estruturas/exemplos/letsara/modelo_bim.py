@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA
+from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -597,7 +597,7 @@ def montar() -> ModeloBIM:
     x6, xE = EG["x_faces"]
     bl = EG["largura_lance"]
     lances = [((x6 + 0.0, x6 + bl), EG["y_lances"][1], EG["y_lances"][0], 0.0, EG["z_patamar"]),           # lance 1: sobe de y 8,35 a 5,55
-              ((xE - bl, xE), EG["y_lances"][0], EG["y_lances"][1], EG["z_patamar"], Z_PISOS[0])]         # lance 2: sobe de 5,55 a 8,35
+              ((xE - bl, xE), EG["y_lances"][0], EG["y_lances"][1], EG["z_patamar"], Z_PISO_PRONTO)]   # DEC-055         # lance 2: sobe de 5,55 a 8,35
     U152 = PerfilRetangular(0.0485, 0.152, "U 152 × 12,2")
     for (xl0, xl1), y0e, y1e, z0e, z1e in lances:
         for xs_ in (xl0 + 0.025, xl1 - 0.025):
@@ -610,7 +610,7 @@ def montar() -> ModeloBIM:
             m.linear("placa", "DG-1 degrau chapa xadrez 4,75", PerfilRetangular(EG["piso_m"] + 0.03, 0.00475), (xl0 + 0.05, yk, zk - 0.0024), (xl1 - 0.05, yk, zk - 0.0024), GES, material="aco")
     PW15 = PerfilI(h=0.152, b=0.152, tw=0.0058, tf=0.0066, nome="W 150 × 22,5")
     zp = EG["z_patamar"]
-    for (ya_p, yb_p), zz, nome_p in ((EG["y_patamar"], zp, "patamar +1,95"), (EG["y_chegada"], Z_PISOS[0], "chegada +3,90")):
+    for (ya_p, yb_p), zz, nome_p in ((EG["y_patamar"], zp, "patamar +1,975"), (EG["y_chegada"], Z_PISO_PRONTO, "chegada no piso pronto +3,95")):
         for yv in (ya_p + 0.08, yb_p - 0.08):
             m.linear("viga", f"VP-1 viga W 150 × 22,5 ({nome_p})", PW15, (x6 + 0.01, yv, zz - 0.0063 - 0.076), (xE - 0.01, yv, zz - 0.0063 - 0.076), GES, material="aco")
         m.linear("placa", f"CH-P chapa xadrez 6,3 ({nome_p})", PerfilRetangular(yb_p - ya_p, 0.0063), (x6 + 0.01, (ya_p + yb_p) / 2, zz - 0.0032), (xE - 0.01, (ya_p + yb_p) / 2, zz - 0.0032), GES, material="aco")
@@ -663,10 +663,11 @@ def montar() -> ModeloBIM:
             m.linear("viga", f"VE viga W 150 × 13,0 ({nm_})", W150e, (xv, ya_ + 0.01, zz - 0.0063 - 0.074), (xv, yb_ - 0.01, zz - 0.0063 - 0.074), GEX, material="aco")
         m.linear("placa", f"CHE chapa xadrez 6,3 ({nm_})", PerfilRetangular(xi - xe_, 0.0063), ((xi + xe_) / 2, ya_ + 0.01, zz - 0.0032), ((xi + xe_) / 2, yb_ - 0.01, zz - 0.0032), GEX, cima=(0.0, 0.0, 1.0), material="aco")
         for xp_ in (xi - 0.05, xe_ + 0.05):
-            for yp_ in (ya_ + 0.06, yb_ - (0.12 if zz == zch else 0.06)):      # chegada: pilarete 12 cm para dentro (folga para a ponta da LE-1)
+            for yp_ in (ya_ + 0.06, yb_ - (0.14 if zz == zch else 0.06)):      # chegada: pilarete 14 cm para dentro (folga para a ponta da LE-1)
                 m.linear("pilar", f"PE pilarete W 150 × 13,0 ({nm_})", W150e, (xp_, yp_, 0.0125), (xp_, yp_, zz - 0.0063 - 0.148), GEX, cima=(0.0, 1.0, 0.0), material="aco")
                 caixa(m, "CBE chapa de base 200 × 200 × 12,5 + 4 chumbadores químicos M16 (sobre graute)", xp_ - 0.10, xp_ + 0.10, yp_ - 0.10, yp_ + 0.10, 0.0, 0.0125, GEX)
-                caixa(m, "BE-1 bloco de concreto 60 × 60 × 60 (base própria da escada externa)", xp_ - 0.30, xp_ + 0.30, yp_ - 0.30, yp_ + 0.30, -0.62, -0.02, "Piso e fundações")
+                _eb = 0.10 if (zz == zch and yp_ > ya_ + 0.1) else 0.0                 # bloco 10 cm excêntrico (livre da cartola PT-1 da placa em y 2,04)
+                caixa(m, "BE-1 bloco de concreto 60 × 60 × 60 (base própria da escada externa)", xp_ - 0.30, xp_ + 0.30, yp_ - 0.30 + _eb, yp_ + 0.30 + _eb, -0.62, -0.02, "Piso e fundações")
     m.linear("viga", "TR-1 trava tubo 80 × 80 × 4,75 do patamar de chegada ao P28 (2 BR-M16 na face do pilar)", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"),
              (xi - 0.05, 0.20, zch - 0.10), (xi - 0.05, 0.02, zch - 0.10), GEX, material="aco")
     # ombreiras OM-2 internas da porta do 2º pav. (vista H): U 152 do piso do térreo a +5,00, por trás das placas, travadas no P28

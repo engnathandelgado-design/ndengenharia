@@ -1,10 +1,10 @@
 {
  "geometria": {
-  "espelho_m": 0.1773,
+  "espelho_m": 0.1795,
   "piso_m": 0.28,
-  "blondel_m": 0.635,
-  "z_patamar": 0.886,
-  "z_chegada": 3.9,
+  "blondel_m": 0.639,
+  "z_patamar": 0.898,
+  "z_chegada": 3.95,
   "largura": 1.5,
   "x": [
    -0.45,
@@ -42,14 +42,14 @@
  "longarina_cima": {
   "perfil": "U 203 × 17,1 (8\")",
   "Lh": 4.48,
-  "L_inclinado": 5.399,
+  "L_inclinado": 5.421,
   "w_d": 4.33,
-  "Md": 10.86,
+  "Md": 10.87,
   "MRd": 30.32,
   "uso": 0.358,
   "flecha_mm": 5.3,
   "lim_L350_mm": 12.8,
-  "f1_Hz": 7.2,
+  "f1_Hz": 7.1,
   "R_d": 9.7,
   "kg_m": 17.1,
   "ok": true
@@ -57,14 +57,14 @@
  "longarina_baixo": {
   "perfil": "U 152 × 12,2 (6\")",
   "Lh": 1.12,
-  "L_inclinado": 1.428,
+  "L_inclinado": 1.435,
   "w_d": 4.3,
   "Md": 0.67,
   "MRd": 16.3,
   "uso": 0.041,
   "flecha_mm": 0.1,
   "lim_L350_mm": 3.2,
-  "f1_Hz": 64.7,
+  "f1_Hz": 63.9,
   "R_d": 2.4,
   "kg_m": 12.2,
   "ok": true
@@ -73,14 +73,14 @@
   {
    "perfil": "U 152 × 12,2 (6\")",
    "Lh": 4.48,
-   "L_inclinado": 5.399,
+   "L_inclinado": 5.421,
    "w_d": 4.25,
-   "Md": 10.65,
+   "Md": 10.66,
    "MRd": 16.3,
    "uso": 0.654,
    "flecha_mm": 13.1,
    "lim_L350_mm": 12.8,
-   "f1_Hz": 4.7,
+   "f1_Hz": 4.6,
    "R_d": 9.5,
    "kg_m": 12.2,
    "ok": false
@@ -88,14 +88,14 @@
   {
    "perfil": "U 203 × 17,1 (8\")",
    "Lh": 4.48,
-   "L_inclinado": 5.399,
+   "L_inclinado": 5.421,
    "w_d": 4.33,
-   "Md": 10.86,
+   "Md": 10.87,
    "MRd": 30.32,
    "uso": 0.358,
    "flecha_mm": 5.3,
    "lim_L350_mm": 12.8,
-   "f1_Hz": 7.2,
+   "f1_Hz": 7.1,
    "R_d": 9.7,
    "kg_m": 17.1,
    "ok": true
@@ -103,14 +103,14 @@
   {
    "perfil": "U 254 × 22,7 (10\")",
    "Lh": 4.48,
-   "L_inclinado": 5.399,
+   "L_inclinado": 5.421,
    "w_d": 4.42,
-   "Md": 11.09,
+   "Md": 11.1,
    "MRd": 50.23,
    "uso": 0.221,
    "flecha_mm": 2.6,
    "lim_L350_mm": 12.8,
-   "f1_Hz": 10.1,
+   "f1_Hz": 10.0,
    "R_d": 9.9,
    "kg_m": 22.7,
    "ok": true
@@ -157,15 +157,15 @@
  },
  "pilarete_chegada": {
   "perfil": "W 150 × 13,0",
-  "h": 3.7,
+  "h": 3.75,
   "Nd": 14.5,
   "Hd": 0.0,
-  "uso": 0.077,
+  "uso": 0.079,
   "kg_m": 13.0
  },
  "pilarete_patamar": {
   "perfil": "W 150 × 13,0",
-  "h": 0.686,
+  "h": 0.698,
   "Nd": 14.0,
   "Hd": 0.0,
   "uso": 0.014,
@@ -197,14 +197,14 @@
    "item": "LE-1",
    "desc": "longarina U 203 × 17,1 (8\") — lance de cima",
    "qt": 2,
-   "L_m": 5.499,
+   "L_m": 5.521,
    "kg_m": 17.1
   },
   {
    "item": "LE-2",
    "desc": "longarina U 152 × 12,2 (6\") — lance de baixo",
    "qt": 2,
-   "L_m": 1.528,
+   "L_m": 1.535,
    "kg_m": 12.2
   },
   {
@@ -232,14 +232,14 @@
    "item": "PE-1",
    "desc": "pilarete W 150 × 13,0 — patamar de chegada",
    "qt": 4,
-   "L_m": 3.7,
+   "L_m": 3.75,
    "kg_m": 13.0
   },
   {
    "item": "PE-2",
    "desc": "pilarete W 150 × 13,0 — patamar +0,89",
    "qt": 4,
-   "L_m": 0.686,
+   "L_m": 0.698,
    "kg_m": 13.0
   },
   {
@@ -301,5 +301,5 @@
  ],
  "acabamento": "galvanização a fogo (NBR 6323) de todas as peças, parafusos galvanizados; chumbadores químicos para uso externo",
  "ok": true,
- "massa_kg": 1484
+ "massa_kg": 1488
 }

@@ -30,7 +30,7 @@ AQ = Path(__file__).parent
 sys.path.insert(0, str(AQ.parents[1]))
 sys.path.insert(0, str(AQ))
 from nd_estruturas import metalica_laminada as ML
-from geometria import ESCADA, Y_LIN
+from geometria import ESCADA, Y_LIN, Z_PISO_PRONTO
 
 E = ESCADA
 Q = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))["escada"]["sobrecarga"]
@@ -130,7 +130,7 @@ if __name__ == "__main__":
                        x_faces=(E["x_face_P6"], E["x_face_E"])),
         cargas=dict(q_kN_m2=Q, g_degraus=round(G_DEG, 3), g_patamar=round(G_PAT, 3), norma="NBR 6120:2019 (escada com acesso público 3,0 kN/m²)"),
         longarina=ln, patamar_frente=pat_f, patamar_fundo=pat_t, chegada_frente=ch_f, chegada_fundo=ch_t,
-        pilaretes=[pilarete(pat_f["R_apoio_d"], E["z_patamar"] - 0.152), pilarete(ch_f["R_apoio_d"], 3.90 - 0.152), pilarete_tubo(2 * ch_f["R_apoio_d"], 3.90 - 0.152)],
+        pilaretes=[pilarete(pat_f["R_apoio_d"], E["z_patamar"] - 0.152), pilarete(ch_f["R_apoio_d"], Z_PISO_PRONTO - 0.152), pilarete_tubo(2 * ch_f["R_apoio_d"], Z_PISO_PRONTO - 0.152)],
         chegada_apoios=dict(x_tubo=round(E["x_face_P6"] + LARG_LANCE + 0.05, 3), x_W=round(E["x_face_E"] - 0.09, 3),
                             obs="viga de frente da chegada: apoio no tubo entre os lances e no pilarete W 150 do lado E; balanço de 1,45 m sobre a entrada do lance 1 (o M do balanço = M do vão de 2,9 m usado na verificação)"),
         ligacoes_face=[ligacao_face(max(pat_t["R_apoio_d"], ch_t["R_apoio_d"]))],
@@ -138,9 +138,9 @@ if __name__ == "__main__":
         base_metalica=base_metalica(ln["R_longarina_d"]),
         lista=[dict(item="LG-1", desc="longarina U 152 × 12,2 (6\")", qt=4, L_m=ln["L_inclinado"] + 0.10, kg_m=U152["kg"]),
                dict(item="VP-1", desc="viga W 150 × 22,5 dos patamares", qt=4, L_m=round(vao, 3), kg_m=22.5),
-               dict(item="PL-1", desc="pilarete W 150 × 22,5 (patamar +1,95)", qt=2, L_m=round(E["z_patamar"] - 0.152, 3), kg_m=22.5),
-               dict(item="PL-2", desc="pilarete W 150 × 22,5 (chegada +3,90, lado E)", qt=1, L_m=round(3.90 - 0.152, 3), kg_m=22.5),
-               dict(item="PL-3", desc="pilarete tubo quadrado 80 × 80 × 4,75 (chegada +3,90, entre os lances)", qt=1, L_m=round(3.90 - 0.152, 3), kg_m=10.9),
+               dict(item="PL-1", desc="pilarete W 150 × 22,5 (patamar +1,975)", qt=2, L_m=round(E["z_patamar"] - 0.152, 3), kg_m=22.5),
+               dict(item="PL-2", desc="pilarete W 150 × 22,5 (chegada no piso pronto +3,95, lado E)", qt=1, L_m=round(Z_PISO_PRONTO - 0.152, 3), kg_m=22.5),
+               dict(item="PL-3", desc="pilarete tubo quadrado 80 × 80 × 4,75 (chegada no piso pronto +3,95, entre os lances)", qt=1, L_m=round(Z_PISO_PRONTO - 0.152, 3), kg_m=10.9),
                dict(item="BR-1", desc="barrote U 102 × 7,4 (4\") dos patamares a cada 60 cm", qt=12, L_m=1.56, kg_m=7.4),
                dict(item="DG-1", desc="degrau chapa xadrez 4,75 dobrada 1300 × 330", qt=20, L_m=1.30, kg_m=round(0.33 * 4.75 * 7.85 * 1.0, 2)),
                dict(item="CT-1", desc="cantoneira L 38 × 38 × 4,8 de apoio do degrau (2 por degrau)", qt=40, L_m=0.30, kg_m=2.68),

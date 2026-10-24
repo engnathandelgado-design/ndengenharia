@@ -1,10 +1,10 @@
 {
  "geometria": {
   "n_espelhos": 22,
-  "espelho_m": 0.1773,
+  "espelho_m": 0.1795,
   "piso_m": 0.28,
-  "blondel_m": 0.635,
-  "z_patamar": 1.95,
+  "blondel_m": 0.639,
+  "z_patamar": 1.975,
   "largura_lance": 1.4,
   "y_patamar": [
    3.99,
@@ -31,7 +31,7 @@
  },
  "longarina": {
   "Lh": 2.8,
-  "L_inclinado": 3.412,
+  "L_inclinado": 3.426,
   "largura": 1.4,
   "w_d": 3.99,
   "Md": 3.91,
@@ -39,7 +39,7 @@
   "uso": 0.24,
   "flecha_mm": 1.9,
   "lim_L350_mm": 8.0,
-  "f1_Hz": 13.2,
+  "f1_Hz": 13.1,
   "R_longarina_d": 5.6,
   "perfil": "U 152 × 12,2 (6\")"
  },
@@ -90,27 +90,27 @@
  "pilaretes": [
   {
    "perfil": "W 150 × 22,5",
-   "h": 1.798,
+   "h": 1.823,
    "Nd": 17.7,
-   "NRd": 761.8,
+   "NRd": 758.1,
    "uso": 0.012,
    "base": "ponta apoiada no piso sobre graute 20 mm; 2 cantoneiras L 102 × 102 × 9,5 × 200 abraçando a alma (2 M16 passantes) + 4 chumbadores químicos M12 hef 100 (sem solda)"
   },
   {
    "perfil": "W 150 × 22,5",
-   "h": 3.748,
+   "h": 3.798,
    "Nd": 10.3,
-   "NRd": 421.1,
+   "NRd": 412.5,
    "uso": 0.012,
    "base": "ponta apoiada no piso sobre graute 20 mm; 2 cantoneiras L 102 × 102 × 9,5 × 200 abraçando a alma (2 M16 passantes) + 4 chumbadores químicos M12 hef 100 (sem solda)"
   },
   {
    "perfil": "tubo quadrado 80 × 80 × 4,75",
-   "h": 3.748,
+   "h": 3.798,
    "Nd": 20.6,
-   "NRd": 140.7,
-   "uso": 0.146,
-   "lambda0": 1.39,
+   "NRd": 137.7,
+   "uso": 0.15,
+   "lambda0": 1.41,
    "base": "ponta apoiada no piso sobre graute; 2 cantoneiras L 76 × 76 × 6,3 × 150 (2 M12 passantes no tubo) + 4 chumbadores químicos M12 hef 100; topo igual, com 2 M16 na mesa inferior da viga (sem solda)"
   }
  ],
@@ -147,7 +147,7 @@
    "item": "LG-1",
    "desc": "longarina U 152 × 12,2 (6\")",
    "qt": 4,
-   "L_m": 3.512,
+   "L_m": 3.5260000000000002,
    "kg_m": 12.2
   },
   {
@@ -159,23 +159,23 @@
   },
   {
    "item": "PL-1",
-   "desc": "pilarete W 150 × 22,5 (patamar +1,95)",
+   "desc": "pilarete W 150 × 22,5 (patamar +1,975)",
    "qt": 2,
-   "L_m": 1.798,
+   "L_m": 1.823,
    "kg_m": 22.5
   },
   {
    "item": "PL-2",
-   "desc": "pilarete W 150 × 22,5 (chegada +3,90, lado E)",
+   "desc": "pilarete W 150 × 22,5 (chegada no piso pronto +3,95, lado E)",
    "qt": 1,
-   "L_m": 3.748,
+   "L_m": 3.798,
    "kg_m": 22.5
   },
   {
    "item": "PL-3",
-   "desc": "pilarete tubo quadrado 80 × 80 × 4,75 (chegada +3,90, entre os lances)",
+   "desc": "pilarete tubo quadrado 80 × 80 × 4,75 (chegada no piso pronto +3,95, entre os lances)",
    "qt": 1,
-   "L_m": 3.748,
+   "L_m": 3.798,
    "kg_m": 10.9
   },
   {
@@ -257,5 +257,5 @@
   }
  ],
  "ok": true,
- "massa_kg": 1632
+ "massa_kg": 1636
 }
