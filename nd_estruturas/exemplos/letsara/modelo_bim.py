@@ -627,6 +627,48 @@ def montar() -> ModeloBIM:
     for xc_ in (xm - 0.60, xm, xm + 0.60):                       # 3 pares de L 76 com chumbador químico M12 no piso
         caixa(m, "CB-1 cantoneira L 76 × 76 × 6,3 × 100 + chumbador químico M12", xc_ - 0.05, xc_ + 0.05, yb + 0.0485 + 0.001, yb + 0.0485 + 0.077, 0.010, 0.0163, GES)
 
+    # 5d. rev09c (DEC-053, decisão do Nathan 24/10): escada metálica EXTERNA em L na fachada A (do pátio à porta do 2º pav. +3,90)
+    EX = json.loads((AQ / "escada_externa.json").read_text(encoding="utf-8"))
+    GEX = "Escada metálica externa"
+    XG = EX["geometria"]
+    xi, xe_ = XG["x"]                                            # face interna (−0,45) e externa (−1,95)
+    zpt, zch = XG["z_patamar"], XG["z_chegada"]
+    esp_, piso_ = XG["espelho_m"], XG["piso_m"]
+    U203 = PerfilRetangular(0.0574, 0.203, "U 203 × 17,1")
+    W150e = PerfilI(h=0.148, b=0.100, tw=0.0043, tf=0.0049, nome="W 150 × 13,0")
+    yc0, yc1 = XG["y_lance_cima"]
+    for xs_ in (xi - 0.03, xe_ + 0.03):                          # lance de cima: sobe de y 6,92 (+0,89) a y 2,44 (+3,90) ao longo da fachada
+        m.linear("viga", "LE-1 longarina U 203 × 17,1 (lance de cima)", U203, (xs_, yc1, zpt + 0.05), (xs_, yc0, zch - 0.15), GEX, material="aco")
+    for k_ in range(1, 17):                                      # 16 degraus; o 17º espelho chega no patamar
+        yk = yc1 - (k_ - 0.5) * piso_
+        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ + 0.03, 0.00475), (xe_ + 0.06, yk, zpt + k_ * esp_ - 0.0024), (xi - 0.06, yk, zpt + k_ * esp_ - 0.0024), GEX, material="aco")
+    xb0, xb1 = XG["x_lance_baixo"]
+    yp0, yp1 = XG["y_patamar"]
+    for ys_ in (yp0 + 0.03, yp1 - 0.03):                         # lance de baixo: sobe de x −3,07 (pátio) a x −1,95 (+0,89)
+        m.linear("viga", "LE-2 longarina U 152 × 12,2 (lance de baixo)", U152, (xb1, ys_, 0.09), (xb0, ys_, zpt - 0.10), GEX, material="aco")
+    for k_ in range(1, 5):
+        xk = xb1 + (k_ - 0.5) * piso_
+        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ + 0.03, 0.00475), (xk, yp0 + 0.06, k_ * esp_ - 0.0024), (xk, yp1 - 0.06, k_ * esp_ - 0.0024), GEX, cima=(0.0, 0.0, 1.0), material="aco")
+    for (ya_, yb_), zz, nm_ in ((XG["y_chegada"], zch, "patamar de chegada +3,90"), ((yp0, yp1), zpt, "patamar +0,89")):
+        for xv in (xi - 0.05, xe_ + 0.05):
+            m.linear("viga", f"VE viga W 150 × 13,0 ({nm_})", W150e, (xv, ya_ + 0.01, zz - 0.0063 - 0.074), (xv, yb_ - 0.01, zz - 0.0063 - 0.074), GEX, material="aco")
+        m.linear("placa", f"CHE chapa xadrez 6,3 ({nm_})", PerfilRetangular(xi - xe_, 0.0063), ((xi + xe_) / 2, ya_ + 0.01, zz - 0.0032), ((xi + xe_) / 2, yb_ - 0.01, zz - 0.0032), GEX, cima=(0.0, 0.0, 1.0), material="aco")
+        for xp_ in (xi - 0.05, xe_ + 0.05):
+            for yp_ in (ya_ + 0.06, yb_ - 0.06):
+                m.linear("pilar", f"PE pilarete W 150 × 13,0 ({nm_})", W150e, (xp_, yp_, 0.0125), (xp_, yp_, zz - 0.0063 - 0.148), GEX, cima=(0.0, 1.0, 0.0), material="aco")
+                caixa(m, "CBE chapa de base 200 × 200 × 12,5 + 4 chumbadores químicos M16 (sobre graute)", xp_ - 0.10, xp_ + 0.10, yp_ - 0.10, yp_ + 0.10, 0.0, 0.0125, GEX)
+                caixa(m, "BE-1 bloco de concreto 60 × 60 × 60 (base própria da escada externa)", xp_ - 0.30, xp_ + 0.30, yp_ - 0.30, yp_ + 0.30, -0.62, -0.02, "Piso e fundações")
+    m.linear("viga", "TR-1 trava tubo 80 × 80 × 4,75 do patamar de chegada ao P28 (2 BR-M16 na face do pilar)", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"),
+             (xi - 0.05, 0.20, zch - 0.10), (xi - 0.05, 0.02, zch - 0.10), GEX, material="aco")
+    # ombreiras OM-2 internas da porta do 2º pav. (vista H): U 152 do piso do térreo a +5,00, por trás das placas, travadas no P28
+    for yj, dd in ((FCH.PORTA_H[0] / 1000 - 0.020 - 0.0485, 1), (FCH.PORTA_H[1] / 1000 + 0.020, 1)):
+        m.linear("pilar", "OM-2 ombreira interna U 152 × 12,2 (porta do 2º pav., vista H)", PerfilRetangular(0.152, 0.0485, "U 152 × 12,2"),
+                 (-0.325 + 0.076, yj + 0.02425, 0.0125), (-0.325 + 0.076, yj + 0.02425, 5.0), GEX, material="aco")
+        caixa(m, "OM-2 chapa de base 12,5 × 200 × 200 + 4 chumbadores químicos M12", -0.325, -0.125, yj - 0.075, yj + 0.125, 0.0, 0.0125, GEX)
+        caixa(m, "OM-2 console L 102 × 102 × 9,5 (apoio da ponta da placa da fiada +3,75)", -0.325, -0.223, yj - 0.03, yj + 0.08, 3.75 - 0.0095, 3.75, GEX)
+        for zt_ in (3.90, 4.90):
+            caixa(m, "OM-2 trava L 76 × 76 × 6,3 até o P28 (2 BR-M16 na face do pilar)", -0.30, -0.224, 0.20, yj, zt_ - 0.038, zt_ + 0.038, GEX)
+
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
     o_ext, o_c = 0.30 + 0.025 + 0.05, 0.20 + 0.025 + 0.05

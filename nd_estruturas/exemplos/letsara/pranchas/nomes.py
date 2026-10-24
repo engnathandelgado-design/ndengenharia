@@ -26,7 +26,7 @@ from familia_pl import marca_de
 PR = "/home/claude/letsara/pranchas/"
 EIXOS = sorted(X_EIXO.items(), key=lambda kv: kv[1])
 # marcas dos pilares internos (mesma tabela da LOC01; chave = nome R01 + x em mm)
-MARCA_INT = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-01", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
+MARCA_INT = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
              ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03"}
 FOLHA = lambda mk: "ND-LET-" + mk.replace("-", "")
 

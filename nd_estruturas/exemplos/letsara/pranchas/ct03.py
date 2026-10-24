@@ -48,7 +48,8 @@ PLAT = 10000.0
 O_PL = 375.0
 
 # pilares do eixo C: (marca, y, by, z_topo, rec)
-PIL = [("PF-02", YL[0], 600, PLAT), ("PC-01", YL[1], 600, ZT_I), ("PC-02", YL[3], 400, ZT_I), ("PC-03", M(Y_P13), 600, ZT_I), ("PF-04", YL[8], 600, PLAT)]
+_ZC = M(next(a_ for a_ in CB2["apoios_diretos"] if a_["nome"] == "C")["z_concreto"])     # rev09b (DEC-050): P8A até o fundo da W 310
+PIL = [("PF-02", YL[0], 600, PLAT), ("PC-01", YL[1], 600, _ZC), ("PC-02", YL[3], 400, ZT_I), ("PC-03", M(Y_P13), 600, ZT_I), ("PF-04", YL[8], 600, PLAT)]
 # I130 entre faces + folga 7,5 (comprimentos = quantitativos)
 I130 = []
 for mk, (ia, ya_f), (ib, yb_f) in (("V407", (1, 300), (3, 200)), ("V406", (3, 200), (None, 300)), ("V405", (None, 300), (8, 300))):
@@ -168,10 +169,9 @@ def corte(v):
     for i in range(2, 8):                                      # pontas das TS-01 do lado E (linhas 3 a 8), vistas
         y = YL[i]
         v.poli([(y - 200, Z_TS_E), (y + 200, Z_TS_E), (y + 200, Z_TS_E + 900), (y - 200, Z_TS_E + 900)], "VISTA", True)
-    _mc = next(m_ for m_ in CB2["montantes"] if m_["apoio"] == "C")    # linha 2 (DEC-049): montante W 150 no topo do P8A + W 310 contínua (cortada)
-    zb_w = M(_mc["z_base"]) + 19
-    v.poli([(YL[1] - 75, zb_w), (YL[1] + 75, zb_w), (YL[1] + 75, M(_mc["z_base"] + _mc["h_m"])), (YL[1] - 75, M(_mc["z_base"] + _mc["h_m"]))], "METALICA", True)
-    zw = M(_mc["z_base"] + _mc["h_m"])
+    _mc = next(m_ for m_ in CB2["apoios_diretos"] if m_["nome"] == "C")    # linha 2 (DEC-050): W 310 contínua (cortada) direto na cabeça do P8A
+    v.poli([(YL[1] - 125, M(_mc["z_concreto"]) + 20), (YL[1] + 125, M(_mc["z_concreto"]) + 20), (YL[1] + 125, M(_mc["z_concreto"]) + 39), (YL[1] - 125, M(_mc["z_concreto"]) + 39)], "METALICA", True)
+    zw = M(_mc["z_fundo_w"])
     v.poli([(YL[1] - 51, zw), (YL[1] + 51, zw), (YL[1] + 51, zw + 313), (YL[1] - 51, zw + 313)], "CORTADO", True)
     z_ter = Z_TS_E + 900 + 10                                  # terças Z 302 e pacote (linhas em vista, do lado E)
     for dz, cam in ((0, "METALICA"), (302, "METALICA"), (302 + 1000 * (PAC["tp40"] + PAC["espacador_la"] + PAC["zipada"]), "METALICA"),
@@ -208,7 +208,7 @@ def corte(v):
     for mk, y, by, zt in PIL:
         v.texto((y + (by / 2 + 120 if y < COMP else -by / 2 - 120), 180), mk, "nota", "BOTTOM_LEFT" if y < COMP else "BOTTOM_RIGHT")
     v.chamada((YL[2], Z_TS_E + 450), (6, 10), "TS-01 (ponta do lado E) no topo da I130: NEO-3 + 2 PN-5")
-    v.chamada((YL[1], zw + 313), (-6, 12), "linha 2: W 310 × 32,7 sobre montante W 150 (ND-LET-COB05)")
+    v.chamada((YL[1], zw + 313), (-6, 12), "linha 2: W 310 × 32,7 direto na cabeça do P8A (ND-LET-COB05)")
     v.chamada((YL[6] + 2500, z_ter + 302), (6, 8), "terças Z 302 + TP40 + lã 40 + zipada + painéis solares (ND-LET-COB01)")
     v.chamada((YL[0] + 75, Z_VB + 300), (8, 9), "VB-03 15×60 (fachada 1)")
     v.chamada((YL[8] - 75, Z_VB + 300), (-8, 9), "VB-07 15×60 (fachada 9)")
@@ -280,7 +280,7 @@ lin = [[nm + "-" + nm, ds, fl] for nm, _, _, fl, ds in CORTES]
 yy = pr.tabela(xt, ytop, "CORTES DA OBRA", ["CORTE", "POSIÇÃO", "FOLHA"], lin, [20, 105, 55], h_lin=5.2)
 notas = ["Corte 6-6 gerado da mesma geometria do modelo e das pranchas das peças: pilares do eixo C cortados (PF-02 e PF-04 com a cabeça recuada no lado interno acima de +8,70), vigas centrais I130 cortadas no eixo, consolos CP-I130 no plano.",
          f"I130: V407 (PC-01 → PC-02), V406 (PC-02 → PC-03), V405 (PC-03 → PF-04); folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
-         "TS-01 das linhas 3 a 8 apoiadas no topo da I130 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 310 × 32,7 metálica contínua sobre montantes W 150 nos pilares (DEC-048, ND-LET-COB05).",
+         "TS-01 das linhas 3 a 8 apoiadas no topo da I130 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 310 × 32,7 metálica contínua apoiada direto na cabeça dos pilares, que sobe até o fundo da W (DEC-050; DEC-048, ND-LET-COB05).",
          "Placas de fechamento por fora dos pilares nas fachadas I (linha 1) e A (linha 9); paredes internas G (linha 2) e C (linha 4, portões) do lado do pavilhão; cada placa nos seus 2 consoles, folgas de 0,5 cm na altura e 2 cm no comprimento.",
          "Cortes transversais: ND-LET-CT01 (eixos 2 e 3); mezanino: CT02; apoios como montados: CT04; montagem: MON01 a MON03.",
          "Cotas em cm, níveis em m. Não medir no desenho. EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]

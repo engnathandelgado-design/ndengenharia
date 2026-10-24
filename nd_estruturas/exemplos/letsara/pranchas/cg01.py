@@ -12,7 +12,7 @@ AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CG = json.load(open(AQ + "cargas_fundacao.json"))
 P = CG["pilares"]
 t = lambda kn: f"{kn / 10:.1f}".replace(".", ",").replace("-0,0", "0,0")      # kN → tf (NBR 9062: g = 10)
-ESP = {"P8": "PM-01", "P8B": "PM-01", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
+ESP = {"P8": "PM-01", "P8B": "PM-02", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
        "P6E": "PE-01", "P7E": "PE-02", "P6-L2": "PE-03"}          # rev09 (DEC-045): pilares da escada e P6 da linha 2
 
 
@@ -104,7 +104,7 @@ pr.notas(470, 318, [
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
     "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; mezanino 5,0 kN/m² (escritório — ND-LET-LA01) e revestimento 1,0 kN/m²); V = vento NBR 6123 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
     "De cálculo (ELU, NBR 8681 / 6118): 1,3 G + 1,4 V + 0,7·1,4 Q (sobrecarga secundária) e 1,0 G + 1,4 V (sucção, G favorável), com desaprumo H/400 (NBR 9062:2017 5.2.3); e 1,3 G + 1,4 Q. Nd mín negativo = tração de cálculo na fundação.",
-    "Pilares PM-01 e PG-01, PG-02, PG-03 e PG-04 não recebem cobertura (V só horizontal pelas placas/portões).",
+    "Pilares PG-01, PG-02, PG-03 e PG-04 não recebem cobertura (V só horizontal pelas placas/portões).",
     "Dimensionar blocos, cálices e estacas em projeto próprio com estes valores; o cálice segue as cargas e o embutimento das pranchas dos pilares.",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 300)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CG01")

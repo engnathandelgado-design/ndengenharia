@@ -20,18 +20,21 @@ def VBz(x, sentido):
 VB = lambda x: VBz(x, 1 if x == 0.0 else -1)                           # cantos: a VB está do lado de dentro
 RV = lambda x: f(math.ceil((zf(x * 1000) / 1000 + 0.90) / 0.05) * 0.05, 2)       # recuo das fachadas = topo da VB (5 cm)
 R1, R2 = f(REC["P1"] / 1000, 2), f(REC["P2"] / 1000, 2)
+# rev09b (DEC-050): na linha 2 o recuo é o apoio direto da W 310 (fundo da W − 40 mm), sem montante
+_L2 = {a["nome"]: a["z_concreto"] for a in json.load(open(AQ + "cob_linha2.json"))["apoios_diretos"]}
+R1L2, R2L2 = f(_L2["A"], 3), f(_L2["E"], 3)
 XE = X_EIXO["E"]
 MARCAS = [
     ("PL-01", "P1 L5–L8", 4, f"recuo +{R1}", "8 CE-1 (C)"),
     ("PL-09", "P1 L3", 1, f"recuo +{R1}", "2 CE-1 (C, fiadas 6–7)"),
     ("PL-10", "P1 L4", 1, f"recuo +{R1}", "8 CE-1 (C) + 5 (B, vista C)"),
-    ("PL-02", "P1 L2", 1, f"2 CP-MEZ (A); recuo +{R1}", "6 CE-1 (C) + 5 (B, vista G)"),
+    ("PL-02", "P1 L2", 1, f"2 CP-MEZ (A); recuo +{R1L2} (W 310 direto)", "6 CE-1 (C) + 5 (B, vista G)"),
     ("PL-03", "P1 L1 canto", 1, f"CP-VB +{VB(0)} (A); 2 CP-MEZ (A); seção cheia até o topo", "6 CE-1 (C) + 6 (D)"),
     ("PL-04", "P1 L9 canto", 1, f"CP-VB +{VB(0)} (A); seção cheia até o topo", "8 CE-1 (C) + 8 (B)"),
     ("PL-05", "P2 L5–L8", 4, f"recuo +{R2}", "8 CE-1 (C)"),
     ("PL-11", "P2 L3", 1, f"recuo +{R2}", "2 CE-1 (C, fiadas 6–7)"),
     ("PL-12", "P2 L4", 1, f"recuo +{R2}", "8 CE-1 (C) + 6 (D, vista C)"),
-    ("PL-06", "P2 L2", 1, f"2 CP-MEZ (A); recuo +{R2}", "6 CE-1 (C) + 6 (D, vista G)"),
+    ("PL-06", "P2 L2", 1, f"2 CP-MEZ (A); recuo +{R2L2} (W 310 direto)", "6 CE-1 (C) + 6 (D, vista G)"),
     ("PL-07", "P2 L1 canto", 1, f"CP-VB +{VB(XE)} (A); 2 CP-MEZ (A); seção cheia até o topo; ES-1FL (D)", "6 CE-1 (C) + 6 (B)"),
     ("PL-08", "P2 L9 canto", 1, f"CP-VB +{VB(XE)} (A); seção cheia até o topo; ES-1FL (B)", "8 CE-1 (C) + 8 (D)"),
     ("PF-01", "P3 L1", 1, f"CP-VB +{VBz(9.87, -1)} (B); CP-VB +{VBz(9.87, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(9.87)}", "6 CE-1 (C)"),

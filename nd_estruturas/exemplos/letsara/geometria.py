@@ -51,3 +51,11 @@ ESCADA = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, z_patamar=Z_PISOS[0]
               x_face_P6=36.30, x_face_E=39.20, y_patamar=(3.99, 5.55), y_lances=(5.55, 8.35), y_chegada=(8.35, Y_LIN[1] - 0.20))
 # cobertura metálica da linha 2 (DEC-046; DEC-050 sem montantes, W direto na cabeça dos pilares): do eixo A ao E, topo na inclinação da TS-01
 X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)
+# rev09c (24/10, decisão do Nathan: escada externa do arquitetônico entra no projeto, opção B do quadro decisao_escada_posicao)
+# Escada metálica em L encostada na fachada A, do térreo à porta do 2º pavimento (+3,90). Arquitetônico (bloco 55555): largura 1,50,
+# piso 28, 22 espelhos (5 no lance de baixo, ao longo de x; 17 no de cima, ao longo da fachada), patamar 1,50 × 1,50 na quina e
+# patamar de chegada de 0,20 a 2,44 (y). Deslocada 15 cm para fora em relação ao arquitetônico para passar livre das placas
+# (face externa das placas −0,425; folga 25 mm): face interna da escada em x = −0,45.
+ESCADA_EXT = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, n_baixo=5, n_cima=17, largura=1.50,
+                  x_int=-0.45, x_ext=-1.95, y_chegada=(0.20, 2.44), y_lance_cima=(2.44, 6.92), y_patamar=(6.92, 8.42),
+                  x_lance_baixo=(-1.95, -3.07), porta_y=(0.89, 1.79), porta_h=2.14)

@@ -395,8 +395,19 @@ def i130():
 
 def vm():
     S = AV.spec_vm()
+    import json as _js
+    _cb = _js.loads(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cob_linha2.json", encoding="utf-8").read())
+    _vj = _js.loads(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json", encoding="utf-8").read())
+    _u = {mk: max(round(c["ELU"]["M2d"] / c["ELU"]["MRd2"], 2) for c in _vj[mk]["casos"] if c["caso"] == "+7,30 linha 2") for mk in ("VM-01", "VM-02", "VM-03")}
+    _p = _cb["carga_vm"]
+    _f = lambda v, n=1: f"{v:.{n}f}".replace(".", ",")
+    notas = [("DEC-052 — +7,30 DA LINHA 2: montante W 150 × 13,0 da cobertura metálica no MEIO do vão das VM-01 (A–B), VM-02 (B–C e C–D) e VM-03 (D–P6) "
+              f"(P característico G/Q {_f(_p['VM-01']['Pg'])}/{_f(_p['VM-01']['Pq'])}, {_f(_p['VM-02']['Pg'])}/{_f(_p['VM-02']['Pq'])} e {_f(_p['VM-03']['Pg'])}/{_f(_p['VM-03']['Pq'])} kN; "
+              f"sucção de cálculo até {_f(_p['VM-01']['Pup_d'], 0)} kN). A PEÇA NÃO MUDA (mesmas marcas, cordoalhas e dente; uso ELU no +7,30 da linha 2: "
+              f"{_f(_u['VM-01'], 2)} / {_f(_u['VM-02'], 2)} / {_f(_u['VM-03'], 2)}; protensão completa mantida). A espera EM-L2 (4 barras roscadas M16 com gancho laçado nas alças N9) "
+              "vai na faixa de 2º estágio, posta por quem faz a capa, com gabarito — ND-LET-COB05. Não cortar nem dobrar as N9 nesses trechos.")]
     return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
-                  run_script("viga_vm.py"), S)
+                  run_script("viga_vm.py"), S, notas_extra=notas)
 
 
 def vb():

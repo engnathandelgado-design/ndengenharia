@@ -58,6 +58,11 @@ PP_KNM = PL["secao"]["pp_kNm"]
 FIADAS = list(range(8))
 ESQ = (1, 4)                                            # fiadas sem placa (faixas de esquadria) nas vistas H, J e I
 PORTA_I = (M(23.79), M(25.59))                          # porta da vista I (fiada 1, vão C–D) — R01: 1,80 m (a confirmar)
+# rev09c (DEC-053, 24/10): porta do 2º pavimento na fachada A do anexo (vista H) para a escada externa — arquitetônico 90 × 214,
+# y 0,89 a 1,79, piso +3,90 (topo +6,04): corta só a fiada 3 (+3,75/+5,00); a de cima (+5,00/+6,25) já é faixa de esquadria.
+# As pontas das placas da fiada 3 junto ao vão apoiam em ombreiras metálicas OM-2 INTERNAS (U 152, do piso do térreo a +5,00, por
+# trás das fiadas 0 e 2, travadas no P28) — nenhuma placa apoia em outra.
+PORTA_H = (890, 1790)
 J_OM = 20                                               # rev06d (DEC-028): ponta da placa a 20 mm do vão da porta (alma da ombreira OM-1 em U + junta)
 OMB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
 FACE_X = (-300, M(LARG) + 300)                          # faces externas dos pilares de canto (direção x)
@@ -91,7 +96,7 @@ VISTAS = {
     "G": dict(titulo="VISTA G — PAREDE INTERNA DA LINHA 2 (face do pavilhão)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: k <= (4 if b == 0 else 5), nomes_pil=["P1B", "P8", "P8A", "P8B", "P2B"]),
     "H": dict(titulo="VISTA H — LATERAL DO ANEXO, EIXO A, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
-              fiadas=lambda k, b: k not in ESQ, esquadria=True),
+              fiadas=lambda k, b: k not in ESQ, esquadria=True, porta=(0, 3, PORTA_H)),
     "I": dict(titulo="VISTA I — FACHADA DA LINHA 1 (anexo, vista de fora)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: k not in ESQ, esquadria=True, porta=(2, 0, PORTA_I), nomes_pil=["P1A", "P3", "P4", "P5", "P2A"]),
     "J": dict(titulo="VISTA J — LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
@@ -123,12 +128,12 @@ def montar(V):
             if d.get("porta") and d["porta"][0] == b and d["porta"][1] == k:
                 p0, p1 = d["porta"][2]
                 trechos = [(s0, p0 - J_OM), (p1 + J_OM, s1)]
-                abert.append((p0, p1, 0, 2 * H_PL, "porta"))
+                abert.append((p0, p1, 0, 2 * H_PL, "porta") if k == 0 else (p0, p1, k * H_PL, (k + 1) * H_PL, "porta"))
             x_c = next((s for s, _, nm in pil if nm == "C"), None)
             for (t0, t1) in trechos:
                 n += 1
-                ap = apoio if (t0 == s0 and t1 == s1) else "CS-1 + baldrame + OM-1"
-                esp = bool(d.get("porta") and d["porta"][0] == b and k == 2)     # placa sobre a porta (PP-05P): recebe o topo das 2 OM-1; mesma protensão da típica (DEC-035) + 2 buchas BR-1
+                ap = apoio if (t0 == s0 and t1 == s1) else ("CS-1 + baldrame + OM-1" if d["porta"][1] == 0 else "CS-1 + console da OM-2 (ombreira interna)")
+                esp = bool(d.get("porta") and d["porta"][0] == b and d["porta"][1] == 0 and k == 2)     # placa sobre a porta (PP-05P): recebe o topo das 2 OM-1; mesma protensão da típica (DEC-035) + 2 buchas BR-1
                 if esp:
                     ap = "2 CS-1 + topo das 2 OM-1"
                 # DEC-044: recorte na ponta do eixo C da fiada +6,25 das paredes internas (I130 + CP-I130 atravessam a parede)
@@ -163,7 +168,9 @@ TIPOS = {}
 for V, (pecas, _, _) in DADOS.items():
     for p in pecas:
         TIPOS.setdefault(p["Lk"], []).append((V, p["id"]))
-TIPO = {L: f"PP-{i+1:02d}" for i, L in enumerate(sorted([L for L in TIPOS if L == int(L)], key=lambda L: -L))}
+_FIXA = [10160, 10055, 9980, 9905, 9860, 9840, 9815, 4535, 4010]   # rev09c: marcas já emitidas não mudam; placas novas (porta da vista H) entram no fim
+_INT = [L for L in _FIXA if L in TIPOS] + sorted([L for L in TIPOS if L == int(L) and L not in _FIXA], key=lambda L: -L)
+TIPO = {L: f"PP-{_FIXA.index(L) + 1 if L in _FIXA else len(_FIXA) + 1 + [x for x in _INT if x not in _FIXA].index(L):02d}" for L in _INT}
 for _L in sorted([L for L in TIPOS if L != int(L)]):        # rev06d: variante PP-05P (placa sobre a porta da vista I) — rev08: mesma protensão, só as buchas BR-1
     _suf = {1: "P", 2: "RE", 3: "RD"}[round((_L - int(_L)) * 10)]   # DEC-044: RE/RD = recorte na ponta esquerda/direita (na elevação da vista) — não são a mesma peça virada (face interna)
     if int(_L) not in TIPO:
@@ -212,10 +219,14 @@ def desenhar_elev(pr, V, origem, esc):
         vv.hachura(pts, "ANSI37", 3.0, "HACHURA")
         vv.poli(pts, "EIXO", fechada=True)
         vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * (0.3 if rot == "porta" else 0.5)), {"portão": "PORTÃO — livre até +7,40", "porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
-        if rot == "porta":                                                          # rev06d: ombreiras OM-1 em U nos 2 lados (ND-LET-PP05)
+        if rot == "porta" and z0 == 0:                                              # rev06d: ombreiras OM-1 em U nos 2 lados (ND-LET-PP05)
             for xa in (a0 - 20, a1):
                 vv.ret(xa, 12, 20, z1 - 22, "METALICA")
             vv.chamada((a0 - 10, z1 * 0.55), (-10, 6), "OM-1 (PP05)")
+        elif rot == "porta":                                                        # rev09c: ombreiras OM-2 internas (atrás das placas), do piso a +5,00
+            for xa in (a0 - 20 - 48, a1 + 20):
+                vv.ret(xa, 0, 48, z1, "OCULTA")
+            vv.chamada((a0 - 44, z0 - 700), (-10, -6), "OM-2 interna (ES02)")
     for p in pecas:
         vv.poli(poligono_placa(p), "VISTA", fechada=True)
         if p.get("rec"):

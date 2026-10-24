@@ -13,7 +13,7 @@ f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
 YL = [round(y * 1000) for y in Y_LIN]
 XA = {k: round(v * 1000) for k, v in X_EIXO.items()}
 Lx, Ly = YL[-1], XA["E"]
-MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-01", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
+MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
              ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03"}
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
@@ -153,7 +153,7 @@ det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
     [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 40×60, 60 na direção A–E")
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
     [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40×60, 60 na direção 1–9")
-det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 600, 600, [((-300, -200), (-12, -8), "PC-03 60×60")], "PC-03 60×60 (PC-01/PM-01 40×60, PC-02 40×40)")
+det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 600, 600, [((-300, -200), (-12, -8), "PC-03 60×60")], "PC-03 60×60 (PC-01/PM-01/PM-02 40×60, PC-02 40×40)")
 det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×25")
 
 # ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01

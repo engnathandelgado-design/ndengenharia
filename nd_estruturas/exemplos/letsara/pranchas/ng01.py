@@ -186,7 +186,7 @@ N_PRODUCAO = [
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
     "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I130 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
-    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 310 da linha 2 (montantes nos pilares, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
+    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 310 da linha 2 (direto na cabeça dos pilares, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
     "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 310 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
@@ -208,6 +208,7 @@ def gerar():
     pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=PREVISTAS["ND-LET-NG01"], desenho="ND-LET-NG01", folha="01/01", rev="06"))
     pr.revisao("06", "21/10/2026", "FOLHA DE ROSTO E NOTAS GERAIS")
+    pr.revisao("", "24/10/2026", "ISOMÉTRICOS DO MODELO REV09 (VÃO DA ESCADA E ESCADA METÁLICA); LINHA 2 SEM MONTANTES (DEC-050)")
     x0, y0, x1, y1 = pr.quadro
     # ---------- título
     yt = y1 - 14
@@ -259,6 +260,10 @@ def gerar():
                   lf, [80, 30, 50, 50, 60], h_lin=5.2, destaque_ultima=True)
     lp = [[c, fm(v)] for c, v in sorted(conc.items())] + [[k, f"{fm(kg, 0)} kg ({fm(m, 0)} m)"] for k, (m, kg) in prot.items()]
     y = pr.tabela(xn1, y - 6, "CONCRETO POR CLASSE (m³) E PROTENSÃO", ["ITEM", "QUANTIDADE"], lp, [120, 150], h_lin=5.2)
+    # rev09b (24/10, pedido do Nathan): isométrico do mezanino com a laje +7,30 e a cobertura cortadas — mostra o vão da escada no +3,90
+    y_fim = max(y0 + 128, y - 10 - 175)
+    pr.imagem(xn1, y_fim, xn1 + 270, y - 10, S + "ng01_mezanino_c.png", "MEZANINO +3,90 — ISOMÉTRICO",
+              "laje +7,30 e cobertura cortadas: vão da escada (P6, P7, linha 2) e escada metálica")
     y = pr.notas(xn2, yt + 6, N_PRODUCAO, 270, "PRODUÇÃO, CONCRETAGEM E MANUSEIO")
     y = pr.notas(xn2, y - 3, N_MONTAGEM, 270, "MONTAGEM")
     y = pr.notas(xn2, y - 3, PEND, 270, "A CONFIRMAR ANTES DA PRODUÇÃO")
@@ -300,7 +305,7 @@ def simbologia(pr, x, yt):
 if __name__ == "__main__":
     os.makedirs(PR + "img_ng01", exist_ok=True)
     SC = sys.argv[1] if len(sys.argv) > 1 else PR + "img_ng01/"
-    for n in ("ng01_estrutura", "ng01_completa"):
+    for n in ("ng01_estrutura", "ng01_completa", "ng01_mezanino"):
         if os.path.exists(SC + n + ".png"):
             corta(SC + n + ".png", PR + "img_ng01/" + n + "_c.png")
     pr = gerar()

@@ -40,6 +40,8 @@ EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA — LIBERADO PARA PRO
 # abaixo; revisões manuais da folha com esta data viram a descrição dela (sem número próprio). Folha sem revisão manual
 # nesta data recebe a descrição padrão. REEMISSAO = None desliga.
 REEMISSAO = dict(data="23/10/2026", desc="REEMISSÃO EXECUTIVA (PACOTE REV09): PISOS +3,90/+7,30; NOMES E REFERÊNCIAS")
+# 24/10/2026 (DEC-050/051): segunda reemissão do pacote rev09 — só nas folhas que têm revisão manual com esta data (numerada depois da REEMISSAO)
+REEMISSAO2 = dict(data="24/10/2026")
 _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
@@ -606,6 +608,22 @@ class Prancha:
 
     def _emitir(self):
         if EMISSAO and not getattr(self, "_emitida", False):
+            novas2 = [d for _, dt, d in self.revisoes if REEMISSAO2 and dt == REEMISSAO2["data"]]
+            self.revisoes = [t for t in self.revisoes if not (REEMISSAO2 and t[1] == REEMISSAO2["data"])]
+            if not self.revisoes and novas2:                       # folha nova de 24/10: só a emissão desta data
+                self.revisoes.append(("00", REEMISSAO2["data"], "; ".join(novas2)))
+                self.dados["rev"], self.dados["data"] = "00", REEMISSAO2["data"]
+                self._emitida = True
+                return
+            self._emitir1()
+            if novas2:
+                r = f"{int(self.dados['rev']) + 1:02d}"
+                self.revisoes.append((r, REEMISSAO2["data"], "; ".join(novas2)))
+                self.dados["rev"], self.dados["data"] = r, REEMISSAO2["data"]
+            self._emitida = True
+
+    def _emitir1(self):
+        if True:
             nums = [int(r) for r, _, _ in self.revisoes if str(r).isdigit()] or ([int(self.dados["rev"])] if str(self.dados.get("rev", "")).isdigit() else [0])
             if not self.revisoes:
                 self.revisoes.append((self.dados["rev"], self.dados["data"], "EMISSÃO INICIAL"))
@@ -614,7 +632,6 @@ class Prancha:
             if not self.revisoes and novas:                       # folha nova do pacote rev09: só a emissão desta data
                 self.revisoes.append(("00", REEMISSAO["data"], "; ".join(novas)))
                 self.dados["rev"], self.dados["data"] = "00", REEMISSAO["data"]
-                self._emitida = True
                 return
             nums = [int(r) for r, _, _ in self.revisoes if str(r).isdigit()] or nums
             r = f"{max(nums) + 1:02d}"
@@ -624,7 +641,6 @@ class Prancha:
                 r = f"{int(r) + 1:02d}"
                 self.revisoes.append((r, REEMISSAO["data"], "; ".join(novas) if novas else REEMISSAO["desc"]))
                 self.dados["rev"], self.dados["data"] = r, REEMISSAO["data"]
-            self._emitida = True
 
     def salvar(self, base, png_dpi=110):
         for v in self.vistas:

@@ -9,7 +9,7 @@ from prancha_nd import Prancha, _wtext, ALTURAS
 from arm_nd import Arm, zonas, fd, f1
 
 ORDEM = ["PL-01", "PL-02", "PL-03", "PL-04", "PL-05", "PL-06", "PL-07", "PL-08", "PL-09", "PL-10", "PL-11", "PL-12",
-         "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06", "PC-01", "PC-02", "PC-03", "PM-01", "PG-01", "PG-02"]
+         "PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06", "PC-01", "PC-02", "PC-03", "PM-01", "PM-02", "PG-01", "PG-02"]
 FORMA = {}
 E50, E25 = 50.0, 25.0
 QW, QH = 485.0, 410.0

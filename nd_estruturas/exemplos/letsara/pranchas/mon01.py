@@ -66,7 +66,7 @@ for j, (nome, x) in enumerate((("B", X_FACH["B"]), ("C", X_FACH["C"]), ("D", X_F
     pilar(Lx, M(x), 600, 400, ["PF-05", "PF-04 (P14)", "PF-06"][j], -1, 700)
 for marca, y, bx, by in (("PC-01 (P8A)", Y_LIN[1], 600, 400), ("PC-02 (P11)", Y_LIN[3], 400, 400), ("PC-03 (P13)", Y_P13, 600, 600)):
     pilar(M(y), M(X_FACH["C"]), bx, by, marca, 1, 700)
-for marca, x in (("PM-01", X_FACH["B"]), ("PM-01", X_FACH["D"])):
+for marca, x in (("PM-01", X_FACH["B"]), ("PM-02", X_FACH["D"])):
     pilar(M(Y_LIN[1]), M(x), 600, 400, marca, 1, 700)
 for marca, x, b_ in (("PG-01 (P9)", 9.87, 400), ("PG-02 (P10)", 15.195, 250), ("PG-04 (P10)", 24.305, 250), ("PG-03 (P12)", 29.63, 400)):
     pilar(M(Y_LIN[3]), M(x), b_, b_, marca, 1, -700)
@@ -164,7 +164,7 @@ pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40
          grupo(["PL-03", "PL-04", "PL-07", "PL-08"], "Pilar 40×60 de canto (L1, L9), cabeça recuada", "cálice −1,00; topo +10,00"),
          grupo(["PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06"], "Pilar 40×60 de fachada (1 e 9) c/ CP-VB", "cálice −1,00; topo +10,00"),
          grupo(["PC-01", "PC-02", "PC-03"], "P8A 40×60, P11 40×40, P13 60×60 (eixo C)", f"cálice −1,00; topo +{f(Z_TC)}"),
-         grupo(["PM-01"], "Pilar do mezanino 40×60 (B2, D2)", "ver ND-LET-MON02"),
+         grupo(["PM-01", "PM-02"], "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 310", "ver ND-LET-MON02"),
          grupo(["PG-01", "PG-03"], "Pilares dos portões 40×40 (P9 / P12, linha 4)", "cálice −1,00; topo +7,47 / +8,06"),
          grupo(["PG-02", "PG-04"], "Pilares dos portões 25×25 (P10)", "cálice −1,00; topo +7,63 / +7,90"),
          grupo(["TS-01"], f"Viga I90 de cobertura, L {LG['L_TS']*100:.0f}, sem dentes", f"recuo +{f(Z_AS['P1'])} / topo I130 +{f(Z_TC)} / recuo +{f(Z_AS['P2'])}")]
@@ -181,7 +181,7 @@ seq = ["Ordem geral (decisão do Nathan, 21/10/2026): pilares → vigas → cobe
        "TS-01 das linhas 8 → 3 (linha 2 sem TS-01, DEC-048; o guindaste trabalha de ré, sempre no vão ainda sem cobertura): NEO-4 no recuo dos pilares laterais (2 PN-3 Ø25) e NEO-3 no topo da I130 / P11 (2 PN-5 Ø20); grautear os tubos TB-3. VB-05 a VB-08 da fachada 9 (dente sobre os CP-VB; PN-6 grauteado só numa ponta, porca apertada após assentar), escoradas contra tombamento até as terças do vão 8–9.",
        "Cobertura dos vãos 3–4 a 8–9, atrás do guindaste: terças, correntes e X dos vãos 4–5 a 8–9 (tudo parafusado, sem mão-francesa), TP40, lã, zipada e painéis. A TS-01 da linha 3 fica travada pelas terças do vão 3–4 (um lado) até a cobertura do vão 2–3.",
        "Mezanino das linhas 1–2, pisos +3,90 e +7,30, com a escada metálica (ND-LET-MON02, ES01), com a cobertura dos vãos 1–2 e 2–3 ainda aberta: guindaste dentro do pavilhão no vão 2–3, entrando pela abertura lateral das vistas E/F (livre até +7,50 entre as linhas 2 e 4).",
-       "Parede G da linha 2 e, depois, W 310 × 32,7 da linha 2 (montantes W 150 nos pilares A, B, C, D, P6 e E, módulos com emendas parafusadas — ND-LET-COB05), VB-01 a VB-04 da fachada 1, terças do vão 1–2 (ST-W e mão-francesa MF-1 em toda terça da linha 2) e por último as do vão 2–3, com o guindaste saindo pela abertura lateral.",
+       "Parede G da linha 2 e, depois, W 310 × 32,7 da linha 2 (apoiada direto na cabeça dos pilares A, B, C, D, P6 e E com chapa CA-L2 e presilhas, módulos com emendas parafusadas — ND-LET-COB05), VB-01 a VB-04 da fachada 1, terças do vão 1–2 (ST-W e mão-francesa MF-1 em toda terça da linha 2) e por último as do vão 2–3, com o guindaste saindo pela abertura lateral.",
        "Fechamento externo pelo lado de fora (ND-LET-MON03): fachada I e anexo (H, J), E e F (fiadas altas), laterais B e D e fachada A."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 notas = ["Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; prumo 10 mm em 10 m; consolo ±10 mm; folga de ponta 25 mm e de dente 25 mm já previstas.",

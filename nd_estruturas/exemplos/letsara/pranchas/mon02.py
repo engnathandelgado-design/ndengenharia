@@ -125,7 +125,7 @@ for n, a in zip(NIVEIS, ASSENTO):
     c.ret(-BV / 2, zt + 210, M(Y2) + BV, 50, "VISTA")
     c.chamada((M(2.5), zt + 260), (8, 6), f"piso {NIVS[NIVEIS.index(n)]}: laje h20 + capa 5")
 c.chamada((M(Y2), M(ASSENTO[0]) - 200), (-40, -22), f"CP-MEZ 40 × 40 × {H_CMEZ/10:.1f} oculto".replace(".", ","))
-c.chamada((0, M(ASSENTO[0]) + 150), (14, -12), f"VM 25 × {H_VIGA*100:.0f} protendida ({fp(PQ['VM-02'][7])} t)")
+c.chamada((0, M(ASSENTO[0]) + 150), (14, -12), f"VM {B_VM*100:.0f} × {H_VIGA*100:.0f} protendida ({fp(PQ['VM-02'][7])} t)")
 c.cota_h([0, M(Y2)], -1000, -10)
 c.cota_v([-1000, 0, M(ASSENTO[0]), M(NIVEIS[0]), M(ASSENTO[1]), M(NIVEIS[1])], -900, -10, total=False)
 def niv(x, z, txt, lado=1):
@@ -142,13 +142,14 @@ y = Q[3] - 6
 LAJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/laje_alveolar.json"))
 CMZ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cargas_mezanino.json"))
 X_JL = 20
-pecas = [[m, f"VM retangular 25×{H_VIGA*100:.0f} protendida, dente {H_DENTE*100:.0f}×{L_DENTE*100:.0f}, L {f(PQ[m][4], 2)} m", str(PQ[m][5]), fp(PQ[m][7]),
+pecas = [[m, f"VM retangular {B_VM*100:.0f}×{H_VIGA*100:.0f} protendida, dente {H_DENTE*100:.0f}×{L_DENTE*100:.0f}, L {f(PQ[m][4], 2)} m", str(PQ[m][5]), fp(PQ[m][7]),
           {"VM-04": f"CP-MEZ; P6–P7 só {NIVS[0]}, P6–E só {NIVS[1]}"}.get(m, f"CP-MEZ {NIVS[0]} / {NIVS[1]}")] for m in ("VM-01", "VM-02", "VM-03", "VM-04")]
 for mk in sorted(m_ for m_ in PQ if m_.startswith("LA-")):
     pecas.append([mk, PQ[mk][2].replace("laje alveolar ", "LP20 ")[:60], str(PQ[mk][5]), fp(PQ[mk][7]), "topo das VM, apoio 10 cm"])
 n_cmz = 2 * sum(len(vigas_nivel(iz)) for iz in (0, 1))
-pecas += [["CP-MEZ", f"Consolo 25×40×{H_CMEZ/10:.1f} sem chanfro (pilares das linhas 1–2 e escada)".replace(".", ","), str(n_cmz), "—", "nos pilares (ver pranchas)"],
-          ["PM-01", f"Pilar 40×60 do mezanino (B2, D2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00"]]
+pecas += [["CP-MEZ", f"Consolo 40×40×{H_CMEZ/10:.1f} sem chanfro (pilares das linhas 1–2 e escada)".replace(".", ","), str(n_cmz), "—", "nos pilares (ver pranchas)"],
+          ["PM-01", f"Pilar 40×60 do mezanino (B2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00; cabeça até a W 310"],
+          ["PM-02", f"Pilar 40×60 do mezanino (D2), L {PQ['PM-02'][4]*100:.0f}", str(PQ["PM-02"][5]), fp(PQ["PM-02"][7]), "cálice −1,00; cabeça até a W 310"]]
 for mk, ds in (("PE-01", "P6 da escada 25×40"), ("PE-02", "P7 da escada 40×60"), ("PE-03", "P6 da linha 2 25×40")):
     pecas.append([mk, f"Pilar {ds}, L {PQ[mk][4]*100:.0f}", str(PQ[mk][5]), fp(PQ[mk][7]), "cálice −1,00"])
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — MEZANINO", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [18, 92, 10, 18, 62], h_lin=6.0)
@@ -156,17 +157,17 @@ seq = [f"Pré-requisitos (ND-LET-MON01): pilares (incluindo P6 e P7 da escada e 
        f"Guindaste dentro do pavilhão no vão 2–3 (entrada pela abertura lateral das vistas E/F, livre até +7,50), afastado da I130 V407 do eixo C: duas posições (perto dos eixos B e D), raio até ~14 m para a linha 1; peça mais pesada VM-02 {fp(PQ['VM-02'][7])} t.",
        f"Piso {NIVS[0]}: VM das linhas 1 e 2 e a VM-04 P6–P7 (sem escoramento): NEO-5F 200×200 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); soltar do guindaste com a viga calçada no neoprene e conferida no nível.",
        f"CONCRETAR AS PONTAS das VM dos dois lados (junta 3 cm VM × pilar, do recorte do dente ao topo, graute ou concreto fck ≥ 30 MPa, fôrma lateral; ND-LET-VM01 det. 2) e aguardar fcj ≥ {X_JL} MPa (corpo de prova da obra) ANTES de montar as lajes (DEC-039, NBR 9062:2017 11.1).",
-       f"Lajes do {NIVS[0]} vão a vão alternando os lados dos PM-01 (A–B, B–C, D–E, C–D) para limitar o desequilíbrio nos pilares, içadas só por garra nas 2 pontas ({fp(PQ['LA-01'][7])} t), apoio de 10 cm no topo da VM sobre fita de neoprene 10 × 100; LA-01R junto aos pilares; no vão da escada as LA-03/LA-03R/LA-04 (linha 1 → VM-04); chavetas grauteadas.",
+       f"Lajes do {NIVS[0]} vão a vão alternando os lados dos PM-01/PM-02 (A–B, B–C, D–E, C–D) para limitar o desequilíbrio nos pilares, içadas só por garra nas 2 pontas ({fp(PQ['LA-01'][7])} t), apoio de 10 cm no topo da VM sobre fita de neoprene 10 × 100; LA-01R junto aos pilares; no vão da escada as LA-03/LA-03R/LA-04 (linha 1 → VM-04); chavetas grauteadas.",
        "Grautear as bainhas BA-1 com as N11 (6 Ø16); limpar e saturar o topo das VM; 2º estágio + capa 5 C30 com tela Q138, N12 e N1, de uma vez, por quem executa a capa; cura úmida 7 dias.",
        f"Piso {NIVS[1]}: VM (as de cima só depois das lajes de baixo — a laje não passa entre as VM do nível superior; VM-04 P6–E da linha 2 só neste nível), pontas concretadas e fcj ≥ {X_JL} MPa, lajes, 2º estágio e capa, igual ao {NIVS[0]}. Carregar só com fck ≥ 20 MPa na capa.",
        f"Escada metálica (ND-LET-ES01): depois da capa do {NIVS[0]} com fck ≥ 20 MPa — vigas de patamar parafusadas nas faces do P6/P7 e do P6 da linha 2/P2 (barras roscadas M16 embutidas), pilaretes com chumbador químico, longarinas e degraus; tudo parafusado.",
        "Estabilidade provisória: pilares das linhas 1–2 engastados nos cálices, sem escoramento nem contraventamento provisório (sem placas, o vento atua só nos pilares, bem abaixo do caso final com as placas); a laje passa a diafragma com a capa ≥ 15 MPa. Vigas e lajes sem escoramento.",
-       "Depois: parede G da linha 2, W 310 da linha 2 com montantes e mãos-francesas (ND-LET-COB05), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
+       "Depois: parede G da linha 2, W 310 da linha 2 direto na cabeça dos pilares, com presilhas e mãos-francesas (ND-LET-COB05), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 c39, c73 = CMZ["piso_390"], CMZ["laje_730"]
 n15 = sum(1 for c_ in LAJ["cordoalhas"] if c_["diam"] == "15.2")
 notas = [f"Laje alveolar LP20 (1245 × 200, 6 alvéolos Ø15,2) + capa 5 C30 em {f(L_P/1000, 2)} m, vão de cálculo {f((L_P - 100)/1000, 2)} m: {n15} Ø15,2 + {LAJ['n_cord'] - n15} Ø12,7 CP-190 RB, uma por nervura, liberação com fckj ≥ {LAJ['fckj']:.0f} MPa; {NIVS[0]}: sobrecarga {f(c39['sobrecarga'], 1)} kN/m² (depósito) + revestimento {f(c39['revestimento'], 1)}; {NIVS[1]}: sem uso, {f(c73['sobrecarga'], 1)} + {f(c73['revestimento'], 1)} kN/m² (ND-LET-LA01).",
-         f"Vigas VM retangulares 25 × {H_VIGA*100:.0f} protendidas (laje apoiada 10 cm no topo, 2º estágio de 18 cm do lado da borda) com dente Gerber {H_DENTE*100:.0f} × {L_DENTE*100:.0f} (NBR 9062:2017 7.4, MEF): assentos +{f(ASSENTO[0])} e +{f(ASSENTO[1])}; fundo da viga e do consolo +{f(ASSENTO[0] - H_CMEZ/1000)} / +{f(ASSENTO[1] - H_CMEZ/1000)}; altura total com laje e capa {H_VIGA*100 + 26:.0f} cm.",
+         f"Vigas VM retangulares {B_VM*100:.0f} × {H_VIGA*100:.0f} protendidas (laje apoiada 10 cm no topo, 2º estágio de 18 cm do lado da borda) com dente Gerber {H_DENTE*100:.0f} × {L_DENTE*100:.0f} (NBR 9062:2017 7.4, MEF): assentos +{f(ASSENTO[0])} e +{f(ASSENTO[1])}; fundo da viga e do consolo +{f(ASSENTO[0] - H_CMEZ/1000)} / +{f(ASSENTO[1] - H_CMEZ/1000)}; altura total com laje e capa {H_VIGA*100 + 26:.0f} cm.",
          "Tolerâncias NBR 9062:2017 (5.2.2.6): pilar ±10 mm em planta; nível dos apoios ±10 mm; folga de ponta 30 mm; apoio da laje ≥ 10 cm medido após a montagem.",
          "Níveis em m, cotas em cm. Não medir no desenho."]
 pr.notas(XC, y - 4, notas, 200)

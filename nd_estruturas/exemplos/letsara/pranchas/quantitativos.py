@@ -73,7 +73,8 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:
     elif canto:
         zr = rec_vb(0.0 if pos.startswith("P1") else 39.50); cab = 0.30 * 0.30
     else:
-        zr = REC_Q[0] if pos.startswith("P1") else REC_Q[1]; cab = 0.40 * 0.30
+        m_r = re.search(r"recuo \+(\d+,\d+)", cons)                    # rev09b: PL-02/PL-06 com recuo próprio (fundo da W 310)
+        zr = num(m_r.group(1)) if m_r else (REC_Q[0] if pos.startswith("P1") else REC_Q[1]); cab = 0.40 * 0.30
     vc = 0.0
     for parte in cons.split(";"):
         m = re.search(r"(?:(\d+) )?(CP-[A-Z0-9]+)[^()]*(?:\(([^)]*)\))?", parte.strip())
@@ -83,7 +84,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:
     vol = 0.24 * (1.0 + zr) + cab * (10.0 - zr) + vc
     folha_mk = mk.replace("-", "")
     pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
-PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
+PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PM02", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
 for f_ in PIL_OUTROS:
     q = quadro(f_)
     pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", ""), num(q["COMPRIMENTO"].split()[0]) / 100,
