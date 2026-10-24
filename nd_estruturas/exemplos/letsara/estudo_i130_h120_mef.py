@@ -31,7 +31,7 @@ arm = CD.armaduras_i130(v, rd["adotado"])
 arm = [a for a in arm if not (a.get("nome") == "pele" and a["pos"] > H - 100)]
 m = analisar(g, arm, cord, v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=v["Ls"], xP=v["xP"], passos=500, rampa_fim=v["rampa_fim"],
              robusto=v["robusto"], sig_pe=v["sig_pe"], lt=v["lt"], saida_png=str(AQ / "mef_dente_I130_h120.png"), titulo="Dente Gerber I130 com h 120 (estudo)")
-m.pop("curva", None)
+print("LIM", m["limite"], "PICO", m["V_pico_kN"], "lt", v["lt"]); m.pop("curva", None)
 out = dict(geometria=dict(H=H, hd=v["hd"], ln=v["ln"], recorte_mm=H - v["hd"], bw=150), Fd=v["Vd"], Hd=v["Hd"], calculo=rd["adotado"],
            MEF=dict(Vu_kN=m["Vu_kN"], FS=m["FS"], ok=m["Vu_kN"] >= 1.06 * v["Vd"], protensao_ok=m.get("protensao_ok")), cordoalhas=cord)
 (AQ / "estudo_i130_h120_mef.json").write_text(json.dumps(out, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
