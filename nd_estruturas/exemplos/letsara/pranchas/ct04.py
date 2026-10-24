@@ -180,7 +180,7 @@ d.cota_h([0, u0, xpd, u0 + LNV, pcm], zbv, -8, total=False)
 d.cota_v([zbv, ZAV, ZTV, ZTV + 210, ZN], u0 + 1250, 8, total=False)
 nivel(d, 0, ZAV, f"assento {f(ZAV / 1000)}", -1)
 nivel(d, u0 + 1200, ZN, f"piso {f(ZN / 1000)}", 1)
-d.chamada((xpd, ZAV + 200), (14, 8), "NEO-5F 200×200×21 fretado + PN-1 Ø20 L=700 (300 no consolo)")
+d.chamada((xpd, ZAV + 200), (14, 8), "NEO-5F 200×200×21 fretado + PN-1 Ø20 L=630 (230 no consolo)")
 d.chamada((u0 / 2, ZTV - 200), (-14, 12), "junta 3 concretada")
 d.chamada((u0 + 900, ZTV + 235), (6, 10), "laje h20 + capa 5")
 

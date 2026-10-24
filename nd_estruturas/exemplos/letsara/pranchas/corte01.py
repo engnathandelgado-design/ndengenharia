@@ -163,13 +163,17 @@ def estrutura(R, eixo):
         zb0 = ap[0]["z_fundo_w"] * 1000
         zbw = lambda x: zb0 + I * (x - ap[0]["x"] * 1000)
         xw0, xw1 = ap[0]["x"] * 1000 - 100, ap[-1]["x"] * 1000 + 100
-        R.poli([(xw0, zbw(xw0)), (xw1, zbw(xw1)), (xw1, zbw(xw1) + 313), (xw0, zbw(xw0) + 313)], "METALICA", True)
+        DW = 200 if "200" in CB2["perfil"] else 313                 # DEC-052: W 200 × 15,0
+        R.poli([(xw0, zbw(xw0)), (xw1, zbw(xw1)), (xw1, zbw(xw1) + DW), (xw0, zbw(xw0) + DW)], "METALICA", True)
+        for mt_ in CB2.get("montantes", []):                      # DEC-052: montantes W 150 no meio dos vãos, sobre as VM do +7,30
+            R.ret(mt_["x"] * 1000 - 74, mt_["z_base"] * 1000, 148, mt_["L_m"] * 1000, "METALICA")
         for a_ in ap:
             x_ = a_["x"] * 1000
             R.ret(x_ - 125, a_["z_concreto"] * 1000 + 20, 250, 19, "METALICA")
     else:
-        sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, 1000), (200, 1080), (200, 1300), (-200, 1300), (-200, 1080),
-               (-75, 1000), (-75, 330), (-200, 250)]
+        _H = H_I130                                                 # DEC-054: h 120
+    sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, _H - 300), (200, _H - 220), (200, _H), (-200, _H), (-200, _H - 220),
+               (-75, _H - 300), (-75, 330), (-200, 250)]
         base = Z_TOP_C - H_I130
         R.poli([(XC + x, base + y) for x, y in sec], "CORTADO", True)
         R.hach([(XC + x, base + y) for x, y in sec])
@@ -195,6 +199,7 @@ pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES (APOIO NO RECUO E NO TOPO DA I1
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; MEZANINO EM MEIO VASO COM DENTE")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE, SEM MÃO-FRANCESA")
 pr.revisao("07", "21/10/2026", "COTAS EM CM; MARCAS DOS PILARES NOS CORTES; DETALHES DE APOIO PASSAM PARA A ND-LET-CT04")
+pr.revisao("10", "24/10/2026", "DEC-052/054: EIXO 2 COM W 200 × 15,0 E MONTANTES; I130 COM h 120")
 pr.revisao("09", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; EIXO 2 COM W 310 METÁLICA (SEM TS-01); P6 DA LINHA 2")
 z_tel = lambda x: zf(x) + (H + 10 + 300 + sum(PAC.values()) * 1000) * c       # topo dos painéis solares
 for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 170), "CORTE 3-3"))):
@@ -237,13 +242,13 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
     if eixo == 3:
         v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3 %, sem dentes (apoio direto)")
     else:
-        v.chamada((14000, zf(14000) + 1150), (-8, -12), "W 310 × 32,7 direto na cabeça dos pilares (ND-LET-COB05)")
+        v.chamada((14000, zf(14000) + 1150), (-8, -12), f"{CB2['perfil'].replace(' x ', ' × ')} nos pilares e em montantes no meio dos vãos (ND-LET-COB05)")
     v.chamada((39875, 5000), (6, 0), "placa 10 cm (por fora)")
     v.chamada((39350, 9950), (8, 20), f"cabeça 40×30; folga de {Z_TOP_PIL - z_tel(39475):.0f} mm do topo dos painéis à platibanda")
     if eixo == 3:
-        v.chamada((XC, Z_TOP_C - 650), (10, -30), "I130 (h 130): TS-01 apoiadas no topo (NEO-3 + 2 PN-5 por viga)")
+        v.chamada((XC, Z_TOP_C - 650), (10, -30), f"I130 (h {H_I130 / 10:g}): TS-01 apoiadas no topo (NEO-3 + 2 PN-5 por viga)")
     else:
-        v.chamada((XC + 200, 800), (10, 8), "P8A 40×60 (40 em x): cabeça até a W 310")
+        v.chamada((XC + 200, 800), (10, 8), "P8A 40×60 (40 em x): cabeça até a W 200")
         v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "VM retangulares 30 × 75 com dente + laje h20 + capa 5")
         v.chamada((P6_L2[0] * 1000, 2000), (-10, 8), "P6 da linha 2 (25 × 40)")
 
@@ -258,7 +263,7 @@ notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações.",
          f"Cobertura rebaixada (rev03) para o pacote TP40 + lã 40 + zipada 70 + painéis solares: topo dos painéis junto ao P2 em {f(z_tel(39475) / 1000)}, {(Z_TOP_PIL - z_tel(39475)):.0f} mm abaixo da platibanda +10,000 (pedido: ≥ 150 mm).",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), sem dentes: apoio de 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e de 16,25 cm no topo da I130 / pilar central (NEO-3 + 2 PN-5 Ø20); terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
          "Cabeça dos pilares laterais recuada acima do assento da TS-01: só os 30 cm externos sobem até +10,00 (consolos externos pela cabeça).",
-         "Vigas centrais I130 (h 130) com dentes 78 × 35 nos consolos CP-I130; vigas do mezanino VM retangulares 30 × 75 protendidas com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev09, ND-LET-VM01). Eixo 2: sem TS-01 — W 310 × 32,7 metálica contínua apoiada direto na cabeça dos pilares, que sobe até o fundo da W (DEC-050, sem montantes).",
+         "Vigas centrais I130 (h 120, DEC-054) com dentes 78 × 35 nos consolos CP-I130 com mísula; vigas do mezanino VM retangulares 30 × 75 protendidas com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev09, ND-LET-VM01). Eixo 2: sem TS-01 — W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes W 150 no meio dos vãos sobre as VM do +7,30 (DEC-052).",
          f"Pé-direito (rev03): fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C); na laje superior (+7,30, sem uso), fundo das terças entre as linhas 1 e 2 de {f((REC[0] + 900 + 10) / 1000)} (eixo A) a {f((Z_TOP_C + 10) / 1000)} (eixo C) — conferir o uso do piso superior. Portões da linha 4 livres até +7,40.",
          "Detalhes de cada apoio na montagem: ND-LET-CT04. Corte do mezanino: ND-LET-CT02. Corte longitudinal: ND-LET-CT03.",
          "Cotas em cm, níveis em m. Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

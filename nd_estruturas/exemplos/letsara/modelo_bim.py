@@ -520,7 +520,7 @@ def montar() -> ModeloBIM:
                 bc_ = VMP.get("b_consolo", bt)
                 m.bloco("consolo", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}×{hcm*100:.1f}", (xf + sg * prj / 2, y, zb + hcm), prj, bc_, hcm, "Consolos")
                 m.bloco("inserto", "NEO-5F 200×200 fretado", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.021), 0.20, 0.20, 0.021, "Pinos, tubos e neoprenes")
-                m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.63, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
         for x0, b_, mk, yl0_, yl1_ in paineis_nivel(iz):           # mesma paginação da ND-LET-LA01 (+3,90 com LA-03 / LA-04 no vão da escada)
             x = (x0 + b_ / 2) / 1000

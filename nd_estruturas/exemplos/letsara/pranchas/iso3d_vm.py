@@ -23,7 +23,7 @@ p.add_mesh(box(x0 + XP - 0.10, x0 + XP + 0.10, -0.10, 0.10, zb + HC, zb + HC + 0
 xa = x0 + FOL
 p.add_mesh(box(xa, xa + LN, ye, yi, zb + REC, zb + H), **conc)                                # nariz do dente
 p.add_mesh(box(xa + LN, xa + LV, ye, yi, zb, zb + H), **conc)                                 # corpo
-p.add_mesh(pv.Cylinder(center=(x0 + XP, 0.0, zb + HC + 0.30), direction=(0, 0, 1), radius=0.010, height=0.70), color="#444444")   # PN-1
+p.add_mesh(pv.Cylinder(center=(x0 + XP, 0.0, zb + HC + 0.085), direction=(0, 0, 1), radius=0.010, height=0.63), color="#444444")   # PN-1 L 630 (230 no consolo)
 x = xa + 0.075
 while x < xa + LV - 0.05:
     for yy in (ye + 0.03, ye + b2 - 0.03):

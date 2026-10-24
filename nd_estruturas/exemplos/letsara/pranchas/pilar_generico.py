@@ -258,9 +258,14 @@ def prancha_pilar(P):
                 v.chapa(W / 2 - c["neo"][0] / 2, zc, c["neo"][0], 10)
                 # rev08: rótulo em 2 linhas dentro da face, logo abaixo do consolo (a chamada para fora cruzava as cadeias de cota)
                 st_ = "nota" if W >= 300 else "min"                                          # rev09: pilares 25 (escada)
-                v.texto((W / 2, zc - h - 1.8 * ESC), c["tipo"], st_, "TOP_CENTER")
-                v.texto((W / 2, zc - h - 4.8 * ESC), (f"{larg/10:g}×{proj/10:g}×{round(h/10, 1):g}" + (f"/{round(hp/10, 1):g}" if hp != h else "")).replace(".", ","), st_, "TOP_CENTER")
-                z_pn = zc - h - 7.6 * ESC
+                zl_ = zc - h                                                                 # rótulos abaixo da AL-2 se ela cruzar o texto
+                if face == P.get("al_face", "A"):
+                    for z_al in AL:
+                        if zc - h - 8.0 * ESC < z_al < zc - h:
+                            zl_ = min(zl_, z_al - 12 + 1.0 * ESC)
+                v.texto((W / 2, zl_ - 1.8 * ESC), c["tipo"], st_, "TOP_CENTER")
+                v.texto((W / 2, zl_ - 4.8 * ESC), (f"{larg/10:g}×{proj/10:g}×{round(h/10, 1):g}" + (f"/{round(hp/10, 1):g}" if hp != h else "")).replace(".", ","), st_, "TOP_CENTER")
+                z_pn = zl_ - 7.6 * ESC
                 if face == P.get("al_face", "A"):                                           # rev09b: rótulo do pino abaixo da AL-2 se ela cruzar o texto
                     for z_al in AL:
                         if z_pn - 2.2 * ESC - 10 < z_al < z_pn + 10:
@@ -632,7 +637,7 @@ F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
 I130 = lambda face: consolo(face, Z_I130, "CP-I130", 500, 400, H_C["CP-I130"], HP_C["CP-I130"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I130"]["tirante"].split(" (")[0], CONS_J["CP-I130"]["n_ramos"], CONS_J["CP-I130"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
 TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
-MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(_VMP.get("b_consolo", _VMP["b"]) * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], H_C["CP-MEZ"], ("PN-1", 20, 700, 300, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75
+MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(_VMP.get("b_consolo", _VMP["b"]) * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], H_C["CP-MEZ"], ("PN-1", 20, 630, 230, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75; pino 230 no consolo de 27,9 (não sai pelo fundo) + 400 no dente
 EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
 NOTA_CONS = "Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ 29 cm; CP-I130 com MÍSULA de concreto: 49 cm junto ao pilar e 39 cm na ponta, fundo inclinado — DEC-054; memória consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
 NOTA_MEZ = " Acima dos CP-MEZ, na largura da VM (25) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."
@@ -696,7 +701,7 @@ def dados_pc1():
                 "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 2 (P8A); 40 em x × 60 em y", "PILAR CENTRAL PC-01",
                 [["PC-01", "P8A (C2)", 1, f"topo +{F(Z_L2['C'])}: {W_L2} direto (CA-L2 + 4 BR-M16); CP-I130 (B); 2 CP-MEZ (A, C)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
-                [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I130", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=700 — CP-MEZ", 4, "faces A e C"], BRM20_INS,
+                [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I130", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo) — CP-MEZ", 4, "faces A e C"], BRM20_INS,
                  ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I130"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"],
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 5, "face B, centrada, fiadas 0 a 4"],
                  ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas G-11/G-17 (DEC-044, PP06)", 1, "face B, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
@@ -741,7 +746,7 @@ def _pm(marca, nome, ap, eixo):
                 f"PILAR DO MEZANINO {marca} ({nome}, 40×60) — LINHA 2, EIXO {eixo} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 f"POSIÇÃO: linha 2, eixo {eixo} ({nome}); 40 em x × 60 em y; topo +{F(zt)}", f"PILAR DO MEZANINO {marca}",
                 [[marca, nome, 1, f"4 CP-MEZ (A, C); topo +{F(zt)}: {W_L2} direto (CA-L2 + 4 BR-M16)", "6 CE-1 (B); 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], BRM20_INS,
+                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], BRM20_INS,
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM retangular 30 × 75 com dente Gerber 45 × 40: fundo do consolo = fundo da viga); pino PN-1 Ø20 no TB-1 do dente; sem peça antigiro: a junta VM × pilar é concretada (fck ≥ 30) antes das lajes — DEC-039.",
@@ -821,7 +826,7 @@ def dados_pe1():
                 "PILAR DA ESCADA PE-01 (P6, 25×40) — x 36,175, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: x = 36,175 m, y = 3,79 m (P6 do R01, escada); 25 em x × 40 em y; topo +3,90", "PILARES DA ESCADA",
                 [["PE-01", "P6 (escada)", 1, "1 CP-MEZ (C) +3,90", "IE-1 (C) +1,95; 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
+                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
                  INS_ESC[:3] + ["face C, patamar +1,95 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
                 ["Concreto C40; armadura longitudinal pelo modelo global (arranjo_pilares.json); estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  "Pilar da escada metálica (DEC-045): CP-MEZ na face C para a viga P6–P7 (VM-04) do +3,90; na mesma face, 4 barras roscadas IE-1 M16 para a chapa de topo da viga de fundo do patamar +1,95 (W 150 × 22,5, ND-LET-ES01).",
@@ -834,7 +839,7 @@ def dados_pe2():
                 "PILAR DA ESCADA PE-02 (P7, 40×60) — EIXO E, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo E, y = 3,79 m (P7 do R01, escada); 60 em x × 40 em y; topo +3,90; as placas da fachada E passam por fora", "PILARES DA ESCADA",
                 [["PE-02", "P7 (escada)", 1, "1 CP-MEZ (A) +3,90", "IE-1 (A) +1,95; 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
+                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
                  INS_ESC[:3] + ["face A, patamar +1,95 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
                 ["Concreto C40; armadura longitudinal pelo modelo global (arranjo_pilares.json); estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  "Pilar da escada metálica (DEC-045): CP-MEZ na face A (interna) para a viga P6–P7 (VM-04) do +3,90; na mesma face, IE-1 para a viga de fundo do patamar +1,95. Face externa alinhada com os pilares do eixo E: as placas da fachada E passam por fora, sem console neste pilar.",
@@ -847,7 +852,7 @@ def dados_pe3():
                 "PILAR DA LINHA 2 PE-03 (P6, 25×40) — x 36,175, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 f"POSIÇÃO: x = 36,175 m, linha 2 (P6 do R01); 25 em x × 40 em y; topo +{F(Z_L2['P6'])}", "PILARES DA ESCADA",
                 [["PE-03", "P6 (linha 2)", 1, f"3 CP-MEZ (A +3,90; A, C +7,30); topo +{F(Z_L2['P6'])}: {W_L2} direto (CA-L2 + 4 BR-M16)", "IE-1 (C) +3,90; 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", 3, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 3, "CP-MEZ"],
+                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 3, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 3, "CP-MEZ"],
                  ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 1, "+7,30, 12 cm acima da VM"], BRM20_INS,
                  INS_ESC[:3] + ["face C, chegada +3,90 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
                 ["Concreto C40; armadura longitudinal pelo modelo global (arranjo_pilares.json); estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,

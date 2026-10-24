@@ -226,7 +226,7 @@ def desenhar_elev(pr, V, origem, esc):
         elif rot == "porta":                                                        # rev09c: ombreiras OM-2 internas (atrás das placas), do piso a +5,00
             for xa in (a0 - 20 - 48, a1 + 20):
                 vv.ret(xa, 0, 48, z1, "OCULTA")
-            vv.chamada((a0 - 44, z0 - 700), (-10, -6), "OM-2 interna (ES02)")
+            vv.chamada((a0 - 44, z0 - 1900), (10, -4), "OM-2 interna (ES02)")
     for p in pecas:
         vv.poli(poligono_placa(p), "VISTA", fechada=True)
         if p.get("rec"):

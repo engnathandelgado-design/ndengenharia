@@ -153,7 +153,8 @@ def dados(mk):
     n_pn2 = sum(1 for c in cons if c["pino_nome"] == "PN-2")
     ins = []
     if n_pn1:
-        ins.append(["PN-1", "Pino Ø20 CA-50 L=700 (300 no consolo)", n_pn1, ", ".join(sorted(set(c["tipo"] for c in cons if c["pino_nome"] == "PN-1")))])
+        _pl = sorted({(c["pino_L"], c["pino_emb"]) for c in cons if c["pino_nome"] == "PN-1"})
+        ins.append(["PN-1", "Pino Ø20 CA-50 " + " / ".join(f"L={L_} ({e_} no consolo)" for L_, e_ in _pl), n_pn1, ", ".join(sorted(set(c["tipo"] for c in cons if c["pino_nome"] == "PN-1")))])
     n_pn6 = sum(1 for c in cons if c["pino_nome"] == "PN-6")
     if n_pn6:
         ins.append(["PN-6", "Barra roscada Ø20 A36 L=700 (300 no consolo)", n_pn6, "CP-VB"])

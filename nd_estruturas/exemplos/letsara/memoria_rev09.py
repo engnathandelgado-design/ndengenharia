@@ -51,7 +51,8 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV0
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Decisões do Nathan: DEC-045 (pisos +3,90 / +7,30, abertura e escada metálica, "
        "P6/P7 da escada e P6 da linha 2), DEC-046 (laje de cima sem uso), DEC-047 (vigas do mezanino retangulares protendidas com 2º estágio, sem meio vaso), "
        "DEC-048 (linha 2 sem TS-01, cobertura metálica), DEC-049 (VM 30 × 75 com dente Gerber 45 em todas as marcas) e, em 24/10, DEC-050/052 (linha 2: W 200 × 15,0 contínua nos pilares e em montantes no meio dos vãos), "
-       "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A) e DEC-054 (I130 com h 120, dente Gerber e consolo com mísula). "
+       "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A), DEC-054 (I130 com h 120, dente Gerber e consolo com mísula), "
+       "DEC-055 (2º pavimento = topo da capa +3,90, piso pronto ~+3,95: as duas escadas chegam no piso pronto com 22 espelhos de 17,95), DEC-056 (doca com piso nivelado) e DEC-057 (sem ponte rolante). "
        "Documento para análise do Nathan antes da emissão do zip com DXF e IFC."),
      Paragraph("1. Níveis e cargas do mezanino", T2),
      tab([["NÍVEL / USO", "SOBRECARGA (kN/m²)", "REVESTIMENTO (kN/m²)", "OBS."],
@@ -126,7 +127,7 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
           [[m["nome"], m["onde"], f(m["z_concreto"], 3), f(m["sobe_m"], 2), f(m["Nc_d"]), f(m["Nt_d"])] for m in CB["apoios_diretos"]],
           [12, 60, 24, 18, 20, 20]),
       Paragraph("7. Escada metálica (calc_escada_metalica.py)", T2),
-      P(f"Escada em U, {ESC['geometria']['n_espelhos']} espelhos de {f(ESC['geometria']['espelho_m'] * 100, 2)} cm, piso {f(ESC['geometria']['piso_m'] * 100, 0)} cm, patamar +1,95, chegada +3,90; "
+      P(f"Escada em U, {ESC['geometria']['n_espelhos']} espelhos de {f(ESC['geometria']['espelho_m'] * 100, 2)} cm, piso {f(ESC['geometria']['piso_m'] * 100, 0)} cm, patamar +{f(ESC['geometria']['z_patamar'], 3)}, chegada no piso pronto +3,95 (DEC-055); "
         f"sobrecarga {f(ESC['cargas']['q_kN_m2'])} kN/m². Longarina {ESC['longarina']['perfil']}: uso {f(ESC['longarina']['uso'], 2)}, flecha {f(ESC['longarina']['flecha_mm'])} ≤ {f(ESC['longarina']['lim_L350_mm'])} mm, f1 {f(ESC['longarina']['f1_Hz'])} Hz; "
         f"VP-1 W 150: uso máx. {f(max(ESC[k]['uso'] for k in ('patamar_frente', 'patamar_fundo', 'chegada_frente', 'chegada_fundo')), 2)}; pilaretes uso máx. {f(max(p['uso'] for p in ESC['pilaretes']), 3)}; "
         f"ligação na face do pilar (2 L 76 + 4 M16, sem solda) uso {f(ESC['ligacoes_face'][0]['uso'], 3)}; base metálica BM-1 ({ESC['base_metalica']['perfil']} L {f(ESC['base_metalica']['L_m'], 2)} m no pé do lance 1): σ piso {f(ESC['base_metalica']['sigma_piso_MPa'], 2)} MPa, uso chumbadores {f(ESC['base_metalica']['uso_chumbador'], 3)}; piso: {ESC['base_metalica']['piso']}. Massa {ESC['massa_kg']} kg (+3 % de parafusos)."),
