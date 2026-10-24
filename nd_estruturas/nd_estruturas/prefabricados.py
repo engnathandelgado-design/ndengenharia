@@ -301,22 +301,24 @@ def resultante_tracao(sec: "Secao", sb, st, n=200):
 
 
 def ato_pretracao(sec: "Secao", sec_ponta: "Secao", x_mac, Lp, grupos, sig_p0, g1, fckj, lt, gama_p=GAMA_P_ATO,
-                  dx=0.025, x_fim=None):
+                  dx=0.025, x_fim=None, area=None):
     """Ato da protensão ao longo da peça (pré-tração), NBR 6118:2023 17.2.4.3.2: força γp·P(x) com a transferência
     linear em lt a partir do início da aderência de cada grupo (face da ponta/dente + isolamento) e o peso próprio da
     peça apoiada nas pontas (M = g1·x·(Lp − x)/2). Seção maciça (sec_ponta) até x_mac. Limites: compressão 0,7 fckj e
     tração 1,2 fctm,j (17.2.4.3.2 b); onde há tração, armadura As = R/250 MPa (17.2.4.3.2 c).
-    grupos: [dict(n, y, x0)] — n cordoalhas Ø12,7 em y (m) aderentes a partir de x0 (m, já com o isolamento).
+    grupos: [dict(n, y, x0)] — n cordoalhas em y (m) aderentes a partir de x0 (m, já com o isolamento);
+    area: área de uma cordoalha (m²), padrão Ø12,7 (CORD["12.7"]).
     Varre de dx até x_fim (padrão Lp/2). Retorna os extremos e os pontos de controle."""
     fctm_j = 0.3 * fckj ** (2 / 3)
     lim_c, lim_t = -0.7 * fckj, 1.2 * fctm_j
     x_fim = Lp / 2 if x_fim is None else x_fim
+    area = CORD["12.7"] if area is None else area
     pts = []
     x = dx
     while x <= x_fim + 1e-9:
         P = My = 0.0
         for gr in grupos:
-            f = min(1.0, max(0.0, (x - gr["x0"]) / lt)) * gr["n"] * CORD["12.7"] * sig_p0 * 1000
+            f = min(1.0, max(0.0, (x - gr["x0"]) / lt)) * gr["n"] * area * sig_p0 * 1000
             P += f
             My += f * gr["y"]
         if P > 0:

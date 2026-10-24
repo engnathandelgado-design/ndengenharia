@@ -14,7 +14,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 ## Próximas
 
 - [ ] Letsara: zip ND-LET-EXECUTIVO-rev09 com DXF e IFC depois da aprovação do Nathan dos PDF do pacote rev09.
-- [ ] Letsara: decisão do Nathan sobre as I130 V401/V402 (estudo h 110 / altura mínima).
+- [ ] Letsara rev09 (24/10): portões da linha 4 (500 × 750, vãos B–P21 e P19–D): fundo da TS-01A/V409/V410 em +7,50 no vão de cada portão (nada abaixo de 7,50); placas protendidas novas entre o topo do portão e a viga onde a viga sobe; conferir colisões com P19, P20, P21 e a V401; atualizar TS-01A, pilares da linha 4, placas da linha 4, lista, quantitativos e 3D.
+- [ ] Letsara rev09: escada externa ES02 na lista/quantitativos; NG01 com malha nova do IFC; MC09; republicar o 3D.
 
 - [ ] Letsara (DEC-027): confirmar com a Kingspan arrancamento dos parafusos em #0,65, distribuição de clipes e junta de dilatação na água de 39,6 m.
 
@@ -39,6 +40,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Escrever `nd_api.py` para chamar a planilha de consolos e dentes Gerber.
 
 ## Depois
+- Letsara (pedido do Nathan, trabalho separado depois da rev09): DUAS VERSÕES do fechamento — versão 1 com as placas de 125 adaptadas ao arquitetônico (janelas, portas e guichê compatibilizados); versão 2 seguindo exatamente a locação de placas da Marques no R01 (com os recortes de portas dela).
 - Letsara (DEC-042, colisão): plano das placas das fachadas 1/9 × face lateral dos cantos (10 cm); CE-1 das paredes internas das linhas 2 e 4 à frente da face dos pilares (15–25 cm); zipada entrando 15 cm na cabeça dos PF; X Ø16 tocando a cabeça dos PF da linha 9; reações da terça de ponta para fechar o ST-1FL — decidir com o Nathan.
 - Letsara: VB mantida com uma ponta solta (DEC-033); se mudar de ideia, ligação presa nas 2 pontas para ±69 kN ou reforço da terça e das esperas ST-1P.
 - Letsara: pranchas de pilar e viga em A1 conforme o tamanho do desenho (pedido do Nathan: ajustar a prancha ao desenho).

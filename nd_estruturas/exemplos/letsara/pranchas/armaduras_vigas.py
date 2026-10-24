@@ -124,7 +124,7 @@ def spec_i(qual):
     prot = [(x, y) for y, xs, _ in P["cord"] for x in xs]
     n_cord = sum(len(xs) for _, xs, _ in P["cord"])
     S1 = dict(nome="SEÇÃO S.1", sub="corrente", esc=10, contorno=[pts], ents=s1_ents, discos=discos, prot=prot, bolhas=bol,
-              formas=["N2", "N11", "N13"] + (["N9"] if SEG else []), prot_txt=f"C1 — {n_cord} cord. Ø12,7")
+              formas=["N2", "N11", "N13"] + (["N9"] if SEG else []), prot_txt=f"C1 — {n_cord} cord. {P.get('cord_txt', 'Ø12,7')}")
     LD = max(1800, 2 * LN + 800)
     y_t = H - HD + 55
     det = [([(0, H - HD), (LN, H - HD), (LN, 0), (LD, 0)], "VISTA", False), ([(LD, H), (0, H), (0, H - HD)], "VISTA", False),
@@ -147,8 +147,9 @@ def spec_i(qual):
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
             nc_mk = VI.I1J[mk]["arranjo"]["n_cord"] if "arranjo" in VI.I1J[mk] else n_cord
-            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000), traspasse=TRm))
-        fam, tit, forma = "I130", "VIGAS CENTRAIS I130 PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
+            marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000), traspasse=TRm,
+                               ctxt=P.get("cord_txt", "Ø12,7"), kgc={"Ø15,2": 1.102}.get(P.get("cord_txt"), KG_CORD)))   # DEC-054: Ø15,2 = 1,102 kg/m
+        fam, tit, forma = "I130", f"VIGAS CENTRAIS I{H // 10} PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
         for mk, Lm in (("VM-01", L1), ("VM-02", L)):
@@ -529,22 +530,22 @@ def folha(num, total, S):
     for k, m in enumerate(S["marcas"]):
         xt = XT + 98 * k
         yy = Q[3] - 8
-        cordm = [("CORD. CP-190 Ø12,7", m["cord"][1], m["cord"][1] * KG_CORD)] if m.get("cord") else None
+        cordm = [(f"CORD. CP-190 {m.get('ctxt', 'Ø12,7')}", m["cord"][1], m["cord"][1] * m.get("kgc", KG_CORD))] if m.get("cord") else None
         A.tx(xt, yy - 4, f"{m['marca']} — L = {fd(m['L']/10)} cm — {m['qtd']} {'UNIDADE' if m['qtd'] == 1 else 'UNIDADES'}", "sub", lay="TITULO")
         yy = A.tabela_ferros(xt, yy - 8, m["barras"], 1)
         yy, kg = A.resumo(xt, yy - 3, m["barras"], 1, fck=S["fck"], vol=m["V"], area=m["area"], cordoalhas=cordm)
         m["kg"] = kg
         if m["qtd"] > 1:
-            cordn = [("CORD. CP-190 Ø12,7", m["cord"][1] * m["qtd"], m["cord"][1] * m["qtd"] * KG_CORD)] if m.get("cord") else None
+            cordn = [(f"CORD. CP-190 {m.get('ctxt', 'Ø12,7')}", m["cord"][1] * m["qtd"], m["cord"][1] * m["qtd"] * m.get("kgc", KG_CORD))] if m.get("cord") else None
             yy = A.tabela_ferros(xt, yy - 6, m["barras"], m["qtd"])
             yy, _ = A.resumo(xt, yy - 3, m["barras"], m["qtd"], fck=S["fck"], vol=m["V"], area=m["area"], cordoalhas=cordn)
     # ------------------------------------------------ coluna direita
     xr = Q[0] + 976
     A.ln((xr - 6, Q[1]), (xr - 6, Q[3]), "CARIMBO")
     lin = [[m["marca"], m["qtd"], fd(round(m["L"] / 10, 1)), f1(m["V"] * m["qtd"]), f1(m["kg"] * m["qtd"], 1),
-            f1(m["cord"][1] * m["qtd"] * KG_CORD, 1) if m.get("cord") else "—"] for m in S["marcas"]]
+            f1(m["cord"][1] * m["qtd"] * m.get("kgc", KG_CORD), 1) if m.get("cord") else "—"] for m in S["marcas"]]
     lin.append(["TOTAL", sum(m["qtd"] for m in S["marcas"]), "", f1(sum(m["V"] * m["qtd"] for m in S["marcas"])), f1(sum(m["kg"] * m["qtd"] for m in S["marcas"]), 1),
-                f1(sum(m["cord"][1] * m["qtd"] * KG_CORD for m in S["marcas"] if m.get("cord")), 1) if any(m.get("cord") for m in S["marcas"]) else "—"])
+                f1(sum(m["cord"][1] * m["qtd"] * m.get("kgc", KG_CORD) for m in S["marcas"] if m.get("cord")), 1) if any(m.get("cord") for m in S["marcas"]) else "—"])
     y = pr.tabela(xr, Q[3] - 6, "RESUMO DA FOLHA (+10%)", ["MARCA", "QT", "L (cm)", "CONC. m³", "CA-50 kg", "CORD. kg"], lin, [24, 12, 30, 34, 34, 34], h_lin=5.0, destaque_ultima=True)
     pr.notas(xr, y - 6, S["notas"] + [
         "Todas as dimensões em centímetro, exceto onde indicado; níveis em metro. Cobrimento 3,0 cm (CAA II).",

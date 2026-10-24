@@ -23,20 +23,22 @@ from nd_estruturas.prefabricados import (Concreto, secao_I, secao_retangular, CO
 from geometria import Y_LIN, Y_P13
 
 AQ = Path(__file__).parent
-H_I = 1.30
+H_I = 1.20                                              # DEC-054 (24/10/2026): h 120 com dente 78 × 35 (antes 1,30)
+DIAM = 15.2                                             # DEC-054: cordoalha Ø15,2 CP-190 RB (antes Ø12,7)
+A_C = CORD["15.2"]                                      # área de uma cordoalha (m²)
 sec = secao_I(H_I, bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
 SECP = secao_retangular(0.40, H_I)                      # maciço das pontas (1,40 m)
 U_AR = sum(math.dist(a, b) for a, b in zip(sec.pts, sec.pts[1:] + sec.pts[:1]))
 C = Concreto(50)
-FCKJ = 45.0                                             # liberação da protensão (DEC-032; antes 40 na prancha e 35 na MC05)
+FCKJ = 50.0                                             # DEC-054: liberação da protensão só com fckj 50 MPa (antes 45, DEC-032)
 SIG_PI = 1453.0                                         # MPa = 0,85 fpyk (9.6.1.2.1): 143,4 kN por cordoalha no macaco
 U, T0, T_G2 = 70.0, 5.0, 60.0                           # umidade (Ijuí/RS, a favor), idade fictícia na liberação, montagem das TS-01
 PSI1, PSI2 = 0.6, 0.4
-NIVEL = "completa"                                      # DEC-043 (22/10/2026): protensão COMPLETA (NBR 6118:2023 Tab. 13.4 nível 3):
+NIVEL = "limitada"                                      # DEC-054: protensão LIMITADA (CAA II, pré-tração: NBR 6118:2023 Tab. 13.4 nível 2); antes completa (DEC-043)
 PSI_D, PSI_F = (PSI1, 1.0) if NIVEL == "completa" else (PSI2, PSI1)   # ELS-D na frequente (ψ1) e ELS-F na rara (ψ = 1)
 X_MAC, LN, HD = 1.40, 0.35, 0.78                        # maciço das pontas, dente 78 × 35
-N3 = (4, 20.0)                                          # 4 Ø20 CA-50 na mesa superior
-Y_N3 = H_I - 0.030 - 0.0063 - 0.010                     # eixo do N3 (cobrimento 3,0 + estribo N13 Ø6,3)
+N3 = (6, 25.0)                                          # DEC-054: 6 Ø25 CA-50 na mesa superior (antes 4 Ø20)
+Y_N3 = H_I - 0.030 - 0.0063 - 0.0125                    # eixo do N3 (cobrimento 3,0 + estribo N13 Ø6,3)
 VD_DENTE_MIN = 0.0                                      # ajustado por viga abaixo (V405/V406: 555 kN, decisão do engenheiro)
 ALCA_A = 2.50                                           # alças AL-3 a 2,50 m das pontas
 LACO_CAP = 2 * 98.7 * 1900 / 1000 / 4 * 0.7             # 1 laço (2 pernas) Ø12,7: 2 × Fptk/4 × 0,7 (critério ND, ts01_dados)
@@ -52,9 +54,9 @@ VIGAS = {"V407": (Y_LIN[1], Y_LIN[3], [Y_LIN[2]]), "V406": (Y_LIN[3], Y_P13, [Y_
 FACES = {"V407": (0.30, 0.20), "V406": (0.20, 0.30), "V405": (0.30, 0.30)}
 X7 = [-150, -100, -50, 0, 50, 100, 150]
 X5, X4 = [-100, -50, 0, 50, 100], [-100, -50, 50, 100]
-Y_LIN_C = (60, 100, 140, 180)
+Y_LIN_C = (60, 110, 160, 210)                           # Ø15,2: espaçamento vertical livre ≥ 2φ (NBR 6118:2023 18.6.2.3)
 ISOL = (0, 0, 2000, 4000)                               # isolamento escalonado (mm): linha 14 com 2,0 m, linha 18 com 4,0 m
-TOPO = dict(y=1200, xs=[-100, 100])                     # 2 cordoalhas na mesa superior, aderentes (controle do ato nas pontas)
+TOPO = dict(y=round(H_I * 1000) - 100, xs=[-100, 100])                     # 2 cordoalhas na mesa superior, aderentes (controle do ato nas pontas)
 
 
 LINHA5 = dict(y=220, xs=[-50, 50], isol=4000)          # DEC-043: 5ª linha (2 cordoalhas a 22 cm, x ±5, isoladas 4,0 m) — V405/V406
@@ -72,9 +74,9 @@ def arranjo(por_linha, topo=True, linha5=False):
 # DEC-043 (protensão completa): menor arranjo da família que passa (ELS-D na frequente, ELS-F na rara, ato, ELU, içamento)
 # com folga de MARGEM_D no ELS-D. V405/V406: 28 + 2 topo dá +0,012 MPa na V406 (não passa) → 28 + 2 (y 22) + 2 topo = 32,
 # as duas na mesma pista de 60 m (24,1 + 24,0 m) → mesmo arranjo. V407: 17 (5+4+4+4, sem topo). Antes (limitada): 30/30/20.
-CANDIDATOS = {"V405": [((7, 7, 7, 7), True, True)], "V406": [((7, 7, 7, 7), True, True)],
-              "V407": [((4, 4, 4, 4), False, False), ((5, 4, 4, 4), False, False), ((5, 5, 4, 4), False, False), ((5, 5, 4, 4), True, False),
-                       ((5, 5, 5, 5), True, False), ((7, 7, 7, 7), True, False)]}
+CANDIDATOS = {"V405": [((7, 5, 5, 5), True, False)], "V406": [((7, 5, 5, 5), True, False)],      # DEC-054 (estudo_i130_h120, opção A)
+              "V407": [((4, 4, 4, 4), False, False), ((5, 4, 4, 4), False, False), ((5, 5, 4, 4), False, False), ((4, 4, 4, 4), True, False),
+                       ((5, 4, 4, 4), True, False), ((5, 5, 4, 4), True, False), ((5, 5, 5, 5), True, False), ((7, 5, 5, 5), True, False)]}
 MARGEM_D = 0.25                                         # MPa (critério de escolha do arranjo, não da norma)
 
 
@@ -110,14 +112,14 @@ def verificar(nome, ya, yb, cargas, lin):
     # ---- arranjo e perdas (seção de momento máximo)
     n_inf = sum(len(l["xs"]) for l in lin if l["y"] < 600)
     n = sum(len(l["xs"]) for l in lin)
-    Ap = n * CORD["12.7"]
+    Ap = n * A_C
     yp = sum(len(l["xs"]) * l["y"] for l in lin) / n / 1000
     pp = perdas_pretracao(SIG_PI, Ap, sec.A, sec.I, sec.yc, yp, Mg1_m, C, FCKJ, U_AR, U=U, t0_dias=T0,
                           fases=[(M_pont(P_g, x_Mmax), T_G2)])
-    lt, lbp, fbpd = lbpt_cordoalha(FCKJ, pp["sig_p0"], gradual=True)
-    lt_b = lbpt_cordoalha(FCKJ, pp["sig_p0"], gradual=False)[0]
+    lt, lbp, fbpd = lbpt_cordoalha(FCKJ, pp["sig_p0"], diam_mm=DIAM, gradual=True)
+    lt_b = lbpt_cordoalha(FCKJ, pp["sig_p0"], diam_mm=DIAM, gradual=False)[0]
     grupos = [dict(n=len(l["xs"]), y=l["y"] / 1000, x0=(LN if l["y"] / 1000 < H_I - HD else 0.0) + l["isol"] / 1000) for l in lin]
-    ato = ato_pretracao(sec, SECP, X_MAC, Lp, grupos, pp["sig_p0"], g1, FCKJ, lt)
+    ato = ato_pretracao(sec, SECP, X_MAC, Lp, grupos, pp["sig_p0"], g1, FCKJ, lt, area=A_C)
     As_N3 = N3[0] * math.pi * (N3[1] / 1000) ** 2 / 4 * 1e4
     # pontos de controle do ato: ponta (fim do lbpt das aderentes), fim de cada isolamento + lbpt, meio
     ctrl = {"ponta (fim do lbpt)": LN + lt}
@@ -134,7 +136,7 @@ def verificar(nome, ya, yb, cargas, lin):
     def P_x(xp, sig):                                   # força e cota da resultante na seção xp (da ponta da peça)
         F = My = 0.0
         for gr in grupos:
-            f = min(1.0, max(0.0, (xp - gr["x0"]) / lt)) * gr["n"] * CORD["12.7"] * sig * 1000
+            f = min(1.0, max(0.0, (xp - gr["x0"]) / lt)) * gr["n"] * A_C * sig * 1000
             F += f
             My += f * gr["y"]
         return F, (My / F if F else yp)
@@ -171,7 +173,7 @@ def verificar(nome, ya, yb, cargas, lin):
     # ---- ELU flexão (seção de momento máximo, cordoalhas plenas)
     Md = 1.3 * (Mg1_m + M_pont(P_g, x_Mmax)) + 1.4 * M_pont(P_q, x_Mmax)
     e_pre = pp["sig_pinf"] / (EP / 1000)
-    cords = [(len(l["xs"]) * CORD["12.7"], l["y"] / 1000, e_pre) for l in lin]
+    cords = [(len(l["xs"]) * A_C, l["y"] / 1000, e_pre) for l in lin]
     MRd, x_ln, xd = mrd_camadas(sec, C.fcd, cords, [(As_N3 * 1e-4, Y_N3)])
     MRd0, _, xd0 = mrd_camadas(sec, C.fcd, cords, [])
     elu = dict(Md=round(Md, 1), MRd=round(MRd, 1), x_d=round(xd, 3), MRd_sem_N3=round(MRd0, 1), x_d_sem_N3=round(xd0, 3),
@@ -258,7 +260,7 @@ def verificar(nome, ya, yb, cargas, lin):
     ato_out.update(controle=ato_ctrl, As_N3_cm2=round(As_N3, 2), fckj=FCKJ, lbpt_m=round(lt, 3), lbpt_brusca_m=round(lt_b, 3), lbp_m=round(lbp, 3))
     return dict(L_eixos=round(yb - ya, 3), L_peca=round(Lp, 3), L_calc=round(L, 3), cargas_concentradas_kN=dict(g=round(P_g, 1), q=round(P_q, 1)),
                 x_cargas_m=[round(a, 3) for a in xs], g2_equiv=round(8 * Mg2_max / L ** 2, 2), q_equiv=round(8 * Mq_max / L ** 2, 2),
-                arranjo=dict(linhas=lin, n_cord=n, n_inf=n_inf, y_cg_mm=round(yp * 1000, 1), sig_pi=SIG_PI, F_macaco_kN=round(SIG_PI * 98.7 / 1000, 1),
+                arranjo=dict(linhas=lin, n_cord=n, n_inf=n_inf, y_cg_mm=round(yp * 1000, 1), sig_pi=SIG_PI, F_macaco_kN=round(SIG_PI * A_C * 1000, 1), cordoalha=f"Ø{DIAM:g}",
                              fckj=FCKJ, fck=C.fck, liberacao="gradual (macaco), simétrica, só com fckj atingido", lbpt_m=round(lt, 3), lbpt_brusca_m=round(lt_b, 3)),
                 perdas={k: (round(v, 7) if isinstance(v, float) else v) for k, v in pp.items()},
                 ato=ato_out, ELS=els, ELU=elu, cortante=cortante, flecha=flecha, icamento=icamento, dente=dente, ok=ok, ok_geral=all(ok.values()),

@@ -16,7 +16,7 @@ for c in N9["consolos"]:
     nome = c["consolo"]
     if not nome.startswith("CP-"):
         continue
-    res[nome] = dict(onde=c["onde"], b_m=c["b_m"], proj_m=c["proj_m"], a_m=c["a_m"], h_consolo_m=c["h_m"], misula_m=0.0, h_total_m=c["h_m"],
+    res[nome] = dict(onde=c["onde"], b_m=c["b_m"], proj_m=c["proj_m"], a_m=c["a_m"], h_consolo_m=c.get("h_ext_m", c["h_m"]), misula_m=c.get("misula_m", 0.0), h_total_m=c["h_m"],
                      d_m=c["d_m"], a_d=c["a_d"], tipo=c["modelo"], gama_n=c["gama_n"], Vd_kN=c["Vd_kN"], Fd_kN=c["Fd_kN"], Hd_kN=c["Hd_kN"],
                      tau_wd_MPa=c["tau_wd_MPa"], tau_wu_MPa=c["tau_wu_MPa"], As_tir_cm2=c["As_tir_cm2"], tirante=c["tirante"],
                      n_ramos=int(c["tirante"].split("(")[1].split()[0]), d_tir=float(c["tirante"].split("Ø")[1].split()[0].replace(",", ".")),

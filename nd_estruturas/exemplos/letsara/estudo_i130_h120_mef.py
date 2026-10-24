@@ -22,6 +22,10 @@ isol = rr["isolamento_mm"]
 cord = [dict(y=y, n=n * fator, **({"isol": i} if i else {})) for y, n, i in zip(Y, pl, isol) if n]
 if "topo" in rr["arranjo"]:
     cord.append(dict(y=H - 100, n=2 * fator))
+SM = int(os.environ.get("SMEAR", 1))   # cordoalhas distribuídas em SM linhas de nós da mesa (modelo plano: a camada real ocupa a largura da mesa)
+if SM > 1:
+    m_ = float(os.environ.get("MALHA", 25.0))
+    cord = [dict(c, y=c["y"] + (k - (SM - 1) / 2) * m_, n=c["n"] / SM) for c in cord for k in range(SM)]
 v = dict(CD.VIGAS["I130"])
 v.update(H=H, Vd=max(rr["dente"]["Fd"], v["Vd"]), Hd=max(rr["dente"]["Hd"], v["Hd"]), cord=cord, sig_pe=rr["sig_pinf"], lt=rr["lbpt_m"] * 1000)
 D = Dente("I120", v["Vd"], v["Hd"], 400, v["hd"], v["ln"], v["a_apoio"], v["H"])

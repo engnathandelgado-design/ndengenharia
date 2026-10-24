@@ -108,7 +108,7 @@ apoios = dict(P1=dict(x_neo=NEO_EXT["xc"], z=REC[0], comp_apoio=round(0.30 - X_P
               centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I130_DIR, assento="horizontal"))
 # conferência: neoprenes dentro do trecho da cunha nas duas pontas
 assert NEO_EXT["xc"] + NEO_EXT["x"] / 2 - X_PONTA_ESQ <= CUNHA and X_PONTA_CEN - (NEO_CEN["xc"] - NEO_CEN["x"] / 2) <= CUNHA
-H_I130, HD_I130, NEO_I130 = 1.30, 0.78, 0.03                       # viga central I130 (rev03): dente 78 × 35 nos consolos CP-I130
+H_I130, HD_I130, NEO_I130 = 1.20, 0.78, 0.03                       # DEC-054: I130 com h 120 (antes 1,30), dente 78 × 35 nos consolos CP-I130 com mísula
 Z_ASS_I130 = round(Z_TOPO_I130 - H_I130 + (H_I130 - HD_I130) - NEO_I130, 3)   # assento do consolo CP-I130 (fundo do dente − neoprene)
 rel, erros = [], 0
 for it in inst:

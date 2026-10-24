@@ -207,7 +207,7 @@ def dados(mk):
                pos_txt, "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
-                G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
+                G.NOTA_CONS.replace("CP-MEZ 29 cm;", "CP-MEZ 29 cm; CP-VB 29 cm (dente 30 da VB 15×60);") + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
                 cab_txt +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06")) else
                  f" LINHA 2 (rev09b, DEC-050/052): sem TS-01 e sem montante no pilar — o recuo sobe até +{zr/1000:.3f}".replace(".", ",") + f", 39 mm abaixo do fundo da {G.W_L2} da cobertura metálica da linha 2 (DEC-052), que apoia direto: graute 20, chapa CA-L2 250 × 250 × 19 e 4 barras roscadas BR-M16 embutidas (padrão Mitsubishi) a 150 × 55, atravessando a mesa da W (furo oblongo e porca encostada: apoio deslizante)." if mk in ("PL-02", "PL-06") else ""),

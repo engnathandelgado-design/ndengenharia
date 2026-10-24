@@ -168,9 +168,11 @@ OUT["aparelhos"] = NEO
 BAR = {10: 0.785, 12.5: 1.227, 16: 2.011, 20: 3.142}
 
 
-def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5):
-    """b largura, proj projeção, h altura (m); a = face do pilar ao centro do aparelho; a_pad/b_pad dimensões do aparelho (m).
-    Vd já majorado (γf); gn = γn (7.3.1.1). Tirante em alças horizontais (Fig. 17)."""
+def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ext=None):
+    """b largura, proj projeção, h altura (m) junto à face do pilar; a = face do pilar ao centro do aparelho; a_pad/b_pad dimensões do aparelho (m).
+    Vd já majorado (γf); gn = γn (7.3.1.1). Tirante em alças horizontais (Fig. 17).
+    h_ext: altura na extremidade (consolo com mísula de fundo inclinado); None = consolo reto."""
+    h_ext = h if h_ext is None else h_ext
     fcd = fck / 1.4
     Fd = gn * Vd
     Hd = 0.16 * Fd                                                   # 7.3.9 — elastômero
@@ -203,20 +205,25 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5):
     As_cost_tot = As_cost * (2 / 3 * d)
     As_v = 0.0015 * b * h * 1e4                                      # 7.3.7 — a/d ≤ 1, carga direta
     T_fend = 0.25 * Fd * (1 - b_pad / b)                             # bloco parcialmente carregado (aparelho afastado das faces)
-    ok = dict(tirante=esc is not None, biela=tau <= tau_u, a_d=ad <= 1.0)
+    # mísula: altura na extremidade >= metade da altura junto ao pilar (NBR 9062:2017 7.3, detalhamento; Fig. 16)
+    # e biela verificada também com a altura útil na seção da carga (fundo inclinado), a favor da segurança
+    d_a = h_ext + (h - h_ext) * (1 - a / proj) - 0.05
+    tau_a = Fd / (b * d_a) / 1e3
+    ok = dict(tirante=esc is not None, biela=tau <= tau_u, a_d=ad <= 1.0, h_ext=h_ext >= h / 2 - 1e-9, biela_na_carga=tau_a <= tau_u)
     return dict(consolo=nome, onde=onde, b_m=b, proj_m=proj, h_m=h, d_m=round(d, 3), a_m=a, a_d=round(ad, 2), modelo=modelo, gama_n=gn,
                 Vd_kN=round(Vd, 1), Fd_kN=round(Fd, 1), Hd_kN=round(Hd, 1), Asv_cm2=round(Asv, 2), As_tir_cm2=round(As, 2), As_min_cm2=round(As_min, 2),
                 tirante=(f"{esc[0] // 2} alça{'s' if esc[0] > 2 else ''} horizonta{'is' if esc[0] > 2 else 'l'} Ø{esc[1]:g} ({esc[0]} ramos, {esc[0] * BAR[esc[1]]:.2f} cm²)".replace(".", ",") if esc else "não cabe"),
                 a2_cm=round(a2 * 100, 1), a2_min_cm=round(esc[2], 1) if esc else None, tau_wd_MPa=round(tau, 2), tau_wu_MPa=round(tau_u, 2),
                 costura_cm2_m=round(As_cost, 2), costura_total_cm2=round(As_cost_tot, 2), costura="estribos horizontais Ø8 c/10 em 2/3 d" if As_cost <= 10.05 else "Ø10 c/7,5",
                 estribos_verticais_cm2=round(As_v, 2), fendilhamento_kN=round(T_fend, 1), As_fend_cm2=round(T_fend / FYD * 10, 2),
+                h_ext_m=h_ext, misula_m=round(h - h_ext, 3), d_carga_m=round(d_a, 3), tau_carga_MPa=round(tau_a, 2),
                 ok=ok, ok_geral=all(ok.values()), norma="NBR 9062:2017 7.3.2 a 7.3.9")
 
 
 HD_VM = VM["premissas"]["dente"]["hd"]
 CON = [
-    consolo("CP-I130", "P8A, P11, P13, P14 — I130 (dente 78 × 35), NEO-2 200×300", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
-            max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1),       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
+    consolo("CP-I130", "P8A, P11, P13, P14 — I130 h 120 (dente 78 × 35, recorte 42), NEO-2 200×300; mísula 10 (DEC-054)", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
+            max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1, h_ext=0.39),   # DEC-054: extremidade 39 = recorte 42 − neoprene 3 (alinhada ao fundo da viga +6,58); face 49       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
     consolo("CP-MEZ", "pilares das linhas 1 e 2 e da escada — dente 45 × 40 da VM retangular 30 × 75, NEO-5F 200×200 fretado; consolo com a largura da face do pilar (40); h = recorte − neoprene (fundo alinhado)", VM["premissas"].get("b_consolo", VM["premissas"]["b"]), VM["premissas"]["dente"]["consolo_proj"], VM["premissas"]["dente"]["consolo_h"], VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
     consolo("DENTE VM", f"nariz do dente Gerber da VM retangular 30 × {VM['premissas']['h_pm']*100:.0f}, h {HD_VM*100:.0f}, LN {VM['premissas']['dente']['ln']*100:.0f} — 7.4 = consolo 7.3", VM["premissas"]["b"], VM["premissas"]["dente"]["ln"], HD_VM, 0.03 + VM["premissas"]["dente"]["ln"] - VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
     consolo("CP-VB", "pilares das fachadas 1 e 9 — dente 30 × 27 da VB 15×60, NEO-6 100×100", 0.15, 0.27, 0.29, 0.135, 0.10, 0.10, VBD["Vd"], 1.1),
@@ -301,9 +308,10 @@ def lebelle(nome, Iy, J, L, w, fcj):
 
 
 trans = []
+_HI = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))["H_I130"]
 for nome, L, bf, h, w, Iy, Jt, fcj in (
         ("TS-01", TS.L / 1000, 0.40, 0.90, TS.car.g1, 0.12 * 0.40 ** 3 / 12 + 0.15 * 0.40 ** 3 / 12, 0.4 * 0.12 ** 3 / 3 + 0.4 * 0.15 ** 3 / 3 + 0.63 * 0.15 ** 3 / 3, 35),
-        ("I130 (V406)", v["L_peca"], 0.40, 1.30, v["linhas"]["peso_kN_m"], 0.22 * 0.4 ** 3 / 12 + 0.25 * 0.4 ** 3 / 12, 0.4 * 0.22 ** 3 / 3 + 0.4 * 0.25 ** 3 / 3 + 0.83 * 0.15 ** 3 / 3, 35),
+        ("I130 (V406)", v["L_peca"], 0.40, _HI, v["linhas"]["peso_kN_m"], 0.22 * 0.4 ** 3 / 12 + 0.25 * 0.4 ** 3 / 12, 0.4 * 0.22 ** 3 / 3 + 0.4 * 0.25 ** 3 / 3 + (_HI - 0.47) * 0.15 ** 3 / 3, v["arranjo"]["fckj"]),   # DEC-054: h 1,20, fckj 50
         ("VM retangular 30 × 75", m["L_peca"], 0.30, 0.75, m["cargas"]["g_pm"], 0.75 * 0.30 ** 3 / 12, 0.75 * 0.30 ** 3 / 3 * (1 - 0.63 * 0.30 / 0.75), 32),
         ("VB 15×60", 9.43, 0.15, 0.60, 2.25, 0.60 * 0.15 ** 3 / 12, 0.60 * 0.15 ** 3 / 3 * (1 - 0.63 * 0.15 / 0.60), 25),
         ("Placa 125×10 (içada na vertical)", 10.15, 0.10, 1.25, 3.12, 1.25 * 0.10 ** 3 / 12, 1.25 * 0.10 ** 3 / 3 * 0.95, 25)):

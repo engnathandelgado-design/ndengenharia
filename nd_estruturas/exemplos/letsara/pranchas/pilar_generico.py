@@ -53,6 +53,7 @@ from geometria import Z_PISOS
 Z_PISO_MM = tuple(round(z * 1000) for z in Z_PISOS)
 Z_MEZ_ASS = tuple(round(z - 260 - _VMP["h_pm"] * 1000 + _VMP["dente"]["recorte"] * 1000 - 21) for z in Z_PISO_MM)
 H_C = {k: round(v["h_total_m"] * 1000) for k, v in CONS_J.items()}
+HP_C = {k: round(v.get("h_consolo_m", v["h_total_m"]) * 1000) for k, v in CONS_J.items()}   # DEC-054: altura na ponta (mísula)
 import geo_fixacao as GF
 CS = GF.C
 XC_CS = 10 + GF.N["B"] / 2                     # rev06e: eixo do CS-1 a 80 mm do eixo do pilar (junta 20/2 + eixo do nicho 70)
@@ -111,7 +112,7 @@ def prancha_pilar(P):
     rd = (lambda fc: REC["d"].get(fc, 0)) if REC else (lambda fc: 0)
     z_rec = REC["z"] if REC else L_TOT
     HB, HH = B - rd("B") - rd("D"), H - rd("A") - rd("C")               # seção da cabeça (B–D × A–C)
-    V = (B * H * z_rec + HB * HH * (L_TOT - z_rec)) / 1e9 + sum(c["larg"] * c["proj"] * c["h"] for c in cons) / 1e9
+    V = (B * H * z_rec + HB * HH * (L_TOT - z_rec)) / 1e9 + sum(c["larg"] * c["proj"] * (c["h"] + c["hp"]) / 2 for c in cons) / 1e9
     PESO = V * 25
     FI = furo_icamento(P, L_TOT, REC, cons)
     if not FI["livre"]:
@@ -176,6 +177,8 @@ def prancha_pilar(P):
                    if not P.get("rec") else "CABEÇA COM ARMADURA PRÓPRIA (N13 POR TRASPASSE)") + "; PLANTA-CHAVE COM NOMES")
     if P["marca"] in ("PM-01", "PC-01", "PE-03"):
         pr.revisao("", "24/10/2026", "DEC-050/052: SEM MONTANTE NO PILAR; CABEÇA DE CONCRETO ATÉ O FUNDO DA W 200 × 15,0 (MONTANTES NO MEIO DOS VÃOS); 4 BR-M16 L 450 + CA-L2" + ("; P14 PASSA A SER O PM-02" if P["marca"] == "PM-01" else ""))
+    if any(c["tipo"] == "CP-I130" for c in P.get("consolos", [])):
+        pr.revisao("", "24/10/2026", "DEC-054: I130 COM h 120; CONSOLO CP-I130 COM MÍSULA (49 NO PILAR, 39 NA PONTA, FUNDO ALINHADO À VIGA)")
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -627,11 +630,11 @@ KP_CEN = [("P6E", 36.175, 3.79, 250, 400, "PE-01"), ("P7E", 39.50, 3.79, 600, 40
           ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-03"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-04")]
 F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
-I130 = lambda face: consolo(face, Z_I130, "CP-I130", 500, 400, H_C["CP-I130"], H_C["CP-I130"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I130"]["tirante"].split(" (")[0], CONS_J["CP-I130"]["n_ramos"], CONS_J["CP-I130"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
+I130 = lambda face: consolo(face, Z_I130, "CP-I130", 500, 400, H_C["CP-I130"], HP_C["CP-I130"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I130"]["tirante"].split(" (")[0], CONS_J["CP-I130"]["n_ramos"], CONS_J["CP-I130"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
 TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
 MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(_VMP.get("b_consolo", _VMP["b"]) * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], H_C["CP-MEZ"], ("PN-1", 20, 700, 300, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75
 EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
-NOTA_CONS = "Consolos sem chanfro: altura = recorte do dente da viga − neoprene, fundo do consolo alinhado ao fundo da viga (CP-MEZ 29, CP-I130 49 cm — memória consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
+NOTA_CONS = "Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ 29 cm; CP-I130 com MÍSULA de concreto: 49 cm junto ao pilar e 39 cm na ponta, fundo inclinado — DEC-054; memória consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
 NOTA_MEZ = " Acima dos CP-MEZ, na largura da VM (25) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."
 # rev09b (DEC-050, decisão do Nathan 24/10): sem montantes — a cabeça de concreto sobe até o fundo da W 310 da linha 2 (cada pilar na sua
 # altura, seguindo a inclinação); a W apoia direto na chapa CA-L2 250 × 250 × 19 sobre graute 20 mm, parafusada em 4 BR-M20 embutidas

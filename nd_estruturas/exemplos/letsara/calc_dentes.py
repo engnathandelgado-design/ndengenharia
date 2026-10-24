@@ -22,12 +22,14 @@ SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: n
 I1J = json.loads((AQUI / "i110_r01.json").read_text(encoding="utf-8"))
 _V = max(("V405", "V406"), key=lambda k: I1J[k]["dente"]["Fd"])
 _DI = I1J[_V]["dente"]
-_CORD_I130 = [dict(y=l["y"], n=len(l["xs"]), **({"isol": l["isol"]} if l["isol"] else {})) for l in I1J[_V]["arranjo"]["linhas"]]
+_FAT = {"Ø15.2": 140.0 / 98.7}.get(I1J[_V]["arranjo"].get("cordoalha"), 1.0)     # DEC-054: Ø15,2 no MEF como n·(140/98,7) cordoalhas Ø12,7 equivalentes
+_CORD_I130 = [dict(y=l["y"], n=len(l["xs"]) * _FAT, **({"isol": l["isol"]} if l["isol"] else {})) for l in I1J[_V]["arranjo"]["linhas"]]
+_H_I130 = round(json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))["H_I130"] * 1000)   # DEC-054: 1200
 VIGAS = {
     # I130: dente 78 × 35; 28 cordoalhas embaixo (linhas 14 e 18 isoladas 2,0 e 4,0 m) + 2 na mesa superior (DEC-032)
-    "I130": dict(Vd=_DI["Fd"], Hd=_DI["Hd"], gama_n=_DI["gama_n"], Vd_reacao=_DI["Vd"], viga=_V, H=1300, ti=250, ts=220, hd=780, ln=350,
-                 a_apoio=175, x_mac=1400, l_apoio=250, cord=_CORD_I130, estribo=(8.0, 150), sup=4 * AREA[20.0], inf=2 * AREA[10.0],
-                 d_tir=20.0, d_sus=16.0, Ls=3600.0, xP=1600.0, rampa_fim=True, robusto=True,
+    "I130": dict(Vd=_DI["Fd"], Hd=_DI["Hd"], gama_n=_DI["gama_n"], Vd_reacao=_DI["Vd"], viga=_V, H=_H_I130, ti=250, ts=220, hd=780, ln=350,
+                 a_apoio=175, x_mac=1400, l_apoio=250, cord=_CORD_I130, estribo=(8.0, 150), sup=6 * AREA[25.0], inf=2 * AREA[10.0],
+                 d_tir=20.0, d_sus=16.0, Ls=3600.0, xP=1600.0, rampa_fim=True, robusto=True, du=0.02,   # DEC-054: passo de 0,02 mm (com 0,05 o 1º passo não converge depois da fissuração da protensão)
                  sig_pe=I1J[_V]["perdas"]["sig_pinf"], lt=I1J[_V]["ato"]["lbpt_m"] * 1000, prancha=True),
     "MEZ-I90": dict(Vd=383.0, Hd=65.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=200,
                     cord=[dict(y=75, n=7), dict(y=117, n=1)], estribo=(8.0, 150), sup=4 * AREA[12.5], inf=2 * AREA[10.0],
@@ -107,7 +109,7 @@ def armaduras_i130(v, a):
         arm.append(dict(tipo="v", nome="modelo", pos=xx, ini=40, fim=H - 40, area_total=2 * AREA[12.5]))
     arm.append(dict(tipo="h", nome="longitudinal_sup", pos=H - 45, ini=25, fim=Ls, area_total=v["sup"]))
     arm.append(dict(tipo="h", nome="longitudinal_inf", pos=35, ini=ln + 30, fim=Ls, area_total=v["inf"]))
-    for y in (500, 650, 800, 950):
+    for y in (y_ for y_ in (500, 650, 800, 950) if y_ < H - 300):     # pele só na alma (mesma regra da prancha)
         arm.append(dict(tipo="h", nome="pele", pos=y, ini=25, fim=Ls, area_total=2 * AREA[8.0]))
     return arm
 
@@ -124,7 +126,7 @@ for nome, v in VIGAS.items():
                  x_mac=v["x_mac"], l_apoio=v["l_apoio"])
         arm = armaduras_i130(v, r["adotado"]) if v.get("prancha") else armaduras(v, r)
         kw = dict(sig_pe=v["sig_pe"], lt=v["lt"]) if "sig_pe" in v else {}
-        m = analisar(g, arm, v["cord"], v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=v.get("Ls", 3000.0), xP=v.get("xP", 1300.0), passos=500, rampa_fim=v.get("rampa_fim", False), robusto=v.get("robusto", False),
+        m = analisar(g, arm, v["cord"], v["Vd"], v["Hd"], fck=50.0, malha=25.0, Ls=v.get("Ls", 3000.0), xP=v.get("xP", 1300.0), passos=500, du=v.get("du", 0.05), rampa_fim=v.get("rampa_fim", False), robusto=v.get("robusto", False),
                      saida_png=str(AQUI / f"mef_dente_{nome}.png"), titulo=f"Dente Gerber {nome}", **kw)
         m["ok"] = m["Vu_kN"] >= 1.06 * v["Vd"]          # validação: o modelo superestima a flexão em ~6% (tests); Vd aqui já é Fd = γn·Vd
         m["criterio"] = f"Vu ≥ 1,06·Fd = {1.06 * v['Vd']:.1f} kN"

@@ -152,9 +152,9 @@ for nome, f_, L, qt in ((_RNq.MARCA_NOVO + _RNq.lista(_RNq.TS_TODAS), "TS01-1", 
 for _mk in ("VM-01", "VM-02", "VM-03", "VM-04"):                          # rev09: cordoalhas por marca (vm_retangular.json)
     _q = next(p[5] for p in pecas if p[1] == _mk)
     cord.append((_RNq.MARCA_NOVO + _RNq.lista(_RNq.nomes_de(_mk)), 12.7, VMJ[_mk]["n_cord"], VMJ[_mk]["L_peca"], _q, ""))
-_IJ = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))          # I130: número de cordoalhas por marca (V407 20, V405/V406 30)
+_IJ = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))          # I130: número e Ø das cordoalhas por marca (DEC-054: Ø15,2, V407 18, V405/V406 24)
 for p_ in [p for p in pecas if p[9] == "ND-LET-I130"]:
-    cord.append((f"I130 {p_[1]}", 12.7, _IJ[p_[1]]["arranjo"]["n_cord"], _IJ[p_[1]]["L_peca"], p_[5], ""))
+    cord.append((f"I130 {p_[1]}", float(_IJ[p_[1]]["arranjo"].get("cordoalha", "Ø12.7")[1:]), _IJ[p_[1]]["arranjo"]["n_cord"], _IJ[p_[1]]["L_peca"], p_[5], ""))
 _PLJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/placas.json"))["protensao"]
 _OMJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))["placa_I15"]
 n, d = _PLJ["n"], _PLJ["diam_mm"]                                          # DEC-035: 10 fios Ø6 CP-175 RB
@@ -165,7 +165,7 @@ if _OMJ["n_total"] > n:
 for p_ in [p for p in pecas if p[1].startswith("LA")]:                   # rev09: Ø15,2 / Ø12,7 / Ø9,5 da descrição da marca
     for n_, d_ in re.findall(r"(\d+) Ø(\d+,\d)", p_[2]):
         cord.append((f"Laje alveolar {p_[1]}", num(d_), int(n_), p_[4], p_[5], "uma por nervura (ND-LET-LA01)"))
-KGC = {5.0: 0.154, 6.0: 0.222, 9.5: 0.432, 12.7: 0.792, 15.2: 1.126}                # kg/m: fios CP-175 Ø5/Ø6 (19,6/28,3 mm²); cordoalhas CP-190
+KGC = {5.0: 0.154, 6.0: 0.222, 9.5: 0.432, 12.7: 0.792, 15.2: 1.102}   # Ø15,2: 140 mm² (NBR 7483)                # kg/m: fios CP-175 Ø5/Ø6 (19,6/28,3 mm²); cordoalhas CP-190
 
 # ------------------------------------------------------------------ metálica e insertos
 terc = [l for l in tab("COB01", "TERÇAS")["linhas"] if l[0]]
@@ -341,7 +341,7 @@ def gerar_xlsx(SAIDA=SAIDA):
         q = int(l[1]); kg = l[4]
         linha(ws, r, [l[0], f"{l[2]} — {l[5]} (comp. {l[3]})", q, round(num(kg) / q, 2) if kg not in ("-", "") else 0, f"=C{r}*D{r}", "ND-LET-COB02"],
               {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
-    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA")):   # rev09 (DEC-045/048)
+    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA"), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS")):   # rev09 (DEC-045/048/053)
         for l in tab(f_, tit_)["linhas"]:
             if not l[0] or l[-1] in ("-", ""):
                 continue
@@ -535,7 +535,7 @@ def listas_pdf(caminho):
     E.append(Spacer(1, 4))
     t2 = tab("COB02", "LISTA DE MATERIAIS")
     E.append(tb([t2["cab"]] + t2["linhas"], [16, 14, 30, 30, 16, 150]))
-    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA", [18, 150, 14, 18, 18, 22])):
+    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA", [18, 150, 14, 18, 18, 22]), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", [18, 150, 14, 18, 18, 22])):
         t3 = tab(f_, tit_)
         E += [Spacer(1, 6), Paragraph(f"{tit_.capitalize()} — ND-LET-{f_} (rev09)", T2)]
         E.append(tb([t3["cab"]] + t3["linhas"], w_))

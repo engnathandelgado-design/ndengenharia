@@ -47,7 +47,7 @@ I130_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405"
 NIVEIS_MEZ, H_LAJE = list(Z_PISOS), 0.20 + 0.05          # rev09 (DEC-045): topo da capa +3,90 / +7,30
 
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
-I130 = PerfilI(h=1.30, b=0.40, tw=0.15, tf=0.25, nome="I130")
+I130 = PerfilI(h=LG["H_I130"], b=0.40, tw=0.15, tf=0.25, nome="I130")       # DEC-054: h 1,20
 I70 = PerfilI(h=0.70, b=0.40, tw=0.15, tf=0.15, nome="I70")
 VB = PerfilRetangular(0.15, 0.60, "VB 15x60")
 VB_N = PerfilRetangular(0.15, 0.30, "VB nariz do dente")
@@ -204,8 +204,8 @@ def montar() -> ModeloBIM:
     for marca, ya, yb in I130_TRECHOS:
         y0, y1 = ya + meia[ya] + 0.075, yb - meia[yb] - 0.075
         arr = I1J[marca]["arranjo"]
-        ob_ = (f"L = {y1 - y0:.3f} m; protendida {arr['n_cord']} cord. Ø12,7 ({arr['n_inf']} embaixo + {arr['n_cord'] - arr['n_inf']} na mesa superior), "
-               f"σpi {I1J[marca]['perdas'].get('sig_pi', 1453):.0f} MPa, fckj 45; dente {GD_['hd']} × {GD_['ln']}, maciço {GD_['x_mac'] / 1000:.2f} m (DEC-032)")
+        ob_ = (f"h {H_I130:.2f}; L = {y1 - y0:.3f} m; protendida {arr['n_cord']} cord. {arr.get('cordoalha', 'Ø12.7').replace('.', ',')} ({arr['n_inf']} embaixo + {arr['n_cord'] - arr['n_inf']} na mesa superior), "
+               f"σpi {I1J[marca]['perdas'].get('sig_pi', 1453):.0f} MPa, fckj {arr['fckj']:g}, protensão limitada; dente {GD_['hd']} × {GD_['ln']}, maciço {GD_['x_mac'] / 1000:.2f} m (DEC-054)")
         ln_, mac_, hd_ = GD_["ln"] / 1000, GD_["x_mac"] / 1000, GD_["hd"] / 1000
         m.linear("viga", marca, I130, (X_C, y0 + mac_, zc), (X_C, y1 - mac_, zc), "Vigas centrais I130", obs=ob_)
         for ya_, yb_ in ((y0, y0 + mac_), (y1 - mac_, y1)):
@@ -217,7 +217,15 @@ def montar() -> ModeloBIM:
         m.linear("viga", f"{marca} degrau do topo", PerfilRetangular(0.20, LG["DEGRAU_C"]), (X_C + 0.10, y0, Z_I130_TOPO + LG["DEGRAU_C"] / 2), (X_C + 0.10, y1, Z_I130_TOPO + LG["DEGRAU_C"] / 2),
                  "Vigas centrais I130", obs="rev04: topo em 2 níveis — metade do lado E 12 mm acima (apoio horizontal das TS-01)")
         for yy, sg in ((ya, 1), (yb, -1)):
-            m.bloco("consolo", f"CP-I130 {marca}", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110), 0.50, 0.40, hC("CP-I130"), "Consolos")
+            # DEC-054: CP-I130 com mísula — 49 junto à face do pilar, 39 na ponta (fundo inclinado), extrudado em x
+            _hf, _hp, _pj = hC("CP-I130"), CONS["CP-I130"]["h_consolo_m"], CONS["CP-I130"]["proj_m"]
+            _yf = yy + sg * meia[yy]
+            _pts = [(0.0, 0.0), (sg * _pj, 0.0), (sg * _pj, -_hp), (0.0, -_hf)]
+            if sg < 0:
+                _pts = _pts[::-1]
+            from nd_estruturas.bim import Peca as _Peca, PerfilPoligono as _PP
+            m.add(_Peca("consolo", "Consolos", f"CP-I130 {marca}", _PP(tuple(_pts), "CP-I130 com mísula"), (X_C - 0.25, _yf, z_ass_i110), (X_C + 0.25, _yf, z_ass_i110), (0.0, 0.0, 1.0), "concreto",
+                        "49 junto ao pilar / 39 na ponta (mísula, DEC-054)"))
             m.bloco("inserto", "NEO-2 300×200×31 fretado", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.031), 0.30, 0.20, 0.031, "Pinos, tubos e neoprenes")
             m.bloco("inserto", "PN-2 pino Ø25 L=900 (350 no consolo; grauteado numa ponta só)", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.55), 0.025, 0.025, 0.90,
                     "Pinos, tubos e neoprenes")
