@@ -41,7 +41,7 @@ D.LN, D.PROJ, D.A_PAD, D.B_PAD = 0.40, 0.40, 0.20, 0.20
 D.X_PAD = 0.111 + D.A_PAD / 2
 D.A_CONS = D.X_PAD
 D.A_DENTE = D.FOLGA + D.LN - D.X_PAD
-GN = 1.1                                                   # NBR 9062:2017 7.3.1.1 (permanente preponderante, pré-moldado)
+GN = 1.2                                                   # NBR 9062:2017 7.3.1.1 (pré-moldado; variável ~45 % da reação, não preponderante — DEC-049)
 FOLGA = 0.03
 VAOS = {"VM-01": 9.37, "VM-02": 9.48, "VM-03": 6.22, "VM-04": 2.90}
 
@@ -106,7 +106,7 @@ def preparar(b, caso):
     M.cordoalhas = lambda n, h, n_top=0: cordoalhas_ret(n, h, n_top, b)
     M.retangulos = lambda h: [(0.0, b, 0.0, h)]
     M.X_PAD = D.X_PAD
-    M.DENTE = dict(M.DENTE, hd=0.35, recorte=0.45, consolo_h=0.429)          # dente adotado (DEC-048) na negativa
+    M.DENTE = dict(M.DENTE, hd=HD_ADOT, recorte=round(H_ADOT - HD_ADOT, 2), consolo_h=round(H_ADOT - HD_ADOT - 0.021, 3))   # dente adotado (DEC-049) na negativa
 
 
 def negativa_ret(L, g2, q2, h=0.80, n12=9):
@@ -146,11 +146,13 @@ def analisar(b, h, n, marca, caso, n_top=2):
 def dente(b, h, hd, Vd):
     Fd = GN * Vd
     den = D.consolo(b, D.LN, hd, D.A_DENTE, Fd)
-    con = D.consolo(b, D.PROJ, h - hd - 0.021, D.A_CONS, Fd)              # neoprene fretado 21 mm (NEO-5F 150 × 200)
+    con = D.consolo(B_CONSOLO, D.PROJ, h - hd - 0.021, D.A_CONS, Fd)      # DEC-049: consolo com a largura da face do pilar (40); NEO-5F 200 × 200 × 21
+    from nd_estruturas.dente_consolo import Dente as _Dente                 # NBR 9062:2017 7.4 (biela τwd) + PCI (Vmax), como no estudo_vm_largura
+    nbr = _Dente("VM", Fd, 0.16 * Fd, b * 1000, hd * 1000, D.LN * 1000, (D.X_PAD - 0.03) * 1000, h * 1000, fck=40.0).dimensionar(16.0, 20.0)
     As_sus = Fd / 43.5
     sus = math.ceil(As_sus / (2 * 2.011))
-    ok = bool(den and con and den["ok"] and con["ok"] and sus * 0.05 <= (h - 0.05) / 4 + 0.05)
-    return dict(Fd=round(Fd, 1), dente=den, consolo=con, As_sus=round(As_sus, 2),
+    ok = bool(den and con and den["ok"] and con["ok"] and nbr["NBR"]["ok_biela"] and nbr["PCI"]["ok_Vmax"])
+    return dict(Fd=round(Fd, 1), dente=den, consolo=con, As_sus=round(As_sus, 2), nbr_pci=dict(NBR=nbr["NBR"], PCI=nbr["PCI"], adotado=nbr["adotado"]),
                 suspensao=f"{sus} estribos fechados Ø16 (2 ramos) = {sus * 4.02:.1f} cm² ≥ {As_sus:.1f}", n_sus=sus, ok=ok)
 
 
@@ -187,7 +189,8 @@ def faixa_2e(b):
     return round(b - M.APOIO_LAJE - 0.02, 3)
 
 
-B_ADOT, H_ADOT, HD_ADOT = 0.25, 0.80, 0.35                 # DEC-048 (opção 2 do quadro de 23/10): fôrma única 25 × 80, dente 35
+B_ADOT, H_ADOT, HD_ADOT = 0.30, 0.75, 0.45                 # DEC-049 (Nathan, 23/10, estudo_vm_largura): fôrma única 30 × 75, dente Gerber 45
+B_CONSOLO = 0.40                                           # consolo CP-MEZ com a largura da face do pilar
 
 
 def adotada():
@@ -217,7 +220,7 @@ if __name__ == "__main__" and "--adotada" in sys.argv:
                 h_pm=H_ADOT, b=B_ADOT, b_alma=B_ADOT, b_aba=0.0, h_aba=0.0, apoio_laje=M.APOIO_LAJE, faixa_2e=faixa_2e(B_ADOT),
                 dente=dict(hd=HD_ADOT, ln=D.LN, recorte=round(H_ADOT - HD_ADOT, 2), consolo_h=round(H_ADOT - HD_ADOT - 0.021, 3), consolo_proj=D.PROJ, macico=1.00),
                 x_pad=D.X_PAD, pad=(200, 200, 21), vao_laje=round(9.65 - 2 * (B_ADOT / 2 - M.APOIO_LAJE), 3), q_piso_390=Q_PISO_390,
-                decisao="DEC-048: retangular protendida 25 × 80 em todas (fôrma única), dente 35 × 35, sem montantes na viga")
+                decisao="DEC-049: retangular protendida 30 × 75 em todas (fôrma única), dente Gerber 45 × 40, consolo 40 × 40 × 27,9; suspensão 3 Ø20 + 4 Ø16 retas no fundo", b_consolo=B_CONSOLO, extra_inf=[dict(n=4, d=16.0, y=110, L=2500)])
     (AQ / "vm_retangular.json").write_text(json.dumps(dict(sol, premissas=prem), indent=1, ensure_ascii=False, default=str), encoding="utf-8")
     sys.exit()
 

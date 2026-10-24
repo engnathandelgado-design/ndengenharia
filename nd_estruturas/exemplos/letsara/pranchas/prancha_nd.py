@@ -36,6 +36,10 @@ CAMADAS = {
 # "PARA APROVAÇÃO, NÃO EXECUTAR" é trocada. EMISSAO = None volta ao comportamento anterior.
 EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM", fase="EXECUTIVO — LIBERADO",
                nota="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM.")
+# Reemissão do pacote rev09 (23/10/2026, DEC-045/047/048): depois da revisão da emissão executiva, mais uma revisão com a data
+# abaixo; revisões manuais da folha com esta data viram a descrição dela (sem número próprio). Folha sem revisão manual
+# nesta data recebe a descrição padrão. REEMISSAO = None desliga.
+REEMISSAO = dict(data="23/10/2026", desc="REEMISSÃO EXECUTIVA (PACOTE REV09): PISOS +3,90/+7,30; NOMES E REFERÊNCIAS")
 _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
@@ -605,9 +609,21 @@ class Prancha:
             nums = [int(r) for r, _, _ in self.revisoes if str(r).isdigit()] or ([int(self.dados["rev"])] if str(self.dados.get("rev", "")).isdigit() else [0])
             if not self.revisoes:
                 self.revisoes.append((self.dados["rev"], self.dados["data"], "EMISSÃO INICIAL"))
+            novas = [d for _, dt, d in self.revisoes if REEMISSAO and dt == REEMISSAO["data"]]
+            self.revisoes = [t for t in self.revisoes if not (REEMISSAO and t[1] == REEMISSAO["data"])]
+            if not self.revisoes and novas:                       # folha nova do pacote rev09: só a emissão desta data
+                self.revisoes.append(("00", REEMISSAO["data"], "; ".join(novas)))
+                self.dados["rev"], self.dados["data"] = "00", REEMISSAO["data"]
+                self._emitida = True
+                return
+            nums = [int(r) for r, _, _ in self.revisoes if str(r).isdigit()] or nums
             r = f"{max(nums) + 1:02d}"
             self.revisoes.append((r, EMISSAO["data"], EMISSAO["desc"]))
             self.dados["rev"], self.dados["data"] = r, EMISSAO["data"]
+            if REEMISSAO:
+                r = f"{int(r) + 1:02d}"
+                self.revisoes.append((r, REEMISSAO["data"], "; ".join(novas) if novas else REEMISSAO["desc"]))
+                self.dados["rev"], self.dados["data"] = r, REEMISSAO["data"]
             self._emitida = True
 
     def salvar(self, base, png_dpi=110):

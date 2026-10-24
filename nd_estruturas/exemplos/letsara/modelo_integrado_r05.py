@@ -41,7 +41,7 @@ Z0, INCL = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + INCL * x                 # fundo da TS-01
 REC = tuple(LG["REC"]); Z_TOP_C = LG["Z_TOPO_I130"]; Z_I130 = LG["Z_ASS_I130"]
 Z_MEZ = Z_PISOS                               # rev09 (DEC-045): topo da capa +3,90 / +7,30 (corte AA' do R01)
-A_VM, G_2E = 0.25 * 0.80, (0.25 - 0.10) * 0.21 * 25   # rev09 (DEC-047/048): VM retangular 25 × 80 + faixa de 2º estágio
+A_VM, G_2E = 0.30 * 0.75, (0.30 - 0.12) * 0.26 * 25   # rev09 (DEC-049): VM retangular 30 × 75 + faixa de 2º estágio 18 × 26
 CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
 CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))   # rev09 (DEC-048): W 310 da linha 2 sobre montantes nos pilares
 X_PORTOES = [9.87, 15.195, 24.305, 29.63]      # pilares P9, P10a, P10b, P12 da linha 4 (portões)

@@ -174,35 +174,32 @@ def vb():
     salvar(p, "ISO-VB-ponta.png", [(3.2, -3.4, 1.8), (0.4, 0, H * 0.4), (0, 0, 1)], 1.1)
 
 
-# ================================================================== VM (VM-02) peça inteira
+# ================================================================== VM (VM-02) peça inteira — rev09: retangular 30 × 75 (DEC-049)
 def vm():
-    VMJ = json.load(open(AQ + "vm_meio_vaso.json"))
+    VMJ = json.load(open(AQ + "vm_retangular.json"))
     P = VMJ["premissas"]
-    H, BA, BB, HA = P["h_pm"], P["b_alma"], P["b_aba"], P["h_aba"]
-    HD, LN, MAC = P["dente"]["hd"], P["dente"]["ln"], P["dente"]["macico"]
-    REC, B = H - HD, BA + BB
+    H, B = P["h_pm"], P["b"]
+    HD, LN = P["dente"]["hd"], P["dente"]["ln"]
+    REC = H - HD
     L = VMJ["VM-02"]["L_peca"]
-    ye, yw, yi = -B / 2, -B / 2 + BA, B / 2
+    ye, yi = -B / 2, B / 2
+    b2 = B - 0.12                                                                       # faixa de 2º estágio (alças), lado da borda
     p = pv.Plotter(off_screen=True, window_size=(2400, 800)); p.set_background("white")
     for a, b in ((0, LN), (L - LN, L)):
-        p.add_mesh(box(a, b, ye, yi, REC, H), **CONC)                                     # nariz
-    for a, b in ((LN, MAC), (L - MAC, L - LN)):
-        p.add_mesh(box(a, b, ye, yi, 0, H), **CONC)                                       # ponta maciça
-    p.add_mesh(box(MAC, L - MAC, ye, yw, 0, H), **CONC)                                   # alma (lado da borda)
-    p.add_mesh(box(MAC, L - MAC, yw, yi, H - HA, H), **CONC)                              # aba (apoio da laje)
+        p.add_mesh(box(a, b, ye, yi, REC, H), **CONC)                                     # nariz do dente
+    p.add_mesh(box(LN, L - LN, ye, yi, 0, H), **CONC)                                     # corpo
     x = 0.15
     while x < L - 0.10:
-        z0 = H
-        for yy in (ye + 0.04, yw - 0.04):
-            p.add_mesh(cil((x, yy, z0 + 0.10), 0.010, 0.20), **ARM)
-        p.add_mesh(cil((x, (ye + yw) / 2, z0 + 0.20), 0.010, BA - 0.08, (0, 1, 0)), **ARM)
+        for yy in (ye + 0.03, ye + b2 - 0.03):
+            p.add_mesh(cil((x, yy, H + 0.10), 0.010, 0.20), **ARM)
+        p.add_mesh(cil((x, ye + b2 / 2, H + 0.20), 0.010, b2 - 0.06, (0, 1, 0)), **ARM)
         x += 0.15
     for s in (1.1, L - 1.1):
-        alca(p, s, (ye + yw) / 2, H, w=0.12, h=0.13)
-    for u in (0.156, L - 0.156):
-        p.add_mesh(cil((u, (ye + yi) / 2, REC + HD / 2), 0.050, HD + 0.01), color="#5a5a5a", opacity=0.6)
-    rot(p, [(L * 0.5, (ye + yw) / 2, H + 0.20), (L * 0.35, yi, H - HA / 2), (L * 0.6, ye, H * 0.4), (LN / 2, yi, REC), (1.1, (ye + yw) / 2, H + 0.13)],
-        ["N9 alças Ø10 c/15 (2º estágio)", "aba 15 × 20 (apoio da laje)", "alma 25 (lado da borda)", f"dente {HD*100:.0f} × {LN*100:.0f}", "AL-1 alça (2x)"], fs=13)
+        alca(p, s, 0.0, H, w=0.12, h=0.13)
+    for u in (P["x_pad"] - 0.03, L - P["x_pad"] + 0.03):
+        p.add_mesh(cil((u, 0.0, REC + HD / 2), 0.050, HD + 0.01), color="#5a5a5a", opacity=0.6)
+    rot(p, [(L * 0.5, ye + b2 / 2, H + 0.20), (L * 0.35, yi, H - 0.02), (L * 0.6, ye, H * 0.4), (LN / 2, yi, REC), (1.1, 0.0, H + 0.13)],
+        ["N9 alças Ø10 c/15 (2º estágio, lado da borda)", "apoio da laje 10 cm (topo)", f"retangular {B*100:.0f} × {H*100:.0f} protendida", f"dente {HD*100:.0f} × {LN*100:.0f}", "AL-1 alça (2x)"], fs=13)
     salvar(p, "ISO-VM-geral.png", [(L * 0.5 - 5, -10, 9), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
 
 

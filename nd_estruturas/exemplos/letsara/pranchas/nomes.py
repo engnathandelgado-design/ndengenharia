@@ -6,7 +6,7 @@ Regras
   Lê-se de cima para baixo por fila de eixo (E, D, C, B, A) e, em cada fila, da esquerda para a direita (linha 1 → 9).
   Pilar fora do eixo entra na fila do eixo mais próximo (pela coordenada vertical da planta); empate na mesma linha
   (mesma coordenada horizontal) resolve de cima para baixo.
-- Vigas: série por nível — V100 nível zero (não há), V200 = 1º nível acima (mezanino +3,15), V300 = +6,55,
+- Vigas: série por nível — V100 nível zero (não há), V200 = 1º nível acima (mezanino +3,90), V300 = +7,30,
   V400 = cobertura (TS-01, VB, I130). Um nome por peça. Convenção de leitura (padrão usual de projeto):
   primeiro as vigas HORIZONTAIS da planta (de cima para baixo e, na mesma fila, da esquerda para a direita),
   depois as VERTICAIS (da esquerda para a direita e, na mesma coluna, de cima para baixo).
@@ -38,7 +38,9 @@ def pilares_obra():
         for lado, x in (("P1", 0.0), ("P2", X_EIXO["E"])):
             out.append((marca_de(f"{lado}-L{i}"), f"{lado} L{i}", x, y, "40×60"))
     for nome, x, y, bx, by in PILARES_ESPECIAIS:
-        if nome in ("P6", "P7"):                                # anexo: fora do projeto (pendência)
+        if nome in ("P6", "P7"):                                # rev09 (DEC-045): pilares da escada
+            mk = "PE-02" if nome == "P7" else ("PE-03" if abs(y - Y_LIN[1]) < 1e-6 else "PE-01")
+            out.append((mk, f"{nome} ({'linha 2' if mk == 'PE-03' else 'escada'})", x, y, f"{round(min(bx, by) * 100)}×{round(max(bx, by) * 100)}"))
             continue
         sec = f"{round(min(bx, by) * 100)}×{round(max(bx, by) * 100)}"
         if y in (Y_LIN[0], Y_LIN[-1]):
@@ -69,11 +71,19 @@ def vigas_obra():
     """(nivel, marca, orientação na planta, x0, y0, x1, y1, descrição) de cada viga.
     orientação: 'H' = horizontal na planta (corre ao longo das linhas, obra y); 'V' = vertical (corre ao longo do eixo, obra x)."""
     v = []
-    # mezanino: VM nas linhas 1 e 2, vãos A–B / D–E = VM-01, B–C / C–D = VM-02, nos dois níveis
-    for niv in ("+3,15", "+6,55"):
-        for y in (Y_LIN[0], Y_LIN[1]):
-            for k, (xa, xb) in enumerate(zip(X_FACH[:-1], X_FACH[1:])):
-                v.append((niv, "VM-01" if k in (0, 3) else "VM-02", "V", xa, y, xb, y, f"linha {Y_LIN.index(y) + 1}, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
+    # mezanino (rev09, DEC-045/048): VM retangulares nas linhas 1 e 2; na linha 2 o vão D–E é D → P6 (VM-03) e P6 → E (VM-04, só no +7,30);
+    # viga P6–P7 da escada (VM-04) no +3,90
+    from geometria import P6_L2, P6_ESC, P7_ESC
+    for iz, niv in enumerate(("+3,90", "+7,30")):
+        for k, (xa, xb) in enumerate(zip(X_FACH[:-1], X_FACH[1:])):
+            v.append((niv, "VM-01" if k in (0, 3) else "VM-02", "V", xa, Y_LIN[0], xb, Y_LIN[0], f"linha 1, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
+        for k, (xa, xb) in enumerate(zip(X_FACH[:-2], X_FACH[1:-1])):
+            v.append((niv, "VM-01" if k == 0 else "VM-02", "V", xa, Y_LIN[1], xb, Y_LIN[1], f"linha 2, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
+        v.append((niv, "VM-03", "V", X_FACH[3], Y_LIN[1], P6_L2[0], Y_LIN[1], "linha 2, D–P6"))
+        if iz == 1:
+            v.append((niv, "VM-04", "V", P6_L2[0], Y_LIN[1], X_FACH[4], Y_LIN[1], "linha 2, P6–E"))
+        else:
+            v.append((niv, "VM-04", "V", P6_ESC[0], P6_ESC[1], P7_ESC[0], P7_ESC[1], "escada, P6–P7 (y 3,79)"))
     # cobertura: I130 no eixo C (horizontal na planta)
     xc = X_EIXO["C"]
     for mk, ya, yb, d in (("V407", Y_LIN[1], Y_LIN[3], "eixo C, linhas 2–4"), ("V406", Y_LIN[3], Y_P13, "eixo C, linha 4 → P13 (PC-03)"),
@@ -84,14 +94,14 @@ def vigas_obra():
         for k, (xa, xb) in enumerate(zip(X_FACH[:-1], X_FACH[1:])):
             v.append(("cobertura", f"VB-0{base + k}", "V", xa, Y_LIN[li], xb, Y_LIN[li], f"linha {li + 1}, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
     # cobertura: TS-01 nas linhas 2 a 8, duas peças por linha (A–C e C–E); TS-01B na linha 2 (ST-1P4), TS-01A na linha 4 (IT-P)
-    for li in range(1, 8):
-        mk = {1: "TS-01B", 3: "TS-01A"}.get(li, "TS-01")
+    for li in range(2, 8):                                   # rev09 (DEC-048): linha 2 com cobertura metálica (W 310), sem TS-01
+        mk = {3: "TS-01A"}.get(li, "TS-01")
         for xa, xb, d in ((0.0, xc, "A–C"), (xc, X_EIXO["E"], "C–E")):
             v.append(("cobertura", mk, "V", xa, Y_LIN[li], xb, Y_LIN[li], f"linha {li + 1}, {d}"))
     return v
 
 
-SERIE = {"+3,15": 200, "+6,55": 300, "cobertura": 400}
+SERIE = {"+3,90": 200, "+7,30": 300, "cobertura": 400}
 FOLHA_V = {"VM": "ND-LET-VM01", "VB": "ND-LET-VB01", "TS": "ND-LET-TS01-1", "V4": "ND-LET-I130"}
 
 

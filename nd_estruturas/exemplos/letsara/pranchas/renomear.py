@@ -1,6 +1,6 @@
 """Nomenclatura nova da Letsara (padrão do Nathan, 22/10/2026) aplicada no texto das folhas.
 
-Regra: pilares P1…P33 e vigas V200…/V300…/V400… (um nome por peça, sentido de leitura — nomes.py/nomes.json).
+Regra: pilares P1…P36 e vigas V200…/V300…/V400… (um nome por peça, sentido de leitura — nomes.py/nomes.json).
 Os geradores continuam usando as marcas internas (PL-01, TS-01B, VB-03…) e as referências do projeto do cliente (R01:
 "P1 L5", "P8A", "P13"…) como chave; este módulo troca, no TEXTO desenhado, cada marca interna pela lista de nomes das
 peças que ela representa e cada referência R01 pelo nome novo da posição. Um passe só (regex com todas as chaves), então
@@ -42,7 +42,13 @@ R01 = {}
 for p in _D["pecas"]:
     if p["tipo"] == "pilar":
         R01.setdefault(p["ref_R01"], []).append(p["nome"])
-R01["P10a"], R01["P10b"] = ["P18"], ["P16"]          # portões: P10a = PG-02 (x 15,195), P10b = PG-04 (x 24,305)
+def _pil_xy(x, y):
+    return min((p for p in _D["pecas"] if p["tipo"] == "pilar"), key=lambda p: (p["x"] - x) ** 2 + (p["y"] - y) ** 2)["nome"]
+
+
+_Y4 = sorted({p["y"] for p in _D["pecas"] if p["tipo"] == "pilar" and p.get("linha") == 4})[0]
+P10A, P10B = _pil_xy(15.195, _Y4), _pil_xy(24.305, _Y4)          # rev09: calculados (a numeração muda com os pilares da escada)
+R01["P10a"], R01["P10b"] = [P10A], [P10B]          # portões: P10a = PG-02 (x 15,195), P10b = PG-04 (x 24,305)
 # R01 sem a linha (P3 = P3 L1 e P3 L9 …); P1/P2 sozinhos são tratados à parte (famílias dos eixos A/E)
 for k, v in list(R01.items()):
     if " L" in k:
@@ -52,9 +58,9 @@ for k in [k for k in R01 if k.startswith("BASE:")]:
     if base not in R01 and base not in ("P1", "P2"):
         R01[base] = R01[k]
     del R01[k]
-R01["P1"], R01["P2"] = ["P25"], ["P1"]               # só usados se a célula for exatamente "P1"/"P2" (raro)
+R01["P1"], R01["P2"] = [_pil_xy(0.0, 0.0)], [_pil_xy(39.5, 0.0)]               # só usados se a célula for exatamente "P1"/"P2" (raro)
 POS_V = {p["nome"]: p.get("posicao", "") for p in _D["pecas"] if p["tipo"] == "viga"}
-TS_TODAS = sorted({n for k in ("TS-01", "TS-01A", "TS-01B") for n in M2N[k]}, key=_num)
+TS_TODAS = sorted({n for k in ("TS-01", "TS-01A", "TS-01B") for n in M2N.get(k, [])}, key=_num)
 
 CHAVES = {}
 for k, v in M2N.items():
@@ -98,11 +104,11 @@ def renomear(s):
         return (guarda(lista(ns)) if ns else m.group(1)) + m.group(2) + li
     s2 = re.sub(r"(?<![\w-])(TS-01[AB]?)(\s+(?:da|na|das|nas)\s+linhas?\s+)(\d)", ts_linha, s2)
     # marca + referência do R01 da MESMA peça ("PL-01 (P1-L5)", "P1-L5 PL-01", "P8 / P8B PM-01"): fica só o nome da posição
-    MK = r"(?:PL|PF|PC|PM|PG)-\d\d"
+    MK = r"(?:PL|PF|PC|PM|PG|PE)-\d\d"
     RF = r"(?:P\d+[ -]L\d|P8A|P8B|P10a|P10b|P\d+)"
     nome_r = lambda r: lista(R01.get(r, R01.get(r.replace("-L", " L"), [r])))
-    s2 = re.sub(r"P10 \(x 15,195\)", lambda m: guarda("P18") + " (x 15,195)", s2)
-    s2 = re.sub(r"P10 \(x 24,305\)", lambda m: guarda("P16") + " (x 24,305)", s2)
+    s2 = re.sub(r"P10 \(x 15,195\)", lambda m: guarda(P10A) + " (x 15,195)", s2)
+    s2 = re.sub(r"P10 \(x 24,305\)", lambda m: guarda(P10B) + " (x 24,305)", s2)
     s2 = re.sub(rf"(?<![\w-]){MK} \(({RF})\)", lambda m: guarda(nome_r(m.group(1))), s2)
     def ref_mk(m):
         refs = [r.strip() for r in m.group(1).split("/")]
@@ -147,7 +153,7 @@ def pilar_em(x, y, tol=0.6):
 
 
 def viga_em(nivel, x, y, tol=0.6, marcas=None):
-    """nome da viga do nível ('+3,15', '+6,55', 'cobertura') mais próxima do ponto (x, y) da obra (m) — distância ao
+    """nome da viga do nível ('+3,90', '+7,30', 'cobertura') mais próxima do ponto (x, y) da obra (m) — distância ao
     eixo da peça em planta (segmento x0,y0 → x1,y1)."""
     best, dmin = None, 1e9
     for p in _D["pecas"]:

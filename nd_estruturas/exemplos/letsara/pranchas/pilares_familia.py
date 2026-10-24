@@ -172,9 +172,12 @@ def dados(mk):
         txt_cs = f"CS-1 na obra" if not cal_ else f"{FCH.CALCO_MARCA[cal_]} na obra: CS-1 com calço de {cal_:g} mm, a face fica {cal_:g} atrás do plano dos consoles — PP06"
         ins.append(["CC-1" if ip["face"] == "C" else "CE-1", (f"CE-1 380×330×{GF.TCE:g} + 2 N18 + CS-1 de fábrica (concretado)" if ip["face"] == "C" else f"CE-1 380×330×{GF.TCE:g} + 4 pinos + 2 N18 ({txt_cs})").replace(".", ","), len(ip["z"]), f"face {ip['face']}, centro 92 acima da fiada" + (f", {ip['obs']}" if ip["obs"] else "")])
         ins.append(["BR-2", "Bucha M16 hef 100 (trava PT-2)", "—", f"laterais junto à {ip['face']}, pacotes suspensos"])
-    if not canto and mk.startswith("PL"):                                     # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
+    L2_MET = mk in ("PL-02", "PL-06")                                          # rev09 (DEC-048): linha 2 com a W 310 sobre montante no recuo
+    if not canto and mk.startswith("PL") and not L2_MET:                      # rev03: TS-01 apoiada no recuo (sem consolo CP-TS)
         ins.append(["PN-3", "Pino Ø25 CA-50 L=600 (300 no pilar)", 2, "assento TS-01, y ±100, 102,5 da cabeça"])
         ins.append(["NEO-4", "Neoprene 200×300×10 com 2 furos Ø35", 1, "assento horizontal da TS-01, de 50 a 250 mm da cabeça"])
+    if L2_MET:
+        ins.append(["BR-M20", "4 barras roscadas M20 8.8 L=480 (400 embutidos + grampo U Ø10), saem 80 — montante W 150 da W 310 (DEC-048)", 4, "recuo, x 75 e 225 da cabeça, y ±75"])
     if mk in ("PL-07", "PL-08"):                                              # DEC-042: canto de seção cheia — a última terça do lado E apoia na face lateral
         f_int = "D" if mk == "PL-07" else "B"                                 # interna (padrão Mitsubishi: barras roscadas embutidas na face)
         ins.append(["ES-1FL", "2 barras roscadas M20 A36 L=400 c/ gancho + grampo U Ø10, horizontais (ST-1FL da última terça)", 2,
@@ -206,13 +209,16 @@ def dados(mk):
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
                 G.NOTA_CONS.replace("CP-I130 49 cm", "CP-I130 49, CP-VB 29 cm (dente 30 da VB 15×60)") + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
                 cab_txt +
-                (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL")) else ""),
+                (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06")) else
+                 " LINHA 2 (rev09, DEC-048): sem TS-01 — no recuo nasce o montante W 150 × 22,5 da W 310 da cobertura metálica da linha 2, com chapa de base 250 × 250 × 19 parafusada em 4 barras roscadas BR-M20 embutidas no recuo (padrão Mitsubishi)." if mk in ("PL-02", "PL-06") else ""),
                 f"Faces: A = interna (consolo da viga principal), C = externa (placas); B e D no sentido anti-horário visto de cima (A → B → C → D). Pilar concretado deitado com a face C (placas) para cima e a face A no fundo da fôrma (detalhe POSIÇÃO NA FÔRMA, DEC-031): CC-1 na face de cima, preso em gabarito apoiado nas laterais; CE-1 das faces B/D rente e parafusada na lateral da fôrma; consolos da face A em caixão no fundo{"" if canto else f"; calço de {d.get('A', 300) / 10:g} cm no fundo sob a cabeça recuada"}. Alças AL-2 na face C (de cima), fora das chapas, cortadas rente após a montagem e antes das placas. CE-1 do CC-1 com 4 furos Ø20 de respiro: lançar e vibrar o concreto até sair pelos furos.",
                 f"CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × {GF.TCE:g}".replace(".", ",") + " com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), centrada no pilar (nas faces laterais em ponta de parede, a 5 mm da aresta da face C, sob o console — DEC-042), uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm). Face C (DEC-031): sai da metalúrgica com os consoles CS-1 já soldados (CC-1 com 2 consoles; CC-1E/CC-1D com 1, nas pontas de parede) e é concretada com o pilar — posição ±5 mm pelo gabarito; o parafuso de nível absorve ±12 mm. Faces laterais: CE-1 rente e CS-1 soldado na obra (ND-LET-PP00 det. 2 e 4; fabricação PP03/PP04). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"], aresta_C=ip["aresta_C"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
-    if not canto and mk.startswith("PL"):
+    if not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06"):
         P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25")
+    elif mk in ("PL-02", "PL-06"):                                             # rev09: base do montante da W 310 (chapa 250 × 250 e 4 BR-M20)
+        P["assento"] = dict(neo=(250, 250, 10), neo_nome="CB chapa de base 250×250", x_neo=(25, 275), x_pino=75, y_pinos=(-75, 75), d=20, L=480, emb=400, pino="BR-M20")
     if canto:
         P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
                  faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")

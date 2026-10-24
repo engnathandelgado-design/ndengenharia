@@ -24,6 +24,7 @@ pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; VB 15×60 COM DENTE")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE")
 pr.revisao("06", "20/10/2026", "X DA COBERTURA NOS VÃOS 4-5 A 8-9; VB-01 A VB-08")
 pr.revisao("07", "21/10/2026", "SÓ LOCAÇÃO DOS PILARES (1:100): EIXOS NOS 4 LADOS, MARCAS, FACES; CORTES NAS CT01 A CT04")
+pr.revisao("09", "23/10/2026", "DEC-045: P6 E P7 DA ESCADA E P6 DA LINHA 2 (PE-01 A PE-03); NOMES NOVOS")
 
 # ------------------------------------------------------------------ pilares: (marca, posição, x_planta=y obra, y_planta=x obra, bx_planta, by_planta, faces)
 pil = []
@@ -33,8 +34,9 @@ for i, y in enumerate(YL, start=1):
         pil.append((marca_de(f"{lado}-L{i}"), pos, y, xo, 400, 600, "lat", lado))
 for nome, x, y, bx, by in PILARES_ESPECIAIS:
     xm, ym = round(x * 1000), round(y * 1000)
-    if nome in ("P6", "P7"):
-        pil.append(("fora", nome, ym, xm, round(by * 1000), round(bx * 1000), "fora", nome))
+    if nome in ("P6", "P7"):                                   # rev09 (DEC-045): P6/P7 da escada e P6 da linha 2 entram no projeto (PE)
+        mk = {(36175, 3790): "PE-01", (39500, 3790): "PE-02", (36175, 9650): "PE-03"}[(xm, ym)]
+        pil.append((mk, nome + (" (linha 2)" if ym == 9650 else " (escada)"), ym, xm, round(by * 1000), round(bx * 1000), "int", nome))
         continue
     if ym in (0, Lx):
         mk = marca_de(f"{nome}-L{1 if ym == 0 else 9}")
@@ -100,7 +102,6 @@ for mk, pos, x, y, bx, by, tp, ref in pil:
         rot(x + bx / 2 + 250, y + by / 2 + 350, bx, by, mk, pos, 0, 0, "BOTTOM_LEFT")
     else:
         pass
-v.texto((10600, 34700), "P6 / P7 (anexo, tracejados): fora do projeto até definição", "min", "BOTTOM_LEFT")
 # faces A (interna) e C (placas) — letras junto às faces (pilares de borda)
 for mk, pos, x, y, bx, by, tp, ref in pil:
     if tp == "lat":
@@ -165,7 +166,7 @@ for p in RN._D["pecas"]:
 lin = []
 for fl, g in sorted(grupos.items(), key=lambda kv: int(kv[1]["nomes"][0][1:])):
     lin.append([RN.novo(RN.lista(g["nomes"])), g["sec"], str(len(g["nomes"])), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
-lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", RN.novo("P6 e P7 do R01 (anexo) fora do projeto")])
+lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", RN.novo("inclui P6 e P7 da escada e P6 da linha 2 (DEC-045)")])
 x0 = 360
 y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm)", "QT", "FOLHA", "NOME NO R01"], lin,
               [40, 18, 9, 18, 95], h_lin=5.2, destaque_ultima=True)

@@ -395,7 +395,7 @@ def i130():
 
 def vm():
     S = AV.spec_vm()
-    return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO VM-01 / VM-02 — MEIO VASO PROTENDIDO COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
+    return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
                   run_script("viga_vm.py"), S)
 
 

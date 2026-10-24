@@ -174,7 +174,7 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.89,
+  "uso_secao": 0.891,
   "lambda_u": 1.1
  },
  "PL-10": {
@@ -336,7 +336,7 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.769,
+  "uso_secao": 0.764,
   "lambda_u": 1.07
  },
  "PL-03": {
@@ -427,8 +427,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.462,
-  "lambda_u": 1.46
+  "uso_secao": 0.463,
+  "lambda_u": 1.45
  },
  "PL-04": {
   "B": 400,
@@ -518,7 +518,7 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.903,
+  "uso_secao": 0.904,
   "lambda_u": 1.02
  },
  "PL-05": {
@@ -862,8 +862,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.458,
-  "lambda_u": 1.94
+  "uso_secao": 0.459,
+  "lambda_u": 1.92
  },
  "PL-07": {
   "B": 400,
@@ -954,7 +954,7 @@
   "tipo": null,
   "As_cm2": 24.13,
   "uso_secao": 0.303,
-  "lambda_u": 1.96
+  "lambda_u": 1.95
  },
  "PL-08": {
   "B": 400,
@@ -1127,7 +1127,7 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.684,
+  "uso_secao": 0.699,
   "lambda_u": 1.45
  },
  "PF-02": {
@@ -1210,8 +1210,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.599,
-  "lambda_u": 1.73
+  "uso_secao": 0.614,
+  "lambda_u": 1.72
  },
  "PF-03": {
   "B": 400,
@@ -1300,8 +1300,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.527,
-  "lambda_u": 1.92
+  "uso_secao": 0.54,
+  "lambda_u": 1.93
  },
  "PF-05": {
   "B": 400,
@@ -1400,7 +1400,7 @@
   ],
   "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.932,
+  "uso_secao": 0.933,
   "lambda_u": 1.02
  },
  "PF-04": {
@@ -1493,7 +1493,7 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.491,
+  "uso_secao": 0.493,
   "lambda_u": 1.78
  },
  "PF-06": {
@@ -1593,7 +1593,7 @@
   ],
   "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.871,
+  "uso_secao": 0.872,
   "lambda_u": 1.08
  },
  "PC-01": {
@@ -1658,8 +1658,8 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.57,
-  "lambda_u": 1.43
+  "uso_secao": 0.568,
+  "lambda_u": 1.44
  },
  "PC-02": {
   "B": 400,
@@ -1756,7 +1756,7 @@
   "tipo": null,
   "As_cm2": 28.15,
   "uso_secao": 0.363,
-  "lambda_u": 1.02
+  "lambda_u": 1.01
  },
  "PC-03": {
   "B": 600,
@@ -1949,7 +1949,7 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.541,
+  "uso_secao": 0.539,
   "lambda_u": 1.48
  },
  "PG-01": {
@@ -2014,7 +2014,7 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.5,
+  "uso_secao": 0.501,
   "lambda_u": 1.76
  },
  "PG-02": {
@@ -2069,7 +2069,7 @@
   ],
   "tipo": null,
   "As_cm2": 8.04,
-  "uso_secao": 0.556,
+  "uso_secao": 0.555,
   "lambda_u": 1.56
  },
  "PG-03": {
@@ -2140,7 +2140,7 @@
   ],
   "tipo": null,
   "As_cm2": 16.08,
-  "uso_secao": 0.375,
+  "uso_secao": 0.376,
   "lambda_u": 2.26
  },
  "PG-04": {
@@ -2203,7 +2203,7 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.418,
+  "uso_secao": 0.417,
   "lambda_u": 2.0
  },
  "PE-01": {
@@ -2258,7 +2258,7 @@
   ],
   "tipo": null,
   "As_cm2": 8.04,
-  "uso_secao": 0.454,
+  "uso_secao": 0.453,
   "lambda_u": 1.88
  },
  "PE-02": {
@@ -2323,15 +2323,15 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.85,
+  "uso_secao": 0.852,
   "lambda_u": 1.16
  },
  "PE-03": {
   "B": 400,
   "H": 250,
-  "nb": 5,
+  "nb": 6,
   "nh": 2,
-  "n": 10,
+  "n": 12,
   "d": 16.0,
   "xy": [
    [
@@ -2343,27 +2343,35 @@
     81
    ],
    [
-    -78,
+    -93,
     -81
    ],
    [
-    -78,
+    -93,
     81
    ],
    [
-    0,
+    -31,
     -81
    ],
    [
-    0,
+    -31,
     81
    ],
    [
-    78,
+    31,
     -81
    ],
    [
-    78,
+    31,
+    81
+   ],
+   [
+    93,
+    -81
+   ],
+   [
+    93,
     81
    ],
    [
@@ -2378,33 +2386,31 @@
   "c": 44.3,
   "grampos": {
    "across_B": [],
-   "across_H": [
-    0
-   ]
+   "across_H": []
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 8.6,
     "Md": 14.5,
-    "MRd0": 80.1,
-    "uso": 0.18,
-    "sigma_s": 60,
+    "MRd0": 94.3,
+    "uso": 0.15,
+    "sigma_s": 50,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 20.9,
     "Md": 35.3,
-    "MRd0": 80.1,
-    "uso": 0.44,
-    "sigma_s": 146,
+    "MRd0": 94.3,
+    "uso": 0.37,
+    "sigma_s": 121,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 20.11,
-  "uso_secao": 0.654,
-  "lambda_u": 1.07
+  "As_cm2": 24.13,
+  "uso_secao": 0.632,
+  "lambda_u": 1.39
  }
 }

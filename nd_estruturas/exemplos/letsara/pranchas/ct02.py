@@ -2,16 +2,17 @@
 
 CORTE 4-4 (1:50): transversal no meio do vão das lajes (y = 4,825 m), olhando para a linha 2 — lajes LP20 + capa 5 cortadas
 (alvéolos reais da seção do cálculo), VM da linha 2 ao fundo, pilares da linha 2, placas laterais H e J cortadas.
-CORTE 5-5 (1:25): longitudinal entre os eixos B e C (x = 14,81 m), olhando para o eixo C — VM meio vaso cortadas nas linhas
-1 e 2, laje no vão de 9,35 m, 2º estágio, capa, placas I (fachada) e G (parede interna) cortadas, pilares do eixo C ao fundo.
+CORTE 5-5 (1:25): longitudinal entre os eixos B e C (x = 14,81 m), olhando para o eixo C — VM retangulares 30 × 75 cortadas nas
+linhas 1 e 2 (rev09, DEC-048), laje no vão, 2º estágio, capa, placas I (fachada) e G (parede interna) cortadas, pilares do eixo C ao fundo.
 DETALHE 1 (1:10): laje alveolar sobre a VM de borda (linha 1), com 2º estágio, capa, fita de neoprene e alças.
-Geometria dos mesmos JSON do cálculo (laje_alveolar, vm_meio_vaso, consolos, geometria, lajes_placas.paineis_mez). A0."""
+Geometria dos mesmos JSON do cálculo (laje_alveolar, vm_retangular, geometria, lajes_placas.paineis_nivel / vigas_nivel). A0."""
 import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha, DIM_K, DIM_DLI
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS
-from lajes_placas import paineis_mez
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Z_PISOS, P6_L2, ABERTURA
+from lajes_placas import paineis_nivel, vigas_nivel
+import renomear as RN
 import pilar_generico as _G
 import pecas_obra as QT                                     # peças = mesma fonte das listas (quantitativos.py)
 import fechamento as FCH
@@ -19,45 +20,43 @@ import fechamento as FCH
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 LAJ = json.load(open(AQ + "laje_alveolar.json"))
 SEC = LAJ["secao"]
-VMJ = json.load(open(AQ + "vm_meio_vaso.json"))
+VMJ = json.load(open(AQ + "vm_retangular.json"))
 VMP = VMJ["premissas"]
-CMZ = json.load(open(AQ + "consolos.json"))["CP-MEZ"]
+CMZ = dict(proj_m=VMP["dente"]["consolo_proj"], h_total_m=VMP["dente"]["consolo_h"])
+CGM = json.load(open(AQ + "cargas_mezanino.json"))
 LG = json.load(open(AQ + "ligacoes.json"))
 PQ = {p_[1]: p_ for p_ in QT.pecas}
 f = lambda v, d=3: f"{v:+.{d}f}".replace(".", ",")
 fd = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: v * 1000
 
-NIV = [3150.0, 6550.0]                                   # pisos acabados do mezanino
+NIV = [z * 1000 for z in Z_PISOS]                        # rev09: topo da capa do mezanino (+3,90 / +7,30)
 ASS = [float(z) for z in _G.Z_MEZ_ASS]                   # assentos dos CP-MEZ
 H_LA, H_CP, FITA = SEC["h"] * 1000, 50.0, 10.0           # laje 200, capa 50, fita 10
 HV = VMP["h_pm"] * 1000                                  # VM 800
-BA, BB, HA = VMP["b_alma"] * 1000, VMP["b_aba"] * 1000, VMP["h_aba"] * 1000
-BT = BA + BB                                             # 400
+BT = VMP["b"] * 1000                                     # rev09: VM retangular 250
+B2E = BT - 120                                           # faixa de 2º estágio 130 (lado da borda)
 HCM = CMZ["h_total_m"] * 1000
-PAI, QT_LA, L_P = paineis_mez()
+PAI_N = [paineis_nivel(0), paineis_nivel(1)]
+L_P = PAI_N[1][1][4] - PAI_N[1][1][3]
 R_AL, PAS = SEC["d_alveolo"] * 500, SEC["passo"] * 1000
 X_NERV = SEC["x_nervuras_mm"]
 B_LA = SEC["b"] * 1000
-ZTV = [n - H_LA - H_CP - FITA for n in NIV]               # topo da aba da VM (= apoio da laje)
+ZTV = [n - H_LA - H_CP - FITA for n in NIV]               # topo da VM (= apoio da laje)
 Y1, Y2 = M(Y_LIN[0]), M(Y_LIN[1])
 XA = {k: M(v) for k, v in X_EIXO.items()}
 LARG = XA["E"]
-FACE = {"A": 300.0, "B": 200.0, "C": 200.0, "D": 200.0, "E": 300.0}
-VM = []
-nomes = list(XA)
-for na, nb in zip(nomes[:-1], nomes[1:]):
-    a_, b_ = XA[na] + FACE[na] + VMP["folga_m"] * 1000, XA[nb] - FACE[nb] - VMP["folga_m"] * 1000
-    VM.append(("VM-01" if "A" in (na, nb) or "E" in (na, nb) else "VM-02", a_, b_))
-PIL2 = [("PL-02", XA["A"], 600, 10000.0), ("PM-01", XA["B"], 400, NIV[1]), ("PC-01", XA["C"], 400, LG["Z_TOPO_I130"] * 1000),
-        ("PM-01", XA["D"], 400, NIV[1]), ("PL-06", XA["E"], 600, 10000.0)]
+VM_N = [[(mk, M(xa), M(xb)) for mk, xa, xb, y in vigas_nivel(iz) if abs(y - Y_LIN[1]) < 0.01] for iz in (0, 1)]   # VM da linha 2 por nível
+PIL2 = [(RN.pilar_em(x / 1000, Y_LIN[1]), x, b, zt) for x, b, zt in ((XA["A"], 600, 10000.0), (XA["B"], 400, NIV[1]), (XA["C"], 400, LG["Z_TOPO_I130"] * 1000),
+        (XA["D"], 400, NIV[1]), (M(P6_L2[0]), 250, NIV[1]), (XA["E"], 600, 10000.0))]
 O_PL = 375.0                                              # eixo das placas: face do pilar 30 + folga 2,5 + meia placa 5
-Z_VIS = 7300.0                                            # vista interrompida acima do mezanino superior
+Z_VIS = 8000.0                                            # vista interrompida acima do mezanino superior
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="CORTES DO MEZANINO — LAJES ALVEOLARES LP20 + CAPA, VIGAS VM EM MEIO VASO, 2º ESTÁGIO E APOIOS",
+                        conteudo="CORTES DO MEZANINO — LAJES ALVEOLARES LP20 + CAPA, VIGAS VM RETANGULARES 30 × 75, 2º ESTÁGIO E APOIOS",
                         desenho="ND-LET-CT02", folha="01/01", fase="EXECUTIVO", rev="00"))
 pr.revisao("00", "21/10/2026", "EMISSÃO: CORTES 4-4 E 5-5 DO MEZANINO E DETALHE DO APOIO DA LAJE")
+pr.revisao("01", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM RETANGULAR 30 × 75; ABERTURA DA ESCADA; P6 DA LINHA 2")
 Q = pr.quadro
 
 
@@ -94,8 +93,8 @@ def secao_laje(v, x0, b, z0, mk):
 
 # ================================================================== CORTE 4-4 — transversal, 1:50
 E1 = 50
-v = pr.vista("CORTE 4-4", (Q[0] + 70, Q[3] - 250), E1, titulo="CORTE 4-4 — MEZANINO, TRANSVERSAL NO MEIO DO VÃO DAS LAJES (y = 4,825 m)",
-             subtitulo="olhando para a linha 2; lajes LP20 + capa 5 cortadas; VM-01/VM-02 da linha 2 e pilares ao fundo; placas H e J cortadas", unidade="cm")
+v = pr.vista("CORTE 4-4", (Q[0] + 70, Q[3] - 228), E1, titulo="CORTE 4-4 — MEZANINO, TRANSVERSAL NO MEIO DO VÃO DAS LAJES (y = 4,825 m)",
+             subtitulo="olhando para a linha 2; lajes LP20 + capa 5 cortadas (no +3,90 sem laje no vão da escada); VM da linha 2 e pilares ao fundo; placas H e J cortadas", unidade="cm")
 v.linha((-1300, 0), (LARG + 1300, 0), "TERRENO")
 for mk, x, b, zt in PIL2:                                  # pilares da linha 2 ao fundo (vista interrompida)
     ztop = min(zt, Z_VIS)
@@ -110,20 +109,22 @@ for mk, x, b, zt in PIL2:                                  # pilares da linha 2 
     if zt > Z_VIS:
         v.interrupcao((x - b / 2, Z_VIS), (x + b / 2, Z_VIS))
     v.texto((x + (b / 2 + 120 if x < LARG else -b / 2 - 120), 150), f"{mk} ao fundo", "min", "BOTTOM_LEFT" if x < LARG else "BOTTOM_RIGHT")
-    for za in ASS:                                         # consolos CP-MEZ (faces B/D dos pilares, ocultos atrás da VM)
-        for sg in ((1,) if x == 0 else (-1,) if x == LARG else (-1, 1)):
-            xa_ = x + sg * b / 2
-            v.poli([(xa_, za - HCM), (xa_ + sg * CMZ["proj_m"] * 1000, za - HCM), (xa_ + sg * CMZ["proj_m"] * 1000, za), (xa_, za)], "OCULTA", True)
-for zt, za in zip(ZTV, ASS):
-    for mk, xa, xb in VM:                                  # VM da linha 2 em vista: dente nas pontas (recorte 30 × 35)
+for iz, za in enumerate(ASS):                              # consolos CP-MEZ nas pontas de cada VM da linha 2 (ocultos atrás da VM)
+    for _, xa, xb in VM_N[iz]:
+        for xf, sg in ((xa - 30, 1), (xb + 30, -1)):
+            v.poli([(xf, za - HCM), (xf + sg * CMZ["proj_m"] * 1000, za - HCM), (xf + sg * CMZ["proj_m"] * 1000, za), (xf, za)], "OCULTA", True)
+Y_CORTE = 4825
+for iz, (zt, za) in enumerate(zip(ZTV, ASS)):
+    for mk, xa, xb in VM_N[iz]:                             # VM da linha 2 em vista: dente nas pontas
         rc, ln = VMP["dente"]["recorte"] * 1000, VMP["dente"]["ln"] * 1000
         zb = zt - HV
         cont = [(xa + ln, zb), (xb - ln, zb), (xb - ln, zb + rc), (xb, zb + rc), (xb, zt), (xa, zt), (xa, zb + rc), (xa + ln, zb + rc)]
         v.poli(cont, "VISTA", True)
-        v.linha((xa + ln, zt - HA), (xb - ln, zt - HA), "OCULTA")            # aba (lado de cá)
-    for x0, b, mk in PAI:                                  # lajes cortadas (junta 1 cm entre painéis)
-        secao_laje(v, x0 + 5, b - 10, zt + FITA, mk)
-    cap = [(300, zt + FITA + H_LA), (LARG - 300, zt + FITA + H_LA), (LARG - 300, zt + FITA + H_LA + H_CP), (300, zt + FITA + H_LA + H_CP)]
+    xs_l = [(x0, b) for x0, b, mk, y0, y1 in PAI_N[iz] if y0 < Y_CORTE < y1]
+    for x0, b in xs_l:                                       # lajes cortadas (junta 1 cm entre painéis)
+        secao_laje(v, x0 + 5, b - 10, zt + FITA, "")
+    xc1 = max(x0 + b for x0, b in xs_l)
+    cap = [(300, zt + FITA + H_LA), (xc1, zt + FITA + H_LA), (xc1, zt + FITA + H_LA + H_CP), (300, zt + FITA + H_LA + H_CP)]
     conc(v, cap, esc=0.012)
 for xp, sg in ((-O_PL, -1), (LARG + O_PL, 1)):            # placas laterais H e J (eixos A e E, linhas 1–2) cortadas
     for k in range(8):
@@ -146,46 +147,49 @@ for zt, n, za in zip(ZTV, NIV, ASS):
     nivel(v, LARG + 900, n, f"piso {f(n / 1000)}")
     nivel(v, LARG + 900, za, f"assento CP-MEZ {f(za / 1000)}")
 nivel(v, LARG + 900, 0, "±0,000")
+PAI = PAI_N[1]
 v.chamada((PAI[3][0] + PAI[3][1] / 2, ZTV[1] + FITA + H_LA + H_CP), (8, 12), "capa 5 cm C30 + tela Q138 (obra)")
 v.chamada((PAI[4][0] + 600, ZTV[1] + FITA + H_LA / 2), (10, -18), f"LP20 {B_LA:.0f} × {H_LA:.0f}, 6 alvéolos Ø{2 * R_AL / 10:.1f}".replace(".", ","))
 v.chamada((PAI[0][0] + 350, ZTV[0] + FITA + H_LA / 2), (12, -22), "LA-02 70 × 20 (borda, 3 alvéolos)")
-v.chamada((12000, ZTV[0] - HV / 2), (8, -14), "VM-02 meio vaso 40 × 80 ao fundo (linha 2)")
-v.chamada((XA["B"] + 200 + 175, ASS[0] - HCM / 2), (10, -12), f"CP-MEZ {CMZ['proj_m']*100:.0f} × {HCM/10:.0f} (oculto)")
+v.chamada((12000, ZTV[0] - HV / 2), (8, -14), "VM retangular 30 × 75 ao fundo (linha 2)")
+v.chamada((M(ABERTURA["x0"] + ABERTURA["x1"]) / 2, NIV[0] - 300), (-30, 24), "+3,90: vão da escada metálica, sem laje (ND-LET-ES01)")
+v.chamada((XA["B"] + 200 + 175, ASS[0] - HCM / 2), (14, -22), f"CP-MEZ {VMP.get('b_consolo', 0.4)*100:.0f} × {CMZ['proj_m']*100:.0f} × {fd(HCM / 10)} (oculto)")
 v.chamada((-O_PL, 3 * 1250 + 650), (-34, 6), "placa H (10 cm)")
 v.chamada((LARG + O_PL, 2 * 1250 + 600), (10, 10), "placa J 10 cm (cortada)")
 
 # ================================================================== CORTE 5-5 — longitudinal, 1:25
 E2 = 25
 XC5 = 14810.0
-w = pr.vista("CORTE 5-5", (Q[0] + 75, Q[3] - 622), E2, titulo="CORTE 5-5 — MEZANINO, LONGITUDINAL ENTRE OS EIXOS B E C (x = 14,81 m)",
-             subtitulo="olhando para o eixo C; VM-02 meio vaso cortadas nas linhas 1 e 2; laje LP20 no vão; placas I (fachada) e G (parede interna) cortadas", unidade="cm")
+w = pr.vista("CORTE 5-5", (Q[0] + 75, Q[3] - 648), E2, titulo="CORTE 5-5 — MEZANINO, LONGITUDINAL ENTRE OS EIXOS B E C (x = 14,81 m)",
+             subtitulo="olhando para o eixo C; VM retangulares 30 × 75 cortadas nas linhas 1 e 2; laje LP20 no vão; placas I (fachada) e G (parede interna) cortadas", unidade="cm")
 w.linha((-900, 0), (Y2 + 900, 0), "TERRENO")
-for y, mk, b in ((Y1, "PF-02", 600), (Y2, "PC-01", 600)):     # pilares do eixo C ao fundo (60 em y)
+for y, mk, b in ((Y1, RN.pilar_em(X_EIXO["C"], Y_LIN[0]), 600), (Y2, RN.pilar_em(X_EIXO["C"], Y_LIN[1]), 600)):     # pilares do eixo C ao fundo (60 em y)
     w.poli([(y - b / 2, 0), (y + b / 2, 0), (y + b / 2, Z_VIS), (y - b / 2, Z_VIS)], "VISTA", True)
     w.interrupcao((y - b / 2, Z_VIS), (y + b / 2, Z_VIS))
     w.texto((y + (b / 2 + 80 if y == Y1 else -b / 2 - 80), 120), f"{mk} ao fundo (eixo C)", "min", "BOTTOM_LEFT" if y == Y1 else "BOTTOM_RIGHT")
 
 
-def meio_vaso(yc, zt, so):
-    """meio vaso cortado: alma 25 do lado externo (so = −1 na linha 1, +1 na linha 2), aba 15 × 20 para dentro."""
-    ye = yc + so * BT / 2
-    yw, yi = ye - so * BA, ye - so * BT
-    pts = [(ye, zt - HV), (yw, zt - HV), (yw, zt - HA), (yi, zt - HA), (yi, zt), (ye, zt)]
+def secao_vm(yc, zt, so):
+    """VM retangular 30 × 75 cortada (so = −1 na linha 1: borda em −y; +1 na linha 2); 2º estágio de 18 cm do lado da borda até
+    o topo da laje; laje apoiada 10 cm no topo (ponta a 2,5 cm do eixo), sobre fita de neoprene 10 × 100."""
+    ye, yi = yc + so * BT / 2, yc - so * BT / 2              # face da borda / face do lado da laje
+    pts = [(ye, zt - HV), (yi, zt - HV), (yi, zt), (ye, zt)]
     conc(w, pts, esc=0.03)
-    yl = yw - so * 50                                       # ponta da laje: 5 cm da face da alma
-    e2 = [(ye, zt), (yl, zt), (yl, zt + FITA + H_LA), (ye, zt + FITA + H_LA)]
+    yl = yi + so * 100                                       # ponta da laje: 10 cm de apoio no topo
+    yf = ye - so * B2E                                       # limite da faixa de 2º estágio
+    e2 = [(ye, zt), (yf, zt), (yf, zt + FITA + H_LA), (ye, zt + FITA + H_LA)]
     w.poli(e2, "VISTA", True); w.hachura(e2, "AR-CONC", 0.015)
-    for k_ in (60, BA - 60):                                # alças N9 (vista lateral)
+    for k_ in (35, B2E - 15):                               # alças N9 (vista lateral)
         yy = ye - so * k_
-        w.linha((yy, zt - 150), (yy, zt + FITA + H_LA - 30), "ARMADURA")
-    w.linha((ye - so * 60, zt + FITA + H_LA - 30), (ye - so * (BA - 60), zt + FITA + H_LA - 30), "ARMADURA")
-    w.chapa(min(yl, yi), zt, abs(yi - yl), FITA, 0.08)       # fita de neoprene sob a laje
+        w.linha((yy, zt - 120), (yy, zt + FITA + H_LA - 30), "ARMADURA")
+    w.linha((ye - so * 35, zt + FITA + H_LA - 30), (ye - so * (B2E - 15), zt + FITA + H_LA - 30), "ARMADURA")
+    w.chapa(min(yl, yi), zt, 100, FITA, 0.08)               # fita de neoprene sob a laje
     return yl
 
 
 for zt, n, za in zip(ZTV, NIV, ASS):
-    yl1 = meio_vaso(Y1, zt, -1)
-    yl2 = meio_vaso(Y2, zt, 1)
+    yl1 = secao_vm(Y1, zt, -1)
+    yl2 = secao_vm(Y2, zt, 1)
     zl = zt + FITA
     w.poli([(yl1, zl), (yl2, zl), (yl2, zl + H_LA), (yl1, zl + H_LA)], "VISTA", True)     # laje em vista longitudinal
     for zz in (H_LA / 2 - R_AL, H_LA / 2 + R_AL):          # alvéolo (oculto) com tampão de 20 cm nas pontas
@@ -221,82 +225,79 @@ for n, za in zip(NIV, ASS):
     nivel(w, Y1 - O_PL - 80, n, f"piso {f(n / 1000)}", -1)
     nivel(w, Y1 - O_PL - 80, za, f"assento {f(za / 1000)}", -1)
 nivel(w, Y1 - O_PL - 80, 0, "±0,000", -1)
-w.chamada((Y1 - 100, ZTV[0] - HV / 2), (20, -10), f"VM-02 meio vaso 40 × 80 protendida ({fd(PQ['VM-02'][7])} t)")
-w.chamada((Y2 + 100, ZTV[0] - HV / 2), (-20, -10), "VM-02 (alma do lado da borda)")
-w.chamada((4800, ZTV[0] + FITA + 40), (10, -14), f"7 Ø12,7 CP-190 RB, eixo a 4 cm do fundo (σpi {LAJ['sig_pi']:.0f} MPa)")
+w.chamada((Y1 + 50, ZTV[0] - HV / 2), (20, -10), f"VM retangular 30 × 75 protendida ({fd(PQ['VM-02'][7])} t)")
+w.chamada((Y2 - 50, ZTV[0] - HV / 2), (-20, -10), "VM 30 × 75 (2º estágio do lado da borda)")
+w.chamada((4800, ZTV[0] + FITA + 40), (10, -14), f"2 Ø15,2 + 5 Ø12,7 CP-190 RB, eixo a 4 cm do fundo (σpi {LAJ['sig_pi']:.0f} MPa)")
 w.chamada((7400, ZTV[0] + FITA + H_LA / 2 + R_AL), (6, 14), "alvéolos tampados 20 cm nas pontas")
 w.chamada((2000, NIV[0]), (-6, 12), "capa 5 C30 + tela Q138")
 w.chamada((Y1 - 100, ZTV[1] + 120), (18, 18), "2º estágio C30 com a capa (obra)")
-w.chamada((Y2 - 250, ZTV[1] + 5), (-12, 16), "fita de neoprene 10 × 50, apoio 10")
+w.chamada((Y2 - 175, ZTV[1] + 5), (-12, 16), "fita de neoprene 10 × 100, apoio 10")
 w.chamada((Y1 - O_PL, 2 * 1250 + 600), (-10, 10), "placa I (fachada da linha 1)")
 w.chamada((Y2 + O_PL, 3 * 1250 + 600), (10, 10), "placa G (parede interna)")
-w.marcador_corte if False else None
 
 # ================================================================== DETALHE 1 — apoio da laje na VM de borda, 1:10
 E3 = 10
 d = pr.vista("DET1", (Q[0] + 655, Q[3] - 470), E3, titulo="DETALHE 1 — LAJE ALVEOLAR NA VM DE BORDA (LINHA 1)",
-             subtitulo="seção da VM no meio do vão; linha 2 espelhada; 2º estágio e capa concretados juntos por quem executa a capa", unidade="cm")
-zt0 = 0.0
-pts = [(0, -HV), (BA, -HV), (BA, -HA), (BT, -HA), (BT, 0), (0, 0)]
+             subtitulo="seção da VM 30 × 75 no meio do vão; linha 2 espelhada; 2º estágio e capa concretados juntos por quem executa a capa", unidade="cm")
+pts = [(0, -HV), (BT, -HV), (BT, 0), (0, 0)]
 conc(d, pts, esc=0.03)
-d.interrupcao((0, -HV + 250), (BA, -HV + 250))
-d.chapa(BA + 50, 0, BB - 50, FITA, 0.05)
-xl = BA + 50
+d.interrupcao((0, -HV + 250), (BT, -HV + 250))
+xl = BT - 100
+d.chapa(xl, 0, 100, FITA, 0.05)
 LV = 900.0
 d.poli([(xl, FITA), (xl + LV, FITA), (xl + LV, FITA + H_LA), (xl, FITA + H_LA)], "CORTADO", True)
 d.interrupcao((xl + LV, FITA), (xl + LV, FITA + H_LA))
-NB = SEC["nervuras_mm"][0]                                                      # nervura de borda 51,5
+NB = SEC["nervuras_mm"][0]
 x_al = [xl + NB + R_AL + k * PAS for k in range(4)]
 for c_ in x_al:
     if c_ + R_AL < xl + LV:
         d.circulo((c_, FITA + H_LA / 2), R_AL, "CORTADO")
-for xc_ in [c["x_mm"] for c in LAJ["cordoalhas"]]:                               # cordoalhas nas nervuras (posição do cálculo), eixo a 4 cm
-    xn = xl + xc_ + B_LA / 2
+for c in LAJ["cordoalhas"]:
+    xn = xl + c["x_mm"] + B_LA / 2
     if xn < xl + LV - 20:
-        d.circulo((xn, FITA + 40), 6.35, "ARM_PROT_SECAO")
-e2 = [(0, 0), (xl, 0), (xl, FITA + H_LA), (0, FITA + H_LA)]
+        d.circulo((xn, FITA + 40), float(c["diam"]) / 2, "ARM_PROT_SECAO")
+e2 = [(0, 0), (B2E, 0), (B2E, FITA + H_LA), (0, FITA + H_LA)]
 d.poli(e2, "VISTA", True); d.hachura(e2, "AR-CONC", 0.008)
 cap = [(0, FITA + H_LA), (xl + LV, FITA + H_LA), (xl + LV, FITA + H_LA + H_CP), (0, FITA + H_LA + H_CP)]
 d.poli(cap, "VISTA", True); d.hachura(cap, "AR-CONC", 0.008)
-d.linha((25, FITA + H_LA + 25), (xl + LV - 20, FITA + H_LA + 25), "ARMADURA")       # tela Q138 a meia capa
-d.poli([(40, -500), (40, FITA + H_LA - 25), (BA - 40, FITA + H_LA - 25), (BA - 40, -500)], "ARMADURA")   # alça N9
-for xx in (40, BA - 40):
-    d.circulo((xx, FITA + H_LA - 40), 6, "ARM_SECAO")
-d.cota_h([0, BA, BA + 50, BT], -HV + 250, -10, total=False)
+d.linha((25, FITA + H_LA + 25), (xl + LV - 20, FITA + H_LA + 25), "ARMADURA")
+d.poli([(35, -120), (35, FITA + H_LA - 25), (B2E - 15, FITA + H_LA - 25), (B2E - 15, -120)], "ARMADURA")   # alça N9
+d.ret(25, -HV + 250, BT - 50, HV - 250 - 25, "ARM_TRANSV")                                               # estribo N2 (interrompido)
+d.cota_h([0, B2E, xl, BT], -HV + 250, -10, total=True)
 d.cota_h([xl, xl + NB, xl + NB + 2 * R_AL, xl + NB + PAS], FITA + H_LA + H_CP, 10, total=False)
-d.cota_v([-HA, 0, FITA, FITA + H_LA, FITA + H_LA + H_CP], xl + LV + 80, 10, total=False)
-d.cota_v([-HV + 250, -HA, 0], -60, -10, total=False)
-d.chamada((BA + 100, FITA / 2), (30, -12), "fita de neoprene 10 × 50; apoio 10 cm")
-d.chamada((BA / 2, FITA + H_LA / 2), (-14, 14), "2º estágio C30 (com a capa)")
-d.chamada((BA - 40, -600), (-22, -12), "alças N9 Ø10 c/15 da alma (sobem até a capa)")
+d.cota_v([0, FITA, FITA + H_LA, FITA + H_LA + H_CP], xl + LV + 80, 10, total=False)
+d.cota_v([-HV + 250, 0], -60, -10, total=False)
+d.chamada((xl + 50, FITA / 2), (-60, 62), "fita de neoprene 10 × 100; apoio 10 cm no topo da VM")
+d.chamada((B2E / 2, FITA + H_LA / 2), (-14, 14), "2º estágio C30, faixa de 18 cm (com a capa)")
+d.chamada((B2E - 15, -100), (-30, -40), "alças N9 Ø10 c/15 (saem 20 cm da VM)")
 d.chamada((xl + 400, FITA + H_LA + 25), (12, 14), "tela Q138 a meia altura da capa")
-d.chamada((xl + LAJ["cordoalhas"][4]["x_mm"] + B_LA / 2, FITA + 40), (8, -34), "cordoalha Ø12,7 (1 por nervura), eixo a 4 cm")
+d.chamada((xl + LAJ["cordoalhas"][4]["x_mm"] + B_LA / 2, FITA + 40), (8, -34), "Ø15,2 nas nervuras de borda, Ø12,7 nas internas, eixo a 4 cm")
 d.chamada((x_al[1], FITA + H_LA / 2 + R_AL), (10, 26), "LP20: alvéolos Ø15,2 no passo 19,8; nervura de borda 5,15")
-d.chamada((BT - 60, -HA / 2), (16, -26), "aba 15 × 20 da VM (apoio da laje)")
-nivel(d, xl + LV + 300, FITA + H_LA + H_CP, "piso (+3,150 / +6,550)")
-nivel(d, xl + LV + 300, 0, "topo da VM (+2,890 / +6,290)")
+d.chamada((BT / 2, -HV / 2 + 100), (22, -8), "VM 30 × 75 protendida (ND-LET-VM01)")
+nivel(d, xl + LV + 300, FITA + H_LA + H_CP, f"piso ({f(NIV[0] / 1000)} / {f(NIV[1] / 1000)})")
+nivel(d, xl + LV + 300, 0, f"topo da VM ({f(ZTV[0] / 1000)} / {f(ZTV[1] / 1000)})")
 
 # ------------------------------------------------------------------ 3D, quadro de níveis e notas
 cb = pr.carimbo_bbox
 pr.imagem(Q[2] - 180, cb[3] + 26, Q[2], cb[3] + 26 + 260, "/home/claude/letsara/pranchas/img_ct02/mez.png",
           titulo="3D — MEZANINO ENTRE OS EIXOS B E C", subtitulo="recorte do modelo da obra; lajes e 2º estágio transparentes")
 xt, ytop = Q[2] - 180, Q[3] - 6
-niv = [["Piso acabado do mezanino inferior / superior", f"{f(NIV[0] / 1000)} / {f(NIV[1] / 1000)}"],
-       ["Topo da capa = piso (capa 5 cm C30)", f"{f(NIV[0] / 1000)} / {f(NIV[1] / 1000)}"],
+niv = [["Topo da capa = piso (capa 5 cm C30)", f"{f(NIV[0] / 1000)} / {f(NIV[1] / 1000)}"],
        ["Fundo da laje (fita de neoprene 1 cm)", f"{f((ZTV[0] + FITA) / 1000)} / {f((ZTV[1] + FITA) / 1000)}"],
-       ["Topo da aba da VM (apoio da laje)", f"{f(ZTV[0] / 1000)} / {f(ZTV[1] / 1000)}"],
-       ["Assento dos consolos CP-MEZ", f"{f(ASS[0] / 1000)} / {f(ASS[1] / 1000)}"],
+       ["Topo da VM (apoio da laje)", f"{f(ZTV[0] / 1000)} / {f(ZTV[1] / 1000)}"],
+       ["Assento dos consolos CP-MEZ (topo do consolo)", f"{f(ASS[0] / 1000)} / {f(ASS[1] / 1000)}"],
        ["Fundo da VM e dos consolos", f"{f((ZTV[0] - HV) / 1000)} / {f((ZTV[1] - HV) / 1000)}"]]
 yy = pr.tabela(xt, ytop, "NÍVEIS DO MEZANINO (m)", ["ELEMENTO", "INFERIOR / SUPERIOR"], niv, [112, 68], h_lin=5.2)
-notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos Ø15,2, passo 19,8) + capa 5 cm C30 com tela Q138, vão de cálculo 9,35 m, biapoiadas nas abas das VM; 7 Ø12,7 CP-190 RB por painel (uma por nervura), σpi {LAJ['sig_pi']:.0f} MPa ({LAJ['cordoalhas'][0]['F_macaco_kN']:.1f} kN por cordoalha); liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).".replace(".", ","),
-         "Cargas consideradas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m², revestimento 1,0 kN/m², sobrecarga 5,0 kN/m² (escritório); montagem sem escoramento com a capa fresca + 1,0 kN/m².",
-         f"VM-01 e VM-02 em meio vaso 40 × 80 protendidas (alma 25 do lado da borda, aba 15 × 20 para dentro), dente Gerber 50 × 35 nos consolos CP-MEZ; topo da aba = apoio da laje (ND-LET-VM01).",
-         "Apoio da laje 10 cm sobre fita de neoprene 10 × 50 contínua; ponta da laje a 5 cm da face da alma; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",
-         "2º estágio sobre a alma das VM (largura 30, até o topo da laje) e capa concretados juntos, por quem executa a capa, depois de todo o nível montado; alças N9 Ø10 c/15 da alma ancoram o 2º estágio; negativas N11/N12 sobre os pilares (ND-LET-VM01) e N1 2 Ø10 sobre os apoios das lajes (ND-LET-LA01).",
-         "Lajes içadas só por garra mecânica nas 2 pontas; montar as lajes só depois de concretar as pontas das VM dos dois lados e de o concreto da junta atingir fcj ≥ 20 MPa (torção do meio vaso; DEC-039). Lajes e vigas sem escoramento.",
+c39, c73 = CGM["piso_390"], CGM["laje_730"]
+notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos Ø15,2, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; 2 Ø15,2 + 5 Ø12,7 CP-190 RB por painel (uma por nervura), σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
+         f"Cargas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m²; {f(NIV[0] / 1000, 2)}: revestimento {fd(c39['revestimento'])} e sobrecarga {fd(c39['sobrecarga'])} kN/m² (depósito); {f(NIV[1] / 1000, 2)} (sem uso): {fd(c73['revestimento'])} e {fd(c73['sobrecarga'])} kN/m²; montagem sem escoramento com a capa fresca + 1,0 kN/m².",
+         "VM-01 a VM-04 retangulares 30 × 75 protendidas (DEC-049), dente Gerber 45 × 40 nos consolos CP-MEZ 40 × 40 × 27,9 com NEO-5F 200 × 200; topo da VM = apoio da laje (ND-LET-VM01).",
+         "Apoio da laje 10 cm no topo da VM sobre fita de neoprene 10 × 100 contínua, com folga de 2 cm até a faixa de 2º estágio; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",
+         "2º estágio na faixa de 18 cm sobre a VM (do lado da borda, até o topo da capa) e capa concretados juntos, por quem executa a capa, depois de todo o nível montado; alças N9 Ø10 c/15 da VM ancoram o 2º estágio; negativas N11/N12 sobre os pilares (ND-LET-VM01) e N1 2 Ø10 sobre os apoios das lajes (ND-LET-LA01).",
+         "Lajes içadas só por garra mecânica nas 2 pontas; montar as lajes só depois de concretar as pontas das VM dos dois lados e de o concreto da junta atingir fcj ≥ 20 MPa (DEC-039). Lajes e vigas sem escoramento.",
+         f"Escada (DEC-045): no {f(NIV[0] / 1000, 2)} não há laje entre o P6, o P7 e a linha 2 (escada metálica, ND-LET-ES01); na linha 2 a VM vai só até o P6 neste nível.",
          "Placas: H e J (laterais do anexo) e I (fachada da linha 1) por fora dos pilares; G (parede interna da linha 2) do lado do pavilhão; cada placa independente nos seus consoles (ND-LET-PP00).",
-         "Sequência: ND-LET-MON02. Apoios como montados: ND-LET-CT04. Cotas em cm, níveis em m. Não medir no desenho.",
-         "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]
+         "Sequência: ND-LET-MON02. Apoios como montados: ND-LET-CT04. Cotas em cm, níveis em m. Não medir no desenho."]
 pr.notas(xt, yy - 4, notas, 178)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CT02")
 for a in avisos:

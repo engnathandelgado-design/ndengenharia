@@ -1,0 +1,2198 @@
+[
+ {
+  "b": 0.25,
+  "h": 0.85,
+  "hd": 0.55,
+  "custo_total": 124318,
+  "faixa_2e": 0.13,
+  "fundo": [
+   2.79,
+   6.19
+  ],
+  "solucoes": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.25,
+    "h": 0.85,
+    "hd": 0.55,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 387.4,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 464.9,
+     "tau_wd": 3.76,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 510.5,
+     "tirante": "5 Ø16 (1006 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 275 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.08,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 974,
+      "tirante": "5 Ø16 (1006 mm²)",
+      "As_sus": 1240,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 275 mm da face reentrante",
+      "As_cost": 391,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 617,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 1142,
+      "ok": true,
+      "n_tir": 5,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.31,
+    "L_calculo": 8.948,
+    "cargas": {
+     "g_pm": 5.31,
+     "g_laje": 13.44,
+     "g_capa": 6.31,
+     "g_2e": 0.75,
+     "q_mont": 5.05,
+     "g1": 25.81,
+     "g2": 5.05,
+     "q2": 25.25
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      200,
+      120
+     ],
+     [
+      50,
+      190
+     ],
+     [
+      200,
+      190
+     ],
+     [
+      75,
+      800
+     ],
+     [
+      175,
+      800
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1038.779,
+    "lbpt_m": 0.878,
+    "ELU": {
+     "M1d": 401.6,
+     "MRd1": 903.1,
+     "xd1": 0.405,
+     "M2d": 786.3,
+     "MRd2": 1410.8,
+     "xd2": 0.317,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -0.27,
+     "lim_F": 2.95,
+     "sig_D": -2.02,
+     "sig_rara": -0.27,
+     "topo_F1": -7.74
+    },
+    "flecha": {
+     "contraflecha_mm": -6.1,
+     "montagem_mm": -0.9,
+     "final_mm": 1.3,
+     "lim_final_mm": 35.8,
+     "lim_montagem_L500": 17.9,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.918,
+    "peso_t": 4.8,
+    "kg_cord": 86.6,
+    "kg_aco": 250.5,
+    "forma_m2": 18.15,
+    "custo_indice": 7006
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.25,
+    "h": 0.85,
+    "hd": 0.55,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 392.1,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 470.5,
+     "tau_wd": 3.8,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 510.5,
+     "tirante": "5 Ø16 (1006 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 275 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.14,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 986,
+      "tirante": "5 Ø16 (1006 mm²)",
+      "As_sus": 1255,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 275 mm da face reentrante",
+      "As_cost": 396,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 627,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 1142,
+      "ok": true,
+      "n_tir": 5,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.42,
+    "L_calculo": 9.058,
+    "cargas": {
+     "g_pm": 5.31,
+     "g_laje": 13.44,
+     "g_capa": 6.31,
+     "g_2e": 0.75,
+     "q_mont": 5.05,
+     "g1": 25.81,
+     "g2": 5.05,
+     "q2": 25.25
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      200,
+      120
+     ],
+     [
+      50,
+      190
+     ],
+     [
+      200,
+      190
+     ],
+     [
+      75,
+      800
+     ],
+     [
+      175,
+      800
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1040.046,
+    "lbpt_m": 0.878,
+    "ELU": {
+     "M1d": 411.5,
+     "MRd1": 903.0,
+     "xd1": 0.405,
+     "M2d": 805.7,
+     "MRd2": 1413.5,
+     "xd2": 0.315,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 0.05,
+     "lim_F": 2.95,
+     "sig_D": -1.74,
+     "sig_rara": 0.05,
+     "topo_F1": -7.99
+    },
+    "flecha": {
+     "contraflecha_mm": -6.3,
+     "montagem_mm": -0.8,
+     "final_mm": 1.9,
+     "lim_final_mm": 36.2,
+     "lim_montagem_L500": 18.1,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.942,
+    "peso_t": 4.85,
+    "kg_cord": 87.6,
+    "kg_aco": 253.6,
+    "forma_m2": 18.37,
+    "custo_indice": 7091
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.25,
+    "h": 0.85,
+    "hd": 0.55,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 251.0,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 301.2,
+     "tau_wd": 2.43,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 510.5,
+     "tirante": "4 Ø16 (804 mm²)",
+     "suspensao": "2 estribos Ø16 fechados (804 mm²) a até 275 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.29,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 631,
+      "tirante": "4 Ø16 (804 mm²)",
+      "As_sus": 803,
+      "suspensao": "2 estribos Ø16 fechados (804 mm²) a até 275 mm da face reentrante",
+      "As_cost": 253,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 308,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 1142,
+      "ok": true,
+      "n_tir": 4,
+      "d_tir": 16.0,
+      "n_sus": 2,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 6.16,
+    "L_calculo": 5.798,
+    "cargas": {
+     "g_pm": 5.31,
+     "g_laje": 13.44,
+     "g_capa": 6.31,
+     "g_2e": 0.75,
+     "q_mont": 5.05,
+     "g1": 25.81,
+     "g2": 5.05,
+     "q2": 25.25
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      75,
+      800
+     ],
+     [
+      175,
+      800
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1128.813,
+    "lbpt_m": 0.906,
+    "ELU": {
+     "M1d": 168.6,
+     "MRd1": 454.4,
+     "xd1": 0.193,
+     "M2d": 330.1,
+     "MRd2": 722.8,
+     "xd2": 0.136,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 0.03,
+     "lim_F": 2.95,
+     "sig_D": -0.75,
+     "sig_rara": 0.03,
+     "topo_F1": -4.68
+    },
+    "flecha": {
+     "contraflecha_mm": -0.9,
+     "montagem_mm": 0.1,
+     "final_mm": 1.2,
+     "lim_final_mm": 23.2,
+     "lim_montagem_L500": 11.6,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.209,
+    "peso_t": 3.02,
+    "kg_cord": 28.6,
+    "kg_aco": 167.4,
+    "forma_m2": 12.01,
+    "custo_indice": 4113
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.25,
+    "h": 0.85,
+    "hd": 0.55,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 71.1,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 85.3,
+     "tau_wd": 0.69,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 510.5,
+     "tirante": "2 Ø16 (402 mm²)",
+     "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 275 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.93,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 396,
+      "tirante": "2 Ø16 (402 mm²)",
+      "As_sus": 228,
+      "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 275 mm da face reentrante",
+      "As_cost": 175,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 175,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 1142,
+      "ok": true,
+      "n_tir": 2,
+      "d_tir": 16.0,
+      "n_sus": 1,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 2.84,
+    "L_calculo": 2.478,
+    "cargas": {
+     "g_pm": 5.31,
+     "g_laje": 13.44,
+     "g_capa": 6.31,
+     "g_2e": 0.75,
+     "q_mont": 5.05,
+     "g1": 25.81,
+     "g2": 8.58,
+     "q2": 5.05
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      75,
+      800
+     ],
+     [
+      175,
+      800
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1117.067,
+    "lbpt_m": 0.906,
+    "ELU": {
+     "M1d": 30.8,
+     "MRd1": 454.6,
+     "xd1": 0.192,
+     "M2d": 42.4,
+     "MRd2": 653.1,
+     "xd2": 0.236,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -4.99,
+     "lim_F": 2.95,
+     "sig_D": -5.02,
+     "sig_rara": -4.99,
+     "topo_F1": -1.15
+    },
+    "flecha": {
+     "contraflecha_mm": -0.2,
+     "montagem_mm": -0.1,
+     "final_mm": -0.5,
+     "lim_final_mm": 9.9,
+     "lim_montagem_L500": 5.0,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 0.483,
+    "peso_t": 1.21,
+    "kg_cord": 13.2,
+    "kg_aco": 65.5,
+    "forma_m2": 5.54,
+    "custo_indice": 1658
+   }
+  }
+ },
+ {
+  "b": 0.3,
+  "h": 0.75,
+  "hd": 0.45,
+  "custo_total": 130344,
+  "faixa_2e": 0.18,
+  "fundo": [
+   2.89,
+   6.29
+  ],
+  "solucoes": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.45,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 391.6,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 469.9,
+     "tau_wd": 3.97,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 488.8,
+     "tirante": "6 Ø16 (1207 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 225 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.27899999999999997,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.13,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1171,
+      "tirante": "6 Ø16 (1207 mm²)",
+      "As_sus": 1253,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 225 mm da face reentrante",
+      "As_cost": 460,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 544,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 972,
+      "ok": true,
+      "n_tir": 6,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.31,
+    "L_calculo": 8.948,
+    "cargas": {
+     "g_pm": 5.62,
+     "g_laje": 13.37,
+     "g_capa": 6.34,
+     "g_2e": 1.0,
+     "q_mont": 5.08,
+     "g1": 26.34,
+     "g2": 5.08,
+     "q2": 25.38
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      200,
+      120
+     ],
+     [
+      250,
+      120
+     ],
+     [
+      100,
+      700
+     ],
+     [
+      200,
+      700
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1050.74,
+    "lbpt_m": 0.879,
+    "ELU": {
+     "M1d": 408.7,
+     "MRd1": 820.4,
+     "xd1": 0.388,
+     "M2d": 795.7,
+     "MRd2": 1326.1,
+     "xd2": 0.294,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 0.91,
+     "lim_F": 2.95,
+     "sig_D": -0.88,
+     "sig_rara": 0.91,
+     "topo_F1": -8.41
+    },
+    "flecha": {
+     "contraflecha_mm": -6.9,
+     "montagem_mm": -0.4,
+     "final_mm": 3.7,
+     "lim_final_mm": 35.8,
+     "lim_montagem_L500": 17.9,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.023,
+    "peso_t": 5.06,
+    "kg_cord": 86.6,
+    "kg_aco": 266.7,
+    "forma_m2": 16.76,
+    "custo_indice": 7340
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.45,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 396.4,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 475.7,
+     "tau_wd": 4.01,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 488.8,
+     "tirante": "6 Ø16 (1207 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 225 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.27899999999999997,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.19,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1185,
+      "tirante": "6 Ø16 (1207 mm²)",
+      "As_sus": 1268,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 225 mm da face reentrante",
+      "As_cost": 466,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 554,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 972,
+      "ok": true,
+      "n_tir": 6,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.42,
+    "L_calculo": 9.058,
+    "cargas": {
+     "g_pm": 5.62,
+     "g_laje": 13.37,
+     "g_capa": 6.34,
+     "g_2e": 1.0,
+     "q_mont": 5.08,
+     "g1": 26.34,
+     "g2": 5.08,
+     "q2": 25.38
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      200,
+      120
+     ],
+     [
+      250,
+      120
+     ],
+     [
+      100,
+      700
+     ],
+     [
+      200,
+      700
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1052.184,
+    "lbpt_m": 0.88,
+    "ELU": {
+     "M1d": 418.8,
+     "MRd1": 820.4,
+     "xd1": 0.388,
+     "M2d": 815.4,
+     "MRd2": 1328.6,
+     "xd2": 0.291,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 1.25,
+     "lim_F": 2.95,
+     "sig_D": -0.58,
+     "sig_rara": 1.25,
+     "topo_F1": -8.69
+    },
+    "flecha": {
+     "contraflecha_mm": -7.1,
+     "montagem_mm": -0.3,
+     "final_mm": 4.6,
+     "lim_final_mm": 36.2,
+     "lim_montagem_L500": 18.1,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.047,
+    "peso_t": 5.12,
+    "kg_cord": 87.6,
+    "kg_aco": 270.0,
+    "forma_m2": 16.96,
+    "custo_indice": 7429
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.45,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 253.7,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 304.4,
+     "tau_wd": 2.57,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 488.8,
+     "tirante": "4 Ø16 (804 mm²)",
+     "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 225 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.27899999999999997,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.32,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 758,
+      "tirante": "4 Ø16 (804 mm²)",
+      "As_sus": 812,
+      "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 225 mm da face reentrante",
+      "As_cost": 298,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 298,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 972,
+      "ok": true,
+      "n_tir": 4,
+      "d_tir": 16.0,
+      "n_sus": 3,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 6.16,
+    "L_calculo": 5.798,
+    "cargas": {
+     "g_pm": 5.62,
+     "g_laje": 13.37,
+     "g_capa": 6.34,
+     "g_2e": 1.0,
+     "q_mont": 5.08,
+     "g1": 26.34,
+     "g2": 5.08,
+     "q2": 25.38
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      100,
+      700
+     ],
+     [
+      200,
+      700
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1135.661,
+    "lbpt_m": 0.908,
+    "ELU": {
+     "M1d": 171.6,
+     "MRd1": 400.8,
+     "xd1": 0.186,
+     "M2d": 334.1,
+     "MRd2": 672.8,
+     "xd2": 0.117,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 0.74,
+     "lim_F": 2.95,
+     "sig_D": -0.05,
+     "sig_rara": 0.74,
+     "topo_F1": -5.09
+    },
+    "flecha": {
+     "contraflecha_mm": -0.9,
+     "montagem_mm": 0.2,
+     "final_mm": 2.0,
+     "lim_final_mm": 23.2,
+     "lim_montagem_L500": 11.6,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.29,
+    "peso_t": 3.22,
+    "kg_cord": 28.6,
+    "kg_aco": 176.4,
+    "forma_m2": 11.09,
+    "custo_indice": 4339
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.3,
+    "h": 0.75,
+    "hd": 0.45,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 72.1,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 86.5,
+     "tau_wd": 0.73,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 488.8,
+     "tirante": "2 Ø16 (402 mm²)",
+     "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 225 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.27899999999999997,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.94,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 379,
+      "tirante": "2 Ø16 (402 mm²)",
+      "As_sus": 231,
+      "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 225 mm da face reentrante",
+      "As_cost": 167,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 167,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 972,
+      "ok": true,
+      "n_tir": 2,
+      "d_tir": 16.0,
+      "n_sus": 1,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 2.84,
+    "L_calculo": 2.478,
+    "cargas": {
+     "g_pm": 5.62,
+     "g_laje": 13.37,
+     "g_capa": 6.34,
+     "g_2e": 1.0,
+     "q_mont": 5.08,
+     "g1": 26.34,
+     "g2": 8.63,
+     "q2": 5.08
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      100,
+      700
+     ],
+     [
+      200,
+      700
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1123.032,
+    "lbpt_m": 0.907,
+    "ELU": {
+     "M1d": 31.3,
+     "MRd1": 400.9,
+     "xd1": 0.186,
+     "M2d": 43.0,
+     "MRd2": 614.6,
+     "xd2": 0.211,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -4.59,
+     "lim_F": 2.95,
+     "sig_D": -4.62,
+     "sig_rara": -4.59,
+     "topo_F1": -1.25
+    },
+    "flecha": {
+     "contraflecha_mm": -0.2,
+     "montagem_mm": -0.1,
+     "final_mm": -0.5,
+     "lim_final_mm": 9.9,
+     "lim_montagem_L500": 5.0,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 0.519,
+    "peso_t": 1.3,
+    "kg_cord": 13.2,
+    "kg_aco": 69.4,
+    "forma_m2": 5.11,
+    "custo_indice": 1757
+   }
+  }
+ },
+ {
+  "b": 0.35,
+  "h": 0.7,
+  "hd": 0.4,
+  "custo_total": 141708,
+  "faixa_2e": 0.23,
+  "fundo": [
+   2.94,
+   6.34
+  ],
+  "solucoes": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.35,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 396.9,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 476.3,
+     "tau_wd": 3.94,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 498.1,
+     "tirante": "7 Ø16 (1408 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+     "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.2,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1322,
+      "tirante": "7 Ø16 (1408 mm²)",
+      "As_sus": 1270,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+      "As_cost": 534,
+      "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+      "Av": 534,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 7,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 4,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.31,
+    "L_calculo": 8.948,
+    "cargas": {
+     "g_pm": 6.12,
+     "g_laje": 13.3,
+     "g_capa": 6.38,
+     "g_2e": 1.25,
+     "q_mont": 5.1,
+     "g1": 27.05,
+     "g2": 5.1,
+     "q2": 25.5
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      300,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      250,
+      120
+     ],
+     [
+      125,
+      650
+     ],
+     [
+      225,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1067.504,
+    "lbpt_m": 0.883,
+    "ELU": {
+     "M1d": 418.3,
+     "MRd1": 782.2,
+     "xd1": 0.361,
+     "M2d": 807.8,
+     "MRd2": 1290.0,
+     "xd2": 0.26,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 1.67,
+     "lim_F": 2.95,
+     "sig_D": -0.05,
+     "sig_rara": 1.67,
+     "topo_F1": -8.6
+    },
+    "flecha": {
+     "contraflecha_mm": -7.0,
+     "montagem_mm": 0.1,
+     "final_mm": 5.7,
+     "lim_final_mm": 35.8,
+     "lim_montagem_L500": 17.9,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.197,
+    "peso_t": 5.49,
+    "kg_cord": 86.6,
+    "kg_aco": 289.6,
+    "forma_m2": 16.29,
+    "custo_indice": 7859
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.35,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 12,
+    "n_cord": 14,
+    "Vd": 401.8,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 482.2,
+     "tau_wd": 3.99,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 498.1,
+     "tirante": "7 Ø16 (1408 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+     "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.26,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1338,
+      "tirante": "7 Ø16 (1408 mm²)",
+      "As_sus": 1286,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+      "As_cost": 540,
+      "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+      "Av": 540,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 7,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 4,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.42,
+    "L_calculo": 9.058,
+    "cargas": {
+     "g_pm": 6.12,
+     "g_laje": 13.3,
+     "g_capa": 6.38,
+     "g_2e": 1.25,
+     "q_mont": 5.1,
+     "g1": 27.05,
+     "g2": 5.1,
+     "q2": 25.5
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      200,
+      120
+     ],
+     [
+      250,
+      120
+     ],
+     [
+      300,
+      120
+     ],
+     [
+      125,
+      650
+     ],
+     [
+      225,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1034.754,
+    "lbpt_m": 0.874,
+    "ELU": {
+     "M1d": 428.6,
+     "MRd1": 891.2,
+     "xd1": 0.423,
+     "M2d": 827.8,
+     "MRd2": 1460.8,
+     "xd2": 0.33,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -0.05,
+     "lim_F": 2.95,
+     "sig_D": -1.82,
+     "sig_rara": -0.05,
+     "topo_F1": -8.15
+    },
+    "flecha": {
+     "contraflecha_mm": -8.5,
+     "montagem_mm": -1.0,
+     "final_mm": 1.5,
+     "lim_final_mm": 36.2,
+     "lim_montagem_L500": 18.1,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.224,
+    "peso_t": 5.56,
+    "kg_cord": 102.2,
+    "kg_aco": 293.1,
+    "forma_m2": 16.48,
+    "custo_indice": 8174
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.35,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 6,
+    "n_cord": 8,
+    "Vd": 257.2,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 308.6,
+     "tau_wd": 2.56,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 498.1,
+     "tirante": "5 Ø16 (1006 mm²)",
+     "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 200 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.37,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 856,
+      "tirante": "5 Ø16 (1006 mm²)",
+      "As_sus": 823,
+      "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 200 mm da face reentrante",
+      "As_cost": 346,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 346,
+      "vertical_dente": "3 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 5,
+      "d_tir": 16.0,
+      "n_sus": 3,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 3
+     }
+    },
+    "L_peca": 6.16,
+    "L_calculo": 5.798,
+    "cargas": {
+     "g_pm": 6.12,
+     "g_laje": 13.3,
+     "g_capa": 6.38,
+     "g_2e": 1.25,
+     "q_mont": 5.1,
+     "g1": 27.05,
+     "g2": 5.1,
+     "q2": 25.5
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      125,
+      650
+     ],
+     [
+      225,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1104.485,
+    "lbpt_m": 0.899,
+    "ELU": {
+     "M1d": 175.6,
+     "MRd1": 536.8,
+     "xd1": 0.236,
+     "M2d": 339.2,
+     "MRd2": 868.8,
+     "xd2": 0.184,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -1.87,
+     "lim_F": 2.95,
+     "sig_D": -2.63,
+     "sig_rara": -1.87,
+     "topo_F1": -3.71
+    },
+    "flecha": {
+     "contraflecha_mm": -1.7,
+     "montagem_mm": -0.5,
+     "final_mm": -0.9,
+     "lim_final_mm": 23.2,
+     "lim_montagem_L500": 11.6,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.397,
+    "peso_t": 3.49,
+    "kg_cord": 38.2,
+    "kg_aco": 192.8,
+    "forma_m2": 10.78,
+    "custo_indice": 4823
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.35,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 73.4,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 88.1,
+     "tau_wd": 0.73,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 498.1,
+     "tirante": "2 Ø16 (402 mm²)",
+     "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 200 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.96,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 386,
+      "tirante": "2 Ø16 (402 mm²)",
+      "As_sus": 235,
+      "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 200 mm da face reentrante",
+      "As_cost": 170,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 170,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 2,
+      "d_tir": 16.0,
+      "n_sus": 1,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 2.84,
+    "L_calculo": 2.478,
+    "cargas": {
+     "g_pm": 6.12,
+     "g_laje": 13.3,
+     "g_capa": 6.38,
+     "g_2e": 1.25,
+     "q_mont": 5.1,
+     "g1": 27.05,
+     "g2": 8.67,
+     "q2": 5.1
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      125,
+      650
+     ],
+     [
+      225,
+      650
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1130.458,
+    "lbpt_m": 0.909,
+    "ELU": {
+     "M1d": 32.1,
+     "MRd1": 376.9,
+     "xd1": 0.174,
+     "M2d": 43.9,
+     "MRd2": 599.3,
+     "xd2": 0.182,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -4.15,
+     "lim_F": 2.95,
+     "sig_D": -4.18,
+     "sig_rara": -4.15,
+     "topo_F1": -1.25
+    },
+    "flecha": {
+     "contraflecha_mm": -0.2,
+     "montagem_mm": -0.1,
+     "final_mm": -0.5,
+     "lim_final_mm": 9.9,
+     "lim_montagem_L500": 5.0,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 0.57,
+    "peso_t": 1.42,
+    "kg_cord": 13.2,
+    "kg_aco": 75.0,
+    "forma_m2": 4.97,
+    "custo_indice": 1899
+   }
+  }
+ },
+ {
+  "b": 0.4,
+  "h": 0.7,
+  "hd": 0.4,
+  "custo_total": 157372,
+  "faixa_2e": 0.28,
+  "fundo": [
+   2.94,
+   6.34
+  ],
+  "solucoes": {
+   "VM-01": {
+    "marca": "VM-01",
+    "b": 0.4,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 10,
+    "n_cord": 12,
+    "Vd": 404.4,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 485.3,
+     "tau_wd": 3.52,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 569.2,
+     "tirante": "7 Ø16 (1408 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+     "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.3,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1347,
+      "tirante": "7 Ø16 (1408 mm²)",
+      "As_sus": 1294,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+      "As_cost": 544,
+      "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+      "Av": 544,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 7,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 4,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.31,
+    "L_calculo": 8.948,
+    "cargas": {
+     "g_pm": 7.0,
+     "g_laje": 13.23,
+     "g_capa": 6.41,
+     "g_2e": 1.5,
+     "q_mont": 5.13,
+     "g1": 28.14,
+     "g2": 5.13,
+     "q2": 25.63
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      350,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      350,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      150,
+      650
+     ],
+     [
+      250,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1083.613,
+    "lbpt_m": 0.888,
+    "ELU": {
+     "M1d": 432.8,
+     "MRd1": 814.5,
+     "xd1": 0.319,
+     "M2d": 825.1,
+     "MRd2": 1326.8,
+     "xd2": 0.227,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": 1.48,
+     "lim_F": 2.95,
+     "sig_D": -0.06,
+     "sig_rara": 1.48,
+     "topo_F1": -7.6
+    },
+    "flecha": {
+     "contraflecha_mm": -6.4,
+     "montagem_mm": 0.0,
+     "final_mm": 4.9,
+     "lim_final_mm": 35.8,
+     "lim_montagem_L500": 17.9,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.495,
+    "peso_t": 6.24,
+    "kg_cord": 86.6,
+    "kg_aco": 327.2,
+    "forma_m2": 16.76,
+    "custo_indice": 8734
+   },
+   "VM-02": {
+    "marca": "VM-02",
+    "b": 0.4,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 12,
+    "n_cord": 14,
+    "Vd": 409.4,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 491.3,
+     "tau_wd": 3.56,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 569.2,
+     "tirante": "7 Ø16 (1408 mm²)",
+     "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+     "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø16 (16.09 cm²)",
+      "tau": 5.36,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 1363,
+      "tirante": "7 Ø16 (1408 mm²)",
+      "As_sus": 1310,
+      "suspensao": "4 estribos Ø16 fechados (1609 mm²) a até 200 mm da face reentrante",
+      "As_cost": 551,
+      "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+      "Av": 551,
+      "vertical_dente": "4 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 7,
+      "d_tir": 16.0,
+      "n_sus": 4,
+      "d_sus": 16.0,
+      "n_cost": 4,
+      "d_cost": 10.0,
+      "n_v": 4
+     }
+    },
+    "L_peca": 9.42,
+    "L_calculo": 9.058,
+    "cargas": {
+     "g_pm": 7.0,
+     "g_laje": 13.23,
+     "g_capa": 6.41,
+     "g_2e": 1.5,
+     "q_mont": 5.13,
+     "g1": 28.14,
+     "g2": 5.13,
+     "q2": 25.63
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      200,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      350,
+      50
+     ],
+     [
+      50,
+      120
+     ],
+     [
+      350,
+      120
+     ],
+     [
+      100,
+      120
+     ],
+     [
+      300,
+      120
+     ],
+     [
+      150,
+      120
+     ],
+     [
+      150,
+      650
+     ],
+     [
+      250,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1054.194,
+    "lbpt_m": 0.88,
+    "ELU": {
+     "M1d": 443.5,
+     "MRd1": 930.0,
+     "xd1": 0.373,
+     "M2d": 845.5,
+     "MRd2": 1503.8,
+     "xd2": 0.285,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -0.09,
+     "lim_F": 2.95,
+     "sig_D": -1.66,
+     "sig_rara": -0.09,
+     "topo_F1": -7.2
+    },
+    "flecha": {
+     "contraflecha_mm": -7.8,
+     "montagem_mm": -1.0,
+     "final_mm": 1.1,
+     "lim_final_mm": 36.2,
+     "lim_montagem_L500": 18.1,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 2.542,
+    "peso_t": 6.35,
+    "kg_cord": 102.2,
+    "kg_aco": 327.6,
+    "forma_m2": 16.96,
+    "custo_indice": 9056
+   },
+   "VM-03": {
+    "marca": "VM-03",
+    "b": 0.4,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 6,
+    "n_cord": 8,
+    "Vd": 262.0,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 314.4,
+     "tau_wd": 2.28,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 569.2,
+     "tirante": "5 Ø16 (1006 mm²)",
+     "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 200 mm da face reentrante",
+     "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "4 alças Ø12.5 (9.82 cm²)",
+      "tau": 3.43,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 872,
+      "tirante": "5 Ø16 (1006 mm²)",
+      "As_sus": 838,
+      "suspensao": "3 estribos Ø16 fechados (1207 mm²) a até 200 mm da face reentrante",
+      "As_cost": 352,
+      "costura": "3 estribos horizontais Ø10 (471 mm²) nos 2/3 inferiores do dente",
+      "Av": 352,
+      "vertical_dente": "3 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 5,
+      "d_tir": 16.0,
+      "n_sus": 3,
+      "d_sus": 16.0,
+      "n_cost": 3,
+      "d_cost": 10.0,
+      "n_v": 3
+     }
+    },
+    "L_peca": 6.16,
+    "L_calculo": 5.798,
+    "cargas": {
+     "g_pm": 7.0,
+     "g_laje": 13.23,
+     "g_capa": 6.41,
+     "g_2e": 1.5,
+     "q_mont": 5.13,
+     "g1": 28.14,
+     "g2": 5.13,
+     "q2": 25.63
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      350,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      150,
+      50
+     ],
+     [
+      250,
+      50
+     ],
+     [
+      150,
+      650
+     ],
+     [
+      250,
+      650
+     ]
+    ],
+    "isoladas_pontas": 2,
+    "sig_pinf": 1117.758,
+    "lbpt_m": 0.902,
+    "ELU": {
+     "M1d": 181.7,
+     "MRd1": 548.0,
+     "xd1": 0.209,
+     "M2d": 346.4,
+     "MRd2": 885.2,
+     "xd2": 0.157,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -1.55,
+     "lim_F": 2.95,
+     "sig_D": -2.23,
+     "sig_rara": -1.55,
+     "topo_F1": -3.38
+    },
+    "flecha": {
+     "contraflecha_mm": -1.5,
+     "montagem_mm": -0.4,
+     "final_mm": -0.6,
+     "lim_final_mm": 23.2,
+     "lim_montagem_L500": 11.6,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 1.581,
+    "peso_t": 3.95,
+    "kg_cord": 38.2,
+    "kg_aco": 220.2,
+    "forma_m2": 11.09,
+    "custo_indice": 5400
+   },
+   "VM-04": {
+    "marca": "VM-04",
+    "b": 0.4,
+    "h": 0.7,
+    "hd": 0.4,
+    "recorte": 0.3,
+    "n_inf": 4,
+    "n_cord": 6,
+    "Vd": 75.3,
+    "dente_ok": true,
+    "dente": {
+     "Fd": 90.4,
+     "tau_wd": 0.65,
+     "tau_lim": 5.14,
+     "PCI_Vmax": 569.2,
+     "tirante": "3 Ø16 (603 mm²)",
+     "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 200 mm da face reentrante",
+     "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+     "consolo": {
+      "h": 0.2789999999999999,
+      "tirante": "2 alças Ø12.5 (4.91 cm²)",
+      "tau": 0.99,
+      "tau_u": 6.48,
+      "ok": true
+     },
+     "adotado": {
+      "As_tir": 442,
+      "tirante": "3 Ø16 (603 mm²)",
+      "As_sus": 241,
+      "suspensao": "1 estribos Ø16 fechados (402 mm²) a até 200 mm da face reentrante",
+      "As_cost": 197,
+      "costura": "2 estribos horizontais Ø10 (314 mm²) nos 2/3 inferiores do dente",
+      "Av": 197,
+      "vertical_dente": "2 estribos verticais Ø10 no dente",
+      "ancoragem_tirante_mm": 886,
+      "ok": true,
+      "n_tir": 3,
+      "d_tir": 16.0,
+      "n_sus": 1,
+      "d_sus": 16.0,
+      "n_cost": 2,
+      "d_cost": 10.0,
+      "n_v": 2
+     }
+    },
+    "L_peca": 2.84,
+    "L_calculo": 2.478,
+    "cargas": {
+     "g_pm": 7.0,
+     "g_laje": 13.23,
+     "g_capa": 6.41,
+     "g_2e": 1.5,
+     "q_mont": 5.13,
+     "g1": 28.14,
+     "g2": 8.71,
+     "q2": 5.13
+    },
+    "pos_cordoalhas_mm": [
+     [
+      50,
+      50
+     ],
+     [
+      350,
+      50
+     ],
+     [
+      100,
+      50
+     ],
+     [
+      300,
+      50
+     ],
+     [
+      150,
+      650
+     ],
+     [
+      250,
+      650
+     ]
+    ],
+    "isoladas_pontas": 0,
+    "sig_pinf": 1139.925,
+    "lbpt_m": 0.911,
+    "ELU": {
+     "M1d": 33.2,
+     "MRd1": 384.4,
+     "xd1": 0.155,
+     "M2d": 45.1,
+     "MRd2": 612.7,
+     "xd2": 0.155,
+     "norma": "NBR 9062:2017 6.3 (F1 peça isolada, F2 composta) e NBR 6118:2023 17.2"
+    },
+    "ELS": {
+     "nivel": "completa",
+     "psi_F": 1.0,
+     "psi_D": 0.6,
+     "sig_F": -3.64,
+     "lim_F": 2.95,
+     "sig_D": -3.66,
+     "sig_rara": -3.64,
+     "topo_F1": -1.13
+    },
+    "flecha": {
+     "contraflecha_mm": -0.1,
+     "montagem_mm": -0.1,
+     "final_mm": -0.4,
+     "lim_final_mm": 9.9,
+     "lim_montagem_L500": 5.0,
+     "norma": "NBR 9062:2017 5.4.3.4 Tab. 9"
+    },
+    "V_m3": 0.651,
+    "peso_t": 1.63,
+    "kg_cord": 13.2,
+    "kg_aco": 84.0,
+    "forma_m2": 5.11,
+    "custo_indice": 2126
+   }
+  }
+ }
+]

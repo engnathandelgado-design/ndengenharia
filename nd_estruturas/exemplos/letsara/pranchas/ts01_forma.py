@@ -68,12 +68,6 @@ vp.chamada((TER[0] + 140 + DX, 140), (8, 34), f"ES-2: 4 esperas M16 por nó do X
 vp.chamada((ALC[0] + DX, 0), (8, -26), "AL-1 (4 alças de cordoalha)")
 vp.chamada((S_TB[0] + DX, -100), (-4, -30), "TB-3 (2 por ponta)")
 vp.cota_v([-200, 200], L + DX, 8)
-# rev08 (DEC-036): TS-01B (linha 2) — ST-1P4 na 1ª e na última terça: +2 ES-1 a 155 mm antes do eixo da terça (aba de 200)
-for s in (TER[0], TER[-1]):
-    for yy in (-60, 60):
-        vp.circulo((ES1(s) - 80 + DX, yy), 8, "OCULTA")
-vp.chamada((ES1(TER[-1]) - 80 + DX, -60), (-10, -26), "só TS-01B: +2 ES-1 (ST-1P4) na 1ª e na última terça, 15,5 antes do eixo")
-
 # ------------------------------------------------------------------ ELEVAÇÃO 1:25
 ve = pr.vista("ELEVAÇÃO", (80, 622), 25, titulo="ELEVAÇÃO — TS-01",
               subtitulo="peça fabricada reta; pontas a prumo na posição montada (caimento 3 %); COTAS EM CM", unidade="cm")
@@ -310,7 +304,6 @@ nn = len(NOS)
 ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "ver planta"],
        ["TB-3", "Tubo Ø50,8×2,0 L=900, passante, a prumo", 4, "a 77,5 das pontas, y = ±100"],
        ["ES-1", "Barra roscada M16 L=330, gancho, sai 120 + grampo U Ø10", 2 * len(TER), "2 por terça, y = ±60"],
-       ["ES-1", "Só TS-01B (linha 2): +4 ES-1 do ST-1P4 + grampo U Ø10", 4, "1ª e última terça, s − 15,5"],
        ["ES-2", "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10", 4 * nn, f"4 por nó do X ({nn} nós)"],
        ["IT-P", "Só TS-01A (linha 4): inserto rosqueado M16 hef 80 no fundo", 6, "fundo, ver nota 11"]]
 y = pr.tabela(x0, y, "INSERTOS (DETALHES NA ND-LET-TS01-3) — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 108, 10, 46])
@@ -336,7 +329,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
          "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (s = 452,0 / 984,8 / 1517,7 cm, y = ±9,75 cm, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04).",
-         "TS-01B (as 2 peças da linha 2, beirais): igual à TS-01 + 2 ES-1 extras (com grampo U Ø10) na 1ª e na última terça, a 15,5 cm antes do eixo da terça, y = ±6 — recebem o suporte ST-1P4 (aba de 20 cm, 4 esperas; DEC-036). Marcas: TS-01 = 10, TS-01A = 2, TS-01B = 2 (total 14).",
+         "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 310, ND-LET-COB05) — 12 peças: TS-01 nas linhas 3 e 5 a 8, TS-01A na linha 4.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()

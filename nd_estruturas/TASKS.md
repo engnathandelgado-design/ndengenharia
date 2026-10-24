@@ -13,6 +13,9 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Próximas
 
+- [ ] Letsara: zip ND-LET-EXECUTIVO-rev09 com DXF e IFC depois da aprovação do Nathan dos PDF do pacote rev09.
+- [ ] Letsara: decisão do Nathan sobre as I130 V401/V402 (estudo h 110 / altura mínima).
+
 - [ ] Letsara (DEC-027): confirmar com a Kingspan arrancamento dos parafusos em #0,65, distribuição de clipes e junta de dilatação na água de 39,6 m.
 
 - [ ] Letsara rev06 (DEC-026): trocar as medidas de pré-dimensionamento do CS-1, NC-1 e cartola PT-1 pelas do catálogo 09 da Trejor (anexar o PDF e o DWG "Consoles 2a ETAPA" do e-mail de 05/02/2021) e recalcular `calc_fixacao_placas.py`; luvas TSA dos PT-1 da 1ª fiada no topo da viga baldrame (projeto de fundações); nas placas ao lado da porta da vista I, alinhar as TSA das peças de baixo com os pinos da peça de cima; CE-1 dos pilares do anexo (H/J/I) contadas em Z_PL[:6] (rever as fiadas reais com esquadria).
@@ -57,6 +60,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+
+- [x] 2026-10-23 — Letsara rev09 (DEC-045 a DEC-049): níveis +3,90/+7,30, escada metálica, P6/P7 e P6 da linha 2, VM 30 × 75 com dente 45, linha 2 em W 310, laje de cima sem uso; pranchas em PDF para análise do Nathan (zip com DXF/IFC só após aprovação).
 - 22/10 Letsara colisões: checagem do modelo inteiro (colisao_modelo.py, OBB + sólidos exatos); CE-1/CS-1 das paredes internas e parede C no lado certo; recortes da cobertura nas cabeças dos PF + RF-4P; lajes com recorte nos pilares; RF-1 com pingadeira interna a prumo; piso até as placas; ST-1FL com as reações reais da terça de ponta (verif_st1fl.py). Resolvido em DEC-044 (22/10): recorte nas placas + CE-1L e calços CS-1C/CS-1D (ND-LET-PP06). Pendente decisão: P8/P8B (PM-01) terminam em +6,55 e a CE-1 da fiada +6,25 fica acima do topo — subir o PM-01 a +7,45/+7,50?
 - [x] 2026-10-22 — Letsara DEC-042: cabeça dos pilares (cantos de seção cheia + ST-1FL, armadura da cabeça para o vento da platibanda, CE-1 em ponta de parede, planta-chave com nomes).
 

@@ -14,7 +14,7 @@ PR = "/home/claude/letsara/pranchas/"
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 J = lambda n: json.load(open(AQ + n + ".json", encoding="utf-8"))
 f = lambda v, d=1: f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
-LAJ, PLJ, VMJ, IJ, NBR, OMJ = J("laje_alveolar"), J("placas"), J("vm_meio_vaso"), J("i110_r01"), J("nbr9062"), J("ombreira")
+LAJ, PLJ, VMJ, IJ, NBR, OMJ = J("laje_alveolar"), J("placas"), J("vm_retangular"), J("i110_r01"), J("nbr9062"), J("ombreira")
 PISTA = 60.0           # pista de protensão (tabelas "PISTA 60 m" das folhas)
 VAO_PISTA = 0.50       # espaço entre peças na pista para corte das cordoalhas (a confirmar com a fábrica)
 
@@ -110,7 +110,7 @@ def linha(p):
         fam = "Mezanino"
         lib, desf = f"{VMJ['premissas']['fckj']:.0f}", f"{VMJ['premissas']['fcj_icamento']:.0f}"
         forma = f"pista {PISTA:g} m (≤ {por_pista(L)} por pista)"
-        prot = f"{VMJ[mk]['cordoalhas']} Ø12,7 CP-190 RB, {f(VMJ[mk]['protensao']['F_macaco_kN'])} kN ({VMJ[mk]['isoladas_pontas']} isoladas nas pontas)"
+        prot = f"{VMJ[mk]['n_cord']} Ø12,7 CP-190 RB, {f(VMJ[mk]['protensao']['F_macaco_kN'])} kN ({VMJ[mk]['isoladas_pontas']} isoladas nas pontas)"
         kg = aco_viga("VM", mk)
         ic = icamento(folha) + " (cabos ≥ 45°)"
         est = "2 calços sob as alças (≤ 0,3 fcj); transportar nos mesmos pontos, travada contra tombamento"
@@ -125,9 +125,9 @@ def linha(p):
     elif fl == "LA01":
         fam = "Mezanino"
         lib = f"{LAJ['fckj']:.0f}"; desf = f"{LAJ['icamento']['fcj_icamento']:.0f}"
-        n = int(re.search(r"(\d+) Ø12,7", LA_MARCAS[mk][1]).group(1))
+        cds = " + ".join(f"{n_} Ø{d_}" for n_, d_ in re.findall(r"(\d+) Ø(\d+,\d)", LA_MARCAS[mk][1]))   # rev09: Ø15,2 / Ø12,7 / Ø9,5
         forma = "pista de lajes alveolares (seção LP20 desenhada)"
-        prot = f"{n} Ø12,7 CP-190 RB, {LA_F} kN" + (f"; {LA_MARCAS[mk][4]}" if LA_MARCAS[mk][4] not in ("-", "") else "")
+        prot = f"{cds} CP-190 RB (σpi {LAJ['sig_pi']:.0f} MPa)" + (f"; {LA_MARCAS[mk][4]}" if LA_MARCAS[mk][4] not in ("-", "") else "")
         kg = None
         ic = f"garra mecânica nas 2 pontas a {f(LAJ['icamento']['ponto_m'] * 100, 0)} cm ({f(LAJ['icamento']['F_por_garra_d_kN'])} kN de cálculo por garra); sem alça"
         est = f"2 calços alinhados a {f(LAJ['icamento']['ponto_m'] * 100, 0)} cm das pontas, até 8 por pilha"

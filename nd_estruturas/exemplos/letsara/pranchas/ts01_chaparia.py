@@ -15,7 +15,8 @@ pr.revisao("03", "14/10/2026", "SEM SOLDA: ESPERAS ES-1/2/3, ST-1P, OR-X, CMF-1;
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS POR TRANSPASSE: SEM MÃO-FRANCESA (SAEM ES-3, CMF-1, MF-1); ST-1P COM 4 M12")
 pr.revisao("06", "17/10/2026", "X NOS VÃOS 4-5 A 8-9: ES-2 NOS 3 NÓS; GRAMPO NAS ES-1; ST-1V-R, ST-1F E CL-P")
 pr.revisao("08", "22/10/2026", "DEC-042: ST-1F → ST-1FL NA FACE LATERAL DO PILAR DE CANTO (SEÇÃO CHEIA)")
-pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · 14 PEÇAS — esperas e peças de ligação (medidas em mm)",
+NTS = len(RN.nomes_de("TS-01")) + len(RN.nomes_de("TS-01A"))         # rev09 (DEC-048): 12 peças (linha 2 metálica, sem TS-01B)
+pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · {NTS} PEÇAS — esperas e peças de ligação (medidas em mm)",
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
 nt, nn = len(P["tercas"]), len(P["nos"])
 
@@ -116,16 +117,6 @@ v3.cota_v([-110, -60, 60, 110], 150, 8, total=False)
 v3.cota_h([0, 75, 150], -110, -8, total=False)
 v3.chamada((75, 60), (8, 24), "2 oblongos 18 × 40 (ES-1)")
 
-# ------------------------------------------------------------------ ST-1P4 (1:5) — rev08, DEC-036: beirais do eixo 2 (TS-01B)
-v4 = pr.vista("ST-1P4 PLANTA", (150, 120), 5, titulo="ST-1P4 — ABA HORIZONTAL", subtitulo="só TS-01B, 1ª terça do beiral do eixo 2 (2 na obra)")
-v4.ret(0, -110, 200, 220, "METALICA")
-for xx in (45, 125):
-    for yy in (-60, 60):
-        oblongo(v4, (xx, yy), 18, 40, horiz=True)
-v4.cota_v([-110, -60, 60, 110], 200, 8, total=False)
-v4.cota_h([0, 45, 125, 200], -110, -8, total=False)
-v4.chamada((125, 60), (20, 30), "4 oblongos 18 × 40 (ES-1 a 7,5 e 15,5 do eixo)")
-
 # ------------------------------------------------------------------ OR-X (1:2,5)
 v = pr.vista("OR-X", (600, 300), 2.5, titulo="OR-X — ORELHA DO X", subtitulo="L 102×76×6,3 A36, L = 80 · vãos 4-5 a 8-9")
 v.ret(0, 0, 76, 6.3, "METALICA")
@@ -144,27 +135,25 @@ pr.imagem(400, 40, 640, 210, "/home/claude/letsara/pranchas/ISO-TS01-ponta-crop.
 # ------------------------------------------------------------------ tabelas
 x0, y = pr.quadro[2] - 180, pr.quadro[3] - 6
 k = lambda kgm, Lm: f(kgm * Lm, 1)
-lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2 * nt * 14, k(1.58, 0.33)],
-         ["ES-2", "barra roscada M16 L=220 c/ gancho + U Ø10", 4 * nn, 4 * nn * 14, k(1.58, 0.22)],
-         ["TB-3", "tubo Ø50,8×2,0 L=900", 4, 56, k(2.41, 0.90)],
-         ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 56, "1,5"],
-         ["ES-1", "idem, +2 na 1ª e +2 na última terça — só TS-01B", "-", 8, k(1.58, 0.33)],
-         ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * 14 - 2, "7,4"],
-         ["ST-1P4", "chapa dobrada 9,5 × 220 (200 + 290), 4 oblongos", "-", 2, "8,0"],
+lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2 * nt * NTS, k(1.58, 0.33)],
+         ["ES-2", "barra roscada M16 L=220 c/ gancho + U Ø10", 4 * nn, 4 * nn * NTS, k(1.58, 0.22)],
+         ["TB-3", "tubo Ø50,8×2,0 L=900", 4, 4 * NTS, k(2.41, 0.90)],
+         ["AL-1", "cordoalha Ø12,7 L=1,90 m", 4, 4 * NTS, "1,5"],
+         ["ST-1P", "chapa dobrada 9,5 × 220 (150 + 290)", nt, nt * NTS, "7,4"],
          ["ST-1V", "igual ao ST-1P, 2 oblongos no eixo (VB eixo 1)", "-", 2 * nt - 1, "7,4"],
          ["ST-1V-R", "como o ST-1V, oblongos 22×44 (VB eixo 9, M20)", "-", 2 * nt - 1, "7,4"],
          ["ST-1FL", "chapa dobrada 9,5 × 290 (190 na face lateral do pilar de canto, 2 furos Ø22 p/ ES-1FL M20 + 100 na alma da terça, 2 M12)", "-", 2, "6,3"],
          ["OR-X", "L 102×76×6,3 L=80", "-", 80, "0,7"],
          ["CL-P", "L 102×102×9,5 L=250 (pilar do portão × TS-01A)", "-", 8, "3,6"],
-         ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 28, "2,3"],
-         ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 28, "1,5"],
-         ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", 14, "-"],
-         ["NEO-3", "neoprene 100×300×10, 2 furos Ø30", "-", 14, "-"]]
+         ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 2 * NTS, "2,3"],
+         ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 2 * NTS, "1,5"],
+         ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", NTS, "-"],
+         ["NEO-3", "neoprene 100×300×10, 2 furos Ø30", "-", NTS, "-"]]
 y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
               [16, 92, 18, 22, 32])
 notas = ["ST-1FL (DEC-042): os pilares de canto P1 e P9 têm seção cheia até o topo; a última terça do lado E encosta na face lateral interna e apoia no ST-1FL (chapa dobrada, aba de 100 parafusada na alma com 2 M12), preso por 2 barras roscadas M20 A36 horizontais embutidas na face (ES-1FL, hef 150 + grampo U Ø10, a 7 e 15 cm da face A). Reações reais da terça de ponta (ELU): 15,7 kN ⊥ à face, 4,0 kN horizontal, 8,2 kN vertical. ACI 318-19 cap. 17, C40, borda 70 mm: tração 27,9 kN contra φNcbg 57,6 kN (aço 147), interação tração × corte 0,85 ≤ 1,2; chapa 0,69; M12 0,55.",
          "Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
-         "ST-1P4 (DEC-036): igual ao ST-1P com aba horizontal de 200 e 4 oblongos, nas 4 ES-1 da 1ª terça do beiral do eixo 2 (TS-01B: +2 ES-1 com grampo na 1ª e na última terça, peça simétrica). ACI 318-19 cap. 17, C50: interação 0,59 com os grampos U Ø10.",
+         "rev09 (DEC-048): a linha 2 não tem TS-01 (cobertura metálica W 310 × 32,7, ND-LET-COB05): sem TS-01B e sem ST-1P4; as terças do beiral da linha 2 apoiam no clip ST-W da W 310.",
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
          "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",
          "OR-X só nos nós dos vãos com X (4-5 a 8-9; 72 nas TS-01 das linhas 4 a 8 + 8 na VB do eixo 9); as esperas ES-2 existem nos 3 nós de todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",

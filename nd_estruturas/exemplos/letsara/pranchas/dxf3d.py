@@ -25,6 +25,6 @@ for grupo, pecas in malha.items():
         pf.append_faces([[pts[i] for i in fc] for fc in fs], dxfattribs={"layer": lay})
         pf.optimize()
         n += 1
-msp.add_text("LETSARA — MODELO 3D — PROJETO DA ND ENGENHARIA", dxfattribs={"layer": "0", "height": 1.0}).set_placement((0, -6, 0))
+msp.add_text("LETSARA — MODELO 3D — rev08 executivo", dxfattribs={"layer": "0", "height": 1.0}).set_placement((0, -6, 0))
 doc.saveas(saida)
 print("ok", n, "malhas", saida)

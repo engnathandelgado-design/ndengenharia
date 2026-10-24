@@ -9,7 +9,7 @@ from ezdxf.addons import Importer
 
 PR = "/home/claude/letsara/pranchas/"
 OUT = "/home/claude/letsara/entregas/"
-REV = "rev08-executivo"
+REV = "rev09"
 # Emissão executiva (21/10/2026): fôrma e armação na mesma folha por marca; folhas AR-PIL/AR-VIG obsoletas.
 # A ordem segue o índice da NG01 (indice.json, quando existir).
 GRUPOS = [
@@ -18,13 +18,13 @@ GRUPOS = [
       "ND-LET-MON01", "ND-LET-MON02", "ND-LET-MON03"]),
     ("01-PILARES", "PILARES — FÔRMA E ARMAÇÃO POR MARCA",
      [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)] +
-     ["ND-LET-PC01", "ND-LET-PC02", "ND-LET-PC03", "ND-LET-PM01", "ND-LET-PG01", "ND-LET-PG02", "ND-LET-PG03", "ND-LET-PG04"]),
+     ["ND-LET-PC01", "ND-LET-PC02", "ND-LET-PC03", "ND-LET-PM01", "ND-LET-PG01", "ND-LET-PG02", "ND-LET-PG03", "ND-LET-PG04", "ND-LET-PE01", "ND-LET-PE02", "ND-LET-PE03"]),
     ("02-VIGAS", "VIGAS — FÔRMA, ARMAÇÃO E PROTENSÃO POR MARCA", ["ND-LET-TS01-1", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01"]),
     ("03-LAJES-E-FECHAMENTO", "LAJES ALVEOLARES E FECHAMENTO LATERAL",
-     ["ND-LET-LA01", "ND-LET-PP00", "ND-LET-PP01", "ND-LET-PP02", "ND-LET-PP03", "ND-LET-PP04", "ND-LET-PP05", "ND-LET-PP06",
+     ["ND-LET-LA01", "ND-LET-ES01", "ND-LET-PP00", "ND-LET-PP01", "ND-LET-PP02", "ND-LET-PP03", "ND-LET-PP04", "ND-LET-PP05", "ND-LET-PP06",
       "ND-LET-PP-A", "ND-LET-PP-B", "ND-LET-PP-C", "ND-LET-PP-D", "ND-LET-PP-EF", "ND-LET-PP-G", "ND-LET-PP-HJ", "ND-LET-PP-I", "ND-LET-CM01"]),
     ("04-COBERTURA", "COBERTURA METÁLICA — PLANTA, TRAVAMENTO, LIGAÇÕES, CALHA, ACABAMENTOS E LISTAS",
-     ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-MT01-1", "ND-LET-MT01-2"]),
+     ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-COB05", "ND-LET-MT01-1", "ND-LET-MT01-2"]),
 ]
 
 

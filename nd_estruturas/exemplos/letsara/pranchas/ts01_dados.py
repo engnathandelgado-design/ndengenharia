@@ -14,7 +14,7 @@ DX = round(H * I_CAI)                                 # ponta a prumo: topo desl
 HD, LN = 0, 0                                         # rev03: sem dente Gerber (apoio direto no assento do pilar / topo da I130)
 N_ESP = len(LG["s_tercas"]) - 1
 PASSO_T = round(LG["passo_tercas"] * 1000)
-P = dict(marca="TS-01", qtd=14, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,
+P = dict(marca="TS-01", qtd=12, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,
          # DEC-043 (22/10/2026): protensão COMPLETA (ELS-D na frequente, ELS-F na rara) → 10 cordoalhas: 5 a 5,5 cm + 5 a 10 cm
          # (x = 0, ±4, ±15,5 nas duas linhas); as 4 de 10 cm em x = ±4 e ±15,5 isoladas 3,00 m nas pontas (ato). Antes: 8 (limitada).
          fck=50, fckj=35, n_cord=10, y_cord=77.5, x_cord=[-155, -40, 0, 40, 155], x_cord2=[-155, -40, 0, 40, 155], y1=55, y2=100,

@@ -460,9 +460,9 @@ def montar() -> ModeloBIM:
             yd = yl + 0.535                                   # 22/10 (colisão): na linha 2 a parede G ocupa y = linha + 0,325 a 0,425 → descida na frente dela
         m.linear("pilar", "DE-1 descida Ø200 (envelope)", PerfilRetangular(0.20, 0.20, "Ø200"), (0.17, yd, 0.0), (0.17, yd, zt_c - 0.15), "Calha e descidas", material="aco")
 
-    # 5. mezanino (linhas 1–2), rev09 (DEC-047/048): VM RETANGULAR PROTENDIDA 25 × 80 com dente Gerber 35 × 40 nas pontas; laje
+    # 5. mezanino (linhas 1–2), rev09 (DEC-047/048): VM RETANGULAR PROTENDIDA 30 × 75 com dente Gerber 45 × 40 nas pontas (DEC-049); laje
     #    apoiada 10 cm no topo da viga (fita 1 cm), 2º estágio de obra na faixa restante até o topo da capa, alças N9 saindo da
-    #    peça; consolos CP-MEZ 25 × 40 × 42,9 com fundo alinhado; NEO-5F fretado; junta da ponta concretada antes das lajes (DEC-039).
+    #    peça; consolos CP-MEZ 40 × 40 × 27,9 (largura da face do pilar) com fundo alinhado; NEO-5F fretado; junta da ponta concretada antes das lajes (DEC-039).
     #    +3,90: abertura da escada (P6 → E, viga P6–P7 → linha 2), sem viga P6 → E na linha 2; +7,30: laje contínua.
     VMJ_ = json.loads((AQ / "vm_retangular.json").read_text(encoding="utf-8"))
     VMP = VMJ_["premissas"]
@@ -505,7 +505,8 @@ def montar() -> ModeloBIM:
                 m.bloco("inserto", "alça N9 Ø10", (xx, y2, za + 0.20), 0.012, max(b2 - 0.05, 0.05), 0.20, "Alças N9 (2º estágio)")
                 xx += 0.30
             for xf, sg in ((fa, 1), (fb, -1)):
-                m.bloco("consolo", f"CP-MEZ {bt*100:.0f}×{prj*100:.0f}×{hcm*100:.0f}", (xf + sg * prj / 2, y, zb + hcm), prj, bt, hcm, "Consolos")
+                bc_ = VMP.get("b_consolo", bt)
+                m.bloco("consolo", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}×{hcm*100:.1f}", (xf + sg * prj / 2, y, zb + hcm), prj, bc_, hcm, "Consolos")
                 m.bloco("inserto", "NEO-5F 200×200 fretado", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.021), 0.20, 0.20, 0.021, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.70, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
@@ -601,10 +602,14 @@ def montar() -> ModeloBIM:
             m.linear("viga", f"VP-1 viga W 150 × 22,5 ({nome_p})", PW15, (x6 + 0.01, yv, zz - 0.0063 - 0.076), (xE - 0.01, yv, zz - 0.0063 - 0.076), GES, material="aco")
         m.linear("placa", f"CH-P chapa xadrez 6,3 ({nome_p})", PerfilRetangular(yb_p - ya_p, 0.0063), (x6 + 0.01, (ya_p + yb_p) / 2, zz - 0.0032), (xE - 0.01, (ya_p + yb_p) / 2, zz - 0.0032), GES, material="aco")
         y_front = yb_p - 0.08 if nome_p.startswith("patamar") else ya_p + 0.08
-        for xp_ in (x6 + 0.09, xE - 0.09):
-            m.linear("pilar", f"PL-{1 if nome_p.startswith('patamar') else 2} pilarete W 150 × 22,5 ({nome_p})", PW15, (xp_, y_front, 0.0125), (xp_, y_front, zz - 0.0063 - 0.152), GES,
-                     cima=(1.0, 0.0, 0.0), material="aco")
-            caixa(m, "chapa de base 200×200×12,5 + 4 chumbadores químicos M12", xp_ - 0.10, xp_ + 0.10, y_front - 0.10, y_front + 0.10, 0.0, 0.0125, GES)
+        if nome_p.startswith("patamar"):
+            apo = [(x6 + 0.09, "PL-1 pilarete W 150 × 22,5", PW15, 0.10)] + [(xE - 0.09, "PL-1 pilarete W 150 × 22,5", PW15, 0.10)]
+        else:                                                    # chegada: tubo entre os lances + W 150 do lado E (entrada do lance 1 livre)
+            apo = [(ESJ["chegada_apoios"]["x_tubo"], "PL-3 pilarete tubo 80 × 80 × 4,75", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"), 0.075),
+                   (ESJ["chegada_apoios"]["x_W"], "PL-2 pilarete W 150 × 22,5", PW15, 0.10)]
+        for xp_, nm_, pf_, hb_ in apo:
+            m.linear("pilar", f"{nm_} ({nome_p})", pf_, (xp_, y_front, 0.0125), (xp_, y_front, zz - 0.0063 - 0.152), GES, cima=(1.0, 0.0, 0.0), material="aco")
+            caixa(m, "chapa de base + 4 chumbadores químicos M12", xp_ - min(hb_, 0.048 if hb_ < 0.1 else hb_), xp_ + min(hb_, 0.048 if hb_ < 0.1 else hb_), y_front - hb_, y_front + hb_, 0.0, 0.0125, GES)
     for xs_ in (x6 + 0.025, x6 + bl - 0.025):                    # pé do lance 1 (1º degrau com apoio próprio no piso)
         caixa(m, "pé da longarina: chapa 200×150×12,5 + 2 chumbadores químicos M12", xs_ - 0.10, xs_ + 0.10, EG["y_lances"][1] - 0.075, EG["y_lances"][1] + 0.075, 0.0, 0.0125, GES)
 
@@ -759,8 +764,8 @@ def montar() -> ModeloBIM:
     m.pendente(f"Cobertura escondida (rev03): topo dos painéis solares junto ao P2 em +{pl['topo_painel_P2']:.3f}, {pl['folga_P2_mm']} mm abaixo da platibanda +10,00 (mínimo 150); junto ao P1 em +{pl['topo_painel_P1']:.3f}.")
     m.pendente("Modelo global integrado (OpenSeesPy, P-Δ, terças, correntes, X e laje como diafragma): pilares 0,66; terça mais carregada 0,97; ELS dentro da NBR 9062:2017 Tab. 7.")
     m.pendente("! Folga na cabeça dos PG-01 a PG-04 mantida em 2 cm (decisão de 20/10): a TS-01 desce ~30 mm (PG-01/PG-03) e ~20 mm (PG-02/PG-04) depois de montada — a viga pode encostar no PG.")
-    m.pendente("! VB com o PN-6 grauteado só numa ponta (decisão de 20/10): o modelo global reprova só o ST-1P da 1ª terça do beiral no eixo 2 (1,06). Proposto o ST-1P4 com 4 esperas (0,26), no 3D em laranja — falta conferir o cone de arrancamento do grupo e a aprovação do Nathan.")
-    m.pendente("rev09 (DEC-047/048): VM retangulares protendidas 25 × 80 com dente 35 × 35; cobertura da linha 2 em W 310 sobre montantes nos pilares.")
+    m.pendente("rev09 (DEC-048): linha 2 sem TS-01 — terças no ST-W da W 310 e mão-francesa MF-1 em toda terça; ST-1P4 e TS-01B deixam de existir.")
+    m.pendente("rev09 (DEC-047/048/049): VM retangulares protendidas 30 × 75 com dente 45 × 40; cobertura da linha 2 em W 310 sobre montantes nos pilares.")
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("rev09 (DEC-045): P6, P7 e P6 da linha 2 do R01 são os pilares da escada metálica (abertura só no +3,90).")
     m.pendente("I130 (DEC-032): V405/V406 com 30 cordoalhas (28 embaixo + 2 na mesa), V407 com 20; σpi 1453 MPa, fckj 45; NEO-2 300×200×31 fretado e PN-2 Ø25 grauteado numa ponta só.")

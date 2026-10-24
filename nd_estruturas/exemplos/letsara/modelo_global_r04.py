@@ -52,7 +52,7 @@ Z_TOP_C = LG["Z_TOPO_I130"]                  # topo da I130 e dos pilares P8A/P1
 Z_MEZ = Z_PISOS                             # rev09 (DEC-045): +3,90 / +7,30
 Z_VT = ()                                  # rev04: sem VT (NBR 9062 + regra ND: só com ponte rolante)
 PLACAS = False                             # variante: fiada superior das placas ligada aos pilares (furo redondo)
-A_VM, G_2E = 0.25 * 0.80, 0.15 * 0.21 * 25   # rev09: VM retangular 25 × 80 (calc_vm_retangular.py) e faixa de 2º estágio (kN/m)
+A_VM, G_2E = 0.30 * 0.75, 0.18 * 0.26 * 25   # rev09 (DEC-049): VM retangular 30 × 75 (calc_vm_retangular.py) e faixa de 2º estágio (kN/m)
 CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
 Z_I130 = LG["Z_ASS_I130"]                 # assento da I130 nos consolos CP-I130 (rev03)
 NOS = LG["nos_contraventamento_x_esq"]

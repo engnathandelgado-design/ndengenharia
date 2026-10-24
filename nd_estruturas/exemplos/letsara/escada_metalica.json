@@ -103,8 +103,22 @@
    "NRd": 421.1,
    "uso": 0.012,
    "base": "chapa 200 × 200 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso"
+  },
+  {
+   "perfil": "tubo quadrado 80 × 80 × 4,75",
+   "h": 3.748,
+   "Nd": 20.6,
+   "NRd": 140.7,
+   "uso": 0.146,
+   "lambda0": 1.39,
+   "base": "chapa 150 × 150 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso; topo com chapa 12,5 e 2 M16 na mesa inferior da viga"
   }
  ],
+ "chegada_apoios": {
+  "x_tubo": 37.75,
+  "x_W": 39.11,
+  "obs": "viga de frente da chegada: apoio no tubo entre os lances e no pilarete W 150 do lado E; balanço de 1,45 m sobre a entrada do lance 1 (o M do balanço = M do vão de 2,9 m usado na verificação)"
+ },
  "ligacoes_face": [
   {
    "Vd": 6.5,
@@ -141,10 +155,17 @@
   },
   {
    "item": "PL-2",
-   "desc": "pilarete W 150 × 22,5 (chegada +3,90)",
-   "qt": 2,
+   "desc": "pilarete W 150 × 22,5 (chegada +3,90, lado E)",
+   "qt": 1,
    "L_m": 3.748,
    "kg_m": 22.5
+  },
+  {
+   "item": "PL-3",
+   "desc": "pilarete tubo quadrado 80 × 80 × 4,75 (chegada +3,90, entre os lances)",
+   "qt": 1,
+   "L_m": 3.748,
+   "kg_m": 10.9
   },
   {
    "item": "BR-1",
@@ -176,5 +197,5 @@
   }
  ],
  "ok": true,
- "massa_kg": 1615
+ "massa_kg": 1571
 }

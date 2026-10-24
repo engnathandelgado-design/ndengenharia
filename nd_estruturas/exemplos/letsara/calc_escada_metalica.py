@@ -74,6 +74,17 @@ def pilarete(N, h):
                 base="chapa 200 × 200 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso")
 
 
+def pilarete_tubo(N, h):
+    """pilarete entre os lances (vão livre de 10 cm entre as longarinas): tubo quadrado 80 × 80 × 4,75 A36 — NBR 8800:2024 5.3 (χ pela Fig. 4)."""
+    A, I = 13.9e-4, 128e-8                                       # tubo 80 × 80 × 4,75 (A 13,9 cm², I 128 cm⁴)
+    r = (I / A) ** 0.5
+    lam0 = h / r / math.pi * (250e3 / 200e6) ** 0.5
+    chi = 0.658 ** (lam0 ** 2) if lam0 <= 1.5 else 0.877 / lam0 ** 2
+    NRd = chi * A * 250e3 / 1.10
+    return dict(perfil="tubo quadrado 80 × 80 × 4,75", h=round(h, 3), Nd=round(N, 1), NRd=round(NRd, 1), uso=round(N / NRd, 3), lambda0=round(lam0, 2),
+                base="chapa 150 × 150 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso; topo com chapa 12,5 e 2 M16 na mesa inferior da viga")
+
+
 def ligacao_face(R):
     """viga W 150 nas faces do pilar (P6, P7, P6 da linha 2, P2-L2): chapa de topo 12,5 + 4 barras roscadas M16 8.8 embutidas."""
     Rd = 4 * 0.4 * 800e3 * 157e-6 / 1.35                       # cisalhamento: 0,4 fub Ab / γa2 (NBR 8800:2024 6.3.3.2), rosca no plano
@@ -93,13 +104,16 @@ if __name__ == "__main__":
                        x_faces=(E["x_face_P6"], E["x_face_E"])),
         cargas=dict(q_kN_m2=Q, g_degraus=round(G_DEG, 3), g_patamar=round(G_PAT, 3), norma="NBR 6120:2019 (escada com acesso público 3,0 kN/m²)"),
         longarina=ln, patamar_frente=pat_f, patamar_fundo=pat_t, chegada_frente=ch_f, chegada_fundo=ch_t,
-        pilaretes=[pilarete(pat_f["R_apoio_d"], E["z_patamar"] - 0.152), pilarete(ch_f["R_apoio_d"], 3.90 - 0.152)],
+        pilaretes=[pilarete(pat_f["R_apoio_d"], E["z_patamar"] - 0.152), pilarete(ch_f["R_apoio_d"], 3.90 - 0.152), pilarete_tubo(2 * ch_f["R_apoio_d"], 3.90 - 0.152)],
+        chegada_apoios=dict(x_tubo=round(E["x_face_P6"] + LARG_LANCE + 0.05, 3), x_W=round(E["x_face_E"] - 0.09, 3),
+                            obs="viga de frente da chegada: apoio no tubo entre os lances e no pilarete W 150 do lado E; balanço de 1,45 m sobre a entrada do lance 1 (o M do balanço = M do vão de 2,9 m usado na verificação)"),
         ligacoes_face=[ligacao_face(max(pat_t["R_apoio_d"], ch_t["R_apoio_d"]))],
         pe_do_lance=dict(Rd=ln["R_longarina_d"], detalhe="chapa de base 200 × 150 × 12,5 soldada de fábrica na longarina + 2 chumbadores químicos M12 hef 100 no piso"),
         lista=[dict(item="LG-1", desc="longarina U 152 × 12,2 (6\")", qt=4, L_m=ln["L_inclinado"] + 0.10, kg_m=U152["kg"]),
                dict(item="VP-1", desc="viga W 150 × 22,5 dos patamares", qt=4, L_m=round(vao, 3), kg_m=22.5),
                dict(item="PL-1", desc="pilarete W 150 × 22,5 (patamar +1,95)", qt=2, L_m=round(E["z_patamar"] - 0.152, 3), kg_m=22.5),
-               dict(item="PL-2", desc="pilarete W 150 × 22,5 (chegada +3,90)", qt=2, L_m=round(3.90 - 0.152, 3), kg_m=22.5),
+               dict(item="PL-2", desc="pilarete W 150 × 22,5 (chegada +3,90, lado E)", qt=1, L_m=round(3.90 - 0.152, 3), kg_m=22.5),
+               dict(item="PL-3", desc="pilarete tubo quadrado 80 × 80 × 4,75 (chegada +3,90, entre os lances)", qt=1, L_m=round(3.90 - 0.152, 3), kg_m=10.9),
                dict(item="BR-1", desc="barrote U 102 × 7,4 (4\") dos patamares a cada 60 cm", qt=12, L_m=1.56, kg_m=7.4),
                dict(item="DG-1", desc="degrau chapa xadrez 4,75 dobrada 1300 × 330", qt=20, L_m=1.30, kg_m=round(0.33 * 4.75 * 7.85 * 1.0, 2)),
                dict(item="CT-1", desc="cantoneira L 38 × 38 × 4,8 de apoio do degrau (2 por degrau)", qt=40, L_m=0.30, kg_m=2.68),

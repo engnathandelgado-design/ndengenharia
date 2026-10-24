@@ -3,6 +3,6 @@
 import pathlib
 _src = pathlib.Path(__file__).with_name("quantitativos.py").read_text(encoding="utf-8")
 _ns = {"__name__": "quantitativos_pecas", "__file__": str(pathlib.Path(__file__).with_name("quantitativos.py"))}
-exec(compile(_src[:_src.index("def soma_cord(")], "quantitativos.py", "exec"), _ns)
+exec(compile(_src[:_src.index("# ------------------------------------------------------------------ aço CA-50")], "quantitativos.py", "exec"), _ns)
 pecas = _ns["pecas"]
 PQ = {p_[1]: p_ for p_ in pecas}

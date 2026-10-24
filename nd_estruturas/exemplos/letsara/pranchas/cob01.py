@@ -299,17 +299,17 @@ kg_t = sum(dd["qt"] * dd["L"] / 1000 * PESO_UE for dd in LM.values())
 tabT.append(["", "", "", "total", f"{qt_t}", f"{kg_t:,.0f}".replace(",", ".")])
 y = pr.tabela(x0, y, f"TERÇAS Z 302×90/82×2,30 METSEC ({PESO_UE} kg/m) — L com os transpasses", ["MARCA", "L (mm)", "VÃOS", "FURAÇÃO", "QT", "kg"], tabT,
               [16, 16, 30, 98, 14, 22], destaque_ultima=True)
-n_sup = 7 * N_T - 2                       # ST-1P: TS-01 (linhas 2 a 8), 1 por apoio; rev08 (DEC-036): 2 viram ST-1P4 (beirais do eixo 2)
-N_ES1B = 8                                # rev08: TS-01B (2 peças da linha 2) com +2 ES-1 na 1ª e na última terça (simétrica; 4 usadas pelo ST-1P4)
-n_m12 = N_T * (7 * (4 + 4) + 2 * 4)       # por linha: 7 apoios internos (4 no ST-1P + 2×2 nas pontas do transpasse) + 2 fachadas (4)
-lm = [["ES-1", "2 esperas M16 por apoio (4 no ST-1P4), concretadas na TS-01 (TS01-3)", f"{7 * 2 * N_T + N_ES1B}", f"topo da TS-01 (+{N_ES1B} na TS-01B)"],
+n_sup = 6 * N_T                           # ST-1P: TS-01 (linhas 3 a 8), 1 por apoio; rev09 (DEC-048): na linha 2 a terça apoia no ST-W da W 310
+n_m12 = N_T * (7 * (4 + 4) + 2 * 4)       # por linha: 7 apoios internos (4 no ST-1P / ST-W + 2×2 nas pontas do transpasse) + 2 fachadas (4)
+lm = [["ES-1", "2 esperas M16 por apoio, concretadas na TS-01 (TS01-3)", f"{6 * 2 * N_T}", "topo da TS-01"],
       ["ST-1P", "chapa dobrada 9,5×220 A36, 4 Ø14 + 2 oblongos", f"{n_sup}", "nas ES-1 (porca + contraporca)"],
-      ["ST-1P4", "chapa dobrada 9,5×220 A36 (aba 200), 4 Ø14 + 4 oblongos — 8,0 kg", "2", "1ª terça do beiral, eixo 2 (A e E)"],
-      ["GR-1", "grampo U Ø10 em cada ES-1 (armadura de ancoragem)", f"{7 * 2 * N_T + N_ES1B}", "TS-01, com as ES-1"],
+      ["ST-W", "clip da terça na mesa da W 310 da linha 2, 2 M16 na mesa + 4 M12 nas almas (ND-LET-COB05)", f"{N_T}", "linha 2"],
+      ["MF-1", "mão-francesa L 51×51×4,8 da terça à mesa inferior da W 310 (ND-LET-COB05)", f"{2 * N_T}", "linha 2, 2 por terça"],
+      ["GR-1", "grampo U Ø10 em cada ES-1 (armadura de ancoragem)", f"{6 * 2 * N_T}", "TS-01, com as ES-1"],
       ["ST-1V", "como o ST-1P, 2 oblongos 18×40 no eixo (VB 15 cm)", f"{N_T}", "nas ES-1V da VB do eixo 1"],
       ["ST-1V-R", "como o ST-1V, oblongos 22×44 (esperas M20)", f"{N_T}", "nas ES-1R da VB do eixo 9 (det. 2)"],
       ["M12 8.8", "parafuso + porca + 2 arruelas Ø24, zincado", f"{n_m12}", f"{N_T * (7 * 4 + 2 * 4)} nos apoios + {N_T * 7 * 4} nas emendas"],
-      ["M16", "porca + arruela (contraporca no ST-1P), galvanizadas", f"{3 * 7 * 2 * N_T + 3 * 2 * N_T + 12}", "ES-1 e ES-1V (+12 no ST-1P4)"],
+      ["M16", "porca + arruela (contraporca no ST-1P), galvanizadas", f"{3 * 6 * 2 * N_T + 3 * 2 * N_T}", "ES-1 e ES-1V"],
       ["M20", "porca + arruela + contraporca, galvanizadas", f"{3 * 2 * N_T}", "ES-1R (eixo 9)"]]
 y = pr.tabela(x0, y - 4, "LISTA DE MATERIAIS — APOIOS E EMENDAS DAS TERÇAS (SEM SOLDA)", ["MARCA", "DESCRIÇÃO", "QT", "ONDE"], lm, [18, 106, 14, 58])
 cc = LG["cargas_cob"]
@@ -317,7 +317,7 @@ notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z
          f"Aba superior de 90 voltada para o lado A (sobre a aba vertical do ST-1P); aba inferior de 82 para o lado E. No transpasse os 2 perfis encaixam um no outro conforme o sistema METLAP do fabricante; furação de fábrica METSEC (E 55 / F 52) — conferir com a voestalpine Meincol antes do pedido.",
          f"Sem mão-francesa: em cada apoio 4 M12 8.8 atravessam o ST-1P (ou ST-1V) e as almas (2 colunas a ±{Y_COL} do eixo, furos a {Z_FURO[0]} e {Z_FURO[1]} do fundo); em cada ponta do transpasse 2 M12 8.8 pelas 2 almas, a {B_TR} da ponta.",
          f"Cobertura Kingspan Isoeste zipada dupla com lã de rocha (manual de instalação, p. 28): 1º TP-40 STD 980 #0,65 na terça (PB 12-14 × 3/4\" P03, 4 por telha por terça); 2º perfil cartola #0,65 sobre cada terça, costurado na TP-40 com PB 1/4\"-14 × 7/8\" P01 EM TODAS AS ONDAS (o manual indica a cada 2 ondas: não passa na sucção desta obra); 3º lã de rocha FSR 32 40 mm; 4º clipe fixo/deslizante #0,65 na cartola (2 PB 12-14 × 3/4\"); 5º zipada 455 #0,50; painéis solares nas costuras da zipada. Cargas permanentes {f(cc['g_total_sem_terca'],3)} kN/m² + terças; sobrecarga {f(cc['sobrecarga'],2)} kN/m².",
-         "ST-1P4 (DEC-036): na 1ª terça do beiral do eixo 2 (lado A e lado E), onde a VB grauteada numa ponta só leva a escora da terça ao ST-1P (49 kN): mesma chapa dobrada do ST-1P com aba horizontal de 200 e 4 oblongos 18 × 40 nas 4 esperas ES-1 (a 7,5 e 15,5 cm antes do eixo da terça, y = ±6, com grampo U Ø10). Verificação ACI 318-19 cap. 17, C50: tração 30,8/84,4 kN, cortante 48,9/141 kN (com grampos), interação 0,59.",
+         "Linha 2 (rev09, DEC-048): sem TS-01; as terças apoiam no clip ST-W sobre a W 310 × 32,7 contínua (só sobre os pilares) e levam mão-francesa MF-1 em toda terça para travar a mesa inferior da W 310 (ND-LET-COB05).",
          "Ligações todas parafusadas, sem solda na fábrica e na obra: ST-1P nas 2 esperas ES-1 da TS-01, com porca de nivelamento por baixo e porca + contraporca por cima; furos oblongos para o ajuste ao longo da viga.",
          "Furação toda de fábrica (d + 2 mm): proibido furar a terça galvanizada na obra sem retoque com tinta rica em zinco.",
          "Montagem: ST-1P nivelados em toda a linha → terças do vão 1-2 ao 8-9, cada peça encaixada na anterior no transpasse → 4 M12 por apoio e 2 M12 em cada ponta do transpasse (aperto final só com a linha inteira montada) → correntes, tirantes rígidos e diagonais → por último o X, tensionado no esticador até tirar a flecha.",

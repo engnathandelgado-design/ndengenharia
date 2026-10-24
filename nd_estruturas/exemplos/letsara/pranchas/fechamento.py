@@ -97,7 +97,7 @@ VISTAS = {
     "J": dict(titulo="VISTA J — LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
               fiadas=lambda k, b: k not in ESQ, esquadria=True),
 }
-ORDEM_VISTAS = ["C", "G", "I", "H", "J", "E", "F", "B", "D", "A"]      # rev08 (MON03): internas C e G antes da TS-01 da própria linha; depois as externas
+ORDEM_VISTAS = ["C", "G", "I", "H", "J", "E", "F", "B", "D", "A"]      # rev08 (MON03): internas C e G antes da viga de cobertura da própria linha (TS-01 / W 310); depois as externas
 
 
 def montar(V):
@@ -359,7 +359,7 @@ def prancha_vista(Vs, desenho, folha):
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 livres até +7,40 (topo do PG-01).")
     if "G" in Vs:
-        notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25: TS-01 baixa junto ao eixo A); acima, fechamento metálico leve até a telha.")
+        notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25, mantido do rev08 por conservadorismo); acima, fechamento metálico leve até a telha, fixado na W 310 da linha 2 (rev09, DEC-048: sem TS-01 nesta linha, ND-LET-COB05).")
     if any(V in Vs for V in ("H", "J", "I")):
         notas.append("Faixas hachuradas: esquadrias do anexo (R01), sem placa, de +1,25 a +2,50 e de +5,00 a +6,25; toda placa fica nos seus 2 consoles CS-1, também acima das faixas." + (" Porta: 180 × 250 (a confirmar); as placas ao lado da porta têm console só na ponta do pilar e apoiam no baldrame / na placa de baixo do lado da porta." if "I" in Vs else ""))
     if any(V in Vs for V in ("E", "F")):
