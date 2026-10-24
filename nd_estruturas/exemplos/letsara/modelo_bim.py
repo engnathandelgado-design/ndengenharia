@@ -653,7 +653,8 @@ def montar() -> ModeloBIM:
     xb0, xb1 = XG["x_lance_baixo"]
     yp0, yp1 = XG["y_patamar"]
     for ys_ in (yp0 + 0.03, yp1 - 0.03):                         # lance de baixo: sobe de x −3,07 (pátio) a x −1,95 (+0,89)
-        m.linear("viga", "LE-2 longarina U 152 × 12,2 (lance de baixo)", U152, (xb1, ys_, 0.09), (xb0, ys_, zpt - 0.10), GEX, material="aco")
+        _d = math.dist((xb1, 0.09), (xb0, zpt - 0.10)); _k = 1 - 0.05 / _d          # ponta encurtada 5 cm (folga para a VE do patamar)
+        m.linear("viga", "LE-2 longarina U 152 × 12,2 (lance de baixo)", U152, (xb1, ys_, 0.09), (xb1 + _k * (xb0 - xb1), ys_, 0.09 + _k * (zpt - 0.10 - 0.09)), GEX, material="aco")
     for k_ in range(1, 5):
         xk = xb1 + (k_ - 0.5) * piso_
         m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ + 0.03, 0.00475), (xk, yp0 + 0.06, k_ * esp_ - 0.0024), (xk, yp1 - 0.06, k_ * esp_ - 0.0024), GEX, cima=(0.0, 0.0, 1.0), material="aco")
@@ -662,18 +663,19 @@ def montar() -> ModeloBIM:
             m.linear("viga", f"VE viga W 150 × 13,0 ({nm_})", W150e, (xv, ya_ + 0.01, zz - 0.0063 - 0.074), (xv, yb_ - 0.01, zz - 0.0063 - 0.074), GEX, material="aco")
         m.linear("placa", f"CHE chapa xadrez 6,3 ({nm_})", PerfilRetangular(xi - xe_, 0.0063), ((xi + xe_) / 2, ya_ + 0.01, zz - 0.0032), ((xi + xe_) / 2, yb_ - 0.01, zz - 0.0032), GEX, cima=(0.0, 0.0, 1.0), material="aco")
         for xp_ in (xi - 0.05, xe_ + 0.05):
-            for yp_ in (ya_ + 0.06, yb_ - 0.06):
+            for yp_ in (ya_ + 0.06, yb_ - (0.12 if zz == zch else 0.06)):      # chegada: pilarete 12 cm para dentro (folga para a ponta da LE-1)
                 m.linear("pilar", f"PE pilarete W 150 × 13,0 ({nm_})", W150e, (xp_, yp_, 0.0125), (xp_, yp_, zz - 0.0063 - 0.148), GEX, cima=(0.0, 1.0, 0.0), material="aco")
                 caixa(m, "CBE chapa de base 200 × 200 × 12,5 + 4 chumbadores químicos M16 (sobre graute)", xp_ - 0.10, xp_ + 0.10, yp_ - 0.10, yp_ + 0.10, 0.0, 0.0125, GEX)
                 caixa(m, "BE-1 bloco de concreto 60 × 60 × 60 (base própria da escada externa)", xp_ - 0.30, xp_ + 0.30, yp_ - 0.30, yp_ + 0.30, -0.62, -0.02, "Piso e fundações")
     m.linear("viga", "TR-1 trava tubo 80 × 80 × 4,75 do patamar de chegada ao P28 (2 BR-M16 na face do pilar)", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"),
              (xi - 0.05, 0.20, zch - 0.10), (xi - 0.05, 0.02, zch - 0.10), GEX, material="aco")
     # ombreiras OM-2 internas da porta do 2º pav. (vista H): U 152 do piso do térreo a +5,00, por trás das placas, travadas no P28
-    for yj, dd in ((FCH.PORTA_H[0] / 1000 - 0.020 - 0.0485, 1), (FCH.PORTA_H[1] / 1000 + 0.020, 1)):
+    for yj, dd in ((FCH.PORTA_H[0] / 1000 - 0.020 - 0.0485, -1), (FCH.PORTA_H[1] / 1000 + 0.020, 1)):
         m.linear("pilar", "OM-2 ombreira interna U 152 × 12,2 (porta do 2º pav., vista H)", PerfilRetangular(0.152, 0.0485, "U 152 × 12,2"),
                  (-0.325 + 0.076, yj + 0.02425, 0.0125), (-0.325 + 0.076, yj + 0.02425, 5.0), GEX, material="aco")
         caixa(m, "OM-2 chapa de base 12,5 × 200 × 200 + 4 chumbadores químicos M12", -0.325, -0.125, yj - 0.075, yj + 0.125, 0.0, 0.0125, GEX)
-        caixa(m, "OM-2 console L 102 × 102 × 9,5 (apoio da ponta da placa da fiada +3,75)", -0.325, -0.223, yj - 0.03, yj + 0.08, 3.75 - 0.0095, 3.75, GEX)
+        _yc = (yj - 0.10, yj) if dd < 0 else (yj + 0.0485, yj + 0.1485)   # console ao lado da ombreira (na aba), do lado da placa
+        caixa(m, "OM-2 console L 102 × 102 × 9,5 (apoio da ponta da placa da fiada +3,75)", -0.325, -0.223, _yc[0], _yc[1], 3.75 - 0.0095, 3.75, GEX)
         for zt_ in (3.90, 4.90):
             caixa(m, "OM-2 trava L 76 × 76 × 6,3 até o P28 (2 BR-M16 na face do pilar)", -0.30, -0.224, 0.20, yj, zt_ - 0.038, zt_ + 0.038, GEX)
 
@@ -739,7 +741,7 @@ def montar() -> ModeloBIM:
         pil = FCH.VISTAS[V]["pil"]
         # rev06d (DEC-028): ombreiras OM-1 em U na porta (ND-LET-PP05) — abas abraçando a ponta das placas, base no baldrame, CL-1 no topo
         for (a0_, a1_, _z0, _z1, rot_) in FCH.DADOS[V][2]:
-            if rot_ != "porta":
+            if rot_ != "porta" or _z0 > 0:                              # rev09c: porta do 2º pav. (vista H) usa a OM-2 interna, não a OM-1
                 continue
             for xe, dd in ((a0_ / 1000, -1), (a1_ / 1000, 1)):           # dd: sentido da placa a partir da face do vão
                 def ux(a, b):

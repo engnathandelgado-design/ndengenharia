@@ -72,14 +72,14 @@ v.texto(P_(xm, (YC0 + YC1) / 2), "chegada +3,90", "min", "MIDDLE_CENTER")
 v.texto(P_(xm, (YP0 + YP1) / 2), "patamar +0,89", "min", "MIDDLE_CENTER")
 for (ya, yb) in ((YC0, YC1), (YP0, YP1)):
     for xp in (XI - 50, XEX + 50):
-        for yp in (ya + 60, yb - 60):
+        for yp in (ya + 60, yb - (120 if ya == YC0 else 60)):
             v.ret(*P_(xp - 50, yp + 74), 100, 148, "CORTADO")
             v.ret(*P_(xp - 300, yp + 300), 600, 600, "OCULTA")
 v.chamada(P_(XEX + 50, YC0 + 60), (-14, 8), "PE-1 + bloco BE-1 (det. 2)")
 v.chamada(P_(XEX + 50, YP1 - 60), (-14, -8), "PE-2 + bloco BE-1")
 v.linha(P_(XI - 50, YC0 + 60), P_(XI - 50, 20), "METALICA")
 v.chamada(P_(XI - 50, 110), (12, 10), "TR-1 trava no P28 (det. 3)")
-v.linha(P_(XEX + 50, YC1 - 60), P_(XEX + 50, YP0 + 60), "OCULTA")
+v.linha(P_(XEX + 50, YC1 - 120), P_(XEX + 50, YP0 + 60), "OCULTA")
 v.cota_h([XB1, XEX, XI, 0], -(YP1 + 700), -8, total=True)
 v.cota_v([-YC0, -YC1, -YL1, -YP1], XB1 - 700, -10, total=True)
 v.cota_v([-PY0, -PY1], 700, 8, total=False)
@@ -95,12 +95,12 @@ for j in range(17):                                     # lance de cima: de y 6,
 c.linha((YL1, ZP + 50), (YL0, ZC - 150), "METALICA"); c.linha((YL1, ZP + 50 - LC["kg_m"] * 0 - 203), (YL0, ZC - 150 - 203), "METALICA")
 for (ya, yb), z in (((YC0, YC1), ZC), ((YP0, YP1), ZP)):
     c.ret(ya, z - 6, yb - ya, 6, "METALICA")
-    for yp in (ya + 60, yb - 60):
+    for yp in (ya + 60, yb - (120 if ya == YC0 else 60)):
         c.ret(yp - 50, 12, 100, z - 160, "METALICA")
         c.ret(yp - 300, -620, 600, 600, "CORTADO"); c.hachura([(yp - 300, -620), (yp + 300, -620), (yp + 300, -20), (yp - 300, -20)], "AR-CONC", 0.03)
 c.ret(PY0, ZC, PY1 - PY0, 2140, "OCULTA"); c.texto(((PY0 + PY1) / 2, ZC + 1070), "porta", "min", "MIDDLE_CENTER", rot=90)
 c.ret(-200, -300, 400, ZC + 1500, "VISTA"); c.texto((0, ZC + 1600), "P28", "min", "BOTTOM_CENTER")
-c.linha((YC0 + 60, ZC - 160), (YC1 - 60, 400), "OCULTA"); c.linha((YC0 + 60, 400), (YC1 - 60, ZC - 160), "OCULTA")
+c.linha((YC0 + 60, ZC - 160), (YC1 - 120, 400), "OCULTA"); c.linha((YC0 + 60, 400), (YC1 - 120, ZC - 160), "OCULTA")
 c.cota_v([0, ZP, ZC], YP1 + 700, 10, total=False)
 c.cota_h([YC0, YC1, YL1, YP1], -900, -10, total=True)
 c.texto(((YC0 + YC1) / 2, ZC + 150), "chegada +3,90", "min", "BOTTOM_CENTER")

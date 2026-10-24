@@ -104,20 +104,22 @@ def i130():
     s0 = P["pinos_topo"][0] / 1e3
     rot(p, [(P["alcas"][0] / 1e3, 0, H + 0.14), (s0 + 0.115, 0.10, H + 0.30), (LN / 2, 0.2, H - HD), (P["pino_x"] / 1e3, 0, H + 0.02), (MAC + 1.0, 0.2, H * 0.5)],
         ["AL-3 alça de içamento (2x)", "apoio das TS-01: NEO-3 + 4 PN-5 por linha", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
-         "TB-2 passante no dente", "seção I130 (b 40, bw 15)"], fs=13)
+         "TB-2 passante no dente", f"seção I{round(H * 100)} (b 40, bw 15)"], fs=13)
     salvar(p, "ISO-I130-geral.png", [(L * 0.5 - 6, -15, 11), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
     # ponta no consolo CP-I130 do pilar central
     p = pv.Plotter(off_screen=True, window_size=(1500, 1200)); p.set_background("white")
-    F = 0.025
+    F = 0.075                                                                              # ponta da viga a 75 mm da face do pilar
     p.add_mesh(box(-0.60 - F, -F, -0.30, 0.30, -1.2, H + 0.25), **PIL_)                    # pilar 60 × 60 (até o topo da viga)
-    PJ = LN + 0.05
-    p.add_mesh(box(-F, -F + PJ, -0.30, 0.30, H - HD - 0.75, H - HD - 0.031), **PIL_)         # consolo
+    PJ = 0.40                                                                              # projeção do CP-I130 (consolos.json): termina 25 mm antes do corpo da viga
+    _CJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))["CP-I130"]   # DEC-054: consolo com mísula
+    _zt = H - HD - 0.031
+    p.add_mesh(prisma([(-F, _zt - _CJ["h_total_m"]), (-F + PJ, _zt - _CJ["h_consolo_m"]), (-F + PJ, _zt), (-F, _zt)], -0.25, 0.25, "xz"), **PIL_)   # consolo
     p.add_mesh(box(P["pino_x"] / 1e3 - 0.10, P["pino_x"] / 1e3 + 0.10, -0.15, 0.15, H - HD - 0.031, H - HD), **NEO)   # NEO-2 fretado
     p.add_mesh(cil((P["pino_x"] / 1e3, 0, H - HD + 0.05), 0.025, 0.60), **ACO)                # PN-2
     peca(p, 0, 3.2)
     rot(p, [(P["pino_x"] / 1e3, 0.15, H - HD - 0.015), (P["pino_x"] / 1e3, 0, H - HD + 0.35), (PJ / 2, 0.30, H - HD - 0.4), (-0.3, 0.3, H)],
-        ["NEO-2 300×200×31 fretado", "PN-2 Ø25 no TB-2 (graute numa ponta)", "consolo CP-I130 (fundo = fundo do dente)", "pilar central PC"])
-    salvar(p, "ISO-I130-ponta.png", [(4.2, -4.4, 2.4), (0.6, 0, H * 0.4), (0, 0, 1)], 1.1)
+        ["NEO-2 300×200×31 fretado", "PN-2 Ø25 no TB-2 (graute numa ponta)", "consolo CP-I130 com mísula (49 / 39)", "pilar central PC"])
+    salvar(p, "ISO-I130-ponta.png", [(3.2, -4.6, -0.2), (0.6, 0, H * 0.4), (0, 0, 1)], 1.1)   # DEC-054: vista um pouco de baixo (mísula do consolo)
 
 
 # ================================================================== VB (VB-02)
@@ -162,7 +164,7 @@ def vb():
         ["ES-1V: 2 esperas M16 por terça (ST-1V)", "AL-1 alça (2x)", "dente 30 × 27 (consolo CP-VB escondido)", "TB-1 + nicho do PN-6"], fs=13)
     salvar(p, "ISO-VB-geral.png", [(L * 0.5 - 5, -12, 9), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
     p = pv.Plotter(off_screen=True, window_size=(1400, 1100)); p.set_background("white")
-    F = 0.025
+    F = 0.075                                                                              # ponta da viga a 75 mm da face do pilar
     p.add_mesh(box(-0.40 - F, -F, -0.25, 0.25, -0.8, H + 0.4), **PIL_)
     zc = VG.REC / 1e3 - 0.010
     p.add_mesh(box(-F, -F + 0.27, -B / 2, B / 2, zc - 0.29, zc), **PIL_)                    # CP-VB 15 × 27 × 29

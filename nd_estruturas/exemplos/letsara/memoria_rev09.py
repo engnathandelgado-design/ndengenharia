@@ -19,6 +19,9 @@ J = lambda n: json.loads((AQ / n).read_text(encoding="utf-8"))
 VM, ES, LA, CB, ESC, CM, CF, CO = (J("vm_retangular.json"), J("estudo_vm_largura.json"), J("laje_alveolar.json"), J("cob_linha2.json"),
                                    J("escada_metalica.json"), J("cargas_mezanino.json"), J("cargas_fundacao.json"), J("consolos.json"))
 MV = J("mef_vm_ret_dente_750_450.json")
+EX, I1 = J("escada_externa.json"), J("i110_r01.json")
+DI = J("dentes.json")["I130"]
+N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I130"][0]
 P_ = VM["premissas"]
 f = lambda v, d=1: (f"{v:.{d}f}".replace(".", ",") if isinstance(v, (int, float)) else str(v))
 ok = lambda b: "ok" if b else "NÃO"
@@ -44,10 +47,11 @@ SAI = Path("/home/claude/letsara/entregas/ND-LET-MC09-REV09-rev09.pdf")
 doc = SimpleDocTemplate(str(SAI), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm, bottomMargin=15 * mm,
                         title="Letsara — memória MC09: alterações do pacote rev09", author="ND Engenharia")
 c39, c73, ce = CM["piso_390"], CM["laje_730"], CM["escada"]
-E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV09 (23/10/2026)", T1),
+E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV09 (23 e 24/10/2026)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Decisões do Nathan: DEC-045 (pisos +3,90 / +7,30, abertura e escada metálica, "
        "P6/P7 da escada e P6 da linha 2), DEC-046 (laje de cima sem uso), DEC-047 (vigas do mezanino retangulares protendidas com 2º estágio, sem meio vaso), "
-       "DEC-048 (linha 2 sem TS-01: W 310 metálica só sobre os pilares, mão-francesa em toda terça) e DEC-049 (VM 30 × 75 com dente Gerber 45 em todas as marcas). "
+       "DEC-048 (linha 2 sem TS-01, cobertura metálica), DEC-049 (VM 30 × 75 com dente Gerber 45 em todas as marcas) e, em 24/10, DEC-050/052 (linha 2: W 200 × 15,0 contínua nos pilares e em montantes no meio dos vãos), "
+       "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A) e DEC-054 (I130 com h 120, dente Gerber e consolo com mísula). "
        "Documento para análise do Nathan antes da emissão do zip com DXF e IFC."),
      Paragraph("1. Níveis e cargas do mezanino", T2),
      tab([["NÍVEL / USO", "SOBRECARGA (kN/m²)", "REVESTIMENTO (kN/m²)", "OBS."],
@@ -105,19 +109,55 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
         f"{sum(1 for c in LA['cordoalhas'] if c['diam'] == '15.2')} Ø15,2 + {sum(1 for c in LA['cordoalhas'] if c['diam'] == '12.7')} Ø12,7 CP-190 RB; uso máximo {f(LA['uso_max'], 2)} ({ok(LA['ok'])}); "
         f"+7,30 com a mesma marca: uso {f(LA['nivel_730']['uso_max'], 2)} ({ok(LA['nivel_730']['ok'])}); LA-03/LA-04 curtas ({f(LA['LA03']['L_peca'], 2)} m, {LA['LA03']['arranjo']}): uso {f(LA['LA03']['uso_max'], 2)}. "
         f"Vibração (NBR 6118:2023 23.3): f1 = {f(LA['vibracao']['f1_Hz'], 2)} Hz — abaixo de 4,8 Hz (referência de escritório com folga); aceitável para depósito, reavaliar se o uso mudar."),
-      Paragraph("6. Cobertura metálica da linha 2 (calc_cobertura_linha2.py, NBR 8800:2024)", T2),
-      P(f"{CB['perfil']} {CB['aco']} contínua de A a E, apoiada direto na cabeça de concreto dos pilares (A, B, C, D, P6, E), sem montantes (DEC-050): chapa CA-L2 250 × 250 × 19 sobre graute 20 mm, 4 barras roscadas M20 embutidas fora da mesa e 2 presilhas PR-L2 19 × 80 (sem solda); faixa de influência {f(CB['trib_m'], 2)} m. "
-        f"ELU: Msd {f(CB['verificacoes']['Msd'])} ≤ MRd {f(CB['verificacoes']['MRd'])} kN·m (uso {f(CB['verificacoes']['uso_M'], 3)}), Vsd {f(CB['verificacoes']['Vsd'])} ≤ VRd {f(CB['verificacoes']['VRd'])} kN; "
-        f"flecha G + Q {f(CB['flecha']['GQ_mm'])} ≤ {f(CB['flecha']['lim_L250_mm'])} mm. Mão-francesa {CB['mao_francesa']['perfil']} em toda terça (Fd {f(CB['mao_francesa']['F_d'])} kN). "
-        "O perfil de cálculo é W 310 × 32,7 (o 44,5 citado no quadro de decisão era estimativa)."),
-      tab([["APOIO", "ONDE", "topo concreto (m)", "sobe (m)", "Nc,d (kN)", "Nt,d (kN)", "uso M20", "uso alma", "uso presilha"]] +
-          [[m["nome"], m["onde"], f(m["z_concreto"], 3), f(m["sobe_m"], 2), f(m["Nc_d"]), f(m["Nt_d"]), f(m["uso_barra"], 3), f(m["uso_alma"], 3), f(m["uso_presilha"], 3)] for m in CB["apoios_diretos"]],
-          [12, 40, 20, 14, 16, 16, 16, 16, 18]),
+      Paragraph("6. Cobertura metálica da linha 2 (calc_cobertura_linha2.py, NBR 8800:2024) — DEC-052", T2),
+      P(f"{CB['perfil']} {CB['aco']} contínua de A a E em 4 módulos, apoiada na cabeça de concreto dos 6 pilares (CA-L2 250 × 250 × 19 sobre graute, 4 BR-M16 L 450 pela mesa) "
+        f"e em 4 montantes {CB['montante']} no meio dos vãos A–B, B–C, C–D e D–P6, sobre as VM do +7,30 (espera EM-L2 laçada na alça N9, posta antes da capa); faixa de influência {f(CB['trib_m'], 2)} m. "
+        f"ELU: Msd {f(CB['verificacoes']['Msd'])} ≤ MRd {f(CB['verificacoes']['MRd'])} kN·m (uso {f(CB['verificacoes']['uso_M'], 2)}; sem mão-francesa seria {f(CB['verificacoes']['uso_sem_mao_francesa'], 2)}), "
+        f"Vsd {f(CB['verificacoes']['Vsd'])} ≤ VRd {f(CB['verificacoes']['VRd'])} kN (uso {f(CB['verificacoes']['uso_V'], 2)}); flecha G + Q {f(CB['flecha']['GQ_mm'])} ≤ {f(CB['flecha']['lim_L250_mm'])} mm (com a mola da VM). "
+        f"Mão-francesa {CB['mao_francesa']['perfil']} em toda terça. W 200 × 15,0 é o W mais leve que passa: W 150 × 13,0 dá flexão 1,20 e flecha 21,2 mm. "
+        f"Aço: viga {CB['aco_kg']['viga']} kg + montantes {CB['aco_kg']['montantes']} kg (antes, W 310 × 32,7 só nos pilares: ≈ 1,3 t)."),
+      tab([["MONTANTE", "VÃO", "VM", "L (m)", "Nc,d (kN)", "Nt,d (kN)", "uso compr.", "uso tração", "uso cantoneiras", "barra espera", "alça N9 da VM"]] +
+          [[m["nome"], m["vao"], m["vm"], f(m["L_m"], 3), f(m["Nc_d"]), f(m["Nt_d"]), f(m["uso_compressao"], 2), f(m["uso_tracao"], 2), f(m["uso_cantoneiras"], 2),
+            f(m["espera"]["uso_barra"], 2), f(m["espera"]["uso_alca"], 2)] for m in CB["montantes"]],
+          [16, 12, 14, 12, 15, 15, 15, 15, 18, 16, 18]),
+      P("A espera EM-L2 (4 BR-M16 8.8 L 330 com gancho laçado na alça N9 Ø10 da VM) leva a tração de sucção ao 2º estágio: no MAB, Nt,d 77,3 kN → alça com uso 0,735 (governa). "
+        "As VM-01/02/03 foram verificadas com a carga concentrada do montante no meio do vão (calc_vm_retangular.py, item 2)."),
+      tab([["APOIO", "ONDE", "topo concreto (m)", "sobe (m)", "Nc,d (kN)", "Nt,d (kN)"]] +
+          [[m["nome"], m["onde"], f(m["z_concreto"], 3), f(m["sobe_m"], 2), f(m["Nc_d"]), f(m["Nt_d"])] for m in CB["apoios_diretos"]],
+          [12, 60, 24, 18, 20, 20]),
       Paragraph("7. Escada metálica (calc_escada_metalica.py)", T2),
       P(f"Escada em U, {ESC['geometria']['n_espelhos']} espelhos de {f(ESC['geometria']['espelho_m'] * 100, 2)} cm, piso {f(ESC['geometria']['piso_m'] * 100, 0)} cm, patamar +1,95, chegada +3,90; "
         f"sobrecarga {f(ESC['cargas']['q_kN_m2'])} kN/m². Longarina {ESC['longarina']['perfil']}: uso {f(ESC['longarina']['uso'], 2)}, flecha {f(ESC['longarina']['flecha_mm'])} ≤ {f(ESC['longarina']['lim_L350_mm'])} mm, f1 {f(ESC['longarina']['f1_Hz'])} Hz; "
         f"VP-1 W 150: uso máx. {f(max(ESC[k]['uso'] for k in ('patamar_frente', 'patamar_fundo', 'chegada_frente', 'chegada_fundo')), 2)}; pilaretes uso máx. {f(max(p['uso'] for p in ESC['pilaretes']), 3)}; "
         f"ligação na face do pilar (2 L 76 + 4 M16, sem solda) uso {f(ESC['ligacoes_face'][0]['uso'], 3)}; base metálica BM-1 ({ESC['base_metalica']['perfil']} L {f(ESC['base_metalica']['L_m'], 2)} m no pé do lance 1): σ piso {f(ESC['base_metalica']['sigma_piso_MPa'], 2)} MPa, uso chumbadores {f(ESC['base_metalica']['uso_chumbador'], 3)}; piso: {ESC['base_metalica']['piso']}. Massa {ESC['massa_kg']} kg (+3 % de parafusos)."),
+      Paragraph("7b. Escada metálica externa da fachada A (calc_escada_externa.py) — DEC-053", T2),
+      P(f"Escada em L junto à fachada A: {EX['geometria']['n_espelhos'] if 'n_espelhos' in EX['geometria'] else 22} espelhos de {f(EX['geometria']['espelho_m'] * 100, 2)} cm, piso {f(EX['geometria']['piso_m'] * 100, 0)} cm (Blondel {f(EX['geometria']['blondel_m'] * 100, 1)} cm), "
+        f"largura {f(EX['geometria']['largura'], 2)} m, patamar +{f(EX['geometria']['z_patamar'], 3)} e chegada +{f(EX['geometria']['z_chegada'], 2)} na porta do 2º pavimento (vista H). "
+        f"Sobrecarga {f(EX['cargas']['q_kN_m2'])} kN/m² ({EX['cargas']['norma']}). Longarina do lance de cima {EX['longarina_cima']['perfil']}: uso {f(EX['longarina_cima']['uso'], 2)}, flecha {f(EX['longarina_cima']['flecha_mm'])} ≤ {f(EX['longarina_cima']['lim_L350_mm'])} mm, f1 {f(EX['longarina_cima']['f1_Hz'])} Hz "
+        f"(U 152 não passa na flecha: {f(EX['alternativas_longarina_cima'][0]['flecha_mm'])} mm); lance de baixo {EX['longarina_baixo']['perfil']}: uso {f(EX['longarina_baixo']['uso'], 2)}; "
+        f"vigas W 150 × 13,0: chegada {f(EX['viga_chegada']['uso'], 2)}, patamar {f(EX['viga_patamar']['uso'], 2)}; pilaretes uso {f(EX['pilarete_chegada']['uso'], 3)}. "
+        "Bases próprias em blocos BE-1 60 × 60 × 60 C25 (σadm do solo 150 kPa a confirmar), sem apoio nas placas; travamento TR-1 no pilar P28 (eixo A). Porta na vista H: as placas acima do vão "
+        "apoiam nas ombreiras internas OM-2 U 152 do piso do térreo. Tudo parafusado e galvanizado a fogo. Folha ND-LET-ES02."),
+      Paragraph("10. Vigas centrais I130 com h 120 (calc_i110_r01.py, calc_dentes.py, calc_nbr9062.py) — DEC-054", T2),
+      P("Decisão do Nathan (24/10, opção A do estudo estudo_i130_h120): V401 (V406) e V402 (V405) com h 120, dente Gerber 78 × 35 mantido (recorte 52 → 42), "
+        "protensão LIMITADA (CAA II, pré-tração: NBR 6118:2023 Tab. 13.4 nível 2 — ELS-D na quase permanente, ELS-F na frequente), C50 e liberação da protensão SÓ com fckj 50 MPa. "
+        "A V400 (V407) passa para h 120 também (fôrma única das três)."),
+      tab([["VIGA", "L (m)", "CORDOALHAS Ø15,2", "Md / MRd (kN·m)", "x/d", "σ ELS-D (MPa)", "σ ELS-F (MPa)", "ato topo / base (MPa)", "flecha final (mm)", "Fd dente (kN)"]] +
+          [[f"{mk} ({ {'V407': 'V400', 'V406': 'V401', 'V405': 'V402'}[mk] })", f(I1[mk]["L_peca"], 2), str(I1[mk]["arranjo"]["n_cord"]), f"{f(I1[mk]['ELU']['Md'], 0)} / {f(I1[mk]['ELU']['MRd'], 0)}",
+            f(I1[mk]["ELU"]["x_d"], 3), f(I1[mk]["ELS"]["D_base"], 2), f"{f(I1[mk]['ELS']['F_base'], 2)} ≤ {f(I1[mk]['ELS']['lim_F'], 2)}",
+            f"{f(I1[mk]['ato']['topo_max'], 2)} / {f(I1[mk]['ato']['base_min'], 2)}", f"{f(I1[mk]['flecha']['final_mm'])} ≤ {f(I1[mk]['flecha']['lim_mm'])}", f(I1[mk]["dente"]["Fd"])]
+           for mk in ("V407", "V406", "V405")], [20, 12, 16, 22, 12, 15, 19, 22, 24, 16]),
+      P("Arranjo V405/V406: 7 + 5 + 5 + 5 Ø15,2 nas linhas y 6/11/16/21 cm (as de 16 e 21 isoladas 2,0 e 4,0 m nas pontas) + 2 na mesa superior; V407: 5 + 5 + 4 + 4. "
+        "σpi 1453 MPa; N3 = 6 Ø25 na mesa superior (ato junto às pontas e compressão do ELU)."),
+      P(f"Dente (NBR 9062:2017 7.4, Fd = {f(I1['V406']['dente']['Fd'])} kN, Hd = {f(I1['V406']['dente']['Hd'])} kN): {DI['calculo']['adotado']['tirante']}; {DI['calculo']['adotado']['suspensao']}; {DI['calculo']['adotado']['costura']}. "
+        + (f"MEF não linear (mef_dente.analisar, armação da prancha, cordoalhas Ø15,2 como n·140/98,7 Ø12,7 equivalentes): Vu = {f(DI['mef']['Vu_kN'])} kN, FS = Vu/Fd = {f(DI['mef']['FS'], 2)} ≥ 1,06 ({ok(DI['mef']['ok'])}). "
+           if DI.get("mef") else "MEF: ver estudo_i130_h120_mef.json. ")
+        + "Convergência: com passo de deslocamento de 0,05 mm o primeiro passo de carga não convergia (a protensão de 24 Ø15,2 fissura a ponta e a zona de transferência antes da carga); "
+          "com 0,02 mm a análise segue até o pico de carga (Vu = pico, antes de qualquer limite de deformação) sem trocar o modelo nem o critério (3,5‰ no concreto / 10‰ no aço)."),
+      P(f"Consolo CP-I130 com MÍSULA de concreto (NBR 9062:2017 7.3): {f(CO['CP-I130']['b_m'] * 100, 0)} × {f(CO['CP-I130']['proj_m'] * 100, 0)}, h {f(CO['CP-I130']['h_total_m'] * 100, 0)} junto ao pilar e {f(CO['CP-I130']['h_consolo_m'] * 100, 0)} na ponta "
+        f"(fundo da ponta alinhado ao fundo da viga +6,576; ponta ≥ h/2), a/d {f(CO['CP-I130']['a_d'], 2)} ({CO['CP-I130']['tipo']}), Fd {f(CO['CP-I130']['Fd_kN'])} kN: τwd {f(CO['CP-I130']['tau_wd_MPa'], 2)} ≤ {f(CO['CP-I130']['tau_wu_MPa'], 2)} MPa "
+        f"(na seção da carga, com a altura reduzida pela mísula: {f(N9C['tau_carga_MPa'], 2)} MPa); tirante {CO['CP-I130']['tirante']} (As {f(CO['CP-I130']['As_tir_cm2'], 2)} cm², uso {f(CO['CP-I130']['As_tir_cm2'] / 16.09, 2)}). "
+        "Pilares P18 (PC-01), P20 (PC-02), P22 (PC-03) e P23 (PF-04) com o consolo novo; assento +6,966 inalterado."),
       Paragraph("8. Pilares novos e cargas na fundação (tf, 1 tf = 10 kN)", T2)]
 lin = [["PILAR (modelo)", "Nk G + Q", "Nd máx", "Nd mín", "Md res máx (tf·m)", "Hd máx"]]
 for nm in ("P6E", "P7E", "P6-L2"):
@@ -128,7 +168,7 @@ E += [tab(lin, [46, 22, 22, 22, 32, 20]),
       P("Pilares dimensionados pelo método geral (dimensionar_pilares_r05.py, flexão oblíqua com 2ª ordem) e verificados no manuseio (manuseio_pilares_r05.py); arranjos nas folhas ND-LET-PE01 a PE03. "
         "Cargas na fundação de todos os pilares na ND-LET-CG01 (modelo global integrado r05)."),
       Paragraph("9. Pendências e observações", T2),
-      P("(a) I130 V401/V402: ficam como estão (h 130, com dente) até a decisão do Nathan. (b) Zip com DXF e IFC só depois da aprovação deste pacote (PDF). "
+      P("(a) Portões da linha 4 (500 × 750): no vão B–P21 o fundo da TS-01A fica 7,497 na face do PG-01 e desce ~3 cm depois da montagem — quadro de decisão enviado ao Nathan. (b) Zip com DXF e IFC só depois da aprovação deste pacote (PDF). "
         "(c) Guarda-corpo e corrimão da escada fora do escopo estrutural. (d) Fretagem da zona de transferência do dente conforme item 4.")]
 doc.build(E)
 print("ok", SAI)

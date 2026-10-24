@@ -182,9 +182,9 @@ def prancha_viga(P):
 
     # ------------------------------------------------------------ ISOMÉTRICOS (iso3d_vigas.py) — rev08, só I130 (A0)
     if not A1 and P["desenho"] == "ND-LET-I130":
-        pr.imagem(Q[0] + 35, Q[1] + 318, Q[0] + 600, Q[1] + 466, "/home/claude/letsara/pranchas/ISO-I130-geral.png",
+        pr.imagem(Q[0] + 35, Q[1] + 312, Q[0] + 600, Q[1] + 458, "/home/claude/letsara/pranchas/ISO-I130-geral.png",
                   titulo=f"ISOMÉTRICO — {P['marca']}", subtitulo="peça inteira: dentes, alças AL-3, apoios das TS-01 (NEO-3 + PN-5), TB-2")
-        pr.imagem(Q[0] + 640, Q[1] + 298, Q[0] + 900, Q[1] + 466, "/home/claude/letsara/pranchas/ISO-I130-ponta.png",
+        pr.imagem(Q[0] + 640, Q[1] + 292, Q[0] + 900, Q[1] + 458, "/home/claude/letsara/pranchas/ISO-I130-ponta.png",
                   titulo="ISOMÉTRICO — PONTA NO CONSOLO CP-I130", subtitulo="dente, NEO-2 fretado, PN-2 no TB-2")
 
     # ------------------------------------------------------------ CORTES 1:10
@@ -227,6 +227,7 @@ def prancha_viga(P):
     for _, xs, _ in P["cord"]:
         if tuple(xs) not in _sets:
             _sets.append(tuple(xs))
+    _sets = [xs_ for xs_ in _sets if not any(set(xs_) < set(o_) for o_ in _sets)]   # subconjuntos já cotados (X5 dentro do X7)
     for k_, xs_ in enumerate(_sets):
         va.cota_h(list(xs_), 0, -12 - 8 * k_, total=False)
     vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 315), YR), "maciço da ponta (TB e CH-A)", macico=True)
@@ -366,12 +367,12 @@ def prancha_viga(P):
     y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
     y = pr.legenda_armadura(XC, y - 4, True)
     pr.notas(XC, y - 4, P["notas"] + ["Cotas de concreto em cm, chaparia em mm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 182)
-    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()) + ("N11", "N12", "N13"):
+    for pos in (("N5", "N6", "N7", "N8", "C1") if HD else ("N5", "C1")) + (("N9", "N10") if SEG else ()) + ("N11", "N12", "N13", "N2", "N3") + (("N4",) if P.get("pele") else ()):
         pr.posicoes_desenho.add(pos)
     avisos = pr.salvar(f"/home/claude/letsara/pranchas/{P['desenho']}")
     print(P["desenho"], len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")
     for a in avisos:
-        if a[0] == "ERRO" or "sobrep" in a[1]:
+        if True:
             print(a)
     return pr
 
