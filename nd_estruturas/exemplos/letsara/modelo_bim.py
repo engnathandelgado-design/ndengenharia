@@ -657,7 +657,7 @@ def montar() -> ModeloBIM:
         m.linear("viga", "LE-2 longarina U 152 × 12,2 (lance de baixo)", U152, (xb1, ys_, 0.09), (xb1 + _k * (xb0 - xb1), ys_, 0.09 + _k * (zpt - 0.10 - 0.09)), GEX, material="aco")
     for k_ in range(1, 5):
         xk = xb1 + (k_ - 0.5) * piso_
-        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ + 0.03, 0.00475), (xk, yp0 + 0.06, k_ * esp_ - 0.0024), (xk, yp1 - 0.06, k_ * esp_ - 0.0024), GEX, cima=(0.0, 0.0, 1.0), material="aco")
+        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ - 0.01, 0.00475), (xk - 0.005, yp0 + 0.06, k_ * esp_ - 0.0024), (xk, yp1 - 0.06, k_ * esp_ - 0.0024), GEX, cima=(0.0, 0.0, 1.0), material="aco")
     for (ya_, yb_), zz, nm_ in ((XG["y_chegada"], zch, "patamar de chegada +3,90"), ((yp0, yp1), zpt, "patamar +0,89")):
         for xv in (xi - 0.05, xe_ + 0.05):
             m.linear("viga", f"VE viga W 150 × 13,0 ({nm_})", W150e, (xv, ya_ + 0.01, zz - 0.0063 - 0.074), (xv, yb_ - 0.01, zz - 0.0063 - 0.074), GEX, material="aco")

@@ -172,7 +172,7 @@ def estrutura(R, eixo):
             R.ret(x_ - 125, a_["z_concreto"] * 1000 + 20, 250, 19, "METALICA")
     else:
         _H = H_I130                                                 # DEC-054: h 120
-    sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, _H - 300), (200, _H - 220), (200, _H), (-200, _H), (-200, _H - 220),
+        sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, _H - 300), (200, _H - 220), (200, _H), (-200, _H), (-200, _H - 220),
                (-75, _H - 300), (-75, 330), (-200, 250)]
         base = Z_TOP_C - H_I130
         R.poli([(XC + x, base + y) for x, y in sec], "CORTADO", True)
@@ -242,7 +242,7 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
     if eixo == 3:
         v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3 %, sem dentes (apoio direto)")
     else:
-        v.chamada((14000, zf(14000) + 1150), (-8, -12), f"{CB2['perfil'].replace(' x ', ' × ')} nos pilares e em montantes no meio dos vãos (ND-LET-COB05)")
+        v.chamada((12000, zf(12000) + 1150), (8, 12), f"{CB2['perfil'].replace(' x ', ' × ')} nos pilares e em montantes no meio dos vãos (ND-LET-COB05)")
     v.chamada((39875, 5000), (6, 0), "placa 10 cm (por fora)")
     v.chamada((39350, 9950), (8, 20), f"cabeça 40×30; folga de {Z_TOP_PIL - z_tel(39475):.0f} mm do topo dos painéis à platibanda")
     if eixo == 3:
