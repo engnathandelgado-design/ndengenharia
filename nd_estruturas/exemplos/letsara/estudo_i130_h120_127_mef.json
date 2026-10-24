@@ -1,0 +1,65 @@
+{
+ "geometria": {
+  "H": 1200,
+  "hd": 780,
+  "ln": 350,
+  "recorte_mm": 420,
+  "bw": 150
+ },
+ "Fd": 610.5,
+ "Hd": 97.7,
+ "calculo": {
+  "As_tir": 1160,
+  "tirante": "4 Ø20 (1257 mm²)",
+  "As_sus": 1628,
+  "suspensao": "5 estribos Ø16 fechados (2011 mm²) a até 390 mm da face reentrante",
+  "As_cost": 514,
+  "costura": "4 estribos horizontais Ø10 (628 mm²) nos 2/3 inferiores do dente",
+  "Av": 530,
+  "vertical_dente": "4 estribos verticais Ø10 no dente",
+  "ancoragem_tirante_mm": 1652,
+  "ok": true,
+  "n_tir": 4,
+  "d_tir": 20.0,
+  "n_sus": 5,
+  "d_sus": 16.0,
+  "n_cost": 4,
+  "d_cost": 10.0,
+  "n_v": 4
+ },
+ "MEF": {
+  "Vu_kN": 755.9,
+  "FS": 1.24,
+  "ok": true,
+  "protensao_ok": true
+ },
+ "cordoalhas": [
+  {
+   "y": 60,
+   "n": 7.0
+  },
+  {
+   "y": 100,
+   "n": 7.0
+  },
+  {
+   "y": 140,
+   "n": 7.0,
+   "isol": 2000
+  },
+  {
+   "y": 180,
+   "n": 7.0,
+   "isol": 4000
+  },
+  {
+   "y": 220,
+   "n": 4,
+   "isol": 4000
+  },
+  {
+   "y": 1100,
+   "n": 4.0
+  }
+ ]
+}
