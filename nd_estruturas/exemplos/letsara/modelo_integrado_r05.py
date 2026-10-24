@@ -43,7 +43,8 @@ REC = tuple(LG["REC"]); Z_TOP_C = LG["Z_TOPO_I130"]; Z_I130 = LG["Z_ASS_I130"]
 Z_MEZ = Z_PISOS                               # rev09 (DEC-045): topo da capa +3,90 / +7,30 (corte AA' do R01)
 A_VM, G_2E = 0.30 * 0.75, (0.30 - 0.12) * 0.26 * 25   # rev09 (DEC-049): VM retangular 30 × 75 + faixa de 2º estágio 18 × 26
 CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
-CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))   # rev09 (DEC-048): W 310 da linha 2 sobre montantes nos pilares
+CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))   # rev09 (DEC-048): W 310 da linha 2; rev09b (DEC-050): direto na cabeça dos pilares
+Z_L2 = {a["nome"]: a["z_concreto"] for a in CB2["apoios_diretos"]}
 X_PORTOES = [9.87, 15.195, 24.305, 29.63]      # pilares P9, P10a, P10b, P12 da linha 4 (portões)
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
 # terças: posições x (linha da alma) — mesmas do modelo r04 / pranchas
@@ -154,22 +155,23 @@ def montar(cfg):
     for i, y in enumerate(Y):
         canto = i in (0, 8)
         for nome, x0, k in (("P1", 0.0, 0), ("P2", LARG, 1)):
-            zs = [REC[k]] + (list(Z_MEZ) if i <= 1 else []) + [7.50, 8.75]
-            zr = REC[k] if not canto else math.ceil((zf(x0) + 0.90) / 0.05) * 0.05
+            rk = Z_L2["A" if k == 0 else "E"] if i == 1 else REC[k]          # rev09b: linha 2 — recuo no fundo da W 310
+            zs = [rk] + (list(Z_MEZ) if i <= 1 else []) + [7.50, 8.75]
+            zr = rk if not canto else math.ceil((zf(x0) + 0.90) / 0.05) * 0.05
             pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))
     for j, x in enumerate(XF[1:4]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", COMP)):
             zs = [zf(x) + 0.30] + (list(Z_MEZ) if y == 0 else []) + ([Z_I130] if "P14" in nome else []) + [7.50, 8.75]
             pilar(nome, x, y, 0.40, 0.60, 10.0, zs, rec=math.ceil((zf(x) + 0.90) / 0.05) * 0.05, cab=(0.40, 0.30))
-    pilar("P8A", XC, Y[1], 0.40, 0.60, Z_TOP_C, [Z_I130] + list(Z_MEZ))
+    pilar("P8A", XC, Y[1], 0.40, 0.60, Z_L2["C"], [Z_I130, Z_TOP_C] + list(Z_MEZ))
     pilar("P11", XC, Y[3], 0.40, 0.40, Z_TOP_C, [Z_I130])
     pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I130])
-    for nome, x in (("P8", XF[1]), ("P8B", XF[3])):
-        pilar(nome, x, Y[1], 0.40, 0.60, Z_MEZ[1], list(Z_MEZ))
+    for nome, x, ap in (("P8", XF[1], "B"), ("P8B", XF[3], "D")):
+        pilar(nome, x, Y[1], 0.40, 0.60, Z_L2[ap], list(Z_MEZ))
     # rev09 (DEC-045): pilares da escada (R01) — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7), P6 da linha 2 até o +7,30
     pilar("P6E", P6_ESC[0], P6_ESC[1], 0.25, 0.40, Z_MEZ[0], [Z_MEZ[0]])
     pilar("P7E", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_MEZ[0], [Z_MEZ[0]])
-    pilar("P6-L2", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_MEZ[1], list(Z_MEZ))
+    pilar("P6-L2", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_L2["P6"], list(Z_MEZ))
     for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
         # rev05 (DEC-024): cabeça dos pilares dos portões a 2 cm do fundo da TS-01 (ligação em y por 2 chapas parafusadas)
         pilar(nome, x, Y[LINHA_PORTOES], b, b, round(zf(x) - 0.02, 3) if cfg.get("ligar_portoes", True) else 7.50, [6.25, 7.40])
@@ -199,12 +201,11 @@ def montar(cfg):
             lin_cen.setdefault(i, []).append(ncen)
     # ---------------- rev09 (DEC-048): linha 2 — W 310 contínua (topo na inclinação da cobertura) sobre montantes W 150 nos pilares
     from nd_estruturas import metalica_laminada as _ML
-    _W, _WM = _ML.perfil(CB2["perfil"]), _ML.perfil(CB2["montante"])
+    _W = _ML.perfil(CB2["perfil"])
     A_W, IX_W, IY_W, J_W = _W.A * 1e-4, _W.Ix * 1e-8, _W.Iy * 1e-8, _W.It * 1e-8
-    A_M, IX_M, IY_M, J_M = _WM.A * 1e-4, _WM.Ix * 1e-8, _WM.Iy * 1e-8, _WM.It * 1e-8
     z_cg_w = lambda x: zf(x) + 0.90 - _W.d / 2000
-    apo_w = {a["nome"]: a for a in CB2["apoios"]}
-    xs_w = sorted(set([0.15, LARG - 0.15] + X_TER + [a["x"] for a in CB2["apoios"]]))
+    apo_w = {a["nome"]: a for a in CB2["apoios_diretos"]}
+    xs_w = sorted(set([0.15, LARG - 0.15] + X_TER + [a["x"] for a in CB2["apoios_diretos"]]))
     cadeia = []
     for x in xs_w:
         n = no(x, Y[1], z_cg_w(x), unico=True)
@@ -212,12 +213,12 @@ def montar(cfg):
         NO_TS[(1, round(x, 3))] = n
     for a, b in zip(cadeia[:-1], cadeia[1:]):
         viga(a, b, A_W, IX_W, IY_W, J_W, "W linha 2", TR_X, E=ES, G=GS)
-    base_m = {"A": ("P1-L2", REC[0]), "B": ("P8", Z_MEZ[1]), "C": ("P8A", Z_TOP_C), "D": ("P8B", Z_MEZ[1]), "P6": ("P6-L2", Z_MEZ[1]), "E": ("P2-L2", REC[1])}
-    for nm, (pn, zb) in base_m.items():
+    base_m = {"A": "P1-L2", "B": "P8", "C": "P8A", "D": "P8B", "P6": "P6-L2", "E": "P2-L2"}
+    for nm, pn in base_m.items():                          # rev09b (DEC-050): W apoiada direto na cabeça (chapa + 4 M20): fixo no C, oblongo em x nos demais
         x = apo_w[nm]["x"]
-        nb = at(pn, zb)
+        nb = at(pn, apo_w[nm]["z_concreto"])
         nt = cadeia[xs_w.index(x)]
-        viga(nb, nt, A_M, IX_M, IY_M, J_M, "montante linha 2", TR_Z, E=ES, G=GS)
+        ops.equalDOF(nb, nt, *((1, 2, 3) if nm == "C" else (2, 3)))
     # I130: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14 (viga 3D nos consolos dos pilares)
     A_I, Iy_I, Iz_I, J_I = 0.32, 0.0626, 0.0029, 0.0030
     pts_i = [("P8A", Y[1]), ("L3", Y[2]), ("P11", Y[3]), ("L5", Y[4]), ("L6", Y[5]), ("P13", Y_P13), ("L7", Y[6]), ("L8", Y[7]), ("P14-L9", COMP)]

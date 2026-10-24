@@ -106,17 +106,18 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
         f"+7,30 com a mesma marca: uso {f(LA['nivel_730']['uso_max'], 2)} ({ok(LA['nivel_730']['ok'])}); LA-03/LA-04 curtas ({f(LA['LA03']['L_peca'], 2)} m, {LA['LA03']['arranjo']}): uso {f(LA['LA03']['uso_max'], 2)}. "
         f"Vibração (NBR 6118:2023 23.3): f1 = {f(LA['vibracao']['f1_Hz'], 2)} Hz — abaixo de 4,8 Hz (referência de escritório com folga); aceitável para depósito, reavaliar se o uso mudar."),
       Paragraph("6. Cobertura metálica da linha 2 (calc_cobertura_linha2.py, NBR 8800:2024)", T2),
-      P(f"{CB['perfil']} {CB['aco']} contínua de A a E, só sobre os pilares (A, B, C, D, P6, E) por montantes {CB['montante']}; faixa de influência {f(CB['trib_m'], 2)} m. "
+      P(f"{CB['perfil']} {CB['aco']} contínua de A a E, apoiada direto na cabeça de concreto dos pilares (A, B, C, D, P6, E), sem montantes (DEC-050): chapa CA-L2 250 × 250 × 19 sobre graute 20 mm, 4 barras roscadas M20 embutidas fora da mesa e 2 presilhas PR-L2 19 × 80 (sem solda); faixa de influência {f(CB['trib_m'], 2)} m. "
         f"ELU: Msd {f(CB['verificacoes']['Msd'])} ≤ MRd {f(CB['verificacoes']['MRd'])} kN·m (uso {f(CB['verificacoes']['uso_M'], 3)}), Vsd {f(CB['verificacoes']['Vsd'])} ≤ VRd {f(CB['verificacoes']['VRd'])} kN; "
         f"flecha G + Q {f(CB['flecha']['GQ_mm'])} ≤ {f(CB['flecha']['lim_L250_mm'])} mm. Mão-francesa {CB['mao_francesa']['perfil']} em toda terça (Fd {f(CB['mao_francesa']['F_d'])} kN). "
         "O perfil de cálculo é W 310 × 32,7 (o 44,5 citado no quadro de decisão era estimativa)."),
-      tab([["APOIO", "ONDE", "h montante (m)", "Nc,d (kN)", "Nt,d (kN)", "uso barras M20"]] +
-          [[m["apoio"], m["onde"], f(m["h_m"], 3), f(m["Nc_d"]), f(m["Nt_d"]), f(m["uso_barra"], 3)] for m in CB["montantes"]], [14, 50, 24, 20, 20, 26]),
+      tab([["APOIO", "ONDE", "topo concreto (m)", "sobe (m)", "Nc,d (kN)", "Nt,d (kN)", "uso M20", "uso alma", "uso presilha"]] +
+          [[m["nome"], m["onde"], f(m["z_concreto"], 3), f(m["sobe_m"], 2), f(m["Nc_d"]), f(m["Nt_d"]), f(m["uso_barra"], 3), f(m["uso_alma"], 3), f(m["uso_presilha"], 3)] for m in CB["apoios_diretos"]],
+          [12, 40, 20, 14, 16, 16, 16, 16, 18]),
       Paragraph("7. Escada metálica (calc_escada_metalica.py)", T2),
       P(f"Escada em U, {ESC['geometria']['n_espelhos']} espelhos de {f(ESC['geometria']['espelho_m'] * 100, 2)} cm, piso {f(ESC['geometria']['piso_m'] * 100, 0)} cm, patamar +1,95, chegada +3,90; "
         f"sobrecarga {f(ESC['cargas']['q_kN_m2'])} kN/m². Longarina {ESC['longarina']['perfil']}: uso {f(ESC['longarina']['uso'], 2)}, flecha {f(ESC['longarina']['flecha_mm'])} ≤ {f(ESC['longarina']['lim_L350_mm'])} mm, f1 {f(ESC['longarina']['f1_Hz'])} Hz; "
         f"VP-1 W 150: uso máx. {f(max(ESC[k]['uso'] for k in ('patamar_frente', 'patamar_fundo', 'chegada_frente', 'chegada_fundo')), 2)}; pilaretes uso máx. {f(max(p['uso'] for p in ESC['pilaretes']), 3)}; "
-        f"ligação na face do pilar (4 M16) uso {f(ESC['ligacoes_face'][0]['uso'], 3)}. Massa {ESC['massa_kg']} kg (+3 % de parafusos)."),
+        f"ligação na face do pilar (2 L 76 + 4 M16, sem solda) uso {f(ESC['ligacoes_face'][0]['uso'], 3)}; base metálica BM-1 ({ESC['base_metalica']['perfil']} L {f(ESC['base_metalica']['L_m'], 2)} m no pé do lance 1): σ piso {f(ESC['base_metalica']['sigma_piso_MPa'], 2)} MPa, uso chumbadores {f(ESC['base_metalica']['uso_chumbador'], 3)}; piso: {ESC['base_metalica']['piso']}. Massa {ESC['massa_kg']} kg (+3 % de parafusos)."),
       Paragraph("8. Pilares novos e cargas na fundação (tf, 1 tf = 10 kN)", T2)]
 lin = [["PILAR (modelo)", "Nk G + Q", "Nd máx", "Nd mín", "Md res máx (tf·m)", "Hd máx"]]
 for nm in ("P6E", "P7E", "P6-L2"):

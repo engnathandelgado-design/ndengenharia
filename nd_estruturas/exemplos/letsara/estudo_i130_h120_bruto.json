@@ -379,5 +379,1948 @@
    ],
    "alca": 1.5
   }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.15,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 15,
+   "falhas": [
+    "ato"
+   ],
+   "ELS_D": -0.414,
+   "x_d": 0.402,
+   "ato_base": -32.05,
+   "ato_topo": 1.44,
+   "icam": 1.51,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.15,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 2 (y 22) + 2 topo",
+   "n": 32,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 15,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.228,
+   "x_d": 0.322,
+   "ato_base": -30.63,
+   "ato_topo": 3.48,
+   "icam": 4.09,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.15,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 2 (y 22) + 4 topo",
+   "n": 34,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 15,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.747,
+   "x_d": 0.343,
+   "ato_base": -30.26,
+   "ato_topo": 1.76,
+   "icam": 2.58,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.15,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 15,
+   "falhas": [
+    "ato"
+   ],
+   "ELS_D": -0.414,
+   "x_d": 0.402,
+   "ato_base": -32.28,
+   "ato_topo": 1.77,
+   "icam": 2.57,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+4+4+4 + 4 (y 26) + 2 topo",
+   "n": 25,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.297,
+   "x_d": 0.383,
+   "ato_base": -30.31,
+   "ato_topo": 3.19,
+   "icam": 4.1,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+4+4 + 4 (y 26) + 2 topo",
+   "n": 26,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ato"
+   ],
+   "ELS_D": -0.649,
+   "x_d": 0.417,
+   "ato_base": -31.95,
+   "ato_topo": 3.81,
+   "icam": 3.99,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 1.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": {
+   "V406": {
+    "viga": "V406",
+    "h_cm": 120,
+    "bw_cm": 20,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+7+5+4 + 2 topo",
+    "n_cord": 25,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5085,
+    "peso_t": 22.45,
+    "peso_kN": 220.2,
+    "m3": 8.81,
+    "kg_cordoalha": 664.6,
+    "L_peca": 24.125,
+    "L_calc": 23.775,
+    "usos": {
+     "ELU_Md_MRd": 0.71,
+     "x_d": 0.383,
+     "cortante_Vd_VRd2": 0.36,
+     "cortante_Asw": "4.78/6.70 cm²/m",
+     "ELS_D_MPa": -0.47,
+     "ELS_F_MPa": 0.355,
+     "ELS_F_topo_MPa": 0.18,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": -1.902,
+     "ato_topo_MPa": 2.3,
+     "ato_base_MPa": -30.55,
+     "ato_lim": "4.55 / -31.5",
+     "ato_As_topo": "1.79 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 3.87,
+     "icamento_lim_t": 4.55
+    },
+    "perdas_pct": {
+     "imediata": 10.6,
+     "total": 30.0
+    },
+    "lbpt_m": 0.843,
+    "sig_pinf": 1017.2,
+    "dente": {
+     "lado": "B",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 551.3,
+     "Fg_d": 469.9,
+     "Fq_d": 85.1,
+     "parcela_variavel": 0.153,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 269.5,
+       "q": 38.8
+      },
+      "B": {
+       "g": 359.0,
+       "q": 60.4
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 35488,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.07,
+     "phi_montagem": 1.52,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.6,
+     "e1_liberacao": -42.2,
+     "e2_montagem": -90.0,
+     "e3_apos_cobertura": -46.6,
+     "e4_final_qp": 13.6,
+     "e5_sobrecarga_freq": 6.3,
+     "sobrecarga_total": 10.5,
+     "fg2_cobertura": 43.4,
+     "lim": {
+      "fabricacao_L300": 79.2,
+      "peca_isolada_montagem_L500": 47.5,
+      "montagem_L250": 95.1,
+      "final": "L/350",
+      "final_mm": 67.9
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.3,
+     "Lh_bf2": 181,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.77,
+       "FS_lebelle": 13.15
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.12,
+       "FS_lebelle": 25.25
+      }
+     },
+     "FS_min": 13.15,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     2000,
+     4000,
+     6000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   },
+   "V405": {
+    "viga": "V405",
+    "h_cm": 120,
+    "bw_cm": 20,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+7+5+4 + 2 topo",
+    "n_cord": 25,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5085,
+    "peso_t": 22.35,
+    "peso_kN": 219.3,
+    "m3": 8.77,
+    "kg_cordoalha": 661.9,
+    "L_peca": 24.025,
+    "L_calc": 23.675,
+    "usos": {
+     "ELU_Md_MRd": 0.7,
+     "x_d": 0.383,
+     "cortante_Vd_VRd2": 0.35,
+     "cortante_Asw": "4.54/6.70 cm²/m",
+     "ELS_D_MPa": -0.698,
+     "ELS_F_MPa": 0.121,
+     "ELS_F_topo_MPa": 0.173,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": -1.904,
+     "ato_topo_MPa": 2.32,
+     "ato_base_MPa": -30.57,
+     "ato_lim": "4.55 / -31.5",
+     "ato_As_topo": "1.82 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 3.87,
+     "icamento_lim_t": 4.55
+    },
+    "perdas_pct": {
+     "imediata": 10.7,
+     "total": 30.1
+    },
+    "lbpt_m": 0.842,
+    "sig_pinf": 1015.2,
+    "dente": {
+     "lado": "A",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 541.1,
+     "Fg_d": 470.3,
+     "Fq_d": 84.7,
+     "parcela_variavel": 0.153,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 352.7,
+       "q": 59.0
+      },
+      "B": {
+       "g": 274.9,
+       "q": 40.2
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 35488,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.07,
+     "phi_montagem": 1.52,
+     "phi_inf_cobertura_60d": 2.05,
+     "perda_progressiva_ate_montagem_pct": 9.6,
+     "e1_liberacao": -41.9,
+     "e2_montagem": -89.4,
+     "e3_apos_cobertura": -46.0,
+     "e4_final_qp": 14.3,
+     "e5_sobrecarga_freq": 6.3,
+     "sobrecarga_total": 10.5,
+     "fg2_cobertura": 43.4,
+     "lim": {
+      "fabricacao_L300": 78.9,
+      "peca_isolada_montagem_L500": 47.4,
+      "montagem_L250": 94.7,
+      "final": "L/350",
+      "final_mm": 67.6
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.1,
+     "Lh_bf2": 180,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.67,
+       "FS_lebelle": 13.31
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 19.02,
+       "FS_lebelle": 25.66
+      }
+     },
+     "FS_min": 13.31,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     2000,
+     4000,
+     6000
+    ],
+    "alca_m": 2.5,
+    "N3": "6 Ø25"
+   }
+  },
+  "melhor_falha": {
+   "arranjo": "7+7+5+4 + 2 topo",
+   "n": 25,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ato",
+    "flechas"
+   ],
+   "ELS_D": -0.47,
+   "x_d": 0.383,
+   "ato_base": -31.77,
+   "ato_topo": 3.94,
+   "icam": 1.31,
+   "isol": [
+    0,
+    2000,
+    2000,
+    4000
+   ],
+   "alca": 1.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "5+5+5+4 + 4 (y 26) + 2 topo",
+   "n": 25,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.485,
+   "x_d": 0.383,
+   "ato_base": -30.27,
+   "ato_topo": 2.74,
+   "icam": 4.29,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 2 topo",
+   "n": 34,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS_D_margem",
+    "icamento"
+   ],
+   "ELS_D": -0.06,
+   "x_d": 0.361,
+   "ato_base": -30.8,
+   "ato_topo": 3.69,
+   "icam": 4.57,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.562,
+   "x_d": 0.378,
+   "ato_base": -30.04,
+   "ato_topo": 1.32,
+   "icam": 2.14,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 2 topo",
+   "n": 34,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS_D_margem",
+    "icamento"
+   ],
+   "ELS_D": -0.06,
+   "x_d": 0.361,
+   "ato_base": -31.05,
+   "ato_topo": 3.94,
+   "icam": 5.72,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.2,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 20,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.562,
+   "x_d": 0.378,
+   "ato_base": -30.29,
+   "ato_topo": 1.69,
+   "icam": 3.29,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "5+5+5+5 + 4 (y 26) + 2 topo",
+   "n": 26,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.511,
+   "x_d": 0.394,
+   "ato_base": -29.6,
+   "ato_topo": 2.39,
+   "icam": 3.84,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+4 + 4 (y 26) + 2 topo",
+   "n": 27,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "ato"
+   ],
+   "ELS_D": -0.67,
+   "x_d": 0.421,
+   "ato_base": -31.57,
+   "ato_topo": 3.7,
+   "icam": 4.44,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 1.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": {
+   "V406": {
+    "viga": "V406",
+    "h_cm": 120,
+    "bw_cm": 25,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+7+4+4 + 2 (y 26) + 2 topo",
+    "n_cord": 26,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5288,
+    "peso_t": 24.21,
+    "peso_kN": 237.5,
+    "m3": 9.5,
+    "kg_cordoalha": 691.2,
+    "L_peca": 24.125,
+    "L_calc": 23.775,
+    "usos": {
+     "ELU_Md_MRd": 0.71,
+     "x_d": 0.393,
+     "cortante_Vd_VRd2": 0.3,
+     "cortante_Asw": "4.07/6.70 cm²/m",
+     "ELS_D_MPa": -0.275,
+     "ELS_F_MPa": 0.535,
+     "ELS_F_topo_MPa": 0.172,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": -1.908,
+     "ato_topo_MPa": 4.02,
+     "ato_base_MPa": -31.07,
+     "ato_lim": "4.55 / -31.5",
+     "ato_As_topo": "5.22 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 1.62,
+     "icamento_lim_t": 4.55
+    },
+    "perdas_pct": {
+     "imediata": 10.3,
+     "total": 29.2
+    },
+    "lbpt_m": 0.845,
+    "sig_pinf": 1028.4,
+    "dente": {
+     "lado": "B",
+     "Vd": 562.4,
+     "Vd_cargas_atuais": 562.4,
+     "Fg_d": 477.8,
+     "Fq_d": 84.6,
+     "parcela_variavel": 0.15,
+     "gama_n": 1.1,
+     "Fd": 618.6,
+     "Hd": 99.0,
+     "reacao_k": {
+      "A": {
+       "g": 278.0,
+       "q": 38.8
+      },
+      "B": {
+       "g": 367.5,
+       "q": 60.4
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 35488,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.04,
+     "phi_montagem": 1.49,
+     "phi_inf_cobertura_60d": 2.04,
+     "perda_progressiva_ate_montagem_pct": 9.2,
+     "e1_liberacao": -44.0,
+     "e2_montagem": -93.2,
+     "e3_apos_cobertura": -50.7,
+     "e4_final_qp": 5.0,
+     "e5_sobrecarga_freq": 6.1,
+     "sobrecarga_total": 10.2,
+     "fg2_cobertura": 42.5,
+     "lim": {
+      "fabricacao_L300": 79.2,
+      "peca_isolada_montagem_L500": 47.5,
+      "montagem_L250": 95.1,
+      "final": "L/350",
+      "final_mm": 67.9
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.3,
+     "Lh_bf2": 181,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.77,
+       "FS_lebelle": 15.08
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 21.12,
+       "FS_lebelle": 21.5
+      }
+     },
+     "FS_min": 15.08,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     2000,
+     2000,
+     4000
+    ],
+    "alca_m": 1.5,
+    "N3": "6 Ø25"
+   },
+   "V405": {
+    "viga": "V405",
+    "h_cm": 120,
+    "bw_cm": 25,
+    "mesas": "sup 40×22 + mísula 8; inf 40×25 + mísula 8",
+    "cordoalha": "Ø15.2",
+    "arranjo": "7+7+4+4 + 2 (y 26) + 2 topo",
+    "n_cord": 26,
+    "F_macaco_kN": 203.4,
+    "F_total_macaco_kN": 5288,
+    "peso_t": 24.12,
+    "peso_kN": 236.6,
+    "m3": 9.46,
+    "kg_cordoalha": 688.4,
+    "L_peca": 24.025,
+    "L_calc": 23.675,
+    "usos": {
+     "ELU_Md_MRd": 0.7,
+     "x_d": 0.393,
+     "cortante_Vd_VRd2": 0.29,
+     "cortante_Asw": "4.07/6.70 cm²/m",
+     "ELS_D_MPa": -0.432,
+     "ELS_F_MPa": 0.294,
+     "ELS_F_topo_MPa": 0.165,
+     "lim_F_MPa": 3.71,
+     "ELS_D_transf_MPa": -1.91,
+     "ato_topo_MPa": 4.04,
+     "ato_base_MPa": -31.08,
+     "ato_lim": "4.55 / -31.5",
+     "ato_As_topo": "5.25 ≤ 29.45 cm²",
+     "icamento_topo_MPa": 1.62,
+     "icamento_lim_t": 4.55
+    },
+    "perdas_pct": {
+     "imediata": 10.4,
+     "total": 29.4
+    },
+    "lbpt_m": 0.845,
+    "sig_pinf": 1026.3,
+    "dente": {
+     "lado": "A",
+     "Vd": 555.0,
+     "Vd_cargas_atuais": 552.1,
+     "Fg_d": 472.0,
+     "Fq_d": 83.0,
+     "parcela_variavel": 0.15,
+     "gama_n": 1.1,
+     "Fd": 610.5,
+     "Hd": 97.7,
+     "reacao_k": {
+      "A": {
+       "g": 361.2,
+       "q": 59.0
+      },
+      "B": {
+       "g": 283.4,
+       "q": 40.2
+      }
+     },
+     "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+    },
+    "flechas": {
+     "Ecs_liberacao_MPa": 35488,
+     "Ecs_28_MPa": 36628,
+     "phi_inf_t0": 3.04,
+     "phi_montagem": 1.49,
+     "phi_inf_cobertura_60d": 2.04,
+     "perda_progressiva_ate_montagem_pct": 9.3,
+     "e1_liberacao": -43.7,
+     "e2_montagem": -92.6,
+     "e3_apos_cobertura": -50.2,
+     "e4_final_qp": 5.7,
+     "e5_sobrecarga_freq": 6.1,
+     "sobrecarga_total": 10.2,
+     "fg2_cobertura": 42.4,
+     "lim": {
+      "fabricacao_L300": 78.9,
+      "peca_isolada_montagem_L500": 47.4,
+      "montagem_L250": 94.7,
+      "final": "L/350",
+      "final_mm": 67.6
+     },
+     "ok": {
+      "e1": true,
+      "e2": true,
+      "e3": true,
+      "e4": true
+     },
+     "criterio": "e1 |contraflecha de fabricação| ≤ L/300; e2 |contraflecha na montagem| ≤ L/250; e3 flecha para baixo da peça isolada após montagem ≤ L/500 (para cima, ≤ L/250); e4 |final, quase-permanente| ≤ L/350"
+    },
+    "lateral": {
+     "L_bf": 60.1,
+     "Lh_bf2": 180,
+     "criterio_simples": false,
+     "casos": {
+      "montagem (apoiada nos dentes, antes do travamento)": {
+       "L": 23.67,
+       "FS_lebelle": 15.27
+      },
+      "içamento (alças a 2,50 m)": {
+       "L": 21.02,
+       "FS_lebelle": 21.8
+      }
+     },
+     "FS_min": 15.27,
+     "ok": true
+    },
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "icamento": true,
+     "ELS_D_margem": true,
+     "flechas": true,
+     "lateral": true
+    },
+    "ok_geral": true,
+    "isolamento_mm": [
+     0,
+     2000,
+     2000,
+     4000
+    ],
+    "alca_m": 1.5,
+    "N3": "6 Ø25"
+   }
+  },
+  "melhor_falha": {
+   "arranjo": "7+7+4+4 + 2 (y 26) + 2 topo",
+   "n": 26,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "icamento"
+   ],
+   "ELS_D": -0.275,
+   "x_d": 0.393,
+   "ato_base": -31.07,
+   "ato_topo": 4.02,
+   "icam": 5.36,
+   "isol": [
+    0,
+    2000,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+4 + 4 topo",
+   "n": 27,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.169,
+   "x_d": 0.386,
+   "ato_base": -28.96,
+   "ato_topo": 2.37,
+   "icam": 3.95,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.175,
+   "x_d": 0.362,
+   "ato_base": -28.48,
+   "ato_topo": 1.83,
+   "icam": 2.63,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.32,
+   "x_d": 0.362,
+   "ato_base": -28.34,
+   "ato_topo": 1.67,
+   "icam": 2.63,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.175,
+   "x_d": 0.362,
+   "ato_base": -28.74,
+   "ato_topo": 2.1,
+   "icam": 3.85,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.25,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 25,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.32,
+   "x_d": 0.362,
+   "ato_base": -28.62,
+   "ato_topo": 1.95,
+   "icam": 3.85,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.159,
+   "x_d": 0.394,
+   "ato_base": -28.34,
+   "ato_topo": 1.84,
+   "icam": 3.56,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+5 + 4 (y 26) + 2 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 30,
+   "falhas": [
+    "icamento"
+   ],
+   "ELS_D": -0.67,
+   "x_d": 0.424,
+   "ato_base": -31.19,
+   "ato_topo": 4.25,
+   "icam": 5.54,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.159,
+   "x_d": 0.394,
+   "ato_base": -28.63,
+   "ato_topo": 2.29,
+   "icam": 4.55,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+5 + 4 (y 26) + 2 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 30,
+   "falhas": [
+    "icamento"
+   ],
+   "ELS_D": -0.67,
+   "x_d": 0.424,
+   "ato_base": -31.46,
+   "ato_topo": 4.52,
+   "icam": 6.52,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.857,
+   "x_d": 0.351,
+   "ato_base": -26.96,
+   "ato_topo": 2.21,
+   "icam": 3.03,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 3.02,
+   "x_d": 0.352,
+   "ato_base": -26.82,
+   "ato_topo": 2.04,
+   "icam": 3.03,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.857,
+   "x_d": 0.351,
+   "ato_base": -27.24,
+   "ato_topo": 2.5,
+   "icam": 4.29,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.3,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 30,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 3.02,
+   "x_d": 0.352,
+   "ato_base": -27.11,
+   "ato_topo": 2.34,
+   "icam": 4.29,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+4 + 4 topo",
+   "n": 29,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.993,
+   "x_d": 0.4,
+   "ato_base": -28.25,
+   "ato_topo": 2.39,
+   "icam": 4.18,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 2 (y 26) + 2 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 35,
+   "falhas": [
+    "ato",
+    "icamento"
+   ],
+   "ELS_D": -0.383,
+   "x_d": 0.405,
+   "ato_base": -30.26,
+   "ato_topo": 5.14,
+   "icam": 7.03,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+4 + 4 (y 26) + 4 topo",
+   "n": 29,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.64,
+   "x_d": 0.4,
+   "ato_base": -27.57,
+   "ato_topo": 1.24,
+   "icam": 3.82,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 2 (y 26) + 2 topo",
+   "n": 28,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 35,
+   "falhas": [
+    "ato",
+    "icamento"
+   ],
+   "ELS_D": -0.383,
+   "x_d": 0.405,
+   "ato_base": -30.55,
+   "ato_topo": 5.44,
+   "icam": 8.04,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.492,
+   "x_d": 0.343,
+   "ato_base": -25.58,
+   "ato_topo": 2.47,
+   "icam": 3.35,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 3.671,
+   "x_d": 0.344,
+   "ato_base": -25.42,
+   "ato_topo": 2.29,
+   "icam": 3.35,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 (y 22) + 4 topo",
+   "n": 32,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 4.807,
+   "x_d": 0.289,
+   "ato_base": -22.17,
+   "ato_topo": 1.55,
+   "icam": 4.14,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.35,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 (y 22) + 4 topo",
+   "n": 32,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 35,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 6.009,
+   "x_d": 0.289,
+   "ato_base": -22.01,
+   "ato_topo": 1.52,
+   "icam": 4.14,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+5 + 4 topo",
+   "n": 30,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.937,
+   "x_d": 0.405,
+   "ato_base": -28.01,
+   "ato_topo": 2.63,
+   "icam": 4.54,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 (y 26) + 2 topo",
+   "n": 30,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 40,
+   "falhas": [
+    "ato",
+    "icamento"
+   ],
+   "ELS_D": -0.958,
+   "x_d": 0.427,
+   "ato_base": -30.96,
+   "ato_topo": 5.83,
+   "icam": 7.26,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+5 + 4 (y 26) + 4 topo",
+   "n": 30,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 2.574,
+   "x_d": 0.405,
+   "ato_base": -27.36,
+   "ato_topo": 1.88,
+   "icam": 4.18,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 15.2,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+4 + 2 (y 26) + 2 topo",
+   "n": 29,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 40,
+   "falhas": [
+    "ato",
+    "icamento"
+   ],
+   "ELS_D": -0.548,
+   "x_d": 0.409,
+   "ato_base": -30.51,
+   "ato_topo": 6.18,
+   "icam": 8.9,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 3.087,
+   "x_d": 0.337,
+   "ato_base": -24.3,
+   "ato_topo": 2.63,
+   "icam": 3.61,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 12.7,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+7+7 + 4 (y 22) + 4 topo",
+   "n": 36,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 4.281,
+   "x_d": 0.337,
+   "ato_base": -24.14,
+   "ato_topo": 2.44,
+   "icam": 3.61,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 (y 22) + 4 topo",
+   "n": 32,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 5.385,
+   "x_d": 0.288,
+   "ato_base": -20.99,
+   "ato_topo": 1.55,
+   "icam": 4.42,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.2,
+  "bw": 0.4,
+  "diam": 12.7,
+  "dente": false,
+  "nivel": "limitada",
+  "geo": "centralizado",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+7+5+5 + 4 (y 22) + 4 topo",
+   "n": 32,
+   "cordoalha": "Ø12.7",
+   "bw_cm": 40,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 6.603,
+   "x_d": 0.288,
+   "ato_base": -20.84,
+   "ato_topo": 1.45,
+   "icam": 4.42,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
+ },
+ {
+  "h": 1.15,
+  "bw": 0.15,
+  "diam": 15.2,
+  "dente": true,
+  "nivel": "limitada",
+  "geo": "atual",
+  "fckj": 45.0,
+  "solucao": null,
+  "melhor_falha": {
+   "arranjo": "7+5+5+4 + 2 topo",
+   "n": 23,
+   "cordoalha": "Ø15.2",
+   "bw_cm": 15,
+   "falhas": [
+    "ELS",
+    "ELS_D_margem"
+   ],
+   "ELS_D": 1.572,
+   "x_d": 0.337,
+   "ato_base": -30.77,
+   "ato_topo": 4.01,
+   "icam": 4.2,
+   "isol": [
+    0,
+    0,
+    2000,
+    4000
+   ],
+   "alca": 2.5
+  }
  }
 ]

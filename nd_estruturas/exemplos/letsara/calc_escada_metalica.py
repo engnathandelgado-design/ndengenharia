@@ -9,7 +9,12 @@ Estrutura (tudo parafusado, sem solda de campo — padrão ND):
     viga de frente W 150 × 22,5 sobre 2 pilaretes W 150 × 22,5; piso em chapa xadrez 6,3 sobre perfis U 102 × 7,4 a cada 60 cm;
   - chegada +3,90 (faixa de 1,08 m junto à linha 2): viga de frente W 150 × 22,5 sobre 2 pilaretes; viga de fundo W 150 × 22,5
     parafusada nas faces do P6 da linha 2 e do P2-L2; piso igual ao do patamar;
-  - 1º degrau: pé das longarinas com chapa de base 200 × 150 × 12,5 e 2 chumbadores químicos M12 no piso (apoio próprio no piso).
+  - rev09b (24/10, pedido do Nathan: "precisa ter uma base metálica para apoio da escada"): BASE METÁLICA BM-1 no térreo —
+    soleira U 152 × 12,2 em pé, transversal ao lance 1, sob o bocel do 1º degrau (o 1º degrau apoia nela) e com o pé das 2
+    longarinas parafusado na alma por cantoneiras; fixada no piso por 3 pares de cantoneiras L 76 × 76 × 6,3 com chumbador
+    químico M12 hef 100; graute de nivelamento 10–20 mm por baixo. Pilaretes apoiados no piso sobre graute, presos por 2
+    cantoneiras L 102 × 102 × 9,5 abraçando a alma (2 M16 passantes) e 4 chumbadores químicos M12. Sem nenhuma solda:
+    vigas nas faces dos pilares e topo dos pilaretes por cantoneiras parafusadas.
 Cargas: NBR 6120:2019 — escada com acesso público 3,0 kN/m² (cargas_mezanino.json); peso próprio da chapa e perfis.
 Combinação ELU 1,4 G + 1,5 Q (NBR 8800:2024 4.7); flecha L/350 (piso, Tab. B.1); vibração: f1 ≥ 5 Hz (conforto, referência).
 Unidades: kN, m.
@@ -71,7 +76,7 @@ def pilarete(N, h):
     p = ML.perfil("W 150 x 22,5")
     r = ML.verificar_barra(p, N=-N, KLx=h, KLy=h, Lb=h)
     return dict(perfil="W 150 × 22,5", h=round(h, 3), Nd=round(N, 1), NRd=round(r["NRd"], 1), uso=round(r["razao_interacao"], 3),
-                base="chapa 200 × 200 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso")
+                base="ponta apoiada no piso sobre graute 20 mm; 2 cantoneiras L 102 × 102 × 9,5 × 200 abraçando a alma (2 M16 passantes) + 4 chumbadores químicos M12 hef 100 (sem solda)")
 
 
 def pilarete_tubo(N, h):
@@ -82,13 +87,34 @@ def pilarete_tubo(N, h):
     chi = 0.658 ** (lam0 ** 2) if lam0 <= 1.5 else 0.877 / lam0 ** 2
     NRd = chi * A * 250e3 / 1.10
     return dict(perfil="tubo quadrado 80 × 80 × 4,75", h=round(h, 3), Nd=round(N, 1), NRd=round(NRd, 1), uso=round(N / NRd, 3), lambda0=round(lam0, 2),
-                base="chapa 150 × 150 × 12,5 + 4 chumbadores químicos M12 hef 100 no piso; topo com chapa 12,5 e 2 M16 na mesa inferior da viga")
+                base="ponta apoiada no piso sobre graute; 2 cantoneiras L 76 × 76 × 6,3 × 150 (2 M12 passantes no tubo) + 4 chumbadores químicos M12 hef 100; topo igual, com 2 M16 na mesa inferior da viga (sem solda)")
 
 
 def ligacao_face(R):
-    """viga W 150 nas faces do pilar (P6, P7, P6 da linha 2, P2-L2): chapa de topo 12,5 + 4 barras roscadas M16 8.8 embutidas."""
-    Rd = 4 * 0.4 * 800e3 * 157e-6 / 1.35                       # cisalhamento: 0,4 fub Ab / γa2 (NBR 8800:2024 6.3.3.2), rosca no plano
-    return dict(Vd=round(R, 1), VRd=round(Rd, 1), uso=round(R / Rd, 3), detalhe="chapa de topo 12,5 × 150 × 250 + 4 barras roscadas M16 8.8 embutidas 150 mm com grampo")
+    """viga W 150 nas faces do pilar (P6, P7, P6 da linha 2, P2-L2): 2 cantoneiras L 76 × 76 × 6,3 × 140 na alma (2 M16 passantes,
+    corte duplo) e nas 4 barras roscadas M16 8.8 embutidas no pilar (2 por cantoneira) — sem solda (rev09b)."""
+    Rd_bar = 4 * 0.4 * 800e3 * 157e-6 / 1.35                   # barras na face: 0,4 fub Ab / γa2 (NBR 8800:2024 6.3.3.2), rosca no plano
+    Rd_alma = 2 * 2 * 0.4 * 800e3 * 201e-6 / 1.35              # 2 M16 passantes em corte duplo
+    Rd_esm = 2 * 1.5 * 0.016 * 0.0058 * 345e3 / 1.35           # esmagamento na alma da W 150 (tw 5,8), 2 furos (6.3.3.3)
+    Rd = min(Rd_bar, Rd_alma, Rd_esm)
+    return dict(Vd=round(R, 1), VRd=round(Rd, 1), uso=round(R / Rd, 3),
+                detalhe="2 cantoneiras L 76 × 76 × 6,3 × 140 na alma da viga (2 M16 passantes) + 4 barras roscadas M16 8.8 embutidas 150 mm com grampo (2 por cantoneira)")
+
+
+def base_metalica(R_long):
+    """rev09b — BM-1: soleira U 152 × 12,2 em pé no piso do térreo sob o bocel do 1º degrau; recebe o pé das 2 longarinas do lance 1
+    e o 1º degrau. Apoio contínuo no piso (graute); fixação por 3 pares de cantoneiras com chumbador químico M12 hef 100.
+    Piso térreo: laje de concreto sobre o solo (por terceiros) e ≥ 12 cm, fck ≥ 25 MPa — confirmar na obra; com piso mais fino ou
+    sem piso, bloco 50 × 50 × 40 de concreto sob cada ponta da soleira e sob cada pilarete."""
+    L = E["x_face_P6"] and LARG_LANCE + 0.10
+    N = 2 * R_long + 1.5 * Q * LARG_LANCE * 0.28 + 1.4 * 0.33 * LARG_LANCE * 0.28   # 2 longarinas + metade do 1º degrau
+    sig = N / (L * U152["bf"]) / 1000                           # MPa sob a aba da soleira (apoio contínuo)
+    V_chum = 0.1 * N / 3                                        # força horizontal (10 % de N, empuxo do lance) por par de cantoneiras
+    Rd_chum = 12.0                                              # M12 hef 100 químico, corte, valor de projeto típico de catálogo (conferir catálogo)
+    return dict(perfil=U152["nome"], L_m=round(L, 3), Nd=round(N, 1), sigma_piso_MPa=round(sig, 3), V_chumbador_d=round(V_chum, 2), Rd_chumbador=Rd_chum,
+                uso_chumbador=round(V_chum / Rd_chum, 3), piso="laje do térreo e ≥ 12 cm, fck ≥ 25 (confirmar); senão bloco 50 × 50 × 40 sob cada apoio",
+                detalhe="soleira U 152 × 12,2 em pé, aba de baixo no piso sobre graute 10–20 mm; 3 pares de cantoneiras L 76 × 76 × 6,3 × 100 (1 M12 na alma + 1 chumbador químico M12 hef 100 no piso); "
+                        "pé de cada longarina parafusado na alma da soleira por 1 cantoneira L 76 × 76 × 6,3 × 120 (2 M12 + 2 M12); 1º degrau com o bocel sobre a aba de cima da soleira (2 M10)")
 
 
 if __name__ == "__main__":
@@ -108,7 +134,8 @@ if __name__ == "__main__":
         chegada_apoios=dict(x_tubo=round(E["x_face_P6"] + LARG_LANCE + 0.05, 3), x_W=round(E["x_face_E"] - 0.09, 3),
                             obs="viga de frente da chegada: apoio no tubo entre os lances e no pilarete W 150 do lado E; balanço de 1,45 m sobre a entrada do lance 1 (o M do balanço = M do vão de 2,9 m usado na verificação)"),
         ligacoes_face=[ligacao_face(max(pat_t["R_apoio_d"], ch_t["R_apoio_d"]))],
-        pe_do_lance=dict(Rd=ln["R_longarina_d"], detalhe="chapa de base 200 × 150 × 12,5 soldada de fábrica na longarina + 2 chumbadores químicos M12 hef 100 no piso"),
+        pe_do_lance=dict(Rd=ln["R_longarina_d"], detalhe="na base metálica BM-1 (soleira U 152) — sem solda"),
+        base_metalica=base_metalica(ln["R_longarina_d"]),
         lista=[dict(item="LG-1", desc="longarina U 152 × 12,2 (6\")", qt=4, L_m=ln["L_inclinado"] + 0.10, kg_m=U152["kg"]),
                dict(item="VP-1", desc="viga W 150 × 22,5 dos patamares", qt=4, L_m=round(vao, 3), kg_m=22.5),
                dict(item="PL-1", desc="pilarete W 150 × 22,5 (patamar +1,95)", qt=2, L_m=round(E["z_patamar"] - 0.152, 3), kg_m=22.5),
@@ -117,7 +144,14 @@ if __name__ == "__main__":
                dict(item="BR-1", desc="barrote U 102 × 7,4 (4\") dos patamares a cada 60 cm", qt=12, L_m=1.56, kg_m=7.4),
                dict(item="DG-1", desc="degrau chapa xadrez 4,75 dobrada 1300 × 330", qt=20, L_m=1.30, kg_m=round(0.33 * 4.75 * 7.85 * 1.0, 2)),
                dict(item="CT-1", desc="cantoneira L 38 × 38 × 4,8 de apoio do degrau (2 por degrau)", qt=40, L_m=0.30, kg_m=2.68),
-               dict(item="CH-P", desc="chapa xadrez 6,3 dos patamares", qt=2, L_m=round(vao, 3), kg_m=round(1.56 * 6.3 * 7.85, 1))],
+               dict(item="CH-P", desc="chapa xadrez 6,3 dos patamares", qt=2, L_m=round(vao, 3), kg_m=round(1.56 * 6.3 * 7.85, 1)),
+               dict(item="BM-1", desc="base metálica: soleira U 152 × 12,2 em pé no piso (pé do lance 1 e 1º degrau)", qt=1, L_m=round(LARG_LANCE + 0.10, 3), kg_m=U152["kg"]),
+               dict(item="CB-1", desc="cantoneira L 76 × 76 × 6,3 × 100 (fixação da BM-1 no piso)", qt=6, L_m=0.10, kg_m=7.29),
+               dict(item="CB-2", desc="cantoneira L 76 × 76 × 6,3 × 120 (pé da longarina na BM-1)", qt=2, L_m=0.12, kg_m=7.29),
+               dict(item="CB-3", desc="cantoneira L 102 × 102 × 9,5 × 200 (base dos pilaretes W 150)", qt=6, L_m=0.20, kg_m=14.6),
+               dict(item="CB-4", desc="cantoneira L 76 × 76 × 6,3 × 150 (base e topo do pilarete tubo)", qt=4, L_m=0.15, kg_m=7.29),
+               dict(item="CB-5", desc="cantoneira L 76 × 76 × 6,3 × 150 (topo dos pilaretes W 150 na viga)", qt=6, L_m=0.15, kg_m=7.29),
+               dict(item="CL-1", desc="cantoneira L 76 × 76 × 6,3 × 140 (VP-1 nas faces dos pilares)", qt=8, L_m=0.14, kg_m=7.29)],
     )
     out["ok"] = all(x["uso"] <= 1.0 for x in (ln, pat_f, pat_t, ch_f, ch_t, *out["pilaretes"], *out["ligacoes_face"])) and ln["flecha_mm"] <= ln["lim_L350_mm"]
     out["massa_kg"] = round(sum(i["qt"] * i["L_m"] * i["kg_m"] for i in out["lista"]))

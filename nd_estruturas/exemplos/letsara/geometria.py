@@ -49,5 +49,5 @@ ABERTURA = dict(nivel=Z_PISOS[0], x0=36.00, x1=39.20, y0=3.99, y1=Y_LIN[1] - 0.2
 # escada metálica em U (arquitetônico R01: 22 degraus H 17,72 B 28, patamar +1,95, lances de 2,80, patamar 1,60)
 ESCADA = dict(n_esp=22, espelho=Z_PISOS[0] / 22, piso=0.28, z_patamar=Z_PISOS[0] / 2,
               x_face_P6=36.30, x_face_E=39.20, y_patamar=(3.99, 5.55), y_lances=(5.55, 8.35), y_chegada=(8.35, Y_LIN[1] - 0.20))
-# cobertura metálica da linha 2 (DEC-046): W contínua sobre montantes, do eixo A ao E, topo na inclinação da TS-01
+# cobertura metálica da linha 2 (DEC-046; DEC-050 sem montantes, W direto na cabeça dos pilares): do eixo A ao E, topo na inclinação da TS-01
 X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)

@@ -2,7 +2,7 @@
 
 As duas TS-01 de concreto da linha 2 saem. No lugar: viga laminada W 310 × 44,5 (Gerdau, ASTM A572 Gr. 50) contínua do eixo A
 ao E, com o TOPO na inclinação atual da cobertura (terças, telhado e platibanda não mudam), apoiada SÓ sobre os pilares por
-montantes curtos W 150 × 22,5 (sem montante nas vigas do mezanino):
+(rev09b, DEC-050: SEM montantes — a cabeça de concreto de cada pilar sobe até o fundo da W; antes: montantes curtos W 150 × 22,5):
   A — recuo do P1-L2 (+7,195), B — topo do P8 (+7,30), C — topo do P8A (+7,776), D — topo do P8B (+7,30),
   P6 da linha 2 — topo (+7,30), E — recuo do P2-L2 (+8,369).
 Mão-francesa em TODA terça da linha 2 (trava a mesa inferior, comprimida pela sucção). Ligações 100 % parafusadas; módulos
@@ -56,7 +56,11 @@ def w_suc(x):
     return sum(b * (cpe - cpi) for b, cpi in LADO) * QV           # kN/m (negativo = para cima)
 
 
-# apoios (centro dos montantes) — eixo dos pilares; nos eixos A/E o montante fica no recuo (30 cm da face externa da cabeça)
+# apoios — eixo dos pilares; nos eixos A/E a W apoia no recuo (30 cm da face externa da cabeça).
+# rev09b (DEC-050, decisão do Nathan 24/10): SEM montantes — a cabeça de concreto de cada pilar sobe até o fundo da W 310
+# (cada pilar na sua altura, seguindo a inclinação); a W apoia direto na chapa de apoio CA-L2 250 × 250 × 19 sobre graute de
+# nivelamento 20 mm, parafusada em 4 barras roscadas M20 8.8 embutidas no pilar (padrão ND/Mitsubishi), sem solda.
+T_CHAPA, T_GRAUTE = 0.019, 0.020
 APOIOS = [("A", 0.15, LG["REC"][0], "recuo do P1-L2"), ("B", X_EIXO["B"], 7.30, "topo do P8"), ("C", X_EIXO["C"], LG["Z_TOPO_I130"], "topo do P8A"),
           ("D", X_EIXO["D"], 7.30, "topo do P8B"), ("P6", P6_L2[0], 7.30, "topo do P6 da linha 2"), ("E", X_EIXO["E"] - 0.15, LG["REC"][1], "recuo do P2-L2")]
 XA, XB = 0.025, X_EIXO["E"] - 0.025                           # pontas da W (25 mm da face da cabeça, como a TS-01)
@@ -115,22 +119,37 @@ def main():
     Msd = max(abs(g1["Mmax"]), abs(g1["Mmin"]), abs(g2["Mmax"]), abs(g2["Mmin"]))
     flecha = dict(GQ_mm=round(res["ELS G + Q"]["d_mm"], 1), Q_mm=round(res["ELS Q"]["d_mm"], 1), lim_L250_mm=round(Lmax / 250 * 1e3, 1),
                   contraflecha_mm=0, obs="sem contraflecha (flecha de G + Q < L/250)")
-    # montantes W 150 × 22,5 (altura = fundo da W − topo do apoio − chapa de base 12,5 − chapa de topo 12,5)
+    # rev09b (DEC-050): apoio direto da W na cabeça do pilar (sem montante). Topo do concreto = fundo da W − chapa 19 − graute 20.
     mont = []
-    for (nm, xa, z_ap, onde) in APOIOS:
-        h = round(zt(xa) - W.d / 1000 - z_ap - 0.025, 3)
+    for (nm, xa, z_ant, onde) in APOIOS:
+        z_fundo_w = zt(xa) - W.d / 1000
+        z_conc = math.floor((z_fundo_w - T_CHAPA - T_GRAUTE) * 1000) / 1000          # mm para baixo; o graute ajusta ±10 mm
         Nc = g1["R"][nm]
         Nt = -g2["R"][nm]
-        H_y = 0.02 * Nc                                         # força horizontal nocional (NBR 8800 4.9.7) + transferência de terça
-        Msd_b = H_y * h
-        comp = ML.verificar_barra(WM, N=-Nc, Mx=0.0, My=Msd_b, KLx=2.0 * h, KLy=2.0 * h, Lb=h)
-        # chapa de base 250 × 250 × 19, 4 barras roscadas M20 8.8 embutidas 400 mm com grampo (padrão Mitsubishi)
-        s_y = 0.150
-        T_bar = max(0.0, Nt) / 4 + Msd_b / (2 * s_y)
+        H_y = 0.02 * Nc                                         # força horizontal nocional (NBR 8800 4.9.7) no topo do pilar
+        T_bar = max(0.0, Nt) / 4                                # sucção dividida por 4 barras (sem braço: chapa direto no pilar)
         Rd_bar = 0.75 * 800e3 * 245e-6 / 1.35                    # NBR 8800:2024 6.3.3.1 (tração no parafuso, Abe = 0,75 Ab)
-        mont.append(dict(apoio=nm, onde=onde, x=round(xa, 3), z_base=round(z_ap, 3), h_m=h, Nc_d=round(Nc, 1), Nt_d=round(max(0.0, Nt), 1),
-                         My_base_d=round(Msd_b, 2), uso_compressao=round(comp["razao_interacao"], 3), T_barra_d=round(T_bar, 1), Rd_barra=round(Rd_bar, 1),
-                         uso_barra=round(T_bar / Rd_bar, 3), base="chapa 250 × 250 × 19 + 4 barras roscadas M20 8.8 (hef 400 + grampo) embutidas no pilar"))
+        Vbar = H_y / 4
+        Rv_bar = 0.4 * 800e3 * 245e-6 / 1.35                     # NBR 8800:2024 6.3.3.2 (corte, rosca no plano)
+        uso_bar = (T_bar / Rd_bar) ** 2 + (Vbar / Rv_bar) ** 2
+        # alma da W sobre o apoio, sem enrijecedor (NBR 8800:2024 5.7.3 e 5.7.4): escoamento local e enrugamento, lb = 250 mm
+        lb, k_ = 0.250, (W.tf + 8.0) / 1000
+        Rd_esc = (5 * k_ + lb) * 345e3 * (W.tw / 1000) / 1.10
+        tw, tf, d_ = W.tw / 1000, W.tf / 1000, W.d / 1000
+        Rd_enr = 0.66 * tw ** 2 * (1 + 3 * (lb / d_) * (tw / tf) ** 1.5) * math.sqrt(200e6 * 345e3 * tf / tw) / 1.10
+        sig_c = Nc / (0.25 * 0.25) / 1000                       # MPa sob a chapa
+        # presilhas PR-L2 19 × 80 × 200 (2 por apoio) na sucção: cada uma leva Nt/2, metade em cada barra; braço barra → borda da mesa
+        e_pr = 0.075 - (W.bf / 2000 - 0.005)
+        M_pr = max(0.0, Nt) / 4 * e_pr
+        sig_pr = M_pr / (0.080 * 0.019 ** 2 / 6) / 1000            # MPa
+        uso_pr = sig_pr / (250 / 1.10)                            # NBR 8800:2024 5.4.2.2 (chapa, Mpl ≥ Mel) — conservador com W elástico
+        mont.append(dict(nome=nm, onde=onde, x=round(xa, 3), z_concreto=z_conc, z_fundo_w=round(z_fundo_w, 3), z_antes=round(z_ant, 3),
+                         sobe_m=round(z_conc - z_ant, 3), Nc_d=round(Nc, 1), Nt_d=round(max(0.0, Nt), 1), H_d=round(H_y, 2),
+                         T_barra_d=round(T_bar, 1), Rd_barra=round(Rd_bar, 1), uso_barra=round(uso_bar, 3),
+                         alma_Rd_escoamento=round(Rd_esc, 1), alma_Rd_enrugamento=round(Rd_enr, 1), uso_alma=round(Nc / min(Rd_esc, Rd_enr), 3),
+                         sig_concreto_MPa=round(sig_c, 2), presilha_sig_MPa=round(sig_pr, 1), uso_presilha=round(uso_pr, 3),
+                         detalhe="CA-L2 chapa de apoio 250 × 250 × 19 sobre graute 20 mm + 4 barras roscadas M20 8.8 L=520 (hef 400 + grampo U Ø10) embutidas no pilar a 150 × 150, por fora da mesa; "
+                               "mesa presa por 2 presilhas PR-L2 19 × 80 × 200 sobre calços 12,5 (torque no apoio fixo C; porca encostada nos demais para deslizar)"))
     # emendas: perto do ponto de momento nulo, módulos ≤ 12 m
     em = [11.60, 23.45, 33.30]
     mods = [round(b - a, 2) for a, b in zip([XA] + em, em + [XB])]
@@ -140,18 +159,18 @@ def main():
     L_mf = math.hypot(0.30, W.d / 1000)
     Ncr_mf = 200e6 * 2.9e-8 * math.pi ** 2 / L_mf ** 2          # L 51×51×4,8: I_min ≈ 2,9 cm⁴ (eixo z)
     out = dict(
-        perfil=PERFIL, aco="ASTM A572 Gr. 50 (fy 345 MPa)", montante=PERFIL_M, trib_m=round(TRIB, 3),
+        perfil=PERFIL, aco="ASTM A572 Gr. 50 (fy 345 MPa)", montante=None, trib_m=round(TRIB, 3),
         cargas_kN_m=dict(g_k=round(g_k, 2), g_fav=round(g_fav, 2), q_k=round(q_k, 2), w_suc_corpo=round(w_suc(X_EIXO["C"]), 2), w_suc_local=round(w_suc(1.0), 2), qv=round(QV, 3)),
         apoios=[dict(nome=nm, x=round(xa, 3), z_apoio=z_ap, onde=o) for nm, xa, z_ap, o in APOIOS], vao_max_m=round(Lmax, 3),
         esforcos={k: dict(Mmax=round(v["Mmax"], 1), Mmin=round(v["Mmin"], 1), Vmax=round(v["Vmax"], 1), d_mm=round(v["d_mm"], 1),
                           R={a: round(b, 1) for a, b in v["R"].items()}) for k, v in res.items()},
         verificacoes=dict(MRd=round(MRd_tr, 1), Msd=round(Msd, 1), uso_M=round(Msd / MRd_tr, 3), VRd=round(VRd, 1), Vsd=round(max(g1["Vmax"], g2["Vmax"]), 1),
                           uso_V=round(max(g1["Vmax"], g2["Vmax"]) / VRd, 3), Lb_m=S_TER, norma="NBR 8800:2024 5.4.2 / Anexo D e 5.4.3"),
-        flecha=flecha, montantes=mont, emendas_x=em, modulos_m=mods,
+        flecha=flecha, apoios_diretos=mont, emendas_x=em, modulos_m=mods,
         mao_francesa=dict(perfil="L 51 × 51 × 4,8 (2\" × 3/16\")", em="todas as terças da linha 2 (dos dois lados da W)", F_d=round(F_mf, 1), L_m=round(L_mf, 3),
                           Ncr_kN=round(Ncr_mf, 1), parafusos="1 M12 8.8 em cada ponta", norma="NBR 8800:2024 4.11 (travamento: 2 % da força na mesa)"),
         terca_sobre_W="ST-W: chapa dobrada 6,3 (igual ao ST-1P) parafusada na mesa superior da W com 2 M12 e na alma da terça com 2 M12 (furos da terça iguais)",
-        ok=Msd <= MRd_tr and max(g1["Vmax"], g2["Vmax"]) <= VRd and flecha["GQ_mm"] <= flecha["lim_L250_mm"] and all(m_["uso_compressao"] <= 1 and m_["uso_barra"] <= 1 for m_ in mont)
+        ok=Msd <= MRd_tr and max(g1["Vmax"], g2["Vmax"]) <= VRd and flecha["GQ_mm"] <= flecha["lim_L250_mm"] and all(m_["uso_barra"] <= 1 and m_["uso_alma"] <= 1 and m_["uso_presilha"] <= 1 for m_ in mont)
            and max(mods) <= 12.0,
     )
     (AQ / "cob_linha2.json").write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
@@ -161,7 +180,7 @@ def main():
 if __name__ == "__main__":
     o = main()
     print(json.dumps({k: o[k] for k in ("cargas_kN_m", "verificacoes", "flecha", "modulos_m", "ok")}, ensure_ascii=False, indent=1))
-    for m_ in o["montantes"]:
+    for m_ in o["apoios_diretos"]:
         print(m_)
     for k, v in o["esforcos"].items():
         print(k, v)

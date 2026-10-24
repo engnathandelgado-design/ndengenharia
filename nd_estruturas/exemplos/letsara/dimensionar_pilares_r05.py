@@ -26,12 +26,12 @@ GRUPOS = {   # marca → pilares do modelo
     "PL-03": ["P1C-L1"], "PL-04": ["P1C-L9"], "PL-05": ["P2-L5", "P2-L6", "P2-L7", "P2-L8"], "PL-11": ["P2-L3"],
     "PL-12": ["P2-L4"], "PL-06": ["P2-L2"], "PL-07": ["P2C-L1"], "PL-08": ["P2C-L9"],
     "PF-01": ["P3-L1"], "PF-02": ["P4-L1"], "PF-03": ["P5-L1"], "PF-05": ["P3-L9"], "PF-04": ["P14-L9"], "PF-06": ["P5-L9"],
-    "PC-01": ["P8A"], "PC-02": ["P11"], "PC-03": ["P13"], "PM-01": ["P8", "P8B"],
+    "PC-01": ["P8A"], "PC-02": ["P11"], "PC-03": ["P13"], "PM-01": ["P8"], "PM-02": ["P8B"],   # rev09b (DEC-050): alturas diferentes
     "PG-01": ["P9"], "PG-02": ["P10a"], "PG-03": ["P12"], "PG-04": ["P10b"],
     "PE-01": ["P6E"], "PE-02": ["P7E"], "PE-03": ["P6-L2"],            # rev09 (DEC-045): pilares da escada
 }
 ATUAL = {"PL": (5, 4, 20.0), "PF": (5, 4, 20.0), "PC-01": (5, 7, 20.0), "PC-02": (4, 4, 20.0), "PC-03": (6, 6, 20.0),
-         "PM-01": (3, 4, 20.0), "PG-01": (3, 3, 16.0), "PG-03": (3, 3, 16.0), "PG-02": (2, 2, 16.0), "PG-04": (2, 2, 16.0),
+         "PM-01": (3, 4, 20.0), "PM-02": (3, 4, 20.0), "PG-01": (3, 3, 16.0), "PG-03": (3, 3, 16.0), "PG-02": (2, 2, 16.0), "PG-04": (2, 2, 16.0),
          "PE-01": (2, 3, 16.0), "PE-02": (3, 3, 16.0), "PE-03": (2, 3, 16.0)}
 COB, PHI_T = 0.030, 0.0063
 # método geral do pilar isolado em balanço (N no topo) só onde a força normal entra no topo: nos pilares do mezanino a carga
@@ -79,6 +79,7 @@ def camadas(brs, eixo):
     return [(y, n, a1) for y, n in sorted(cnt.items())]
 
 
+from geometria import Z_PISOS as Z_MEZ_DIAF   # +3,90 / +7,30 (lajes alveolares com capa = diafragmas)
 PHI = 2.0                                   # coeficiente de fluência φ(∞, t0) — peça pré-moldada carregada após 28 dias (NBR 6118 A.2.2.3)
 ECI = 5600 * math.sqrt(40) * 1e3            # kN/m²
 QP = "ELU sobrecarga"                       # quase permanente ≈ (G1,3 + Q1,4)/1,35 (a favor da segurança: inclui toda a sobrecarga)
@@ -92,6 +93,10 @@ def e_cc(p):
     for eixo, Mk, h, bb in (("x", "My", b["bx"], b["by"]), ("y", "Mx", b["by"], b["bx"])):
         Msg = abs(b[Mk]) / 1.35
         le = 2 * H
+        if all(any(abs(z - zl) < 1e-3 for z in b["zs"]) for zl in Z_MEZ_DIAF):
+            # rev09b (DEC-050): pilar ligado às 2 lajes do mezanino (diafragmas +3,90 e +7,30): o deslocamento lateral do conjunto já está
+            # na 2ª ordem global do r05; para a fluência vale o comprimento entre travamentos (trecho em balanço acima do +7,30 com le = 2 l)
+            le = max(2 * (H - Z_MEZ_DIAF[-1]), Z_MEZ_DIAF[0], Z_MEZ_DIAF[1] - Z_MEZ_DIAF[0])
         Ne = 10 * ECI * (bb * h ** 3 / 12) / le ** 2
         th = max(1 / 300, min(1 / 200, 1 / (100 * math.sqrt(H))))
         ea = th * H
