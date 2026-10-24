@@ -94,9 +94,9 @@ reg("VM × laje (2º estágio)", "VM-01..04 I90", "N9 estribos salientes Ø8 c/1
 reg("VM × laje (2º estágio)", "VM", "topo da mesa (40) rugoso, pente 5 mm", "laje alveolar", "apoio 10 cm em neoprene 10", "enchimento entre a ponta da laje e a borda da mesa", "30 × 20 cm", True, "capa 5 cm por cima; N9 sai 17 cm do topo (dentro do enchimento + capa)")
 
 # ------------------------------------------------------------------ 5. I130 × pilares centrais (PN-2) e apoio da V405
-reg("I130 × PC", "V405/406/407 I130 (h 130)", "dente 780×350 + TB-2 tubo Ø60,3×3,6 (furo 53), sem chapa", "PC-01/02", "consolo CP-I130 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
+reg("I130 × PC", "V404/405/406/407 I130 (h 120)", "dente 780×350 + TB-2 tubo Ø60,3×3,6 (furo 53), sem chapa", "PC-01/02", "consolo CP-I130 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
     "neoprene 300×250×30 fretado (3 camadas); pressão 4,3 ≤ 10 MPa; pino grauteado numa ponta só")
-reg("I130 × PC", "V405", "dente na linha 9", "PF-04 (P14, linha 9, eixo C)", "consolo CP-I130 + PN-2 Ø25", "apoio da ponta da V405", f"+{LG['Z_ASS_I130']:.3f} (face interna do P14)", True, "V405 = P13 → linha 9 (23,76 m c-c), como no R01 (viga central até o P14)")
+reg("I130 × PC", "V404", "dente na linha 9", "PF-04 (P14, linha 9, eixo C)", "consolo CP-I130 + PN-2 Ø25", "apoio da ponta da V404", f"+{LG['Z_ASS_I130']:.3f} (face interna do P14)", True, "DEC-058: V404 = P13B → linha 9 (16,517 m c-c); V406 L4 → P13 e V405 P13 → P13B, três vãos iguais")
 
 # ------------------------------------------------------------------ 6. cobertura escondida
 pl = LG["platibanda"]

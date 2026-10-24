@@ -696,6 +696,8 @@ def escada_externa():
                 p0_, p1_ = (c_ + off, sA, zb0), (c_ + off, sB, zb1)
             else:
                 p0_, p1_ = (sA, c_ + off, zb0), (sB, c_ + off, zb1)
+            _L = math.dist(p0_, p1_); _u = [(p1_[i] - p0_[i]) / _L for i in range(3)]
+            p0_, p1_ = tuple(p0_[i] + 0.09 * _u[i] for i in range(3)), tuple(p1_[i] - 0.09 * _u[i] for i in range(3))   # garfo (90 mm) fora do 3D: a barra termina antes da aba B
             linear("CX-1 barra redonda Ø12,5 do contraventamento (pontas M12, garfo + pino M12, esticador)", ("R", 0.0125, 0.0125, "barra Ø12,5"), p0_, p1_, GE, tipo="viga")
             ndiag += 1
             for (ss, zz) in ((s0, zb0), (s1, zb1)):                                     # orelhas nas duas pontas

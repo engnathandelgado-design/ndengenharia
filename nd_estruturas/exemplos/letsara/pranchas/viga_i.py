@@ -349,7 +349,7 @@ def prancha_viga(P):
         varm.linha((100, H + 160), (L - 100, H + 160), "ARMADURA")
         varm.chamada((L - 400, H + 120), (8, 2), f"N9 — {len(xs9e)} estribos salientes Ø8 c/15 + N10 2 Ø10 (CORTE C-C)")
     varm.chamada((zona + 300, cob + 50), (10, -16), f"N2 — {len(xs_e)} estribos Ø{d_est:g}: c/{s1//10} corrente, c/{s2//10} nos {zona/1000:g} m das pontas")
-    varm.chamada((L / 2, P["cord"][0][0]), (10, -14), f"C1 — {n_cord} cord. {CT}" + (f"; {P['n_isol']} isoladas {P['isol_mm']/1000:g} m nas pontas" if P.get("n_isol") else ""))
+    varm.chamada((L / 2, P["cord"][0][0]), (10, -14), f"C1 — {n_cord} cord. {CT}" + (f"; {P['n_isol']} isoladas {(P['isol_mm'] + P.get('ini_isol', 0))/10:g} cm da ponta (PEAD)" if P.get("n_isol") else ""))
     varm.cota_h([0, zona, L - zona, L], 0, -10)
 
     # ------------------------------------------------------------ coluna direita
@@ -360,9 +360,13 @@ def prancha_viga(P):
     y = ta["y_base"]
     cords = []
     for k, (yy, xs, isol) in enumerate(P["cord"], 1):
-        cords.append(dict(pos="C1", diam=P.get("d_cord", 12.7), qtd=len(xs), y=yy, forca=F_cord, isol=isol))
-    tc = pr.tabela_cordoalhas(XC, y - 4, cords, P["L_pista"])
+        cords.append(dict(pos="C1", diam=P.get("d_cord", 12.7), qtd=len(xs), y=yy, forca=F_cord, isol=(isol + P.get("ini_isol", 0)) if isol else 0, local="DA PONTA"))
+    tc = pr.tabela_cordoalhas(XC, y - 4, cords, P["L_pista"], nome="CORDOALHAS " + P.get("nome_cord", ""))
     y = tc["y_base"]
+    if P.get("cord2"):                                   # rev08: segunda marca de protensão na mesma folha (V407)
+        nm2, lin2 = P["cord2"]
+        c2 = [dict(pos="C2", diam=P.get("d_cord", 12.7), qtd=len(xs), y=yy, forca=F_cord, isol=(isol + P.get("ini_isol", 0)) if isol else 0, local="DA PONTA") for yy, xs, isol in lin2]
+        y = pr.tabela_cordoalhas(XC, y - 4, c2, P["L_pista"], nome="CORDOALHAS " + nm2)["y_base"]
     if P.get("tab_isol"):
         y = pr.tabela(XC, y - 4, P["tab_isol"]["titulo"], P["tab_isol"]["cab"], P["tab_isol"]["linhas"], P["tab_isol"]["larg"], h_lin=5.0)
     y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [16, 104, 10, 52])
@@ -440,7 +444,8 @@ def dados_i110():
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
         n3=(6, 25.0, "CA-50 na mesa superior (compressão no ELU e tração no ato junto às pontas)"),
         cord=cord, n_isol=n_isol, isol_mm=max(l["isol"] for l in ARR["linhas"]), sig_pi=ARR["sig_pi"], L_pista=60, fck=ARR["fck"], fckj=ARR["fckj"],
-        lbpt=ARR["lbpt_m"], tab_isol=TAB_ISOL, pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
+        lbpt=ARR["lbpt_m"], tab_isol=TAB_ISOL, ini_isol=350, nome_cord="V406, V405, V404",
+        cord2=("V407", [(l["y"], l["xs"], l["isol"]) for l in I1J["V407"]["arranjo"]["linhas"]]), pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
         est=(8.0, 150, 100, 2000), Vd=round(max(I1J[k]["linhas"]["Vd_kN"] for k in ("V404", "V405", "V406"))), alcas=[2500, L - 2500], tercas=[],
         consolos=[], pinos_topo=pinos, anc=anc, tir=DTI["tirante"].split(" (")[0], n_sus=DTI["n_sus"], sus=DTI["suspensao"].split(" (")[0],
         n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
@@ -466,7 +471,7 @@ def dados_i110():
                "N3 = 6 Ø25 CA-50 na mesa superior: compressão do ELU (x/d ≤ 0,45) e tração no ato junto às pontas (NBR 6118:2023 17.2.4.3.2 b).",
                f"Dentes Gerber 78 × 35 nas duas pontas (NBR 9062:2017 7.4; Fd = γn·Vd = {f(max(I1J[k]['dente']['Fd'] for k in ('V404', 'V405', 'V406')), 0)} kN, V405 com 2 TS-01 no topo, verificado por MEF não linear com esta armação): N5 tirante em {n_u} alças HORIZONTAIS (U deitado) Ø{DTI['d_tir']:g} por ponta, ramos no nível do tirante, dobra interna ≥ 8φ (16 cm), curva junto à face do dente; N6 suspensão, N7 costura, N8 estribos do nariz; maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
                f"TS-01 apoiadas direto no topo da viga (sem consolos CV-TS), neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01. TOPO HORIZONTAL EM 2 NÍVEIS ao longo de toda a viga (NBR 9062:2017 7.2.1.6, aparelho horizontal): metade do lado A em +{Fz(zt)} e metade do lado E {dgc} mm acima (+{Fz(ztd)}), degrau no eixo da viga feito com régua-guia no acabamento do topo; h = {HI // 10} cm na metade A e {f(HI / 10 + dgc / 10, 1)} cm na metade E. As pontas das TS-01 têm cunha no fundo e a face de apoio fica horizontal.",
-               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 com mísula (assento +{Fz(za)}; consolo 49 junto ao pilar e 39 na ponta, alinhado ao fundo da viga — DEC-054); graute só numa ponta de cada viga. V404 vai até o consolo do P14 (PF-04); P13 e P13B (PC-03) recebem as I130 nos dois lados (DEC-058).",
+               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 com mísula (assento +{Fz(za)}; consolo 49 junto ao pilar e 39 na ponta, alinhado ao fundo da viga — DEC-054); graute só numa ponta de cada viga. V404 vai até o consolo do P14 (PF-04); os dois PC-03 do eixo C recebem as I130 nos dois lados (DEC-058).",
                f"Içar pelas 2 alças AL-3 ({ICJ['n_lacos']} laços cada, {f(ICJ['F_alca_d_kN'], 0)} kN de cálculo por alça com βa 1,3); estocar sobre 2 calços nas alças; não virar a peça."])
 
 

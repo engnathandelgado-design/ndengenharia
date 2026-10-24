@@ -20,6 +20,8 @@ VM, ES, LA, CB, ESC, CM, CF, CO = (J("vm_retangular.json"), J("estudo_vm_largura
                                    J("escada_metalica.json"), J("cargas_mezanino.json"), J("cargas_fundacao.json"), J("consolos.json"))
 MV = J("mef_vm_ret_dente_750_450.json")
 EX, I1 = J("escada_externa.json"), J("i110_r01.json")
+ESD, PJ, DP = J("escadas.json"), J("portao_l4.json"), J("arranjo_pilares.json")
+NOME_I = {"V407": "V400", "V406": "V401", "V405": "V402", "V404": "V403"}
 DI = J("dentes.json")["I130"]
 N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I130"][0]
 P_ = VM["premissas"]
@@ -126,50 +128,83 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
       tab([["APOIO", "ONDE", "topo concreto (m)", "sobe (m)", "Nc,d (kN)", "Nt,d (kN)"]] +
           [[m["nome"], m["onde"], f(m["z_concreto"], 3), f(m["sobe_m"], 2), f(m["Nc_d"]), f(m["Nt_d"])] for m in CB["apoios_diretos"]],
           [12, 60, 24, 18, 20, 20]),
-      Paragraph("7. Escada metálica (calc_escada_metalica.py)", T2),
-      P(f"Escada em U, {ESC['geometria']['n_espelhos']} espelhos de {f(ESC['geometria']['espelho_m'] * 100, 2)} cm, piso {f(ESC['geometria']['piso_m'] * 100, 0)} cm, patamar +{f(ESC['geometria']['z_patamar'], 3)}, chegada no piso pronto +3,95 (DEC-055); "
-        f"sobrecarga {f(ESC['cargas']['q_kN_m2'])} kN/m². Longarina {ESC['longarina']['perfil']}: uso {f(ESC['longarina']['uso'], 2)}, flecha {f(ESC['longarina']['flecha_mm'])} ≤ {f(ESC['longarina']['lim_L350_mm'])} mm, f1 {f(ESC['longarina']['f1_Hz'])} Hz; "
-        f"VP-1 W 150: uso máx. {f(max(ESC[k]['uso'] for k in ('patamar_frente', 'patamar_fundo', 'chegada_frente', 'chegada_fundo')), 2)}; pilaretes uso máx. {f(max(p['uso'] for p in ESC['pilaretes']), 3)}; "
-        f"ligação na face do pilar (2 L 76 + 4 M16, sem solda) uso {f(ESC['ligacoes_face'][0]['uso'], 3)}; base metálica BM-1 ({ESC['base_metalica']['perfil']} L {f(ESC['base_metalica']['L_m'], 2)} m no pé do lance 1): σ piso {f(ESC['base_metalica']['sigma_piso_MPa'], 2)} MPa, uso chumbadores {f(ESC['base_metalica']['uso_chumbador'], 3)}; piso: {ESC['base_metalica']['piso']}. Massa {ESC['massa_kg']} kg (+3 % de parafusos)."),
-      Paragraph("7b. Escada metálica externa da fachada A (calc_escada_externa.py) — DEC-053", T2),
-      P(f"Escada em L junto à fachada A: {EX['geometria']['n_espelhos'] if 'n_espelhos' in EX['geometria'] else 22} espelhos de {f(EX['geometria']['espelho_m'] * 100, 2)} cm, piso {f(EX['geometria']['piso_m'] * 100, 0)} cm (Blondel {f(EX['geometria']['blondel_m'] * 100, 1)} cm), "
-        f"largura {f(EX['geometria']['largura'], 2)} m, patamar +{f(EX['geometria']['z_patamar'], 3)} e chegada +{f(EX['geometria']['z_chegada'], 2)} na porta do 2º pavimento (vista H). "
-        f"Sobrecarga {f(EX['cargas']['q_kN_m2'])} kN/m² ({EX['cargas']['norma']}). Longarina do lance de cima {EX['longarina_cima']['perfil']}: uso {f(EX['longarina_cima']['uso'], 2)}, flecha {f(EX['longarina_cima']['flecha_mm'])} ≤ {f(EX['longarina_cima']['lim_L350_mm'])} mm, f1 {f(EX['longarina_cima']['f1_Hz'])} Hz "
-        f"(U 152 não passa na flecha: {f(EX['alternativas_longarina_cima'][0]['flecha_mm'])} mm); lance de baixo {EX['longarina_baixo']['perfil']}: uso {f(EX['longarina_baixo']['uso'], 2)}; "
-        f"vigas W 150 × 13,0: chegada {f(EX['viga_chegada']['uso'], 2)}, patamar {f(EX['viga_patamar']['uso'], 2)}; pilaretes uso {f(EX['pilarete_chegada']['uso'], 3)}. "
-        "Bases próprias em blocos BE-1 60 × 60 × 60 C25 (σadm do solo 150 kPa a confirmar), sem apoio nas placas; travamento TR-1 no pilar P28 (eixo A). Porta na vista H: as placas acima do vão "
-        "apoiam nas ombreiras internas OM-2 U 152 do piso do térreo. Tudo parafusado e galvanizado a fogo. Folha ND-LET-ES02."),
-      Paragraph("10. Vigas centrais I130 com h 120 (calc_i110_r01.py, calc_dentes.py, calc_nbr9062.py) — DEC-054", T2),
-      P("Decisão do Nathan (24/10, opção A do estudo estudo_i130_h120): V401 (V406) e V402 (V405) com h 120, dente Gerber 78 × 35 mantido (recorte 52 → 42), "
-        "protensão LIMITADA (CAA II, pré-tração: NBR 6118:2023 Tab. 13.4 nível 2 — ELS-D na quase permanente, ELS-F na frequente), C50 e liberação da protensão SÓ com fckj 50 MPa. "
-        "A V400 (V407) passa para h 120 também (fôrma única das três)."),
-      tab([["VIGA", "L (m)", "CORDOALHAS Ø15,2", "Md / MRd (kN·m)", "x/d", "σ ELS-D (MPa)", "σ ELS-F (MPa)", "ato topo / base (MPa)", "flecha final (mm)", "Fd dente (kN)"]] +
-          [[f"{mk} ({ {'V407': 'V400', 'V406': 'V401', 'V405': 'V402'}[mk] })", f(I1[mk]["L_peca"], 2), str(I1[mk]["arranjo"]["n_cord"]), f"{f(I1[mk]['ELU']['Md'], 0)} / {f(I1[mk]['ELU']['MRd'], 0)}",
-            f(I1[mk]["ELU"]["x_d"], 3), f(I1[mk]["ELS"]["D_base"], 2), f"{f(I1[mk]['ELS']['F_base'], 2)} ≤ {f(I1[mk]['ELS']['lim_F'], 2)}",
+      Paragraph("7. Escadas metálicas interna e externa (escadas_detalhe.py) — DEC-045/053/055/060", T2),
+      P(f"Modelo único de detalhamento das duas escadas: peças do 3D/IFC, ligações, lista e folhas ND-LET-ES01, ES02 e ES03 saem de escadas_detalhe.py. "
+        f"Sobrecarga {f(ESD['cargas']['q_kN_m2'])} kN/m²; guarda-corpo {f(ESD['cargas']['guarda_corpo_kN_m'], 2)} kN/m no topo e {f(ESD['cargas']['fechamento_kPa'], 2)} kPa no fechamento; corrimão {f(ESD['cargas']['corrimao_kN'], 2)} kN ({ESD['norma']}). "
+        "Perfis no limite: para cada peça foi escolhido o mais leve da lista que passa em resistência, flecha L/350, vibração e geometria das ligações."),
+      tab([["PEÇA", "PERFIL", "USO", "OBS."]] +
+          [[nm, d_["perfil"], f(d_["uso"], 2), ob] for nm, d_, ob in (
+              ("longarina interna", ESD["interna"]["longarina"], f"flecha {f(ESD['interna']['longarina']['flecha_mm'])} ≤ {f(ESD['interna']['longarina']['lim_mm'])} mm; U 102 não comporta a cantoneira do degrau"),
+              ("VP-1 frente do patamar", ESD["interna"]["viga_patamar_frente"], f"flecha {f(ESD['interna']['viga_patamar_frente']['flecha_mm'])} ≤ {f(ESD['interna']['viga_patamar_frente']['lim_mm'])} mm"),
+              ("VP-2 / VP-4 fundo (assentos SA)", ESD["interna"]["viga_patamar_fundo"], "W 150 × 9,2 é o menor W"),
+              ("VP-3 frente da chegada (balanço)", ESD["interna"]["viga_chegada_frente"], f"balanço {f(ESD['interna']['viga_chegada_frente']['balanco'], 2)} m"),
+              ("barrote interno", ESD["interna"]["barrote"], ""), ("pilarete da chegada (interna)", ESD["interna"]["pilarete_chegada"], f"λ {ESD['interna']['pilarete_chegada']['lambda_']}"),
+              ("longarina externa (lance de cima)", ESD["externa"]["longarina_cima"], f"flecha {f(ESD['externa']['longarina_cima']['flecha_mm'])} ≤ {f(ESD['externa']['longarina_cima']['lim_mm'])} mm"),
+              ("longarina externa (lance de baixo)", ESD["externa"]["longarina_baixo"], ""), ("barrote externo", ESD["externa"]["barrote"], ""),
+              ("pilarete da chegada (externa)", ESD["externa"]["pilarete_chegada"], f"λ {ESD['externa']['pilarete_chegada']['lambda_']}; contraventado pelo X"),
+              ("X de contraventamento (externa)", dict(perfil=ESD["externa"]["contraventamento"]["barra"], uso=ESD["externa"]["contraventamento"]["uso"]), f"Nd {f(ESD['externa']['contraventamento']['Nd'])} ≤ {f(ESD['externa']['contraventamento']['NRd'])} kN"))],
+          [52, 40, 14, 72]),
+      P("Guarda-corpos e corrimãos (RT CBMRS nº 11 Parte 01/2016): corrimão nos dois lados de todos os lances a 0,90 m do bocel, tubo Ø38,1, 40 mm livres, contínuo nos patamares e com 30 cm de prolongamento nas pontas livres; "
+        "guarda-corpo 0,92 m nos lances internos, 1,05 m nos patamares e na abertura da laje, 1,30 m em toda a escada externa; barras verticais com vão livre < 150 mm (esfera de 15 cm)."),
+      tab([["TRECHO", "LOCAL", "h (m)", "MONTANTE (uso)", "CORRIMÃO (uso)", "BARRAS", "FIXAÇÃO (uso)"]] +
+          [[g["cod"], g["nome"], f(g["h"], 2), f"{g['gc']['montante']['perfil']} ({f(g['gc']['montante']['uso'], 2)})", f"{g['gc']['corrimao']['perfil']} ({f(g['gc']['corrimao']['uso'], 2)})",
+            "—" if g.get("so_corrimao") else f"{g['gc']['barra']['perfil'].replace('barra redonda ', '')} c/{g['gc']['barra']['s_mm']}", f"{g['fix']} ({f(g['gc']['fixacao_montante']['uso'], 2)})"] for g in ESD["guardas"]],
+          [14, 50, 11, 30, 28, 22, 23]),
+      P(f"Ligações (NBR 8800:2024 6.3, todas parafusadas, sem solda): cada uma conferida automaticamente — furos dentro das duas peças, bordas (M10 18, M12 22, M16 29 mm), espaçamento ≥ 3d, folga de chave, faixa comum de altura entre as peças, corte do parafuso e pressão de contato. "
+        f"{len(ESD['ligacoes'])} ligações, {ESD['n_conflitos']} conflitos; modelo 3D com 0 colisões > 3 mm (colisao_modelo.py). A trava TR-1 da escada externa (rev 00) foi retirada: não alcançava a face do P28 (x −0,55 contra −0,30, atrás das placas); a estabilidade passa ao X de barras Ø12,5 sob a chegada em 3 planos."),
+      tab([["COD", "LIGAÇÃO", "PARAFUSOS / ELEMENTOS", "Vd / VRd (kN)", "USO"]] +
+          [[l["cod"], l["tipo"], l["furos"], f"{f(l['Vd'], 1)} / {f(l['VRd'], 1)}", f(l["uso"], 2)] for l in ESD["ligacoes"]],
+          [18, 34, 86, 24, 14]),
+      P("Pé-direito livre (≥ 2,10 m): " + "; ".join(f"{q['faixa']} {f(q['pe_direito_min_m'], 2) + ' m' if q['pe_direito_min_m'] else 'livre'}" for q in ESD["pe_direito"]) + "."),
+      P(f"Massa: escada interna {f(ESD['massa_kg']['interna'] * 1.03, 0)} kg e externa {f(ESD['massa_kg']['externa'] * 1.03, 0)} kg (com 3 % de parafusos; sem as ombreiras OM-2)."),
+      Paragraph("10. Vigas centrais I130 h 120 com cordoalha Ø12,7 (calc_i110_r01.py, calc_dentes.py) — DEC-054/058", T2),
+      P("Eixo C no arranjo C (DEC-058): P20 na linha 4, P22 (antes P13) em y 46,317 e pilar novo P23 em y 62,833 — três vãos iguais de 16,517 m; as três I130 novas (V401, V402 e V403) são uma só marca de fôrma e de armação, e a V400 (20,15 m) segue igual. "
+        "h 120, dente Gerber 78 × 35, consolo com mísula, protensão LIMITADA (ELS-D na quase permanente com margem de −0,25 MPa, ELS-F na frequente), C50, liberação só com fckj 50 MPa, cordoalha Ø12,7 CP-190 RB. "
+        "Busca automática: para cada marca, os arranjos candidatos × os 4 padrões de isolamento escalonado (linha de baixo sempre aderente); adotado o que passa em tudo (ELU, ELS-D, ELS-F, ato, flecha, içamento e dente) com MENOS cordoalha."),
+      tab([["VIGA", "L (m)", "Ø12,7", "padrão de isolamento (mm)", "Md / MRd (kN·m)", "σ ELS-D (MPa)", "σ ELS-F (MPa)", "ato topo / base (MPa)", "flecha final (mm)", "Fd dente (kN)"]] +
+          [[f"{NOME_I[mk]}", f(I1[mk]["L_peca"], 2), str(I1[mk]["arranjo"]["n_cord"]), " / ".join(str(v) for v in I1[mk]["isolamento_padrao"]), f"{f(I1[mk]['ELU']['Md'], 0)} / {f(I1[mk]['ELU']['MRd'], 0)}",
+            f(I1[mk]["ELS"]["D_base"], 2), f"{f(I1[mk]['ELS']['F_base'], 2)} ≤ {f(I1[mk]['ELS']['lim_F'], 2)}",
             f"{f(I1[mk]['ato']['topo_max'], 2)} / {f(I1[mk]['ato']['base_min'], 2)}", f"{f(I1[mk]['flecha']['final_mm'])} ≤ {f(I1[mk]['flecha']['lim_mm'])}", f(I1[mk]["dente"]["Fd"])]
-           for mk in ("V407", "V406", "V405")], [20, 12, 16, 22, 12, 15, 19, 22, 24, 16]),
-      P("Arranjo V405/V406: 7 + 5 + 5 + 5 Ø15,2 nas linhas y 6/11/16/21 cm (as de 16 e 21 isoladas 2,0 e 4,0 m nas pontas) + 2 na mesa superior; V407: 5 + 5 + 4 + 4. "
-        "σpi 1453 MPa; N3 = 6 Ø25 na mesa superior (ato junto às pontas e compressão do ELU)."),
-      P(f"Dente (NBR 9062:2017 7.4, Fd = {f(I1['V406']['dente']['Fd'])} kN, Hd = {f(I1['V406']['dente']['Hd'])} kN): {DI['calculo']['adotado']['tirante']}; {DI['calculo']['adotado']['suspensao']}; {DI['calculo']['adotado']['costura']}. "
-        + (f"MEF não linear (mef_dente.analisar, armação da prancha, cordoalhas Ø15,2 como n·140/98,7 Ø12,7 equivalentes): Vu = {f(DI['mef']['Vu_kN'])} kN, FS = Vu/Fd = {f(DI['mef']['FS'], 2)} ≥ 1,06 ({ok(DI['mef']['ok'])}). "
-           if DI.get("mef") else "MEF: ver estudo_i130_h120_mef.json. ")
-        + "Convergência: com passo de deslocamento de 0,05 mm o primeiro passo de carga não convergia (a protensão de 24 Ø15,2 fissura a ponta e a zona de transferência antes da carga); "
-          "com 0,02 mm a análise segue até o pico de carga (Vu = pico, antes de qualquer limite de deformação) sem trocar o modelo nem o critério (3,5‰ no concreto / 10‰ no aço)."),
+           for mk in ("V407", "V406", "V405", "V404")], [14, 11, 11, 26, 22, 15, 18, 20, 20, 15]),
+      P("Isolamento por linha (bainha plástica de PEAD vedada nas pontas com fita e mastique, medida a partir da FACE DA PEÇA; a linha de baixo é sempre aderente):"),
+      tab([["VIGA", "linha y (cm)", "cordoalhas", "isoladas", "isolado em cada ponta (cm, da face)", "lbpt (cm)", "ato no fim do isolamento topo / base (MPa)"]] +
+          [[NOME_I[mk], f(ln_["y"] / 10, 0), str(len(ln_["xs"])), str(len(ln_["xs"]) if ln_["isol"] else 0), f((ln_["isol"] + 350) / 10, 0) if ln_["isol"] else "aderente",
+            f(I1[mk]["ato"]["lbpt_m"] * 100, 1),
+            next((f"{f(c_['topo'], 2)} / {f(c_['base'], 2)}" for k_, c_ in I1[mk]["ato"]["controle"].items() if "isolamento" in k_ and f"de {round(ln_['isol'] / 1000)} m" in k_), "—") if ln_["isol"] else "—"]
+           for mk in ("V407", "V405") for ln_ in I1[mk]["arranjo"]["linhas"]], [14, 18, 18, 16, 38, 16, 50]),
+      P(f"V401, V402 e V403 têm o mesmo arranjo (marca única). Limites do ato com fckj 50: tração {f(I1['V405']['ato']['lim_t'], 3)} MPa (resistida pela armadura N3 da mesa) e compressão {f(I1['V405']['ato']['lim_c'], 0)} MPa; "
+        f"os pontos de controle são o fim do lbpt na ponta e o fim de cada trecho isolado + lbpt. Força no macaco {f(I1['V405']['arranjo']['F_macaco_kN'], 1)} kN por cordoalha (σpi {f(I1['V405']['arranjo']['sig_pi'], 0)} MPa); "
+        f"perdas totais {f(I1['V405']['perdas']['perda_total_pct'], 1)} %."),
+      P(f"Dente (NBR 9062:2017 7.4, Fd = {f(I1['V405']['dente']['Fd'])} kN com γn 1,1, Hd = {f(I1['V405']['dente']['Hd'])} kN, reação real da V402, a mais carregada): {DI['calculo']['adotado']['tirante']}; {DI['calculo']['adotado']['suspensao']}; {DI['calculo']['adotado']['costura']}. "
+        + (f"MEF não linear (mef_dente.analisar com a armação da prancha e as cordoalhas Ø12,7, passo de deslocamento 0,02 mm): Vu = {f(DI['mef']['Vu_kN'])} kN, FS = Vu/Fd = {f(DI['mef']['FS'], 2)} ≥ 1,06 ({ok(DI['mef']['ok'])})."
+           if DI.get("mef") else "MEF: ver estudo_i130_h120_mef.json.")),
+      P(f"Cordoalha total das 4 I130: {f(sum(I1[mk]['arranjo']['n_cord'] for mk in I1) * 0.792 * 0 + sum(I1[mk]['arranjo']['n_cord'] * I1[mk]['L_peca'] for mk in I1) * 0.792, 0)} kg (comprimento das peças; a pista de 60 m entra no consumo da fábrica)."),
       P(f"Consolo CP-I130 com MÍSULA de concreto (NBR 9062:2017 7.3): {f(CO['CP-I130']['b_m'] * 100, 0)} × {f(CO['CP-I130']['proj_m'] * 100, 0)}, h {f(CO['CP-I130']['h_total_m'] * 100, 0)} junto ao pilar e {f(CO['CP-I130']['h_consolo_m'] * 100, 0)} na ponta "
         f"(fundo da ponta alinhado ao fundo da viga +6,576; ponta ≥ h/2), a/d {f(CO['CP-I130']['a_d'], 2)} ({CO['CP-I130']['tipo']}), Fd {f(CO['CP-I130']['Fd_kN'])} kN: τwd {f(CO['CP-I130']['tau_wd_MPa'], 2)} ≤ {f(CO['CP-I130']['tau_wu_MPa'], 2)} MPa "
         f"(na seção da carga, com a altura reduzida pela mísula: {f(N9C['tau_carga_MPa'], 2)} MPa); tirante {CO['CP-I130']['tirante']} (As {f(CO['CP-I130']['As_tir_cm2'], 2)} cm², uso {f(CO['CP-I130']['As_tir_cm2'] / 16.09, 2)}). "
-        "Pilares P18 (PC-01), P20 (PC-02), P22 (PC-03) e P23 (PF-04) com o consolo novo; assento +6,966 inalterado."),
+        "Pilares PC-01, PC-02, PC-03 (P22 e P23) e PF-04 com o consolo novo; assento +6,966 inalterado."),
       Paragraph("8. Pilares novos e cargas na fundação (tf, 1 tf = 10 kN)", T2)]
-lin = [["PILAR (modelo)", "Nk G + Q", "Nd máx", "Nd mín", "Md res máx (tf·m)", "Hd máx"]]
-for nm in ("P6E", "P7E", "P6-L2"):
+lin = [["PILAR", "Nk G + Q", "Nd máx", "Nd mín", "Md res máx (tf·m)", "Hd máx"]]
+for nm, nn in (("P6E", "P6 da escada (PE-01)"), ("P7E", "P7 da escada (PE-02)"), ("P6-L2", "P6 da linha 2 (PE-03)"), ("P13", "P22 — PC-03 (y 46,317)"), ("P13B", "P23 — PC-03 novo (y 62,833)")):
     d = CF["pilares"][nm]
-    lin.append([{"P6E": "P6 da escada (PE-01)", "P7E": "P7 da escada (PE-02)", "P6-L2": "P6 da linha 2 (PE-03)"}[nm], f((d["G"]["N"] + d["Q"]["N"]) / 10),
-                f(d["ELU"]["Nd_max"] / 10), f(d["ELU"]["Nd_min"] / 10), f(d["ELU"]["Md_res_max"] / 10), f(d["ELU"]["Hd_max"] / 10)])
+    lin.append([nn, f((d["G"]["N"] + d["Q"]["N"]) / 10), f(d["ELU"]["Nd_max"] / 10), f(d["ELU"]["Nd_min"] / 10), f(d["ELU"]["Md_res_max"] / 10), f(d["ELU"]["Hd_max"] / 10)])
+pc3 = DP["PC-03"]
 E += [tab(lin, [46, 22, 22, 22, 32, 20]),
-      P("Pilares dimensionados pelo método geral (dimensionar_pilares_r05.py, flexão oblíqua com 2ª ordem) e verificados no manuseio (manuseio_pilares_r05.py); arranjos nas folhas ND-LET-PE01 a PE03. "
-        "Cargas na fundação de todos os pilares na ND-LET-CG01 (modelo global integrado r05)."),
+      P(f"PC-03 40 × 40 (P22 e P23): {pc3['n']} Ø{f(pc3['d'], 0)} (As {f(pc3['As_cm2'], 2)} cm², barras ≤ Ø20), uso da seção {f(pc3['uso_secao'], 3)} no método geral com 2ª ordem (dimensionar_pilares_r05.py), λ/λ1 {f(pc3['lambda_u'], 2)}; "
+        f"manuseio: " + "; ".join(f"{m_['caso']} uso {f(m_['uso'], 2)}" for m_ in pc3["manuseio"]) + "."),
+      P("Modelo global r05 (modelo_integrado_r05.py) revisto nesta emissão: (1) I130 como vãos simplesmente apoiados (antes cadeia contínua, que subestimava o P22); (2) montantes da linha 2 (DEC-052) incluídos; "
+        "(3) a combinação com G favorável só tira painéis e instalações quando há vento (antes valia também nos casos característicos e reduzia as cargas da CG01). Cargas de todos os pilares na ND-LET-CG01, em tf."),
+      Paragraph("11. Portões da linha 4 — opção A (calc_portao_l4.py) — DEC-059", T2),
+      P("Os PG-01 a PG-04 passam a APOIAR a TS-01A (neoprene + graute depois da montagem): a viga fica contínua sobre os PG para g2 + q e o fundo no vão do portão fica em +7,50 (portões 500 × 750 livres). "
+        "Sobre o portão PG-04–PG-03 (P19–D), placa PV-1 10 × 37 de +7,50 a +7,88 apoiada nas cantoneiras CL-V das faces dos PG (folha ND-LET-PV01)."),
+      tab([["TRECHO", "Md neg / MRd (kN·m)", "uso", "σ topo sobre o PG (MPa, rara)", "reações Rd (kN)"]] +
+          [[k, f"{f(v['Md_neg_kNm'])} / {f(v['MRd_neg_kNm'])}", f(v["uso_neg"], 3), " / ".join(f(x, 3) for x in v["sig_topo_PG_rara_MPa"]) + f" ≤ {f(v['lim_F_MPa'], 2)}",
+            "; ".join(f"{r['pg']} {f(r['Rd'])}" for r in v["reacoes"])] for k, v in PJ["ts01a"].items()], [30, 34, 14, 50, 50]),
+      tab([["PILAR", "Nd (tf)", "λ", "uso N", "neoprene", "σ (MPa)"]] +
+          [[k, f(v["Nd_tf"]), f(v["lambda_"], 1), f(v["uso_N"], 3), PJ["neoprene"][k]["dim_mm"], f(PJ["neoprene"][k]["sigma_MPa"], 2)] for k, v in PJ["pilares"].items()], [24, 20, 16, 18, 40, 20]),
+      P("As reações dos PG entram nas cargas da fundação (calc_cargas_fundacao.somar_portoes) e na CG01."),
       Paragraph("9. Pendências e observações", T2),
-      P("(a) Portões da linha 4 (500 × 750): no vão B–P21 o fundo da TS-01A fica 7,497 na face do PG-01 e desce ~3 cm depois da montagem — quadro de decisão enviado ao Nathan. (b) Zip com DXF e IFC só depois da aprovação deste pacote (PDF). "
-        "(c) Guarda-corpo e corrimão da escada fora do escopo estrutural. (d) Fretagem da zona de transferência do dente conforme item 4.")]
+      P("(a) Zip com DXF e IFC só depois da aprovação deste pacote (PDF). (b) Confirmar com a sondagem a σ adotada de 150 kPa nos blocos BE-1/BE-2 da escada externa. "
+        "(c) Conferir no catálogo do fornecedor o chumbador químico M10 hef 70 dos guarda-corpos da laje (GI-10/GI-11). (d) Fretagem da zona de transferência do dente conforme item 4.")]
 doc.build(E)
 print("ok", SAI)

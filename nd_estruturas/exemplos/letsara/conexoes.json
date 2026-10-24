@@ -512,7 +512,7 @@
   "peca_b": "terça Z 302 (alma 2,30) — sem mão-francesa",
   "inserto_b": "4 M12 8.8",
   "verificacao": "torção de apoio (tração) + reação e escora (corte)",
-  "valor": "interação 0.18",
+  "valor": "interação 0.19",
   "ok": true,
   "obs": "tração T = R·e/z nos 2 parafusos de cima (binário com o apoio da alma no ST-1P) + corte √(R² + N²)/4; (T/TRd)² + (V/VRd)² ≤ 1"
  },
@@ -523,9 +523,9 @@
   "peca_b": "almas das 2 terças",
   "inserto_b": "M12 8.8",
   "verificacao": "transferência do momento de apoio",
-  "valor": "uso 0.78",
+  "valor": "uso 0.79",
   "ok": true,
-  "obs": "Fd 12.99 kN ≤ 16.7 kN"
+  "obs": "Fd 13.15 kN ≤ 16.7 kN"
  },
  {
   "grupo": "terça × TS-01",
@@ -534,7 +534,7 @@
   "peca_b": "ES-1 (2 M16 a y = ±60)",
   "inserto_b": "porca + contraporca",
   "verificacao": "flexão da aba / esperas (tração + corte)",
-  "valor": "aba 0.78; esperas 0.17",
+  "valor": "aba 0.79; esperas 0.18",
   "ok": true,
   "obs": "sem solda"
  },
@@ -545,7 +545,7 @@
   "peca_b": "terça / X",
   "inserto_b": "2 M16 com gancho, hef 150 (s 120) + 1 grampo U Ø10 em cada espera",
   "verificacao": "uso / interação tração × corte",
-  "valor": "0.91 ≤ 1",
+  "valor": "0.92 ≤ 1",
   "ok": true,
   "obs": ""
  },
@@ -578,7 +578,7 @@
   "peca_b": "OR-X (viga da linha i) / OR-X (linha i+1)",
   "inserto_b": "L 102×76×6,3 com furo Ø18, na espera ES-2",
   "verificacao": "tração na diagonal (NBR 8800:2008 6.3.3)",
-  "valor": "31.4 ≤ 44.7 kN",
+  "valor": "31.37 ≤ 44.7 kN",
   "ok": true,
   "obs": "Vd 22.8 kN por painel; 40 diagonais (20 por meia água × 2)"
  },
@@ -613,7 +613,7 @@
   "verificacao": "N + M (NBR 14762:2010 9.9), vento 0°",
   "valor": "0.95 ≤ 1",
   "ok": true,
-  "obs": "modelo integrado r05: governa vão 7-8, x = 39.221 m: Nd 11.4 kN, Md 18.28 kN·m"
+  "obs": "modelo integrado r05: governa vão 7-8, x = 39.221 m: Nd 11.3 kN, Md 18.5 kN·m"
  },
  {
   "grupo": "cobertura × VB eixo 9",
@@ -622,9 +622,9 @@
   "peca_b": "VB-05 a 08",
   "inserto_b": "escora da terça (vento do oitão)",
   "verificacao": "aço / concreto (ACI 318-19 17)",
-  "valor": "0.45 / 0.85",
+  "valor": "0.45 / 0.86",
   "ok": true,
-  "obs": "Fy 49.09 kN"
+  "obs": "Fy 49.1 kN"
  },
  {
   "grupo": "cobertura × TS-01",
@@ -633,7 +633,7 @@
   "peca_b": "TS-01",
   "inserto_b": "escora + arrancamento",
   "verificacao": "ACI 318-19 17.8",
-  "valor": "0.91",
+  "valor": "0.92",
   "ok": true,
   "obs": "Vu 47.0 kN ao longo da terça"
  },
@@ -657,7 +657,7 @@
   "verificacao": "corte (y)",
   "valor": "0.93",
   "ok": true,
-  "obs": "Fd 22.93 kN; furo oblongo vertical"
+  "obs": "Fd 22.92 kN; furo oblongo vertical"
  },
  {
   "grupo": "calha",
@@ -677,7 +677,7 @@
   "peca_b": "terças",
   "inserto_b": "porca + contraporca dos 2 lados",
   "verificacao": "tração acumulada (14 terças)",
-  "valor": "14.27 ≤ 17.5 kN",
+  "valor": "13.87 ≤ 17.5 kN",
   "ok": true,
   "obs": ""
  },
@@ -688,7 +688,7 @@
   "peca_b": "1ª e 2ª terça junto às ancoragens",
   "inserto_b": "furo oval 11×23 na alma",
   "verificacao": "compressão, λ 126",
-  "valor": "14.27 ≤ 30.5 kN",
+  "valor": "13.87 ≤ 30.5 kN",
   "ok": true,
   "obs": ""
  },
@@ -699,7 +699,7 @@
   "peca_b": "ST-1P da 1ª terça (furo Ø18)",
   "inserto_b": "porca + contraporca",
   "verificacao": "tração",
-  "valor": "31.8 ≤ 44.7 kN",
+  "valor": "30.9 ≤ 44.7 kN",
   "ok": true,
   "obs": "L/4 e 3L/4 ao apoio mais próximo; L/2 aos dois apoios"
  },
@@ -826,7 +826,7 @@
  },
  {
   "grupo": "I130 × PC",
-  "peca_a": "V405/406/407 I130 (h 130)",
+  "peca_a": "V404/405/406/407 I130 (h 120)",
   "inserto_a": "dente 780×350 + TB-2 tubo Ø60,3×3,6 (furo 53), sem chapa",
   "peca_b": "PC-01/02",
   "inserto_b": "consolo CP-I130 + PN-2 Ø25",
@@ -837,14 +837,14 @@
  },
  {
   "grupo": "I130 × PC",
-  "peca_a": "V405",
+  "peca_a": "V404",
   "inserto_a": "dente na linha 9",
   "peca_b": "PF-04 (P14, linha 9, eixo C)",
   "inserto_b": "consolo CP-I130 + PN-2 Ø25",
-  "verificacao": "apoio da ponta da V405",
+  "verificacao": "apoio da ponta da V404",
   "valor": "+6.966 (face interna do P14)",
   "ok": true,
-  "obs": "V405 = P13 → linha 9 (23,76 m c-c), como no R01 (viga central até o P14)"
+  "obs": "DEC-058: V404 = P13B → linha 9 (16,517 m c-c); V406 L4 → P13 e V405 P13 → P13B, três vãos iguais"
  },
  {
   "grupo": "cobertura × platibanda",

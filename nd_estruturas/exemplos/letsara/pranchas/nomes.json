@@ -186,8 +186,8 @@
   {
    "nome": "P14",
    "tipo": "pilar",
-   "marca": "PM-01",
-   "folha": "ND-LET-PM01",
+   "marca": "PM-02",
+   "folha": "ND-LET-PM02",
    "nivel": "fundação",
    "x": 29.63,
    "y": 9.65,
@@ -302,8 +302,8 @@
    "folha": "ND-LET-PC03",
    "nivel": "fundação",
    "x": 19.75,
-   "y": 54.575,
-   "secao": "60×60",
+   "y": 46.317,
+   "secao": "40×40",
    "ref_R01": "P13",
    "fila": "C",
    "fora_do_eixo": false,
@@ -311,6 +311,20 @@
   },
   {
    "nome": "P23",
+   "tipo": "pilar",
+   "marca": "PC-03",
+   "folha": "ND-LET-PC03",
+   "nivel": "fundação",
+   "x": 19.75,
+   "y": 62.833,
+   "secao": "40×40",
+   "ref_R01": "P13B",
+   "fila": "C",
+   "fora_do_eixo": false,
+   "linha": null
+  },
+  {
+   "nome": "P24",
    "tipo": "pilar",
    "marca": "PF-04",
    "folha": "ND-LET-PF04",
@@ -324,7 +338,7 @@
    "linha": 9
   },
   {
-   "nome": "P24",
+   "nome": "P25",
    "tipo": "pilar",
    "marca": "PF-01",
    "folha": "ND-LET-PF01",
@@ -338,7 +352,7 @@
    "linha": 1
   },
   {
-   "nome": "P25",
+   "nome": "P26",
    "tipo": "pilar",
    "marca": "PM-01",
    "folha": "ND-LET-PM01",
@@ -352,7 +366,7 @@
    "linha": 2
   },
   {
-   "nome": "P26",
+   "nome": "P27",
    "tipo": "pilar",
    "marca": "PG-01",
    "folha": "ND-LET-PG01",
@@ -366,7 +380,7 @@
    "linha": 4
   },
   {
-   "nome": "P27",
+   "nome": "P28",
    "tipo": "pilar",
    "marca": "PF-05",
    "folha": "ND-LET-PF05",
@@ -380,7 +394,7 @@
    "linha": 9
   },
   {
-   "nome": "P28",
+   "nome": "P29",
    "tipo": "pilar",
    "marca": "PL-03",
    "folha": "ND-LET-PL03",
@@ -394,7 +408,7 @@
    "linha": 1
   },
   {
-   "nome": "P29",
+   "nome": "P30",
    "tipo": "pilar",
    "marca": "PL-02",
    "folha": "ND-LET-PL02",
@@ -408,7 +422,7 @@
    "linha": 2
   },
   {
-   "nome": "P30",
+   "nome": "P31",
    "tipo": "pilar",
    "marca": "PL-09",
    "folha": "ND-LET-PL09",
@@ -422,7 +436,7 @@
    "linha": 3
   },
   {
-   "nome": "P31",
+   "nome": "P32",
    "tipo": "pilar",
    "marca": "PL-10",
    "folha": "ND-LET-PL10",
@@ -436,7 +450,7 @@
    "linha": 4
   },
   {
-   "nome": "P32",
+   "nome": "P33",
    "tipo": "pilar",
    "marca": "PL-01",
    "folha": "ND-LET-PL01",
@@ -450,7 +464,7 @@
    "linha": 5
   },
   {
-   "nome": "P33",
+   "nome": "P34",
    "tipo": "pilar",
    "marca": "PL-01",
    "folha": "ND-LET-PL01",
@@ -464,7 +478,7 @@
    "linha": 6
   },
   {
-   "nome": "P34",
+   "nome": "P35",
    "tipo": "pilar",
    "marca": "PL-01",
    "folha": "ND-LET-PL01",
@@ -478,7 +492,7 @@
    "linha": 7
   },
   {
-   "nome": "P35",
+   "nome": "P36",
    "tipo": "pilar",
    "marca": "PL-01",
    "folha": "ND-LET-PL01",
@@ -492,7 +506,7 @@
    "linha": 8
   },
   {
-   "nome": "P36",
+   "nome": "P37",
    "tipo": "pilar",
    "marca": "PL-04",
    "folha": "ND-LET-PL04",
@@ -762,8 +776,8 @@
    "x0": 19.75,
    "y0": 29.8,
    "x1": 19.75,
-   "y1": 54.575,
-   "posicao": "eixo C, linha 4 → P13 (PC-03)"
+   "y1": 46.317,
+   "posicao": "eixo C, linha 4 → PC-03"
   },
   {
    "nome": "V402",
@@ -773,13 +787,26 @@
    "nivel": "cobertura",
    "orientacao_planta": "H",
    "x0": 19.75,
-   "y0": 54.575,
+   "y0": 46.317,
    "x1": 19.75,
-   "y1": 79.35,
-   "posicao": "eixo C, P13 → linha 9"
+   "y1": 62.833,
+   "posicao": "eixo C, PC-03 → PC-03"
   },
   {
    "nome": "V403",
+   "tipo": "viga",
+   "marca": "V404",
+   "folha": "ND-LET-I130",
+   "nivel": "cobertura",
+   "orientacao_planta": "H",
+   "x0": 19.75,
+   "y0": 62.833,
+   "x1": 19.75,
+   "y1": 79.35,
+   "posicao": "eixo C, PC-03 → linha 9"
+  },
+  {
+   "nome": "V404",
    "tipo": "viga",
    "marca": "VB-04",
    "folha": "ND-LET-VB01",
@@ -792,7 +819,7 @@
    "posicao": "linha 1, D–E"
   },
   {
-   "nome": "V404",
+   "nome": "V405",
    "tipo": "viga",
    "marca": "VB-03",
    "folha": "ND-LET-VB01",
@@ -805,7 +832,7 @@
    "posicao": "linha 1, C–D"
   },
   {
-   "nome": "V405",
+   "nome": "V406",
    "tipo": "viga",
    "marca": "VB-02",
    "folha": "ND-LET-VB01",
@@ -818,7 +845,7 @@
    "posicao": "linha 1, B–C"
   },
   {
-   "nome": "V406",
+   "nome": "V407",
    "tipo": "viga",
    "marca": "VB-01",
    "folha": "ND-LET-VB01",
@@ -831,7 +858,7 @@
    "posicao": "linha 1, A–B"
   },
   {
-   "nome": "V407",
+   "nome": "V408",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -844,7 +871,7 @@
    "posicao": "linha 3, C–E"
   },
   {
-   "nome": "V408",
+   "nome": "V409",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -857,7 +884,7 @@
    "posicao": "linha 3, A–C"
   },
   {
-   "nome": "V409",
+   "nome": "V410",
    "tipo": "viga",
    "marca": "TS-01A",
    "folha": "ND-LET-TS01-1",
@@ -870,7 +897,7 @@
    "posicao": "linha 4, C–E"
   },
   {
-   "nome": "V410",
+   "nome": "V411",
    "tipo": "viga",
    "marca": "TS-01A",
    "folha": "ND-LET-TS01-1",
@@ -883,7 +910,7 @@
    "posicao": "linha 4, A–C"
   },
   {
-   "nome": "V411",
+   "nome": "V412",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -896,7 +923,7 @@
    "posicao": "linha 5, C–E"
   },
   {
-   "nome": "V412",
+   "nome": "V413",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -909,7 +936,7 @@
    "posicao": "linha 5, A–C"
   },
   {
-   "nome": "V413",
+   "nome": "V414",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -922,7 +949,7 @@
    "posicao": "linha 6, C–E"
   },
   {
-   "nome": "V414",
+   "nome": "V415",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -935,7 +962,7 @@
    "posicao": "linha 6, A–C"
   },
   {
-   "nome": "V415",
+   "nome": "V416",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -948,7 +975,7 @@
    "posicao": "linha 7, C–E"
   },
   {
-   "nome": "V416",
+   "nome": "V417",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -961,7 +988,7 @@
    "posicao": "linha 7, A–C"
   },
   {
-   "nome": "V417",
+   "nome": "V418",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -974,7 +1001,7 @@
    "posicao": "linha 8, C–E"
   },
   {
-   "nome": "V418",
+   "nome": "V419",
    "tipo": "viga",
    "marca": "TS-01",
    "folha": "ND-LET-TS01-1",
@@ -987,7 +1014,7 @@
    "posicao": "linha 8, A–C"
   },
   {
-   "nome": "V419",
+   "nome": "V420",
    "tipo": "viga",
    "marca": "VB-08",
    "folha": "ND-LET-VB01",
@@ -1000,7 +1027,7 @@
    "posicao": "linha 9, D–E"
   },
   {
-   "nome": "V420",
+   "nome": "V421",
    "tipo": "viga",
    "marca": "VB-07",
    "folha": "ND-LET-VB01",
@@ -1013,7 +1040,7 @@
    "posicao": "linha 9, C–D"
   },
   {
-   "nome": "V421",
+   "nome": "V422",
    "tipo": "viga",
    "marca": "VB-06",
    "folha": "ND-LET-VB01",
@@ -1026,7 +1053,7 @@
    "posicao": "linha 9, B–C"
   },
   {
-   "nome": "V422",
+   "nome": "V423",
    "tipo": "viga",
    "marca": "VB-05",
    "folha": "ND-LET-VB01",
@@ -1073,9 +1100,8 @@
   "PF-03": [
    "P13"
   ],
-  "PM-01": [
-   "P14",
-   "P25"
+  "PM-02": [
+   "P14"
   ],
   "PG-03": [
    "P15"
@@ -1099,40 +1125,44 @@
    "P21"
   ],
   "PC-03": [
-   "P22"
-  ],
-  "PF-04": [
+   "P22",
    "P23"
   ],
-  "PF-01": [
+  "PF-04": [
    "P24"
   ],
-  "PG-01": [
+  "PF-01": [
+   "P25"
+  ],
+  "PM-01": [
    "P26"
   ],
-  "PF-05": [
+  "PG-01": [
    "P27"
   ],
-  "PL-03": [
+  "PF-05": [
    "P28"
   ],
-  "PL-02": [
+  "PL-03": [
    "P29"
   ],
-  "PL-09": [
+  "PL-02": [
    "P30"
   ],
-  "PL-10": [
+  "PL-09": [
    "P31"
   ],
+  "PL-10": [
+   "P32"
+  ],
   "PL-01": [
-   "P32",
    "P33",
    "P34",
-   "P35"
+   "P35",
+   "P36"
   ],
   "PL-04": [
-   "P36"
+   "P37"
   ],
   "VM-01": [
    "V200",
@@ -1169,45 +1199,48 @@
   "V405": [
    "V402"
   ],
-  "VB-04": [
+  "V404": [
    "V403"
   ],
-  "VB-03": [
+  "VB-04": [
    "V404"
   ],
-  "VB-02": [
+  "VB-03": [
    "V405"
   ],
-  "VB-01": [
+  "VB-02": [
    "V406"
   ],
+  "VB-01": [
+   "V407"
+  ],
   "TS-01": [
-   "V407",
    "V408",
-   "V411",
+   "V409",
    "V412",
    "V413",
    "V414",
    "V415",
    "V416",
    "V417",
-   "V418"
-  ],
-  "TS-01A": [
-   "V409",
-   "V410"
-  ],
-  "VB-08": [
+   "V418",
    "V419"
   ],
-  "VB-07": [
+  "TS-01A": [
+   "V410",
+   "V411"
+  ],
+  "VB-08": [
    "V420"
   ],
-  "VB-06": [
+  "VB-07": [
    "V421"
   ],
-  "VB-05": [
+  "VB-06": [
    "V422"
+  ],
+  "VB-05": [
+   "V423"
   ]
  },
  "nome_para_marca": {
@@ -1224,7 +1257,7 @@
   "P11": "PL-05",
   "P12": "PL-08",
   "P13": "PF-03",
-  "P14": "PM-01",
+  "P14": "PM-02",
   "P15": "PG-03",
   "P16": "PF-06",
   "P17": "PF-02",
@@ -1233,20 +1266,21 @@
   "P20": "PC-02",
   "P21": "PG-02",
   "P22": "PC-03",
-  "P23": "PF-04",
-  "P24": "PF-01",
-  "P25": "PM-01",
-  "P26": "PG-01",
-  "P27": "PF-05",
-  "P28": "PL-03",
-  "P29": "PL-02",
-  "P30": "PL-09",
-  "P31": "PL-10",
-  "P32": "PL-01",
+  "P23": "PC-03",
+  "P24": "PF-04",
+  "P25": "PF-01",
+  "P26": "PM-01",
+  "P27": "PG-01",
+  "P28": "PF-05",
+  "P29": "PL-03",
+  "P30": "PL-02",
+  "P31": "PL-09",
+  "P32": "PL-10",
   "P33": "PL-01",
   "P34": "PL-01",
   "P35": "PL-01",
-  "P36": "PL-04",
+  "P36": "PL-01",
+  "P37": "PL-04",
   "V200": "VM-01",
   "V201": "VM-02",
   "V202": "VM-02",
@@ -1268,15 +1302,15 @@
   "V400": "V407",
   "V401": "V406",
   "V402": "V405",
-  "V403": "VB-04",
-  "V404": "VB-03",
-  "V405": "VB-02",
-  "V406": "VB-01",
-  "V407": "TS-01",
+  "V403": "V404",
+  "V404": "VB-04",
+  "V405": "VB-03",
+  "V406": "VB-02",
+  "V407": "VB-01",
   "V408": "TS-01",
-  "V409": "TS-01A",
+  "V409": "TS-01",
   "V410": "TS-01A",
-  "V411": "TS-01",
+  "V411": "TS-01A",
   "V412": "TS-01",
   "V413": "TS-01",
   "V414": "TS-01",
@@ -1284,9 +1318,10 @@
   "V416": "TS-01",
   "V417": "TS-01",
   "V418": "TS-01",
-  "V419": "VB-08",
-  "V420": "VB-07",
-  "V421": "VB-06",
-  "V422": "VB-05"
+  "V419": "TS-01",
+  "V420": "VB-08",
+  "V421": "VB-07",
+  "V422": "VB-06",
+  "V423": "VB-05"
  }
 }

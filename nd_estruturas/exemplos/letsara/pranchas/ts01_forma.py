@@ -17,6 +17,7 @@ pr.revisao("03", "14/10/2026", "SEM DENTES (APOIO DIRETO), TERÇAS c/1,20 m, ESP
 pr.revisao("04", "16/10/2026", "NBR 9062: TOLERÂNCIA DE COMPRIMENTO ±10 mm (FOLGA CENTRAL 19 mm); ESTABILIDADE LATERAL")
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
 pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA (1ª A 40 cm DA CALHA); ES-2 SÓ NOS 3 NÓS DO X; GRAMPO NAS ES-1; TS-01A COM IT-P")
+pr.revisao("07", "24/10/2026", "DEC-059: TS-01A APOIADA NOS PG-01 A PG-04 (NEOPRENE + GRAUTE), PORTÕES LIVRES ATÉ +7,50")
 pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
                   f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
@@ -328,7 +329,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          f"Desforma, içamento e montagem só pelas 4 alças AL-1 com 2 balancins e cabos verticais; liberar com fckj ≥ {P['fckj']} MPa.",
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
-         "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (s = 452,0 / 984,8 / 1517,7 cm, y = ±9,75 cm, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04).",
+         "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (s = 452,0 / 984,8 / 1517,7 cm, y = ±9,75 cm, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04). DEC-059: a TS-01A APOIA nos PG-01 a PG-04 (neoprene NEO-7 + graute depois da montagem: contínua sobre os PG para g2 + q, Md− 86,5 ≤ 165,2 kN·m, topo comprimido sobre o PG); fundo no vão dos portões em +7,50; placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01).",
          "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 310, ND-LET-COB05) — 12 peças: TS-01 nas linhas 3 e 5 a 8, TS-01A na linha 4.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)

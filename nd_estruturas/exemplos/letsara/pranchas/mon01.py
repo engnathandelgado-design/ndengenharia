@@ -74,7 +74,7 @@ for marca, x, b_ in (("PG-01 (P9)", 9.87, 400), ("PG-02 (P10)", 15.195, 250), ("
 for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_PC_C[0]), ("V405", Y_PC_C[0], Y_PC_C[1]), ("V404", Y_PC_C[1], Y_LIN[8])):   # DEC-058
     Lm_ = PQ[marca][4]                                                   # comprimento da peça (folha ND-LET-I130)
     v.ret(M((ya + yb) / 2 - Lm_ / 2), M(X_FACH["C"]) - 200, M(Lm_), 400, "VISTA")
-    x_t = M(ya) + 1500                                                   # rótulo fora dos eixos e dos rótulos dos PC
+    x_t = M(Y_LIN[5]) + 600 if marca == "V405" else M(ya) + 1500   # rótulo fora dos eixos e dos rótulos dos PC
     v.texto((x_t, M(X_FACH["C"]) + 500), f"{marca} (I130, L = {f(Lm_, 2)} m)", "min", "BOTTOM_LEFT")
 # TS-01 (linhas 2 a 8, dois vãos)
 for i in range(2, 9):

@@ -730,13 +730,13 @@ def dados_pc2():
 def dados_pc3():
     # DEC-058 (24/10/2026, arranjo C): dois PC-03 40×40 (P13 em y 46,317 e P13B em y 62,833), fora das linhas da cobertura
     cons = [I130("B"), I130("D")]
-    return base("PC-03", 2, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 6, 4), "ND-LET-PC03",
+    return base("PC-03", 2, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 4, 3), "ND-LET-PC03",
                 "PILARES CENTRAIS PC-03 (P13, P13B, 40×40) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, y = 46,317 m (P13) e y = 62,833 m (P13B) — 3 vãos iguais de 16,517 m da linha 4 à linha 9 (DEC-058)", "PILAR CENTRAL PC-03",
                 [["PC-03", "P13 (y 46,317)", 1, "CP-I130 (B, D)", "2 AL-2"], ["PC-03", "P13B (y 62,833)", 1, "CP-I130 (B, D)", "2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I130", 2, "faces B e D"], ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I130"],
                  ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
-                ["Concreto C40; 16 Ø16 retos; estribos N2 Ø6,3 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
+                ["Concreto C40; 10 Ø16 retos (dimensionar_pilares_r05: uso 0,54); estribos N2 Ø6,3 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"CP-I130 nas faces B e D, assento +{F(Z_I130)}: P13 recebe V406 (B) e V405 (D); P13B recebe V405 (B) e V404 (D); sem TS-01 no topo (os dois ficam fora das linhas 5 a 8 — TS-01 no topo da I130)."])
 
 

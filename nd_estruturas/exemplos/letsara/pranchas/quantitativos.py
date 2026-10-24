@@ -94,6 +94,9 @@ pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas
               num(q["VOLUME"].split()[0]), round(num(q["VOLUME"].split()[0]) * 2.5, 2), "C50", "ND-LET-TS01"))
 for mk, pos, qt, L, p in tab("I130", "MARCAS")["linhas"]:
     pecas.append(("Vigas de cobertura", mk, pos, "I130", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I130"))
+_PV = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/portao_l4.json"))["placa_PV1"]   # DEC-059
+pecas.append(("Placas de fechamento", "PV-1", "sobre o portão PG-04–PG-03 da linha 4 (+7,50 a +7,88)", "10 × 37", _PV["L_m"], 1,
+              round(0.10 * _PV["h_m"] * _PV["L_m"], 3), round(_PV["peso_kN"] / 10, 3), "C40", "ND-LET-PV01"))
 for mk, pos, qt, L, p in tab("VB01", "MARCAS")["linhas"]:
     pecas.append(("Vigas de borda", mk, pos, "15×60 c/ dente", num(L) / 100, int(qt), round(num(p) / 2.5, 3), num(p), "C40", "ND-LET-VB01"))
 VMP_H, VMP_B = round(VMJ["premissas"]["h_pm"] * 100), round(VMJ["premissas"]["b"] * 100)
@@ -189,7 +192,7 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
-add_ins("I130", "I130", 3); add_ins("VM01", "VM", sum(p[5] for p in pecas if p[1].startswith("VM-"))); add_ins("VB01", "VB", 8)
+add_ins("I130", "I130", 4); add_ins("VM01", "VM", sum(p[5] for p in pecas if p[1].startswith("VM-"))); add_ins("VB01", "VB", 8)
 for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 12))
@@ -341,7 +344,7 @@ def gerar_xlsx(SAIDA=SAIDA):
         q = int(l[1]); kg = l[4]
         linha(ws, r, [l[0], f"{l[2]} — {l[5]} (comp. {l[3]})", q, round(num(kg) / q, 2) if kg not in ("-", "") else 0, f"=C{r}*D{r}", "ND-LET-COB02"],
               {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
-    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA"), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS")):   # rev09 (DEC-045/048/053)
+    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)"), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS")):   # rev09 (DEC-045/048/053)
         for l in tab(f_, tit_)["linhas"]:
             if not l[0] or l[-1] in ("-", ""):
                 continue
@@ -535,7 +538,7 @@ def listas_pdf(caminho):
     E.append(Spacer(1, 4))
     t2 = tab("COB02", "LISTA DE MATERIAIS")
     E.append(tb([t2["cab"]] + t2["linhas"], [16, 14, 30, 30, 16, 150]))
-    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA METÁLICA", [18, 150, 14, 18, 18, 22]), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", [18, 150, 14, 18, 18, 22])):
+    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)", [20, 180, 16, 22]), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", [20, 180, 16, 22])):
         t3 = tab(f_, tit_)
         E += [Spacer(1, 6), Paragraph(f"{tit_.capitalize()} — ND-LET-{f_} (rev09)", T2)]
         E.append(tb([t3["cab"]] + t3["linhas"], w_))

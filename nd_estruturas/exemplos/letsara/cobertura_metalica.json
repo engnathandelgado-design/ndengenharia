@@ -203,16 +203,16 @@
    "interno": {
     "R": 24.8,
     "T_parafuso": 2.86,
-    "V_parafuso": 6.81,
-    "interacao": 0.188
+    "V_parafuso": 6.83,
+    "interacao": 0.189
    },
    "extremo": {
     "R": 8.22,
     "T_parafuso": 0.95,
-    "V_parafuso": 3.49,
-    "interacao": 0.046
+    "V_parafuso": 3.53,
+    "interacao": 0.047
    },
-   "uso": 0.188,
+   "uso": 0.189,
    "nota": "tração T = R·e/z nos 2 parafusos de cima (binário com o apoio da alma no ST-1P) + corte √(R² + N²)/4; (T/TRd)² + (V/VRd)² ≤ 1"
   },
   "nota": "MEF de viga contínua (Euler-Bernoulli), 2·EI no transpasse; M > 0 (mesa superior comprimida, travada pela telha) contra MRd sem FLT; M < 0 (mesa inferior comprimida) contra MRd com Lb entre correntes; no transpasse 2 perfis; sobrecarga alternada nos vãos; NBR 14762:2010 9.8 e 9.8.5; flecha L/180 (NBR 8800 Anexo C).",
@@ -489,18 +489,18 @@
   }
  },
  "terca_escora": {
-  "Nd": 11.3,
+  "Nd": 11.5,
   "NcRd": 94.7,
   "modo_N": "local-global",
   "Md": 18.5,
-  "Mz": 0.14,
+  "Mz": 0.13,
   "MRd": 23.09,
-  "interacao": 0.955,
+  "interacao": 0.957,
   "ok": true,
   "vao_governante": "7-8",
   "linha_governante_x_m": 39.221,
   "transpasse": false,
-  "Nd_max": 11.3,
+  "Nd_max": 11.5,
   "por_vao": [
    {
     "vao": "1-2",
@@ -603,12 +603,12 @@
    "onde": "1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"
   },
   "modelo_integrado": {
-   "corrente_T_max": 3.44,
-   "uso_corrente": 0.197,
-   "diagonal_T_max": 12.68,
-   "uso_diagonal": 0.284,
-   "tirante_C_max": 0.3,
-   "uso_tirante": 0.01
+   "corrente_T_max": 6.09,
+   "uso_corrente": 0.349,
+   "diagonal_T_max": 13.75,
+   "uso_diagonal": 0.308,
+   "tirante_C_max": 0.34,
+   "uso_tirante": 0.011
   },
   "diagonal": {
    "barra": "Ø16 A36, rosca M16",
@@ -637,13 +637,13 @@
   ],
   "n_diagonais": 20,
   "fonte": "modelo_integrado_r05.json (máx. ELU)",
-  "V_painel_d": 22.8,
-  "T_diag_d": 31.37,
+  "V_painel_d": 23.1,
+  "T_diag_d": 31.78,
   "NtRd_16": 44.7,
-  "uso_diag": 0.702,
+  "uso_diag": 0.711,
   "no": {
-   "Fx_kN": 43.18,
-   "Fy_kN": 45.52
+   "Fx_kN": 43.74,
+   "Fy_kN": 46.11
   },
   "barra": "Ø16 A36 em 2 trechos unidos por esticador M16 (rosca direita/esquerda), L ≈ 13.8 m de orelha a orelha",
   "furos_tercas": "oblongos 18 × 28 (eixo maior ao longo da terça) a 35 ('/') e 75 ('\\') do fundo da terça",
@@ -728,9 +728,9 @@
   "reacao_suc_kN": 24.8,
   "reacao_grav_kN": 14.03,
   "M12_alma": {
-   "Fd": 6.81,
+   "Fd": 6.83,
    "T": 2.86,
-   "uso": 0.188
+   "uso": 0.189
   },
   "aba": {
    "Md_kNm": 0.891,
@@ -740,61 +740,70 @@
   "esperas": {
    "barra": "2 barras roscadas M16 A36 (fu 400) com gancho, hef 150, saliência 120",
    "Td": 15.5,
-   "Vd": 5.65,
+   "Vd": 5.75,
    "Ft_Rd": 44.7,
    "Fv_Rd": 23.8,
-   "interacao": 0.177
+   "interacao": 0.179
   },
   "rasgamento_alma": {
    "e_mm": 45,
-   "Fd": 5.65,
+   "Fd": 5.75,
    "Rd": 34.3
   },
   "modelo_integrado": {
    "ST-1V eixo 1": {
-    "it": 0.035,
-    "Fy_max": 8.38,
-    "Fx_max": 1.96,
-    "Rz_up": 7.77,
-    "Rz_down": 7.37,
+    "it": 0.123,
+    "Fy_max": 16.35,
+    "Fx_max": 1.93,
+    "Rz_up": 7.91,
+    "Rz_down": 7.39,
     "esperas": 2,
-    "parafusos": 0.021,
-    "esperas_it": 0.035,
-    "linha": 16,
-    "x": 20.28,
-    "Rz": -4.7,
-    "Fy": -8.4,
-    "Fx": -0.3
-   },
-   "ST-1P": {
-    "it": 0.978,
-    "Fy_max": 47.02,
-    "Fx_max": 10.61,
-    "Rz_up": 24.67,
-    "Rz_down": 22.11,
-    "esperas": 2,
-    "parafusos": 0.497,
-    "esperas_it": 0.978,
-    "linha": 0,
-    "x": 0.52,
-    "Rz": -2.3,
-    "Fy": 47.0,
-    "Fx": -1.3
-   },
-   "ST-1V-R eixo 9": {
-    "it": 0.547,
-    "Fy_max": 49.1,
-    "Fx_max": 6.56,
-    "Rz_up": 8.36,
-    "Rz_down": 7.35,
-    "esperas": 4,
-    "parafusos": 0.547,
-    "esperas_it": 0.267,
+    "parafusos": 0.066,
+    "esperas_it": 0.123,
     "linha": 8,
     "x": 10.62,
     "Rz": -5.0,
-    "Fy": -49.1,
+    "Fy": 16.3,
+    "Fx": 0.0
+   },
+   "ST-1P": {
+    "it": 0.593,
+    "Fy_max": 35.68,
+    "Fx_max": 15.9,
+    "Rz_up": 24.67,
+    "Rz_down": 22.06,
+    "esperas": 2,
+    "parafusos": 0.326,
+    "esperas_it": 0.593,
+    "linha": 8,
+    "x": 10.62,
+    "Rz": -12.6,
+    "Fy": 35.7,
+    "Fx": 0.1
+   },
+   "ST-1V-R eixo 9": {
+    "it": 0.545,
+    "Fy_max": 48.79,
+    "Fx_max": 6.57,
+    "Rz_up": 8.36,
+    "Rz_down": 7.35,
+    "esperas": 4,
+    "parafusos": 0.545,
+    "esperas_it": 0.265,
+    "linha": 8,
+    "x": 10.62,
+    "Rz": -6.8,
+    "Fy": -48.8,
     "Fx": -0.0
+   },
+   "ST-1FL canto": {
+    "it": 0.0,
+    "Fy_max": 15.81,
+    "Fx_max": 3.99,
+    "Rz_up": 8.21,
+    "Rz_down": 4.43,
+    "V_max": 17.32,
+    "x": 39.22
    }
   },
   "nota": "Cada apoio verificado no modelo integrado com as forças do próprio cleat (Rz, Fy ao longo da terça, Fx): 4 M12 na alma (T = R·e/z, V = √(R² + Fy² + Fx²)/4) e esperas (T = 1,25·Rz↑/n, V = √(Fy² + Fx²)/n)."
@@ -803,15 +812,15 @@
   "onde": "VB do eixo 9 (34 apoios)",
   "peca": "ST-1V (chapa dobrada 9,5 × 220 × 290) com oblongos 22 × 44 na aba horizontal",
   "esperas": "2 barras roscadas M20 A36 L = 520 + gancho (hef 400), no eixo da VB a 45 e 105 da alma, amarradas aos estribos + grampo U Ø10 em cada espera",
-  "Fy_d": 49.1,
-  "Fx_d": 6.56,
+  "Fy_d": 48.79,
+  "Fx_d": 6.57,
   "Rz_up_d": 8.36,
   "aco": {
    "Td": 5.22,
-   "Vd": 24.77,
+   "Vd": 24.62,
    "Ft_Rd": 69.8,
    "Fv_Rd": 37.2,
-   "interacao": 0.448
+   "interacao": 0.443
   },
   "concreto": {
    "phiNn": 34.3,
@@ -821,23 +830,24 @@
    "grampos_kN": 99.0,
    "phiVn": 68.6,
    "modoV": "pryout",
-   "interacao": 0.856
+   "interacao": 0.852
   }
  },
  "ST1V_eixo1": {
-  "Fy_d": 8.38,
-  "Rz_up_d": 7.77,
+  "esperas": "2 M16 L=330 c/ gancho + grampo U Ø10 em cada espera (rev09d)",
+  "Fy_d": 16.35,
+  "Rz_up_d": 7.91,
   "phiNn": 24.6,
-  "phiVn": 13.2,
-  "modoV": "borda",
-  "interacao": 0.871
+  "phiVn": 49.2,
+  "modoV": "pryout",
+  "interacao": 0.614
  },
  "chumbadores": {
   "ST-1P": {
    "esperas": "2 M16 com gancho, hef 150 (s 120) + 1 grampo U Ø10 em cada espera",
    "Nu": 31.0,
-   "Vu_terca": 47.0,
-   "Vu_viga": 13.9,
+   "Vu_terca": 35.7,
+   "Vu_viga": 15.9,
    "phiNn": 71.7,
    "modoN": "cone",
    "phiVn_terca_sem_grampo": 29.8,
@@ -845,54 +855,54 @@
    "modoV_terca": "aco",
    "phiVn_viga": 43.9,
    "modoV_viga": "borda",
-   "interacao": 0.916
+   "interacao": 0.782
   },
   "OR-X": {
    "esperas": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10",
-   "Vu": 31.4,
+   "Vu": 31.8,
    "phiVn": 35.3,
    "modoV": "aco",
-   "uso": 0.889
+   "uso": 0.901
   },
   "OR-X VB": {
    "esperas": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10 (VB 15×60, eixo 9)",
-   "Vu": 31.4,
+   "Vu": 31.8,
    "phiVn": 35.3,
    "modoV": "aco",
-   "uso": 0.889
+   "uso": 0.901
   }
  },
  "ligacao_portoes": {
   "forcas_kN": {
-   "P9": 22.92,
-   "P10a": 12.61,
-   "P10b": 12.42,
-   "P12": 21.66
+   "P9": 23.29,
+   "P10a": 12.75,
+   "P10b": 12.53,
+   "P12": 21.89
   },
-  "Fd_max": 22.92,
+  "Fd_max": 23.29,
   "peca": "2 cantoneiras L 102×102×9,5 L = 250 por pilar (faces x), A36 galvanizadas",
   "parafusos": {
-   "Fd_TS": 5.73,
-   "Fd_pilar": 11.46,
+   "Fd_TS": 5.82,
+   "Fd_pilar": 11.64,
    "Rd_M16_88": 47.7,
-   "uso": 0.24
+   "uso": 0.244
   },
   "insertos_TS": {
    "phiVn": 16.7,
    "modo": "borda",
-   "Vu": 11.46,
-   "uso": 0.685
+   "Vu": 11.64,
+   "uso": 0.697
   },
   "inserto_pilar": {
    "phiVn": 12.3,
    "modo": "borda",
-   "Vu": 11.46,
-   "uso": 0.932
+   "Vu": 11.64,
+   "uso": 0.947
   },
   "cantoneira": {
-   "Md": 0.688,
+   "Md": 0.699,
    "MRd": 1.282,
-   "uso": 0.536
+   "uso": 0.545
   },
   "cabeca_pilares_m": {
    "P9": 7.47,

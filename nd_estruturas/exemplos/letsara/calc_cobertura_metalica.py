@@ -308,8 +308,10 @@ R["ST1V_R"] = dict(onde="VB do eixo 9 (34 apoios)", peca="ST-1V (chapa dobrada 9
 assert R["ST1V_R"]["aco"]["interacao"] <= 1 and R["ST1V_R"]["concreto"]["interacao"] <= 1, R["ST1V_R"]
 g1v = GR.get("ST-1V eixo 1", dict(Fy_max=0.0, Fx_max=0.0, Rz_up=0.0))
 g1c = GrupoPinos(d=16, d_cabeca=32, hef=150, nx=2, ny=1, sx=60, sy=0, cx_neg=2000, cx_pos=2000, cy_neg=75, cy_pos=75, ha=600, fc=40.0)
-t1v, v1v = g1c.tracao(), g1c.cortante("y-")
-R["ST1V_eixo1"] = dict(Fy_d=g1v["Fy_max"], Rz_up_d=g1v["Rz_up"], phiNn=round(t1v["phiNn_kN"], 1), phiVn=round(v1v["phiVn_kN"], 1), modoV=v1v["modo"],
+# rev09d (24/10, r05 com montantes da linha 2): Fy no ST-1V do eixo 1 sobe para ~16 kN — as ES-1V M16 ganham grampo U Ø10 em cada
+# espera (armadura de ancoragem da ruptura de borda, ACI 318-19 17.5.2.1), como as ES-1R do eixo 9; sem grampo a interação seria > 1
+t1v, v1v = g1c.tracao(), g1c.cortante("y-", armadura_ancoragem_kN=2 * gr10)
+R["ST1V_eixo1"] = dict(esperas="2 M16 L=330 c/ gancho + grampo U Ø10 em cada espera (rev09d)", Fy_d=g1v["Fy_max"], Rz_up_d=g1v["Rz_up"], phiNn=round(t1v["phiNn_kN"], 1), phiVn=round(v1v["phiVn_kN"], 1), modoV=v1v["modo"],
                        interacao=round(interacao(g1v["Rz_up"] * 1.25, t1v["phiNn_kN"], math.hypot(g1v["Fy_max"], g1v["Fx_max"]), v1v["phiVn_kN"])[0], 3))
 assert R["ST1V_eixo1"]["interacao"] <= 1, R["ST1V_eixo1"]
 
