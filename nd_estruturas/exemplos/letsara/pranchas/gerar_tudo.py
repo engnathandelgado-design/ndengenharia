@@ -4,7 +4,7 @@ import json, os, subprocess, sys, time
 PR = "/home/claude/letsara/pranchas/"
 LOG = PR + "gerar_tudo.jsonl"
 ORDEM = ["pilares_familia.py", "pilar_generico.py", "ts01_chaparia.py", "vigas_exec.py", "cob01.py", "cob02.py", "cob03.py", "cob04.py", "cob_l2.py", "mt01.py",
-         "lajes_placas.py", "es01.py", "es02.py", "fechamento.py", "pp01.py", "pp02.py", "pp03.py", "pp04.py", "pp05.py", "pp06.py",
+         "lajes_placas.py", "es01.py", "es02.py", "es03.py", "fechamento.py", "pp01.py", "pp02.py", "pp03.py", "pp04.py", "pp05.py", "pp06.py", "pv01.py",
          "loc01.py", "cg01.py", "corte01.py", "ct02.py", "ct03.py", "ct04.py", "mon01.py", "mon02.py", "mon03.py",
          "quantitativos.py", "pr01.py", "ng01.py"]
 if __name__ == "__main__":

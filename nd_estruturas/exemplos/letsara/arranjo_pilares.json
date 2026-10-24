@@ -2,9 +2,9 @@
  "PL-01": {
   "B": 400,
   "H": 600,
-  "nb": 6,
+  "nb": 7,
   "nh": 3,
-  "n": 14,
+  "n": 16,
   "d": 16.0,
   "xy": [
    [
@@ -20,35 +20,43 @@
     256
    ],
    [
-    -93,
+    -104,
     -256
    ],
    [
-    -93,
+    -104,
     256
    ],
    [
-    -31,
+    -52,
     -256
    ],
    [
-    -31,
+    -52,
     256
    ],
    [
-    31,
+    0,
     -256
    ],
    [
-    31,
+    0,
     256
    ],
    [
-    93,
+    52,
     -256
    ],
    [
-    93,
+    52,
+    256
+   ],
+   [
+    104,
+    -256
+   ],
+   [
+    104,
     256
    ],
    [
@@ -69,32 +77,34 @@
    "across_B": [
     0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 322.6,
-    "uso": 0.21,
-    "sigma_s": 85,
+    "MRd0": 367.3,
+    "uso": 0.18,
+    "sigma_s": 72,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 34.8,
     "Md": 58.9,
-    "MRd0": 322.6,
-    "uso": 0.18,
-    "sigma_s": 75,
+    "MRd0": 367.3,
+    "uso": 0.16,
+    "sigma_s": 64,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 28.15,
-  "uso_secao": 0.995,
-  "lambda_u": 1.0
+  "As_cm2": 32.17,
+  "uso_secao": 0.898,
+  "lambda_u": 1.1
  },
  "PL-09": {
   "B": 400,
@@ -174,15 +184,15 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.931,
-  "lambda_u": 1.06
+  "uso_secao": 0.957,
+  "lambda_u": 1.04
  },
  "PL-10": {
   "B": 400,
   "H": 600,
-  "nb": 6,
+  "nb": 7,
   "nh": 3,
-  "n": 14,
+  "n": 16,
   "d": 16.0,
   "xy": [
    [
@@ -198,35 +208,43 @@
     256
    ],
    [
-    -93,
+    -104,
     -256
    ],
    [
-    -93,
+    -104,
     256
    ],
    [
-    -31,
+    -52,
     -256
    ],
    [
-    -31,
+    -52,
     256
    ],
    [
-    31,
+    0,
     -256
    ],
    [
-    31,
+    0,
     256
    ],
    [
-    93,
+    52,
     -256
    ],
    [
-    93,
+    52,
+    256
+   ],
+   [
+    104,
+    -256
+   ],
+   [
+    104,
     256
    ],
    [
@@ -247,39 +265,41 @@
    "across_B": [
     0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 39.2,
     "Md": 66.3,
-    "MRd0": 322.6,
-    "uso": 0.21,
-    "sigma_s": 85,
+    "MRd0": 367.3,
+    "uso": 0.18,
+    "sigma_s": 72,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
     "Mk": 34.8,
     "Md": 58.9,
-    "MRd0": 322.6,
-    "uso": 0.18,
-    "sigma_s": 75,
+    "MRd0": 367.3,
+    "uso": 0.16,
+    "sigma_s": 64,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 28.15,
-  "uso_secao": 0.977,
-  "lambda_u": 1.02
+  "As_cm2": 32.17,
+  "uso_secao": 0.867,
+  "lambda_u": 1.14
  },
  "PL-02": {
   "B": 400,
   "H": 600,
-  "nb": 2,
+  "nb": 3,
   "nh": 3,
-  "n": 6,
+  "n": 8,
   "d": 16.0,
   "xy": [
    [
@@ -292,6 +312,14 @@
    ],
    [
     -156,
+    256
+   ],
+   [
+    0,
+    -256
+   ],
+   [
+    0,
     256
    ],
    [
@@ -312,32 +340,34 @@
    "across_B": [
     0
    ],
-   "across_H": []
+   "across_H": [
+    0
+   ]
   },
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 35.9,
     "Md": 60.7,
-    "MRd0": 143.3,
-    "uso": 0.42,
-    "sigma_s": 232,
+    "MRd0": 188.4,
+    "uso": 0.32,
+    "sigma_s": 155,
     "ok": true
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 34.8,
-    "Md": 58.9,
-    "MRd0": 143.3,
-    "uso": 0.41,
-    "sigma_s": 225,
+    "Mk": 48.9,
+    "Md": 82.6,
+    "MRd0": 188.4,
+    "uso": 0.44,
+    "sigma_s": 211,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 12.06,
-  "uso_secao": 0.746,
-  "lambda_u": 1.03
+  "As_cm2": 16.08,
+  "uso_secao": 0.641,
+  "lambda_u": 1.12
  },
  "PL-03": {
   "B": 400,
@@ -427,8 +457,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.442,
-  "lambda_u": 1.38
+  "uso_secao": 0.464,
+  "lambda_u": 1.33
  },
  "PL-04": {
   "B": 400,
@@ -518,8 +548,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.9,
-  "lambda_u": 1.02
+  "uso_secao": 0.907,
+  "lambda_u": 1.0
  },
  "PL-05": {
   "B": 400,
@@ -609,8 +639,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.931,
-  "lambda_u": 1.1
+  "uso_secao": 0.962,
+  "lambda_u": 1.04
  },
  "PL-11": {
   "B": 400,
@@ -690,8 +720,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.714,
-  "lambda_u": 1.38
+  "uso_secao": 0.741,
+  "lambda_u": 1.34
  },
  "PL-12": {
   "B": 400,
@@ -781,8 +811,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.881,
-  "lambda_u": 1.12
+  "uso_secao": 0.908,
+  "lambda_u": 1.1
  },
  "PL-06": {
   "B": 400,
@@ -852,18 +882,18 @@
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 58.7,
-    "Md": 99.2,
+    "Mk": 75.1,
+    "Md": 126.9,
     "MRd0": 233.2,
-    "uso": 0.43,
-    "sigma_s": 190,
+    "uso": 0.54,
+    "sigma_s": 243,
     "ok": true
    }
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.532,
-  "lambda_u": 1.72
+  "uso_secao": 0.531,
+  "lambda_u": 1.69
  },
  "PL-07": {
   "B": 400,
@@ -953,8 +983,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.3,
-  "lambda_u": 1.79
+  "uso_secao": 0.314,
+  "lambda_u": 1.72
  },
  "PL-08": {
   "B": 400,
@@ -1044,7 +1074,7 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.788,
+  "uso_secao": 0.797,
   "lambda_u": 1.12
  },
  "PF-01": {
@@ -1127,8 +1157,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.528,
-  "lambda_u": 1.39
+  "uso_secao": 0.558,
+  "lambda_u": 1.33
  },
  "PF-02": {
   "B": 400,
@@ -1210,8 +1240,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.426,
-  "lambda_u": 1.65
+  "uso_secao": 0.453,
+  "lambda_u": 1.58
  },
  "PF-03": {
   "B": 400,
@@ -1300,8 +1330,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.379,
-  "lambda_u": 1.82
+  "uso_secao": 0.4,
+  "lambda_u": 1.74
  },
  "PF-05": {
   "B": 400,
@@ -1400,8 +1430,8 @@
   ],
   "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.931,
-  "lambda_u": 1.02
+  "uso_secao": 0.946,
+  "lambda_u": 1.0
  },
  "PF-04": {
   "B": 400,
@@ -1493,8 +1523,8 @@
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.531,
-  "lambda_u": 1.66
+  "uso_secao": 0.588,
+  "lambda_u": 1.54
  },
  "PF-06": {
   "B": 400,
@@ -1593,7 +1623,7 @@
   ],
   "tipo": null,
   "As_cm2": 28.15,
-  "uso_secao": 0.87,
+  "uso_secao": 0.886,
   "lambda_u": 1.08
  },
  "PC-01": {
@@ -1664,25 +1694,25 @@
    },
    {
     "caso": "verticalização (base + FI-1 AC)",
-    "Mk": 60.7,
-    "Md": 102.6,
+    "Mk": 62.3,
+    "Md": 105.3,
     "MRd0": 233.2,
-    "uso": 0.44,
-    "sigma_s": 196,
+    "uso": 0.45,
+    "sigma_s": 201,
     "ok": true
    }
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.38,
-  "lambda_u": 1.8
+  "uso_secao": 0.393,
+  "lambda_u": 1.74
  },
  "PC-02": {
   "B": 400,
   "H": 400,
   "nb": 4,
-  "nh": 5,
-  "n": 14,
+  "nh": 4,
+  "n": 12,
   "d": 16.0,
   "xy": [
    [
@@ -1691,15 +1721,11 @@
    ],
    [
     -156,
-    -78
+    -52
    ],
    [
     -156,
-    0
-   ],
-   [
-    -156,
-    78
+    52
    ],
    [
     -156,
@@ -1727,15 +1753,90 @@
    ],
    [
     156,
-    -78
+    -52
+   ],
+   [
+    156,
+    52
+   ],
+   [
+    156,
+    156
+   ]
+  ],
+  "c": 44.3,
+  "grampos": {
+   "across_B": [],
+   "across_H": []
+  },
+  "manuseio": [
+   {
+    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
+    "Mk": 13.7,
+    "Md": 23.2,
+    "MRd0": 172.7,
+    "uso": 0.13,
+    "sigma_s": 69,
+    "ok": true
+   },
+   {
+    "caso": "verticalização (base + FI-1 AC)",
+    "Mk": 27.3,
+    "Md": 46.1,
+    "MRd0": 172.7,
+    "uso": 0.27,
+    "sigma_s": 137,
+    "ok": true
+   }
+  ],
+  "tipo": null,
+  "As_cm2": 24.13,
+  "uso_secao": 0.424,
+  "lambda_u": 1.02
+ },
+ "PC-03": {
+  "B": 400,
+  "H": 400,
+  "nb": 4,
+  "nh": 3,
+  "n": 10,
+  "d": 16.0,
+  "xy": [
+   [
+    -156,
+    -156
+   ],
+   [
+    -156,
+    0
+   ],
+   [
+    -156,
+    156
+   ],
+   [
+    -52,
+    -156
+   ],
+   [
+    -52,
+    156
+   ],
+   [
+    52,
+    -156
+   ],
+   [
+    52,
+    156
+   ],
+   [
+    156,
+    -156
    ],
    [
     156,
     0
-   ],
-   [
-    156,
-    78
    ],
    [
     156,
@@ -1754,8 +1855,8 @@
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
     "Mk": 13.7,
     "Md": 23.2,
-    "MRd0": 197.2,
-    "uso": 0.12,
+    "MRd0": 145.8,
+    "uso": 0.16,
     "sigma_s": 69,
     "ok": true
    },
@@ -1763,127 +1864,16 @@
     "caso": "verticalização (base + FI-1 AC)",
     "Mk": 27.3,
     "Md": 46.1,
-    "MRd0": 199.7,
-    "uso": 0.23,
-    "sigma_s": 110,
+    "MRd0": 145.6,
+    "uso": 0.32,
+    "sigma_s": 183,
     "ok": true
    }
   ],
   "tipo": null,
-  "As_cm2": 28.15,
-  "uso_secao": 0.389,
-  "lambda_u": 1.0
- },
- "PC-03": {
-  "B": 600,
-  "H": 600,
-  "nb": 5,
-  "nh": 5,
-  "n": 16,
-  "d": 16.0,
-  "xy": [
-   [
-    -256,
-    -256
-   ],
-   [
-    -256,
-    -128
-   ],
-   [
-    -256,
-    0
-   ],
-   [
-    -256,
-    128
-   ],
-   [
-    -256,
-    256
-   ],
-   [
-    -128,
-    -256
-   ],
-   [
-    -128,
-    256
-   ],
-   [
-    0,
-    -256
-   ],
-   [
-    0,
-    256
-   ],
-   [
-    128,
-    -256
-   ],
-   [
-    128,
-    256
-   ],
-   [
-    256,
-    -256
-   ],
-   [
-    256,
-    -128
-   ],
-   [
-    256,
-    0
-   ],
-   [
-    256,
-    128
-   ],
-   [
-    256,
-    256
-   ]
-  ],
-  "c": 44.3,
-  "grampos": {
-   "across_B": [
-    -128,
-    0,
-    128
-   ],
-   "across_H": [
-    -128,
-    0,
-    128
-   ]
-  },
-  "manuseio": [
-   {
-    "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
-    "Mk": 30.9,
-    "Md": 52.2,
-    "MRd0": 371.8,
-    "uso": 0.14,
-    "sigma_s": 80,
-    "ok": true
-   },
-   {
-    "caso": "verticalização (base + FI-1 AC)",
-    "Mk": 80.7,
-    "Md": 136.3,
-    "MRd0": 371.8,
-    "uso": 0.37,
-    "sigma_s": 208,
-    "ok": true
-   }
-  ],
-  "tipo": null,
-  "As_cm2": 32.17,
-  "uso_secao": 0.953,
-  "lambda_u": 1.02
+  "As_cm2": 20.11,
+  "uso_secao": 0.537,
+  "lambda_u": 1.01
  },
  "PM-01": {
   "B": 600,
@@ -1953,8 +1943,8 @@
    },
    {
     "caso": "verticalização (base + FI-1 AC)",
-    "Mk": 58.6,
-    "Md": 99.0,
+    "Mk": 58.5,
+    "Md": 98.9,
     "MRd0": 233.2,
     "uso": 0.42,
     "sigma_s": 189,
@@ -1963,8 +1953,8 @@
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.496,
-  "lambda_u": 1.56
+  "uso_secao": 0.521,
+  "lambda_u": 1.5
  },
  "PM-02": {
   "B": 600,
@@ -2034,18 +2024,18 @@
    },
    {
     "caso": "verticalização (base + FI-1 AC)",
-    "Mk": 65.0,
-    "Md": 109.9,
+    "Mk": 66.7,
+    "Md": 112.7,
     "MRd0": 233.2,
-    "uso": 0.47,
-    "sigma_s": 210,
+    "uso": 0.48,
+    "sigma_s": 215,
     "ok": true
    }
   ],
   "tipo": null,
   "As_cm2": 20.11,
-  "uso_secao": 0.399,
-  "lambda_u": 1.82
+  "uso_secao": 0.423,
+  "lambda_u": 1.74
  },
  "PG-01": {
   "B": 400,
@@ -2109,8 +2099,8 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.496,
-  "lambda_u": 1.78
+  "uso_secao": 0.514,
+  "lambda_u": 1.74
  },
  "PG-02": {
   "B": 250,
@@ -2164,8 +2154,8 @@
   ],
   "tipo": null,
   "As_cm2": 8.04,
-  "uso_secao": 0.545,
-  "lambda_u": 1.58
+  "uso_secao": 0.534,
+  "lambda_u": 1.6
  },
  "PG-03": {
   "B": 400,
@@ -2235,8 +2225,8 @@
   ],
   "tipo": null,
   "As_cm2": 16.08,
-  "uso_secao": 0.373,
-  "lambda_u": 2.26
+  "uso_secao": 0.386,
+  "lambda_u": 2.22
  },
  "PG-04": {
   "B": 250,
@@ -2298,8 +2288,8 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.411,
-  "lambda_u": 2.02
+  "uso_secao": 0.404,
+  "lambda_u": 2.06
  },
  "PE-01": {
   "B": 400,
@@ -2353,8 +2343,8 @@
   ],
   "tipo": null,
   "As_cm2": 8.04,
-  "uso_secao": 0.506,
-  "lambda_u": 1.74
+  "uso_secao": 0.537,
+  "lambda_u": 1.66
  },
  "PE-02": {
   "B": 400,
@@ -2418,8 +2408,8 @@
   ],
   "tipo": null,
   "As_cm2": 12.06,
-  "uso_secao": 0.998,
-  "lambda_u": 1.08
+  "uso_secao": 0.993,
+  "lambda_u": 1.04
  },
  "PE-03": {
   "B": 400,
@@ -2495,17 +2485,17 @@
    },
    {
     "caso": "verticalização (base + FI-1 BD)",
-    "Mk": 28.3,
-    "Md": 47.8,
+    "Mk": 29.0,
+    "Md": 49.0,
     "MRd0": 94.3,
-    "uso": 0.51,
-    "sigma_s": 165,
+    "uso": 0.52,
+    "sigma_s": 169,
     "ok": true
    }
   ],
   "tipo": null,
   "As_cm2": 24.13,
-  "uso_secao": 0.135,
-  "lambda_u": 3.0
+  "uso_secao": 0.142,
+  "lambda_u": 2.83
  }
 }

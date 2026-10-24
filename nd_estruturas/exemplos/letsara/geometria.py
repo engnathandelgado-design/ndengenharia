@@ -27,10 +27,14 @@ PILARES_ESPECIAIS = [
     ("P6", 36.175, Y_LIN[1], 0.25, 0.40),                                                                                # linha 2
     ("P9", 9.87, Y_LIN[3], 0.40, 0.40), ("P10", 15.195, Y_LIN[3], 0.25, 0.25), ("P11", 19.75, Y_LIN[3], 0.40, 0.40),
     ("P10", 24.305, Y_LIN[3], 0.25, 0.25), ("P12", 29.63, Y_LIN[3], 0.40, 0.40),                                       # linha 4 (portões)
-    ("P13", 19.75, 54.575, 0.60, 0.60),                                                                                  # central
+    ("P13", 19.75, 46.317, 0.40, 0.40), ("P13B", 19.75, 62.833, 0.40, 0.40),                                           # centrais (DEC-058)
     ("P3", 9.87, Y_LIN[8], 0.40, 0.60), ("P14", 19.75, Y_LIN[8], 0.40, 0.60), ("P5", 29.63, Y_LIN[8], 0.40, 0.60),   # linha 9
 ]
-Y_P13 = 54.575
+# DEC-058 (24/10/2026, decisão do Nathan, arranjo C de estudo_i130_pilar_extra): o P13 (PC-03) sai de y 54,575 (60×60) e
+# vai para y 46,317; entra um pilar novo (P13B, também PC-03, 40×40) em y 62,833 → 3 vãos iguais de 16,517 m da linha 4
+# à linha 9; a I130 da linha 2 à 4 (20,15 m) não muda. Os dois PC-03 ficam fora das linhas da cobertura (TS-01 no topo da I130).
+Y_PC_C = (46.317, 62.833)
+Y_P13 = Y_PC_C[0]
 LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
 X_L4 = [0.0, 9.87, 15.195, 19.75, 24.305, 29.63, 39.50]      # P1, P9, P10, P11, P10, P12, P2
 X_L2 = [0.0, 9.87, 19.75, 29.63, 36.175, 39.50]              # P1B, P8, P8A, P8B, P6, P2B

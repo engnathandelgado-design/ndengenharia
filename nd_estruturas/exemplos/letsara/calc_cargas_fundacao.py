@@ -59,5 +59,27 @@ for nm, g in res["G"].items():
     pil[nm] = d
 out = dict(fonte="modelo_integrado_r05 (OpenSeesPy, P-Δ, 0,4 Eci Ic nos pilares — NBR 9062:2017 Anexo A)", unidades="kN, kN·m",
            combinacoes_ELU=list(elu), casos_vento=list(ventos), pilares=pil)
+
+
+def somar_portoes(out):
+    """DEC-059: os PG-01 a PG-04 apoiam a TS-01A depois do graute (calc_portao_l4.py → portao_l4.json). O modelo r05 mantém os PG
+    ligados à TS-01A só em y; a reação vertical da fase 2 (g2 + q na viga contínua) é SOMADA aqui aos PG, sem descontar dos
+    pilares da linha 4 / P11 (a favor da segurança nos dois). Idempotente (marca 'portao_l4' no json)."""
+    pj = AQ / "portao_l4.json"
+    if not pj.exists() or out.get("portao_l4"):
+        return out
+    PJ = json.loads(pj.read_text(encoding="utf-8"))
+    nome = {"PG-01": "P9", "PG-02": "P10a", "PG-04": "P10b", "PG-03": "P12"}
+    for m in PJ["ts01a"].values():
+        for r in m["reacoes"]:
+            d = out["pilares"][nome[r["pg"]]]
+            d["G"]["N"] = round(d["G"]["N"] + r["Rg"], 1)
+            d["Q"]["N"] = round(d["Q"]["N"] + r["Rq"], 1)
+            d["ELU"]["Nd_max"] = round(d["ELU"]["Nd_max"] + r["Rd"], 1)
+    out["portao_l4"] = "reação vertical da TS-01A somada aos PG (DEC-059)"
+    return out
+
+
+out = somar_portoes(out)
 (AQ / "cargas_fundacao.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(len(pil), "pilares")

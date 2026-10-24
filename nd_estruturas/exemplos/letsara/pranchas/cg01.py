@@ -12,7 +12,7 @@ AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CG = json.load(open(AQ + "cargas_fundacao.json"))
 P = CG["pilares"]
 t = lambda kn: f"{kn / 10:.1f}".replace(".", ",").replace("-0,0", "0,0")      # kN → tf (NBR 9062: g = 10)
-ESP = {"P8": "PM-01", "P8B": "PM-02", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
+ESP = {"P8": "PM-01", "P8B": "PM-02", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P13B": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
        "P6E": "PE-01", "P7E": "PE-02", "P6-L2": "PE-03"}          # rev09 (DEC-045): pilares da escada e P6 da linha 2
 
 
@@ -31,6 +31,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         desenho="ND-LET-CG01", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
 pr.revisao("07", "21/10/2026", "EMISSÃO: CARGAS NA FUNDAÇÃO DO MODELO GLOBAL INTEGRADO (G, Q, V CARACTERÍSTICAS E ENVOLTÓRIA ELU)")
 pr.revisao("09", "23/10/2026", "DEC-045/049: PISOS +3,90/+7,30; PILARES DA ESCADA; VM 30 × 75; LINHA 2 METÁLICA")
+pr.revisao("10", "24/10/2026", "DEC-058/059: 2 PC-03 NO EIXO C (I130 EM 3 VÃOS DE 16,517 m, Ø12,7); PG-01 A PG-04 APOIAM A TS-01A (PORTÕES)")
 E = 100
 import math
 from prancha_nd import DIM_K, DIM_DLI

@@ -12,7 +12,7 @@ MARCA_NOVO = "\x01"
 _D = json.load(open(PR + "nomes.json", encoding="utf-8"))
 M2N = {k: v for k, v in _D["marca_para_nomes"].items()}
 # I130: no R01 / nas folhas antigas as vigas centrais eram V405/V406/V407
-I130_ANT = {"V405", "V406", "V407"}
+I130_ANT = {"V404", "V405", "V406", "V407"}   # DEC-058: 4 vigas centrais
 
 
 def _num(n):

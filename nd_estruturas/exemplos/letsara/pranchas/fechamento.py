@@ -115,7 +115,7 @@ def montar(V):
         s0 = d["ini"] if b == 0 else sa + JUNTA // 2
         s1 = d["fim"] if b == len(pil) - 2 else sb - JUNTA // 2
         if b in d.get("portoes", []):
-            abert.append((sa + ba // 2, sb - bb // 2, 0, 7400, "portão"))
+            abert.append((sa + ba // 2, sb - bb // 2, 0, 7500, "portão"))          # DEC-059: livres até +7,50 (PG apoiam a TS-01A)
             continue
         ks = [k for k in FIADAS if d["fiadas"](k, b)]
         if d.get("esquadria"):
@@ -218,7 +218,7 @@ def desenhar_elev(pr, V, origem, esc):
         pts = [(a0, z0), (a1, z0), (a1, z1), (a0, z1)]
         vv.hachura(pts, "ANSI37", 3.0, "HACHURA")
         vv.poli(pts, "EIXO", fechada=True)
-        vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * (0.3 if rot == "porta" else 0.5)), {"portão": "PORTÃO — livre até +7,40", "porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
+        vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * (0.3 if rot == "porta" else 0.5)), {"portão": "PORTÃO 500 × 750 — livre até +7,50", "porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
         if rot == "porta" and z0 == 0:                                              # rev06d: ombreiras OM-1 em U nos 2 lados (ND-LET-PP05)
             for xa in (a0 - 20, a1):
                 vv.ret(xa, 12, 20, z1 - 22, "METALICA")
@@ -234,6 +234,12 @@ def desenhar_elev(pr, V, origem, esc):
             vv.chamada((xr, p["z0"] + REC_Z0 + 400), (-6 if p["rec"] == "s1" else 6, 8), f"recorte {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} — PP06")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.6), p["id"], "nota", "MIDDLE_CENTER")
         vv.texto(((p["s0"] + p["s1"]) / 2, p["z0"] + H_PL * 0.22), TIPO[p["Lk"]], "min", "MIDDLE_CENTER")
+    if V == "C":                                                                    # DEC-059: placa PV-1 sobre o portão P19–D (ND-LET-PV01)
+        _pj = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/portao_l4.json"))
+        s0v, s1v = d["pil"][4][0] + JUNTA // 2, d["pil"][5][0] - JUNTA // 2
+        z0v, z1v = round(_pj["placa_P19_D"]["z0"] * 1000) + 5, round(_pj["placa_P19_D"]["z1"] * 1000)
+        vv.poli([(s0v, z0v), (s1v, z0v), (s1v, z1v), (s0v, z1v)], "VISTA", fechada=True)
+        vv.chamada(((s0v + s1v) / 2, (z0v + z1v) / 2), (6, 10), "PV-1 10 × 37 sobre o portão (ND-LET-PV01)")
     for (s, z) in ca1:                                                              # rev06: nichos NC-1 / consoles CS-1 (atrás da placa)
         vv.ret(s - NC_B / 2, z - NC_H / 2, NC_B, NC_H, "OCULTA")
     for p in pecas:                                                                 # pinos PT-1 na junta de baixo / travas PT-2 no pé
@@ -328,6 +334,8 @@ def prancha_vista(Vs, desenho, folha):
     pr.revisao("03", "14/10/2026", "PLACA 125 × 10 (8 Ø12,7); LIGAÇÕES PARAFUSADAS (TRILHO + BUCHA), SEM SOLDA; VT DO EIXO A A +6,25")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; JUNTA VERTICAL 20 mm")
     pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: CONSOLE CS-1 (CC-1 NA FACE C OU NA CE-1) + NICHO NC-1 + 2 PINOS PT-1")
+    if "C" in Vs:
+        pr.revisao("10", "24/10/2026", "DEC-059: PORTÕES LIVRES ATÉ +7,50 (PG APOIAM A TS-01A); PLACA PV-1 SOBRE O PORTÃO PG-04–PG-03")
     Q = pr.quadro
     XC = Q[2] - 190
     pesos = sum(peso_t(p["Lk"]) for p in lista)
@@ -368,7 +376,7 @@ def prancha_vista(Vs, desenho, folha):
     if n_ca:
         notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Consoles concretados (CC-1, face C) nesta prancha: {n_cc}; soldados na obra (faces laterais): {n_ca - n_cc} — filete {FX['solda']['filete_mm']:g} mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio.")
     if "C" in Vs:
-        notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 livres até +7,40 (topo do PG-01).")
+        notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 (500 × 750) livres até +7,50 (DEC-059): os PG-01 a PG-04 apoiam a TS-01A (neoprene + graute depois da montagem) e a viga não desce no vão; sobre o portão entre o PG-04 e o PG-03, placa PV-1 de 10 × 37 (+7,50 a +7,88) apoiada nas cantoneiras CL-V dos PG (ND-LET-PV01).")
     if "G" in Vs:
         notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25, mantido do rev08 por conservadorismo); acima, fechamento metálico leve até a telha, fixado na W 310 da linha 2 (rev09, DEC-048: sem TS-01 nesta linha, ND-LET-COB05).")
     if any(V in Vs for V in ("H", "J", "I")):
@@ -709,7 +717,8 @@ def prancha_cm():
             kp.ret(M(x) - 200, M(y) - 300, 400, 600, "CORTADO")
     for x, b in zip(X_L4[1:-1], (400, 250, 400, 250, 400)):
         kp.ret(M(x) - b / 2, M(Y_LIN[3]) - b / 2, b, b, "CORTADO")
-    kp.ret(M(19.75) - 300, M(54.575) - 300, 600, 600, "CORTADO")
+    for _yc in (46.317, 62.833):                                           # DEC-058: dois PC-03 40×40
+        kp.ret(M(19.75) - 200, M(_yc) - 200, 400, 400, "CORTADO")
     o = FOLGA
     xe0, xe1 = -300 - o - 150, -300 - o
     xd0, xd1 = M(LARG) + 300 + o, M(LARG) + 300 + o + 150
@@ -760,7 +769,7 @@ def prancha_cm():
         "Geometria pela PLANTA BAIXA - LOCAÇÃO DE PILARES do R01: eixos A–E a 9,87 / 9,88 / 9,88 / 9,87 m; linhas 1–9 a 9,65 / 10,075 / 10,075 / 9,925 / 10,00 / 10,00 / 10,00 / 9,625 m (79,35 m entre eixos).",
         "Vistas como no R01: B e D (linhas 4–9) fechadas, 8 fiadas; E (eixo A) e F (eixo E), linhas 2–4, só as 2 fiadas de cima (rev04, sem VT); H, J (anexo) e I (fachada da linha 1) com faixas de esquadria de +1,25 a +2,50 e de +5,00 a +6,25 e porta na I; A (linha 9) fechada.",
         "Paredes internas C (linha 4) e G (linha 2) com placas até +7,50 (vão A–B até +6,25: a TS-01 desce a +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve — confirmar com o cliente.",
-        "Linha 4: 2 portões (P9–P10 e P10–P12), livres até +7,40 (topo do PG-01), sob a TS-01; o trecho P10–P11–P10 é fechado.",
+        "Linha 4: 2 portões 500 × 750 (P9–P10 e P10–P12), livres até +7,50 (DEC-059: PG apoiam a TS-01A); placa PV-1 sobre o portão PG-04–PG-03; o trecho P10–P11–P10 é fechado.",
         "Placas 125 × 10 (rev03) por fora dos pilares (folga 25 mm), juntas verticais de 20 mm no eixo dos pilares (rev04; tolerância de comprimento da placa ±5 mm); rev06 (DEC-026, sistema Trejor): cada placa nos seus 2 consoles CS-1 (concretados com o pilar na face C — CC-1, DEC-031 — ou soldados na obra nas CE-1 das faces laterais), nicho NC-1 nas pontas, folga de 5 mm na junta horizontal (sem empilhar peso), 2 pinos guia PT-1 por junta (só guia, não transmitem esforço) ou trava de pé PT-2 nos pacotes suspensos: ND-LET-PP00.",
         "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (consoles com folga e pinos com furo oblongo vertical) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
         "Cotas de concreto em cm, níveis em m. Não medir no desenho."], 190)
@@ -861,7 +870,7 @@ def prancha_vt():
     y = pr.legenda_armadura(XC, y - 4, False)
     pr.notas(XC, y - 4, [f"Relação do aço desenhada para {MK[lista[0][0]]} (L = {Lmax:.1f} cm); nas demais marcas N1, N2, N3 e a quantidade de N4 seguem o comprimento da peça (tabela por marca).".replace(".", ",", 1),
                          "Eixo A (rev03): fundo +6,25, topo +6,85, atrás da fiada +6,25/+7,50, assento do CP-VT +6,54 — abaixo do recuo +7,19 dos pilares P1 (assento da TS-01). Eixo E: fundo +7,50, topo +8,10, atrás da fiada +7,50/+8,75, assento +7,79. Dentes Gerber 30 × 20 nos consolos CP-VT.",
-                         "Linha 4 sem verga: os portões ficam sob a TS-01 da linha 4, livres até +7,40.",
+                         "Linha 4 sem verga: os portões ficam sob a TS-01A da linha 4, livres até +7,50 (DEC-059); placa PV-1 sobre o portão PG-04–PG-03.",
                          "Linhas 2–4: vista E (eixo A) aberta até +6,25 e vista F (eixo E) até +7,50; a VT fica aparente por dentro e escondida por fora pela fiada de placas.",
                          "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VT01")

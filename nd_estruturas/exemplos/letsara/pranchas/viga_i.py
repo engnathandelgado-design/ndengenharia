@@ -1,12 +1,12 @@
 """Prancha genérica de viga pré-moldada protendida de seção I (fôrma, armação, insertos) — padrão ND.
-Usada por I130 (V405/406/407) e VM (mezanino). Cotas de concreto em cm, chaparia em mm. Rodar: python viga_i.py i110 | vm"""
+Usada por I130 (V404/405/406/407) e VM (mezanino). Cotas de concreto em cm, chaparia em mm. Rodar: python viga_i.py i110 | vm"""
 import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 from prancha_nd import Prancha, MASSA_ACO
 
 f = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13
+from geometria import Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C
 I1J = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/i110_r01.json"))
 LGJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 XC = X_EIXO["C"]
@@ -335,6 +335,11 @@ def prancha_viga(P):
         varm.linha((x, cob if x > LN and x < L - LN or not HD else H - HD + cob), (x, H - cob), "ARM_TRANSV")
     for y, xs, isol in P["cord"]:
         varm.linha((LN, y), (L - LN, y), "ARM_PROT")
+        if isol:                                                     # pedido do Nathan (24/10): trecho isolado (bainha) desenhado nas 2 pontas
+            x0i = LN if y < H - HD else 0
+            for xa_, xb_ in ((x0i, x0i + isol), (L - x0i - isol, L - x0i)):
+                varm.ret(xa_, y - 12, xb_ - xa_, 24, "OCULTA")
+            varm.chamada((x0i + isol, y), (6, -4 - y / 60), f"{len(xs)} isol. {f((x0i + isol) / 10, 0)} da ponta")
     varm.linha((cob, H - cob - 5), (L - cob, H - cob - 5), "ARMADURA")
     varm.chamada((L / 2, H - cob - 5), (10, 12), f"N3 — {N3n} Ø{N3d:g} {N3t}")
     if SEG:
@@ -358,6 +363,8 @@ def prancha_viga(P):
         cords.append(dict(pos="C1", diam=P.get("d_cord", 12.7), qtd=len(xs), y=yy, forca=F_cord, isol=isol))
     tc = pr.tabela_cordoalhas(XC, y - 4, cords, P["L_pista"])
     y = tc["y_base"]
+    if P.get("tab_isol"):
+        y = pr.tabela(XC, y - 4, P["tab_isol"]["titulo"], P["tab_isol"]["cab"], P["tab_isol"]["linhas"], P["tab_isol"]["larg"], h_lin=5.0)
     y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [16, 104, 10, 52])
     qd = [["MARCA", P["marca"], "SEÇÃO", f"I{H/10:g} (b {B/10:g}, bw {P['bw']/10:g})"],
           ["COMPRIMENTO", f"{L/10:g} cm", "CONCRETO", f"C{P['fck']} / fckj {P['fckj']} MPa"],
@@ -377,12 +384,17 @@ def prancha_viga(P):
     return pr
 
 
-# ================================================================== I130 — V405 / V406 / V407
+# ================================================================== I130 — V404 / V405 / V406 / V407 (DEC-058)
 def dados_i110():
     L = round(I1J["V406"]["L_peca"] * 1000)
     y0 = Y_LIN[3] + 0.20 + 0.075                                    # ponta da V406 (face do P11 + 75)
-    pinos = [round((Y_LIN[k] - y0) * 1000) for k in (4, 5)]          # TS-01 das linhas 5 e 6 apoiadas no topo (rev03)
-    Lm = {k: I1J[k]["L_peca"] for k in ("V405", "V406", "V407")}
+    pinos = [round((Y_LIN[k] - y0) * 1000) for k in (4,)]            # DEC-058: TS-01 da linha 5 apoiada no topo da V406
+    Lm = {k: I1J[k]["L_peca"] for k in ("V404", "V405", "V406", "V407")}
+    # posição das TS-01 no topo de cada marca (mm da ponta do lado A): mesma fôrma e cordoalha, só os PN-5/NEO-3 mudam de lugar
+    _ya = {"V407": Y_LIN[1] + 0.30 + 0.075, "V406": Y_LIN[3] + 0.20 + 0.075, "V405": Y_PC_C[0] + 0.20 + 0.075, "V404": Y_PC_C[1] + 0.20 + 0.075}
+    _ts = {"V407": (2,), "V406": (4,), "V405": (5, 6), "V404": (7,)}
+    PTS = {k: [round((Y_LIN[i] - _ya[k]) * 1000) for i in v] for k, v in _ts.items()}
+    _pt = lambda k: " e ".join(f"L{i + 1} a {f(x / 10, 1)} cm" for i, x in zip(_ts[k], PTS[k]))
     DTI = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["I130"]["calculo"]["adotado"]
     anc = DTI["ancoragem_tirante_mm"]
     zt, za = LGJ["Z_TOPO_I130"], LGJ["Z_ASS_I130"]
@@ -394,29 +406,51 @@ def dados_i110():
     cord = [(l["y"], l["xs"], l["isol"]) for l in ARR["linhas"]]
     n_inf, n_sup = ARR["n_inf"], ARR["n_cord"] - ARR["n_inf"]
     n_isol = sum(len(l["xs"]) for l in ARR["linhas"] if l["isol"])
-    isol_txt = " e ".join(f"{len(l['xs'])} em y = {l['y']/10:g} cm isoladas {l['isol']/10:g} cm" for l in ARR["linhas"] if l["isol"])
+    isol_txt = " e ".join(f"{len(l['xs'])} em y = {l['y']/10:g} cm isoladas {(350 + l['isol'])/10:g} cm a partir da face da ponta" for l in ARR["linhas"] if l["isol"])
     ader_txt = ", ".join(f"{len(l['xs'])} em y = {l['y']/10:g}" for l in ARR["linhas"] if not l["isol"] and l["y"] < 600)
     sup_txt = f"; {n_sup} na mesa superior (y = {max(l['y'] for l in ARR['linhas'])/10:g} cm, aderentes)" if n_sup else ""
     n_u = -(-DTI["n_tir"] // 2)                                      # N5: alças horizontais (U deitado), 2 ramos cada
+    # pedido do Nathan (24/10): isolamento por linha — quantas isoladas, comprimento em cada ponta (da face da peça), material,
+    # lbpt e o ato na seção em que o isolamento termina (calc_i110_r01: busca entre 4 padrões, linha de baixo aderente)
+    LN_ = 350
+    tab = []
+    for mk, rot in (("V406", "V406, V405, V404"), ("V407", "V407")):
+        A_ = I1J[mk]["arranjo"]; AT = I1J[mk]["ato"]
+        for l in A_["linhas"]:
+            n_l = len(l["xs"])
+            ini = LN_ if l["y"] < HI - 780 else 0
+            if l["isol"]:
+                cc = next((v for k_, v in AT["controle"].items() if f"isolamento de {l['isol']/1000:g} m" in k_), None)
+                ato_t = f"{f(cc['topo'], 2)} / {f(cc['base'], 1)}" if cc else "-"
+            else:
+                cc = AT["controle"].get("ponta (fim do lbpt)"); ato_t = f"{f(cc['topo'], 2)} / {f(cc['base'], 1)}" if cc else "-"
+            tab.append([rot, f"{l['y']/10:g}", n_l, n_l if l["isol"] else 0, f"{(ini + l['isol'])/10:g}" if l["isol"] else "aderente",
+                        "PEAD vedada" if l["isol"] else "-", f(A_["lbpt_m"] * 100, 0), ato_t])
+    lim_t, lim_c = I1J["V406"]["ato"]["lim_t"], I1J["V406"]["ato"]["lim_c"]
+    TAB_ISOL = dict(titulo=f"ISOLAMENTO DAS CORDOALHAS POR LINHA (ato: limites {f(lim_t, 2)} / {f(lim_c, 1)} MPa)",
+                    cab=["MARCAS", "y (cm)", "CORD.", "ISOL.", "ISOLADO (cm da ponta)", "BAINHA", "lbpt (cm)", "ATO topo / base (MPa)"],
+                    linhas=tab, larg=[30, 13, 13, 13, 30, 22, 17, 44])
     ICJ = I1J["V406"]["icamento"]
     return dict(
         revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA"), ("04", "16/10/2026", "NBR 9062: NEO-2 FRETADO; TOPO HORIZONTAL EM 2 NÍVEIS (APOIO DAS TS-01); TOLERÂNCIAS"),
               ("06", "19/10/2026", "DEC-032: 28 + 2 CORDOALHAS, σpi 1453, ISOLAMENTO 2/4 m, fckj 45; DENTE COM A REAÇÃO REAL; N5 EM ALÇAS HORIZONTAIS; AL-3 COM 3 LAÇOS"),
-              ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; 24 Ø15,2 (7+5+5+5 + 2 TOPO); PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120")],
+              ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; 24 Ø15,2 (7+5+5+5 + 2 TOPO); PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120"),
+              ("08", "24/10/2026", f"DEC-058: PILAR A MAIS NO EIXO C, 3 VÃOS DE 16,517 m (V406, V405, V404 IGUAIS); CORDOALHA Ø12,7: {ARR['n_cord']} NAS TRÊS, {I1J['V407']['arranjo']['n_cord']} NA V407")],
         marca="V406", qtd=1, familia=f"VIGAS CENTRAIS I{HI // 10} (EIXO C)", desenho="ND-LET-I130", h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
         n3=(6, 25.0, "CA-50 na mesa superior (compressão no ELU e tração no ato junto às pontas)"),
         cord=cord, n_isol=n_isol, isol_mm=max(l["isol"] for l in ARR["linhas"]), sig_pi=ARR["sig_pi"], L_pista=60, fck=ARR["fck"], fckj=ARR["fckj"],
-        lbpt=ARR["lbpt_m"], pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
-        est=(8.0, 150, 100, 2000), Vd=round(I1J["V406"]["linhas"]["Vd_kN"]), alcas=[2500, L - 2500], tercas=[],
+        lbpt=ARR["lbpt_m"], tab_isol=TAB_ISOL, pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
+        est=(8.0, 150, 100, 2000), Vd=round(max(I1J[k]["linhas"]["Vd_kN"] for k in ("V404", "V405", "V406"))), alcas=[2500, L - 2500], tercas=[],
         consolos=[], pinos_topo=pinos, anc=anc, tir=DTI["tirante"].split(" (")[0], n_sus=DTI["n_sus"], sus=DTI["suspensao"].split(" (")[0],
         n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
-        titulo=f"VIGA CENTRAL I{HI // 10} PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V407".replace(".", ","),
+        titulo=f"VIGA CENTRAL I{HI // 10} PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V404 · V407".replace(".", ","),
         subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I130 (assento +{Fz(za)}); TS-01 apoiadas no topo horizontal em 2 níveis (+{Fz(zt)} lado A / +{Fz(ztd)} lado E) nas linhas 3, 5, 6, 7 e 8",
-        kp_sub="vigas centrais no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_P13, "V406"), (XC, Y_P13, XC, Y_LIN[8], "V405")],
-        marcas=[["V407", f"C: PC-01 → PC-02; TS-01 na L3 ({I1J['V407']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V407'] / 10, 1)],
-                ["V406", "C: PC-02 → PC-03; TS-01 nas L5, L6", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V406'] / 10, 1)],
-                ["V405", "C: PC-03 → PF-04; TS-01 nas L7, L8", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V405'] / 10, 1)]],
+        kp_sub="vigas centrais no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_PC_C[0], "V406"), (XC, Y_PC_C[0], XC, Y_PC_C[1], "V405"), (XC, Y_PC_C[1], XC, Y_LIN[8], "V404")],
+        marcas=[["V407", f"C: PC-01 → PC-02; TS-01 {_pt('V407')} ({I1J['V407']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V407'] / 10, 1)],
+                ["V406", f"C: PC-02 → PC-03 (P13); TS-01 {_pt('V406')} ({ARR['n_cord']} cord.)", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V406'] / 10, 1)],
+                ["V405", f"C: PC-03 (P13) → PC-03 (P13B); TS-01 {_pt('V405')} ({I1J['V405']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V405'] / 10, 1)],
+                ["V404", f"C: PC-03 (P13B) → PF-04; TS-01 {_pt('V404')} ({I1J['V404']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V404']*100:.1f}".replace(".", ","), f(A * 25 * Lm['V404'] / 10, 1)]],
         barras_ponta=[dict(pos="N5", diam=DTI["d_tir"], qtd=n_u, comp=round(2 * (round(anc / 10) + 3) + 0.5 * 3.1416 * 19 + 10),
                            forma=[(round(anc / 10) + 3, 0), (0, 0), (0, 19), (round(anc / 10) + 3, 19)], trechos=[f"{round(anc / 10) + 3}", "19", f"{round(anc / 10) + 3}"]),
                       dict(pos="N6", diam=16.0, qtd=DTI["n_sus"], comp=round((2 * (90 + HI - 60) + 160) / 10), forma=[(0, 0), (9, 0), (9, (HI - 60) // 10), (0, (HI - 60) // 10), (0, 0), (2, 2)], trechos=["9", f"{(HI - 60) // 10}", "", ""]),
@@ -424,15 +458,15 @@ def dados_i110():
                       dict(pos="N8", diam=10.0, qtd=DTI["n_v"], comp=round((2 * (340 + 720) + 140) / 10), forma=[(0, 0), (34, 0), (34, 72), (0, 72), (0, 0), (2, 2)], trechos=["34", "72", "", ""])],
         insertos=[["TB-2", "Tubo Ø60,3×3,6 L=780, passante, sem solda", 2, "pontas, a 175 da face"],
                   ["AL-3", f"{ICJ['n_lacos']} laços de cordoalha Ø12,7 ({2 * ICJ['n_lacos']} pernas) por alça", 2, f"a {ICJ['a_alca_m'] * 100:g} cm das pontas"],
-                  ["PN-5", "Pino Ø20 CA-50 L=600 (300 na viga), apoio das TS-01", 4 * len(pinos), "topo, ±100 da linha, ±115 do eixo"],
-                  ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30 (assento das TS-01)", 2 * len(pinos), "topo, nas linhas"],
+                  ["PN-5", "Pino Ø20 CA-50 L=600 (300 na viga), apoio das TS-01", 4 * len(pinos), "topo, ±100 da linha, ±115 do eixo (V405: 8; V404/V407: 4 — posições na tabela de marcas)"],
+                  ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30 (assento das TS-01)", 2 * len(pinos), "topo, nas linhas (V405: 4)"],
                   ["NEO-2", "Neoprene 300×200×31 fretado, chapas inox (apoio nos PC)", 2, "sobre os consolos CP-I130"]],
         memoria=[],
-        notas=[f"Concreto C{ARR['fck']}; {ARR['n_cord']} cordoalhas CP-190 RB {ARR.get('cordoalha', 'Ø12.7').replace('.', ',')}: {ader_txt} cm (aderentes), {isol_txt} nas pontas (bainha plástica estanque){sup_txt}. σpi = {ARR['sig_pi']:g} MPa ({f(ARR['F_macaco_kN'], 1)} kN por cordoalha no macaco); liberação GRADUAL e simétrica SÓ COM fckj ≥ {ARR['fckj']:g} MPa comprovado por corpo de prova da peça (DEC-054; CP-V e cura térmica) (lbpt = {f(ARR['lbpt_m'] * 100, 0)} cm). Protensão LIMITADA (NBR 6118:2023 Tab. 13.4 nível 2, CAA II, DEC-054): descompressão na combinação quase permanente e sem fissuração na frequente. V407 (vão menor): {I1J['V407']['arranjo']['n_cord']} cordoalhas — " + ", ".join(f"{len(l['xs'])} em y = {l['y']/10:g}" + (f" (isoladas {l['isol']/10:g} cm)" if l['isol'] else "") for l in I1J['V407']['arranjo']['linhas']) + " cm, sem cordoalhas na mesa superior (ver tabela de marcas).",
+        notas=[f"Concreto C{ARR['fck']}; {ARR['n_cord']} cordoalhas CP-190 RB {ARR.get('cordoalha', 'Ø12.7').replace('.', ',')}: {ader_txt} cm (aderentes), {isol_txt} nas pontas{sup_txt}. Isolamento por linha na tabela ao lado: comprimento medido da face da ponta (inclui o dente de 35 cm nas linhas abaixo do dente), bainha de PEAD (polietileno de alta densidade) bipartida, vedada nas duas extremidades com fita e mastique para não entrar nata; a linha de baixo (y 6) é sempre aderente. σpi = {ARR['sig_pi']:g} MPa ({f(ARR['F_macaco_kN'], 1)} kN por cordoalha no macaco); liberação GRADUAL e simétrica SÓ COM fckj ≥ {ARR['fckj']:g} MPa comprovado por corpo de prova da peça (DEC-054/058; CP-V e cura térmica) (lbpt = {f(ARR['lbpt_m'] * 100, 0)} cm). Protensão LIMITADA (NBR 6118:2023 Tab. 13.4 nível 2, CAA II, DEC-054): descompressão na combinação quase permanente e sem fissuração na frequente. V406, V405 e V404 (16,517 m, DEC-058): mesma fôrma, mesmo arranjo e mesma pista; só os insertos das TS-01 do topo mudam de lugar (tabela de marcas). V407 (vão de 20,15 m): {I1J['V407']['arranjo']['n_cord']} cordoalhas — " + ", ".join(f"{len(l['xs'])} em y = {l['y']/10:g}" + (f" (isoladas {(350 + l['isol'])/10:g} cm da ponta)" if l['isol'] else "") for l in I1J['V407']['arranjo']['linhas']) + " cm (ver tabela de marcas).",
                "N3 = 6 Ø25 CA-50 na mesa superior: compressão do ELU (x/d ≤ 0,45) e tração no ato junto às pontas (NBR 6118:2023 17.2.4.3.2 b).",
-               f"Dentes Gerber 78 × 35 nas duas pontas (NBR 9062:2017 7.4; Fd = γn·Vd = {f(I1J['V406']['dente']['Fd'], 0)} kN, verificado por MEF não linear com esta armação): N5 tirante em {n_u} alças HORIZONTAIS (U deitado) Ø{DTI['d_tir']:g} por ponta, ramos no nível do tirante, dobra interna ≥ 8φ (16 cm), curva junto à face do dente; N6 suspensão, N7 costura, N8 estribos do nariz; maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
+               f"Dentes Gerber 78 × 35 nas duas pontas (NBR 9062:2017 7.4; Fd = γn·Vd = {f(max(I1J[k]['dente']['Fd'] for k in ('V404', 'V405', 'V406')), 0)} kN, V405 com 2 TS-01 no topo, verificado por MEF não linear com esta armação): N5 tirante em {n_u} alças HORIZONTAIS (U deitado) Ø{DTI['d_tir']:g} por ponta, ramos no nível do tirante, dobra interna ≥ 8φ (16 cm), curva junto à face do dente; N6 suspensão, N7 costura, N8 estribos do nariz; maciço de 140 cm nas pontas; TB-2 passante no dente, sem chapa soldada.",
                f"TS-01 apoiadas direto no topo da viga (sem consolos CV-TS), neoprene NEO-3 100×300×10 e 4 pinos PN-5 Ø20 por linha (2 por TS-01), grauteados nos tubos TB-3 das TS-01. TOPO HORIZONTAL EM 2 NÍVEIS ao longo de toda a viga (NBR 9062:2017 7.2.1.6, aparelho horizontal): metade do lado A em +{Fz(zt)} e metade do lado E {dgc} mm acima (+{Fz(ztd)}), degrau no eixo da viga feito com régua-guia no acabamento do topo; h = {HI // 10} cm na metade A e {f(HI / 10 + dgc / 10, 1)} cm na metade E. As pontas das TS-01 têm cunha no fundo e a face de apoio fica horizontal.",
-               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 com mísula (assento +{Fz(za)}; consolo 49 junto ao pilar e 39 na ponta, alinhado ao fundo da viga — DEC-054); graute só numa ponta de cada viga. V405 vai até o consolo do P14 (PF-04).",
+               f"Apoio nos pilares centrais PC: neoprene NEO-2 300×200×31 fretado (2 camadas de 10 + 2 de 2,5 mm, chapas inox 2 mm — NBR 9062:2017 7.2.1.6) e pino PN-2 Ø25 no consolo CP-I130 com mísula (assento +{Fz(za)}; consolo 49 junto ao pilar e 39 na ponta, alinhado ao fundo da viga — DEC-054); graute só numa ponta de cada viga. V404 vai até o consolo do P14 (PF-04); P13 e P13B (PC-03) recebem as I130 nos dois lados (DEC-058).",
                f"Içar pelas 2 alças AL-3 ({ICJ['n_lacos']} laços cada, {f(ICJ['F_alca_d_kN'], 0)} kN de cálculo por alça com βa 1,3); estocar sobre 2 calços nas alças; não virar a peça."])
 
 

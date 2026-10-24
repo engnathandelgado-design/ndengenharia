@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA
+from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -42,8 +42,8 @@ L_TS = LG["L_TS"] * C3                             # projeção horizontal entre
 X0P = LG["X_PONTA_ESQ"]
 PONTAS = [(X0P, X0P + L_TS), (LARG - X0P - L_TS, LARG - X0P)]
 Z_I130_TOPO, H_I130 = LG["Z_TOPO_I130"], LG["H_I130"]
-CENTRAIS = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13)]
-I130_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_P13), ("V405", Y_P13, Y_LIN[8])]   # V405 vai até a linha 9 (P14)
+CENTRAIS = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_PC_C[0]), ("P13B", Y_PC_C[1])]          # DEC-058: dois PC-03 40×40
+I130_TRECHOS = [("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_PC_C[0]), ("V405", Y_PC_C[0], Y_PC_C[1]), ("V404", Y_PC_C[1], Y_LIN[8])]   # V404 vai até a linha 9 (P14)
 NIVEIS_MEZ, H_LAJE = list(Z_PISOS), 0.20 + 0.05          # rev09 (DEC-045): topo da capa +3,90 / +7,30
 
 I90 = PerfilI(h=0.90, b=0.40, tw=0.15, tf=0.15, nome="I90")
@@ -170,10 +170,10 @@ def montar() -> ModeloBIM:
             zr = rec_vb(x)
             m.pilar(f"{nome}-L{1 if sg > 0 else 9}", x, y, 0.40, 0.60, Z_CALICE, zr, obs="60 ⊥ fachada; cabeça recuada acima da VB")
             m.pilar(f"{nome}-L{1 if sg > 0 else 9} cabeça", x, y - sg * 0.15, 0.40, 0.30, zr, TOPO_PLAT, obs="cabeça 40×30")
-    # centrais (R01): P8A 40×60, P11 40×40, P13 60×60 — topo +8,88 (topo da I130)
-    for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.60, 0.60))):
+    # centrais: P8A 40×60, P11 40×40, P13 e P13B 40×40 (DEC-058) — topo = topo da I130
+    for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.40, 0.40), (0.40, 0.40))):
         zt_c = Z_L2["C"] if marca == "P8A" else Z_I130_TOPO             # rev09b: P8A sobe até o fundo da W 310 da linha 2
-        m.pilar(marca, X_C, y, bx, by, Z_CALICE, zt_c, obs=f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01; topo em 2 níveis" if marca != "P8A" else
+        m.pilar(marca, X_C, y, bx, by, Z_CALICE, zt_c, obs=(f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01; topo em 2 níveis" if marca == "P11" else f"{bx*100:.0f}×{by*100:.0f}; PC-03, apoio das I130 (DEC-058)") if marca != "P8A" else
                 f"{bx*100:.0f}×{by*100:.0f}; CP-I130 da V400; topo +{zt_c:.3f} = fundo da W 310 − 40 mm (DEC-050)".replace(".", ","))
         if marca == "P11":                                     # rev04: metade do lado E 12 mm mais alta (assentos das TS-01); rev09: P8A sem TS-01
             m.bloco("pilar", f"{marca} degrau do topo", (X_C + bx / 4, y, LG["Z_TOPO_I130_DIR"]), bx / 2, by, LG["DEGRAU_C"], "Pilares")
@@ -196,10 +196,14 @@ def montar() -> ModeloBIM:
             m.linear("inserto", "M16 8.8 (IL-1)", PerfilRetangular(0.016, 0.016), (xf_ - sx * 0.10, yl4, zf(x) - 0.06), (xf_ + sx * 0.03, yl4, zf(x) - 0.06), GM, material="aco")
             for dy in (-0.0975, 0.0975):
                 barra_v(m, "M16 8.8 + IT-P (fundo da TS-01A)", xf_ + sx * 0.06, yl4 + dy, zf(x) - 0.03, zf(x) + 0.08, 0.016, GM)
+        # DEC-059 (24/10, opção A do Nathan): a cabeça do PG passa a APOIAR a TS-01A — neoprene NEO-7 colado na cabeça + graute
+        # injetado entre o neoprene e o fundo da viga depois da montagem (a viga não desce no vão dos portões: fundo ≥ +7,50)
+        _zt = zf(x - b_ / 2)
+        m.bloco("inserto", f"NEO-7 neoprene {round((b_ - 0.05) * 1000)}×200×10 + graute 10 mm (apoio da TS-01A, DEC-059)", (x, yl4, _zt - 0.001), b_ - 0.05, 0.20, 0.019, "Pinos, tubos e neoprenes")
 
     # 2. vigas centrais I130 (comprimentos do R01) e consolos CP-I130 / CV-TS
     zc = Z_I130_TOPO - H_I130 / 2
-    meia = {Y_LIN[1]: 0.30, Y_LIN[3]: 0.20, Y_P13: 0.30, Y_LIN[8]: 0.30}
+    meia = {Y_LIN[1]: 0.30, Y_LIN[3]: 0.20, Y_PC_C[0]: 0.20, Y_PC_C[1]: 0.20, Y_LIN[8]: 0.30}
     z_ass_i110 = LG["Z_ASS_I130"]
     for marca, ya, yb in I130_TRECHOS:
         y0, y1 = ya + meia[ya] + 0.075, yb - meia[yb] - 0.075
@@ -590,86 +594,26 @@ def montar() -> ModeloBIM:
             pb = (xw + 0.03, y2 + sy * (W_.bf / 2000 + 0.01), zc - W_.d / 1000 + W_.tf / 1000)
             m.linear("inserto", "MF-1 mão-francesa L 51×51×4,8 (1 M12 em cada ponta)", PerfilRetangular(0.051, 0.051), pa, pb, GL2, material="aco")
 
-    # 5c. rev09 (DEC-045): escada metálica em U (só até o +3,90), longarinas U 152 parafusadas nos patamares, degraus em chapa xadrez
-    ESJ = json.loads((AQ / "escada_metalica.json").read_text(encoding="utf-8"))
-    GES = "Escada metálica"
-    EG = ESJ["geometria"]
-    x6, xE = EG["x_faces"]
-    bl = EG["largura_lance"]
-    lances = [((x6 + 0.0, x6 + bl), EG["y_lances"][1], EG["y_lances"][0], 0.0, EG["z_patamar"]),           # lance 1: sobe de y 8,35 a 5,55
-              ((xE - bl, xE), EG["y_lances"][0], EG["y_lances"][1], EG["z_patamar"], Z_PISO_PRONTO)]   # DEC-055         # lance 2: sobe de 5,55 a 8,35
-    U152 = PerfilRetangular(0.0485, 0.152, "U 152 × 12,2")
-    for (xl0, xl1), y0e, y1e, z0e, z1e in lances:
-        for xs_ in (xl0 + 0.025, xl1 - 0.025):
-            m.linear("viga", "LG-1 longarina U 152 × 12,2", U152, (xs_, y0e, z0e + 0.09), (xs_, y1e, z1e - 0.10), GES, material="aco")
-        n_ = round((z1e - z0e) / EG["espelho_m"])
-        sgy = 1 if y1e > y0e else -1
-        for k_ in range(1, n_):
-            yk = y0e + sgy * (k_ - 0.5) * EG["piso_m"]
-            zk = z0e + k_ * EG["espelho_m"]
-            m.linear("placa", "DG-1 degrau chapa xadrez 4,75", PerfilRetangular(EG["piso_m"] + 0.03, 0.00475), (xl0 + 0.05, yk, zk - 0.0024), (xl1 - 0.05, yk, zk - 0.0024), GES, material="aco")
-    PW15 = PerfilI(h=0.152, b=0.152, tw=0.0058, tf=0.0066, nome="W 150 × 22,5")
-    zp = EG["z_patamar"]
-    for (ya_p, yb_p), zz, nome_p in ((EG["y_patamar"], zp, "patamar +1,975"), (EG["y_chegada"], Z_PISO_PRONTO, "chegada no piso pronto +3,95")):
-        for yv in (ya_p + 0.08, yb_p - 0.08):
-            m.linear("viga", f"VP-1 viga W 150 × 22,5 ({nome_p})", PW15, (x6 + 0.01, yv, zz - 0.0063 - 0.076), (xE - 0.01, yv, zz - 0.0063 - 0.076), GES, material="aco")
-        m.linear("placa", f"CH-P chapa xadrez 6,3 ({nome_p})", PerfilRetangular(yb_p - ya_p, 0.0063), (x6 + 0.01, (ya_p + yb_p) / 2, zz - 0.0032), (xE - 0.01, (ya_p + yb_p) / 2, zz - 0.0032), GES, material="aco")
-        y_front = yb_p - 0.08 if nome_p.startswith("patamar") else ya_p + 0.08
-        if nome_p.startswith("patamar"):
-            apo = [(x6 + 0.09, "PL-1 pilarete W 150 × 22,5", PW15, 0.10)] + [(xE - 0.09, "PL-1 pilarete W 150 × 22,5", PW15, 0.10)]
-        else:                                                    # chegada: tubo entre os lances + W 150 do lado E (entrada do lance 1 livre)
-            apo = [(ESJ["chegada_apoios"]["x_tubo"], "PL-3 pilarete tubo 80 × 80 × 4,75", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"), 0.075),
-                   (ESJ["chegada_apoios"]["x_W"], "PL-2 pilarete W 150 × 22,5", PW15, 0.10)]
-        for xp_, nm_, pf_, hb_ in apo:                          # rev09b: base do pilarete por 2 cantoneiras L 102 (sem chapa soldada)
-            m.linear("pilar", f"{nm_} ({nome_p})", pf_, (xp_, y_front, 0.02), (xp_, y_front, zz - 0.0063 - 0.152), GES, cima=(1.0, 0.0, 0.0), material="aco")
-            caixa(m, "graute de assentamento 20 mm do pilarete", xp_ - 0.12, xp_ + 0.12, y_front - 0.10, y_front + 0.10, 0.0, 0.02, GES)
-            for sg in (-1, 1):
-                caixa(m, "CB-3 cantoneira L 102 × 102 × 9,5 × 200 + 2 M16 + 2 chumbadores químicos M12", xp_ - 0.10, xp_ + 0.10,
-                      y_front + sg * (0.0029 + 0.051) - 0.051, y_front + sg * (0.0029 + 0.051) + 0.051, 0.02, 0.0295, GES)
-    BM = ESJ["base_metalica"]                                    # rev09b: base metálica BM-1 no pé do lance 1 (pedido do Nathan, 24/10)
-    yb = EG["y_lances"][1] + 0.002
-    xm = x6 + bl / 2
-    caixa(m, "graute de nivelamento 10 mm da BM-1", xm - BM["L_m"] / 2, xm + BM["L_m"] / 2, yb, yb + 0.0485, 0.0, 0.010, GES)
-    m.linear("viga", "BM-1 base metálica U 152 × 12,2 (soleira em pé, pé do lance 1 e 1º degrau)", PerfilRetangular(0.0485, 0.152, "U 152 × 12,2"),
-             (xm - BM["L_m"] / 2, yb + 0.02425, 0.010 + 0.076), (xm + BM["L_m"] / 2, yb + 0.02425, 0.010 + 0.076), GES, material="aco")
-    for xc_ in (xm - 0.60, xm, xm + 0.60):                       # 3 pares de L 76 com chumbador químico M12 no piso
-        caixa(m, "CB-1 cantoneira L 76 × 76 × 6,3 × 100 + chumbador químico M12", xc_ - 0.05, xc_ + 0.05, yb + 0.0485 + 0.001, yb + 0.0485 + 0.077, 0.010, 0.0163, GES)
-
-    # 5d. rev09c (DEC-053, decisão do Nathan 24/10): escada metálica EXTERNA em L na fachada A (do pátio à porta do 2º pav. +3,90)
-    EX = json.loads((AQ / "escada_externa.json").read_text(encoding="utf-8"))
+    # 5c/5d. rev09d (DEC-060, 24/10): escadas metálicas interna (ES01) e externa (ES02) com guarda-corpos e corrimãos (RT CBMRS 11)
+    # e todas as ligações parafusadas — peças geradas por escadas_detalhe.py (fonte única: pranchas ES01/ES02/ES03, lista e 3D)
+    import escadas_detalhe as ESD
+    from nd_estruturas.bim import Peca as _PecaE, PerfilPoligono as _PPE
+    for pc in ESD.P:
+        if pc["g"] == "caixa":
+            caixa(m, pc["marca"], pc["x0"], pc["x1"], pc["y0"], pc["y1"], pc["z0"], pc["z1"], pc["grupo"])
+        elif pc["g"] == "linear":
+            pf = pc["perfil"]
+            prf = PerfilI(h=pf[1], b=pf[2], tw=pf[3], tf=pf[4], nome=pf[5]) if pf[0] == "I" else PerfilRetangular(pf[1], pf[2], pf[3])
+            m.linear(pc["tipo"], pc["marca"], prf, pc["p0"], pc["p1"], pc["grupo"], cima=pc["cima"], material="aco", obs=pc.get("obs", ""))
+        else:
+            c0, z0_ = pc["contorno"][0]
+            pts_ = tuple((round(c - c0, 6), round(z - z0_, 6)) for c, z in pc["contorno"])
+            if pc["eixo"] == "y":                                    # contorno (y, z), extrudado em x de a0 a a1 (u local = +y)
+                p0_, p1_ = (pc["a0"], c0, z0_), (pc["a1"], c0, z0_)
+            else:                                                    # contorno (x, z), extrudado em y: eixo −y (u local = +x)
+                p0_, p1_ = (c0, pc["a1"], z0_), (c0, pc["a0"], z0_)
+            m.add(_PecaE(pc["tipo"], pc["grupo"], pc["marca"], _PPE(pts_, pc["marca"][:40]), p0_, p1_, (0.0, 0.0, 1.0), "aco", pc.get("obs", "")))
     GEX = "Escada metálica externa"
-    XG = EX["geometria"]
-    xi, xe_ = XG["x"]                                            # face interna (−0,45) e externa (−1,95)
-    zpt, zch = XG["z_patamar"], XG["z_chegada"]
-    esp_, piso_ = XG["espelho_m"], XG["piso_m"]
-    U203 = PerfilRetangular(0.0574, 0.203, "U 203 × 17,1")
-    W150e = PerfilI(h=0.148, b=0.100, tw=0.0043, tf=0.0049, nome="W 150 × 13,0")
-    yc0, yc1 = XG["y_lance_cima"]
-    for xs_ in (xi - 0.03, xe_ + 0.03):                          # lance de cima: sobe de y 6,92 (+0,89) a y 2,44 (+3,90) ao longo da fachada
-        m.linear("viga", "LE-1 longarina U 203 × 17,1 (lance de cima)", U203, (xs_, yc1, zpt + 0.05), (xs_, yc0, zch - 0.15), GEX, material="aco")
-    for k_ in range(1, 17):                                      # 16 degraus; o 17º espelho chega no patamar
-        yk = yc1 - (k_ - 0.5) * piso_
-        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ + 0.03, 0.00475), (xe_ + 0.06, yk, zpt + k_ * esp_ - 0.0024), (xi - 0.06, yk, zpt + k_ * esp_ - 0.0024), GEX, material="aco")
-    xb0, xb1 = XG["x_lance_baixo"]
-    yp0, yp1 = XG["y_patamar"]
-    for ys_ in (yp0 + 0.03, yp1 - 0.03):                         # lance de baixo: sobe de x −3,07 (pátio) a x −1,95 (+0,89)
-        _d = math.dist((xb1, 0.09), (xb0, zpt - 0.10)); _k = 1 - 0.05 / _d          # ponta encurtada 5 cm (folga para a VE do patamar)
-        m.linear("viga", "LE-2 longarina U 152 × 12,2 (lance de baixo)", U152, (xb1, ys_, 0.09), (xb1 + _k * (xb0 - xb1), ys_, 0.09 + _k * (zpt - 0.10 - 0.09)), GEX, material="aco")
-    for k_ in range(1, 5):
-        xk = xb1 + (k_ - 0.5) * piso_
-        m.linear("placa", "DE-1 degrau chapa xadrez 4,75", PerfilRetangular(piso_ - 0.01, 0.00475), (xk - 0.005, yp0 + 0.06, k_ * esp_ - 0.0024), (xk, yp1 - 0.06, k_ * esp_ - 0.0024), GEX, cima=(0.0, 0.0, 1.0), material="aco")
-    for (ya_, yb_), zz, nm_ in ((XG["y_chegada"], zch, "patamar de chegada +3,90"), ((yp0, yp1), zpt, "patamar +0,89")):
-        for xv in (xi - 0.05, xe_ + 0.05):
-            m.linear("viga", f"VE viga W 150 × 13,0 ({nm_})", W150e, (xv, ya_ + 0.01, zz - 0.0063 - 0.074), (xv, yb_ - 0.01, zz - 0.0063 - 0.074), GEX, material="aco")
-        m.linear("placa", f"CHE chapa xadrez 6,3 ({nm_})", PerfilRetangular(xi - xe_, 0.0063), ((xi + xe_) / 2, ya_ + 0.01, zz - 0.0032), ((xi + xe_) / 2, yb_ - 0.01, zz - 0.0032), GEX, cima=(0.0, 0.0, 1.0), material="aco")
-        for xp_ in (xi - 0.05, xe_ + 0.05):
-            for yp_ in (ya_ + 0.06, yb_ - (0.14 if zz == zch else 0.06)):      # chegada: pilarete 14 cm para dentro (folga para a ponta da LE-1)
-                m.linear("pilar", f"PE pilarete W 150 × 13,0 ({nm_})", W150e, (xp_, yp_, 0.0125), (xp_, yp_, zz - 0.0063 - 0.148), GEX, cima=(0.0, 1.0, 0.0), material="aco")
-                caixa(m, "CBE chapa de base 200 × 200 × 12,5 + 4 chumbadores químicos M16 (sobre graute)", xp_ - 0.10, xp_ + 0.10, yp_ - 0.10, yp_ + 0.10, 0.0, 0.0125, GEX)
-                _eb = 0.10 if (zz == zch and yp_ > ya_ + 0.1) else 0.0                 # bloco 10 cm excêntrico (livre da cartola PT-1 da placa em y 2,04)
-                caixa(m, "BE-1 bloco de concreto 60 × 60 × 60 (base própria da escada externa)", xp_ - 0.30, xp_ + 0.30, yp_ - 0.30 + _eb, yp_ + 0.30 + _eb, -0.62, -0.02, "Piso e fundações")
-    m.linear("viga", "TR-1 trava tubo 80 × 80 × 4,75 do patamar de chegada ao P28 (2 BR-M16 na face do pilar)", PerfilRetangular(0.08, 0.08, "tubo 80×80×4,75"),
-             (xi - 0.05, 0.20, zch - 0.10), (xi - 0.05, 0.02, zch - 0.10), GEX, material="aco")
     # ombreiras OM-2 internas da porta do 2º pav. (vista H): U 152 do piso do térreo a +5,00, por trás das placas, travadas no P28
     for yj, dd in ((FCH.PORTA_H[0] / 1000 - 0.020 - 0.0485, -1), (FCH.PORTA_H[1] / 1000 + 0.020, 1)):
         m.linear("pilar", "OM-2 ombreira interna U 152 × 12,2 (porta do 2º pav., vista H)", PerfilRetangular(0.152, 0.0485, "U 152 × 12,2"),
@@ -677,8 +621,27 @@ def montar() -> ModeloBIM:
         caixa(m, "OM-2 chapa de base 12,5 × 200 × 200 + 4 chumbadores químicos M12", -0.325, -0.125, yj - 0.075, yj + 0.125, 0.0, 0.0125, GEX)
         _yc = (yj - 0.10, yj) if dd < 0 else (yj + 0.0485, yj + 0.1485)   # console ao lado da ombreira (na aba), do lado da placa
         caixa(m, "OM-2 console L 102 × 102 × 9,5 (apoio da ponta da placa da fiada +3,75)", -0.325, -0.223, _yc[0], _yc[1], 3.75 - 0.0095, 3.75, GEX)
-        for zt_ in (3.90, 4.90):
-            caixa(m, "OM-2 trava L 76 × 76 × 6,3 até o P28 (2 BR-M16 na face do pilar)", -0.30, -0.224, 0.20, yj, zt_ - 0.038, zt_ + 0.038, GEX)
+        # rev09d: OM-2 do lado do P28 travada no P28 em +4,30 e +4,90 (acima do PT-2 da fiada +3,75); a outra ombreira travada
+        # na primeira só em +3,88, abaixo da soleira da porta (+3,95) — nenhuma trava atravessa o vão da porta
+        travas = ((0.20, yj, 4.30), (0.20, yj, 4.90)) if dd < 0 else ((FCH.PORTA_H[0] / 1000 - 0.020, yj, 3.88),)
+        for y_ini, y_fim, zt_ in travas:
+            caixa(m, "OM-2 trava L 76 × 76 × 6,3 até o P28 (2 BR-M16 na face do pilar)" if dd < 0 else "OM-2 trava L 76 × 76 × 6,3 até a outra ombreira (sob a soleira, 2 M12)",
+                  -0.30, -0.224, y_ini, y_fim, zt_ - 0.038, zt_ + 0.038, GEX)
+
+    # 5e. DEC-059 (24/10): placa PV-1 sobre o portão P19–D da linha 4 (+7,50 até 6 cm abaixo do fundo da TS-01A), apoiada nas
+    #     cantoneiras CL-V das faces dos PG-04 e PG-03 (BR-M16 embutidas) e travada no topo pelas CT-V; portões livres até +7,50
+    PJ = json.loads((AQ / "portao_l4.json").read_text(encoding="utf-8"))
+    yl4 = Y_LIN[LINHA_PORTOES]
+    yc_pl = yl4 - (0.20 + 0.025 + 0.05)                                   # mesmo plano da parede C (placas a 2,5 cm da face dos PG 40×40)
+    x0v, x1v = X_L4[4] + 0.010, X_L4[5] - 0.010
+    z0v, z1v = PJ["placa_P19_D"]["z0"] + 0.005, PJ["placa_P19_D"]["z1"]
+    m.linear("placa", "PV-1 placa sobre o portão P19–D (10 × 37, DEC-059)", PerfilRetangular(0.10, z1v - z0v, "PV-1 10×37"),
+             (x0v, yc_pl, (z0v + z1v) / 2), (x1v, yc_pl, (z0v + z1v) / 2), "Placas de fechamento", obs="armada, C40; peso próprio nos 2 apoios CL-V; ND-LET-PV01")
+    for xpg, bpg, lh in ((X_L4[4], 0.25, 0.152), (X_L4[5], 0.40, 0.102)):
+        yface = yl4 - bpg / 2
+        caixa(m, f"CL-V cantoneira L {lh * 1000:.0f} × 102 × 9,5 L=150 — apoio da PV-1 (2 BR-M16 na face do PG)", xpg - 0.075, xpg + 0.075, yface - lh, yface, z0v - 0.005 - 0.0095, z0v - 0.005, GM)
+        caixa(m, f"CL-V cantoneira — aba na face do PG", xpg - 0.075, xpg + 0.075, yface - 0.0095, yface, z0v - 0.005 - 0.102, z0v - 0.005, GM)
+        caixa(m, "CT-V cantoneira L 76 × 76 × 6,3 L=80 — trava do topo da PV-1 (1 BR-M16 no PG + 1 M12 na placa)", xpg - 0.04, xpg + 0.04, yface - 0.0063, yface, z1v - 0.10, z1v - 0.024, GM)
 
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
@@ -833,10 +796,10 @@ def montar() -> ModeloBIM:
     m.pendente("! Folga na cabeça dos PG-01 a PG-04 mantida em 2 cm (decisão de 20/10): a TS-01 desce ~30 mm (PG-01/PG-03) e ~20 mm (PG-02/PG-04) depois de montada — a viga pode encostar no PG.")
     m.pendente("rev09 (DEC-048/052): linha 2 sem TS-01 — W 200 × 15,0 contínua nos pilares e em 4 montantes W 150 no meio dos vãos sobre as VM do +7,30; terças no ST-W e mão-francesa MF-1 em toda terça.")
     m.pendente("rev09 (DEC-047/049/053/055): VM retangulares protendidas 30 × 75 com dente 45 × 40; escada interna e escada externa em L (fachada A) chegando no piso pronto +3,95.")
-    m.pendente("! Portões da linha 4 (500 × 750): no vão B–P21 o fundo da TS-01A fica em 7,497 e desce ~3 cm — decisão do Nathan pendente (quadro decisao_portao_l4).")
+    m.pendente("DEC-059: portões da linha 4 livres até +7,50 — PG-01 a PG-04 apoiam a TS-01A (NEO-7 + graute após a montagem; fundo 7,497 na face do PG-01, dentro da tolerância de ±10 mm); placa PV-1 sobre o portão P19–D.")
     m.pendente("! Painéis solares adotados com 0,15 kN/m² e instalações 0,10 kN/m²: confirmar com o fornecedor.")
     m.pendente("rev09 (DEC-045): P6, P7 e P6 da linha 2 do R01 são os pilares da escada metálica (abertura só no +3,90).")
-    m.pendente("I130 (DEC-054): h 120 com dente 78 × 35; V405/V406 com 24 Ø15,2 (22 embaixo + 2 na mesa), V407 com 18; protensão limitada, liberação com fckj 50; consolo CP-I130 com mísula 49/39; NEO-2 fretado e PN-2 Ø25.")
+    m.pendente(f"I130 (DEC-054/058): h 120 com dente 78 × 35; eixo C com dois PC-03 40×40 (y 46,317 e 62,833), V406/V405/V404 de 16,517 m com {I1J['V406']['arranjo']['n_cord']} Ø12,7 e V407 com {I1J['V407']['arranjo']['n_cord']} Ø12,7; protensão limitada, liberação com fckj 50; consolo CP-I130 com mísula 49/39; NEO-2 fretado e PN-2 Ø25.")
     m.pendente("TS-01 sem dentes: apoio no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e no topo da I130 / pilares centrais (NEO-3 + 2 PN-5 Ø20).")
     m.pendente("Ligações modeladas como na execução: ST-1P/ST-1P4/ST-1V/ST-1V-R/ST-1FL em chapa dobrada com esperas, porcas e grampos; correntes Ø10, tirantes rígidos L 51 e diagonais de ancoragem Ø16 (COB02); X Ø16 com esticador e OR-X nas ES-2; placas Trejor: CC-1 (CE-1 12,5 + CS-1 de fábrica) na face C e CS-1 soldado na obra nas faces laterais, NC-1, PT-1/PT-2; CL-P dos pilares dos portões. Rufos e telhas em camadas.")
     m.pendente("Fora do 3D (só nas pranchas): armaduras, cordoalhas, alças de içamento AL-1/AL-2/AL-3, grampos e porcas das placas, furos de içamento dos pilares.")
@@ -867,7 +830,7 @@ def renomear_pecas(modelo):
             else:
                 xm, ym, zm = (p.p0[0] + p.p1[0]) / 2, (p.p0[1] + p.p1[1]) / 2, (p.p0[2] + p.p1[2]) / 2
             niv = "cobertura" if p.grupo != "Vigas de mezanino (retangulares protendidas)" else ("+3,90" if zm < 5.5 else "+7,30")
-            fam = {"Vigas centrais I130": ("V405", "V406", "V407"), "Vigas I90 de cobertura": ("TS",), "Vigas de borda": ("VB",),
+            fam = {"Vigas centrais I130": ("V404", "V405", "V406", "V407"), "Vigas I90 de cobertura": ("TS",), "Vigas de borda": ("VB",),
                    "Vigas de mezanino (retangulares protendidas)": ("VM",)}[p.grupo]
             nm = RN.viga_em(niv, xm, ym, tol=0.8, marcas=fam)
         if not nm and isinstance(p.marca, str):                       # insertos e afins: texto com a nomenclatura nova

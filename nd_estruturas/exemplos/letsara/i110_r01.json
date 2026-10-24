@@ -17,25 +17,29 @@
     {
      "y": 60,
      "xs": [
+      -150,
       -100,
       -50,
+      0,
       50,
-      100
+      100,
+      150
      ],
      "isol": 0
     },
     {
-     "y": 110,
+     "y": 100,
      "xs": [
       -100,
       -50,
+      0,
       50,
       100
      ],
-     "isol": 0
+     "isol": 2000
     },
     {
-     "y": 160,
+     "y": 140,
      "xs": [
       -100,
       -50,
@@ -45,44 +49,34 @@
      "isol": 2000
     },
     {
-     "y": 210,
+     "y": 220,
      "xs": [
-      -100,
       -50,
-      50,
-      100
+      50
      ],
      "isol": 4000
-    },
-    {
-     "y": 1100,
-     "xs": [
-      -100,
-      100
-     ],
-     "isol": 0
     }
    ],
    "n_cord": 18,
-   "n_inf": 16,
-   "y_cg_mm": 242.2,
+   "n_inf": 18,
+   "y_cg_mm": 106.7,
    "sig_pi": 1453.0,
-   "F_macaco_kN": 203.4,
-   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 143.4,
+   "cordoalha": "Ø12.7",
    "fckj": 50.0,
    "fck": 50,
    "liberacao": "gradual (macaco), simétrica, só com fckj atingido",
-   "lbpt_m": 0.805,
-   "lbpt_brusca_m": 1.006
+   "lbpt_m": 0.675,
+   "lbpt_brusca_m": 0.844
   },
   "perdas": {
    "sig_pi": 1453.0,
    "d_cravacao": 19.5,
    "d_relax_inicial": 24.1233397,
-   "d_elastica": 78.9879766,
-   "sig_p0": 1330.3886837,
-   "P0": 3352.579483,
-   "perda_imediata_pct": 8.4384939,
+   "d_elastica": 73.2871026,
+   "sig_p0": 1336.0895577,
+   "P0": 2373.6967082,
+   "perda_imediata_pct": 8.0461419,
    "alfa_p_j": 4.9244937,
    "Eci_j_MPa": 39597.9797464,
    "U": 70.0,
@@ -91,76 +85,82 @@
    "h_fic_cm": 18.2805731,
    "phi": 3.075,
    "eps_cs": -0.00039,
-   "sig_c_p0g": 16.0398169,
+   "sig_c_p0g": 14.88216,
    "fases": [
     {
      "dM": 984.4240824063,
      "t_dias": 60.0,
      "phi": 2.05,
-     "d_sigma_c": 6.661566167001475
+     "d_sigma_c": 9.240859863139839
     }
    ],
    "processo": "9.6.3.4.2 com fases (superposição)",
-   "d_prog_9_6_3_4_2": 272.6328776,
-   "d_prog_9_6_3_4_3": 320.3478745,
-   "d_prog": 272.6328776,
-   "sig_pinf": 1057.7558061,
-   "Pinf": 2665.5446314,
-   "perda_progressiva_pct": 18.7634465,
-   "perda_total_pct": 27.2019404
+   "d_prog_9_6_3_4_2": 238.9691483,
+   "d_prog_9_6_3_4_3": 308.1709032,
+   "d_prog": 238.9691483,
+   "sig_pinf": 1097.1204094,
+   "Pinf": 1949.1441193,
+   "perda_progressiva_pct": 16.4466035,
+   "perda_total_pct": 24.4927454
   },
   "ato": {
    "lim_c": -35.0,
    "lim_t": 4.886,
-   "topo_max": 1.5,
-   "x_topo_max": 1.175,
-   "base_min": -23.029,
-   "x_base_min": 5.175,
-   "R_tracao_max": 69.25,
-   "x_R_max": 0.35,
-   "As_topo_cm2": 2.77,
+   "topo_max": 3.991,
+   "x_topo_max": 3.025,
+   "base_min": -19.436,
+   "x_base_min": 5.025,
+   "R_tracao_max": 192.593,
+   "x_R_max": 1.025,
+   "As_topo_cm2": 7.704,
    "gama_p": 1.1,
    "ok": true,
    "controle": {
     "ponta (fim do lbpt)": {
-     "x": 1.15,
-     "topo": 1.49,
-     "base": -9.98,
-     "As_cm2": 1.85
+     "x": 1.025,
+     "topo": 2.81,
+     "base": -7.04,
+     "As_cm2": 7.7
     },
-    "fim do isolamento de 2 m (linha 16)": {
-     "x": 3.15,
-     "topo": 0.04,
-     "base": -17.85,
-     "As_cm2": 0.0
+    "fim do isolamento de 2 m (linha 10)": {
+     "x": 3.025,
+     "topo": 3.99,
+     "base": -18.32,
+     "As_cm2": 6.85
     },
-    "fim do isolamento de 4 m (linha 21)": {
-     "x": 5.15,
-     "topo": 0.1,
-     "base": -23.0,
-     "As_cm2": 0.0
+    "fim do isolamento de 2 m (linha 14)": {
+     "x": 3.025,
+     "topo": 3.99,
+     "base": -18.32,
+     "As_cm2": 6.85
+    },
+    "fim do isolamento de 4 m (linha 22)": {
+     "x": 5.025,
+     "topo": 3.28,
+     "base": -19.44,
+     "As_cm2": 4.55
     },
     "meio do vão": {
      "x": 9.75,
-     "topo": -0.88,
-     "base": -22.08,
-     "As_cm2": 0.0
+     "topo": 2.24,
+     "base": -18.42,
+     "As_cm2": 2.33
     }
    },
    "As_N3_cm2": 29.45,
    "fckj": 50.0,
-   "lbpt_m": 0.805,
-   "lbpt_brusca_m": 1.006,
-   "lbp_m": 1.799
+   "lbpt_m": 0.675,
+   "lbpt_brusca_m": 0.844,
+   "lbp_m": 1.503
   },
   "ELS": {
-   "D_base": -2.613,
-   "F_base": 0.627,
-   "F_topo": -0.12,
-   "D_base_transferencia": 0.617,
+   "D_base": -0.51,
+   "F_base": 0.243,
+   "F_topo": 1.115,
+   "D_base_transferencia": 0.233,
    "x_Dt": 0.366,
    "x_F": 0.366,
-   "x_Ft": 18.367,
+   "x_Ft": 18.463,
    "x_D": 9.654,
    "lim_F": 3.71,
    "lim_D": 0.0,
@@ -169,37 +169,37 @@
    "nivel": "limitada",
    "psi_D": 0.4,
    "psi_F": 0.6,
-   "x_cordoalhas_plenas": 1.155,
+   "x_cordoalhas_plenas": 1.025,
    "ok": true
   },
   "ELU": {
    "Md": 2085.2,
-   "MRd": 3412.1,
-   "x_d": 0.213,
-   "MRd_sem_N3": 3084.7,
-   "x_d_sem_N3": 0.373,
+   "MRd": 2941.7,
+   "x_d": 0.141,
+   "MRd_sem_N3": 2677.2,
+   "x_d_sem_N3": 0.247,
    "x_Mmax": 9.7,
    "ok": true
   },
   "cortante": {
-   "VRd2": 1109.1,
+   "VRd2": 1138.6,
    "Vd_max": 260.2,
    "Asw_min": 2.44,
-   "d": 1.065,
+   "d": 1.093,
    "pior": {
     "x": 2.09,
     "Vd": 248.3,
-    "Vc": 267.4,
+    "Vc": 253.2,
     "Asw_req": 2.44,
     "Asw_ef": 6.7
    },
    "estribos": "N2 Ø8 c/10 nos 2,0 m das pontas, c/15 corrente (2 ramos)",
    "ok": true,
-   "Vc0": 195.1
+   "Vc0": 200.3
   },
   "flecha": {
-   "contraflecha_ato_mm": -21.1,
-   "final_mm": -12.1,
+   "contraflecha_ato_mm": -20.6,
+   "final_mm": -13.5,
    "lim_mm": 54.7,
    "phi_t0": 3.08,
    "phi_montagem": 2.05,
@@ -213,13 +213,13 @@
    "n_lacos": 2,
    "ruptura_lacos_kN": 525.1,
    "F_alca_beta3_kN": 244.8,
-   "topo_alca": 1.7,
-   "base_alca": -15.35,
-   "base_vao": -21.41,
-   "topo_vao": 0.58,
+   "topo_alca": 4.39,
+   "base_alca": -12.4,
+   "base_vao": -18.09,
+   "topo_vao": 3.41,
    "lim_t": 4.89,
    "lim_c": -35.0,
-   "As_topo_cm2": 1.63,
+   "As_topo_cm2": 10.78,
    "ok": true
   },
   "dente": {
@@ -256,47 +256,103 @@
   "linhas": {
    "Vd_kN": 275.5,
    "peso_kN_m": 7.94,
-   "P0_kN": 3352.6,
-   "Pinf_kN": 2665.5,
-   "flecha_final_mm": -12.1,
+   "P0_kN": 2373.7,
+   "Pinf_kN": 1949.1,
+   "flecha_final_mm": -13.5,
    "Md_kNm": 2085.2,
-   "MRd_kNm": 3412.1,
-   "x_d": 0.213,
-   "elsd_inf_MPa": -2.613,
-   "elsf_inf_MPa": 0.627,
+   "MRd_kNm": 2941.7,
+   "x_d": 0.141,
+   "elsd_inf_MPa": -0.51,
+   "elsf_inf_MPa": 0.243,
    "elsf_lim_MPa": 3.71,
-   "perda_imediata_pct": 8.4,
-   "perda_total_pct": 27.2
+   "perda_imediata_pct": 8.0,
+   "perda_total_pct": 24.5
   },
   "tentativas": [
    {
-    "arranjo": "4+4+4+4",
-    "n": 16,
-    "ok": {
-     "ato": true,
-     "ELS": true,
-     "ELU": true,
-     "cortante": true,
-     "flecha": true,
-     "icamento": false
-    },
-    "ELS_D": -3.214
-   },
-   {
-    "arranjo": "5+4+4+4",
+    "arranjo": "7+4+4 + 2 (y 22)",
+    "isol": [
+     0,
+     0,
+     2000,
+     4000
+    ],
     "n": 17,
     "ok": {
-     "ato": false,
-     "ELS": true,
+     "ato": true,
+     "ELS": false,
      "ELU": true,
      "cortante": true,
      "flecha": true,
      "icamento": false
     },
-    "ELS_D": -4.194
+    "ELS_D": 0.238
    },
    {
-    "arranjo": "5+5+4+4",
+    "arranjo": "7+4+4 + 2 (y 22)",
+    "isol": [
+     0,
+     2000,
+     2000,
+     4000
+    ],
+    "n": 17,
+    "ok": {
+     "ato": true,
+     "ELS": false,
+     "ELU": true,
+     "cortante": true,
+     "flecha": true,
+     "icamento": true
+    },
+    "ELS_D": 0.238
+   },
+   {
+    "arranjo": "7+4+4 + 2 (y 22)",
+    "isol": [
+     0,
+     2000,
+     4000,
+     6000
+    ],
+    "n": 17,
+    "ok": {
+     "ato": true,
+     "ELS": false,
+     "ELU": true,
+     "cortante": true,
+     "flecha": true,
+     "icamento": true
+    },
+    "ELS_D": 0.238
+   },
+   {
+    "arranjo": "7+4+4 + 2 (y 22)",
+    "isol": [
+     0,
+     3000,
+     3000,
+     6000
+    ],
+    "n": 17,
+    "ok": {
+     "ato": true,
+     "ELS": false,
+     "ELU": true,
+     "cortante": true,
+     "flecha": true,
+     "icamento": true
+    },
+    "ELS_D": 0.238
+   },
+   {
+    "arranjo": "7+5+4 + 2 (y 22)",
+    "isol": [
+     0,
+     0,
+     2000,
+     4000
+    ],
     "n": 18,
     "ok": {
      "ato": false,
@@ -306,10 +362,16 @@
      "flecha": true,
      "icamento": false
     },
-    "ELS_D": -5.08
+    "ELS_D": -0.51
    },
    {
-    "arranjo": "4+4+4+4 + 2 topo",
+    "arranjo": "7+5+4 + 2 (y 22)",
+    "isol": [
+     0,
+     2000,
+     2000,
+     4000
+    ],
     "n": 18,
     "ok": {
      "ato": true,
@@ -319,42 +381,34 @@
      "flecha": true,
      "icamento": true
     },
-    "ELS_D": -2.613
+    "ELS_D": -0.51
    }
+  ],
+  "isolamento_padrao": [
+   0,
+   2000,
+   2000,
+   4000
   ]
  },
  "V406": {
-  "L_eixos": 24.775,
-  "L_peca": 24.125,
-  "L_calc": 23.775,
+  "L_eixos": 16.517,
+  "L_peca": 15.967,
+  "L_calc": 15.617,
   "cargas_concentradas_kN": {
    "g": 205.7,
    "q": 49.6
   },
   "x_cargas_m": [
-   9.475,
-   19.475
+   9.475
   ],
-  "g2_equiv": 21.56,
-  "q_equiv": 5.2,
+  "g2_equiv": 25.09,
+  "q_equiv": 6.05,
   "arranjo": {
    "linhas": [
     {
      "y": 60,
      "xs": [
-      -150,
-      -100,
-      -50,
-      0,
-      50,
-      100,
-      150
-     ],
-     "isol": 0
-    },
-    {
-     "y": 110,
-     "xs": [
       -100,
       -50,
       0,
@@ -364,56 +418,46 @@
      "isol": 0
     },
     {
-     "y": 160,
+     "y": 100,
      "xs": [
       -100,
       -50,
-      0,
+      50,
+      100
+     ],
+     "isol": 0
+    },
+    {
+     "y": 140,
+     "xs": [
+      -100,
+      -50,
       50,
       100
      ],
      "isol": 2000
-    },
-    {
-     "y": 210,
-     "xs": [
-      -100,
-      -50,
-      0,
-      50,
-      100
-     ],
-     "isol": 4000
-    },
-    {
-     "y": 1100,
-     "xs": [
-      -100,
-      100
-     ],
-     "isol": 0
     }
    ],
-   "n_cord": 24,
-   "n_inf": 22,
-   "y_cg_mm": 209.2,
+   "n_cord": 13,
+   "n_inf": 13,
+   "y_cg_mm": 96.9,
    "sig_pi": 1453.0,
-   "F_macaco_kN": 203.4,
-   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 143.4,
+   "cordoalha": "Ø12.7",
    "fckj": 50.0,
    "fck": 50,
    "liberacao": "gradual (macaco), simétrica, só com fckj atingido",
-   "lbpt_m": 0.787,
-   "lbpt_brusca_m": 0.983
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855
   },
   "perdas": {
    "sig_pi": 1453.0,
    "d_cravacao": 19.5,
    "d_relax_inicial": 24.1233397,
-   "d_elastica": 109.1709331,
-   "sig_p0": 1300.2057271,
-   "P0": 4368.6912432,
-   "perda_imediata_pct": 10.5157793,
+   "d_elastica": 56.5865827,
+   "sig_p0": 1352.7900776,
+   "P0": 1735.7649485,
+   "perda_imediata_pct": 6.89676,
    "alfa_p_j": 4.9244937,
    "Eci_j_MPa": 39597.9797464,
    "U": 70.0,
@@ -422,77 +466,71 @@
    "h_fic_cm": 18.2805731,
    "phi": 3.075,
    "eps_cs": -0.00039,
-   "sig_c_p0g": 22.1689662,
+   "sig_c_p0g": 11.4908429,
    "fases": [
     {
-     "dM": 1523.0222285357788,
+     "dM": 764.8918945354865,
      "t_dias": 60.0,
      "phi": 2.05,
-     "d_sigma_c": 11.279330156280203
+     "d_sigma_c": 7.3241477141923665
     }
    ],
    "processo": "9.6.3.4.2 com fases (superposição)",
-   "d_prog_9_6_3_4_2": 286.2801902,
-   "d_prog_9_6_3_4_3": 382.8914677,
-   "d_prog": 286.2801902,
-   "sig_pinf": 1013.925537,
-   "Pinf": 3406.7898043,
-   "perda_progressiva_pct": 19.7026972,
-   "perda_total_pct": 30.2184765
+   "d_prog_9_6_3_4_2": 224.1951332,
+   "d_prog_9_6_3_4_3": 271.8333578,
+   "d_prog": 224.1951332,
+   "sig_pinf": 1128.5949444,
+   "Pinf": 1448.1001731,
+   "perda_progressiva_pct": 15.4298096,
+   "perda_total_pct": 22.3265696
   },
   "ato": {
    "lim_c": -35.0,
    "lim_t": 4.886,
-   "topo_max": 3.976,
-   "x_topo_max": 1.15,
-   "base_min": -31.776,
-   "x_base_min": 5.15,
-   "R_tracao_max": 193.234,
-   "x_R_max": 1.15,
-   "As_topo_cm2": 7.729,
+   "topo_max": 3.789,
+   "x_topo_max": 1.05,
+   "base_min": -15.053,
+   "x_base_min": 3.05,
+   "R_tracao_max": 263.332,
+   "x_R_max": 1.05,
+   "As_topo_cm2": 10.533,
    "gama_p": 1.1,
    "ok": true,
    "controle": {
     "ponta (fim do lbpt)": {
-     "x": 1.125,
-     "topo": 3.88,
-     "base": -15.42,
-     "As_cm2": 7.5
+     "x": 1.025,
+     "topo": 3.75,
+     "base": -9.18,
+     "As_cm2": 10.42
     },
-    "fim do isolamento de 2 m (linha 16)": {
-     "x": 3.125,
-     "topo": 2.06,
-     "base": -25.58,
-     "As_cm2": 1.48
-    },
-    "fim do isolamento de 4 m (linha 21)": {
-     "x": 5.125,
-     "topo": 1.93,
-     "base": -31.68,
-     "As_cm2": 1.06
+    "fim do isolamento de 2 m (linha 14)": {
+     "x": 3.025,
+     "topo": 3.26,
+     "base": -15.0,
+     "As_cm2": 5.57
     },
     "meio do vão": {
-     "x": 12.05,
-     "topo": -0.29,
-     "base": -29.6,
-     "As_cm2": 0.0
+     "x": 7.975,
+     "topo": 2.13,
+     "base": -13.95,
+     "As_cm2": 2.7
     }
    },
    "As_N3_cm2": 29.45,
    "fckj": 50.0,
-   "lbpt_m": 0.787,
-   "lbpt_brusca_m": 0.983,
-   "lbp_m": 1.799
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855,
+   "lbp_m": 1.503
   },
   "ELS": {
-   "D_base": -0.391,
-   "F_base": 0.803,
-   "F_topo": 1.026,
-   "D_base_transferencia": 0.788,
-   "x_Dt": 23.831,
-   "x_F": 23.831,
-   "x_Ft": 1.126,
-   "x_D": 9.685,
+   "D_base": -0.532,
+   "F_base": 0.332,
+   "F_topo": 2.117,
+   "D_base_transferencia": 0.322,
+   "x_Dt": 15.636,
+   "x_F": 15.636,
+   "x_Ft": 1.034,
+   "x_D": 9.623,
    "lim_F": 3.71,
    "lim_D": 0.0,
    "psi1": 0.6,
@@ -500,77 +538,77 @@
    "nivel": "limitada",
    "psi_D": 0.4,
    "psi_F": 0.6,
-   "x_cordoalhas_plenas": 1.137,
+   "x_cordoalhas_plenas": 1.034,
    "ok": true
   },
   "ELU": {
-   "Md": 3194.2,
-   "MRd": 4408.8,
-   "x_d": 0.366,
-   "MRd_sem_N3": 3731.4,
-   "x_d_sem_N3": 0.597,
-   "x_Mmax": 9.69,
+   "Md": 1552.7,
+   "MRd": 2242.0,
+   "x_d": 0.092,
+   "MRd_sem_N3": 2051.9,
+   "x_d_sem_N3": 0.182,
+   "x_Mmax": 9.66,
    "ok": true
   },
   "cortante": {
-   "VRd2": 1116.2,
-   "Vd_max": 525.5,
+   "VRd2": 1148.8,
+   "Vd_max": 276.9,
    "Asw_min": 2.44,
-   "d": 1.072,
+   "d": 1.103,
    "pior": {
-    "x": 22.05,
-    "Vd": 513.2,
-    "Vc": 270.3,
-    "Asw_req": 5.79,
+    "x": 2.05,
+    "Vd": 193.7,
+    "Vc": 308.9,
+    "Asw_req": 2.44,
     "Asw_ef": 6.7
    },
    "estribos": "N2 Ø8 c/10 nos 2,0 m das pontas, c/15 corrente (2 ramos)",
    "ok": true,
-   "Vc0": 196.4
+   "Vc0": 202.1
   },
   "flecha": {
-   "contraflecha_ato_mm": -45.0,
-   "final_mm": 12.4,
-   "lim_mm": 67.9,
+   "contraflecha_ato_mm": -10.6,
+   "final_mm": -8.4,
+   "lim_mm": 44.6,
    "phi_t0": 3.08,
    "phi_montagem": 2.05,
    "ok": true
   },
   "icamento": {
    "a_alca_m": 2.5,
-   "peso_kN": 199.9,
-   "F_alca_d_kN": 130.0,
+   "peso_kN": 135.2,
+   "F_alca_d_kN": 87.9,
    "cap_laco_kN": 65.6,
    "n_lacos": 2,
    "ruptura_lacos_kN": 525.1,
-   "F_alca_beta3_kN": 299.9,
-   "topo_alca": 4.12,
-   "base_alca": -22.64,
-   "base_vao": -28.04,
-   "topo_vao": 0.89,
+   "F_alca_beta3_kN": 202.8,
+   "topo_alca": 4.64,
+   "base_alca": -13.55,
+   "base_vao": -14.06,
+   "topo_vao": 3.35,
    "lim_t": 4.89,
    "lim_c": -35.0,
-   "As_topo_cm2": 6.09,
+   "As_topo_cm2": 11.16,
    "ok": true
   },
   "dente": {
    "lado": "B",
-   "Vd": 555.0,
-   "Vd_cargas_atuais": 540.2,
-   "Fg_d": 468.1,
-   "Fq_d": 86.9,
-   "parcela_variavel": 0.157,
+   "Vd": 292.3,
+   "Vd_cargas_atuais": 292.3,
+   "Fg_d": 250.2,
+   "Fq_d": 42.1,
+   "parcela_variavel": 0.144,
    "gama_n": 1.1,
-   "Fd": 610.5,
-   "Hd": 97.7,
+   "Fd": 321.6,
+   "Hd": 51.4,
    "reacao_k": {
     "A": {
-     "g": 261.0,
-     "q": 38.8
+     "g": 148.6,
+     "q": 19.5
     },
     "B": {
-     "g": 350.5,
-     "q": 60.4
+     "g": 192.5,
+     "q": 30.1
     }
    },
    "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
@@ -585,24 +623,30 @@
   },
   "ok_geral": true,
   "linhas": {
-   "Vd_kN": 555.0,
+   "Vd_kN": 292.3,
    "peso_kN_m": 7.94,
-   "P0_kN": 4368.7,
-   "Pinf_kN": 3406.8,
-   "flecha_final_mm": 12.4,
-   "Md_kNm": 3194.2,
-   "MRd_kNm": 4408.8,
-   "x_d": 0.366,
-   "elsd_inf_MPa": -0.391,
-   "elsf_inf_MPa": 0.803,
+   "P0_kN": 1735.8,
+   "Pinf_kN": 1448.1,
+   "flecha_final_mm": -8.4,
+   "Md_kNm": 1552.7,
+   "MRd_kNm": 2242.0,
+   "x_d": 0.092,
+   "elsd_inf_MPa": -0.532,
+   "elsf_inf_MPa": 0.332,
    "elsf_lim_MPa": 3.71,
-   "perda_imediata_pct": 10.5,
-   "perda_total_pct": 30.2
+   "perda_imediata_pct": 6.9,
+   "perda_total_pct": 22.3
   },
   "tentativas": [
    {
-    "arranjo": "7+5+5+5 + 2 topo",
-    "n": 24,
+    "arranjo": "5+4+4",
+    "isol": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "n": 13,
     "ok": {
      "ato": true,
      "ELS": true,
@@ -611,42 +655,35 @@
      "flecha": true,
      "icamento": true
     },
-    "ELS_D": -0.391
+    "ELS_D": -0.532
    }
+  ],
+  "isolamento_padrao": [
+   0,
+   0,
+   2000,
+   4000
   ]
  },
  "V405": {
-  "L_eixos": 24.775,
-  "L_peca": 24.025,
-  "L_calc": 23.675,
+  "L_eixos": 16.516,
+  "L_peca": 15.966,
+  "L_calc": 15.616,
   "cargas_concentradas_kN": {
    "g": 205.7,
    "q": 49.6
   },
   "x_cargas_m": [
-   4.6,
-   14.6
+   2.958,
+   12.958
   ],
-  "g2_equiv": 21.58,
-  "q_equiv": 5.21,
+  "g2_equiv": 19.57,
+  "q_equiv": 4.72,
   "arranjo": {
    "linhas": [
     {
      "y": 60,
      "xs": [
-      -150,
-      -100,
-      -50,
-      0,
-      50,
-      100,
-      150
-     ],
-     "isol": 0
-    },
-    {
-     "y": 110,
-     "xs": [
       -100,
       -50,
       0,
@@ -656,56 +693,46 @@
      "isol": 0
     },
     {
-     "y": 160,
+     "y": 100,
      "xs": [
       -100,
       -50,
-      0,
+      50,
+      100
+     ],
+     "isol": 0
+    },
+    {
+     "y": 140,
+     "xs": [
+      -100,
+      -50,
       50,
       100
      ],
      "isol": 2000
-    },
-    {
-     "y": 210,
-     "xs": [
-      -100,
-      -50,
-      0,
-      50,
-      100
-     ],
-     "isol": 4000
-    },
-    {
-     "y": 1100,
-     "xs": [
-      -100,
-      100
-     ],
-     "isol": 0
     }
    ],
-   "n_cord": 24,
-   "n_inf": 22,
-   "y_cg_mm": 209.2,
+   "n_cord": 13,
+   "n_inf": 13,
+   "y_cg_mm": 96.9,
    "sig_pi": 1453.0,
-   "F_macaco_kN": 203.4,
-   "cordoalha": "Ø15.2",
+   "F_macaco_kN": 143.4,
+   "cordoalha": "Ø12.7",
    "fckj": 50.0,
    "fck": 50,
    "liberacao": "gradual (macaco), simétrica, só com fckj atingido",
-   "lbpt_m": 0.786,
-   "lbpt_brusca_m": 0.983
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855
   },
   "perdas": {
    "sig_pi": 1453.0,
    "d_cravacao": 19.5,
    "d_relax_inicial": 24.1233397,
-   "d_elastica": 109.5589626,
-   "sig_p0": 1299.8176977,
-   "P0": 4367.3874641,
-   "perda_imediata_pct": 10.5424847,
+   "d_elastica": 56.1551271,
+   "sig_p0": 1353.2215332,
+   "P0": 1736.3185493,
+   "perda_imediata_pct": 6.8670658,
    "alfa_p_j": 4.9244937,
    "Eci_j_MPa": 39597.9797464,
    "U": 70.0,
@@ -714,77 +741,71 @@
    "h_fic_cm": 18.2805731,
    "phi": 3.075,
    "eps_cs": -0.00039,
-   "sig_c_p0g": 22.247762,
+   "sig_c_p0g": 11.4032286,
    "fases": [
     {
-     "dM": 1512.1471710970445,
+     "dM": 580.0030633991747,
      "t_dias": 60.0,
      "phi": 2.05,
-     "d_sigma_c": 11.198790712389142
+     "d_sigma_c": 5.553762749178344
     }
    ],
    "processo": "9.6.3.4.2 com fases (superposição)",
-   "d_prog_9_6_3_4_2": 287.7427911,
-   "d_prog_9_6_3_4_3": 383.6744206,
-   "d_prog": 287.7427911,
-   "sig_pinf": 1012.0749066,
-   "Pinf": 3400.5716861,
-   "perda_progressiva_pct": 19.803358,
-   "perda_total_pct": 30.3458426
+   "d_prog_9_6_3_4_2": 238.1302196,
+   "d_prog_9_6_3_4_3": 270.8814331,
+   "d_prog": 238.1302196,
+   "sig_pinf": 1115.0913136,
+   "Pinf": 1430.7736645,
+   "perda_progressiva_pct": 16.3888658,
+   "perda_total_pct": 23.2559316
   },
   "ato": {
    "lim_c": -35.0,
    "lim_t": 4.886,
-   "topo_max": 3.979,
-   "x_topo_max": 1.15,
-   "base_min": -31.788,
-   "x_base_min": 5.15,
-   "R_tracao_max": 193.523,
-   "x_R_max": 1.15,
-   "As_topo_cm2": 7.741,
+   "topo_max": 3.791,
+   "x_topo_max": 1.05,
+   "base_min": -15.058,
+   "x_base_min": 3.05,
+   "R_tracao_max": 263.44,
+   "x_R_max": 1.05,
+   "As_topo_cm2": 10.538,
    "gama_p": 1.1,
    "ok": true,
    "controle": {
     "ponta (fim do lbpt)": {
-     "x": 1.125,
-     "topo": 3.89,
-     "base": -15.42,
-     "As_cm2": 7.51
+     "x": 1.025,
+     "topo": 3.75,
+     "base": -9.18,
+     "As_cm2": 10.42
     },
-    "fim do isolamento de 2 m (linha 16)": {
-     "x": 3.125,
-     "topo": 2.07,
-     "base": -25.59,
-     "As_cm2": 1.49
-    },
-    "fim do isolamento de 4 m (linha 21)": {
-     "x": 5.125,
-     "topo": 1.95,
-     "base": -31.7,
-     "As_cm2": 1.09
+    "fim do isolamento de 2 m (linha 14)": {
+     "x": 3.025,
+     "topo": 3.26,
+     "base": -15.01,
+     "As_cm2": 5.57
     },
     "meio do vão": {
-     "x": 12.0,
-     "topo": -0.24,
-     "base": -29.65,
-     "As_cm2": 0.0
+     "x": 7.975,
+     "topo": 2.13,
+     "base": -13.95,
+     "As_cm2": 2.7
     }
    },
    "As_N3_cm2": 29.45,
    "fckj": 50.0,
-   "lbpt_m": 0.786,
-   "lbpt_brusca_m": 0.983,
-   "lbp_m": 1.799
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855,
+   "lbp_m": 1.503
   },
   "ELS": {
-   "D_base": -0.615,
-   "F_base": 0.791,
-   "F_topo": 0.949,
-   "D_base_transferencia": 0.776,
-   "x_Dt": 0.293,
-   "x_F": 0.293,
-   "x_Ft": 22.903,
-   "x_D": 14.735,
+   "D_base": -1.928,
+   "F_base": 0.49,
+   "F_topo": 0.996,
+   "D_base_transferencia": 0.474,
+   "x_Dt": 15.635,
+   "x_F": 15.635,
+   "x_Ft": 1.034,
+   "x_D": 13.605,
    "lim_F": 3.71,
    "lim_D": 0.0,
    "psi1": 0.6,
@@ -792,77 +813,77 @@
    "nivel": "limitada",
    "psi_D": 0.4,
    "psi_F": 0.6,
-   "x_cordoalhas_plenas": 1.136,
+   "x_cordoalhas_plenas": 1.034,
    "ok": true
   },
   "ELU": {
-   "Md": 3161.1,
-   "MRd": 4408.8,
-   "x_d": 0.366,
-   "MRd_sem_N3": 3730.5,
-   "x_d_sem_N3": 0.596,
-   "x_Mmax": 14.74,
+   "Md": 1262.4,
+   "MRd": 2242.0,
+   "x_d": 0.092,
+   "MRd_sem_N3": 2051.4,
+   "x_d_sem_N3": 0.182,
+   "x_Mmax": 7.36,
    "ok": true
   },
   "cortante": {
-   "VRd2": 1116.2,
-   "Vd_max": 514.1,
+   "VRd2": 1148.8,
+   "Vd_max": 415.8,
    "Asw_min": 2.44,
-   "d": 1.072,
+   "d": 1.103,
    "pior": {
-    "x": 2.07,
-    "Vd": 503.1,
-    "Vc": 270.6,
-    "Asw_req": 5.54,
+    "x": 2.05,
+    "Vd": 391.6,
+    "Vc": 314.8,
+    "Asw_req": 2.44,
     "Asw_ef": 6.7
    },
    "estribos": "N2 Ø8 c/10 nos 2,0 m das pontas, c/15 corrente (2 ramos)",
    "ok": true,
-   "Vc0": 196.4
+   "Vc0": 202.1
   },
   "flecha": {
-   "contraflecha_ato_mm": -44.7,
-   "final_mm": 13.1,
-   "lim_mm": 67.6,
+   "contraflecha_ato_mm": -10.6,
+   "final_mm": -5.3,
+   "lim_mm": 44.6,
    "phi_t0": 3.08,
    "phi_montagem": 2.05,
    "ok": true
   },
   "icamento": {
    "a_alca_m": 2.5,
-   "peso_kN": 199.1,
-   "F_alca_d_kN": 129.4,
+   "peso_kN": 135.2,
+   "F_alca_d_kN": 87.9,
    "cap_laco_kN": 65.6,
    "n_lacos": 2,
    "ruptura_lacos_kN": 525.1,
-   "F_alca_beta3_kN": 298.7,
-   "topo_alca": 4.12,
-   "base_alca": -22.63,
-   "base_vao": -28.09,
-   "topo_vao": 0.95,
+   "F_alca_beta3_kN": 202.7,
+   "topo_alca": 4.64,
+   "base_alca": -13.55,
+   "base_vao": -14.06,
+   "topo_vao": 3.35,
    "lim_t": 4.89,
    "lim_c": -35.0,
-   "As_topo_cm2": 6.09,
+   "As_topo_cm2": 11.16,
    "ok": true
   },
   "dente": {
-   "lado": "A",
-   "Vd": 555.0,
-   "Vd_cargas_atuais": 530.0,
-   "Fg_d": 468.5,
-   "Fq_d": 86.5,
-   "parcela_variavel": 0.156,
+   "lado": "B",
+   "Vd": 431.3,
+   "Vd_cargas_atuais": 431.3,
+   "Fg_d": 360.5,
+   "Fq_d": 70.8,
+   "parcela_variavel": 0.164,
    "gama_n": 1.1,
-   "Fd": 610.5,
-   "Hd": 97.7,
+   "Fd": 474.4,
+   "Hd": 75.9,
    "reacao_k": {
     "A": {
-     "g": 344.2,
-     "q": 59.0
+     "g": 269.4,
+     "q": 48.7
     },
     "B": {
-     "g": 266.4,
-     "q": 40.2
+     "g": 277.3,
+     "q": 50.6
     }
    },
    "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
@@ -877,24 +898,30 @@
   },
   "ok_geral": true,
   "linhas": {
-   "Vd_kN": 555.0,
+   "Vd_kN": 431.3,
    "peso_kN_m": 7.94,
-   "P0_kN": 4367.4,
-   "Pinf_kN": 3400.6,
-   "flecha_final_mm": 13.1,
-   "Md_kNm": 3161.1,
-   "MRd_kNm": 4408.8,
-   "x_d": 0.366,
-   "elsd_inf_MPa": -0.615,
-   "elsf_inf_MPa": 0.791,
+   "P0_kN": 1736.3,
+   "Pinf_kN": 1430.8,
+   "flecha_final_mm": -5.3,
+   "Md_kNm": 1262.4,
+   "MRd_kNm": 2242.0,
+   "x_d": 0.092,
+   "elsd_inf_MPa": -1.928,
+   "elsf_inf_MPa": 0.49,
    "elsf_lim_MPa": 3.71,
-   "perda_imediata_pct": 10.5,
-   "perda_total_pct": 30.3
+   "perda_imediata_pct": 6.9,
+   "perda_total_pct": 23.3
   },
   "tentativas": [
    {
-    "arranjo": "7+5+5+5 + 2 topo",
-    "n": 24,
+    "arranjo": "5+4+4",
+    "isol": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "n": 13,
     "ok": {
      "ato": true,
      "ELS": true,
@@ -903,8 +930,288 @@
      "flecha": true,
      "icamento": true
     },
-    "ELS_D": -0.615
+    "ELS_D": -1.928
    }
+  ],
+  "isolamento_padrao": [
+   0,
+   0,
+   2000,
+   4000
+  ]
+ },
+ "V404": {
+  "L_eixos": 16.517,
+  "L_peca": 15.867,
+  "L_calc": 15.517,
+  "cargas_concentradas_kN": {
+   "g": 205.7,
+   "q": 49.6
+  },
+  "x_cargas_m": [
+   6.442
+  ],
+  "g2_equiv": 25.74,
+  "q_equiv": 6.21,
+  "arranjo": {
+   "linhas": [
+    {
+     "y": 60,
+     "xs": [
+      -100,
+      -50,
+      0,
+      50,
+      100
+     ],
+     "isol": 0
+    },
+    {
+     "y": 100,
+     "xs": [
+      -100,
+      -50,
+      50,
+      100
+     ],
+     "isol": 0
+    },
+    {
+     "y": 140,
+     "xs": [
+      -100,
+      -50,
+      50,
+      100
+     ],
+     "isol": 2000
+    }
+   ],
+   "n_cord": 13,
+   "n_inf": 13,
+   "y_cg_mm": 96.9,
+   "sig_pi": 1453.0,
+   "F_macaco_kN": 143.4,
+   "cordoalha": "Ø12.7",
+   "fckj": 50.0,
+   "fck": 50,
+   "liberacao": "gradual (macaco), simétrica, só com fckj atingido",
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855
+  },
+  "perdas": {
+   "sig_pi": 1453.0,
+   "d_cravacao": 19.5,
+   "d_relax_inicial": 24.1233397,
+   "d_elastica": 56.5330187,
+   "sig_p0": 1352.8436416,
+   "P0": 1735.8336766,
+   "perda_imediata_pct": 6.8930735,
+   "alfa_p_j": 4.9244937,
+   "Eci_j_MPa": 39597.9797464,
+   "U": 70.0,
+   "t0_dias": 5.0,
+   "t_lib_dias": 0.8,
+   "h_fic_cm": 18.2805731,
+   "phi": 3.075,
+   "eps_cs": -0.00039,
+   "sig_c_p0g": 11.4799658,
+   "fases": [
+    {
+     "dM": 774.5971762922767,
+     "t_dias": 60.0,
+     "phi": 2.05,
+     "d_sigma_c": 7.41707969281891
+    }
+   ],
+   "processo": "9.6.3.4.2 com fases (superposição)",
+   "d_prog_9_6_3_4_2": 223.2818526,
+   "d_prog_9_6_3_4_3": 271.715215,
+   "d_prog": 223.2818526,
+   "sig_pinf": 1129.561789,
+   "Pinf": 1449.3407315,
+   "perda_progressiva_pct": 15.3669548,
+   "perda_total_pct": 22.2600283
+  },
+  "ato": {
+   "lim_c": -35.0,
+   "lim_t": 4.886,
+   "topo_max": 3.794,
+   "x_topo_max": 1.05,
+   "base_min": -15.067,
+   "x_base_min": 3.05,
+   "R_tracao_max": 263.773,
+   "x_R_max": 1.05,
+   "As_topo_cm2": 10.551,
+   "gama_p": 1.1,
+   "ok": true,
+   "controle": {
+    "ponta (fim do lbpt)": {
+     "x": 1.025,
+     "topo": 3.75,
+     "base": -9.19,
+     "As_cm2": 10.44
+    },
+    "fim do isolamento de 2 m (linha 14)": {
+     "x": 3.025,
+     "topo": 3.27,
+     "base": -15.02,
+     "As_cm2": 5.61
+    },
+    "meio do vão": {
+     "x": 7.925,
+     "topo": 2.16,
+     "base": -13.98,
+     "As_cm2": 2.78
+    }
+   },
+   "As_N3_cm2": 29.45,
+   "fckj": 50.0,
+   "lbpt_m": 0.684,
+   "lbpt_brusca_m": 0.855,
+   "lbp_m": 1.503
+  },
+  "ELS": {
+   "D_base": -0.405,
+   "F_base": 0.321,
+   "F_topo": 2.065,
+   "D_base_transferencia": 0.312,
+   "x_Dt": 0.33,
+   "x_F": 0.33,
+   "x_Ft": 14.839,
+   "x_D": 6.615,
+   "lim_F": 3.71,
+   "lim_D": 0.0,
+   "psi1": 0.6,
+   "psi2": 0.4,
+   "nivel": "limitada",
+   "psi_D": 0.4,
+   "psi_F": 0.6,
+   "x_cordoalhas_plenas": 1.034,
+   "ok": true
+  },
+  "ELU": {
+   "Md": 1570.1,
+   "MRd": 2242.0,
+   "x_d": 0.092,
+   "MRd_sem_N3": 2051.9,
+   "x_d_sem_N3": 0.182,
+   "x_Mmax": 6.61,
+   "ok": true
+  },
+  "cortante": {
+   "VRd2": 1148.8,
+   "Vd_max": 269.0,
+   "Asw_min": 2.44,
+   "d": 1.103,
+   "pior": {
+    "x": 2.04,
+    "Vd": 257.8,
+    "Vc": 293.9,
+    "Asw_req": 2.44,
+    "Asw_ef": 6.7
+   },
+   "estribos": "N2 Ø8 c/10 nos 2,0 m das pontas, c/15 corrente (2 ramos)",
+   "ok": true,
+   "Vc0": 202.1
+  },
+  "flecha": {
+   "contraflecha_ato_mm": -10.5,
+   "final_mm": -8.1,
+   "lim_mm": 44.3,
+   "phi_t0": 3.08,
+   "phi_montagem": 2.05,
+   "ok": true
+  },
+  "icamento": {
+   "a_alca_m": 2.5,
+   "peso_kN": 134.4,
+   "F_alca_d_kN": 87.3,
+   "cap_laco_kN": 65.6,
+   "n_lacos": 2,
+   "ruptura_lacos_kN": 525.1,
+   "F_alca_beta3_kN": 201.6,
+   "topo_alca": 4.64,
+   "base_alca": -13.55,
+   "base_vao": -14.09,
+   "topo_vao": 3.38,
+   "lim_t": 4.89,
+   "lim_c": -35.0,
+   "As_topo_cm2": 11.16,
+   "ok": true
+  },
+  "dente": {
+   "lado": "A",
+   "Vd": 284.4,
+   "Vd_cargas_atuais": 284.4,
+   "Fg_d": 243.8,
+   "Fq_d": 40.6,
+   "parcela_variavel": 0.143,
+   "gama_n": 1.1,
+   "Fd": 312.9,
+   "Hd": 50.1,
+   "reacao_k": {
+    "A": {
+     "g": 187.6,
+     "q": 29.0
+    },
+    "B": {
+     "g": 152.7,
+     "q": 20.6
+    }
+   },
+   "norma": "NBR 9062:2017 7.3.1.1 (γn), 7.3.1.2 (Hd = 0,16 Fd, elastômero) e 7.4"
+  },
+  "ok": {
+   "ato": true,
+   "ELS": true,
+   "ELU": true,
+   "cortante": true,
+   "flecha": true,
+   "icamento": true
+  },
+  "ok_geral": true,
+  "linhas": {
+   "Vd_kN": 284.4,
+   "peso_kN_m": 7.94,
+   "P0_kN": 1735.8,
+   "Pinf_kN": 1449.3,
+   "flecha_final_mm": -8.1,
+   "Md_kNm": 1570.1,
+   "MRd_kNm": 2242.0,
+   "x_d": 0.092,
+   "elsd_inf_MPa": -0.405,
+   "elsf_inf_MPa": 0.321,
+   "elsf_lim_MPa": 3.71,
+   "perda_imediata_pct": 6.9,
+   "perda_total_pct": 22.3
+  },
+  "tentativas": [
+   {
+    "arranjo": "5+4+4",
+    "isol": [
+     0,
+     0,
+     2000,
+     4000
+    ],
+    "n": 13,
+    "ok": {
+     "ato": true,
+     "ELS": true,
+     "ELU": true,
+     "cortante": true,
+     "flecha": true,
+     "icamento": true
+    },
+    "ELS_D": -0.405
+   }
+  ],
+  "isolamento_padrao": [
+   0,
+   0,
+   2000,
+   4000
   ]
  }
 }

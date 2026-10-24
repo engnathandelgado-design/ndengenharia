@@ -123,7 +123,7 @@ MATERIAIS = [
     ["Pilares PL, PF, PC, PM, PG", PLQ["CONCRETO"], "—", "25", "armado (CA-50)", PLQ["COBRIMENTO"].replace(" (CAA II)", ""), "II"],
     ["Viga TS-01 (I90 de cobertura)", "C50", TSQ["CONCRETO"].split("fckj ")[1], TSQ["CONCRETO"].split("fckj ")[1],
      f"{ncord(TS_CORD)} Ø12,7 CP-190 RB — {TS_CORD[0][4]} kN", "3,0", "II"],
-    ["Vigas I130 (V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
+    ["Vigas I130 (V404, V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
      " / ".join(f"{k} {v['arranjo']['n_cord']}" for k, v in IJ.items()) + f" Ø12,7 — {f(IJ['V406']['arranjo']['F_macaco_kN'])} kN", "3,0", "II"],
     ["Vigas do mezanino VM-01 a VM-04 (30 × 75)", f"C{VMJ['premissas']['fck']:.0f}", f"{VMJ['premissas']['fckj']:.0f}", f"{VMJ['premissas']['fcj_icamento']:.0f}",
      f"{ncord(VM_CORD)} Ø12,7 CP-190 RB — {VM_CORD[0][4]} kN", "2,5 estribo / 3,0 cord.", "II"],
@@ -186,7 +186,7 @@ N_PRODUCAO = [
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
     "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I130 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
-    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 310 da linha 2 (direto na cabeça dos pilares, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
+    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 310 da linha 2 (direto na cabeça dos pilares, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
     "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 310 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
@@ -240,8 +240,8 @@ def gerar():
     lin_n = [[RN.novo(RN.lista(v)), RN.novo(f"{k} L1 a L9 (pilares laterais do eixo {'A' if k == 'P1' else 'E'})" if k in ("P1", "P2") else k)]
              for k, v in sorted(por_lado.items(), key=lambda kv: int(kv[1][0][1:]))]
     grp = lambda *mks: RN.lista([n for m in mks for n in RN.nomes_de(m)])
-    lin_n += [[RN.novo(grp("V407")), RN.novo("V407 (I130, linhas 2–4)")], [RN.novo(grp("V406")), RN.novo("V406 (I130, linha 4 → P13)")],
-              [RN.novo(grp("V405")), RN.novo("V405 (I130, P13 → linha 9)")],
+    lin_n += [[RN.novo(grp("V407")), RN.novo("V407 (I130, linhas 2–4)")], [RN.novo(grp("V406")), RN.novo("V406 (I130, linha 4 → PC-03 y 46,317)")],
+              [RN.novo(grp("V405")), RN.novo("V405 (I130, PC-03 → PC-03, y 46,317 → 62,833)")], [RN.novo(grp("V404")), RN.novo("V404 (I130, PC-03 y 62,833 → linha 9)")],
               [RN.novo(grp("VM-01", "VM-02", "VM-03", "VM-04")), RN.novo("vigas do mezanino (+3,90 e +7,30)")],
               [RN.novo(grp(*[f"VB-0{k}" for k in range(1, 9)])), RN.novo("vigas de borda das fachadas 1 e 9")],
               [RN.novo(grp("TS-01", "TS-01A", "TS-01B")), RN.novo("vigas de cobertura das linhas 3 a 8")]]

@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C
 from familia_pl import marca_de
 
 f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
@@ -14,7 +14,7 @@ YL = [round(y * 1000) for y in Y_LIN]
 XA = {k: round(v * 1000) for k, v in X_EIXO.items()}
 Lx, Ly = YL[-1], XA["E"]
 MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
-             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03"}
+             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE LOCAÇÃO DOS PILARES — EIXOS, MARCAS, SEÇÕES E FACES",
@@ -25,6 +25,7 @@ pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE")
 pr.revisao("06", "20/10/2026", "X DA COBERTURA NOS VÃOS 4-5 A 8-9; VB-01 A VB-08")
 pr.revisao("07", "21/10/2026", "SÓ LOCAÇÃO DOS PILARES (1:100): EIXOS NOS 4 LADOS, MARCAS, FACES; CORTES NAS CT01 A CT04")
 pr.revisao("09", "23/10/2026", "DEC-045: P6 E P7 DA ESCADA E P6 DA LINHA 2 (PE-01 A PE-03); NOMES NOVOS")
+pr.revisao("10", "24/10/2026", "DEC-058: EIXO C COM 2 PC-03 40×40 (y 46,317 E 62,833), 3 VÃOS DE 16,517 m; NOMES P23 A P37")
 
 # ------------------------------------------------------------------ pilares: (marca, posição, x_planta=y obra, y_planta=x obra, bx_planta, by_planta, faces)
 pil = []
@@ -129,13 +130,14 @@ for xr, dp in ((-1150, -3), (Lx + 1650, 3)):
     xt = xr + (dp * DIM_K + math.copysign(DIM_DLI, dp)) * E
     total((xr, 0), (xr, Ly), (xt, 0), 90, (xt, (XA["B"] + XA["C"]) / 2))
 # faces externas
-# pilares fora dos eixos: PG-02 / PG-04 (linha 4) e PC-03 (P13)
+# pilares fora dos eixos: PG-02 / PG-04 (linha 4) e os dois PC-03 (DEC-058)
 y4 = YL[3]
 v.cota_h([XA["B"], 15195, XA["C"], 24305, XA["D"]], y4 - 1500, 0, total=False) if False else None
 v.cota_v([XA["B"], 15195, XA["C"], 24305, XA["D"]], y4 - 2200, -4, total=False)
-v.cota_h([YL[5], round(Y_P13 * 1000), YL[6]], XA["C"] - 1700, -4, total=False)
+v.cota_h([YL[3], round(Y_PC_C[0] * 1000), round(Y_PC_C[1] * 1000), YL[8]], XA["C"] - 1700, -4, total=False)
 v.chamada((y4, 15195), (14, -10), "PG-02 e PG-04 fora do eixo (portões)")
-v.chamada((round(Y_P13 * 1000), XA["C"]), (-12, -14), "PC-03 fora da linha (cotado)")
+v.chamada((round(Y_PC_C[0] * 1000), XA["C"]), (-12, -14), "PC-03 fora das linhas (cotados)")
+v.chamada((round(Y_PC_C[1] * 1000), XA["C"]), (12, -14), "3 vãos de 1651,7 da linha 4 à 9")
 
 # ------------------------------------------------------------------ DETALHES TÍPICOS DE LOCAÇÃO 1:25 (cm)
 def det(nome, org, titulo, bx, by, chamadas, sub):
@@ -153,7 +155,7 @@ det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
     [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 40×60, 60 na direção A–E")
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
     [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40×60, 60 na direção 1–9")
-det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 600, 600, [((-300, -200), (-12, -8), "PC-03 60×60")], "PC-03 60×60 (PC-01/PM-01/PM-02 40×60, PC-02 40×40)")
+det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 400, 400, [((-200, -150), (-12, -8), "PC-02 / PC-03 40×40")], "PC-02/PC-03 40×40 (PC-01/PM-01/PM-02 40×60)")
 det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×25")
 
 # ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01
@@ -172,9 +174,9 @@ y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENT
               [40, 18, 9, 18, 95], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
-    "Todos os pilares são centrados nos eixos, exceto PG-02 e PG-04 (linha 4, portões) e PC-03 (entre as linhas 6 e 7): posições cotadas na planta.",
+    "Todos os pilares são centrados nos eixos, exceto PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
-    RN.novo("Nomes P1 a P33: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
+    RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
     "Tolerância de locação (NBR 9062:2017 5.2.2.6): ±1,0 cm entre apoios consecutivos, acumulado ≤ 0,1 % do comprimento; prumo ±H/300 até 2,5 cm.",
     "Cargas na fundação: ND-LET-CG01. Cortes: ND-LET-CT01 a CT04 (planta-chave dos cortes na CT03). Montagem: ND-LET-MON01 a MON03.",
     "Cotas em cm; níveis em m a partir do piso acabado (±0,00).",

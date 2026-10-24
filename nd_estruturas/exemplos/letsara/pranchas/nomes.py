@@ -20,14 +20,14 @@ Saída: nomes.json (pecas, marca_para_nomes, nome_para_marca). Rodar: python nom
 import json, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_P13
+from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_PC_C
 from familia_pl import marca_de
 
 PR = "/home/claude/letsara/pranchas/"
 EIXOS = sorted(X_EIXO.items(), key=lambda kv: kv[1])
 # marcas dos pilares internos (mesma tabela da LOC01; chave = nome R01 + x em mm)
 MARCA_INT = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
-             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03"}
+             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
 FOLHA = lambda mk: "ND-LET-" + mk.replace("-", "")
 
 
@@ -86,8 +86,8 @@ def vigas_obra():
             v.append((niv, "VM-04", "V", P6_ESC[0], P6_ESC[1], P7_ESC[0], P7_ESC[1], "escada, P6–P7 (y 3,79)"))
     # cobertura: I130 no eixo C (horizontal na planta)
     xc = X_EIXO["C"]
-    for mk, ya, yb, d in (("V407", Y_LIN[1], Y_LIN[3], "eixo C, linhas 2–4"), ("V406", Y_LIN[3], Y_P13, "eixo C, linha 4 → P13 (PC-03)"),
-                          ("V405", Y_P13, Y_LIN[8], "eixo C, P13 → linha 9")):
+    for mk, ya, yb, d in (("V407", Y_LIN[1], Y_LIN[3], "eixo C, linhas 2–4"), ("V406", Y_LIN[3], Y_PC_C[0], "eixo C, linha 4 → PC-03"),   # DEC-058
+                          ("V405", Y_PC_C[0], Y_PC_C[1], "eixo C, PC-03 → PC-03"), ("V404", Y_PC_C[1], Y_LIN[8], "eixo C, PC-03 → linha 9")):
         v.append(("cobertura", mk, "H", xc, ya, xc, yb, d))
     # cobertura: VB nas fachadas 1 e 9 (VB-01..04 linha 1, VB-05..08 linha 9, de A para E)
     for li, base in ((0, 1), (8, 5)):

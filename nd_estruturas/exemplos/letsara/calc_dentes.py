@@ -20,7 +20,7 @@ SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: n
 # (calc_i110_r01.py) — Vd 555 kN, γn 1,1 (parcela permanente preponderante, NBR 9062:2017 7.3.1.1), Fd = γn·Vd e
 # Hd = 0,16·Fd; o MEF roda com a armação da prancha (armaduras_i130) e as cordoalhas, σp∞ e lbpt do cálculo da viga.
 I1J = json.loads((AQUI / "i110_r01.json").read_text(encoding="utf-8"))
-_V = max(("V405", "V406"), key=lambda k: I1J[k]["dente"]["Fd"])
+_V = max((k for k in I1J if k != "V407"), key=lambda k: I1J[k]["dente"]["Fd"])   # DEC-058: V405 (P13 → P13B, 2 TS-01 no topo)
 _DI = I1J[_V]["dente"]
 _FAT = {"Ø15.2": 140.0 / 98.7}.get(I1J[_V]["arranjo"].get("cordoalha"), 1.0)     # DEC-054: Ø15,2 no MEF como n·(140/98,7) cordoalhas Ø12,7 equivalentes
 _CORD_I130 = [dict(y=l["y"], n=len(l["xs"]) * _FAT, **({"isol": l["isol"]} if l["isol"] else {})) for l in I1J[_V]["arranjo"]["linhas"]]

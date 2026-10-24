@@ -1,8 +1,8 @@
-"""Letsara — vigas centrais I130 (V407, V406, V405), verificação completa da peça protendida (DEC-032). Gera i110_r01.json,
+"""Letsara — vigas centrais I130 (V407, V406, V405, V404 — DEC-058), verificação completa da peça protendida (DEC-032). Gera i110_r01.json,
 que é a ÚNICA fonte do arranjo de cordoalhas, σpi, fckj, isolamentos, lbpt e reações para as pranchas (viga_i.py,
 armaduras_vigas.py), o dente (calc_dentes.py) e a memória MC05 (calc_nbr9062.py / memoria_nbr9062.py).
 
-Vãos (eixo a eixo): V407 L2→L4 20,15 m; V406 L4→P13 24,775 m; V405 P13→L9 24,775 m. Cargas: peso próprio e as TS-01
+Vãos (eixo a eixo, DEC-058): V407 L2→L4 20,15 m; V406 L4→P13, V405 P13→P13B e V404 P13B→L9, 16,517 m cada. Cargas: peso próprio e as TS-01
 apoiadas no topo (2 por linha) como cargas concentradas nas posições reais (reações e momentos sem supor simetria).
 
 Verificações (NBR 6118:2023 / NBR 9062:2017):
@@ -20,12 +20,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from nd_estruturas.prefabricados import (Concreto, secao_I, secao_retangular, CORD, EP, FYD_CA50, perdas_pretracao,
                                          lbpt_cordoalha, ato_pretracao, tensoes_secao, resultante_tracao, mrd_camadas,
                                          vc_protendido, gama_n_consolo, GAMA_P_ATO, SIG_ACO_ATO)
-from geometria import Y_LIN, Y_P13
+from geometria import Y_LIN, Y_PC_C
 
 AQ = Path(__file__).parent
 H_I = 1.20                                              # DEC-054 (24/10/2026): h 120 com dente 78 × 35 (antes 1,30)
-DIAM = 15.2                                             # DEC-054: cordoalha Ø15,2 CP-190 RB (antes Ø12,7)
-A_C = CORD["15.2"]                                      # área de uma cordoalha (m²)
+DIAM = 12.7                                             # DEC-058 (24/10, Nathan): cordoalha Ø12,7 CP-190 RB (DEC-054 era Ø15,2)
+A_C = CORD["12.7"]                                      # área de uma cordoalha (m²)
 sec = secao_I(H_I, bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
 SECP = secao_retangular(0.40, H_I)                      # maciço das pontas (1,40 m)
 U_AR = sum(math.dist(a, b) for a, b in zip(sec.pts, sec.pts[1:] + sec.pts[:1]))
@@ -49,21 +49,22 @@ G_COB = LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]
 g_ts = (0.2225 * 25 + G_COB * TRIB) * L_TS / 2          # reação de 1 TS-01 no topo da I130
 q_ts = LG["cargas_cob"]["sobrecarga"] * TRIB * L_TS / 2
 P_g, P_q = 2 * g_ts, 2 * q_ts                           # duas TS por linha
-VIGAS = {"V407": (Y_LIN[1], Y_LIN[3], [Y_LIN[2]]), "V406": (Y_LIN[3], Y_P13, [Y_LIN[4], Y_LIN[5]]),
-         "V405": (Y_P13, Y_LIN[8], [Y_LIN[6], Y_LIN[7]])}
-FACES = {"V407": (0.30, 0.20), "V406": (0.20, 0.30), "V405": (0.30, 0.30)}
+VIGAS = {"V407": (Y_LIN[1], Y_LIN[3], [Y_LIN[2]]), "V406": (Y_LIN[3], Y_PC_C[0], [Y_LIN[4]]),           # DEC-058: 3 vãos de 16,517 m
+         "V405": (Y_PC_C[0], Y_PC_C[1], [Y_LIN[5], Y_LIN[6]]), "V404": (Y_PC_C[1], Y_LIN[8], [Y_LIN[7]])}
+FACES = {"V407": (0.30, 0.20), "V406": (0.20, 0.20), "V405": (0.20, 0.20), "V404": (0.20, 0.30)}   # PC-03 40×40
 X7 = [-150, -100, -50, 0, 50, 100, 150]
 X5, X4 = [-100, -50, 0, 50, 100], [-100, -50, 50, 100]
-Y_LIN_C = (60, 110, 160, 210)                           # Ø15,2: espaçamento vertical livre ≥ 2φ (NBR 6118:2023 18.6.2.3)
-ISOL = (0, 0, 2000, 4000)                               # isolamento escalonado (mm): linha 14 com 2,0 m, linha 18 com 4,0 m
+Y_LIN_C = (60, 100, 140, 180)                           # Ø12,7: espaçamento vertical livre ≥ 2φ / 20 mm (NBR 6118:2023 18.6.2.3)
+ISOL = (0, 0, 2000, 4000)                               # isolamento escalonado (mm) por linha; por viga em ISOL_V
+ISOL_V = {}                                             # (padrão de isolamento escolhido na busca, ver ISOLS)
 TOPO = dict(y=round(H_I * 1000) - 100, xs=[-100, 100])                     # 2 cordoalhas na mesa superior, aderentes (controle do ato nas pontas)
 
 
 LINHA5 = dict(y=220, xs=[-50, 50], isol=4000)          # DEC-043: 5ª linha (2 cordoalhas a 22 cm, x ±5, isoladas 4,0 m) — V405/V406
 
 
-def arranjo(por_linha, topo=True, linha5=False):
-    lin = [dict(y=y, xs=(X7 if n == 7 else X5 if n == 5 else X4), isol=i) for y, n, i in zip(Y_LIN_C, por_linha, ISOL)]
+def arranjo(por_linha, topo=True, linha5=False, isol=ISOL):
+    lin = [dict(y=y, xs=(X7 if n == 7 else X5 if n == 5 else X4), isol=i) for y, n, i in zip(Y_LIN_C, por_linha, isol) if n]
     if linha5:
         lin.append(dict(LINHA5))
     if topo:
@@ -72,15 +73,16 @@ def arranjo(por_linha, topo=True, linha5=False):
 
 
 # DEC-043 (protensão completa): menor arranjo da família que passa (ELS-D na frequente, ELS-F na rara, ato, ELU, içamento)
-# com folga de MARGEM_D no ELS-D. V405/V406: 28 + 2 topo dá +0,012 MPa na V406 (não passa) → 28 + 2 (y 22) + 2 topo = 32,
-# as duas na mesma pista de 60 m (24,1 + 24,0 m) → mesmo arranjo. V407: 17 (5+4+4+4, sem topo). Antes (limitada): 30/30/20.
-CANDIDATOS = {"V405": [((7, 5, 5, 5), True, False)], "V406": [((7, 5, 5, 5), True, False)],      # DEC-054 (estudo_i130_h120, opção A)
-              "V407": [((4, 4, 4, 4), False, False), ((5, 4, 4, 4), False, False), ((5, 5, 4, 4), False, False), ((4, 4, 4, 4), True, False),
-                       ((5, 4, 4, 4), True, False), ((5, 5, 4, 4), True, False), ((5, 5, 5, 5), True, False), ((7, 5, 5, 5), True, False)]}
+# com folga de MARGEM_D no ELS-D (histórico: DEC-043/054, Ø15,2, vãos de 24,775 m).
+# DEC-058 (Ø12,7, arranjo C): menor arranjo que passa com folga de MARGEM_D no ELS-D (estudo_i130_pilar_extra: V407 18 =
+# 7+5+4 + 2 (y 22); V406/V405/V404 13 = 5+4+4, marca única de seção e cordoalha). Tenta antes os arranjos menores.
+_PEQ = [((4, 4, 4), False, False), ((5, 4, 4), False, False), ((5, 5, 4), False, False)]
+CANDIDATOS = {"V407": [((7, 4, 4), False, True), ((7, 5, 4), False, True), ((7, 5, 4, 4), False, False), ((7, 5, 4), True, True)],
+              "V406": _PEQ, "V405": _PEQ, "V404": _PEQ}
 MARGEM_D = 0.25                                         # MPa (critério de escolha do arranjo, não da norma)
 
 
-VD_MIN = {"V405": 555.0, "V406": 555.0, "V407": 0.0}
+VD_MIN = {"V404": 0.0, "V405": 0.0, "V406": 0.0, "V407": 0.0}   # DEC-058: reação real (antes 555 kN fixo nas de 24,775 m)
 
 
 def verificar(nome, ya, yb, cargas, lin):
@@ -270,19 +272,37 @@ def verificar(nome, ya, yb, cargas, lin):
                             perda_imediata_pct=round(pp["perda_imediata_pct"], 1), perda_total_pct=round(pp["perda_total_pct"], 1)))
 
 
-res = {}
-for nome, (ya, yb, cargas) in VIGAS.items():
-    escolhido = None
+MARCA_UNICA = ("V406", "V405", "V404")                 # DEC-058: mesma pista, mesma seção e mesma cordoalha
+
+
+# Pedido do Nathan (24/10): busca entre os 4 padrões de isolamento escalonado (linha de baixo sempre aderente), com o
+# comprimento isolado medido da face do dente (início do fundo da viga) em cada ponta. Escolhe o arranjo com menos cordoalhas;
+# no empate, o primeiro padrão da lista (menos isolamento).
+ISOLS = [(0, 0, 2000, 4000), (0, 2000, 2000, 4000), (0, 2000, 4000, 6000), (0, 3000, 3000, 6000)]
+
+
+def escolher(nome, ya, yb, cargas, cands, isols=ISOLS):
     tent = []
-    for por_linha, topo, l5 in CANDIDATOS[nome]:
-        r = verificar(nome, ya, yb, cargas, arranjo(por_linha, topo, l5))
-        tent.append(dict(arranjo=f"{'+'.join(map(str, por_linha))}" + (" + 2 (y 22)" if l5 else "") + (" + 2 topo" if topo else ""), n=r["arranjo"]["n_cord"], ok=r["ok"],
-                         ELS_D=r["ELS"]["D_base"]))
-        if r["ok_geral"] and r["ELS"]["D_base"] <= -MARGEM_D:
-            escolhido = r
-            break
-    r = escolhido or r
+    for k, (por_linha, topo, l5) in enumerate(cands):
+        for ji, iso in enumerate(isols):
+            r = verificar(nome, ya, yb, cargas, arranjo(por_linha, topo, l5, iso))
+            tent.append(dict(arranjo=f"{'+'.join(map(str, por_linha))}" + (" + 2 (y 22)" if l5 else "") + (" + 2 topo" if topo else ""), isol=list(iso),
+                             n=r["arranjo"]["n_cord"], ok=r["ok"], ELS_D=r["ELS"]["D_base"]))
+            if r["ok_geral"] and r["ELS"]["D_base"] <= -MARGEM_D:
+                r["tentativas"] = tent
+                r["isolamento_padrao"] = list(iso)
+                return (k, ji), r
     r["tentativas"] = tent
+    return (len(cands) - 1, len(isols) - 1), r
+
+
+res = {}
+kmax = max(escolher(n, *VIGAS[n], CANDIDATOS[n])[0] for n in MARCA_UNICA)          # (arranjo, padrão de isolamento) comum às três
+for nome, (ya, yb, cargas) in VIGAS.items():
+    if nome in MARCA_UNICA:
+        _, r = escolher(nome, ya, yb, cargas, CANDIDATOS[nome][kmax[0]:kmax[0] + 1], ISOLS[kmax[1]:kmax[1] + 1])
+    else:
+        _, r = escolher(nome, ya, yb, cargas, CANDIDATOS[nome])
     res[nome] = r
     print(nome, "L", r["L_peca"], "n", r["arranjo"]["n_cord"], "ok", r["ok_geral"], {k: v for k, v in r["ok"].items() if not v})
     print("   perdas imed %.1f %% total %.1f %% (φ %.2f, εcs %.2e)" % (r["perdas"]["perda_imediata_pct"], r["perdas"]["perda_total_pct"], r["perdas"]["phi"], r["perdas"]["eps_cs"]),

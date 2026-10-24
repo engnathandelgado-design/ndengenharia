@@ -25,7 +25,7 @@ sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ.parents[1]))
 from nd_estruturas.prefabricados import Concreto
 from nd_estruturas import vento_nbr6123 as VNT
 from nd_estruturas.metalica_fria import PerfilZ, barra_redonda_tracao_Rd, compressao_laminado_Rd
-from geometria import Y_LIN, X_EIXO, Y_P13, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2
+from geometria import Y_LIN, X_EIXO, Y_PC_C, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2
 
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 CB = json.loads((AQ / "cobertura_metalica.json").read_text(encoding="utf-8"))
@@ -165,7 +165,8 @@ def montar(cfg):
             pilar(nome, x, y, 0.40, 0.60, 10.0, zs, rec=math.ceil((zf(x) + 0.90) / 0.05) * 0.05, cab=(0.40, 0.30))
     pilar("P8A", XC, Y[1], 0.40, 0.60, Z_L2["C"], [Z_I130, Z_TOP_C] + list(Z_MEZ))
     pilar("P11", XC, Y[3], 0.40, 0.40, Z_TOP_C, [Z_I130])
-    pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I130])
+    pilar("P13", XC, Y_PC_C[0], 0.40, 0.40, Z_TOP_C, [Z_I130])          # DEC-058: PC-03 40×40 em y 46,317 e 62,833
+    pilar("P13B", XC, Y_PC_C[1], 0.40, 0.40, Z_TOP_C, [Z_I130])
     for nome, x, ap in (("P8", XF[1], "B"), ("P8B", XF[3], "D")):
         pilar(nome, x, Y[1], 0.40, 0.60, Z_L2[ap], list(Z_MEZ))
     # rev09 (DEC-045): pilares da escada (R01) — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7), P6 da linha 2 até o +7,30
@@ -205,7 +206,7 @@ def montar(cfg):
     A_W, IX_W, IY_W, J_W = _W.A * 1e-4, _W.Ix * 1e-8, _W.Iy * 1e-8, _W.It * 1e-8
     z_cg_w = lambda x: zf(x) + 0.90 - _W.d / 2000
     apo_w = {a["nome"]: a for a in CB2["apoios_diretos"]}
-    xs_w = sorted(set([0.15, LARG - 0.15] + X_TER + [a["x"] for a in CB2["apoios_diretos"]]))
+    xs_w = sorted(set([0.15, LARG - 0.15] + X_TER + [a["x"] for a in CB2["apoios_diretos"]] + [mt["x"] for mt in CB2.get("montantes", [])]))
     cadeia = []
     for x in xs_w:
         n = no(x, Y[1], z_cg_w(x), unico=True)
@@ -219,16 +220,45 @@ def montar(cfg):
         nb = at(pn, apo_w[nm]["z_concreto"])
         nt = cadeia[xs_w.index(x)]
         ops.equalDOF(nb, nt, *((1, 2, 3) if nm == "C" else (2, 3)))
-    # I130: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14 (viga 3D nos consolos dos pilares)
-    A_I, Iy_I, Iz_I, J_I = 0.32, 0.0626, 0.0029, 0.0030
-    pts_i = [("P8A", Y[1]), ("L3", Y[2]), ("P11", Y[3]), ("L5", Y[4]), ("L6", Y[5]), ("P13", Y_P13), ("L7", Y[6]), ("L8", Y[7]), ("P14-L9", COMP)]
+    # DEC-052 (24/10, corrigido no r05 em 24/10 com o DEC-058): montantes W 150 × 13,0 no meio dos vãos da linha 2, apoiados na VM do
+    # +7,30 (espera EM-L2). A VM entra como viga biapoiada nos pilares (rótulas nas pontas) com a rigidez da mola do cob_linha2
+    # (k = 48 EI / L³); o montante é uma barra axial W 150 (EA). A carga do montante desce pela VM aos 2 pilares vizinhos.
+    _xp_l2 = {"P1-L2": 0.0, "P8": XF[1], "P8A": XF[2], "P8B": XF[3], "P6-L2": P6_L2[0], "P2-L2": LARG}
+    _A_mont = _ML.perfil(CB2["montante"]).A * 1e-4
+    for mt in CB2.get("montantes", []):
+        xm_ = mt["x"]
+        pa_ = max((k for k, v in _xp_l2.items() if v < xm_), key=lambda k: _xp_l2[k])
+        pb_ = min((k for k, v in _xp_l2.items() if v > xm_), key=lambda k: _xp_l2[k])
+        L_ = _xp_l2[pb_] - _xp_l2[pa_]
+        I_eq = mt["k_mola"] * L_ ** 3 / (48 * Ev)
+        nmid = no(xm_, Y[1], Z_MEZ[1], unico=True)
+        for pn_, rel in ((pa_, 1), (pb_, 2)):
+            t = _e()
+            n1_, n2_ = (at(pn_, Z_MEZ[1]), nmid) if rel == 1 else (nmid, at(pn_, Z_MEZ[1]))
+            ops.element("elasticBeamColumn", t, n1_, n2_, A_VM, Ev, Gv, 0.003, I_eq, I_eq, TR_X, "-releasey", rel, "-releasez", rel)
+            ele.append(dict(tag=t, grupo="VM montante L2", n1=n1_, n2=n2_, A=A_VM))
+        barra(cadeia[xs_w.index(xm_)], nmid, _A_mont, "montante L2", 11, extra=dict(nome=mt["nome"]))
+    # I130 (DEC-058): P8A → L3 → P11 → L5 → P13 → L6 → L7 → P13B → L8 → P14 (viga 3D nos consolos dos pilares)
+    # DEC-058 (24/10/2026): I130 h 120 (seção real) e vigas BIAPOIADAS (dentes Gerber nos consolos): cada vão com nós próprios nos
+    # apoios (antes a cadeia era contínua sobre os pilares e tirava carga do P13). Apoio: translações + torção (pino PN-2 no consolo).
+    from nd_estruturas.prefabricados import secao_I as _sI
+    _sec = _sI(LG["H_I130"], bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
+    A_I, Iy_I, Iz_I, J_I = _sec.A, _sec.I, 0.0029, 0.0030
+    vaos_i = [[("P8A", Y[1]), ("L3", Y[2]), ("P11", Y[3])], [("P11", Y[3]), ("L5", Y[4]), ("P13", Y_PC_C[0])],
+              [("P13", Y_PC_C[0]), ("L6", Y[5]), ("L7", Y[6]), ("P13B", Y_PC_C[1])], [("P13B", Y_PC_C[1]), ("L8", Y[7]), ("P14-L9", COMP)]]
     ni = {}
-    for nome, y in pts_i:
-        ni[nome] = no(XC, y, Z_I130 + 0.65, unico=True)
-    for (na, _), (nb, _) in zip(pts_i[:-1], pts_i[1:]):
-        viga(ni[na], ni[nb], A_I, Iy_I, Iz_I, J_I, "I130", TR_Y)
-    for nome in ("P8A", "P11", "P13", "P14-L9"):
-        ops.equalDOF(at(nome, Z_I130), ni[nome], 1, 2, 3, 5)
+    for vao in vaos_i:
+        nos_v = []
+        for k_, (nome, y) in enumerate(vao):
+            if 0 < k_ < len(vao) - 1:
+                ni[nome] = no(XC, y, Z_I130 + 0.65, unico=True)
+                nos_v.append(ni[nome])
+            else:
+                n_ = no(XC, y, Z_I130 + 0.65, unico=True)
+                ops.equalDOF(at(nome, Z_I130), n_, 1, 2, 3, 5)
+                nos_v.append(n_)
+        for a_, b_ in zip(nos_v[:-1], nos_v[1:]):
+            viga(a_, b_, A_I, Iy_I, Iz_I, J_I, "I130", TR_Y)
     # TS-01 no centro: linha 2 sobre o P8A (oblongo em x), linha 4 sobre o P11, demais sobre a I130
     for i, ns in lin_cen.items():
         for n in ns:
@@ -531,7 +561,9 @@ def aplicar(caso, fatores, desaprumo):
     for e in TER_ELE:
         x = X_TER[e["linha"]]; ym = (e["y0"] + e["y1"]) / 2
         w = -(W_Z + CC["g_total_sem_terca"] * S_TER) * fG - CC["sobrecarga"] * S_TER * fQc
-        if fG < 1.2:                                   # combinação com G favorável: painéis e instalações desprezados (sucção)
+        if fG < 1.2 and fW:                            # combinação com G favorável e VENTO: painéis e instalações desprezados (sucção)
+            # (24/10/2026: antes valia também nos casos característicos G e G+Q sem vento — tirava painéis, instalações e a
+            # sobrecarga da cobertura das cargas na fundação da CG01; corrigido)
             w = -(W_Z + CC["g_favoravel_sucao"] * S_TER) * fG
         if fW and caso:
             d, ecc, interno = caso

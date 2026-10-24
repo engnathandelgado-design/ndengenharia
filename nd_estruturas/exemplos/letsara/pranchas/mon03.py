@@ -17,6 +17,8 @@ import pecas_obra as QT
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 PLJ = json.load(open(AQ + "placas.json"))
 PQ = QT.PQ
+import json as _jj
+_IJ3 = _jj.load(open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/i110_r01.json'))
 fd = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: v * 1000
 YL = [M(y) for y in Y_LIN]
@@ -168,7 +170,7 @@ q.texto((Lp / 2, H_PL / 2), "placa de pé — face externa para fora", "nota", "
 # ================================================================== TABELAS: sequência geral e içamento
 seq = [["1", "Locação dos cálices e conferência dos níveis", "±1,0 cm em planta; fundo nivelado", "LOC01, CG01"],
        ["2", "Pilares, todas as linhas", "aprumar, cunhar, grautear no dia; 24 h e graute ≥ 15 MPa", "MON01"],
-       ["3", "Vigas centrais I130 (V407, V406, V405)", "NEO-2; PN-2 grauteado numa ponta", "MON01, CT03, CT04"],
+       ["3", "Vigas centrais I130 (V407, V406, V405, V404)", "NEO-2; PN-2 grauteado numa ponta", "MON01, CT03, CT04"],
        ["4", "Parede C (linha 4) — antes da TS-01 da linha 4", "cada placa nos seus 2 consoles", "MON03, PP-C"],
        ["5", "TS-01 L8 → L3 e VB-05 a VB-08 (guindaste de ré)", "pinos nos TB-3; VB escoradas", "MON01, CT04"],
        ["6", "Cobertura dos vãos 3–4 a 8–9 (terças, correntes, X, telhas)", "tudo parafusado; atrás do guindaste", "COB01 a COB04"],
@@ -182,7 +184,7 @@ pz = lambda mks: max(PQ[m][7] for m in mks)
 Lz = lambda mks: max(PQ[m][4] for m in mks)
 pil = [m for m in PQ if m[:2] in ("PL", "PF", "PC", "PM", "PG")]
 ica = [["Pilares", fd(pz(pil), 1), fd(Lz(pil), 2), "2 alças AL-2 (desforma) + furo FI-1 (verticalizar e montar)", "pino passante + 2 manilhas"],
-       ["I130 (V405, V406, V407)", fd(pz(["V405", "V406", "V407"]), 1), fd(Lz(["V405", "V406", "V407"]), 2), "2 alças AL-3 (3 laços cada)", "balancim"],
+       ["I130 (V404, V405, V406, V407)", fd(pz(["V404", "V405", "V406", "V407"]), 1), fd(Lz(["V404", "V405", "V406", "V407"]), 2), f"2 alças AL-3 ({_IJ3['V407']['icamento']['n_lacos']} laços cada)", "balancim"],
        ["TS-01", fd(pz(["TS-01"]), 1), fd(Lz(["TS-01"]), 2), "4 alças AL-1", "2 balancins, cabos verticais"],
        ["VM-01 / VM-02", fd(pz(["VM-01", "VM-02"]), 1), fd(Lz(["VM-01", "VM-02"]), 2), "2 alças AL-1", "cabos ≥ 45°"],
        ["VB-01 a VB-08", fd(pz([f"VB-0{k}" for k in range(1, 9)]), 1), fd(Lz([f"VB-0{k}" for k in range(1, 9)]), 2), "2 alças AL-1", "escorar após montar"],
@@ -198,7 +200,7 @@ notas = [f"Placas protendidas 125 × 10 (10 fios Ø6 CP-175 RB), dimensionadas s
          "As placas são montadas de pé e concretadas deitadas: desforma por 4 insertos IZ-1 numa face com balancim, basculamento e estocagem EM PÉ em cavalete; transporte em pé (cavalete A). Não estocar nem transportar deitada (empena).",
          "Sequência (decisão do Nathan, 21/10/2026): pilares → vigas → cobertura → mezanino → fechamento. Não dá para cumprir 100 % com guindaste: (a) a laje de 9,55 m não passa entre a VB da linha 1 e a W 310 da linha 2 e as VM ficam embaixo delas → W 310 L2, VB-01 a 04 e terças dos vãos 1–2 e 2–3 só depois do mezanino; (b) a placa de 10 m das paredes G e C sobe pelo topo e o balancim não passa entre a viga de cobertura e as terças → C antes da TS-01 L4 e G antes da W 310 L2.",
          "Abaixo da cobertura montada a altura livre é de +7,19 (eixo A) a +7,78 (eixo C) no fundo da TS-01; sobre o piso +7,30 sobram 0,1 a 0,8 m: manipulador telescópico ou mini-guindaste sob a cobertura NÃO servem para lajes, VM nem placas (só para terças, chaparia e peças leves).",
-         f"Guindastes: principal autopropelido classe 90–100 t (I130 V406 {fd(PQ['V406'][7], 1)} t a ~10–12 m, dentro do pavilhão, trabalhando de ré da linha 9 para a 3); mezanino e parede G com o guindaste no vão 2–3, entrando pela abertura lateral E/F (livre até +7,50); placas externas com guindaste de ~40–60 t no perímetro (3,24 t a até ~14 m). Conferir as classes na tabela de carga do equipamento e o solo das patolas; plano de rigging (NBR 9062:2017 3.17 e Seção 11) da montadora.",
+         f"Guindastes: principal autopropelido classe 90–100 t (I130 V407 {fd(PQ['V407'][7], 1)} t a ~10–12 m, dentro do pavilhão, trabalhando de ré da linha 9 para a 3); mezanino e parede G com o guindaste no vão 2–3, entrando pela abertura lateral E/F (livre até +7,50); placas externas com guindaste de ~40–60 t no perímetro (3,24 t a até ~14 m). Conferir as classes na tabela de carga do equipamento e o solo das patolas; plano de rigging (NBR 9062:2017 3.17 e Seção 11) da montadora.",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): ±1,0 cm em planta e no nível dos apoios; prumo ±H/300 até 2,5 cm; juntas medidas após a montagem.",
          "Cotas em cm, níveis em m. Não medir no desenho. EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]
 pr.notas(Q[2] - 180, Q[3] - 6, notas, 178)

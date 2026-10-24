@@ -25,7 +25,7 @@ PARES_OK = {frozenset(("Fixação das placas", "Placas de fechamento")), frozens
             frozenset(("Alças N9 (2º estágio)", "Vigas de mezanino (retangulares protendidas)")), frozenset(("Contraventamento",)),
             frozenset(("Correntes, tirantes rígidos e diagonais",)),
             frozenset(("Esperas e insertos embutidos", "Placas de fechamento")),
-            frozenset(("Cobertura metálica da linha 2",)), frozenset(("Escada metálica",))}       # rev09: perfis e chapas parafusados entre si      # NC-1: nicho embutido na placa
+            frozenset(("Cobertura metálica da linha 2",))}       # rev09d (DEC-060): escadas conferidas peça a peça (antes o grupo era excluído)      # NC-1: nicho embutido na placa
 # tolerância de contato por par (mm): telhas modeladas como lâminas planas entre os apoios (seguem a reta do topo das terças) —
 # ficam até 6 mm "dentro" do Z302 no meio; barras, correntes e suportes encostados na terça com folga de modelagem ≤ 3 mm
 TOL_PAR = {frozenset(("Telhas", "Terças metálicas")): 7.0}
@@ -88,7 +88,9 @@ def sat(A, B):
 
 def main():
     m = MB.montar()
-    P = [p for p in m.pecas if not any(k in p.marca.lower() for k in ATRAVESSA)]
+    # rev09d (DEC-060): nas escadas todas as peças são sólidos reais (os parafusos não são modelados) — nada é excluído pelo nome
+    ESC = {"Escada metálica", "Escada metálica externa"}
+    P = [p for p in m.pecas if p.grupo in ESC or not any(k in p.marca.lower() for k in ATRAVESSA)]
     O = [obb(p) for p in P]
     # pré-filtro: grade de 2 m pelas caixas alinhadas das OBB
     cel = collections.defaultdict(list)

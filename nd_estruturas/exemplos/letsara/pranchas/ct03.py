@@ -9,7 +9,7 @@ import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha, DIM_K, DIM_DLI
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Z_PISOS
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, Z_PISOS
 import renomear as RN
 import pecas_obra as QT                                     # peças = mesma fonte das listas (quantitativos.py)
 import fechamento as FCH
@@ -49,12 +49,13 @@ O_PL = 375.0
 
 # pilares do eixo C: (marca, y, by, z_topo, rec)
 _ZC = M(next(a_ for a_ in CB2["apoios_diretos"] if a_["nome"] == "C")["z_concreto"])     # rev09b (DEC-050): P8A até o fundo da W 310
-PIL = [("PF-02", YL[0], 600, PLAT), ("PC-01", YL[1], 600, _ZC), ("PC-02", YL[3], 400, ZT_I), ("PC-03", M(Y_P13), 600, ZT_I), ("PF-04", YL[8], 600, PLAT)]
+PIL = [("PF-02", YL[0], 600, PLAT), ("PC-01", YL[1], 600, _ZC), ("PC-02", YL[3], 400, ZT_I), ("PC-03", M(Y_PC_C[0]), 400, ZT_I), ("PC-03", M(Y_PC_C[1]), 400, ZT_I), ("PF-04", YL[8], 600, PLAT)]   # DEC-058
 # I130 entre faces + folga 7,5 (comprimentos = quantitativos)
 I130 = []
-for mk, (ia, ya_f), (ib, yb_f) in (("V407", (1, 300), (3, 200)), ("V406", (3, 200), (None, 300)), ("V405", (None, 300), (8, 300))):
-    ya = (YL[ia] if ia is not None else M(Y_P13)) + ya_f + FOLGA_I
-    yb = (YL[ib] if ib is not None else M(Y_P13)) - yb_f - FOLGA_I
+_YP = {"P13": M(Y_PC_C[0]), "P13B": M(Y_PC_C[1])}
+for mk, (ia, ya_f), (ib, yb_f) in (("V407", (1, 300), (3, 200)), ("V406", (3, 200), ("P13", 200)), ("V405", ("P13", 200), ("P13B", 200)), ("V404", ("P13B", 200), (8, 300))):
+    ya = (YL[ia] if isinstance(ia, int) else _YP[ia]) + ya_f + FOLGA_I
+    yb = (YL[ib] if isinstance(ib, int) else _YP[ib]) - yb_f - FOLGA_I
     I130.append((mk, ya, yb))
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
@@ -63,6 +64,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("00", "21/10/2026", "EMISSÃO: CORTE 6-6 LONGITUDINAL, PLANTA-CHAVE DOS CORTES E 3D")
 pr.revisao("01", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; LINHA 2 METÁLICA (W 310)")
 pr.revisao("02", "24/10/2026", "DEC-052/054: LINHA 2 COM W 200 × 15,0; I130 COM h 120 E CONSOLO COM MÍSULA")
+pr.revisao("03", "24/10/2026", "DEC-058: 2 PC-03 40×40 NO EIXO C, I130 EM 3 VÃOS DE 16,517 m (V406, V405, V404)")
 Q = pr.quadro
 
 
@@ -281,7 +283,7 @@ xt, ytop = Q[2] - 180, Q[3] - 6
 lin = [[nm + "-" + nm, ds, fl] for nm, _, _, fl, ds in CORTES]
 yy = pr.tabela(xt, ytop, "CORTES DA OBRA", ["CORTE", "POSIÇÃO", "FOLHA"], lin, [20, 105, 55], h_lin=5.2)
 notas = ["Corte 6-6 gerado da mesma geometria do modelo e das pranchas das peças: pilares do eixo C cortados (PF-02 e PF-04 com a cabeça recuada no lado interno acima de +8,70), vigas centrais I130 cortadas no eixo, consolos CP-I130 no plano.",
-         f"I130: V407 (PC-01 → PC-02), V406 (PC-02 → PC-03), V405 (PC-03 → PF-04); folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
+         f"I130: V407 (PC-01 → PC-02), V406 (PC-02 → P13), V405 (P13 → P13B), V404 (P13B → PF-04) — DEC-058; folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
          "TS-01 das linhas 3 a 8 apoiadas no topo da I130 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes no meio dos vãos (DEC-052, ND-LET-COB05).",
          "Placas de fechamento por fora dos pilares nas fachadas I (linha 1) e A (linha 9); paredes internas G (linha 2) e C (linha 4, portões) do lado do pavilhão; cada placa nos seus 2 consoles, folgas de 0,5 cm na altura e 2 cm no comprimento.",
          "Cortes transversais: ND-LET-CT01 (eixos 2 e 3); mezanino: CT02; apoios como montados: CT04; montagem: MON01 a MON03.",

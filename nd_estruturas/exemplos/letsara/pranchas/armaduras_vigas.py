@@ -140,7 +140,7 @@ def spec_i(qual):
     BOA_I = {"N3": aderencia_boa(H - cob - 15, H), "N4": aderencia_boa(max(P.get("pele") or [0]), H), "N12": aderencia_boa(cob + 5, H),
              "N10": aderencia_boa(H + 160, H)}
     if qual == "i110":
-        for mk in ("V407", "V406", "V405"):
+        for mk in ("V407", "V406", "V405", "V404"):                             # DEC-058
             Lm = round(VI.I1J[mk]["L_peca"] * 1000)
             _, bm = VI.armacao_i(P, Lm)
             bm, TRm = dividir_barras(bm, P["fck"], boa=BOA_I)                     # barras de usina de 12 m
@@ -149,7 +149,7 @@ def spec_i(qual):
             nc_mk = VI.I1J[mk]["arranjo"]["n_cord"] if "arranjo" in VI.I1J[mk] else n_cord
             marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000), traspasse=TRm,
                                ctxt=P.get("cord_txt", "Ø12,7"), kgc={"Ø15,2": 1.102}.get(P.get("cord_txt"), KG_CORD)))   # DEC-054: Ø15,2 = 1,102 kg/m
-        fam, tit, forma = "I130", f"VIGAS CENTRAIS I{H // 10} PROTENDIDAS — V405, V406, V407", "ND-LET-I130"
+        fam, tit, forma = "I130", f"VIGAS CENTRAIS I{H // 10} PROTENDIDAS — V404, V405, V406, V407", "ND-LET-I130"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
         for mk, Lm in (("VM-01", L1), ("VM-02", L)):
