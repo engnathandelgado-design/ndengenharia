@@ -14,8 +14,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 ## Próximas
 
 - [ ] Letsara: zip ND-LET-EXECUTIVO-rev09 com DXF e IFC depois da aprovação do Nathan dos PDF do pacote rev09.
-- [ ] Letsara rev09 (24/10): portões da linha 4 (500 × 750, vãos B–P21 e P19–D): fundo da TS-01A/V409/V410 em +7,50 no vão de cada portão (nada abaixo de 7,50); placas protendidas novas entre o topo do portão e a viga onde a viga sobe; conferir colisões com P19, P20, P21 e a V401; atualizar TS-01A, pilares da linha 4, placas da linha 4, lista, quantitativos e 3D.
-- [ ] Letsara rev09: escada externa ES02 na lista/quantitativos; NG01 com malha nova do IFC; MC09; republicar o 3D.
+- [ ] Letsara rev09 (24/10, AGUARDA DECISÃO — quadro decisao_portao_l4.png: PG viram apoio / subir a linha 4 / portão 7,40): portões da linha 4 (500 × 750, vãos B–P21 e P19–D): fundo da TS-01A/V409/V410 em +7,50 no vão de cada portão (nada abaixo de 7,50); placas protendidas novas entre o topo do portão e a viga onde a viga sobe; conferir colisões com P19, P20, P21 e a V401; atualizar TS-01A, pilares da linha 4, placas da linha 4, lista, quantitativos e 3D.
 
 - [ ] Letsara (DEC-027): confirmar com a Kingspan arrancamento dos parafusos em #0,65, distribuição de clipes e junta de dilatação na água de 39,6 m.
 
@@ -62,6 +61,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+- Letsara rev09 (24/10): DEC-052 (W 200 × 15,0 + montantes, COB05), DEC-053 (escada externa ES02, OM-2, BE-1), DEC-054 (I130 h 120, Ø15,2, protensão limitada, fckj 50, dente MEF FS 1,19, CP-I130 com mísula; V407 h 120), DEC-055 (piso pronto +3,95, espelhos 17,95), DEC-056/057; NG01, 3D/IFC (0 colisões), quantitativos, MC09, pranchas unidas rev09 (72 folhas, 0 erros/0 avisos).
 
 - [x] 2026-10-24 — Letsara DEC-050 (linha 2 sem montantes, W 310 direto na cabeça dos pilares, PM-02 novo) e DEC-051 (escada sem solda, base metálica BM-1); isométrico do mezanino na NG01 com o vão da escada; posição da escada conferida (escada externa da fachada A em aberto). PDF para análise; zip só após aprovação.
 - [x] 2026-10-23 — Letsara rev09 (DEC-045 a DEC-049): níveis +3,90/+7,30, escada metálica, P6/P7 e P6 da linha 2, VM 30 × 75 com dente 45, linha 2 em W 310, laje de cima sem uso; pranchas em PDF para análise do Nathan (zip com DXF/IFC só após aprovação).
