@@ -156,7 +156,8 @@ Ng_vb, Nq_vb = VBD["g"] * 9.43 / 2, VBD["q"] * 9.43 / 2
 NEO = [
     neo_simples("NEO-4 200×300×10 (simples)", 200, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no recuo dos pilares laterais P1/P2"),
     neo_simples("NEO-4 150×300×10 (simples)", 150, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no recuo — alternativa rev04"),
-    neo_simples("NEO-3 100×300×10 (simples)", 100, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I130 / P8A / P11"),
+    neo_simples("NEO-3 100×300×10 (simples)", 100, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo do P11 (pilar central da linha 4)"),
+    neo_simples("NEO-3C 150×300×10 (simples, rev10)", 150, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I130 + consolo lateral CT-I130 (rev10, DEC-059)"),
     neo_fretado("NEO-2 300×250 fretado (rev03)", 250, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130"),
     neo_fretado("NEO-2 200×300 fretado (rev04)", 200, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130 — rev04 (a2 do consolo)"),
     neo_fretado("NEO-5F 200×200 fretado (rev09)", 200, 200, 10, 2, 2.5, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM retangular 30 × 75 (dente 45 × 40) nos consolos CP-MEZ 40"),
@@ -168,7 +169,7 @@ OUT["aparelhos"] = NEO
 BAR = {10: 0.785, 12.5: 1.227, 16: 2.011, 20: 3.142}
 
 
-def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ext=None):
+def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ext=None, c_tir=0.05):
     """b largura, proj projeção, h altura (m) junto à face do pilar; a = face do pilar ao centro do aparelho; a_pad/b_pad dimensões do aparelho (m).
     Vd já majorado (γf); gn = γn (7.3.1.1). Tirante em alças horizontais (Fig. 17).
     h_ext: altura na extremidade (consolo com mísula de fundo inclinado); None = consolo reto."""
@@ -176,7 +177,7 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ex
     fcd = fck / 1.4
     Fd = gn * Vd
     Hd = 0.16 * Fd                                                   # 7.3.9 — elastômero
-    d = h - 0.05
+    d = h - c_tir                                                    # c_tir: topo ao eixo do tirante
     ad = a / d
     modelo = "viga em balanço" if ad > 1 else "consolo curto" if ad > 0.5 else "consolo muito curto"
     if ad <= 0.5:
@@ -207,7 +208,7 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ex
     T_fend = 0.25 * Fd * (1 - b_pad / b)                             # bloco parcialmente carregado (aparelho afastado das faces)
     # mísula: altura na extremidade >= metade da altura junto ao pilar (NBR 9062:2017 7.3, detalhamento; Fig. 16)
     # e biela verificada também com a altura útil na seção da carga (fundo inclinado), a favor da segurança
-    d_a = h_ext + (h - h_ext) * (1 - a / proj) - 0.05
+    d_a = h_ext + (h - h_ext) * (1 - a / proj) - c_tir
     tau_a = Fd / (b * d_a) / 1e3
     ok = dict(tirante=esc is not None, biela=tau <= tau_u, a_d=ad <= 1.0, h_ext=h_ext >= h / 2 - 1e-9, biela_na_carga=tau_a <= tau_u)
     return dict(consolo=nome, onde=onde, b_m=b, proj_m=proj, h_m=h, d_m=round(d, 3), a_m=a, a_d=round(ad, 2), modelo=modelo, gama_n=gn,
@@ -226,6 +227,11 @@ CON = [
             max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1, h_ext=0.39),   # DEC-054: extremidade 39 = recorte 42 − neoprene 3 (alinhada ao fundo da viga +6,58); face 49       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
     consolo("CP-MEZ", "pilares das linhas 1 e 2 e da escada — dente 45 × 40 da VM retangular 30 × 75, NEO-5F 200×200 fretado; consolo com a largura da face do pilar (40); h = recorte − neoprene (fundo alinhado)", VM["premissas"].get("b_consolo", VM["premissas"]["b"]), VM["premissas"]["dente"]["consolo_proj"], VM["premissas"]["dente"]["consolo_h"], VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
     consolo("DENTE VM", f"nariz do dente Gerber da VM retangular 30 × {VM['premissas']['h_pm']*100:.0f}, h {HD_VM*100:.0f}, LN {VM['premissas']['dente']['ln']*100:.0f} — 7.4 = consolo 7.3", VM["premissas"]["b"], VM["premissas"]["dente"]["ln"], HD_VM, 0.03 + VM["premissas"]["dente"]["ln"] - VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
+    # rev10 (DEC-059): consolo lateral CT-I130 nas duas faces da mesa superior da I130 onde chega cada TS-01 (linhas 3, 5, 6, 7, 8):
+    # b 50 (ao longo da I130), projeção 20 além da mesa (40 → 80), h 30 na face e 15 na ponta (mísula), topo = topo da I130.
+    # NEO-3C 150 × 300 de 12 a 27 cm da ponta da TS-01 (centro 3,25 cm além da face da mesa); a favor da segurança: Fd inteiro no consolo.
+    consolo("CT-I130", "I130 V400/V401/V402/V403 — apoio das TS-01 (linhas 3, 5, 6, 7, 8), nas duas faces da mesa superior; NEO-3C 150×300; mísula 15 (DEC-059)",
+            0.50, 0.20, 0.30, 0.0325, 0.15, 0.30, 1.4 * (Ng_ts + Nq_ts), 1.2, fck=50, h_ext=0.15, c_tir=0.075),   # tirante a 7,5 cm do topo, abaixo do N3 6 Ø25 da mesa
     consolo("CP-VB", "pilares das fachadas 1 e 9 — dente 30 × 27 da VB 15×60, NEO-6 100×100", 0.15, 0.27, 0.29, 0.135, 0.10, 0.10, VBD["Vd"], 1.1),
 ]
 OUT["consolos"] = CON

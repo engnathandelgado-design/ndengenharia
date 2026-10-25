@@ -670,9 +670,23 @@ def montar() -> ModeloBIM:
     for i in range(3, 9):                                  # rev09: linha 2 sem TS-01 (W 310 + ST-W, mais abaixo)
         y = Y_LIN[i - 1]
         AP, PT = LG["apoios_ts"], LG["PINO_TS"]                 # rev04: assentos horizontais; pinos a 7,75 cm das 4 pontas
+        # rev10 (DEC-059): nas linhas sobre a I130 (3, 5, 6, 7, 8) a TS-01 assenta na mesa + consolo lateral CT-I130 com NEO-3C 150 × 300;
+        # na linha 4 (topo do P11) continua o NEO-3 100 × 300
+        _ce, _cd, _nn, _dn = (("centro_esq", "centro_dir", "2 PN-5 Ø20 + NEO-3", (0.10, 0.30)) if i == 4 else
+                              ("i130_esq", "i130_dir", "2 PN-5 Ø20 + NEO-3C (sobre o consolo CT-I130)", (0.15, 0.30)))
+        if i != 4:
+            _ct = LG["CT_I130"]
+            _pj, _hh, _he, _bh = _ct["proj"], _ct["h"], _ct["h_ext"], _ct["b"] / 2
+            _pl = [(0.20, 0.0), (0.20, -0.25), (0.075, -0.25), (0.075, -_hh), (0.20, -_hh), (0.20 + _pj, -_he), (0.20 + _pj, 0.0)]
+            _dg = LG["DEGRAU_C"]                                   # lado E: topo 12 mm acima (degrau), fundo no mesmo nível do lado A
+            _plE = [(u, v + _dg if v == 0.0 else v) for u, v in _pl]
+            for _zr, _poly, _lado in ((Z_I130_TOPO, _pl, "lado A"), (Z_I130_TOPO, [(-u, v) for u, v in _plE][::-1], "lado E")):
+                m.add(Peca("consolo", "Consolos", f"CT-I130 L{i} {_lado}", PerfilPoligono(tuple(_poly), "CT-I130 com mísula"),
+                           (X_C, y - _bh, _zr), (X_C, y + _bh, _zr), (0.0, 0.0, 1.0), "concreto",
+                           f"consolo lateral da I130 (DEC-059): b {_ct['b']*100:.0f}, projeção {_pj*100:.0f}, h {_hh*100:.0f}/{_he*100:.0f}; apoio da TS-01"))
         for (xn, z_as), xpin, nome_, neo, dpin in (((AP["P1"]["x_neo"], AP["P1"]["z"]), PONTAS[0][0] + PT, "2 PN-3 Ø25 + NEO-4", (0.20, 0.30), 0.025),
-                                                  ((AP["centro_esq"]["x_neo"], AP["centro_esq"]["z"]), PONTAS[0][1] - PT, "2 PN-5 Ø20 + NEO-3", (0.10, 0.30), 0.020),
-                                                  ((AP["centro_dir"]["x_neo"], AP["centro_dir"]["z"]), PONTAS[1][0] + PT, "2 PN-5 Ø20 + NEO-3", (0.10, 0.30), 0.020),
+                                                  ((AP[_ce]["x_neo"], AP[_ce]["z"]), PONTAS[0][1] - PT, _nn, _dn, 0.020),
+                                                  ((AP[_cd]["x_neo"], AP[_cd]["z"]), PONTAS[1][0] + PT, _nn, _dn, 0.020),
                                                   ((AP["P2"]["x_neo"], AP["P2"]["z"]), PONTAS[1][1] - PT, "2 PN-3 Ø25 + NEO-4", (0.20, 0.30), 0.025)):
             for dy in (-0.10, 0.10):
                 m.bloco("inserto", nome_, (xpin, y + dy, z_as + 0.31), dpin, dpin, 0.61, PIN)

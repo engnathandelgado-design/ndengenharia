@@ -28,7 +28,12 @@ X_PONTA_CEN = X_CEN - 0.0375                            # 75 mm entre as pontas 
 X_FIM = X_P2 - X_PONTA_ESQ                              # ponta da TS-01 direita (face da cabeça do P2)
 NEO_EXT = dict(x=0.200, y=0.300, e=0.010, xc=X_PONTA_ESQ + 0.125)        # neoprene no assento do pilar lateral (rev04: centro a 12,5 cm da ponta)
 PINO_TS = 0.0775                                                         # rev04: pinos a 7,75 cm da ponta nos 4 apoios (TS-01 simétrica: uma marca serve aos dois lados)
-NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo da I130 / pilar central (x 19,585 → 19,685)
+NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo do pilar central P11 (x 19,585 → 19,685)
+# rev10 (DEC-059, Nathan 25/10/2026): consolo lateral CT-I130 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
+# da I130 onde chega cada TS-01 → assento de 36,25 cm (ponta da TS-01 até a ponta do consolo) e neoprene maior NEO-3C 150 × 300,
+# de 12 a 27 cm da ponta (dentro da cunha de 30 cm; pinos PN-5 a 7,75 cm fora do neoprene).
+CT_I130 = dict(b=0.50, proj=0.20, h=0.30, h_ext=0.15)
+NEO_CI = dict(x=0.150, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.195)
 H_PAC = H_TS + Z_TERCA + H_TERCA + sum(PACOTE.values())
 # cargas da cobertura (kN/m²) — rev03; pesos de catálogo usuais (conferir com os fornecedores da telha e dos painéis)
 # rev06c (Nathan, 17/10/2026): sistema Kingspan Isoeste "zipada dupla com lã de rocha" (manual de instalação, p. 27–33):
@@ -105,9 +110,12 @@ DEGRAU_C = round(Z_TOPO_I130_DIR - Z_TOPO_I130, 4)
 apoios = dict(P1=dict(x_neo=NEO_EXT["xc"], z=REC[0], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
               P2=dict(x_neo=X_P2 - NEO_EXT["xc"], z=REC[1], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
               centro_esq=dict(x_neo=NEO_CEN["xc"], z=Z_TOPO_I130, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20), 4), assento="horizontal"),
-              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I130_DIR, assento="horizontal"))
+              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I130_DIR, assento="horizontal"),
+              i130_esq=dict(x_neo=NEO_CI["xc"], z=Z_TOPO_I130, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20 - CT_I130["proj"]), 4), assento="horizontal + consolo CT-I130"),
+              i130_dir=dict(x_neo=2 * X_CEN - NEO_CI["xc"], z=Z_TOPO_I130_DIR, assento="horizontal + consolo CT-I130"))
 # conferência: neoprenes dentro do trecho da cunha nas duas pontas
 assert NEO_EXT["xc"] + NEO_EXT["x"] / 2 - X_PONTA_ESQ <= CUNHA and X_PONTA_CEN - (NEO_CEN["xc"] - NEO_CEN["x"] / 2) <= CUNHA
+assert X_PONTA_CEN - (NEO_CI["xc"] - NEO_CI["x"] / 2) <= CUNHA and NEO_CI["xc"] - NEO_CI["x"] / 2 >= X_CEN - 0.20 - CT_I130["proj"] + 0.03
 H_I130, HD_I130, NEO_I130 = 1.20, 0.78, 0.03                       # DEC-054: I130 com h 120 (antes 1,30), dente 78 × 35 nos consolos CP-I130 com mísula
 Z_ASS_I130 = round(Z_TOPO_I130 - H_I130 + (H_I130 - HD_I130) - NEO_I130, 3)   # assento do consolo CP-I130 (fundo do dente − neoprene)
 rel, erros = [], 0
@@ -174,7 +182,7 @@ folga_plat = dict(platibanda=PLATIBANDA, pacote_m=round(H_PAC, 3), pacote=PACOTE
                   folga_P2_mm=round((PLATIBANDA - z_topo(X_FIM)) * 1000), ok=PLATIBANDA - z_topo(X_FIM) >= FOLGA_PLAT - 1e-6)
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"],
-           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_TOPO_I130_DIR=Z_TOPO_I130_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN,
+           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_TOPO_I130_DIR=Z_TOPO_I130_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN, NEO_CI=NEO_CI, CT_I130=CT_I130,
            contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], tirantes=tir, borda_furo_fundo_terca_mm=furo_min,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=[r for r in rel if r["ligacao"] == "apoio"], tercas=[r for r in rel if r["ligacao"] == "terças"],

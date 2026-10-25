@@ -1,0 +1,183 @@
+{
+ "folha": "ND-LET-MT01-2",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PEÇAS DE FIXAÇÃO DAS PLACAS — IMAGENS DAS PEÇAS E PLANO DE CORTE",
+  "desenho": "ND-LET-MT01",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "02/02",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "PLANO DE CORTE — PEÇAS PLANAS (OBRA + 5 %)",
+   "cab": [
+    "CHAPA",
+    "MATERIAL",
+    "Nº",
+    "PEÇA",
+    "DIMENSÃO",
+    "QT",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "CH 2",
+     "ASTM A36",
+     "4",
+     "PAREDE LATERAL",
+     "CH 2 × 50,5 × 184,5",
+     "420",
+     "61,4"
+    ],
+    [
+     "CH 3",
+     "ASTM A572 Gr.50",
+     "2",
+     "BASE",
+     "CH 3 × 50,5 × 140",
+     "420",
+     "69,9"
+    ],
+    [
+     "CH 6,3",
+     "ASTM A572 Gr.50",
+     "11",
+     "ALMA",
+     "CH 6,3 × 54,5 × 64/34 (trapézio)",
+     "850",
+     "112,3"
+    ],
+    [
+     "CH 8",
+     "ASTM A572 Gr.50",
+     "14",
+     "CHAPA DE PONTA (furo Ø18)",
+     "CH 8 × 34 × 83,7",
+     "425",
+     "69,2"
+    ],
+    [
+     "CH 9,5",
+     "ASTM A572 Gr.50",
+     "3",
+     "FUNDO",
+     "CH 9,5 × 140 × 200",
+     "420",
+     "877,0"
+    ],
+    [
+     "CH 9,5",
+     "ASTM A572 Gr.50",
+     "10",
+     "COSTAS (solda de campo na CE-1)",
+     "CH 9,5 × 120 × 130",
+     "425",
+     "494,4"
+    ],
+    [
+     "CH 12,5",
+     "ASTM A572 Gr.50",
+     "1",
+     "TETO",
+     "CH 12,5 × 50,5 × 140",
+     "420",
+     "291,4"
+    ],
+    [
+     "CH 12,5",
+     "ASTM A572 Gr.50",
+     "5",
+     "ABA E (lado da ponta)",
+     "CH 12,5 × 38 × 44",
+     "420",
+     "68,9"
+    ],
+    [
+     "CH 12,5",
+     "ASTM A572 Gr.50",
+     "6",
+     "ABA D",
+     "CH 12,5 × 38 × 42",
+     "420",
+     "65,8"
+    ],
+    [
+     "CH 16",
+     "ASTM A572 Gr.50",
+     "12",
+     "MESA (furo Ø18)",
+     "CH 16 × 54,5 × 104",
+     "425",
+     "289,0"
+    ],
+    [
+     "CH 19",
+     "ASTM A572 Gr.50",
+     "13",
+     "DENTE",
+     "CH 19 × 13 × 35",
+     "850",
+     "57,7"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO POR CHAPA (sem perda de corte)",
+   "cab": [
+    "CHAPA",
+    "MATERIAL",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "CH 2",
+     "ASTM A36",
+     "61"
+    ],
+    [
+     "CH 3",
+     "ASTM A572 Gr.50",
+     "70"
+    ],
+    [
+     "CH 6,3",
+     "ASTM A572 Gr.50",
+     "112"
+    ],
+    [
+     "CH 8",
+     "ASTM A572 Gr.50",
+     "69"
+    ],
+    [
+     "CH 9,5",
+     "ASTM A572 Gr.50",
+     "1371"
+    ],
+    [
+     "CH 12,5",
+     "ASTM A572 Gr.50",
+     "426"
+    ],
+    [
+     "CH 16",
+     "ASTM A572 Gr.50",
+     "289"
+    ],
+    [
+     "CH 19",
+     "ASTM A572 Gr.50",
+     "58"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

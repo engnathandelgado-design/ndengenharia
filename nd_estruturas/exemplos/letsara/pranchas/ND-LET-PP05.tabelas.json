@@ -1,0 +1,105 @@
+{
+ "folha": "ND-LET-PP05",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "FIXAÇÃO DAS PLACAS — OMBREIRA METÁLICA OM-1 DA PORTA DA VISTA I (FABRICAÇÃO E MONTAGEM)",
+  "desenho": "ND-LET-PP05",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — 1 OM-1 (OBRA: 2 PEÇAS IGUAIS)",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QTD",
+    "kg/un"
+   ],
+   "linhas": [
+    [
+     "1",
+     "PERFIL U DOBRADO",
+     "U 125×80×6,3 L=2478; Ø18 nas abas +310/+940/+2400",
+     "ASTM A36",
+     "1",
+     "33,37"
+    ],
+    [
+     "2",
+     "CHAPA DE BASE",
+     "12,5 × 200 × 180, 2 furos Ø18",
+     "ASTM A36",
+     "1",
+     "3,53"
+    ],
+    [
+     "3",
+     "CHAPA DE LIGAÇÃO CL-1",
+     "12,5 × 100 × 360, Ø18 + oblongo 18 × 40",
+     "ASTM A36",
+     "1",
+     "3,53"
+    ],
+    [
+     "4",
+     "PARAFUSO PASSANTE",
+     "M16 × 150 ISO 4014 + porca + 2 arruelas",
+     "cl. 8.8 galv.",
+     "2",
+     "0,32"
+    ],
+    [
+     "5",
+     "PARAFUSO CL-1",
+     "M16 × 40 ISO 4017 (aba do U) e M16 × 40 (bucha BR-1)",
+     "cl. 8.8 galv.",
+     "2",
+     "0,10"
+    ],
+    [
+     "6",
+     "CHUMBADOR QUÍMICO",
+     "barra M16 × 160 5.8 + adesivo epóxi, hef 100",
+     "cl. 5.8 galv.",
+     "2",
+     "0,25"
+    ],
+    [
+     "7",
+     "CALÇO DE NEOPRENE",
+     "6 × 50 × 1150 (2 por face da placa)",
+     "neoprene dureza 60",
+     "4",
+     "0,40"
+    ],
+    [
+     "8",
+     "CALÇO DE CL-1",
+     "12 × 100 × 100 (entre CL-1 e a placa I-15)",
+     "ASTM A36",
+     "1",
+     "0,94"
+    ],
+    [
+     "9",
+     "BUCHA BR-1 (na placa I-15)",
+     "M16 hef 70, embutida na fábrica",
+     "aço zincado",
+     "1",
+     "0,10"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

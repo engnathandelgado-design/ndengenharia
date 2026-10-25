@@ -1,0 +1,49 @@
+{
+ "folha": "ND-LET-CT02",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "CORTES DO MEZANINO — LAJES ALVEOLARES LP20 + CAPA, VIGAS VM RETANGULARES 30 × 75, 2º ESTÁGIO E APOIOS",
+  "desenho": "ND-LET-CT02",
+  "rev": "02",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "NÍVEIS DO MEZANINO (m)",
+   "cab": [
+    "ELEMENTO",
+    "INFERIOR / SUPERIOR"
+   ],
+   "linhas": [
+    [
+     "Topo da capa = piso (capa 5 cm C30)",
+     "+3,900 / +7,300"
+    ],
+    [
+     "Fundo da laje (fita de neoprene 1 cm)",
+     "+3,650 / +7,050"
+    ],
+    [
+     "Topo da VM (apoio da laje)",
+     "+3,640 / +7,040"
+    ],
+    [
+     "Assento dos consolos CP-MEZ (topo do consolo)",
+     "+3,169 / +6,569"
+    ],
+    [
+     "Fundo da VM e dos consolos",
+     "+2,890 / +6,290"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

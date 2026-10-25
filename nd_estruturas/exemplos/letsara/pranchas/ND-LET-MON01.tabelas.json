@@ -1,0 +1,179 @@
+{
+ "folha": "ND-LET-MON01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I130, VB-01 A VB-08 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
+  "desenho": "ND-LET-MON01",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/03",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PEÇAS DE MONTAGEM — COBERTURA",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "PESO (t)",
+    "APOIO / NÍVEL"
+   ],
+   "linhas": [
+    [
+     "PL-01, PL-05, PL-09, PL-10, PL-11, PL-12",
+     "Pilar 40×60 lateral (L3 a L8), L 1100, cabeça recuada",
+     "12",
+     "5,8 a 6,1",
+     "cálice −1,00; topo +10,00"
+    ],
+    [
+     "PL-02, PL-06",
+     "Pilar 40×60 lateral c/ 2 CP-MEZ (L2)",
+     "2",
+     "6,2 a 6,5",
+     "cálice −1,00; topo +10,00"
+    ],
+    [
+     "PL-03, PL-04, PL-07, PL-08",
+     "Pilar 40×60 de canto (L1, L9), cabeça recuada",
+     "4",
+     "5,9 a 6,6",
+     "cálice −1,00; topo +10,00"
+    ],
+    [
+     "PF-01, PF-02, PF-03, PF-04, PF-05, PF-06",
+     "Pilar 40×60 de fachada (1 e 9) c/ CP-VB",
+     "6",
+     "6,2 a 6,8",
+     "cálice −1,00; topo +10,00"
+    ],
+    [
+     "PC-01, PC-02, PC-03",
+     "P8A 40×60, P11 40×40, P13 e P13B 40×40 (eixo C)",
+     "4",
+     "4,0 a 6,3",
+     "cálice −1,00; topo +7,776"
+    ],
+    [
+     "PM-01, PM-02",
+     "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 310",
+     "2",
+     "5,9 a 6,3",
+     "ver ND-LET-MON02"
+    ],
+    [
+     "PG-01, PG-03",
+     "Pilares dos portões 40×40 (P9 / P12, linha 4)",
+     "2",
+     "3,4 a 3,6",
+     "cálice −1,00; topo +7,47 / +8,06"
+    ],
+    [
+     "PG-02, PG-04",
+     "Pilares dos portões 25×25 (P10)",
+     "2",
+     "1,4 a 1,4",
+     "cálice −1,00; topo +7,63 / +7,90"
+    ],
+    [
+     "TS-01",
+     "Viga I90 de cobertura, L 1970, sem dentes",
+     "12",
+     "11,8",
+     "recuo +7,195 / topo I130 +7,776 / recuo +8,369"
+    ],
+    [
+     "V407",
+     "Viga I130 central, L 19,50 m",
+     "1",
+     "15,5",
+     "consolos CP-I130 (+6,966)"
+    ],
+    [
+     "V406",
+     "Viga I130 central, L 15,97 m",
+     "1",
+     "12,7",
+     "consolos CP-I130 (+6,966)"
+    ],
+    [
+     "V405",
+     "Viga I130 central, L 15,97 m",
+     "1",
+     "12,7",
+     "consolos CP-I130 (+6,966)"
+    ],
+    [
+     "V404",
+     "Viga I130 central, L 15,87 m",
+     "1",
+     "12,6",
+     "consolos CP-I130 (+6,966)"
+    ],
+    [
+     "VB-01",
+     "Viga de borda 15×60 c/ dente, L 932 cm (A–B, fach. 1)",
+     "1",
+     "2,0",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-02",
+     "Viga de borda 15×60 c/ dente, L 943 cm (B–C, fach. 1)",
+     "1",
+     "2,1",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-03",
+     "Viga de borda 15×60 c/ dente, L 943 cm (C–D, fach. 1)",
+     "1",
+     "2,1",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-04",
+     "Viga de borda 15×60 c/ dente, L 932 cm (D–E, fach. 1)",
+     "1",
+     "2,0",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-05",
+     "Viga de borda 15×60 c/ dente, L 932 cm (A–B, fach. 9)",
+     "1",
+     "2,0",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-06",
+     "Viga de borda 15×60 c/ dente, L 943 cm (B–C, fach. 9)",
+     "1",
+     "2,1",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-07",
+     "Viga de borda 15×60 c/ dente, L 943 cm (C–D, fach. 9)",
+     "1",
+     "2,1",
+     "consolos CP-VB"
+    ],
+    [
+     "VB-08",
+     "Viga de borda 15×60 c/ dente, L 932 cm (D–E, fach. 9)",
+     "1",
+     "2,0",
+     "consolos CP-VB"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

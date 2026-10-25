@@ -61,6 +61,17 @@
    "x_neo": 19.865000000000002,
    "z": 7.788,
    "assento": "horizontal"
+  },
+  "i130_esq": {
+   "x_neo": 19.5175,
+   "z": 7.776,
+   "comp_apoio": 0.3625,
+   "assento": "horizontal + consolo CT-I130"
+  },
+  "i130_dir": {
+   "x_neo": 19.9825,
+   "z": 7.788,
+   "assento": "horizontal + consolo CT-I130"
   }
  },
  "REC": [
@@ -98,6 +109,18 @@
   "y": 0.3,
   "e": 0.01,
   "xc": 19.634999999999998
+ },
+ "NEO_CI": {
+  "x": 0.15,
+  "y": 0.3,
+  "e": 0.01,
+  "xc": 19.5175
+ },
+ "CT_I130": {
+  "b": 0.5,
+  "proj": 0.2,
+  "h": 0.3,
+  "h_ext": 0.15
  },
  "contraventamento": {
   "chapa": {

@@ -54,7 +54,8 @@ def spec_ts01():
     det += [([(x + sk(30), 30), (x + sk(H - 30), H - 30)], "ARM_TRANSV", False) for x in X_N6]
     det += [([(30, yy), (780, yy)], "ARM_TRANSV", False) for yy in (35, 125)] + [([(30, 80), (630, 80)], "ARM_TRANSV", False)]
     det += [([(115, 0), (115 + DX, H)], "OCULTA", False), ([(165, 0), (165 + DX, H)], "OCULTA", False)]
-    D1 = dict(nome="DETALHE D1 — PONTA (APOIO DIRETO)", sub="as duas pontas iguais (TB-3 a 14 e 7,75 cm da ponta)", esc=10, contorno=[], ents=det, discos=[], prot=[],
+    D1 = dict(nome="DETALHE D1 — PONTA (APOIO DIRETO)", sub=f"as duas pontas iguais (TB-3 a 14 e 7,75 cm da ponta); face da ponta a prumo na posição montada: topo {fd(DX/10)} cm à frente do fundo", esc=10, contorno=[], ents=det, discos=[], prot=[],
+              cotas=[((0, 0), (DX, H), 0, 80, f"{fd(DX/10)} (topo × fundo)"), ((0, 0), (DX, H), 90, -150, f"{fd(H/10)}"), ((0, 0), (300, 0), 0, -60, "30 (cunha)")],
               bolhas=[("N6", (290 + sk(500), 500), (8, 8)), ("N7", (400, 80), (10, -6)), ("N8", (600, 125), (8, 10))],
               formas=["N6", "N7", "N8"])
     V = T.V
@@ -134,15 +135,32 @@ def spec_i(qual):
     det += [([(xk, H - HD + cob), (xk, H - cob)], "ARM_TRANSV", False) for xk in VI.x_n8(n_v, LN, P["pino_x"])]
     det += [([(LN if y < H - HD else 0, y), (LD, y)], "ARM_PROT", False) for y, _, _ in P["cord"]]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
-              bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (8, -8)), ("N8", (100, H - 100), (-16, 10))],
+              cotas=[((0, H - HD), (LN, 0), 0, -100, f"{fd(LN/10)}"), ((0, H - HD), (0, H), 90, -60, f"{fd(HD/10)}"), ((LN, 0), (LN, H - HD), 90, -60, f"{fd((H-HD)/10)} (recorte)"), ((LD, 0), (LD, H), 90, 120, f"{fd(H/10)}")],
+              bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (8, -8)), ("N8", (100, H - 100), (-26, 14))],
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
+    blocos_extra = []
+    CTp = P.get("ct")
+    if CTp:                                                                  # rev10 (DEC-059): consolo lateral CT-I130
+        bw2, pj, hc, he = bw / 2, CTp["proj"], CTp["h"], CTp["h_ext"]
+        pdd = [(-B / 2, H - 450), (-bw2, H - 450), (-bw2, H - hc), (-B / 2, H - hc), (-B / 2 - pj, H - he), (-B / 2 - pj, H), (B / 2 + pj, H), (B / 2 + pj, H - he),
+               (B / 2, H - hc), (bw2, H - hc), (bw2, H - 450)]
+        xe = B / 2 + pj - cob
+        ents_ct = [([(-xe, H - CTp["c_tir"]), (xe, H - CTp["c_tir"])], "ARMADURA", False)] + [([(-xe, yy), (xe, yy)], "ARM_TRANSV", False) for yy in (H - 140, H - 200)]
+        for sg in (-1, 1):
+            x0_, x1_ = sg * (B / 2 + 30), sg * (B / 2 + pj - cob)
+            ents_ct.append(([(x0_, H - 120), (x1_, H - 120), (x1_, H - cob), (x0_, H - cob)], "ARM_TRANSV", True))
+        blocos_extra.append(dict(nome="DETALHE D2 — CONSOLO LATERAL CT-I130", sub=f"nas 2 faces, em cada linha de TS-01; b {CTp['b']/10:g}, projeção {pj/10:g}, h {hc/10:g}/{he/10:g}", esc=10,
+                                 contorno=[pdd], ents=ents_ct, discos=[], prot=[],
+                                 bolhas=[("N14", (xe * 0.6, H - CTp["c_tir"]), (6, 10)), ("N15", (-xe * 0.6, H - 200), (-6, -10)), ("N16", (B / 2 + pj - cob, H - 120), (10, -8))],
+                                 formas=["N14", "N15", "N16"],
+                                 cotas=[((-B / 2 - pj, H), (-B / 2, H), 0, 60, f"{fd(pj/10)}"), ((B / 2 + pj, H - he), (B / 2 + pj, H), 90, 80, f"{fd(he/10)}"), ((-B / 2 - pj, H - hc), (-B / 2 - pj, H), 90, -80, f"{fd(hc/10)}")]))
     marcas = []
     BOA_I = {"N3": aderencia_boa(H - cob - 15, H), "N4": aderencia_boa(max(P.get("pele") or [0]), H), "N12": aderencia_boa(cob + 5, H),
              "N10": aderencia_boa(H + 160, H)}
     if qual == "i110":
         for mk in ("V407", "V406", "V405", "V404"):                             # DEC-058
             Lm = round(VI.I1J[mk]["L_peca"] * 1000)
-            _, bm = VI.armacao_i(P, Lm)
+            _, bm = VI.armacao_i(P, Lm, n_ct=P.get("ct_n", {}).get(mk, 0))
             bm, TRm = dividir_barras(bm, P["fck"], boa=BOA_I)                     # barras de usina de 12 m
             A = VI.area_I(B, H, ts, ti, P["m"], bw)
             Vm = A * Lm / 1000 + (B * H / 1e6 - A) * P["x_mac"] / 1000 * 2 - 2 * B * (H - HD) * LN / 1e9
@@ -161,7 +179,7 @@ def spec_i(qual):
         fam, tit, forma = "VM", "VIGAS DO MEZANINO I90 PROTENDIDAS — VM-01, VM-02", "ND-LET-VM01"
     longas = [("N3", cob)] + ([("N4", cob)] if P.get("pele") else []) + [("N12", LN + cob)] + ([("N10", 100)] if SEG else [])
     return dict(fam=fam, titulo=tit, forma=forma, fck=P["fck"], L=L, H=H, esc=40 if L > 13000 else 20, rep=P["marca"],
-                contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2, "S.1")], dets=[(LN, "D1")], longas=longas, blocos=[S1, D1], marcas=marcas,
+                contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2, "S.1")], dets=[(LN, "D1")], longas=longas, blocos=[S1, D1] + blocos_extra, marcas=marcas,
                 notas=[n for n in P["notas"][:3]] + [t for t in (nota_traspasse(*[m.get("traspasse") for m in marcas]),) if t] + ["N11/N13: estribos das mesas c/25 (N11 envolve as cordoalhas; N13 o N3). N12: 2 Ø10 nos cantos da mesa inferior (porta-estribos).",
                                                      "No trecho dos dentes os estribos N2 são substituídos pelos N8 (dente) e N6 (suspensão)."])
 
@@ -335,6 +353,7 @@ def spec_vm():
     if P.get("extra_inf"):
         det += [([(LN + 30 + k * 50, COB), (LN + 30 + k * 50, 250)], "ARM_TRANSV", False) for k in range(10)]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}, recorte {REC/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
+              cotas=[((0, REC), (LN, 0), 0, -100, f"{fd(LN/10)}"), ((0, REC), (0, H), 90, -120, f"{fd((H-REC)/10)}"), ((LN, 0), (LN, REC), 90, -60, f"{fd(REC/10)} (recorte)"), ((1600, 0), (1600, H), 90, 120, f"{fd(H/10)}")],
               bolhas=[("N6", (LN + 300, REC + 55), (4, -8)), ("N7", (LN + 40, H / 2), (10, -10)), ("N8", (LN + 300, REC + 120), (8, 8)), ("N10", (60, H - 80), (-14, 10))]
               + ([("N13", (1300, P["extra_inf"][0]["y"]), (6, -8)), ("N14", (LN + 280, 200), (8, -14))] if P.get("extra_inf") else []),
               formas=["N6", "N7", "N8"] + (["N14"] if P.get("extra_inf") else []), corte_x=1600)
@@ -397,6 +416,7 @@ def spec_vt():
     det += [([(x, H - HDv + COB), (x, H - COB)], "ARM_TRANSV", False) for x in (60, 110, 160)]
     det += [([(x, COB), (x, H - COB)], "ARM_TRANSV", False) for x in (380, 530, 680, 830)]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub="dente 30 × 20; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
+              cotas=[((0, H - HDv), (LNv, 0), 0, -100, f"{fd(LNv/10)}"), ((0, H - HDv), (0, H), 90, -120, f"{fd(HDv/10)}"), ((LNv, 0), (LNv, H - HDv), 90, -60, f"{fd((H-HDv)/10)} (recorte)"), ((LD, 0), (LD, H), 90, 120, f"{fd(H/10)}")],
               bolhas=[("N5", (500, 330), (4, 8)), ("N6", (315, 150), (10, -6)), ("N7", (110, H - 60), (-4, 8)), ("N4", (680, 450), (8, 6))],
               formas=["N5", "N6", "N7"], corte_x=LD)
     return dict(fam="VT", titulo="VIGAS DE TRAVAMENTO VT-01 A VT-04 (25 × 60, CONCRETO ARMADO)", forma="ND-LET-VT01", fck=40, L=L, H=H, esc=20, rep="VT-01",
@@ -431,11 +451,18 @@ def bloco(A: Arm, b, bar, x, ytop):
     if b.get("corte_x"):
         cx = b["corte_x"]
         A.ln(T((cx, ymin - 60)), T((cx, ymax + 60)), "CARIMBO_FINO")
+    for p1, p2, ang, dist, txt in b.get("cotas", []):       # rev10: cotas do detalhe (texto em cm; dist em mm da peça)
+        q1, q2 = T(p1), T(p2)
+        base = (q1[0], max(q1[1], q2[1]) + dist / esc) if ang == 0 else (min(q1[0], q2[0]) + dist / esc, q1[1])
+        if dist < 0 and ang == 0:
+            base = (q1[0], min(q1[1], q2[1]) + dist / esc)
+        d = A.pr.msp.add_linear_dim(base=base, p1=q1, p2=q2, angle=ang, text=txt, dimstyle="ND", dxfattribs={"layer": "COTA"})
+        d.render()
     for pos, alvo, (dx, dy) in b["bolhas"]:
         p = T(alvo)
         A.bolha_lider(p, p[0] + dx, p[1] + dy, pos, registrar=pos in bar)   # barra emendada: as posições dos trechos vêm da elevação
     x_dir = T((xmax, 0))[0] + 14
-    yb = oy + ymin / esc
+    yb = oy + ymin / esc - max([-c[3] / esc + 6 for c in b.get("cotas", []) if c[2] == 0 and c[3] < 0] or [0])
     # barras explodidas em coluna à direita (1:20)
     y = ytop - 6
     xr_max = x_dir

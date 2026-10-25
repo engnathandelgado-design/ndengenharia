@@ -1,0 +1,192 @@
+{
+ "folha": "ND-LET-PP04",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINO PT-1, TRAVA PT-2 E FIXADORES DO SISTEMA",
+  "desenho": "ND-LET-PP04",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — CE-1 (1 CJ), PT-1 (1 CJ), PT-2 (1 CJ)",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QTD",
+    "kg/un",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "20",
+     "CHAPA DE ESPERA",
+     "CH 12.5 × 330 × 380",
+     "ASTM A36",
+     "1",
+     "12,305",
+     "12,305"
+    ],
+    [
+     "21",
+     "PINO COM CABEÇA (stud)",
+     "Ø16 × 150, cabeça Ø32 × 10 — ISO 13918 SD",
+     "S235J2 + C450",
+     "4",
+     "0,284",
+     "1,136"
+    ],
+    [
+     "30",
+     "CARTOLA PT-1",
+     "CH 6,3 × 80, dobrada (desenv. 280)",
+     "ASTM A36",
+     "1",
+     "1,108",
+     "1,108"
+    ],
+    [
+     "31",
+     "PARAFUSO PT-1/PT-2",
+     "M16 × 40 ISO 4017 cl. 8.8",
+     "aço cl. 8.8 galv.",
+     "2",
+     "0,097",
+     "0,194"
+    ],
+    [
+     "32",
+     "ARRUELA LARGA",
+     "M16 ISO 7093 (17 × 50 × 3)",
+     "aço galv.",
+     "2",
+     "0,040",
+     "0,080"
+    ],
+    [
+     "33",
+     "LUVA TSA M16 (Trejor)",
+     "hef 70, embutida nas placas",
+     "aço zincado",
+     "2",
+     "0,090",
+     "0,180"
+    ],
+    [
+     "40",
+     "CANTONEIRA PT-2",
+     "L 102 × 102 × 9,5 L = 150",
+     "ASTM A36",
+     "1",
+     "2,190",
+     "2,190"
+    ],
+    [
+     "43",
+     "BUCHA BR-1 / BR-2",
+     "M16 hef 70 (placa) / hef 100 (pilar)",
+     "aço zincado",
+     "2",
+     "0,100",
+     "0,200"
+    ]
+   ]
+  },
+  {
+   "titulo": "FIXADORES DO SISTEMA — OBRA (torque em N·m)",
+   "cab": [
+    "Nº",
+    "PEÇA",
+    "CLASSE",
+    "ROSCA",
+    "USO",
+    "APERTO",
+    "QTD"
+   ],
+   "linhas": [
+    [
+     "16",
+     "M16 × 45 ISO 4017",
+     "8.8 galv. fogo",
+     "rosca total",
+     "nível do CS-1",
+     "contraporca 120",
+     "404"
+    ],
+    [
+     "15",
+     "porca M16 ISO 4032",
+     "8, sobremedida",
+     "6H + 0,4",
+     "soldada (CS-1)",
+     "—",
+     "808"
+    ],
+    [
+     "17",
+     "contraporca M16 ISO 4035",
+     "05 galv.",
+     "6H + 0,4",
+     "trava do nível",
+     "120",
+     "404"
+    ],
+    [
+     "18",
+     "prisioneiro M16 × 45 ISO 4026",
+     "45H zincado",
+     "sext. int. 8",
+     "frontal do CS-1",
+     "trava química",
+     "404"
+    ],
+    [
+     "31",
+     "M16 × 40 ISO 4017",
+     "8.8 galv. fogo",
+     "b = 38",
+     "PT-1 e PT-2",
+     "80 (oblongo livre)",
+     "816"
+    ],
+    [
+     "32",
+     "arruela larga M16 ISO 7093",
+     "200 HV galv.",
+     "17 × 50 × 3",
+     "PT-1 e PT-2",
+     "—",
+     "816"
+    ],
+    [
+     "33",
+     "luva TSA M16 (Trejor)",
+     "zincada",
+     "hef 70",
+     "placas (PT-1)",
+     "—",
+     "660"
+    ],
+    [
+     "43",
+     "bucha BR-1 / BR-2 M16",
+     "zincada",
+     "hef 70 / 100",
+     "placa / pilar (PT-2)",
+     "—",
+     "156"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

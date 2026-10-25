@@ -1,0 +1,326 @@
+{
+ "folha": "ND-LET-PC03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILARES CENTRAIS PC-03 (P13, P13B, 40×40) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PC03",
+  "rev": "10",
+  "data": "24/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PC-03",
+  "qtd": 2,
+  "peso": "39,5",
+  "volume": "1,58"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — PILAR CENTRAL PC-03",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PC-03",
+     "P13 (y 46,317)",
+     "1",
+     "CP-I130 (B, D)",
+     "2 AL-2"
+    ],
+    [
+     "PC-03",
+     "P13B (y 62,833)",
+     "1",
+     "CP-I130 (B, D)",
+     "2 AL-2"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "10",
+     "870",
+     "8700"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "72",
+     "152",
+     "10944"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "72",
+     "50",
+     "3600"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "16",
+     "218",
+     "3488"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "4",
+     "248",
+     "992"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "8",
+     "190",
+     "1520"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "159,98 m",
+     "39,20 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "16,72 m",
+     "6,60 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "10,91 m",
+     "6,73 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "134,07 m",
+     "211,56 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "264,09 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 2 UNIDADES",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "20",
+     "870",
+     "17400"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "144",
+     "152",
+     "21888"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "144",
+     "50",
+     "7200"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "32",
+     "218",
+     "6976"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "8",
+     "248",
+     "1984"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "16",
+     "190",
+     "3040"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10% — 2 UNIDADES",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "319,97 m",
+     "78,39 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "33,44 m",
+     "13,21 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "21,82 m",
+     "13,47 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "268,14 m",
+     "423,12 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "528,18 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PC-03) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-2",
+     "Pino Ø25 CA-50 L=900 — CP-I130",
+     "2",
+     "faces B e D"
+    ],
+    [
+     "NEO-2",
+     "Neoprene 300×200×31 fretado (rev04)",
+     "2",
+     "CP-I130"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7",
+     "2",
+     "face A"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces A–C, 65 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PC-03",
+     "SEÇÃO",
+     "40 × 40 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "877.6 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "1,58 m³",
+     "PESO",
+     "3,95 t"
+    ],
+    [
+     "AÇO CA-50",
+     "264 kg",
+     "TAXA",
+     "1,26 %"
+    ],
+    [
+     "QUANTIDADE",
+     "2",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

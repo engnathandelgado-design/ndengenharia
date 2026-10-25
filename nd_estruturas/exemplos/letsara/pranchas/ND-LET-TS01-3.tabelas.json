@@ -1,0 +1,130 @@
+{
+ "folha": "ND-LET-TS01-3",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "TS-01 — ESPERAS, INSERTOS E PEÇAS DE LIGAÇÃO DA COBERTURA (SEM SOLDA)",
+  "desenho": "ND-LET-TS01-3",
+  "rev": "10",
+  "data": "23/10/2026",
+  "folha": "02/02",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "/VIGA",
+    "OBRA",
+    "kg/un"
+   ],
+   "linhas": [
+    [
+     "ES-1",
+     "barra roscada M16 L=330 c/ gancho + grampo U Ø10",
+     "32",
+     "384",
+     "0,5"
+    ],
+    [
+     "ES-2",
+     "barra roscada M16 L=220 c/ gancho + U Ø10",
+     "12",
+     "144",
+     "0,3"
+    ],
+    [
+     "TB-3",
+     "tubo Ø50,8×2,0 L=900",
+     "4",
+     "48",
+     "2,2"
+    ],
+    [
+     "AL-1",
+     "cordoalha Ø12,7 L=1,90 m",
+     "4",
+     "48",
+     "1,5"
+    ],
+    [
+     "ST-1P",
+     "chapa dobrada 9,5 × 220 (150 + 290)",
+     "16",
+     "192",
+     "7,4"
+    ],
+    [
+     "ST-1V",
+     "igual ao ST-1P, 2 oblongos no eixo (VB eixo 1)",
+     "-",
+     "31",
+     "7,4"
+    ],
+    [
+     "ST-1V-R",
+     "como o ST-1V, oblongos 22×44 (VB eixo 9, M20)",
+     "-",
+     "31",
+     "7,4"
+    ],
+    [
+     "ST-1FL",
+     "chapa dobrada 9,5 × 290 (190 na face lateral do pilar de canto, 2 furos Ø22 p/ ES-1FL M20 + 100 na alma da terça, 2 M12)",
+     "-",
+     "2",
+     "6,3"
+    ],
+    [
+     "OR-X",
+     "L 102×76×6,3 L=80",
+     "-",
+     "80",
+     "0,7"
+    ],
+    [
+     "CL-P",
+     "L 102×102×9,5 L=250 (pilar do portão × TS-01A)",
+     "-",
+     "8",
+     "3,6"
+    ],
+    [
+     "PN-3",
+     "pino Ø25 CA-50 L=600 (pilar)",
+     "-",
+     "24",
+     "2,3"
+    ],
+    [
+     "PN-5",
+     "pino Ø20 CA-50 L=600 (I130/pilar central)",
+     "-",
+     "24",
+     "1,5"
+    ],
+    [
+     "NEO-4",
+     "neoprene 200×300×10, 2 furos Ø35",
+     "-",
+     "12",
+     "-"
+    ],
+    [
+     "NEO-3",
+     "neoprene 100×300×10, 2 furos Ø30",
+     "-",
+     "12",
+     "-"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

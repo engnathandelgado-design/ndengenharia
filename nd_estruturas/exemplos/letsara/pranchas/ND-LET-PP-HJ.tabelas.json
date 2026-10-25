@@ -1,0 +1,186 @@
+{
+ "folha": "ND-LET-PP-HJ",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS H E J: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
+  "desenho": "ND-LET-PP-HJ",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "07/08",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PRODUÇÃO E MONTAGEM (na ordem)",
+   "cab": [
+    "SEQ",
+    "PEÇA",
+    "TIPO",
+    "L (cm)",
+    "BASE",
+    "PESO (t)",
+    "APOIO DA PEÇA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "H-01",
+     "PP-06",
+     "984,0",
+     "+0,00",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "2",
+     "H-02",
+     "PP-06",
+     "984,0",
+     "+2,50",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "3",
+     "H-03",
+     "PP-11",
+     "107,0",
+     "+3,75",
+     "0,34",
+     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-2 (pé)"
+    ],
+    [
+     "4",
+     "H-04",
+     "PP-10",
+     "783,0",
+     "+3,75",
+     "2,49",
+     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-2 (pé)"
+    ],
+    [
+     "5",
+     "H-05",
+     "PP-06",
+     "984,0",
+     "+6,25",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "6",
+     "H-06",
+     "PP-06",
+     "984,0",
+     "+7,50",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "7",
+     "H-07",
+     "PP-06",
+     "984,0",
+     "+8,75",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "1",
+     "J-01",
+     "PP-06",
+     "984,0",
+     "+0,00",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "2",
+     "J-02",
+     "PP-06",
+     "984,0",
+     "+2,50",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "3",
+     "J-03",
+     "PP-06",
+     "984,0",
+     "+3,75",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "4",
+     "J-04",
+     "PP-06",
+     "984,0",
+     "+6,25",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "5",
+     "J-05",
+     "PP-06",
+     "984,0",
+     "+7,50",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "6",
+     "J-06",
+     "PP-06",
+     "984,0",
+     "+8,75",
+     "3,13",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO POR TIPO",
+   "cab": [
+    "TIPO",
+    "L (cm)",
+    "QT",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "PP-06",
+     "984,0",
+     "11",
+     "34,4"
+    ],
+    [
+     "PP-10",
+     "783,0",
+     "1",
+     "2,5"
+    ],
+    [
+     "PP-11",
+     "107,0",
+     "1",
+     "0,3"
+    ],
+    [
+     "",
+     "total",
+     "13",
+     "37,3"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

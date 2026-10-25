@@ -1,0 +1,61 @@
+{
+ "folha": "ND-LET-CT01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "CORTES TRANSVERSAIS DA ESTRUTURA — EIXOS 2 E 3",
+  "desenho": "ND-LET-CT01",
+  "rev": "10",
+  "data": "24/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "NÍVEIS (m)",
+   "cab": [
+    "ELEMENTO",
+    "NÍVEL"
+   ],
+   "linhas": [
+    [
+     "Assento da TS-01 no P1 (recuo)",
+     "+7,195"
+    ],
+    [
+     "Assento da TS-01 no P2 (recuo)",
+     "+8,369"
+    ],
+    [
+     "Topo da I130 / pilares centrais",
+     "+7,776"
+    ],
+    [
+     "Fundo da I130",
+     "+6,576"
+    ],
+    [
+     "Assento da I130 (CP-I130)",
+     "+6,966"
+    ],
+    [
+     "Topo dos painéis junto ao P1 / ao P2",
+     "+8,665 / +9,849"
+    ],
+    [
+     "Platibanda (todas)",
+     "+10,000"
+    ],
+    [
+     "Pisos do mezanino",
+     "+3,900 / +7,300"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

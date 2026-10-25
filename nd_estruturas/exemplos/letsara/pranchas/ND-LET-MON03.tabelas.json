@@ -1,0 +1,240 @@
+{
+ "folha": "ND-LET-MON03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLANO DE MONTAGEM DO FECHAMENTO LATERAL (PLACAS) E SEQUÊNCIA GERAL DA OBRA — IÇAMENTO E EQUIPAMENTOS",
+  "desenho": "ND-LET-MON03",
+  "rev": "02",
+  "data": "23/10/2026",
+  "folha": "03/03",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "ORDEM DE MONTAGEM DAS PAREDES",
+   "cab": [
+    "ORDEM",
+    "VISTA",
+    "PAREDE",
+    "PLACAS",
+    "FOLHA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "C",
+     "interna, portões",
+     "23",
+     "PP-C"
+    ],
+    [
+     "2",
+     "G",
+     "interna, linha 2",
+     "23",
+     "PP-G"
+    ],
+    [
+     "3",
+     "I",
+     "fachada linha 1",
+     "25",
+     "PP-I"
+    ],
+    [
+     "4",
+     "H",
+     "anexo, eixo A",
+     "7",
+     "PP-HJ"
+    ],
+    [
+     "5",
+     "J",
+     "anexo, eixo E",
+     "6",
+     "PP-HJ"
+    ],
+    [
+     "6",
+     "E",
+     "eixo A, L2–L4 (alto)",
+     "4",
+     "PP-EF"
+    ],
+    [
+     "7",
+     "F",
+     "eixo E, L2–L4 (alto)",
+     "4",
+     "PP-EF"
+    ],
+    [
+     "8",
+     "B",
+     "lateral eixo A",
+     "40",
+     "PP-B"
+    ],
+    [
+     "9",
+     "D",
+     "lateral eixo E",
+     "40",
+     "PP-D"
+    ],
+    [
+     "10",
+     "A",
+     "fachada linha 9",
+     "32",
+     "PP-A"
+    ]
+   ]
+  },
+  {
+   "titulo": "SEQUÊNCIA GERAL DA OBRA",
+   "cab": [
+    "ETAPA",
+    "SERVIÇO",
+    "CONDIÇÃO PARA SEGUIR",
+    "FOLHAS"
+   ],
+   "linhas": [
+    [
+     "1",
+     "Locação dos cálices e conferência dos níveis",
+     "±1,0 cm em planta; fundo nivelado",
+     "LOC01, CG01"
+    ],
+    [
+     "2",
+     "Pilares, todas as linhas",
+     "aprumar, cunhar, grautear no dia; 24 h e graute ≥ 15 MPa",
+     "MON01"
+    ],
+    [
+     "3",
+     "Vigas centrais I130 (V407, V406, V405, V404)",
+     "NEO-2; PN-2 grauteado numa ponta",
+     "MON01, CT03, CT04"
+    ],
+    [
+     "4",
+     "Parede C (linha 4) — antes da TS-01 da linha 4",
+     "cada placa nos seus 2 consoles",
+     "MON03, PP-C"
+    ],
+    [
+     "5",
+     "TS-01 L8 → L3 e VB-05 a VB-08 (guindaste de ré)",
+     "pinos nos TB-3; VB escoradas",
+     "MON01, CT04"
+    ],
+    [
+     "6",
+     "Cobertura dos vãos 3–4 a 8–9 (terças, correntes, X, telhas)",
+     "tudo parafusado; atrás do guindaste",
+     "COB01 a COB04"
+    ],
+    [
+     "7",
+     "Mezanino +3,90 e +7,30: VM, pontas concretadas (fcj ≥ 20), lajes, 2º estágio, capa; escada",
+     "cobertura dos vãos 1–3 aberta; capa ≥ 20 MPa",
+     "MON02, CT02"
+    ],
+    [
+     "8",
+     "Parede G (linha 2) — antes da W 310 da linha 2",
+     "cada placa nos seus 2 consoles",
+     "MON03, PP-G"
+    ],
+    [
+     "9",
+     "W 310 da linha 2, VB-01 a VB-04, terças dos vãos 1–2 e 2–3",
+     "ST-W e MF-1 em toda terça da linha 2",
+     "MON01, COB01, COB05"
+    ],
+    [
+     "10",
+     "Placas externas I, H, J, E, F, B, D e A (por fora)",
+     "guindaste no perímetro",
+     "MON03, PP"
+    ],
+    [
+     "11",
+     "Telhas, rufos e calhas dos vãos 1–3; acabamentos",
+     "após a estrutura travada",
+     "COB03, COB04"
+    ]
+   ]
+  },
+  {
+   "titulo": "IÇAMENTO POR TIPO DE PEÇA (PESO DA PEÇA MAIS PESADA)",
+   "cab": [
+    "PEÇA",
+    "PESO (t)",
+    "L (m)",
+    "PONTOS DE IÇAMENTO",
+    "ACESSÓRIO"
+   ],
+   "linhas": [
+    [
+     "Pilares",
+     "6,8",
+     "11,00",
+     "2 alças AL-2 (desforma) + furo FI-1 (verticalizar e montar)",
+     "pino passante + 2 manilhas"
+    ],
+    [
+     "I130 (V404, V405, V406, V407)",
+     "15,5",
+     "19,50",
+     "2 alças AL-3 (2 laços cada)",
+     "balancim"
+    ],
+    [
+     "TS-01",
+     "11,8",
+     "19,70",
+     "4 alças AL-1",
+     "2 balancins, cabos verticais"
+    ],
+    [
+     "VM-01 / VM-02",
+     "5,1",
+     "9,42",
+     "2 alças AL-1",
+     "cabos ≥ 45°"
+    ],
+    [
+     "VB-01 a VB-08",
+     "2,1",
+     "9,43",
+     "2 alças AL-1",
+     "escorar após montar"
+    ],
+    [
+     "Lajes LA-01/01R/02",
+     "3,3",
+     "9,55",
+     "garra mecânica nas 2 pontas",
+     "sem alça embutida"
+    ],
+    [
+     "Placas PP",
+     "3,2",
+     "10,16",
+     "2 alças AL-P no topo (montagem de pé)",
+     "balancim; desforma por 4 IZ-1"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

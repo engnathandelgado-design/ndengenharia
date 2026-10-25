@@ -1,0 +1,65 @@
+{
+ "folha": "ND-LET-CT03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "CORTE LONGITUDINAL DA OBRA (EIXO C), PLANTA-CHAVE DOS CORTES E VISTAS 3D DA ESTRUTURA",
+  "desenho": "ND-LET-CT03",
+  "rev": "03",
+  "data": "24/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "CORTES DA OBRA",
+   "cab": [
+    "CORTE",
+    "POSIÇÃO",
+    "FOLHA"
+   ],
+   "linhas": [
+    [
+     "1-1",
+     "pórtico de montagem, linha 3",
+     "ND-LET-MON01"
+    ],
+    [
+     "2-2",
+     "transversal, eixo 2",
+     "ND-LET-CT01"
+    ],
+    [
+     "3-3",
+     "transversal, eixo 3",
+     "ND-LET-CT01"
+    ],
+    [
+     "4-4",
+     "mezanino, meio do vão das lajes",
+     "ND-LET-CT02"
+    ],
+    [
+     "5-5",
+     "mezanino, entre os eixos B e C",
+     "ND-LET-CT02"
+    ],
+    [
+     "6-6",
+     "longitudinal, eixo C",
+     "ND-LET-CT03"
+    ],
+    [
+     "M-M",
+     "montagem do mezanino",
+     "ND-LET-MON02"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

@@ -1,0 +1,282 @@
+{
+ "folha": "ND-LET-PP-C",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA C: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
+  "desenho": "ND-LET-PP-C",
+  "rev": "09",
+  "data": "24/10/2026",
+  "folha": "03/08",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PRODUÇÃO E MONTAGEM (na ordem)",
+   "cab": [
+    "SEQ",
+    "PEÇA",
+    "TIPO",
+    "L (cm)",
+    "BASE",
+    "PESO (t)",
+    "APOIO DA PEÇA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "C-01",
+     "PP-01",
+     "1016,0",
+     "+0,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "2",
+     "C-02",
+     "PP-01",
+     "1016,0",
+     "+1,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "3",
+     "C-03",
+     "PP-01",
+     "1016,0",
+     "+2,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "4",
+     "C-04",
+     "PP-01",
+     "1016,0",
+     "+3,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "5",
+     "C-05",
+     "PP-01",
+     "1016,0",
+     "+5,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "6",
+     "C-06",
+     "PP-08",
+     "453,5",
+     "+0,00",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "7",
+     "C-07",
+     "PP-08",
+     "453,5",
+     "+1,25",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "8",
+     "C-08",
+     "PP-08",
+     "453,5",
+     "+2,50",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "9",
+     "C-09",
+     "PP-08",
+     "453,5",
+     "+3,75",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "10",
+     "C-10",
+     "PP-08",
+     "453,5",
+     "+5,00",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "11",
+     "C-11",
+     "PP-08RD",
+     "453,5",
+     "+6,25",
+     "1,37",
+     "2 CS-1 (ponta recortada: CS-1 na CE-1L) + 2 PT-1 (guia)"
+    ],
+    [
+     "12",
+     "C-12",
+     "PP-08",
+     "453,5",
+     "+0,00",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "13",
+     "C-13",
+     "PP-08",
+     "453,5",
+     "+1,25",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "14",
+     "C-14",
+     "PP-08",
+     "453,5",
+     "+2,50",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "15",
+     "C-15",
+     "PP-08",
+     "453,5",
+     "+3,75",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "16",
+     "C-16",
+     "PP-08",
+     "453,5",
+     "+5,00",
+     "1,44",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "17",
+     "C-17",
+     "PP-08RE",
+     "453,5",
+     "+6,25",
+     "1,37",
+     "2 CS-1 (ponta recortada: CS-1 na CE-1L) + 2 PT-1 (guia)"
+    ],
+    [
+     "18",
+     "C-18",
+     "PP-01",
+     "1016,0",
+     "+0,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "19",
+     "C-19",
+     "PP-01",
+     "1016,0",
+     "+1,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "20",
+     "C-20",
+     "PP-01",
+     "1016,0",
+     "+2,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "21",
+     "C-21",
+     "PP-01",
+     "1016,0",
+     "+3,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "22",
+     "C-22",
+     "PP-01",
+     "1016,0",
+     "+5,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "23",
+     "C-23",
+     "PP-01",
+     "1016,0",
+     "+6,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO POR TIPO",
+   "cab": [
+    "TIPO",
+    "L (cm)",
+    "QT",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "PP-01",
+     "1016,0",
+     "11",
+     "35,5"
+    ],
+    [
+     "PP-08",
+     "453,5",
+     "10",
+     "14,4"
+    ],
+    [
+     "PP-08RD",
+     "453,5",
+     "1",
+     "1,4"
+    ],
+    [
+     "PP-08RE",
+     "453,5",
+     "1",
+     "1,4"
+    ],
+    [
+     "",
+     "total",
+     "23",
+     "52,7"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

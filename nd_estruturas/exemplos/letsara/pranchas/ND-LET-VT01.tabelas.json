@@ -1,0 +1,360 @@
+{
+ "folha": "ND-LET-VT01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "VIGAS DE TRAVAMENTO VT 25 × 60 (EIXOS A E E, +7,50 A +8,10, DENTES GERBER) — PLANTA, ELEVAÇÃO, SEÇÃO E APOIO",
+  "desenho": "ND-LET-VT01",
+  "rev": "03",
+  "data": "14/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "PARA APROVAÇÃO"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — VT 25×60 (eixos A e E)",
+   "cab": [
+    "MARCA",
+    "TRECHO (linhas)",
+    "QT",
+    "L (cm)",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "VT-01",
+     "L2–L3, L3–L4",
+     "4",
+     "967,5",
+     "3,70"
+    ],
+    [
+     "VT-02",
+     "L5–L6, L6–L7, L7–L8",
+     "6",
+     "960,0",
+     "3,67"
+    ],
+    [
+     "VT-03",
+     "L4–L5",
+     "2",
+     "952,5",
+     "3,64"
+    ],
+    [
+     "VT-04",
+     "L8–L9",
+     "2",
+     "922,5",
+     "3,53"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR VIGA — mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "TB-1",
+     "Tubo Ø50×3,0 L=280, passante, sem solda",
+     "2",
+     "a 10 cm das pontas"
+    ],
+    [
+     "AL-1",
+     "Laço de cordoalha Ø12,7",
+     "2",
+     "a L/5 das pontas"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "6,3",
+     "106,56",
+     "28,7"
+    ],
+    [
+     "CA-50",
+     "8",
+     "43,36",
+     "18,8"
+    ],
+    [
+     "CA-50",
+     "12,5",
+     "59,32",
+     "62,8"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "110,4"
+    ]
+   ]
+  },
+  {
+   "titulo": "AÇO CA-50 POR MARCA (+10% perdas)",
+   "cab": [
+    "MARCA",
+    "L (cm)",
+    "QT",
+    "kg/peça",
+    "kg total"
+   ],
+   "linhas": [
+    [
+     "VT-01",
+     "967,5",
+     "4",
+     "110,4",
+     "441,6"
+    ],
+    [
+     "VT-02",
+     "960,0",
+     "6",
+     "109,3",
+     "655,9"
+    ],
+    [
+     "VT-03",
+     "952,5",
+     "2",
+     "108,7",
+     "217,3"
+    ],
+    [
+     "VT-04",
+     "922,5",
+     "2",
+     "105,4",
+     "210,7"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N1",
+     "diam": 12.5,
+     "qtd": 3,
+     "comp": 922,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       85,
+       0
+      ]
+     ],
+     "trechos": [
+      "922"
+     ]
+    },
+    {
+     "pos": "N2",
+     "diam": 12.5,
+     "qtd": 3,
+     "comp": 962,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       85,
+       0
+      ]
+     ],
+     "trechos": [
+      "962"
+     ]
+    },
+    {
+     "pos": "N3",
+     "diam": 8.0,
+     "qtd": 4,
+     "comp": 922,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       85,
+       0
+      ]
+     ],
+     "trechos": [
+      "922"
+     ]
+    },
+    {
+     "pos": "N4",
+     "diam": 6.3,
+     "qtd": 62,
+     "comp": 162,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       19,
+       0
+      ],
+      [
+       19,
+       54
+      ],
+      [
+       0,
+       54
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "19",
+      "54",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N5",
+     "diam": 12.5,
+     "qtd": 4,
+     "comp": 70,
+     "forma": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       64,
+       0
+      ]
+     ],
+     "trechos": [
+      "6",
+      "64"
+     ]
+    },
+    {
+     "pos": "N6",
+     "diam": 8.0,
+     "qtd": 4,
+     "comp": 162,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       19,
+       0
+      ],
+      [
+       19,
+       54
+      ],
+      [
+       0,
+       54
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "19",
+      "54",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N7",
+     "diam": 6.3,
+     "qtd": 6,
+     "comp": 102,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       19,
+       0
+      ],
+      [
+       19,
+       24
+      ],
+      [
+       0,
+       24
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "19",
+      "24",
+      "",
+      ""
+     ]
+    }
+   ]
+  }
+ ]
+}

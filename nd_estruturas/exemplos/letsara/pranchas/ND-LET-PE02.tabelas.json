@@ -1,0 +1,229 @@
+{
+ "folha": "ND-LET-PE02",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR DA ESCADA PE-02 (P7, 40×60) — EIXO E, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PE02",
+  "rev": "09",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PE-02",
+  "qtd": 1,
+  "peso": "30,5",
+  "volume": "1,22"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — PILARES DA ESCADA",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PE-02",
+     "P7 (escada)",
+     "1",
+     "1 CP-MEZ (A) +3,90",
+     "IE-1 (A) +1,95; 2 AL-2"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "6",
+     "482",
+     "2892"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "46",
+     "192",
+     "8832"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "46",
+     "50",
+     "2300"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "8",
+     "248",
+     "1984"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "2",
+     "268",
+     "536"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "4",
+     "128",
+     "512"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "122,45 m",
+     "30,00 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "5,63 m",
+     "2,22 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "5,90 m",
+     "3,64 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "53,64 m",
+     "84,64 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "120,50 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PE-02) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-1",
+     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "1",
+     "CP-MEZ"
+    ],
+    [
+     "NEO-5F",
+     "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)",
+     "1",
+     "CP-MEZ"
+    ],
+    [
+     "IE-1",
+     "4 barras roscadas M16 8.8 L=200 (150 embutidos + grampo U Ø10) — chapa de topo da viga W 150 da escada",
+     "4",
+     "face A, patamar +1,95 (viga de fundo VP-1)"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7",
+     "2",
+     "face D"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces B–D, 57.5 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PE-02",
+     "SEÇÃO",
+     "60 × 40 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "490 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "1,22 m³",
+     "PESO",
+     "3,05 t"
+    ],
+    [
+     "AÇO CA-50",
+     "121 kg",
+     "TAXA",
+     "0,50 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

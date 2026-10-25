@@ -1,0 +1,249 @@
+{
+ "folha": "ND-LET-PM02",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR DO MEZANINO PM-02 (P8B, 40×60) — LINHA 2, EIXO D — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PM02",
+  "rev": "00",
+  "data": "24/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PM-02",
+  "qtd": 1,
+  "peso": "62,9",
+  "volume": "2,52"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — PILAR DO MEZANINO PM-02",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PM-02",
+     "P8B",
+     "1",
+     "4 CP-MEZ (A, C); topo +8,745: W 200 × 15,0 direto (CA-L2 + 4 BR-M16)",
+     "6 CE-1 (B); 2 AL-2"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "10",
+     "966",
+     "9660"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "79",
+     "192",
+     "15168"
+    ],
+    [
+     "CA-50",
+     "N3A",
+     "6,3",
+     "79",
+     "50",
+     "3950"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "12",
+     "96",
+     "1152"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "32",
+     "208",
+     "6656"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "8",
+     "228",
+     "1824"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "16",
+     "128",
+     "2048"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "210,30 m",
+     "51,52 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "22,53 m",
+     "8,90 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "32,74 m",
+     "20,20 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "179,48 m",
+     "283,21 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "363,83 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PM-02) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-1",
+     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "4",
+     "consolos CP-MEZ"
+    ],
+    [
+     "NEO-5F",
+     "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)",
+     "4",
+     "CP-MEZ"
+    ],
+    [
+     "BA-1",
+     "Bainha corrugada Ø50 horizontal (N11)",
+     "4",
+     "12 cm acima da VM"
+    ],
+    [
+     "BR-M16",
+     "4 barras roscadas M16 8.8 L=450 (350 embutidos + grampo U Ø10), saem 100 — apoio direto da W 200 × 15,0 da linha 2: graute 20 + chapa CA-L2 250×250×19 + mesa da W + arruela, porca e contraporca (DEC-050/052)",
+     "4",
+     "topo, x ±75, y ±27,5 (centro da cabeça)"
+    ],
+    [
+     "CE-1",
+     "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)",
+     "6",
+     "face B, centrada"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7",
+     "2",
+     "face A"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces A–C, 70 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PM-02",
+     "SEÇÃO",
+     "40 × 60 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "974.5 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "2,52 m³",
+     "PESO",
+     "6,29 t"
+    ],
+    [
+     "AÇO CA-50",
+     "364 kg",
+     "TAXA",
+     "0,84 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

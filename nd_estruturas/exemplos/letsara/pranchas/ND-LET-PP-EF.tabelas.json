@@ -1,0 +1,129 @@
+{
+ "folha": "ND-LET-PP-EF",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS E E F: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
+  "desenho": "ND-LET-PP-EF",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "05/08",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PRODUÇÃO E MONTAGEM (na ordem)",
+   "cab": [
+    "SEQ",
+    "PEÇA",
+    "TIPO",
+    "L (cm)",
+    "BASE",
+    "PESO (t)",
+    "APOIO DA PEÇA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "E-01",
+     "PP-02",
+     "1005,5",
+     "+7,50",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "2",
+     "E-02",
+     "PP-02",
+     "1005,5",
+     "+8,75",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "3",
+     "E-03",
+     "PP-02",
+     "1005,5",
+     "+7,50",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "4",
+     "E-04",
+     "PP-02",
+     "1005,5",
+     "+8,75",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "1",
+     "F-01",
+     "PP-02",
+     "1005,5",
+     "+7,50",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "2",
+     "F-02",
+     "PP-02",
+     "1005,5",
+     "+8,75",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "3",
+     "F-03",
+     "PP-02",
+     "1005,5",
+     "+7,50",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ],
+    [
+     "4",
+     "F-04",
+     "PP-02",
+     "1005,5",
+     "+8,75",
+     "3,20",
+     "2 consoles CS-1 + 2 PT-2 (pé)"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO POR TIPO",
+   "cab": [
+    "TIPO",
+    "L (cm)",
+    "QT",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "PP-02",
+     "1005,5",
+     "8",
+     "25,6"
+    ],
+    [
+     "",
+     "total",
+     "8",
+     "25,6"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

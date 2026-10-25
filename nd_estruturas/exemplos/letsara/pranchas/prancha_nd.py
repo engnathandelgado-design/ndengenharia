@@ -30,6 +30,7 @@ CAMADAS = {
     "COTA": (32, 13, "Continuous"), "TEXTO": (7, 18, "Continuous"), "TITULO": (7, 25, "Continuous"),
     "CHAMADA": (7, 13, "Continuous"), "INDICACAO": (7, 25, "Continuous"), "TABELA": (7, 25, "Continuous"),
     "TABELA_FINA": (8, 13, "Continuous"), "BOLHA": (8, 13, "Continuous"), "POSICAO": (1, 18, "Continuous"),
+    "COR_FACHADA": (7, 0, "Continuous"),
 }
 # Emissão executiva (21/10/2026, decisão do Nathan): toda folha gerada sai liberada para produção e montagem.
 # Uma revisão nova é acrescentada automaticamente (número = maior revisão da folha + 1) e a nota antiga

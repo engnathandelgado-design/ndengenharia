@@ -195,6 +195,20 @@ def carimbo(desenho, conteudo, folha, rev="00", fmt="A1"):
 
 
 # ================================================================== elevação de uma vista
+# rev10 (Nathan 25/10/2026): cada parede (vista) com uma cor própria — mesma cor nas elevações PP-x, na planta da CM01 e no
+# isométrico (iso_fachadas.py), hachura sólida com transparência de 60 %
+COR_VISTA = {"A": (31, 119, 180), "B": (255, 127, 14), "C": (44, 160, 44), "D": (214, 39, 40), "E": (148, 103, 189),
+             "F": (140, 86, 75), "G": (227, 119, 194), "H": (23, 190, 207), "I": (188, 189, 34), "J": (127, 127, 127)}
+
+
+def hachura_cor(vv, pts, V, transp=0.6):
+    h = vv.pr.msp.add_hatch(dxfattribs={"layer": "COR_FACHADA"})
+    h.set_solid_fill(rgb=COR_VISTA[V])
+    h.transparency = transp
+    h.paths.add_polyline_path([vv.P(p) for p in pts], is_closed=True)
+    return vv._add(h)
+
+
 def desenhar_elev(pr, V, origem, esc):
     d = VISTAS[V]
     pecas, ca1, abert = DADOS[V]
@@ -228,6 +242,7 @@ def desenhar_elev(pr, V, origem, esc):
                 vv.ret(xa, 0, 48, z1, "OCULTA")
             vv.chamada((a0 - 44, z0 - 1900), (10, -4), "OM-2 interna (ES02)")
     for p in pecas:
+        hachura_cor(vv, poligono_placa(p), V)
         vv.poli(poligono_placa(p), "VISTA", fechada=True)
         if p.get("rec"):
             xr = p["s1"] - REC_B if p["rec"] == "s1" else p["s0"] + REC_B
@@ -318,6 +333,8 @@ def planta_chave(pr, Vs, origem, esc=1000):
         k.ret(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0), abs(b[0] - a[0]) + (0 if horiz else 1200), abs(b[1] - a[1]) + (1200 if horiz else 0), "CORTADO")
         k.hachura([(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
                    (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], "SOLID", 1, "CORTADO")
+        hachura_cor(k, [(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
+                        (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], V, 0.0)
         cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
         off = (0, 5600) if horiz and a[1] > 40000 else (0, -3500) if horiz and a[1] < 1000 else (M(4.94), 3000) if horiz else (-5600, 0) if a[0] < 0 else (3500, 0)
         k.circulo((cx + off[0], cy + off[1]), 1800, "INDICACAO")
@@ -654,6 +671,35 @@ def prancha_tipo():
               titulo="ISOMÉTRICO — PLACA TÍPICA (FACE INTERNA)", subtitulo="NC-1 nas 2 pontas, alças AL-P e luvas TSA no topo, macho-fêmea")
     pr.imagem(Q[0] + 560, Q[1] + 40, Q[0] + 760, Q[1] + 165, "/home/claude/letsara/pranchas/img/iso_pp_ponta.png",
               titulo="ISOMÉTRICO — PONTA DA PLACA", subtitulo="nicho NC-1 aberto na ponta e na face interna")
+    # ---- rev10 (Nathan 25/10/2026): ESQUEMA DOS 4 PONTOS DE DESFORMA/IÇAMENTO NUMA FACE, placa inteira (sem interrupção), cotado,
+    # com carga por ponto; tabela das posições por tipo. NBR 9062:2017 5.3.2 (βa 1,3 saque/manuseio) e 5.3.3 (dispositivos βa 3,0).
+    Lt = max(TIPOS)
+    xs4 = [round(0.104 * Lt), round(0.396 * Lt), Lt - round(0.396 * Lt), Lt - round(0.104 * Lt)]
+    ei = pr.vista("IÇAMENTO", (Q[0] + 790, Q[1] + 190), 60, titulo="ESQUEMA DE DESFORMA E IÇAMENTO — 4 PONTOS NA FACE INTERNA (IZ-1)",
+                  subtitulo=f"placa deitada na fôrma, face interna para cima; balancim duplo; placa {TIPO[Lt]} (L {Lt/10:.1f} cm) — demais tipos na tabela".replace(".", ","), unidade="cm")
+    ei.ret(0, 0, Lt, H_PL, "VISTA")
+    for xi in xs4:
+        ei.ret(xi - 40, H_PL / 2 - 40, 80, 80, "METALICA"); ei.circulo((xi, H_PL / 2), 20, "METALICA")
+    zb, zg = H_PL + 350, H_PL + 650                                            # balancins (esquema, fora de escala na altura)
+    for a_, b_ in ((xs4[0], xs4[1]), (xs4[2], xs4[3])):
+        ei.linha((a_, H_PL / 2), ((a_ + b_) / 2, zb), "METALICA"); ei.linha((b_, H_PL / 2), ((a_ + b_) / 2, zb), "METALICA")
+        ei.ret((a_ + b_) / 2 - 300, zb, 600, 60, "METALICA")
+    xm1, xm2 = (xs4[0] + xs4[1]) / 2, (xs4[2] + xs4[3]) / 2
+    ei.ret(xm1, zg, xm2 - xm1, 60, "METALICA")
+    ei.linha((xm1, zb + 60), (xm1, zg), "METALICA"); ei.linha((xm2, zb + 60), (xm2, zg), "METALICA")
+    ei.linha((Lt / 2, zg + 60), (Lt / 2, zg + 250), "METALICA")
+    ei.cota_h([0] + xs4 + [Lt], 0, -10, total=True)
+    ei.cota_v([0, H_PL / 2, H_PL], Lt, 10, total=False)
+    Pk = peso_t(Lt) * 10 / 4
+    ei.chamada((xs4[0], H_PL / 2), (6, 42), f"IZ-1 (4x) a 0,104 L e 0,396 L de cada ponta, meia altura: {f(Pk, 1)} kN por ponto (peso/4); com βa 1,3: {f(1.3 * Pk, 1)} kN ≤ 12,7 kN (1,3 t, FS ≥ 3)")
+    ei.chamada((Lt / 2, zg + 200), (14, 3), "balancim duplo (cargas iguais nos 4 pontos); cabos a prumo")
+    rows_i = []
+    for L_ in sorted(TIPOS, key=lambda L: -L):
+        a1, a2 = round(0.104 * L_), round(0.396 * L_)
+        pk = peso_t(L_) * 10 / 4
+        rows_i.append([TIPO[L_], f"{L_/10:.1f}".replace(".", ","), f"{a1/10:.1f}".replace(".", ","), f"{a2/10:.1f}".replace(".", ","), f(pk, 1), f(1.3 * pk, 1)])
+    pr.tabela(Q[0] + 780, Q[1] + 150, "PONTOS DE DESFORMA / IÇAMENTO IZ-1 POR TIPO (4 por placa, face interna)", ["TIPO", "L (cm)", "a1 (cm)", "a2 (cm)", "Pk (kN)", "βa·Pk (kN)"],
+              rows_i, [22, 28, 28, 28, 28, 34], h_lin=4.6)
     # ---- tabelas
     y = Q[3] - 6
     rows = []
@@ -733,6 +779,26 @@ def prancha_cm():
         x0 = FACE_X[0] if b == 0 else M(xa)
         x1 = FACE_X[1] if b == 5 else M(xb)
         kp.ret(x0, M(Y_LIN[3]) - 200 - o - 150, x1 - x0, 150, "CORTADO")                                # C
+    # rev10 (Nathan 25/10/2026): cada parede na cor da sua vista (mesmas cores das PP-x e do isométrico)
+    _r = lambda x0, y0, x1, y1: [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    _faixas = [("I", _r(FACE_X[0], FACE_Y[0] - o - 150, FACE_X[1], FACE_Y[0] - o)), ("A", _r(FACE_X[0], FACE_Y[1] + o, FACE_X[1], FACE_Y[1] + o + 150)),
+               ("G", _r(FACE_X[0], M(Y_LIN[1]) + 300 + o, FACE_X[1], M(Y_LIN[1]) + 300 + o + 150)),
+               ("H", _r(xe0, FACE_Y[0], xe1, M(Y_LIN[1]))), ("E", _r(xe0, M(Y_LIN[1]), xe1, M(Y_LIN[3]))), ("B", _r(xe0, M(Y_LIN[3]), xe1, FACE_Y[1])),
+               ("J", _r(xd0, FACE_Y[0], xd1, M(Y_LIN[1]))), ("F", _r(xd0, M(Y_LIN[1]), xd1, M(Y_LIN[3]))), ("D", _r(xd0, M(Y_LIN[3]), xd1, FACE_Y[1]))]
+    for b, (xa, xb) in enumerate(zip(X_L4[:-1], X_L4[1:])):
+        if b in (1, 4):
+            continue
+        _faixas.append(("C", _r(FACE_X[0] if b == 0 else M(xa), M(Y_LIN[3]) - 200 - o - 150, FACE_X[1] if b == 5 else M(xb), M(Y_LIN[3]) - 200 - o)))
+    for V_, pts_ in _faixas:
+        hachura_cor(kp, [(x_, y_) for x_, y_ in pts_], V_, 0.2)
+    lg = pr.vista("LEGENDA", (Q[0] + 18, Q[1] + 118), 1, titulo="CORES DAS PAREDES (VISTAS)", subtitulo="mesmas cores nas pranchas PP-x e no isométrico", unidade="mm")
+    for k_, V_ in enumerate("ABCDEFGHIJ"):
+        yy_ = -k_ * 7.0
+        hachura_cor(lg, _r(0, yy_, 10, yy_ + 5), V_, 0.4)
+        lg.poli(_r(0, yy_, 10, yy_ + 5), "VISTA", fechada=True)
+        lg.texto((13, yy_ + 1), f"VISTA {V_} — {VISTAS[V_]['titulo'].split(' — ')[1].split(' (')[0]}", "min")
+    pr.imagem(XC, Q[1] + 140, XC + 186, Q[1] + 290, "/home/claude/letsara/pranchas/img/iso_fachadas.png",
+              titulo="ISOMÉTRICO DO FECHAMENTO — CORES POR PAREDE", subtitulo="placas com transparência de 60 %; pilares e vigas em cinza")
     pos = {"A": (19.75, 85.6), "B": (-5.5, 54.5), "C": (19.75, 25.5), "D": (45.0, 54.5), "E": (-5.5, 19.7), "F": (45.0, 19.7),
            "G": (19.75, 13.5), "H": (-5.5, 4.8), "I": (19.75, -3.6), "J": (45.0, 4.8)}
     for V, (x, y) in pos.items():

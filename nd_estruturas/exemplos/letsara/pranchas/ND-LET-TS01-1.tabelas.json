@@ -1,0 +1,540 @@
+{
+ "folha": "ND-LET-TS01-1",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO",
+  "desenho": "ND-LET-TS01-1",
+  "rev": "10",
+  "data": "24/10/2026",
+  "folha": "01/02",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "INSERTOS (DETALHES NA ND-LET-TS01-3) — mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "AL-1",
+     "Alça laço cordoalha Ø12,7, 2 pernas 700",
+     "4",
+     "ver planta"
+    ],
+    [
+     "TB-3",
+     "Tubo Ø50,8×2,0 L=900, passante, a prumo",
+     "4",
+     "a 77,5 das pontas, y = ±100"
+    ],
+    [
+     "ES-1",
+     "Barra roscada M16 L=330, gancho, sai 120 + grampo U Ø10",
+     "32",
+     "2 por terça, y = ±60"
+    ],
+    [
+     "ES-2",
+     "Barra roscada M16 L=220, gancho, sai 50 + grampo U Ø10",
+     "12",
+     "4 por nó do X (3 nós)"
+    ],
+    [
+     "IT-P",
+     "Só TS-01A (linha 4): inserto rosqueado M16 hef 80 no fundo",
+     "6",
+     "fundo, ver nota 11"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "TS-01",
+     "QUANTIDADE",
+     "12"
+    ],
+    [
+     "COMPRIMENTO",
+     "1969,7 cm (fundo)",
+     "PONTAS",
+     "a prumo (desl, 2,7 cm)"
+    ],
+    [
+     "VOLUME",
+     "4,713 m³",
+     "PESO",
+     "117,8 kN (12,01 t)"
+    ],
+    [
+     "CONCRETO",
+     "C50 / fckj 35",
+     "PROTENSÃO",
+     "10 cord. Ø12,7"
+    ],
+    [
+     "APOIO EXTERNO",
+     "assento do pilar, 27,5 cm",
+     "APOIO CENTRAL",
+     "topo I130, 16,25 cm"
+    ],
+    [
+     "CUNHAS",
+     "30 cm, 0 → 9 mm",
+     "TUBOS TB-3",
+     "a 7,75 cm das 2 pontas"
+    ]
+   ]
+  },
+  {
+   "titulo": "MANUSEIO",
+   "cab": [
+    "FASE",
+    "APOIO",
+    "CARGA"
+   ],
+   "linhas": [
+    [
+     "Desforma / içamento",
+     "4 alças AL-1 + 2 balancins",
+     "38,3 kN por alça"
+    ],
+    [
+     "Estoque / transporte",
+     "2 calços a 210 cm das pontas",
+     "58,9 kN por calço"
+    ],
+    [
+     "Liberação",
+     "fckj ≥ 35 MPa",
+     "—"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "6,3",
+     "86",
+     "200",
+     "17200"
+    ],
+    [
+     "CA-50",
+     "N2a",
+     "12,5",
+     "2",
+     "1025",
+     "2050"
+    ],
+    [
+     "CA-50",
+     "N2b",
+     "12,5",
+     "2",
+     "1019",
+     "2038"
+    ],
+    [
+     "CA-50",
+     "N2c",
+     "12,5",
+     "2",
+     "920",
+     "1840"
+    ],
+    [
+     "CA-50",
+     "N2d",
+     "12,5",
+     "2",
+     "1124",
+     "2248"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "80",
+     "96",
+     "7680"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "6,3",
+     "80",
+     "96",
+     "7680"
+    ],
+    [
+     "CA-50",
+     "N5a",
+     "10",
+     "1",
+     "1005",
+     "1005"
+    ],
+    [
+     "CA-50",
+     "N5b",
+     "10",
+     "1",
+     "1004",
+     "1004"
+    ],
+    [
+     "CA-50",
+     "N5c",
+     "10",
+     "1",
+     "945",
+     "945"
+    ],
+    [
+     "CA-50",
+     "N5d",
+     "10",
+     "1",
+     "1064",
+     "1064"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "16",
+     "250",
+     "4000"
+    ],
+    [
+     "CA-50",
+     "N7",
+     "10",
+     "6",
+     "154",
+     "924"
+    ],
+    [
+     "CA-50",
+     "N8",
+     "10",
+     "4",
+     "232",
+     "928"
+    ],
+    [
+     "CA-50",
+     "N9",
+     "10",
+     "4",
+     "250",
+     "1000"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "358,16 m",
+     "87,75 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "44,00 m",
+     "17,38 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "75,57 m",
+     "46,63 kg"
+    ],
+    [
+     "PESO CA-50 Ø 12,5",
+     "89,94 m",
+     "86,61 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "238,36 kg"
+    ],
+    [
+     "CORD. CP-190 Ø12,7",
+     "196,97 m",
+     "152,65 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 12 UNIDADES",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "6,3",
+     "1032",
+     "200",
+     "206400"
+    ],
+    [
+     "CA-50",
+     "N2a",
+     "12,5",
+     "24",
+     "1025",
+     "24600"
+    ],
+    [
+     "CA-50",
+     "N2b",
+     "12,5",
+     "24",
+     "1019",
+     "24456"
+    ],
+    [
+     "CA-50",
+     "N2c",
+     "12,5",
+     "24",
+     "920",
+     "22080"
+    ],
+    [
+     "CA-50",
+     "N2d",
+     "12,5",
+     "24",
+     "1124",
+     "26976"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "960",
+     "96",
+     "92160"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "6,3",
+     "960",
+     "96",
+     "92160"
+    ],
+    [
+     "CA-50",
+     "N5a",
+     "10",
+     "12",
+     "1005",
+     "12060"
+    ],
+    [
+     "CA-50",
+     "N5b",
+     "10",
+     "12",
+     "1004",
+     "12048"
+    ],
+    [
+     "CA-50",
+     "N5c",
+     "10",
+     "12",
+     "945",
+     "11340"
+    ],
+    [
+     "CA-50",
+     "N5d",
+     "10",
+     "12",
+     "1064",
+     "12768"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "192",
+     "250",
+     "48000"
+    ],
+    [
+     "CA-50",
+     "N7",
+     "10",
+     "72",
+     "154",
+     "11088"
+    ],
+    [
+     "CA-50",
+     "N8",
+     "10",
+     "48",
+     "232",
+     "11136"
+    ],
+    [
+     "CA-50",
+     "N9",
+     "10",
+     "48",
+     "250",
+     "12000"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10% — 12 UNIDADES",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "4297,92 m",
+     "1052,99 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "528,00 m",
+     "208,56 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "906,84 m",
+     "559,52 kg"
+    ],
+    [
+     "PESO CA-50 Ø 12,5",
+     "1079,23 m",
+     "1039,30 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "2860,37 kg"
+    ],
+    [
+     "CORD. CP-190 Ø12,7",
+     "2363,64 m",
+     "1831,82 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DA FOLHA (+10%)",
+   "cab": [
+    "MARCA",
+    "QT",
+    "L (cm)",
+    "CONC. m³",
+    "CA-50 kg",
+    "CORD. kg"
+   ],
+   "linhas": [
+    [
+     "TS-01",
+     "12",
+     "1969,7",
+     "56,55",
+     "2860,4",
+     "1831,8"
+    ],
+    [
+     "TOTAL",
+     "12",
+     "",
+     "56,55",
+     "2860,4",
+     "1831,8"
+    ]
+   ]
+  },
+  {
+   "titulo": "CORDOALHAS CP-190 RB — PISTA 60 m",
+   "cab": [
+    "POS",
+    "Ø (mm)",
+    "QUANT",
+    "y (mm)",
+    "F (kN)",
+    "ΔL MEDIR (mm)",
+    "ISOLAM. (mm)"
+   ],
+   "linhas": [
+    [
+     "C1",
+     "12,7",
+     "6",
+     "62",
+     "143,4",
+     "453",
+     "ADERENTE"
+    ],
+    [
+     "C2",
+     "12,7",
+     "4",
+     "100",
+     "143,4",
+     "453",
+     "3000 PONTAS"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

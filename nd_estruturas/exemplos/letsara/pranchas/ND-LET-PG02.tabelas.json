@@ -1,0 +1,221 @@
+{
+ "folha": "ND-LET-PG02",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR DOS PORTÕES PG-02 (P10a, 25×25) — LINHA 4, x = 15,195 m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PG02",
+  "rev": "09",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PG-02",
+  "qtd": 1,
+  "peso": "13,5",
+  "volume": "0,54"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — PILARES DA PAREDE DOS PORTÕES",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PG-01",
+     "P9",
+     "1",
+     "sem consolo; topo +7,47",
+     "CE-1 (B); 2 IL-1; 2 AL-2"
+    ],
+    [
+     "PG-02",
+     "P10 (x 15,195)",
+     "1",
+     "sem consolo; topo +7,63",
+     "CE-1 (B); 2 IL-1; 2 AL-2"
+    ],
+    [
+     "PG-04",
+     "P10 (x 24,305)",
+     "1",
+     "sem consolo; topo +7,90",
+     "CE-1 (B); 2 IL-1; 2 AL-2"
+    ],
+    [
+     "PG-03",
+     "P12",
+     "1",
+     "sem consolo; topo +8,06",
+     "CE-1 (B); 2 IL-1; 2 AL-2"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "4",
+     "855",
+     "3420"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "71",
+     "92",
+     "6532"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "12",
+     "96",
+     "1152"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "71,85 m",
+     "17,60 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "12,67 m",
+     "7,82 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "37,62 m",
+     "59,36 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "84,79 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PG-02) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "CE-1",
+     "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1D na obra: CS-1 com calço de 75 mm, a face fica 75 atrás do plano dos consoles — PP06, DEC-044)",
+     "6",
+     "face B, centrada"
+    ],
+    [
+     "IL-1",
+     "Inserto rosqueado M16 hef 100 (cantoneira CL-P)",
+     "2",
+     "faces B e D, 75 do topo"
+    ],
+    [
+     "NEO-7",
+     "Neoprene 200×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A, DEC-059)",
+     "1",
+     "cabeça"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7",
+     "2",
+     "face A"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces A–C, 75 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PG-02",
+     "SEÇÃO",
+     "25 × 25 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "863 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "0,54 m³",
+     "PESO",
+     "1,35 t"
+    ],
+    [
+     "AÇO CA-50",
+     "85 kg",
+     "TAXA",
+     "1,29 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

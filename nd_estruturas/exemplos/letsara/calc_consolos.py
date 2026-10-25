@@ -10,11 +10,11 @@ from pathlib import Path
 
 AQ = Path(__file__).parent
 N9 = json.loads((AQ / "nbr9062.json").read_text(encoding="utf-8"))
-NEO = {"CP-I130": (300, 200, 30), "CP-MEZ": (300, 150, 10), "CP-VB": (100, 100, 10)}     # (b, a, h) mm — NEO-2 / NEO-5 / NEO-6
+NEO = {"CP-I130": (300, 200, 30), "CP-MEZ": (300, 150, 10), "CP-VB": (100, 100, 10), "CT-I130": (300, 150, 10)}     # (b, a, h) mm — NEO-2 / NEO-5 / NEO-6
 res = {}
 for c in N9["consolos"]:
     nome = c["consolo"]
-    if not nome.startswith("CP-"):
+    if not nome.startswith(("CP-", "CT-")):
         continue
     res[nome] = dict(onde=c["onde"], b_m=c["b_m"], proj_m=c["proj_m"], a_m=c["a_m"], h_consolo_m=c.get("h_ext_m", c["h_m"]), misula_m=c.get("misula_m", 0.0), h_total_m=c["h_m"],
                      d_m=c["d_m"], a_d=c["a_d"], tipo=c["modelo"], gama_n=c["gama_n"], Vd_kN=c["Vd_kN"], Fd_kN=c["Fd_kN"], Hd_kN=c["Hd_kN"],

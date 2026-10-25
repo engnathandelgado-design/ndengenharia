@@ -1,0 +1,475 @@
+{
+ "folha": "ND-LET-AR-PIL-06",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "ARMADURAS — PRÉ-MOLDADOS — PILARES PC-03, PM-01, PG-01, PG-02 — SEÇÕES E LISTA DO AÇO",
+  "desenho": "ND-LET-AR-PIL-06",
+  "rev": "04",
+  "data": "20/10/2026",
+  "folha": "06/06",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "PARA APROVAÇÃO"
+ },
+ "tabelas": [
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "20",
+     "12",
+     "870",
+     "10440"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "8",
+     "72",
+     "232",
+     "16704"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "16",
+     "258",
+     "4128"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "4",
+     "288",
+     "1152"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "8",
+     "190",
+     "1520"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 8",
+     "200,46 m",
+     "79,18 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "12,67 m",
+     "7,82 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "45,41 m",
+     "71,65 kg"
+    ],
+    [
+     "PESO CA-50 Ø 20",
+     "114,84 m",
+     "283,20 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "441,85 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "20",
+     "10",
+     "747",
+     "7470"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "8",
+     "64",
+     "192",
+     "12288"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "12",
+     "96",
+     "1152"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "24",
+     "198",
+     "4752"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "8",
+     "218",
+     "1744"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "16",
+     "130",
+     "2080"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 8",
+     "158,05 m",
+     "62,43 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "31,86 m",
+     "19,66 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "52,27 m",
+     "82,49 kg"
+    ],
+    [
+     "PESO CA-50 Ø 20",
+     "82,17 m",
+     "202,63 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "367,20 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 2 UNIDADES",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "20",
+     "20",
+     "747",
+     "14940"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "8",
+     "128",
+     "192",
+     "24576"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "24",
+     "96",
+     "2304"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "16",
+     "48",
+     "198",
+     "9504"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "16",
+     "218",
+     "3488"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "32",
+     "130",
+     "4160"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10% — 2 UNIDADES",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 8",
+     "316,10 m",
+     "124,86 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "63,71 m",
+     "39,31 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "104,54 m",
+     "164,97 kg"
+    ],
+    [
+     "PESO CA-50 Ø 20",
+     "164,34 m",
+     "405,26 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "734,40 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "20",
+     "4",
+     "839",
+     "3356"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "8",
+     "70",
+     "152",
+     "10640"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "10",
+     "96",
+     "960"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 8",
+     "117,04 m",
+     "46,23 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "10,56 m",
+     "6,52 kg"
+    ],
+    [
+     "PESO CA-50 Ø 20",
+     "36,92 m",
+     "91,03 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "143,78 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "4",
+     "855",
+     "3420"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "71",
+     "92",
+     "6532"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "12",
+     "96",
+     "1152"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "71,85 m",
+     "17,60 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "12,67 m",
+     "7,82 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "37,62 m",
+     "59,36 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "84,79 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DA FOLHA (+10%)",
+   "cab": [
+    "MARCA",
+    "QT",
+    "CONC. (m³)",
+    "CA-50 (kg)"
+   ],
+   "linhas": [
+    [
+     "PC-03",
+     "1",
+     "3,36",
+     "441,9"
+    ],
+    [
+     "PM-01",
+     "2",
+     "3,95",
+     "734,4"
+    ],
+    [
+     "PG-01",
+     "1",
+     "1,36",
+     "143,8"
+    ],
+    [
+     "PG-02",
+     "1",
+     "0,54",
+     "84,8"
+    ],
+    [
+     "TOTAL",
+     "5",
+     "9,20",
+     "1404,8"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

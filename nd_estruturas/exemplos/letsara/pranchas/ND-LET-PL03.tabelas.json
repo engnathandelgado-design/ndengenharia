@@ -1,0 +1,304 @@
+{
+ "folha": "ND-LET-PL03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR PRÉ-MOLDADO PL-03 (FAMÍLIA 40×60) — P1 L1 canto — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PL03",
+  "rev": "10",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PL-03",
+  "qtd": 1,
+  "peso": "68,5",
+  "volume": "2,74"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — FAMÍLIA DE PILARES 40×60",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PL-03",
+     "P1 L1 canto",
+     "1",
+     "CP-VB +7,798 (A); 2 CP-MEZ (A); seção cheia até o topo",
+     "6 CC-1 (C) + 6 (D)"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "12",
+     "1092",
+     "13104"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "87",
+     "192",
+     "16704"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "87",
+     "50",
+     "4350"
+    ],
+    [
+     "CA-50",
+     "N3A",
+     "6,3",
+     "87",
+     "70",
+     "6090"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "24",
+     "96",
+     "2304"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "12,5",
+     "2",
+     "197",
+     "394"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "2",
+     "192",
+     "384"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "3",
+     "80",
+     "240"
+    ],
+    [
+     "CA-50",
+     "N7",
+     "16",
+     "16",
+     "248",
+     "3968"
+    ],
+    [
+     "CA-50",
+     "N8",
+     "10",
+     "4",
+     "268",
+     "1072"
+    ],
+    [
+     "CA-50",
+     "N9",
+     "8",
+     "8",
+     "128",
+     "1024"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "298,58 m",
+     "73,15 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "13,90 m",
+     "5,49 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "41,36 m",
+     "25,52 kg"
+    ],
+    [
+     "PESO CA-50 Ø 12,5",
+     "4,33 m",
+     "4,17 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "187,79 m",
+     "296,34 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "404,67 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PL-03) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-1",
+     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "2",
+     "CP-MEZ"
+    ],
+    [
+     "PN-6",
+     "Barra roscada Ø20 A36 L=700 (300 no consolo)",
+     "1",
+     "CP-VB"
+    ],
+    [
+     "NEO-5",
+     "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)",
+     "2",
+     "CP-MEZ"
+    ],
+    [
+     "NEO-6",
+     "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)",
+     "1",
+     "CP-VB"
+    ],
+    [
+     "CC-1",
+     "CE-1 380×330×12,5 + 2 N18 + CS-1 de fábrica (concretado)",
+     "6",
+     "face C, centro 92 acima da fiada"
+    ],
+    [
+     "BR-2",
+     "Bucha M16 hef 100 (trava PT-2)",
+     "—",
+     "laterais junto à C, pacotes suspensos"
+    ],
+    [
+     "CE-1",
+     "CE-1 380×330×12,5 + 4 pinos + 2 N18 (CS-1C na obra: CS-1 com calço de 100 mm, a face fica 100 atrás do plano dos consoles — PP06)",
+     "6",
+     "face D, centro 92 acima da fiada"
+    ],
+    [
+     "BR-2",
+     "Bucha M16 hef 100 (trava PT-2)",
+     "—",
+     "laterais junto à D, pacotes suspensos"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN",
+     "2",
+     "face C: 320 do topo, 330 da base"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces B–D, 70 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PL-03",
+     "SEÇÃO",
+     "60 × 40 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "1100 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "2,74 m³",
+     "PESO",
+     "6,85 t"
+    ],
+    [
+     "AÇO CA-50",
+     "405 kg",
+     "TAXA",
+     "1,01 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

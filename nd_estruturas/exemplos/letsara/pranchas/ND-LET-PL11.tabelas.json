@@ -1,0 +1,244 @@
+{
+ "folha": "ND-LET-PL11",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR PRÉ-MOLDADO PL-11 (FAMÍLIA 40×60) — P2 L3 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PL11",
+  "rev": "10",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PL-11",
+  "qtd": 1,
+  "peso": "61,1",
+  "volume": "2,44"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — FAMÍLIA DE PILARES 40×60",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PL-11",
+     "P2 L3",
+     "1",
+     "recuo +8,37",
+     "2 CC-1 (C, fiadas 6–7)"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "4",
+     "1092",
+     "4368"
+    ],
+    [
+     "CA-50",
+     "N1A",
+     "16",
+     "6",
+     "945",
+     "5670"
+    ],
+    [
+     "CA-50",
+     "N13",
+     "10",
+     "5",
+     "239",
+     "1195"
+    ],
+    [
+     "CA-50",
+     "N14",
+     "6,3",
+     "15",
+     "132",
+     "1980"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "72",
+     "192",
+     "13824"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "72",
+     "50",
+     "3600"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "4",
+     "96",
+     "384"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "213,44 m",
+     "52,29 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "17,37 m",
+     "10,72 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "110,42 m",
+     "174,24 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "237,25 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PL-11) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "CC-1",
+     "CE-1 380×330×12,5 + 2 N18 + CS-1 de fábrica (concretado)",
+     "2",
+     "face C, centro 92 acima da fiada, fiadas 6–7"
+    ],
+    [
+     "BR-2",
+     "Bucha M16 hef 100 (trava PT-2)",
+     "—",
+     "laterais junto à C, pacotes suspensos"
+    ],
+    [
+     "PN-3",
+     "Pino Ø25 CA-50 L=600 (300 no pilar)",
+     "2",
+     "assento TS-01, y ±100, 102,5 da cabeça"
+    ],
+    [
+     "NEO-4",
+     "Neoprene 200×300×10 com 2 furos Ø35",
+     "1",
+     "assento horizontal da TS-01, de 50 a 250 mm da cabeça"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN",
+     "2",
+     "face C: 320 do topo, 330 da base"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces B–D, 208 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PL-11",
+     "SEÇÃO",
+     "60 × 40 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "1100 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "2,44 m³",
+     "PESO",
+     "6,11 t"
+    ],
+    [
+     "AÇO CA-50",
+     "237 kg",
+     "TAXA",
+     "0,84 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ],
+    [
+     "CABEÇA",
+     "40 × 30 cm acima de +8,37",
+     "",
+     ""
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

@@ -1,0 +1,631 @@
+{
+ "folha": "ND-LET-PIL-A01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR PRÉ-MOLDADO PL-01 (FAMÍLIA PL-01 A PF-03) 40×60 — CONCRETO ARMADO — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PIL-A01",
+  "rev": "05",
+  "data": "20/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "PARA APROVAÇÃO — OPÇÃO A (ARMADO)",
+  "marca": "PL-01",
+  "qtd": 4,
+  "peso": "61,2",
+  "volume": "2,45"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — FAMÍLIA DE PILARES 40×60 (MESMA ARMAÇÃO; 2 AL-2 CADA)",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (nível do assento, face)",
+    "INSERTOS DE PLACA"
+   ],
+   "linhas": [
+    [
+     "PL-01",
+     "P1 L5–L8",
+     "4",
+     "recuo +7,20",
+     "8 CE-1 (C)"
+    ],
+    [
+     "PL-09",
+     "P1 L3",
+     "1",
+     "recuo +7,20",
+     "2 CE-1 (C, fiadas 6–7)"
+    ],
+    [
+     "PL-10",
+     "P1 L4",
+     "1",
+     "recuo +7,20",
+     "8 CE-1 (C) + 5 (B, vista C)"
+    ],
+    [
+     "PL-02",
+     "P1 L2",
+     "1",
+     "2 CP-MEZ (A); recuo +7,20",
+     "6 CE-1 (C) + 5 (B, vista G)"
+    ],
+    [
+     "PL-03",
+     "P1 L1 canto",
+     "1",
+     "CP-VB +7,798 (A); 2 CP-MEZ (A); recuo A e B",
+     "6 CE-1 (C) + 6 (D)"
+    ],
+    [
+     "PL-04",
+     "P1 L9 canto",
+     "1",
+     "CP-VB +7,798 (A); recuo A e D",
+     "8 CE-1 (C) + 8 (B)"
+    ],
+    [
+     "PL-05",
+     "P2 L5–L8",
+     "4",
+     "recuo +8,37",
+     "8 CE-1 (C)"
+    ],
+    [
+     "PL-11",
+     "P2 L3",
+     "1",
+     "recuo +8,37",
+     "2 CE-1 (C, fiadas 6–7)"
+    ],
+    [
+     "PL-12",
+     "P2 L4",
+     "1",
+     "recuo +8,37",
+     "8 CE-1 (C) + 6 (D, vista C)"
+    ],
+    [
+     "PL-06",
+     "P2 L2",
+     "1",
+     "2 CP-MEZ (A); recuo +8,37",
+     "6 CE-1 (C) + 6 (D, vista G)"
+    ],
+    [
+     "PL-07",
+     "P2 L1 canto",
+     "1",
+     "CP-VB +8,957 (A); 2 CP-MEZ (A); recuo A e D",
+     "6 CE-1 (C) + 6 (B)"
+    ],
+    [
+     "PL-08",
+     "P2 L9 canto",
+     "1",
+     "CP-VB +8,957 (A); recuo A e B",
+     "8 CE-1 (C) + 8 (D)"
+    ],
+    [
+     "PF-01",
+     "P3 L1",
+     "1",
+     "CP-VB +8,071 (B); CP-VB +8,091 (D); 4 CP-MEZ (B, D); recuo +8,40",
+     "6 CE-1 (C)"
+    ],
+    [
+     "PF-02",
+     "P4 L1",
+     "1",
+     "CP-VB +8,367 (B); CP-VB +8,388 (D); 4 CP-MEZ (B, D); recuo +8,70",
+     "6 CE-1 (C)"
+    ],
+    [
+     "PF-03",
+     "P5 L1",
+     "1",
+     "CP-VB +8,664 (B); CP-VB +8,684 (D); 4 CP-MEZ (B, D); recuo +9,00",
+     "6 CE-1 (C)"
+    ],
+    [
+     "PF-05",
+     "P3 L9",
+     "1",
+     "CP-VB +8,091 (B); CP-VB +8,071 (D); recuo +8,40",
+     "8 CE-1 (C)"
+    ],
+    [
+     "PF-04",
+     "P14 L9",
+     "1",
+     "CP-VB +8,388 (B); CP-VB +8,367 (D); CP-I130 +6,966 (A); recuo +8,70",
+     "8 CE-1 (C)"
+    ],
+    [
+     "PF-06",
+     "P5 L9",
+     "1",
+     "CP-VB +8,684 (B); CP-VB +8,664 (D); recuo +9,00",
+     "8 CE-1 (C)"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "8",
+     "234,84",
+     "102,0"
+    ],
+    [
+     "CA-50",
+     "10",
+     "4,96",
+     "3,4"
+    ],
+    [
+     "CA-50",
+     "12,5",
+     "1,20",
+     "1,3"
+    ],
+    [
+     "CA-50",
+     "16",
+     "15,96",
+     "27,7"
+    ],
+    [
+     "CA-50",
+     "20",
+     "139,83",
+     "379,3"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "513,7"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PL-01) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-1",
+     "Pino Ø20 CA-50 L=700 (300 no consolo), a 175 mm da face",
+     "3",
+     "CP-TS (face A) e 2 CP-VT (faces B e D)"
+    ],
+    [
+     "CP-VT",
+     "Consolo 25×20×29 sem chanfro p/ dente da VT 25×60 (+7,790)",
+     "2",
+     "faces B e D (canto: 1)"
+    ],
+    [
+     "IP-01",
+     "Chapa A36 150×150×9,5 + 2 pinos Ø12,5 c/ cabeça (p/ CM-01)",
+     "8",
+     "face C, c/1250 a partir do piso"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7 (2 pernas 700), carga 40 kN",
+     "2",
+     "face A: 3200 do topo; 2300 da base"
+    ],
+    [
+     "NEO-1",
+     "Neoprene 300×150×10 c/ furo Ø30 (montagem)",
+     "1",
+     "sobre o consolo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PL-01",
+     "SEÇÃO",
+     "40 × 60 (cabeça 40 × 30)"
+    ],
+    [
+     "COMPRIMENTO",
+     "1100 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "2,45 m³",
+     "PESO",
+     "6,12 t"
+    ],
+    [
+     "AÇO CA-50",
+     "514 kg",
+     "TAXA",
+     "1,83 %"
+    ],
+    [
+     "PROTENSÃO",
+     "—",
+     "CG",
+     "5,50 m da base"
+    ],
+    [
+     "QUANTIDADE",
+     "4 (família: 24)",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (método geral, NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": [
+    [
+     "ELU, vento lado 60 (λu)",
+     "1,03"
+    ],
+    [
+     "ELU, vento lado 40 (λu)",
+     "1,08"
+    ],
+    [
+     "Fachada, vento lado 40 (λu)",
+     "1,01"
+    ],
+    [
+     "Armadura mínima (0,4 %)",
+     "44,0 ≥ 9,6 cm²"
+    ],
+    [
+     "Estribos (18.4.3)",
+     "s = 15 ≤ min(20; 40; 12Ø = 24) cm"
+    ],
+    [
+     "Grampos (18.4.3)",
+     "barras a > 20Øt = 16 cm do canto → N3"
+    ],
+    [
+     "Fissuração (freq.)",
+     "σ = 1,45 ≤ 2,46 MPa (estádio I)"
+    ],
+    [
+     "Içamento (2 pontos)",
+     "σ ≤ 1,7 MPa com ×1,3 — sem fissura"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N1",
+     "diam": 20.0,
+     "qtd": 5,
+     "comp": 1092,
+     "trechos": [
+      "1092"
+     ]
+    },
+    {
+     "pos": "N1A",
+     "diam": 20.0,
+     "qtd": 9,
+     "comp": 947,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       60
+      ],
+      [
+       6,
+       60
+      ]
+     ],
+     "trechos": [
+      "932",
+      "15"
+     ]
+    },
+    {
+     "pos": "N7",
+     "diam": 16.0,
+     "qtd": 4,
+     "comp": 228,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       60
+      ],
+      [
+       5,
+       60
+      ]
+     ],
+     "trechos": [
+      "216",
+      "12"
+     ]
+    },
+    {
+     "pos": "N8",
+     "diam": 8.0,
+     "qtd": 15,
+     "comp": 132,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       24
+      ],
+      [
+       0,
+       24
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "34",
+      "24",
+      "34",
+      "24"
+     ]
+    },
+    {
+     "pos": "N9",
+     "diam": 12.5,
+     "qtd": 2,
+     "comp": 60,
+     "trechos": [
+      "60"
+     ]
+    },
+    {
+     "pos": "N2",
+     "diam": 8.0,
+     "qtd": 72,
+     "comp": 192,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       54
+      ],
+      [
+       0,
+       54
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "34",
+      "54",
+      "34",
+      "54"
+     ]
+    },
+    {
+     "pos": "N3",
+     "diam": 8.0,
+     "qtd": 144,
+     "comp": 50,
+     "forma": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       6
+      ]
+     ],
+     "trechos": [
+      "8",
+      "34",
+      "8"
+     ]
+    },
+    {
+     "pos": "N4",
+     "diam": 16.0,
+     "qtd": 3,
+     "comp": 228,
+     "forma": [
+      [
+       0,
+       15
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       85,
+       0
+      ],
+      [
+       85,
+       34
+      ],
+      [
+       0,
+       34
+      ],
+      [
+       0,
+       49
+      ]
+     ],
+     "trechos": [
+      "15",
+      "82",
+      "34",
+      "82",
+      "15"
+     ]
+    },
+    {
+     "pos": "N5",
+     "diam": 10.0,
+     "qtd": 2,
+     "comp": 248,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       70,
+       0
+      ],
+      [
+       70,
+       34
+      ],
+      [
+       0,
+       34
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "82",
+      "34",
+      "82",
+      "34"
+     ]
+    },
+    {
+     "pos": "N6",
+     "diam": 8.0,
+     "qtd": 3,
+     "comp": 160,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       40
+      ],
+      [
+       0,
+       40
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "34",
+      "38",
+      "34",
+      "38"
+     ]
+    }
+   ]
+  }
+ ]
+}

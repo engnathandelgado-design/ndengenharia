@@ -1,0 +1,611 @@
+{
+ "folha": "ND-LET-COB01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO E TRAVAMENTO, APOIOS E EMENDAS POR TRANSPASSE",
+  "desenho": "ND-LET-COB01",
+  "rev": "09",
+  "data": "24/10/2026",
+  "folha": "01/04",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "FUROS DO X (OBLONGOS 18×28) — y DO EIXO INICIAL DO VÃO, mm",
+   "cab": [
+    "FURO",
+    "T3 /35",
+    "T3 \\75",
+    "T4 /35",
+    "T4 \\75",
+    "T5 /35",
+    "T5 \\75"
+   ],
+   "linhas": [
+    [
+     "X1",
+     "1242",
+     "8683",
+     "1251",
+     "8749",
+     "1231",
+     "8593"
+    ],
+    [
+     "X2",
+     "2483",
+     "7442",
+     "2501",
+     "7499",
+     "2458",
+     "7365"
+    ],
+    [
+     "X3",
+     "3723",
+     "6202",
+     "3751",
+     "6249",
+     "3685",
+     "6138"
+    ],
+    [
+     "X4",
+     "4962",
+     "4962",
+     "5000",
+     "5000",
+     "4912",
+     "4912"
+    ],
+    [
+     "X5",
+     "6202",
+     "3723",
+     "6249",
+     "3751",
+     "6138",
+     "3685"
+    ],
+    [
+     "X6",
+     "7443",
+     "2482",
+     "7500",
+     "2500",
+     "7366",
+     "2457"
+    ],
+    [
+     "X7",
+     "8683",
+     "1242",
+     "8749",
+     "1251",
+     "8593",
+     "1231"
+    ],
+    [
+     "Y1",
+     "1406",
+     "8519",
+     "1416",
+     "8584",
+     "1394",
+     "8438"
+    ],
+    [
+     "Y2",
+     "2828",
+     "7097",
+     "2849",
+     "7151",
+     "2802",
+     "7030"
+    ],
+    [
+     "Y3",
+     "4251",
+     "5674",
+     "4283",
+     "5717",
+     "4211",
+     "5621"
+    ],
+    [
+     "Y4",
+     "5674",
+     "4251",
+     "5717",
+     "4283",
+     "5621",
+     "4211"
+    ],
+    [
+     "Y5",
+     "7097",
+     "2828",
+     "7151",
+     "2849",
+     "7030",
+     "2802"
+    ],
+    [
+     "Y6",
+     "8519",
+     "1406",
+     "8584",
+     "1416",
+     "8438",
+     "1394"
+    ]
+   ]
+  },
+  {
+   "titulo": "TERÇAS Z 302×90/82×2,30 METSEC (8.92 kg/m) — L com os transpasses",
+   "cab": [
+    "MARCA",
+    "L (mm)",
+    "VÃOS",
+    "FURAÇÃO",
+    "QT",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "T1",
+     "10210",
+     "1-2",
+     "pontas (apoio + emenda), correntes",
+     "28",
+     "2.550"
+    ],
+    [
+     "T1D",
+     "10210",
+     "1-2",
+     "pontas (apoio + emenda), correntes + diag. Ø18",
+     "4",
+     "364"
+    ],
+    [
+     "T2",
+     "10975",
+     "2-3, 3-4",
+     "pontas (apoio + emenda), correntes",
+     "56",
+     "5.482"
+    ],
+    [
+     "T2D",
+     "10975",
+     "2-3, 3-4",
+     "pontas (apoio + emenda), correntes + diag. Ø18",
+     "8",
+     "783"
+    ],
+    [
+     "T3",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes",
+     "6",
+     "579"
+    ],
+    [
+     "T3DX1",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
+     "2",
+     "193"
+    ],
+    [
+     "T3DY6",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
+     "2",
+     "193"
+    ],
+    [
+     "T3X2",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X2",
+     "2",
+     "193"
+    ],
+    [
+     "T3X3",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X3",
+     "2",
+     "193"
+    ],
+    [
+     "T3X4",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X4",
+     "2",
+     "193"
+    ],
+    [
+     "T3X5",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X5",
+     "2",
+     "193"
+    ],
+    [
+     "T3X6",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X6",
+     "2",
+     "193"
+    ],
+    [
+     "T3X7",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X X7",
+     "2",
+     "193"
+    ],
+    [
+     "T3Y1",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X Y1",
+     "2",
+     "193"
+    ],
+    [
+     "T3Y2",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X Y2",
+     "2",
+     "193"
+    ],
+    [
+     "T3Y3",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X Y3",
+     "2",
+     "193"
+    ],
+    [
+     "T3Y4",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X Y4",
+     "2",
+     "193"
+    ],
+    [
+     "T3Y5",
+     "10825",
+     "4-5",
+     "pontas (apoio + emenda), correntes + X Y5",
+     "2",
+     "193"
+    ],
+    [
+     "T4",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes",
+     "18",
+     "1.750"
+    ],
+    [
+     "T4DX1",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
+     "6",
+     "583"
+    ],
+    [
+     "T4DY6",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
+     "6",
+     "583"
+    ],
+    [
+     "T4X2",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X2",
+     "6",
+     "583"
+    ],
+    [
+     "T4X3",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X3",
+     "6",
+     "583"
+    ],
+    [
+     "T4X4",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X4",
+     "6",
+     "583"
+    ],
+    [
+     "T4X5",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X5",
+     "6",
+     "583"
+    ],
+    [
+     "T4X6",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X6",
+     "6",
+     "583"
+    ],
+    [
+     "T4X7",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X X7",
+     "6",
+     "583"
+    ],
+    [
+     "T4Y1",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X Y1",
+     "6",
+     "583"
+    ],
+    [
+     "T4Y2",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X Y2",
+     "6",
+     "583"
+    ],
+    [
+     "T4Y3",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X Y3",
+     "6",
+     "583"
+    ],
+    [
+     "T4Y4",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X Y4",
+     "6",
+     "583"
+    ],
+    [
+     "T4Y5",
+     "10900",
+     "5-6, 6-7, 7-8",
+     "pontas (apoio + emenda), correntes + X Y5",
+     "6",
+     "583"
+    ],
+    [
+     "T5",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes",
+     "6",
+     "545"
+    ],
+    [
+     "T5DX1",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
+     "2",
+     "182"
+    ],
+    [
+     "T5DY6",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
+     "2",
+     "182"
+    ],
+    [
+     "T5X2",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X2",
+     "2",
+     "182"
+    ],
+    [
+     "T5X3",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X3",
+     "2",
+     "182"
+    ],
+    [
+     "T5X4",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X4",
+     "2",
+     "182"
+    ],
+    [
+     "T5X5",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X5",
+     "2",
+     "182"
+    ],
+    [
+     "T5X6",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X6",
+     "2",
+     "182"
+    ],
+    [
+     "T5X7",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X7",
+     "2",
+     "182"
+    ],
+    [
+     "T5Y1",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y1",
+     "2",
+     "182"
+    ],
+    [
+     "T5Y2",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y2",
+     "2",
+     "182"
+    ],
+    [
+     "T5Y3",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y3",
+     "2",
+     "182"
+    ],
+    [
+     "T5Y4",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y4",
+     "2",
+     "182"
+    ],
+    [
+     "T5Y5",
+     "10185",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y5",
+     "2",
+     "182"
+    ],
+    [
+     "",
+     "",
+     "",
+     "total",
+     "256",
+     "24.511"
+    ]
+   ]
+  },
+  {
+   "titulo": "LISTA DE MATERIAIS — APOIOS E EMENDAS DAS TERÇAS (SEM SOLDA)",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "ONDE"
+   ],
+   "linhas": [
+    [
+     "ES-1",
+     "2 esperas M16 por apoio, concretadas na TS-01 (TS01-3)",
+     "384",
+     "topo da TS-01"
+    ],
+    [
+     "ST-1P",
+     "chapa dobrada 9,5×220 A36, 4 Ø14 + 2 oblongos",
+     "192",
+     "nas ES-1 (porca + contraporca)"
+    ],
+    [
+     "ST-W",
+     "clip da terça na mesa da W 310 da linha 2, 2 M16 na mesa + 4 M12 nas almas (ND-LET-COB05)",
+     "32",
+     "linha 2"
+    ],
+    [
+     "MF-1",
+     "mão-francesa L 51×51×4,8 da terça à mesa inferior da W 310 (ND-LET-COB05)",
+     "64",
+     "linha 2, 2 por terça"
+    ],
+    [
+     "GR-1",
+     "grampo U Ø10 em cada ES-1 (armadura de ancoragem)",
+     "384",
+     "TS-01, com as ES-1"
+    ],
+    [
+     "ST-1V",
+     "como o ST-1P, 2 oblongos 18×40 no eixo (VB 15 cm)",
+     "32",
+     "nas ES-1V da VB do eixo 1"
+    ],
+    [
+     "ST-1V-R",
+     "como o ST-1V, oblongos 22×44 (esperas M20)",
+     "32",
+     "nas ES-1R da VB do eixo 9 (det. 2)"
+    ],
+    [
+     "M12 8.8",
+     "parafuso + porca + 2 arruelas Ø24, zincado",
+     "2048",
+     "1152 nos apoios + 896 nas emendas"
+    ],
+    [
+     "M16",
+     "porca + arruela (contraporca no ST-1P), galvanizadas",
+     "1344",
+     "ES-1 e ES-1V"
+    ],
+    [
+     "M20",
+     "porca + arruela + contraporca, galvanizadas",
+     "192",
+     "ES-1R (eixo 9)"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

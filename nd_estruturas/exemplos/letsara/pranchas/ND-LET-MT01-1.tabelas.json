@@ -1,0 +1,280 @@
+{
+ "folha": "ND-LET-MT01-1",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PEÇAS DE FIXAÇÃO DAS PLACAS — NICHO NC-1 E CONSOLE CS-1: DESENHOS DE FABRICAÇÃO, LISTAS E QUANTIDADES",
+  "desenho": "ND-LET-MT01",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/02",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — NC-1 / NC-1' (400 CONJUNTOS)",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QT/CJ",
+    "QT TOTAL",
+    "kg TOTAL"
+   ],
+   "linhas": [
+    [
+     "1",
+     "TETO",
+     "CH 12,5 × 50,5 × 140",
+     "ASTM A572 Gr.50",
+     "1",
+     "400",
+     "277,5"
+    ],
+    [
+     "2",
+     "BASE",
+     "CH 3 × 50,5 × 140",
+     "ASTM A572 Gr.50",
+     "1",
+     "400",
+     "66,6"
+    ],
+    [
+     "3",
+     "FUNDO",
+     "CH 9,5 × 140 × 200",
+     "ASTM A572 Gr.50",
+     "1",
+     "400",
+     "835,2"
+    ],
+    [
+     "4",
+     "PAREDE LATERAL",
+     "CH 2 × 50,5 × 184,5",
+     "ASTM A36",
+     "1",
+     "400",
+     "58,5"
+    ],
+    [
+     "5",
+     "ABA E (lado da ponta)",
+     "CH 12,5 × 38 × 44",
+     "ASTM A572 Gr.50",
+     "1",
+     "400",
+     "65,6"
+    ],
+    [
+     "6",
+     "ABA D",
+     "CH 12,5 × 38 × 42",
+     "ASTM A572 Gr.50",
+     "1",
+     "400",
+     "62,6"
+    ],
+    [
+     "7",
+     "GRAMPO U DO TETO",
+     "RED Ø6,3 × 112 (desenv,)",
+     "ASTM A36",
+     "2",
+     "800",
+     "21,9"
+    ],
+    [
+     "8",
+     "GRAMPO U DA BASE",
+     "RED Ø6,3 × 88 (desenv,)",
+     "ASTM A36",
+     "2",
+     "800",
+     "17,2"
+    ],
+    [
+     "",
+     "total NC-1 (3,51 kg/cj)",
+     "",
+     "",
+     "",
+     "",
+     "1405"
+    ]
+   ]
+  },
+  {
+   "titulo": "LISTA DE MATERIAIS — CS-1 (404 CONJUNTOS)",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QT/CJ",
+    "QT TOTAL",
+    "kg TOTAL"
+   ],
+   "linhas": [
+    [
+     "10",
+     "COSTAS (solda de campo na CE-1)",
+     "CH 9,5 × 120 × 130",
+     "ASTM A572 Gr.50",
+     "1",
+     "404",
+     "470,0"
+    ],
+    [
+     "11",
+     "ALMA",
+     "CH 6,3 × 54,5 × 64/34 (trapézio)",
+     "ASTM A572 Gr.50",
+     "2",
+     "808",
+     "106,7"
+    ],
+    [
+     "12",
+     "MESA (furo Ø18)",
+     "CH 16 × 54,5 × 104",
+     "ASTM A572 Gr.50",
+     "1",
+     "404",
+     "274,7"
+    ],
+    [
+     "13",
+     "DENTE",
+     "CH 19 × 13 × 35",
+     "ASTM A572 Gr.50",
+     "2",
+     "808",
+     "54,8"
+    ],
+    [
+     "14",
+     "CHAPA DE PONTA (furo Ø18)",
+     "CH 8 × 34 × 83,7",
+     "ASTM A572 Gr.50",
+     "1",
+     "404",
+     "65,7"
+    ],
+    [
+     "15",
+     "PORCA SEXTAVADA M16 (soldada)",
+     "M16 ISO 4032 cl, 8, rosca sobremedida p/ galv,",
+     "aço cl. 8",
+     "2",
+     "808",
+     "26,7"
+    ],
+    [
+     "16",
+     "PARAFUSO DE NÍVEL",
+     "M16 × 50 ISO 4017 cl, 8,8, rosca total",
+     "aço cl. 8.8 galv.",
+     "1",
+     "404",
+     "42,4"
+    ],
+    [
+     "17",
+     "CONTRAPORCA FINA",
+     "M16 ISO 4035 cl, 05",
+     "aço galv.",
+     "1",
+     "404",
+     "7,3"
+    ],
+    [
+     "18",
+     "PRISIONEIRO FRONTAL",
+     "M16 × 45 ISO 4026 45H, sext, int, 8",
+     "aço 45H zincado",
+     "1",
+     "404",
+     "27,5"
+    ],
+    [
+     "",
+     "total CS-1 (2,66 kg/cj)",
+     "",
+     "",
+     "",
+     "",
+     "1076"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUANTIDADES DE PRODUÇÃO",
+   "cab": [
+    "PEÇA",
+    "USO",
+    "OBRA",
+    "RESERVA 5 %",
+    "PRODUZIR",
+    "kg (obra)"
+   ],
+   "linhas": [
+    [
+     "NC-1",
+     "ponta inicial da placa",
+     "200",
+     "10",
+     "210",
+     "703"
+    ],
+    [
+     "NC-1'",
+     "ponta final — espelhado (abas e parede do outro lado)",
+     "200",
+     "10",
+     "210",
+     "703"
+    ],
+    [
+     "CS-1",
+     "console (porcas soldadas; parafusos à parte)",
+     "404",
+     "21",
+     "425",
+     "1076"
+    ],
+    [
+     "CS-1C",
+     "CS-1 (dos acima) + caixa de calço 120 × 330 × 100 ch. 9,5 soldada nas costas (PP06)",
+     "39",
+     "2",
+     "41",
+     "480"
+    ],
+    [
+     "CS-1D",
+     "CS-1 (dos acima) + caixa de calço 120 × 330 × 75 ch. 9,5 soldada nas costas (PP06)",
+     "12",
+     "1",
+     "13",
+     "128"
+    ],
+    [
+     "CE-1L",
+     "chapa de espera 840 × 330 × 12,5 com asas (PP06; pinos como a CE-1)",
+     "2",
+     "0",
+     "2",
+     "54"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

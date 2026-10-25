@@ -1,0 +1,61 @@
+{
+ "folha": "ND-LET-COB03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS",
+  "desenho": "ND-LET-COB03",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "03/04",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — CALHA E DESCIDAS (RUFOS NA ND-LET-COB04)",
+   "cab": [
+    "MARCA",
+    "QT",
+    "DESCRIÇÃO",
+    "ONDE"
+   ],
+   "linhas": [
+    [
+     "CA-1",
+     "79 m",
+     "calha 300×150, chapa galv. 1,25, desenv. 700",
+     "eixo A, linhas 1 a 9"
+    ],
+    [
+     "SC-1",
+     "107",
+     "suporte ferro chato 38×6,35 A36 galv. + 2 M10",
+     "c/750, na 1ª terça"
+    ],
+    [
+     "BO-1",
+     "9",
+     "bocal de saída Ø200 com ralo hemisférico",
+     "junto aos pilares P1"
+    ],
+    [
+     "DE-1",
+     "14 barras",
+     "tubo PVC Ø200 série R (≈ 79 m em barras de 6 m)",
+     "descidas até a caixa de areia"
+    ],
+    [
+     "EX-1",
+     "2",
+     "extravasor Ø100 (tubo + flange); furo na placa feito na obra",
+     "pontas da calha, fachadas 1 e 9"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

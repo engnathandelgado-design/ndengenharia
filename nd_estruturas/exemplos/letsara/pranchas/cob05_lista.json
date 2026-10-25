@@ -1,0 +1,145 @@
+{
+ "total_kg": 975,
+ "linhas": [
+  [
+   "W-L2 1",
+   "W 200 × 15,0 A572-50",
+   "1",
+   "10,79",
+   "162"
+  ],
+  [
+   "W-L2 2",
+   "W 200 × 15,0 A572-50",
+   "1",
+   "9,97",
+   "150"
+  ],
+  [
+   "W-L2 3",
+   "W 200 × 15,0 A572-50",
+   "1",
+   "11,49",
+   "172"
+  ],
+  [
+   "W-L2 4",
+   "W 200 × 15,0 A572-50",
+   "1",
+   "7,20",
+   "108"
+  ],
+  [
+   "MT-L2 1",
+   "montante W 150 × 13,0 (A–B, sobre a VM-01)",
+   "1",
+   "0,715",
+   "9,3"
+  ],
+  [
+   "MT-L2 2",
+   "montante W 150 × 13,0 (B–C, sobre a VM-02)",
+   "1",
+   "1,010",
+   "13,1"
+  ],
+  [
+   "MT-L2 3",
+   "montante W 150 × 13,0 (C–D, sobre a VM-02)",
+   "1",
+   "1,306",
+   "17,0"
+  ],
+  [
+   "MT-L2 4",
+   "montante W 150 × 13,0 (D–P6, sobre a VM-03)",
+   "1",
+   "1,554",
+   "20,2"
+  ],
+  [
+   "CB-M1",
+   "L 102 × 102 × 12,7 × 100 (base do montante), 2 + 2 furos Ø18",
+   "8",
+   "0,10",
+   "15,2"
+  ],
+  [
+   "CB-M2",
+   "L 102 × 102 × 12,7 × 130 (topo do montante), 2 + 2 furos Ø18",
+   "8",
+   "0,13",
+   "19,8"
+  ],
+  [
+   "EM-L2",
+   "barra roscada M16 8.8 L 330 com gancho 180° (espera no 2º estágio)",
+   "16",
+   "0,33",
+   "8,3"
+  ],
+  [
+   "CA-L2",
+   "chapa de apoio 250 × 250 × 19, 4 furos Ø18 (graute 20 por baixo)",
+   "6",
+   "-",
+   "56"
+  ],
+  [
+   "BR-M16",
+   "barra roscada M16 8.8 L 450 + grampo (embutida no pilar)",
+   "24",
+   "0,45",
+   "17,1"
+  ],
+  [
+   "TL-1",
+   "tala de mesa 9,5 × 100 × 300",
+   "6",
+   "0,30",
+   "13,4"
+  ],
+  [
+   "TL-2",
+   "tala de alma 6,3 × 130 × 200",
+   "6",
+   "0,20",
+   "7,7"
+  ],
+  [
+   "ST-W",
+   "clip da terça, chapa dobrada 6,3",
+   "32",
+   "-",
+   "102"
+  ],
+  [
+   "MF-1",
+   "mão-francesa L 51 × 51 × 4,8 L 361",
+   "64",
+   "0,36",
+   "84"
+  ],
+  [
+   "M16 8.8",
+   "parafuso + porca + 2 arruelas (emendas e montantes); porcas das barras",
+   "92 + 80",
+   "-",
+   "-"
+  ],
+  [
+   "M12 8.8",
+   "parafuso + porca + 2 arruelas (ST-W e MF-1)",
+   "256",
+   "-",
+   "-"
+  ],
+  [
+   "",
+   "TOTAL (sem parafusos)",
+   "",
+   "",
+   "975"
+  ]
+ ]
+}

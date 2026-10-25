@@ -1,0 +1,228 @@
+{
+ "folha": "ND-LET-CM01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS DE FECHAMENTO — LOCAÇÃO CONFORME AS VISTAS DO R01 (A A J), ORDEM DE MONTAGEM DAS VISTAS E PENDÊNCIAS",
+  "desenho": "ND-LET-CM01",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "ORDEM DE MONTAGEM DAS VISTAS",
+   "cab": [
+    "ORD.",
+    "VISTA",
+    "PAREDE",
+    "PEÇAS",
+    "PESO (t)",
+    "PRANCHA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "C",
+     "PAREDE INTERNA DA LINHA 4",
+     "23",
+     "52,7",
+     "ND-LET-PP-C"
+    ],
+    [
+     "2",
+     "G",
+     "PAREDE INTERNA DA LINHA 2",
+     "23",
+     "73,0",
+     "ND-LET-PP-G"
+    ],
+    [
+     "3",
+     "I",
+     "FACHADA DA LINHA 1",
+     "25",
+     "75,8",
+     "ND-LET-PP-I"
+    ],
+    [
+     "4",
+     "H",
+     "LATERAL DO ANEXO, EIXO A, LINHAS 1 A 2",
+     "7",
+     "18,5",
+     "ND-LET-PP-HJ"
+    ],
+    [
+     "5",
+     "J",
+     "LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2",
+     "6",
+     "18,8",
+     "ND-LET-PP-HJ"
+    ],
+    [
+     "6",
+     "E",
+     "LATERAL DO EIXO A, LINHAS 2 A 4",
+     "4",
+     "12,8",
+     "ND-LET-PP-EF"
+    ],
+    [
+     "7",
+     "F",
+     "LATERAL DO EIXO E, LINHAS 2 A 4",
+     "4",
+     "12,8",
+     "ND-LET-PP-EF"
+    ],
+    [
+     "8",
+     "B",
+     "LATERAL DO EIXO A, LINHAS 4 A 9",
+     "40",
+     "126,4",
+     "ND-LET-PP-B"
+    ],
+    [
+     "9",
+     "D",
+     "LATERAL DO EIXO E, LINHAS 4 A 9",
+     "40",
+     "126,4",
+     "ND-LET-PP-D"
+    ],
+    [
+     "10",
+     "A",
+     "FACHADA DA LINHA 9",
+     "32",
+     "101,9",
+     "ND-LET-PP-A"
+    ],
+    [
+     "",
+     "",
+     "total",
+     "204",
+     "619,0",
+     ""
+    ]
+   ]
+  },
+  {
+   "titulo": "TIPOS × VISTAS",
+   "cab": [
+    "TIPO",
+    "L (cm)",
+    "QT",
+    "VISTA: QUANTIDADE"
+   ],
+   "linhas": [
+    [
+     "PP-01",
+     "1016,0",
+     "50",
+     "A: 16  C: 11  G: 11  I: 12"
+    ],
+    [
+     "PP-02",
+     "1005,5",
+     "8",
+     "E: 4  F: 4"
+    ],
+    [
+     "PP-03",
+     "998,0",
+     "48",
+     "B: 24  D: 24"
+    ],
+    [
+     "PP-04",
+     "990,5",
+     "16",
+     "B: 8  D: 8"
+    ],
+    [
+     "PP-05RD",
+     "986,0",
+     "1",
+     "G: 1"
+    ],
+    [
+     "PP-05RE",
+     "986,0",
+     "1",
+     "G: 1"
+    ],
+    [
+     "PP-05P",
+     "986,0",
+     "1",
+     "I: 1"
+    ],
+    [
+     "PP-05",
+     "986,0",
+     "36",
+     "A: 16  G: 10  I: 10"
+    ],
+    [
+     "PP-06",
+     "984,0",
+     "11",
+     "H: 5  J: 6"
+    ],
+    [
+     "PP-07",
+     "981,5",
+     "16",
+     "B: 8  D: 8"
+    ],
+    [
+     "PP-10",
+     "783,0",
+     "1",
+     "H: 1"
+    ],
+    [
+     "PP-08RD",
+     "453,5",
+     "1",
+     "C: 1"
+    ],
+    [
+     "PP-08RE",
+     "453,5",
+     "1",
+     "C: 1"
+    ],
+    [
+     "PP-08",
+     "453,5",
+     "10",
+     "C: 10"
+    ],
+    [
+     "PP-09",
+     "401,0",
+     "2",
+     "I: 2"
+    ],
+    [
+     "PP-11",
+     "107,0",
+     "1",
+     "H: 1"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

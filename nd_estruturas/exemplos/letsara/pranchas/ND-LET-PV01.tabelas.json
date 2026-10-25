@@ -1,0 +1,188 @@
+{
+ "folha": "ND-LET-PV01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACA PV-1 SOBRE O PORTÃO DA LINHA 4 (ENTRE PG-04 E PG-03) — FÔRMA, ARMAÇÃO, APOIOS E MONTAGEM",
+  "desenho": "ND-LET-PV01",
+  "rev": "00",
+  "data": "24/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "5",
+     "22,41",
+     "3,8"
+    ],
+    [
+     "CA-50",
+     "10",
+     "21,04",
+     "14,3"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "18,1"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PV-1",
+     "SEÇÃO",
+     "10 × 37,3 cm"
+    ],
+    [
+     "COMPRIMENTO",
+     "530,5 cm",
+     "CONCRETO",
+     "C40 / desforma fcj 15 MPa"
+    ],
+    [
+     "VOLUME",
+     "0,198 m³",
+     "PESO",
+     "0,50 t"
+    ],
+    [
+     "AÇO CA-50/60",
+     "18,1 kg",
+     "COBRIMENTO",
+     "2,5 cm"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS E PEÇAS DE LIGAÇÃO",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "CL-V",
+     "L 152 × 102 × 9,5 L=150 (PG-04) e L 102 × 102 × 9,5 L=150 (PG-03), galvanizadas",
+     "2",
+     "face B dos PG, topo +7,50"
+    ],
+    [
+     "IL-2",
+     "barras roscadas M16 8.8 L=200 (150 embutidas + grampo U Ø10) — na fábrica dos PG",
+     "6",
+     "2 por CL-V + 1 por CT-V"
+    ],
+    [
+     "CT-V",
+     "L 76 × 76 × 6,3 L=80 + 1 M12 em bucha BR-2 da placa",
+     "2",
+     "topo, nas 2 pontas"
+    ],
+    [
+     "BR-2",
+     "bucha rosqueada M12 hef 60 (na placa, 75 da ponta, 60 abaixo do topo)",
+     "2",
+     "face B da placa"
+    ],
+    [
+     "AL-1",
+     "alça de cordoalha Ø12,7 (1 laço)",
+     "2",
+     "topo, a 0,2 L"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N1",
+     "diam": 10.0,
+     "qtd": 2,
+     "comp": 526,
+     "trechos": [
+      "526"
+     ]
+    },
+    {
+     "pos": "N2",
+     "diam": 10.0,
+     "qtd": 2,
+     "comp": 526,
+     "trechos": [
+      "526"
+     ]
+    },
+    {
+     "pos": "N3",
+     "diam": 5.0,
+     "qtd": 27,
+     "comp": 83,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       5.0,
+       0
+      ],
+      [
+       5.0,
+       32.3
+      ],
+      [
+       0,
+       32.3
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "trechos": [
+      "5",
+      "32.3",
+      "",
+      ""
+     ]
+    }
+   ]
+  }
+ ]
+}

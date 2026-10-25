@@ -1,0 +1,320 @@
+{
+ "folha": "ND-LET-PF03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PILAR PRÉ-MOLDADO PF-03 (FAMÍLIA 40×60) — P5 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "desenho": "ND-LET-PF03",
+  "rev": "10",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "PF-03",
+  "qtd": 1,
+  "peso": "68,1",
+  "volume": "2,72"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — FAMÍLIA DE PILARES 40×60",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "CONSOLOS (face)",
+    "INSERTOS"
+   ],
+   "linhas": [
+    [
+     "PF-03",
+     "P5 L1",
+     "1",
+     "CP-VB +8,664 (B); CP-VB +8,684 (D); 4 CP-MEZ (B, D); recuo +9,00",
+     "6 CC-1 (C)"
+    ]
+   ]
+  },
+  {
+   "titulo": "TABELA DE FERROS — 1 UNIDADE",
+   "cab": [
+    "TIPO",
+    "POS.",
+    "BIT.",
+    "QUANT.",
+    "C.UNIT (cm)",
+    "C.TOT (cm)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "N1",
+     "16",
+     "2",
+     "1092",
+     "2184"
+    ],
+    [
+     "CA-50",
+     "N1A",
+     "16",
+     "10",
+     "1008",
+     "10080"
+    ],
+    [
+     "CA-50",
+     "N13",
+     "10",
+     "3",
+     "156",
+     "468"
+    ],
+    [
+     "CA-50",
+     "N14",
+     "6,3",
+     "9",
+     "132",
+     "1188"
+    ],
+    [
+     "CA-50",
+     "N2",
+     "6,3",
+     "78",
+     "192",
+     "14976"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "156",
+     "50",
+     "7800"
+    ],
+    [
+     "CA-50",
+     "N18",
+     "10",
+     "12",
+     "96",
+     "1152"
+    ],
+    [
+     "CA-50",
+     "N4",
+     "12,5",
+     "4",
+     "157",
+     "628"
+    ],
+    [
+     "CA-50",
+     "N5",
+     "10",
+     "4",
+     "152",
+     "608"
+    ],
+    [
+     "CA-50",
+     "N6",
+     "8",
+     "6",
+     "80",
+     "480"
+    ],
+    [
+     "CA-50",
+     "N7",
+     "16",
+     "32",
+     "208",
+     "6656"
+    ],
+    [
+     "CA-50",
+     "N8",
+     "10",
+     "8",
+     "228",
+     "1824"
+    ],
+    [
+     "CA-50",
+     "N9",
+     "8",
+     "16",
+     "128",
+     "2048"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO +10%",
+   "cab": [
+    "DESCRIÇÃO",
+    "COMPR.",
+    "PESO"
+   ],
+   "linhas": [
+    [
+     "PESO CA-50 Ø 6,3",
+     "263,60 m",
+     "64,58 kg"
+    ],
+    [
+     "PESO CA-50 Ø 8",
+     "27,81 m",
+     "10,98 kg"
+    ],
+    [
+     "PESO CA-50 Ø 10",
+     "44,57 m",
+     "27,50 kg"
+    ],
+    [
+     "PESO CA-50 Ø 12,5",
+     "6,91 m",
+     "6,65 kg"
+    ],
+    [
+     "PESO CA-50 Ø 16",
+     "208,12 m",
+     "328,41 kg"
+    ],
+    [
+     "PESO TOTAL CA-50",
+     "",
+     "438,13 kg"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PILAR (PF-03) — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "PN-1",
+     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "4",
+     "CP-MEZ"
+    ],
+    [
+     "PN-6",
+     "Barra roscada Ø20 A36 L=700 (300 no consolo)",
+     "2",
+     "CP-VB"
+    ],
+    [
+     "NEO-5",
+     "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)",
+     "4",
+     "CP-MEZ"
+    ],
+    [
+     "NEO-6",
+     "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)",
+     "2",
+     "CP-VB"
+    ],
+    [
+     "BA-1",
+     "Bainha corrugada Ø50 horizontal (N11)",
+     "4",
+     "12 cm acima da VM"
+    ],
+    [
+     "CC-1",
+     "CE-1 380×330×12,5 + 2 N18 + CS-1 de fábrica (concretado)",
+     "6",
+     "face C, centro 92 acima da fiada"
+    ],
+    [
+     "BR-2",
+     "Bucha M16 hef 100 (trava PT-2)",
+     "—",
+     "laterais junto à C, pacotes suspensos"
+    ],
+    [
+     "AL-2",
+     "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN",
+     "2",
+     "face C: 320 do topo, 330 da base"
+    ],
+    [
+     "FI-1",
+     "Furo de içamento: tubo aço Ø60,3 × 3 perdido",
+     "1",
+     "faces A–C, 187.5 cm do topo"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "PF-03",
+     "SEÇÃO",
+     "60 × 40 cm (x × y)"
+    ],
+    [
+     "COMPRIMENTO",
+     "1100 cm",
+     "CONCRETO",
+     "C40"
+    ],
+    [
+     "VOLUME",
+     "2,72 m³",
+     "PESO",
+     "6,81 t"
+    ],
+    [
+     "AÇO CA-50",
+     "438 kg",
+     "TAXA",
+     "1,01 %"
+    ],
+    [
+     "QUANTIDADE",
+     "1",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ],
+    [
+     "CABEÇA",
+     "40 × 30 cm acima de +9,00",
+     "",
+     ""
+    ]
+   ]
+  },
+  {
+   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
+   "cab": [
+    "VERIFICAÇÃO",
+    "RESULTADO"
+   ],
+   "linhas": []
+  }
+ ],
+ "aco": []
+}

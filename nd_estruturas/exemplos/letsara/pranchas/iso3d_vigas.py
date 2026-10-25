@@ -95,15 +95,24 @@ def i130():
             s0 /= 1e3
             if not (x_ini <= s0 <= x_fim):
                 continue
+            CT = P.get("ct")
+            if CT:                                                     # rev10 (DEC-059): consolo lateral CT-I130 com mísula nas 2 faces
+                pj, hh, he = CT["proj"] / 1e3, CT["h"] / 1e3, CT["h_ext"] / 1e3
+                for sg in (-1, 1):
+                    pol = [(sg * BW / 2, H - hh), (sg * B / 2, H - hh), (sg * (B / 2 + pj), H - he), (sg * (B / 2 + pj), H), (sg * BW / 2, H)]
+                    p.add_mesh(prisma(pol if sg > 0 else pol[::-1], s0 - CT["b"] / 2e3, s0 + CT["b"] / 2e3, "yz"), **CONC)
+                    yn = sg * CT["y_neo"] / 1e3
+                    p.add_mesh(box(s0 - 0.15, s0 + 0.15, yn - CT["a_neo"] / 2e3, yn + CT["a_neo"] / 2e3, H, H + 0.01), **NEO)
             for dn in (-0.115, 0.115):
-                p.add_mesh(box(s0 + dn - 0.05, s0 + dn + 0.05, -0.15, 0.15, H, H + 0.01), **NEO)
+                if not CT:
+                    p.add_mesh(box(s0 + dn - 0.05, s0 + dn + 0.05, -0.15, 0.15, H, H + 0.01), **NEO)
                 for ds in (-0.10, 0.10):
-                    p.add_mesh(cil((s0 + dn, ds, H + 0.15), 0.020, 0.30), **ACO)
+                    p.add_mesh(cil((s0 + ds, dn, H + 0.15), 0.020, 0.30), **ACO)
     p = pv.Plotter(off_screen=True, window_size=(2600, 900)); p.set_background("white")
     peca(p)
     s0 = P["pinos_topo"][0] / 1e3
     rot(p, [(P["alcas"][0] / 1e3, 0, H + 0.14), (s0 + 0.115, 0.10, H + 0.30), (LN / 2, 0.2, H - HD), (P["pino_x"] / 1e3, 0, H + 0.02), (MAC + 1.0, 0.2, H * 0.5)],
-        ["AL-3 alça de içamento (2x)", "apoio das TS-01: NEO-3 + 4 PN-5 por linha", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
+        ["AL-3 alça de içamento (2x)", "apoio das TS-01: consolos CT-I130 com mísula + NEO-3C + 4 PN-5", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
          "TB-2 passante no dente", f"seção I{round(H * 100)} (b 40, bw 15)"], fs=13)
     salvar(p, "ISO-I130-geral.png", [(L * 0.5 - 6, -15, 11), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
     # ponta no consolo CP-I130 do pilar central

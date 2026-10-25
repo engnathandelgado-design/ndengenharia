@@ -1,0 +1,149 @@
+{
+ "folha": "ND-LET-PP03",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CONSOLE CS-1: CONJUNTO SOLDADO, PEÇAS, PARAFUSOS, SOLDAS E LISTA DE MATERIAIS",
+  "desenho": "ND-LET-PP03",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — CS-1 (1 CONJUNTO)",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QTD",
+    "kg/un",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "10",
+     "COSTAS (solda de campo na CE-1)",
+     "CH 9.5 × 120 × 130",
+     "ASTM A572 Gr.50",
+     "1",
+     "1,163",
+     "1,163"
+    ],
+    [
+     "11",
+     "ALMA",
+     "CH 6.3 × 54.5 × 64/34 (trapézio)",
+     "ASTM A572 Gr.50",
+     "2",
+     "0,132",
+     "0,264"
+    ],
+    [
+     "12",
+     "MESA (furo Ø18)",
+     "CH 16 × 54.5 × 104",
+     "ASTM A572 Gr.50",
+     "1",
+     "0,680",
+     "0,680"
+    ],
+    [
+     "13",
+     "DENTE",
+     "CH 19 × 13 × 35",
+     "ASTM A572 Gr.50",
+     "2",
+     "0,068",
+     "0,136"
+    ],
+    [
+     "14",
+     "CHAPA DE PONTA (furo Ø18)",
+     "CH 8 × 34 × 83.7",
+     "ASTM A572 Gr.50",
+     "1",
+     "0,163",
+     "0,163"
+    ],
+    [
+     "15",
+     "PORCA SEXTAVADA M16 (soldada)",
+     "M16 ISO 4032 cl. 8, rosca sobremedida p/ galv.",
+     "aço cl. 8",
+     "2",
+     "0,033",
+     "0,066"
+    ],
+    [
+     "16",
+     "PARAFUSO DE NÍVEL",
+     "M16 × 50 ISO 4017 cl. 8.8, rosca total",
+     "aço cl. 8.8 galv.",
+     "1",
+     "0,105",
+     "0,105"
+    ],
+    [
+     "17",
+     "CONTRAPORCA FINA",
+     "M16 ISO 4035 cl. 05",
+     "aço galv.",
+     "1",
+     "0,018",
+     "0,018"
+    ],
+    [
+     "18",
+     "PRISIONEIRO FRONTAL",
+     "M16 × 45 ISO 4026 45H, sext. interno 8, ponta plana",
+     "aço 45H zincado",
+     "1",
+     "0,068",
+     "0,068"
+    ],
+    [
+     "",
+     "PESO TOTAL DO CONJUNTO (kg)",
+     "",
+     "",
+     "",
+     "",
+     "2,66"
+    ]
+   ]
+  },
+  {
+   "titulo": "REGULAGEM (ANTES DE IÇAR A PLACA)",
+   "cab": [
+    "PEÇA",
+    "AJUSTE",
+    "TRAVAMENTO"
+   ],
+   "linhas": [
+    [
+     "M16 de nível (16)",
+     "topo da cabeça a G = 51 ± 12 acima da mesa",
+     "contraporca (17) 120 N·m"
+    ],
+    [
+     "prisioneiro (18)",
+     "ponta a 75,5 ± 5 da face da CE-1 (afastamento 25)",
+     "trava química média"
+    ],
+    [
+     "placa na montagem",
+     "teto do nicho 27 a 54.3 acima da final (G = 51)",
+     "encostar e baixar"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

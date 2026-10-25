@@ -1,0 +1,351 @@
+{
+ "folha": "ND-LET-PP-A",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA A: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
+  "desenho": "ND-LET-PP-A",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/08",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE PRODUÇÃO E MONTAGEM (na ordem)",
+   "cab": [
+    "SEQ",
+    "PEÇA",
+    "TIPO",
+    "L (cm)",
+    "BASE",
+    "PESO (t)",
+    "APOIO DA PEÇA"
+   ],
+   "linhas": [
+    [
+     "1",
+     "A-01",
+     "PP-01",
+     "1016,0",
+     "+0,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "2",
+     "A-02",
+     "PP-01",
+     "1016,0",
+     "+1,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "3",
+     "A-03",
+     "PP-01",
+     "1016,0",
+     "+2,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "4",
+     "A-04",
+     "PP-01",
+     "1016,0",
+     "+3,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "5",
+     "A-05",
+     "PP-01",
+     "1016,0",
+     "+5,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "6",
+     "A-06",
+     "PP-01",
+     "1016,0",
+     "+6,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "7",
+     "A-07",
+     "PP-01",
+     "1016,0",
+     "+7,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "8",
+     "A-08",
+     "PP-01",
+     "1016,0",
+     "+8,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "9",
+     "A-09",
+     "PP-05",
+     "986,0",
+     "+0,00",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "10",
+     "A-10",
+     "PP-05",
+     "986,0",
+     "+1,25",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "11",
+     "A-11",
+     "PP-05",
+     "986,0",
+     "+2,50",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "12",
+     "A-12",
+     "PP-05",
+     "986,0",
+     "+3,75",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "13",
+     "A-13",
+     "PP-05",
+     "986,0",
+     "+5,00",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "14",
+     "A-14",
+     "PP-05",
+     "986,0",
+     "+6,25",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "15",
+     "A-15",
+     "PP-05",
+     "986,0",
+     "+7,50",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "16",
+     "A-16",
+     "PP-05",
+     "986,0",
+     "+8,75",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "17",
+     "A-17",
+     "PP-05",
+     "986,0",
+     "+0,00",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "18",
+     "A-18",
+     "PP-05",
+     "986,0",
+     "+1,25",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "19",
+     "A-19",
+     "PP-05",
+     "986,0",
+     "+2,50",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "20",
+     "A-20",
+     "PP-05",
+     "986,0",
+     "+3,75",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "21",
+     "A-21",
+     "PP-05",
+     "986,0",
+     "+5,00",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "22",
+     "A-22",
+     "PP-05",
+     "986,0",
+     "+6,25",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "23",
+     "A-23",
+     "PP-05",
+     "986,0",
+     "+7,50",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "24",
+     "A-24",
+     "PP-05",
+     "986,0",
+     "+8,75",
+     "3,14",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "25",
+     "A-25",
+     "PP-01",
+     "1016,0",
+     "+0,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "26",
+     "A-26",
+     "PP-01",
+     "1016,0",
+     "+1,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "27",
+     "A-27",
+     "PP-01",
+     "1016,0",
+     "+2,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "28",
+     "A-28",
+     "PP-01",
+     "1016,0",
+     "+3,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "29",
+     "A-29",
+     "PP-01",
+     "1016,0",
+     "+5,00",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "30",
+     "A-30",
+     "PP-01",
+     "1016,0",
+     "+6,25",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "31",
+     "A-31",
+     "PP-01",
+     "1016,0",
+     "+7,50",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ],
+    [
+     "32",
+     "A-32",
+     "PP-01",
+     "1016,0",
+     "+8,75",
+     "3,23",
+     "2 consoles CS-1 + 2 PT-1 (guia)"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO POR TIPO",
+   "cab": [
+    "TIPO",
+    "L (cm)",
+    "QT",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "PP-01",
+     "1016,0",
+     "16",
+     "51,7"
+    ],
+    [
+     "PP-05",
+     "986,0",
+     "16",
+     "50,2"
+    ],
+    [
+     "",
+     "total",
+     "32",
+     "101,9"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

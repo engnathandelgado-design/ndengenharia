@@ -1,0 +1,237 @@
+{
+ "folha": "ND-LET-LA01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "LAJES ALVEOLARES DO MEZANINO (h20 + CAPA 5) — FÔRMA (PAGINAÇÃO +3,90 E +7,30, SEÇÃO, RECORTE, APOIO) E ARMAÇÃO (PROTENSÃO, CAPA, NEGATIVA)",
+  "desenho": "ND-LET-LA01",
+  "rev": "09",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO",
+  "marca": "LA-01",
+  "qtd": 45,
+  "peso": "33,4",
+  "volume": "1,34"
+ },
+ "tabelas": [
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "10",
+     "8,00",
+     "5,4"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "5,4"
+    ]
+   ]
+  },
+  {
+   "titulo": "PROTENSÃO — POR PAINEL (LA-02: 4 Ø12,7; LA-01R: ficam 4 na ponta recortada)",
+   "cab": [
+    "POS",
+    "Ø (mm)",
+    "QUANT",
+    "y (mm)",
+    "σpi (MPa)",
+    "F MACACO (kN)",
+    "PAINEL"
+   ],
+   "linhas": [
+    [
+     "C1",
+     "15,2",
+     "2",
+     "40",
+     "1450",
+     "203,0",
+     "LA-01 / LA-01R"
+    ],
+    [
+     "C2",
+     "12,7",
+     "5",
+     "40",
+     "1450",
+     "143,1",
+     "LA-01 / LA-01R"
+    ],
+    [
+     "C3",
+     "9,5",
+     "7",
+     "40",
+     "1450",
+     "79,5",
+     "LA-03 / LA-03R / LA-04"
+    ]
+   ]
+  },
+  {
+   "titulo": "PRODUÇÃO E MANUSEIO",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "concreto / liberação",
+     "C50 · fckj ≥ 30 MPa (LA-03: 30), liberação gradual (macaco)"
+    ],
+    [
+     "transferência",
+     "lbpt = 116 cm"
+    ],
+    [
+     "içamento",
+     "garra nas 2 pontas a 30 cm · 28,3 kN de cálculo por garra · 3,41 t"
+    ],
+    [
+     "estocagem / transporte",
+     "2 calços alinhados a 30 cm das pontas, até 8 painéis"
+    ],
+    [
+     "contraflecha estimada",
+     "14,9 mm na liberação · 26,1 mm na montagem"
+    ]
+   ]
+  },
+  {
+   "titulo": "TELAS DA CAPA (OBRA) — POR PAINEL",
+   "cab": [
+    "TELA",
+    "DESCRIÇÃO",
+    "ÁREA (m²)"
+   ],
+   "linhas": [
+    [
+     "Q138",
+     "Ø4,2 c/10 × c/10, CA-60, a 2,5 cm do topo da capa",
+     "11,94"
+    ]
+   ]
+  },
+  {
+   "titulo": "MARCAS — LAJES ALVEOLARES (2 NÍVEIS)",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "PESO (t)",
+    "OBS."
+   ],
+   "linhas": [
+    [
+     "LA-01",
+     "125 × 955 × 20, 2 Ø15,2 + 5 Ø12,7",
+     "45",
+     "3,34",
+     "-"
+    ],
+    [
+     "LA-01R",
+     "125 × 955 × 20, 2 Ø15,2 + 5 Ø12,7",
+     "13",
+     "3,34",
+     "recorte 45×27.5 ou 30×20 (P6); alv. 2 e 5 cheios"
+    ],
+    [
+     "LA-02",
+     "70 × 955 × 20, 4 Ø12,7",
+     "3",
+     "1,88",
+     "corte longit. do LA-01"
+    ],
+    [
+     "LA-03",
+     "125 × 374 × 20, 7 Ø9,5",
+     "1",
+     "1,31",
+     "só +3,90, vão da escada"
+    ],
+    [
+     "LA-03R",
+     "125 × 374 × 20, 7 Ø9,5",
+     "1",
+     "1,31",
+     "recorte 30×20 (P6); alv. 2 e 5 cheios"
+    ],
+    [
+     "LA-04",
+     "70 × 374 × 20, 4 Ø9,5",
+     "1",
+     "0,74",
+     "só +3,90, vão da escada"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DAS LAJES",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "VÃO",
+     "945 cm (entre centros de apoio)",
+     "APOIO",
+     "10 cm + neoprene"
+    ],
+    [
+     "SOBREC. +3,90",
+     "5,0 + revest. 1,0 kN/m²",
+     "SOBREC. +7,30",
+     "1,0 + revest. 1,7"
+    ],
+    [
+     "h TOTAL",
+     "25 cm",
+     "ESCORAMENTO",
+     "nenhum"
+    ],
+    [
+     "PAINÉIS",
+     "64 (2 níveis)",
+     "CONTRAFLECHA",
+     "≈ 26 mm (montagem)"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N1",
+     "diam": 10.0,
+     "qtd": 4,
+     "comp": 200,
+     "trechos": [
+      "200"
+     ]
+    }
+   ]
+  }
+ ]
+}

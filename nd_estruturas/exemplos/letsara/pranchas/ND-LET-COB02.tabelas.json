@@ -1,0 +1,201 @@
+{
+ "folha": "ND-LET-COB02",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS",
+  "desenho": "ND-LET-COB02",
+  "rev": "09",
+  "data": "24/10/2026",
+  "folha": "02/04",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — TRAVAMENTO DA COBERTURA",
+   "cab": [
+    "POS.",
+    "QT",
+    "PERFIL",
+    "COMP. (mm)",
+    "kg",
+    "DESCRIÇÃO"
+   ],
+   "linhas": [
+    [
+     "X1",
+     "12",
+     "Ø16 A36",
+     "9000 + 4876",
+     "263",
+     "X, vãos 5-6, 6-7, 7-8 (orelha a orelha 13818)"
+    ],
+    [
+     "X2",
+     "4",
+     "Ø16 A36",
+     "9000 + 4824",
+     "87",
+     "X, vãos 4-5 (orelha a orelha 13766)"
+    ],
+    [
+     "X3",
+     "4",
+     "Ø16 A36",
+     "9000 + 4669",
+     "86",
+     "X, vãos 8-9 (orelha a orelha 13611)"
+    ],
+    [
+     "X4",
+     "12",
+     "Ø16 A36",
+     "9000 + 4009",
+     "246",
+     "X, vãos 5-6, 6-7, 7-8 (orelha a orelha 12951)"
+    ],
+    [
+     "X5",
+     "4",
+     "Ø16 A36",
+     "9000 + 3953",
+     "82",
+     "X, vãos 4-5 (orelha a orelha 12895)"
+    ],
+    [
+     "X6",
+     "4",
+     "Ø16 A36",
+     "9000 + 3794",
+     "81",
+     "X, vãos 8-9 (orelha a orelha 12736)"
+    ],
+    [
+     "ES",
+     "40",
+     "esticador M16",
+     "-",
+     "-",
+     "um por diagonal do X"
+    ],
+    [
+     "D1",
+     "8",
+     "Ø16 A36",
+     "5040",
+     "64",
+     "diagonal a/2, vãos 8-9"
+    ],
+    [
+     "D2",
+     "8",
+     "Ø16 A36",
+     "5050",
+     "64",
+     "diagonal a/2, vãos 1-2"
+    ],
+    [
+     "D3",
+     "8",
+     "Ø16 A36",
+     "5180",
+     "65",
+     "diagonal a/2, vãos 4-5"
+    ],
+    [
+     "D4",
+     "24",
+     "Ø16 A36",
+     "5220",
+     "198",
+     "diagonal a/2, vãos 5-6, 6-7, 7-8"
+    ],
+    [
+     "D5",
+     "16",
+     "Ø16 A36",
+     "5260",
+     "133",
+     "diagonal a/2, vãos 2-3, 3-4"
+    ],
+    [
+     "D6",
+     "16",
+     "Ø16 A36",
+     "2840",
+     "72",
+     "diagonal a/4, vãos 1-2, 8-9"
+    ],
+    [
+     "D7",
+     "8",
+     "Ø16 A36",
+     "2900",
+     "37",
+     "diagonal a/4, vãos 4-5"
+    ],
+    [
+     "D8",
+     "24",
+     "Ø16 A36",
+     "2920",
+     "111",
+     "diagonal a/4, vãos 5-6, 6-7, 7-8"
+    ],
+    [
+     "D9",
+     "16",
+     "Ø16 A36",
+     "2940",
+     "74",
+     "diagonal a/4, vãos 2-3, 3-4"
+    ],
+    [
+     "C1",
+     "480",
+     "Ø10 A36",
+     "1343",
+     "398",
+     "corrente flexível (rosca M10 40 nas pontas)"
+    ],
+    [
+     "R1",
+     "96",
+     "L 51×51×3,2",
+     "1180",
+     "279",
+     "tirante rígido (2 furos oval 11×23)"
+    ],
+    [
+     "CL",
+     "192",
+     "L 32×32×3",
+     "100",
+     "-",
+     "clipe do tirante rígido"
+    ],
+    [
+     "OR-X",
+     "80",
+     "L 102×76×6,3",
+     "80",
+     "-",
+     "72 nas TS-01 (linhas 4 a 8) + 8 na VB do eixo 9"
+    ],
+    [
+     "CB",
+     "256",
+     "CH 6,3×50×50",
+     "-",
+     "-",
+     "calço biselado das diagonais"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

@@ -1,0 +1,248 @@
+{
+ "folha": "ND-LET-COB04",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA — ACABAMENTOS KINGSPAN (ZIPADA DUPLA COM LÃ DE ROCHA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS",
+  "desenho": "ND-LET-COB04",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "04/04",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE)",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "CHAPA",
+    "DESENV.",
+    "m",
+    "PÇ"
+   ],
+   "linhas": [
+    [
+     "RF-2",
+     "rufo de fechamento placa → calha, entre pilares; aba verti…",
+     "#0,65 pré-pintado",
+     "560",
+     "75,8",
+     "28"
+    ],
+    [
+     "RF-2C",
+     "contra-rufo na face da cabeça dos P1 (pilares do eixo A), …",
+     "#0,65 pré-pintado",
+     "290",
+     "5,4",
+     "9"
+    ],
+    [
+     "PG-1",
+     "perfil pingadeira sob a ponta da zipada, 100 mm dentro da …",
+     "#0,65 pré-pintado",
+     "230",
+     "79,6",
+     "29"
+    ],
+    [
+     "RF-3",
+     "rufo de topo liso sobre a ponta da zipada (aba de 150 + 60…",
+     "#0,65 pré-pintado",
+     "890",
+     "75,8",
+     "28"
+    ],
+    [
+     "CR-1",
+     "cantoneira de apoio do RF-3, L 40 × 40 #1,25 galvanizada, …",
+     "#1,25 galv.",
+     "90",
+     "75,8",
+     "28"
+    ],
+    [
+     "RF-3P",
+     "rufo de topo liso nos pilares P2: até a face da cabeça, po…",
+     "#0,65 pré-pintado",
+     "580",
+     "5,4",
+     "9"
+    ],
+    [
+     "RF-4",
+     "rufo de acabamento lateral, da placa até a última onda da …",
+     "#0,65 pré-pintado",
+     "370",
+     "78,4",
+     "29"
+    ],
+    [
+     "RF-4C",
+     "contra-rufo lateral na placa, paralelo à água (3 %): PAR T…",
+     "#0,65 pré-pintado",
+     "110",
+     "80,3",
+     "29"
+    ],
+    [
+     "RB-1/2",
+     "rufo de acabamento de borda sobre a última onda (RB-1 no i…",
+     "#0,65 pré-pintado",
+     "180",
+     "78,4",
+     "29"
+    ],
+    [
+     "RF-1",
+     "rufo chapéu da platibanda sobre a placa de 10 cm, caimento…",
+     "#0,65 pré-pintado",
+     "380",
+     "229,5",
+     "82"
+    ],
+    [
+     "RF-1C",
+     "rufo chapéu sobre a cabeça do pilar + placa (largura 100 +…",
+     "#0,65 pré-pintado",
+     "720",
+     "10,8",
+     "18"
+    ]
+   ]
+  },
+  {
+   "titulo": "ACESSÓRIOS E FIXAÇÕES DOS ACABAMENTOS — OBRA",
+   "cab": [
+    "ITEM",
+    "USO",
+    "QTD"
+   ],
+   "linhas": [
+    [
+     "veda-onda + Z do veda-onda",
+     "ponta alta da zipada (eixo E), 1 por telha",
+     "176"
+    ],
+    [
+     "massa vedante (tubo 25 m)",
+     "veda-ondas, costuras e topo dos contra-rufos",
+     "23"
+    ],
+    [
+     "fita Tacky Tape 9,5 (rolo 12 m)",
+     "costura transversal dos rufos (transpasse 200)",
+     "11"
+    ],
+    [
+     "PAR Tapper 1/4\" × 2 3/4\" + bucha",
+     "rufos e contra-rufos no concreto, a cada 500",
+     "966"
+    ],
+    [
+     "PB 1/4\"-14 × 7/8\" P01",
+     "costuras dos rufos e da pingadeira",
+     "1082"
+    ],
+    [
+     "selante PU (sachê 600 ml)",
+     "topo dos contra-rufos e encontros com as cabeças",
+     "15"
+    ],
+    [
+     "base deslizante #0,80 + perfil cartola especial",
+     "bordas laterais (linhas 1 e 9), a cada terça",
+     "64"
+    ]
+   ]
+  },
+  {
+   "titulo": "TELHAS, CARTOLAS E FIXAÇÕES — ÁREA 3123 m² (COMPRA: +5 %)",
+   "cab": [
+    "ITEM",
+    "UN",
+    "LÍQ.",
+    "COMPRA",
+    "OBSERVAÇÃO"
+   ],
+   "linhas": [
+    [
+     "Telha zipada 455 #0,50 pré-pintada (Kingspan)",
+     "pç",
+     "176",
+     "176",
+     "peça única de 39,21 m (perfilada na obra), 6901 m; área 3123…"
+    ],
+    [
+     "Telha TP-40 STD 980 #0,65 (inferior)",
+     "pç",
+     "328",
+     "328",
+     "82 colunas × 4 peças (11,71 + 11,12 + 11,57 + 5,39 m), trans…"
+    ],
+    [
+     "Perfil cartola #0,65 h 40 (sobre cada terça)",
+     "pç 3 m",
+     "864",
+     "864",
+     "32 linhas × 79,65 m = 2549 m; 27 peças de 3 m por linha"
+    ],
+    [
+     "Perfil cartola especial (bordas laterais, linhas 1 e 9)",
+     "m",
+     "78,4",
+     "83",
+     "ao longo da água, com as bases deslizantes #0,80"
+    ],
+    [
+     "Lã de rocha FSR 32 e = 40 (entre cartolas)",
+     "m²",
+     "3123",
+     "3280",
+     "painéis entre as cartolas, sem frestas; manter seca"
+    ],
+    [
+     "Clipe fixo #0,65",
+     "pç",
+     "352",
+     "370",
+     "1 por zipada nas 2 terças do meio da água (x = 19,44 e 20,25…"
+    ],
+    [
+     "Clipe deslizante #0,65 + base deslizante",
+     "cj",
+     "5280",
+     "5544",
+     "1 por zipada nas demais terças; a zipada dilata a partir do …"
+    ],
+    [
+     "PB 12-14 × 3/4\" P03 (TP-40 × terça)",
+     "pç",
+     "10496",
+     "11021",
+     "4 por telha em cada terça"
+    ],
+    [
+     "PB 12-14 × 3/4\" P03 (clipe × cartola)",
+     "pç",
+     "11264",
+     "11828",
+     "2 por clipe"
+    ],
+    [
+     "PB 1/4\"-14 × 7/8\" P01 (cartola × TP-40)",
+     "pç",
+     "10432",
+     "10954",
+     "costura em TODAS as ondas (sucção de borda — calc_fixacao_te…"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

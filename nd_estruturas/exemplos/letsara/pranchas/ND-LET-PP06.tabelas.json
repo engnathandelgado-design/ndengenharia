@@ -1,0 +1,417 @@
+{
+ "folha": "ND-LET-PP06",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "PLACAS RECORTADAS NO I130 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C / CS-1D (DEC-044)",
+  "desenho": "ND-LET-PP06",
+  "rev": "10",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "PLACAS RECORTADAS (DEC-044)",
+   "cab": [
+    "PEÇA",
+    "TIPO",
+    "L (cm)",
+    "RECORTE NA PONTA",
+    "VISTA",
+    "BASE",
+    "CONSOLES (cm da ponta)",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "C-11",
+     "PP-08RD",
+     "453,5",
+     "direita",
+     "ND-LET-PP-C",
+     "+6,25",
+     "7 / 33",
+     "1,37"
+    ],
+    [
+     "C-17",
+     "PP-08RE",
+     "453,5",
+     "esquerda",
+     "ND-LET-PP-C",
+     "+6,25",
+     "33 / 7",
+     "1,37"
+    ],
+    [
+     "G-11",
+     "PP-05RD",
+     "986,0",
+     "direita",
+     "ND-LET-PP-G",
+     "+6,25",
+     "7 / 33",
+     "3,06"
+    ],
+    [
+     "G-17",
+     "PP-05RE",
+     "986,0",
+     "esquerda",
+     "ND-LET-PP-G",
+     "+6,25",
+     "33 / 7",
+     "3,06"
+    ]
+   ]
+  },
+  {
+   "titulo": "LISTA DE MATERIAIS — CE-1L (1 CJ) — 2 PÇ: P8A E P11, FIADA +6,25",
+   "cab": [
+    "Nº",
+    "DESCRIÇÃO",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QTD",
+    "kg/un"
+   ],
+   "linhas": [
+    [
+     "20",
+     "CHAPA DE ESPERA CE-1L",
+     "CH 12,5 × 330 × 840",
+     "ASTM A36",
+     "1",
+     "27,200"
+    ],
+    [
+     "21",
+     "PINO COM CABEÇA (stud)",
+     "Ø16 × 150, cabeça Ø32 × 10 — ISO 13918 SD",
+     "S235J2 + C450",
+     "4",
+     "0,284"
+    ]
+   ]
+  },
+  {
+   "titulo": "CAIXAS DE CALÇO — CS-1C (39 PÇ, e = 100) E CS-1D (12 PÇ, e = 75)",
+   "cab": [
+    "MARCA",
+    "PEÇA",
+    "DIMENSÃO (mm)",
+    "MATERIAL",
+    "QTD",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "CS-1C",
+     "chapa lateral",
+     "CH 9,5 × 330 × 100",
+     "ASTM A36",
+     "2",
+     "2,461"
+    ],
+    [
+     "",
+     "chapa topo / fundo",
+     "CH 9,5 × 101 × 100",
+     "ASTM A36",
+     "2",
+     "0,753"
+    ],
+    [
+     "",
+     "chapa frente / fundo",
+     "CH 9,5 × 120 × 330",
+     "ASTM A36",
+     "2",
+     "2,953"
+    ],
+    [
+     "",
+     "caixa completa (12,3 kg) + CS-1 (PP03)",
+     "120 × 330 × 100",
+     "",
+     "1",
+     "14,96"
+    ],
+    [
+     "CS-1D",
+     "chapa lateral",
+     "CH 9,5 × 330 × 75",
+     "ASTM A36",
+     "2",
+     "1,846"
+    ],
+    [
+     "",
+     "chapa topo / fundo",
+     "CH 9,5 × 101 × 75",
+     "ASTM A36",
+     "2",
+     "0,565"
+    ],
+    [
+     "",
+     "chapa frente / fundo",
+     "CH 9,5 × 120 × 330",
+     "ASTM A36",
+     "2",
+     "2,953"
+    ],
+    [
+     "",
+     "caixa completa (10,7 kg) + CS-1 (PP03)",
+     "120 × 330 × 75",
+     "",
+     "1",
+     "13,36"
+    ]
+   ]
+  },
+  {
+   "titulo": "ONDE VÃO OS CALÇOS (por pilar e fiada — base da fiada)",
+   "cab": [
+    "MARCA",
+    "VISTA",
+    "PILAR",
+    "QT",
+    "FIADAS (base)"
+   ],
+   "linhas": [
+    [
+     "CS-1C",
+     "vista A",
+     "P1C",
+     "8",
+     "+0,00, +1,25, +2,50, +3,75, +5,00, +6,25, +7,50, +8,75"
+    ],
+    [
+     "CS-1C",
+     "vista A",
+     "P2C",
+     "8",
+     "+0,00, +1,25, +2,50, +3,75, +5,00, +6,25, +7,50, +8,75"
+    ],
+    [
+     "CS-1C",
+     "vista G",
+     "P1B",
+     "5",
+     "+0,00, +1,25, +2,50, +3,75, +5,00"
+    ],
+    [
+     "CS-1C",
+     "vista G",
+     "P2B",
+     "6",
+     "+0,00, +1,25, +2,50, +3,75, +5,00, +6,25"
+    ],
+    [
+     "CS-1C",
+     "vista I",
+     "P1A",
+     "6",
+     "+0,00, +2,50, +3,75, +6,25, +7,50, +8,75"
+    ],
+    [
+     "CS-1C",
+     "vista I",
+     "P2A",
+     "6",
+     "+0,00, +2,50, +3,75, +6,25, +7,50, +8,75"
+    ],
+    [
+     "CS-1D",
+     "vista C",
+     "P10",
+     "12",
+     "+0,00, +0,00, +1,25, +1,25, +2,50, +2,50, +3,75, +3,75, +5,00, +5,00, +6,25, +6,25"
+    ]
+   ]
+  },
+  {
+   "titulo": "RELAÇÃO DO AÇO",
+   "cab": [
+    "POS",
+    "AÇO",
+    "Ø (mm)",
+    "QUANT",
+    "C. UNIT (cm)",
+    "C. TOTAL (m)"
+   ],
+   "linhas": [
+    [
+     "N3",
+     "CA-50",
+     "8",
+     "2",
+     "138",
+     "2,76"
+    ],
+    [
+     "N4",
+     "CA-50",
+     "8",
+     "1",
+     "256",
+     "2,56"
+    ],
+    [
+     "N5",
+     "CA-50",
+     "6,3",
+     "1",
+     "54",
+     "0,54"
+    ],
+    [
+     "N6",
+     "CA-50",
+     "6,3",
+     "1",
+     "54",
+     "0,54"
+    ],
+    [
+     "N7",
+     "CA-50",
+     "6,3",
+     "1",
+     "46",
+     "0,46"
+    ],
+    [
+     "N8",
+     "CA-50",
+     "8",
+     "2",
+     "70",
+     "1,40"
+    ],
+    [
+     "N9",
+     "CA-50",
+     "8",
+     "2",
+     "82",
+     "1,64"
+    ],
+    [
+     "N10",
+     "CA-50",
+     "8",
+     "2",
+     "37",
+     "0,74"
+    ],
+    [
+     "N11",
+     "CA-50",
+     "6,3",
+     "3",
+     "40",
+     "1,20"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "6,3",
+     "2,74",
+     "0,7"
+    ],
+    [
+     "CA-50",
+     "8",
+     "9,10",
+     "4,0"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "4,7"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N3",
+     "diam": 8,
+     "qtd": 2,
+     "comp": 138
+    },
+    {
+     "pos": "N4",
+     "diam": 8,
+     "qtd": 1,
+     "comp": 256
+    },
+    {
+     "pos": "N5",
+     "diam": 6.3,
+     "qtd": 1,
+     "comp": 54
+    },
+    {
+     "pos": "N6",
+     "diam": 6.3,
+     "qtd": 1,
+     "comp": 54
+    },
+    {
+     "pos": "N7",
+     "diam": 6.3,
+     "qtd": 1,
+     "comp": 46
+    },
+    {
+     "pos": "N8",
+     "diam": 8,
+     "qtd": 2,
+     "comp": 70
+    },
+    {
+     "pos": "N9",
+     "diam": 8,
+     "qtd": 2,
+     "comp": 82
+    },
+    {
+     "pos": "N10",
+     "diam": 8,
+     "qtd": 2,
+     "comp": 37
+    },
+    {
+     "pos": "N11",
+     "diam": 6.3,
+     "qtd": 3,
+     "comp": 40
+    }
+   ]
+  }
+ ]
+}

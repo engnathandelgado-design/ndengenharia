@@ -1,0 +1,374 @@
+{
+ "folha": "ND-LET-PP01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — ARMADURA DA PONTA, CONJUNTO MONTADO, TOLERÂNCIAS, SEQUÊNCIA DE MONTAGEM E LISTAS",
+  "desenho": "ND-LET-PP01",
+  "rev": "08",
+  "data": "23/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "6,3",
+     "3,08",
+     "0,8"
+    ],
+    [
+     "CA-50",
+     "8",
+     "10,64",
+     "4,6"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "5,5"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DAS PEÇAS METÁLICAS — OBRA",
+   "cab": [
+    "MARCA",
+    "COMPOSIÇÃO",
+    "FOLHA",
+    "QT",
+    "kg/un",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "NC-1 / NC-1'",
+     "caixa soldada + grampos (pontas com console)",
+     "ND-LET-PP02",
+     "400",
+     "3,51",
+     "1405"
+    ],
+    [
+     "CC-1",
+     "CE-1 + 2 CS-1 soldados na fábrica (face C, concretado)",
+     "PP03/PP04",
+     "110",
+     "18,77",
+     "2064"
+    ],
+    [
+     "CC-1E",
+     "CE-1 + 1 CS-1 à esquerda (face C, concretado)",
+     "PP03/PP04",
+     "28",
+     "16,10",
+     "451"
+    ],
+    [
+     "CC-1D",
+     "CE-1 + 1 CS-1 à direita (face C, concretado)",
+     "PP03/PP04",
+     "36",
+     "16,10",
+     "580"
+    ],
+    [
+     "CE-1",
+     "chapa de espera + 4 pinos (faces laterais, rente)",
+     "ND-LET-PP04",
+     "95",
+     "13,44",
+     "1277"
+    ],
+    [
+     "CE-1L",
+     "CE-1 840 × 330 com asas (P8A e P11, fiada +6,25; DEC-044)",
+     "ND-LET-PP06",
+     "2",
+     "28,34",
+     "57"
+    ],
+    [
+     "CS-1",
+     "console soldado na obra na CE-1 lateral",
+     "ND-LET-PP03",
+     "69",
+     "2,66",
+     "184"
+    ],
+    [
+     "CS-1C",
+     "CS-1 + caixa de calço 100 (cantos, PL-02/PL-06; DEC-044)",
+     "ND-LET-PP06",
+     "39",
+     "14,96",
+     "584"
+    ],
+    [
+     "CS-1D",
+     "CS-1 + caixa de calço 75 (PG-02/PG-04; DEC-044)",
+     "ND-LET-PP06",
+     "12",
+     "13,36",
+     "160"
+    ],
+    [
+     "PT-1",
+     "cartola + 2 M16 + 2 arruelas",
+     "ND-LET-PP04",
+     "330",
+     "1,38",
+     "456"
+    ],
+    [
+     "PT-2",
+     "cantoneira + 2 M16 + 2 arruelas",
+     "ND-LET-PP04",
+     "78",
+     "2,46",
+     "192"
+    ],
+    [
+     "OM-1",
+     "ombreira em U + base + CL-1 (porta da vista I)",
+     "ND-LET-PP05",
+     "2",
+     "42,72",
+     "85"
+    ],
+    [
+     "",
+     "total da fixação (sem luvas e buchas)",
+     "",
+     "",
+     "",
+     "7495"
+    ]
+   ]
+  },
+  {
+   "titulo": "TOLERÂNCIAS E FOLGAS DE MONTAGEM (mm)",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "AJUSTE / OBS."
+   ],
+   "linhas": [
+    [
+     "afastamento placa–pilar (a)",
+     "25 ± 5",
+     "prisioneiro frontal"
+    ],
+    [
+     "G: mesa → teto do nicho",
+     "51 ± 12",
+     "M16 de nível"
+    ],
+    [
+     "posição do console × nicho (x)",
+     "± 12",
+     "fábrica ±5, pilar ±10, placa ±5"
+    ],
+    [
+     "engate aba × dente (G máx.)",
+     "≥ 10",
+     "sucção"
+    ],
+    [
+     "folga aba × dente (a máx.)",
+     "≥ 2",
+     "montagem"
+    ],
+    [
+     "janela de montagem R",
+     "27 a 54.3 (G = 51)",
+     "teto acima da final"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N3",
+     "diam": 8.0,
+     "qtd": 4,
+     "comp": 138,
+     "trechos": [
+      "138"
+     ]
+    },
+    {
+     "pos": "N4",
+     "diam": 8.0,
+     "qtd": 2,
+     "comp": 256,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       4,
+       0
+      ],
+      [
+       4,
+       116
+      ],
+      [
+       0,
+       116
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "trechos": [
+      "4",
+      "116",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N5",
+     "diam": 6.3,
+     "qtd": 2,
+     "comp": 54,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       16,
+       0
+      ],
+      [
+       16,
+       5.4
+      ],
+      [
+       0,
+       5.4
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "trechos": [
+      "16",
+      "5,4",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N6",
+     "diam": 6.3,
+     "qtd": 2,
+     "comp": 54,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       16,
+       0
+      ],
+      [
+       16,
+       5.4
+      ],
+      [
+       0,
+       5.4
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "trechos": [
+      "16",
+      "5,4",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N7",
+     "diam": 6.3,
+     "qtd": 2,
+     "comp": 46,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       4,
+       0
+      ],
+      [
+       4,
+       17.5
+      ],
+      [
+       0,
+       17.5
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "trechos": [
+      "4",
+      "17,5",
+      "",
+      ""
+     ]
+    }
+   ]
+  }
+ ]
+}
