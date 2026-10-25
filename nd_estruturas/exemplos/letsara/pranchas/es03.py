@@ -15,10 +15,11 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="ESCADAS METÁLICAS — GUARDA-CORPOS, CORRIMÃOS (RT CBMRS 11) E LIGAÇÕES PARAFUSADAS",
                         desenho="ND-LET-ES03", folha="01/01", fase="PARA APROVAÇÃO", rev="00"))
 pr.revisao("00", "24/10/2026", "EMISSÃO INICIAL (DEC-060): GUARDA-CORPOS E CORRIMÃOS DAS ESCADAS INTERNA E EXTERNA E TABELA DE LIGAÇÕES")
+pr.revisao("09", "25/10/2026", "DEC-062: CORRIMÃO DUPLO 0,92 / 0,70 (RT CBMRS 11 + NBR 9050); DETALHES NAS ND-LET-ES04 / ES05")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.cabecalho_peca("GC", "GUARDA-CORPOS E CORRIMÃOS — ESCADA INTERNA (GI-1 A GI-11) E EXTERNA (GE-1 A GE-7)",
-                  "RT CBMRS nº 11 Parte 01/2016 · corrimão 0,90 nos dois lados · guarda 0,92 nos lances, 1,05 nos patamares e na laje, 1,30 na escada externa · tudo parafusado, galvanizado",
+                  "RT CBMRS nº 11 Parte 01/2016 · corrimão duplo 0,92 / 0,70 nos dois lados · guarda 0,92 nos lances, 1,05 nos patamares e na laje, 1,30 na escada externa · tudo parafusado, galvanizado",
                   largura=XC - Q[0] - 10)
 
 
@@ -142,7 +143,7 @@ y = pr.tabela(XC, y - 3, f"LIGAÇÕES DAS ESCADAS — {EJ['n_conflitos']} CONFLI
 lin = [[p["faixa"][:46], f(p["pe_direito_min_m"], 2) if p["pe_direito_min_m"] else "livre", p["sob"][:40]] for p in EJ["pe_direito"]]
 y = pr.tabela(XC, y - 3, "PÉ-DIREITO LIVRE (≥ 2,10 m)", ["FAIXA", "m", "LIMITADO POR"], lin, [70, 16, 84], h_lin=4.4)
 c = EJ["cargas"]
-notas = ["RT CBMRS nº 11 Parte 01/2016: corrimão nos DOIS lados de todos os lances, a 0,90 m do bocel (faixa 0,80–0,92), tubo redondo Ø38,1 (faixa 38–65), afastado 40 mm de qualquer peça ou parede, contínuo nos patamares, com prolongamento de 30 cm nas pontas livres.",
+notas = ["RT CBMRS nº 11 Parte 01/2016 e NBR 9050:2020: corrimão DUPLO nos DOIS lados de todos os lances, a 0,92 m (faixa CBMRS 0,80–0,92) e 0,70 m do bocel, tubo redondo Ø38,1 (faixa 38–65), afastado 40 mm de qualquer peça ou parede, contínuo nos patamares, com prolongamento de 30 cm nas pontas livres.",
          "Guarda-corpo em todo lado livre: 0,92 m nos lances internos (vertical do bocel), 1,05 m nos patamares internos e na abertura da laje +3,90, 1,30 m em toda a escada externa; fechamento em barras verticais que não deixam passar a esfera de 15 cm.",
          f"Cargas: {f(c['guarda_corpo_kN_m'], 2)} kN/m horizontal no topo, {f(c['fechamento_kPa'], 2)} kPa no fechamento (não simultâneas) e {f(c['corrimao_kN'], 2)} kN concentrada no corrimão; γf 1,5. Montantes a ≤ 1,20 m, perfis no limite (uso na tabela).",
          "Ligações todas parafusadas, sem solda: montante encostado nas pontas das mesas da longarina/viga com 2 M12 a 70 e bucha (det. A); na laje, 2 cantoneiras L 102 e 4 chumbadores químicos M10 (det. B — conferir catálogo do chumbador); corrimão em suporte de chapa dobrada (det. C).",

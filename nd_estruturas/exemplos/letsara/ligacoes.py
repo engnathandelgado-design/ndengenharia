@@ -29,7 +29,7 @@ X_FIM = X_P2 - X_PONTA_ESQ                              # ponta da TS-01 direita
 NEO_EXT = dict(x=0.200, y=0.300, e=0.010, xc=X_PONTA_ESQ + 0.125)        # neoprene no assento do pilar lateral (rev04: centro a 12,5 cm da ponta)
 PINO_TS = 0.0775                                                         # rev04: pinos a 7,75 cm da ponta nos 4 apoios (TS-01 simétrica: uma marca serve aos dois lados)
 NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo do pilar central P11 (x 19,585 → 19,685)
-# rev10 (DEC-059, Nathan 25/10/2026): consolo lateral CT-I130 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
+# rev10 (DEC-061, Nathan 25/10/2026): consolo lateral CT-I130 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
 # da I130 onde chega cada TS-01 → assento de 36,25 cm (ponta da TS-01 até a ponta do consolo) e neoprene maior NEO-3C 150 × 300,
 # de 12 a 27 cm da ponta (dentro da cunha de 30 cm; pinos PN-5 a 7,75 cm fora do neoprene).
 CT_I130 = dict(b=0.50, proj=0.20, h=0.30, h_ext=0.15)

@@ -43,6 +43,8 @@ EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA — LIBERADO PARA PRO
 REEMISSAO = dict(data="23/10/2026", desc="REEMISSÃO EXECUTIVA (PACOTE REV09): PISOS +3,90/+7,30; NOMES E REFERÊNCIAS")
 # 24/10/2026 (DEC-050/051): segunda reemissão do pacote rev09 — só nas folhas que têm revisão manual com esta data (numerada depois da REEMISSAO)
 REEMISSAO2 = dict(data="24/10/2026")
+# 25/10/2026 (pacote rev10, DEC-061/062): terceira reemissão — só nas folhas com revisão manual desta data
+REEMISSAO3 = dict(data="25/10/2026")
 _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
@@ -609,18 +611,25 @@ class Prancha:
 
     def _emitir(self):
         if EMISSAO and not getattr(self, "_emitida", False):
-            novas2 = [d for _, dt, d in self.revisoes if REEMISSAO2 and dt == REEMISSAO2["data"]]
-            self.revisoes = [t for t in self.revisoes if not (REEMISSAO2 and t[1] == REEMISSAO2["data"])]
-            if not self.revisoes and novas2:                       # folha nova de 24/10: só a emissão desta data
-                self.revisoes.append(("00", REEMISSAO2["data"], "; ".join(novas2)))
-                self.dados["rev"], self.dados["data"] = "00", REEMISSAO2["data"]
+            tardias = []                                           # reemissões de 24/10 e 25/10 (só nas folhas com revisão manual na data)
+            for RE in (REEMISSAO2, REEMISSAO3):
+                if not RE:
+                    continue
+                nv = [d for _, dt, d in self.revisoes if dt == RE["data"]]
+                self.revisoes = [t for t in self.revisoes if t[1] != RE["data"]]
+                if nv:
+                    tardias.append((RE["data"], nv))
+            if not self.revisoes and tardias:                      # folha nova: só as emissões dessas datas
+                for k, (dt, nv) in enumerate(tardias):
+                    self.revisoes.append((f"{k:02d}", dt, "; ".join(nv)))
+                    self.dados["rev"], self.dados["data"] = f"{k:02d}", dt
                 self._emitida = True
                 return
             self._emitir1()
-            if novas2:
+            for dt, nv in tardias:
                 r = f"{int(self.dados['rev']) + 1:02d}"
-                self.revisoes.append((r, REEMISSAO2["data"], "; ".join(novas2)))
-                self.dados["rev"], self.dados["data"] = r, REEMISSAO2["data"]
+                self.revisoes.append((r, dt, "; ".join(nv)))
+                self.dados["rev"], self.dados["data"] = r, dt
             self._emitida = True
 
     def _emitir1(self):

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "ESCADAS METÁLICAS — GUARDA-CORPOS, CORRIMÃOS (RT CBMRS 11) E LIGAÇÕES PARAFUSADAS",
   "desenho": "ND-LET-ES03",
-  "rev": "00",
-  "data": "24/10/2026",
+  "rev": "01",
+  "data": "25/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -31,7 +31,7 @@
      "lance 1, lado livre (x 36,30)",
      "0,92",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "longarina"
     ],
     [
@@ -39,7 +39,7 @@
      "lance 1, lado do vão central (só corrimão)",
      "0,92",
      "40 × 40 × 4",
-     "0,85",
+     "0,87",
      "longarina"
     ],
     [
@@ -47,7 +47,7 @@
      "lance 2, lado do vão central",
      "0,92",
      "40 × 40 × 4",
-     "0,85",
+     "0,87",
      "longarina"
     ],
     [
@@ -55,7 +55,7 @@
      "lance 2, lado do eixo E (60 cm até a parede)",
      "0,92",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "longarina"
     ],
     [
@@ -63,7 +63,7 @@
      "patamar +1,975, lado do P6–P7",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ],
     [
@@ -79,7 +79,7 @@
      "patamar +1,975, lado do eixo E",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ],
     [
@@ -87,7 +87,7 @@
      "chegada +3,95, sobre a entrada do lance 1",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ],
     [
@@ -95,7 +95,7 @@
      "chegada +3,95, lado do eixo E",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ],
     [
@@ -103,7 +103,7 @@
      "laje +3,90, borda x 36,00 da abertura",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "laje"
     ],
     [
@@ -111,7 +111,7 @@
      "laje +3,90, borda y 3,99 da abertura (sobre a VM",
      "1,05",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "laje"
     ],
     [
@@ -125,9 +125,9 @@
     [
      "GE-2",
      "lance de cima, lado da parede",
-     "0,90",
+     "0,92",
      "40 × 40 × 4",
-     "0,85",
+     "0,87",
      "degrau"
     ],
     [
@@ -151,7 +151,7 @@
      "patamar +0,90, lado da linha 2",
      "1,30",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ],
     [
@@ -167,7 +167,7 @@
      "chegada +3,95, ponta da linha 1",
      "1,30",
      "50 × 50 × 2",
-     "0,91",
+     "0,93",
      "viga"
     ]
    ]
@@ -326,14 +326,14 @@
      "GC-LAJE",
      "montante × laje (+3,90)",
      "2 M12 passantes no montante + 4 chumbadores químicos M10 hef 7",
-     "0,69",
+     "0,70",
      "ok"
     ],
     [
      "GC-L0,92",
      "montante × longarina",
      "2 M12 8.8 a 70 mm, atravessando o montante, a bucha e a alma d",
-     "0,63",
+     "0,64",
      "ok"
     ],
     [

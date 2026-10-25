@@ -27,6 +27,7 @@ pr.revisao("01", "24/10/2026", "BASE METÁLICA BM-1 NO TÉRREO (PÉ DO LANCE 1 E
 pr.revisao("02", "24/10/2026", "SEM TABELA DE VERIFICAÇÕES (MEMÓRIA MC09); REFERÊNCIA À ESCADA EXTERNA ND-LET-ES02")
 pr.revisao("03", "24/10/2026", "DEC-055: CHEGADA NO PISO PRONTO +3,95 — 22 ESPELHOS DE 17,95, PATAMAR +1,975")
 pr.revisao("04", "24/10/2026", "DEC-060: GUARDA-CORPOS E CORRIMÃOS (RT CBMRS 11, ES03), PERFIS NO LIMITE, VIGAS EM ASSENTOS SA, LIGAÇÕES VERIFICADAS")
+pr.revisao("09", "25/10/2026", "DEC-062: CORRIMÃO DUPLO 0,92 / 0,70 (RT CBMRS 11 + NBR 9050); DETALHES NAS ND-LET-ES04 / ES05")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.cabecalho_peca("ES", "ESCADA METÁLICA INTERNA EM U — 2 LANCES DE 11 ESPELHOS (17,95 × 28) — PATAMAR +1,975 E CHEGADA +3,95",
@@ -101,8 +102,8 @@ c.texto((M(V["VP2"]["eixo"]) + 200, ZP + 1150), "patamar +1,975", "min", "BOTTOM
 c.texto((M(V["VP3"]["eixo"]) + 100, M(Z_PISO_PRONTO) + 1150), "chegada +3,95", "min", "BOTTOM_LEFT")
 pd = min(p["pe_direito_min_m"] for p in EJ["pe_direito"] if p["pe_direito_min_m"])
 c.texto((5600, 6000), f"pé-direito mínimo {f(pd, 2)} m (chegada, sob o fundo da laje +7,30)", "min", "BOTTOM_LEFT")
-for cc, dxy, tx in (("EI-L1-T", (10, 10), "topo do lance (det. 5)"), ("EI-L1-DG", (12, -6), "degrau (det. 1)"), ("SA-1", (-20, -12), "SA-1 (det. 2)"),
-                    ("GI-1 corr", (8, 14), "corrimão 0,90 / guarda 0,92 (ES03)")):
+for cc, dxy, tx in (("EI-L1-T", (-30, -10), "topo do lance (det. 5)"), ("EI-L1-DG", (12, -6), "degrau (det. 1)"), ("SA-1", (-20, -12), "SA-1 (det. 2)"),
+                    ("GI-1 corr", (8, 14), "corrimão duplo 0,92 / 0,70 · guarda 0,92 (ES03/ES04)")):
     c.chamada(E.centro(cc, YZ), dxy, tx)
 
 # ------------------------------------------------------------------ DETALHES 1:5
@@ -182,7 +183,7 @@ notas = [f"Cargas (NBR 6120:2019): sobrecarga {f(EJ['cargas']['q_kN_m2'])} kN/m�
          f"Perfis no limite (o mais leve que passa): longarinas {I['longarina']['perfil']} (uso {f(I['longarina']['uso'], 2)}; o U 102 não comporta a cantoneira do degrau); VP-1 {I['viga_patamar_frente']['perfil']} (uso {f(I['viga_patamar_frente']['uso'], 2)}); demais vigas W 150 × 9,2; barrotes {I['barrote']['perfil']}; pilaretes {I['pilarete_chegada']['perfil']} (uso {f(I['pilarete_chegada']['uso'], 2)}).",
          "Vigas de fundo VP-2 e VP-4 apoiadas em assentos SA-1/SA-2 (cantoneiras nas faces do P6, do P7, do P6 da linha 2 e do P2, com 2 BR-M16 embutidas na fábrica do pilar); VP-3 em balanço até a borda da laje; vigas de borda VP-5/VP-6 recebem os montantes do guarda-corpo.",
          f"Ligações todas parafusadas, SEM SOLDA, conferidas uma a uma em escadas_detalhe.py (furos nas duas peças, bordas, espaçamentos, folga de chave, faixa comum de altura, corte e contato — NBR 8800:2024 6.3): {len(EJ['ligacoes'])} ligações, {EJ['n_conflitos']} conflitos; 3D sem colisões.",
-         "Guarda-corpos e corrimãos (RT CBMRS nº 11 Parte 01/2016): corrimão nos dois lados de cada lance a 0,90 m, guarda-corpo 0,92 m nos lances e 1,05 m nos patamares e na abertura da laje — elevações, fixações e tabela na ND-LET-ES03.",
+         "Guarda-corpos e corrimãos (RT CBMRS nº 11 Parte 01/2016): corrimão DUPLO nos dois lados de cada lance a 0,92 e 0,70 m (NBR 9050), guarda-corpo 0,92 m nos lances e 1,05 m nos patamares e na abertura da laje — elevações, fixações e tabela na ND-LET-ES03.",
          "Aço: W em ASTM A572 Gr. 50; U, cantoneiras, chapas e tubos em ASTM A36; galvanização a fogo após a fabricação. Montagem depois da capa do +3,90: assentos e VP-2/VP-4 → pilaretes, VP-1 e VP-3 → longarinas e degraus → pisos → guarda-corpos.",
          "Cotas em mm, níveis em m. Conferir na obra as faces dos pilares antes de fabricar. Não medir no desenho."]
 pr.notas(XC, y - 4, notas, 182)

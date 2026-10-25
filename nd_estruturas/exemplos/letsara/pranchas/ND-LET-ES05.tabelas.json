@@ -1,0 +1,170 @@
+{
+ "folha": "ND-LET-ES05",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "ESCADA METÁLICA EXTERNA — GUARDA-CORPO E CORRIMÃO DUPLO: DETALHES DE CONSTRUÇÃO E MONTAGEM",
+  "desenho": "ND-LET-ES05",
+  "rev": "00",
+  "data": "25/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "LISTA DE MATERIAIS — GUARDA-CORPO (GE-1, GE-3, GE-4, GE-5, GE-6, GE-7)",
+   "cab": [
+    "ITEM",
+    "DESCRIÇÃO",
+    "MATERIAL",
+    "QUANT.",
+    "UN."
+   ],
+   "linhas": [
+    [
+     "1",
+     "Montante tubo 60 × 60 × 2 (topo com tampa)",
+     "ASTM A500 gr. B galv.",
+     "12",
+     "pç"
+    ],
+    [
+     "2",
+     "Tampa do montante — chapa dobrada # 3 mm (PEÇA 2)",
+     "ASTM A36 galv.",
+     "23",
+     "pç"
+    ],
+    [
+     "3",
+     "Travessa superior tubo 40 × 40 × 2",
+     "ASTM A500 gr. B galv.",
+     "11,09",
+     "m"
+    ],
+    [
+     "4",
+     "Cantoneira L 38 × 38 × 4,8 das barras (2 por vão)",
+     "ASTM A36 galv.",
+     "22,18",
+     "m"
+    ],
+    [
+     "5",
+     "Parafuso M10 × 30 8.8 + porca + 2 arruelas (cantoneira L 38 no montante)",
+     "ISO 898-1 cl. 8.8 galv.",
+     "48",
+     "cj"
+    ],
+    [
+     "6",
+     "Barra redonda Ø12,7 c/130, pontas roscadas (vão livre 117 mm)",
+     "SAE 1020 galv.",
+     "84",
+     "pç"
+    ],
+    [
+     "7",
+     "Porca + contraporca M10 das barras (2 pontas)",
+     "classe 8 galv.",
+     "336",
+     "pç"
+    ],
+    [
+     "8",
+     "Parafuso M12 × 110 8.8 + porca + 2 arruelas (montante na longarina / viga) — DETALHE 1",
+     "ISO 898-1 cl. 8.8 galv.",
+     "46",
+     "cj"
+    ],
+    [
+     "9",
+     "Bucha tubo Ø21,3 × 2,6 L 46 (espaçador entre as mesas)",
+     "ASTM A53 galv.",
+     "36",
+     "pç"
+    ],
+    [
+     "10",
+     "Montante tubo 40 × 40 × 4 (topo com tampa)",
+     "ASTM A500 gr. B galv.",
+     "5",
+     "pç"
+    ],
+    [
+     "11",
+     "Montante tubo 50 × 50 × 2 (topo com tampa)",
+     "ASTM A500 gr. B galv.",
+     "6",
+     "pç"
+    ]
+   ]
+  },
+  {
+   "titulo": "LISTA DE MATERIAIS — CORRIMÃO DUPLO (0,92 / 0,70 m)",
+   "cab": [
+    "ITEM",
+    "DESCRIÇÃO",
+    "MATERIAL",
+    "QUANT.",
+    "UN."
+   ],
+   "linhas": [
+    [
+     "1",
+     "Corrimão tubo Ø38,1 × 2 (2 alturas: 0,92 e 0,70 m)",
+     "ASTM A53 / NBR 5590 galv.",
+     "33,54",
+     "m"
+    ],
+    [
+     "2",
+     "Suporte do corrimão CR-S — chapa dobrada # 4,75 × 40 em L (PEÇA 1)",
+     "ASTM A36 galv.",
+     "46",
+     "pç"
+    ],
+    [
+     "3",
+     "Abraçadeira # 3 × 25 do tubo Ø38,1 (PEÇA 1)",
+     "ASTM A36 galv.",
+     "46",
+     "pç"
+    ],
+    [
+     "4",
+     "Parafuso M10 × 70 8.8 + porca (suporte no montante)",
+     "ISO 898-1 cl. 8.8 galv.",
+     "46",
+     "cj"
+    ],
+    [
+     "5",
+     "Parafuso M8 × 25 8.8 + porca (abraçadeira)",
+     "ISO 898-1 cl. 8.8 galv.",
+     "92",
+     "cj"
+    ],
+    [
+     "6",
+     "Terminal do corrimão: curva 90° + tampa # 3 soldada de fábrica (DETALHE 3)",
+     "ASTM A53 / A36 galv.",
+     "28",
+     "pç"
+    ],
+    [
+     "7",
+     "Luva de emenda Ø34 × 3 L 150 com 2 M8 (1 a cada 6 m de tubo)",
+     "ASTM A53 galv.",
+     "6",
+     "pç"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

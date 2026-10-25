@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "ESCADA METÁLICA EXTERNA DA FACHADA A (PÁTIO → +3,95) — PLANTA, CORTES, BASES, PORTA E LISTA DE MATERIAL",
   "desenho": "ND-LET-ES02",
-  "rev": "00",
-  "data": "24/10/2026",
+  "rev": "01",
+  "data": "25/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -172,43 +172,43 @@
      "GE-1",
      "guarda-corpo + corrimão — lance de cima, lado externo (x −1,95) (ND-LET-ES03)",
      "1",
-     "112,0"
+     "121,1"
     ],
     [
      "GE-2",
      "corrimão — lance de cima, lado da parede (ND-LET-ES03)",
      "1",
-     "33,1"
+     "43,6"
     ],
     [
      "GE-3",
      "guarda-corpo + corrimão — lance de baixo, lado da linha 1 (ND-LET-ES03)",
      "1",
-     "31,5"
+     "34,3"
     ],
     [
      "GE-4",
      "guarda-corpo + corrimão — lance de baixo, lado da linha 2 (ND-LET-ES03)",
      "1",
-     "31,5"
+     "34,3"
     ],
     [
      "GE-5",
      "guarda-corpo + corrimão — patamar +0,90, lado da linha 2 (ND-LET-ES03)",
      "1",
-     "34,3"
+     "36,5"
     ],
     [
      "GE-6",
      "guarda-corpo + corrimão — chegada +3,95, lado externo (x −1,95) (ND-LET-ES03)",
      "1",
-     "53,1"
+     "56,8"
     ],
     [
      "GE-7",
      "guarda-corpo + corrimão — chegada +3,95, ponta da linha 1 (ND-LET-ES03)",
      "1",
-     "36,6"
+     "39,0"
     ],
     [
      "OM-2",
@@ -238,13 +238,13 @@
      "",
      "parafusos M8/M10/M12/M16 8.8 galv., chumbadores químicos M12/M16, garfos, pinos e esticadores do X (+3 %)",
      "",
-     "50"
+     "51"
     ],
     [
      "",
      "TOTAL",
      "",
-     "1721"
+     "1756"
     ]
    ]
   },

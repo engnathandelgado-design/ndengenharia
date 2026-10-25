@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter
 PR = Path("/home/claude/letsara/pranchas")
 AQ = Path("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 sys.path.insert(0, str(AQ)); sys.path.insert(0, str(PR))
-SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev09.xlsx")
+SAIDA = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/letsara/entregas/ND-LET-QUANTITATIVOS-rev10.xlsx")
 LAJ = json.loads((AQ / "laje_alveolar.json").read_text(encoding="utf-8"))
 VMJ = json.loads((AQ / "vm_retangular.json").read_text(encoding="utf-8"))   # rev09 (DEC-049): VM retangular 30 × 75
 FCK_CAPA = 30                                  # capa 5 cm C30 (ND-LET-LA01, quadro das lajes; laje_alveolar.json)
@@ -468,12 +468,12 @@ def listas_pdf(caminho):
 
     def rodape(c, d):
         c.saveState(); c.setFont("DV", 7)
-        c.drawString(12 * mm, 7 * mm, "LETSARA — LISTAS DE MATERIAIS rev09 — 23/10/2026 (PARA ANÁLISE)")
+        c.drawString(12 * mm, 7 * mm, "LETSARA — LISTAS DE MATERIAIS rev10 — 25/10/2026 (PARA ANÁLISE)")
         c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
 
     doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
                             title="Letsara — listas de materiais rev07", author="ND Engenharia")
-    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev09, 23/10/2026, PARA ANÁLISE)", T1),
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev10, 25/10/2026, PARA ANÁLISE)", T1),
          Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
             "Rev07: placas 10 fios Ø6 CP-175 RB (só peso próprio, DEC-035); lajes alveolares LP20 com 7 Ø12,7 por painel e capa C30; ST-1P4 nos beirais do eixo 2 (DEC-033); fôrma e armação na mesma folha por marca.")]
     # 1 peças

@@ -372,8 +372,8 @@
      "25",
      "fôrma de pilar, peça deitada",
      "—",
-     "368",
-     "368",
+     "359",
+     "359",
      "desforma e transporte pelas 2 AL-2; verticalizar e montar pelo FI-1 — AL-2 ×2 (face C: 320 do topo, 345 da base); FI-1 ×1 (faces A–C, 207,5 cm do topo)",
      "deitado em 2 calços a 0,21 L das pontas; não apoiar em consolos ou chapas",
      "PF04"
@@ -412,8 +412,8 @@
      "25",
      "fôrma de pilar, peça deitada",
      "—",
-     "401",
-     "401",
+     "392",
+     "392",
      "desforma e transporte pelas 2 AL-2; verticalizar e montar pelo FI-1 — AL-2 ×2 (face A); FI-1 ×1 (faces A–C, 70 cm do topo)",
      "deitado em 2 calços a 0,21 L das pontas; não apoiar em consolos ou chapas",
      "PC01"
@@ -432,8 +432,8 @@
      "25",
      "fôrma de pilar, peça deitada",
      "—",
-     "292",
-     "292",
+     "277",
+     "277",
      "desforma e transporte pelas 2 AL-2; verticalizar e montar pelo FI-1 — AL-2 ×2 (face A); FI-1 ×1 (faces A–C, 145 cm do topo)",
      "deitado em 2 calços a 0,21 L das pontas; não apoiar em consolos ou chapas",
      "PC02"
@@ -452,8 +452,8 @@
      "25",
      "fôrma de pilar, peça deitada",
      "—",
-     "264",
-     "528",
+     "249",
+     "498",
      "desforma e transporte pelas 2 AL-2; verticalizar e montar pelo FI-1 — AL-2 ×2 (face A); FI-1 ×1 (faces A–C, 65 cm do topo)",
      "deitado em 2 calços a 0,21 L das pontas; não apoiar em consolos ou chapas",
      "PC03"
@@ -653,7 +653,7 @@
      "",
      "",
      "",
-     "11.295",
+     "11.231",
      "",
      "",
      ""
@@ -692,8 +692,8 @@
      "50",
      "pista 60 m (≤ 3 por pista)",
      "18 Ø12,7 CP-190 RB, 143,4 kN",
-     "936",
-     "936",
+     "944",
+     "944",
      "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — AL-3 ×2 (a 250 cm das pontas)",
      "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte",
      "I130"
@@ -712,8 +712,8 @@
      "50",
      "pista 60 m (≤ 3 por pista)",
      "13 Ø12,7 CP-190 RB, 143,4 kN",
-     "776",
-     "776",
+     "784",
+     "784",
      "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — AL-3 ×2 (a 250 cm das pontas)",
      "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte",
      "I130"
@@ -732,8 +732,8 @@
      "50",
      "pista 60 m (≤ 3 por pista)",
      "13 Ø12,7 CP-190 RB, 143,4 kN",
-     "776",
-     "776",
+     "792",
+     "792",
      "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — AL-3 ×2 (a 250 cm das pontas)",
      "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte",
      "I130"
@@ -752,8 +752,8 @@
      "50",
      "pista 60 m (≤ 3 por pista)",
      "13 Ø12,7 CP-190 RB, 143,4 kN",
-     "773",
-     "773",
+     "781",
+     "781",
      "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — AL-3 ×2 (a 250 cm das pontas)",
      "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte",
      "I130"
@@ -773,7 +773,7 @@
      "",
      "",
      "",
-     "6.122",
+     "6.161",
      "",
      "",
      ""
@@ -1553,7 +1553,7 @@
      "",
      "",
      "",
-     "26.521",
+     "26.497",
      "",
      "",
      ""
@@ -1594,7 +1594,7 @@
     ],
     [
      "Ø8",
-     "4.779"
+     "4.797"
     ],
     [
      "Ø10",
@@ -1602,11 +1602,11 @@
     ],
     [
      "Ø12,5",
-     "1.415"
+     "1.435"
     ],
     [
      "Ø16",
-     "10.167"
+     "10.104"
     ],
     [
      "Ø20",
@@ -1618,7 +1618,7 @@
     ],
     [
      "TOTAL CA-50",
-     "26.522"
+     "26.498"
     ]
    ]
   },
@@ -1673,7 +1673,7 @@
      "37",
      "78,2",
      "195,5",
-     "11.295",
+     "11.231",
      "144"
     ],
     [
@@ -1681,7 +1681,7 @@
      "16",
      "78,0",
      "194,9",
-     "6.122",
+     "6.161",
      "79"
     ],
     [

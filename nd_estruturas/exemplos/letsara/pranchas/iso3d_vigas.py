@@ -96,7 +96,7 @@ def i130():
             if not (x_ini <= s0 <= x_fim):
                 continue
             CT = P.get("ct")
-            if CT:                                                     # rev10 (DEC-059): consolo lateral CT-I130 com mísula nas 2 faces
+            if CT:                                                     # rev10 (DEC-061): consolo lateral CT-I130 com mísula nas 2 faces
                 pj, hh, he = CT["proj"] / 1e3, CT["h"] / 1e3, CT["h_ext"] / 1e3
                 for sg in (-1, 1):
                     pol = [(sg * BW / 2, H - hh), (sg * B / 2, H - hh), (sg * (B / 2 + pj), H - he), (sg * (B / 2 + pj), H), (sg * BW / 2, H)]

@@ -351,6 +351,7 @@ def prancha_vista(Vs, desenho, folha):
     pr.revisao("03", "14/10/2026", "PLACA 125 × 10 (8 Ø12,7); LIGAÇÕES PARAFUSADAS (TRILHO + BUCHA), SEM SOLDA; VT DO EIXO A A +6,25")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; JUNTA VERTICAL 20 mm")
     pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: CONSOLE CS-1 (CC-1 NA FACE C OU NA CE-1) + NICHO NC-1 + 2 PINOS PT-1")
+    pr.revisao("11", "25/10/2026", "DEC-062: PLACAS NA COR DA PAREDE (VISTA), HACHURA COM 60 % DE TRANSPARÊNCIA")
     if "C" in Vs:
         pr.revisao("10", "24/10/2026", "DEC-059: PORTÕES LIVRES ATÉ +7,50 (PG APOIAM A TS-01A); PLACA PV-1 SOBRE O PORTÃO PG-04–PG-03")
     Q = pr.quadro
@@ -426,6 +427,7 @@ def prancha_tipo():
     pr.revisao("04", "16/10/2026", "NBR 9062: JUNTA 20 mm, TOLERÂNCIAS, ESTABILIDADE NO IÇAMENTO")
     pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR: NICHO NC-1 NAS PONTAS, CONSOLE CS-1, PINOS PT-1, TRAVA PT-2; ARMADURA DO DENTE")
     pr.revisao("07", "21/10/2026", "FÔRMA E ARMAÇÃO NA MESMA FOLHA (PADRÃO USINA)")
+    pr.revisao("11", "25/10/2026", "DEC-062: ESQUEMA COTADO DOS 4 PONTOS DE DESFORMA/IÇAMENTO IZ-1 NUMA FACE, CARGA POR PONTO E TABELA POR TIPO")
     Q = pr.quadro
     XC = Q[2] - 190
     Ls = sorted(TIPOS)
@@ -746,6 +748,7 @@ def prancha_cm():
     pr.revisao("03", "14/10/2026", "PLACAS 125 × 10; LIGAÇÕES SEM SOLDA; VT DO EIXO A A +6,25; PORTÕES ATÉ +7,40")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; E E F ABERTAS ATÉ +7,50; JUNTA VERTICAL 20 mm")
     pr.revisao("06", "17/10/2026", "FIXAÇÃO TREJOR (CS-1/CC-1 + CE-1 + NC-1 + PT-1/PT-2); TOLERÂNCIA ±12 (DEC-031)")
+    pr.revisao("11", "25/10/2026", "DEC-062: CADA PAREDE NA SUA COR (PLANTA E LEGENDA) E ISOMÉTRICO DO FECHAMENTO COM 60 % DE TRANSPARÊNCIA")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("CM", f"PLACAS PROTENDIDAS 125 × 10 — {N_TOT} PEÇAS · {len(TIPO)} TIPOS · 10 VISTAS · {f(PESO_TOT, 0)} t",

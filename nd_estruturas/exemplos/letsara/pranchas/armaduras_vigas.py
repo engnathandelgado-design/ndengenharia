@@ -140,7 +140,7 @@ def spec_i(qual):
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
     blocos_extra = []
     CTp = P.get("ct")
-    if CTp:                                                                  # rev10 (DEC-059): consolo lateral CT-I130
+    if CTp:                                                                  # rev10 (DEC-061): consolo lateral CT-I130
         bw2, pj, hc, he = bw / 2, CTp["proj"], CTp["h"], CTp["h_ext"]
         pdd = [(-B / 2, H - 450), (-bw2, H - 450), (-bw2, H - hc), (-B / 2, H - hc), (-B / 2 - pj, H - he), (-B / 2 - pj, H), (B / 2 + pj, H), (B / 2 + pj, H - he),
                (B / 2, H - hc), (bw2, H - hc), (bw2, H - 450)]

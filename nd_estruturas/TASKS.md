@@ -61,6 +61,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Camada web FastAPI: só se o Streamlit (DEC-007) não atender.
 
 ## Feito
+- Letsara rev10: revisão do Nathan sobre a rev09 (consolo CT-I130, escadas ES04/ES05 com corrimão duplo, içamento das placas, cotas D1, cores por fachada) — DEC-061/062.
 - Letsara rev09d (24/10): DEC-058 (eixo C, P23, I130 Ø12,7 com isolamento escalonado, dente FS 1,53), DEC-059 (portão L4, PV-1), DEC-060 (escadas RT CBMRS 11, ligações 0 conflitos, ES03); gerar_tudo 0/0, 0 colisões, rev09 unida, 3D republicado. Pendentes: σ do solo dos BE-1/BE-2; catálogo do chumbador M10 hef 70 (GI-10/11); NEO-4 levantamento (já existente); zip DXF+IFC após aprovação.
 - Letsara rev09 (24/10): DEC-052 (W 200 × 15,0 + montantes, COB05), DEC-053 (escada externa ES02, OM-2, BE-1), DEC-054 (I130 h 120, Ø15,2, protensão limitada, fckj 50, dente MEF FS 1,19, CP-I130 com mísula; V407 h 120), DEC-055 (piso pronto +3,95, espelhos 17,95), DEC-056/057; NG01, 3D/IFC (0 colisões), quantitativos, MC09, pranchas unidas rev09 (72 folhas, 0 erros/0 avisos).
 

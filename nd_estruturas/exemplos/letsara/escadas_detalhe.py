@@ -34,6 +34,9 @@ E_ACO, FY36, FU36, GA1, GA2 = 200e6, 250e3, 400e3, 1.10, 1.35
 FUB = 825e3                                                      # ASTM A325 / 8.8
 Q = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))["escada"]["sobrecarga"]     # 3,0 kN/m²
 H_GC, Q_GC, P_CR = 0.73, 1.20, 0.90                              # kN/m no topo, kPa no fechamento, kN no corrimão (CBMRS / NBR 14718)
+# rev10 (Nathan 25/10/2026, padrão da prancha de referência): CORRIMÃO DUPLO — 0,92 m (RT CBMRS 11: 0,80–0,92) e 0,70 m acima do
+# bocel/piso (NBR 9050:2020, corrimãos em duas alturas), nos dois lados, 40 mm livres, prolongamentos de 30 cm nas duas alturas
+H_CR = (0.92, 0.70)
 GAMA_Q = 1.5
 BORDA = {8: 14, 10: 18, 12: 22, 16: 29, 20: 35}                  # NBR 8800:2024 Tab. 14 (borda cortada), mm
 TCHAVE = {8: 12, 10: 15, 12: 18, 16: 23}                         # folga mínima furo × face de mesa/aba perpendicular (cabeça/porca + chave), mm
@@ -246,7 +249,7 @@ def dim_gc(h_gc, s, b_max=None):
     """montante (tubo quadrado), travessa superior (tubo), corrimão (tubo redondo Ø 38–65), barras Ø12,7 do fechamento e cantoneiras
     que prendem as barras. Retorna os mais leves que passam para altura h_gc e espaçamento s entre montantes."""
     out = {}
-    M_m = GAMA_Q * max(H_GC * s * h_gc, P_CR * 0.90)               # base do montante: 730 N/m × s no topo, ou 900 N no corrimão
+    M_m = GAMA_Q * max(H_GC * s * h_gc, P_CR * H_CR[0])            # base do montante: 730 N/m × s no topo, ou 900 N no corrimão de cima
     for tb in sorted((t_ for t_ in TUBOS_Q if b_max is None or t_["b"] <= b_max), key=lambda t_: t_["kg"]):
         MRd = tb["W"] * 1e-6 * FY36 / GA1
         if M_m <= MRd:
@@ -725,8 +728,8 @@ def escada_externa():
 
 
 # ------------------------------------------------------------------ guarda-corpos e corrimãos
-def guarda(cod, nome, p0, p1, z0, z1, h, grupo, fix, vazio, corrimao=True, so_corrimao=False, h_cr=0.90, fechamento=True, montantes_fim=True,
-           b_max=None, ext=(0.0, 0.0), lance=None, zmin=-99.0):
+def guarda(cod, nome, p0, p1, z0, z1, h, grupo, fix, vazio, corrimao=True, so_corrimao=False, h_cr=H_CR[0], fechamento=True, montantes_fim=True,
+           b_max=None, ext=(0.0, 0.0), lance=None, zmin=-99.0, h_cr2=H_CR[1]):
     """trecho reto de guarda-corpo / corrimão. p0 → p1 em planta (m) = linha de FIXAÇÃO: ponta das mesas da longarina/viga
     ('longarina', 'viga') ou borda da laje ('laje'); z0 → z1 = linha dos bocéis / piso acabado; vazio = vetor em planta para o lado
     livre. Montantes a ≤ 1,20 m: encostados nas pontas das mesas (2 M12 + bucha na alma) ou, na laje, 10 cm para dentro (2 cantoneiras
@@ -769,20 +772,21 @@ def guarda(cod, nome, p0, p1, z0, z1, h, grupo, fix, vazio, corrimao=True, so_co
         D = G["corrimao"]["D"] / 1000
         dist = bm / 2 + 0.040 + D / 2                                      # 40 mm livres entre o corrimão e o montante
         dc = off - dist
-        c0, c1 = PT(0.0, dc, h_cr), PT(L, dc, h_cr)
-        linear(f"{cod} corrimão {G['corrimao']['perfil']} ({nome})", ("R", D, D, G["corrimao"]["perfil"]), c0, c1, grupo)
-        for t_, e_ in ((0.0, -ext[0]), (L, ext[1])):                       # prolongamentos horizontais de 30 cm (CBMRS / NBR 9077)
-            if abs(e_) > 1e-6:
-                q0 = PT(t_, dc, h_cr)
-                q1 = (q0[0] + ux * e_, q0[1] + uy * e_, q0[2])
-                linear(f"{cod} corrimão {G['corrimao']['perfil']} — prolongamento de 30 cm ({nome})", ("R", D, D, G["corrimao"]["perfil"]), q0, q1, grupo)
-    return dict(cod=cod, nome=nome, L=round(L, 3), n_vaos=n, s=round(s, 3), h=h, h_corrimao=h_cr, fix=fix, gc=G, so_corrimao=so_corrimao, prolongamentos=ext)
+        for hh_, nv_ in ((h_cr, "superior 0,92"), (h_cr2, "inferior 0,70")):   # rev10: corrimão duplo
+            c0, c1 = PT(0.0, dc, hh_), PT(L, dc, hh_)
+            linear(f"{cod} corrimão {G['corrimao']['perfil']} {nv_} ({nome})", ("R", D, D, G["corrimao"]["perfil"]), c0, c1, grupo)
+            for t_, e_ in ((0.0, -ext[0]), (L, ext[1])):                   # prolongamentos horizontais de 30 cm (CBMRS / NBR 9077)
+                if abs(e_) > 1e-6:
+                    q0 = PT(t_, dc, hh_)
+                    q1 = (q0[0] + ux * e_, q0[1] + uy * e_, q0[2])
+                    linear(f"{cod} corrimão {G['corrimao']['perfil']} {nv_} — prolongamento de 30 cm ({nome})", ("R", D, D, G["corrimao"]["perfil"]), q0, q1, grupo)
+    return dict(cod=cod, nome=nome, L=round(L, 3), n_vaos=n, s=round(s, 3), h=h, h_corrimao=h_cr, h_corrimao2=h_cr2, fix=fix, gc=G, so_corrimao=so_corrimao, prolongamentos=ext)
 
 
 def corrimao_parede(cod, nome, ln: Lance, grupo, ext=(0.30, 0.30)):
     """lado da parede (escada externa, placas a 25 mm): montantes 40 × 40 × 4 do lado dos degraus, encostados na alma da longarina
     (2 M12) e apoiados no degrau (atrás da cantoneira do degrau e antes do bocel do degrau seguinte); corrimão 40 mm livres."""
-    G = dim_gc(0.90, 1.12, 40)
+    G = dim_gc(H_CR[0], 1.12, 40)
     bm = G["montante"]["b"] / 1000
     bf = ln.u["bf"] / 1000
     lat_w = ln.l1 - bf                                                     # face da alma do lado dos degraus (longarina junto à parede)
@@ -796,12 +800,13 @@ def corrimao_parede(cod, nome, ln: Lance, grupo, ext=(0.30, 0.30)):
         caixa(f"{cod} montante {G['montante']['perfil']} ({nome}) — na alma da longarina, sobre o degrau {k}", min(x0, x1), max(x0, x1), y0, y1, zk, zk + 1.00, grupo, tipo="pilar")
     D = G["corrimao"]["D"] / 1000
     xc = lat_w + sgl * (bm + 0.040 + D / 2)
-    z_a, z_b = ln.z_nosing(0.0) + 0.90, ln.z_nosing(ln.L_h) + 0.90
-    linear(f"{cod} corrimão {G['corrimao']['perfil']} ({nome})", ("R", D, D, G["corrimao"]["perfil"]), (xc, ln.c(0.0), z_a), (xc, ln.c(ln.L_h), z_b), grupo)
-    for c_, z_, e_ in ((ln.c(0.0), z_a, ext[0] * -ln.sg), (ln.c(ln.L_h), z_b, ext[1] * ln.sg)):
-        linear(f"{cod} corrimão {G['corrimao']['perfil']} — prolongamento de 30 cm ({nome})", ("R", D, D, G["corrimao"]["perfil"]), (xc, c_, z_), (xc, c_ + e_, z_), grupo)
+    for hh_, nv_ in ((H_CR[0], "superior 0,92"), (H_CR[1], "inferior 0,70")):           # rev10: corrimão duplo
+        z_a, z_b = ln.z_nosing(0.0) + hh_, ln.z_nosing(ln.L_h) + hh_
+        linear(f"{cod} corrimão {G['corrimao']['perfil']} {nv_} ({nome})", ("R", D, D, G["corrimao"]["perfil"]), (xc, ln.c(0.0), z_a), (xc, ln.c(ln.L_h), z_b), grupo)
+        for c_, z_, e_ in ((ln.c(0.0), z_a, ext[0] * -ln.sg), (ln.c(ln.L_h), z_b, ext[1] * ln.sg)):
+            linear(f"{cod} corrimão {G['corrimao']['perfil']} {nv_} — prolongamento de 30 cm ({nome})", ("R", D, D, G["corrimao"]["perfil"]), (xc, c_, z_), (xc, c_ + e_, z_), grupo)
     largura_livre = (ln.l1 - ln.l0) - 2 * bf - (bm + 0.040 + D) - 0.0
-    return dict(cod=cod, nome=nome, L=round(ln.L_h, 3), n_vaos=len(ks) - 1, s=1.12, h=0.90, h_corrimao=0.90, fix="degrau", gc=G, so_corrimao=True, prolongamentos=ext,
+    return dict(cod=cod, nome=nome, L=round(ln.L_h, 3), n_vaos=len(ks) - 1, s=1.12, h=0.92, h_corrimao=H_CR[0], h_corrimao2=H_CR[1], fix="degrau", gc=G, so_corrimao=True, prolongamentos=ext,
                 largura_livre_m=round(largura_livre, 3))
 
 
@@ -850,7 +855,8 @@ def guardas():
     Dr = 0.0381
     xa_r, xb_r = L1.l1 + 0.020 - (0.020 + 0.040 + Dr / 2), L2.l0 - 0.020 + (0.020 + 0.040 + Dr / 2)
     for (a_, b_) in (((xa_r, Y_LAN[0] - 0.12), (xb_r, Y_LAN[0] - 0.12)), ((xa_r, Y_LAN[0] - 0.12), (xa_r, Y_LAN[0] - 0.025)), ((xb_r, Y_LAN[0] - 0.12), (xb_r, Y_LAN[0] - 0.025))):
-        linear("GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar (curvas de 90°, luvas parafusadas)", ("R", Dr, Dr, "tubo Ø38,1 × 2"), (a_[0], a_[1], Z_PAT + 0.90), (b_[0], b_[1], Z_PAT + 0.90), GI)
+        for hh_ in H_CR:                                                   # rev10: corrimão duplo também no retorno
+            linear(f"GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a {hh_:.2f} (curvas de 90°, luvas parafusadas)".replace(".", ","), ("R", Dr, Dr, "tubo Ø38,1 × 2"), (a_[0], a_[1], Z_PAT + hh_), (b_[0], b_[1], Z_PAT + hh_), GI)
     yP0, yP1 = Y_PAT
     gs.append(guarda("GI-5", "patamar +1,975, lado do P6–P7", (X6 + 0.01 + 0.098 + 0.01, V["VP2"]["eixo"] - bfp), (XE_ - 0.01 - 0.098 - 0.01, V["VP2"]["eixo"] - bfp), Z_PAT, Z_PAT, 1.05, GI, "viga", (0, -1)))
     gs.append(guarda("GI-6", "patamar +1,975, lado x 36,30", (X6 + 0.01, V["VP2"]["eixo"] + 0.20), (X6 + 0.01, V["VP1"]["eixo"] - bfp - 0.02), Z_PAT, Z_PAT, 1.05, GI, "viga", (-1, 0)))
@@ -1034,7 +1040,7 @@ def lista_material():
 
 LISTA, MASSA = lista_material()
 conflitos = [dict(cod=c["cod"], falhas=[k for k in c["checks"] if not k["ok"]], uso=c["uso"]) for c in C if not c["ok"]]
-RES = dict(norma="RT CBMRS nº 11 Parte 01/2016; NBR 9077; NBR 14718:2019; NBR 8800:2024 (ligações)", cargas=dict(q_kN_m2=Q, guarda_corpo_kN_m=H_GC, fechamento_kPa=Q_GC, corrimao_kN=P_CR),
+RES = dict(norma="RT CBMRS nº 11 Parte 01/2016; NBR 9050:2020 (corrimão duplo 0,92 / 0,70); NBR 9077; NBR 14718:2019; NBR 8800:2024 (ligações)", h_corrimao=list(H_CR), cargas=dict(q_kN_m2=Q, guarda_corpo_kN_m=H_GC, fechamento_kPa=Q_GC, corrimao_kN=P_CR),
            interna={k: v for k, v in esc_int.items() if k not in ("geom",)}, externa={k: v for k, v in esc_ext.items() if k not in ("geom",)},
            guardas=GUARDAS, ligacoes=C, conflitos=conflitos, n_conflitos=len(conflitos), pe_direito=PD, lista=LISTA, massa_kg=MASSA,
            pecas=P)

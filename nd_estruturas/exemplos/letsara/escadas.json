@@ -1,5 +1,9 @@
 {
- "norma": "RT CBMRS nº 11 Parte 01/2016; NBR 9077; NBR 14718:2019; NBR 8800:2024 (ligações)",
+ "norma": "RT CBMRS nº 11 Parte 01/2016; NBR 9050:2020 (corrimão duplo 0,92 / 0,70); NBR 9077; NBR 14718:2019; NBR 8800:2024 (ligações)",
+ "h_corrimao": [
+  0.92,
+  0.7
+ ],
  "cargas": {
   "q_kN_m2": 3.0,
   "guarda_corpo_kN_m": 0.73,
@@ -479,16 +483,17 @@
    "n_vaos": 3,
    "s": 0.933,
    "h": 0.92,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -528,13 +533,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -550,16 +555,17 @@
    "n_vaos": 3,
    "s": 0.877,
    "h": 0.92,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
      "perfil": "tubo 40 × 40 × 4",
      "b": 40,
      "t": 4.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.431,
-     "uso": 0.849,
+     "uso": 0.868,
      "kg_m": 4.52
     },
     "travessa": {
@@ -599,13 +605,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 68.3,
-     "uso_contato_tubo": 0.254,
+     "uso_contato_tubo": 0.26,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": true,
@@ -621,16 +627,17 @@
    "n_vaos": 3,
    "s": 0.933,
    "h": 0.92,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
      "perfil": "tubo 40 × 40 × 4",
      "b": 40,
      "t": 4.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.431,
-     "uso": 0.849,
+     "uso": 0.868,
      "kg_m": 4.52
     },
     "travessa": {
@@ -670,13 +677,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 68.3,
-     "uso_contato_tubo": 0.254,
+     "uso_contato_tubo": 0.26,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -692,16 +699,17 @@
    "n_vaos": 3,
    "s": 0.933,
    "h": 0.92,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -741,13 +749,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -763,16 +771,17 @@
    "n_vaos": 3,
    "s": 0.888,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -812,13 +821,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -834,7 +843,8 @@
    "n_vaos": 1,
    "s": 1.081,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
@@ -905,16 +915,17 @@
    "n_vaos": 1,
    "s": 0.94,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -954,13 +965,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -976,16 +987,17 @@
    "n_vaos": 2,
    "s": 0.815,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1025,13 +1037,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -1047,16 +1059,17 @@
    "n_vaos": 1,
    "s": 0.762,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1096,13 +1109,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -1118,16 +1131,17 @@
    "n_vaos": 4,
    "s": 1.035,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "laje",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1167,13 +1181,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -1189,16 +1203,17 @@
    "n_vaos": 3,
    "s": 0.977,
    "h": 1.05,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "laje",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1238,13 +1253,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -1260,7 +1275,8 @@
    "n_vaos": 4,
    "s": 1.08,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
@@ -1330,17 +1346,18 @@
    "L": 4.48,
    "n_vaos": 4,
    "s": 1.12,
-   "h": 0.9,
-   "h_corrimao": 0.9,
+   "h": 0.92,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "degrau",
    "gc": {
     "montante": {
      "perfil": "tubo 40 × 40 × 4",
      "b": 40,
      "t": 4.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.431,
-     "uso": 0.849,
+     "uso": 0.868,
      "kg_m": 4.52
     },
     "travessa": {
@@ -1366,27 +1383,27 @@
      "d": 10.0,
      "s_mm": 130,
      "vao_livre_mm": 120,
-     "Md": 0.0143,
+     "Md": 0.0152,
      "MRd": 0.0223,
-     "uso": 0.642,
+     "uso": 0.68,
      "kg_m": 0.617
     },
     "cantoneira_barras": {
      "perfil": "L 38 × 38 × 4,8",
-     "Md": 0.099,
+     "Md": 0.102,
      "MRd": 0.184,
-     "uso": 0.538,
+     "uso": 0.553,
      "kg_m": 2.68
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 68.3,
-     "uso_contato_tubo": 0.254,
+     "uso_contato_tubo": 0.26,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": true,
@@ -1403,7 +1420,8 @@
    "n_vaos": 1,
    "s": 1.05,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
@@ -1474,7 +1492,8 @@
    "n_vaos": 1,
    "s": 1.05,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "longarina",
    "gc": {
     "montante": {
@@ -1545,16 +1564,17 @@
    "n_vaos": 2,
    "s": 0.615,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1594,13 +1614,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -1616,7 +1636,8 @@
    "n_vaos": 2,
    "s": 1.04,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
@@ -1687,16 +1708,17 @@
    "n_vaos": 2,
    "s": 0.68,
    "h": 1.3,
-   "h_corrimao": 0.9,
+   "h_corrimao": 0.92,
+   "h_corrimao2": 0.7,
    "fix": "viga",
    "gc": {
     "montante": {
      "perfil": "tubo 50 × 50 × 2",
      "b": 50,
      "t": 2.0,
-     "Md": 1.215,
+     "Md": 1.242,
      "MRd": 1.343,
-     "uso": 0.905,
+     "uso": 0.925,
      "kg_m": 3.01
     },
     "travessa": {
@@ -1736,13 +1758,13 @@
     },
     "fixacao_montante": {
      "desc": "2 M12 8.8 a 70 mm (binário)",
-     "F_d": 17.4,
+     "F_d": 17.7,
      "VRd": 27.6,
-     "uso": 0.628,
+     "uso": 0.642,
      "contato_tubo_Rd": 34.1,
-     "uso_contato_tubo": 0.509,
+     "uso_contato_tubo": 0.52,
      "contato_Rd_t43": 36.7,
-     "uso_contato": 0.473
+     "uso_contato": 0.484
     }
    },
    "so_corrimao": false,
@@ -2542,9 +2564,9 @@
    ],
    "elemento": "2 cantoneiras L 102 × 102 × 9,5 L = 150 (uma de cada lado do montante)",
    "furos": "2 M12 passantes no montante + 4 chumbadores químicos M10 hef 70 na capa/laje (2 por cantoneira)",
-   "Vd": 5.54,
+   "Vd": 5.63,
    "VRd": 8.0,
-   "uso": 0.692,
+   "uso": 0.704,
    "checks": [
     {
      "item": "chumbador × borda da laje: borda 60 ≥ 18",
@@ -2570,9 +2592,9 @@
    ],
    "elemento": "2 cantoneiras L 102 × 102 × 9,5 L = 150 (uma de cada lado do montante)",
    "furos": "2 M12 passantes no montante + 4 chumbadores químicos M10 hef 70 na capa/laje (2 por cantoneira)",
-   "Vd": 5.54,
+   "Vd": 5.63,
    "VRd": 8.0,
-   "uso": 0.692,
+   "uso": 0.704,
    "checks": [
     {
      "item": "chumbador × borda da laje: borda 60 ≥ 18",
@@ -2598,9 +2620,9 @@
    ],
    "elemento": "bucha espaçadora tubo Ø21,3 × 2,6 L = 46 (atravessa a faixa das mesas)",
    "furos": "2 M12 8.8 a 70 mm, atravessando o montante, a bucha e a alma da longarina",
-   "Vd": 17.4,
+   "Vd": 17.7,
    "VRd": 27.6,
-   "uso": 0.63,
+   "uso": 0.641,
    "checks": [
     {
      "item": "2 M12: entre furos 70 ≥ 36",
@@ -2949,7 +2971,14 @@
   {
    "escada": "externa",
    "item": "GE-1",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 9.1
+  },
+  {
+   "escada": "externa",
+   "item": "GE-1",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 9.1
   },
@@ -2970,7 +2999,14 @@
   {
    "escada": "externa",
    "item": "GE-2",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 3,
+   "kg": 10.5
+  },
+  {
+   "escada": "externa",
+   "item": "GE-2",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 3,
    "kg": 10.5
   },
@@ -2998,7 +3034,14 @@
   {
    "escada": "externa",
    "item": "GE-3",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 2,
+   "kg": 2.8
+  },
+  {
+   "escada": "externa",
+   "item": "GE-3",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 2,
    "kg": 2.8
   },
@@ -3033,7 +3076,14 @@
   {
    "escada": "externa",
    "item": "GE-4",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 2,
+   "kg": 2.8
+  },
+  {
+   "escada": "externa",
+   "item": "GE-4",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 2,
    "kg": 2.8
   },
@@ -3068,7 +3118,14 @@
   {
    "escada": "externa",
    "item": "GE-5",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 2.2
+  },
+  {
+   "escada": "externa",
+   "item": "GE-5",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 2.2
   },
@@ -3103,7 +3160,14 @@
   {
    "escada": "externa",
    "item": "GE-6",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 3.7
+  },
+  {
+   "escada": "externa",
+   "item": "GE-6",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 3.7
   },
@@ -3138,7 +3202,14 @@
   {
    "escada": "externa",
    "item": "GE-7",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 2.4
+  },
+  {
+   "escada": "externa",
+   "item": "GE-7",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 2.4
   },
@@ -3327,7 +3398,14 @@
   {
    "escada": "interna",
    "item": "GI-1",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 2,
+   "kg": 6.5
+  },
+  {
+   "escada": "interna",
+   "item": "GI-1",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 2,
    "kg": 6.5
   },
@@ -3369,7 +3447,14 @@
   {
    "escada": "interna",
    "item": "GI-10",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 7.4
+  },
+  {
+   "escada": "interna",
+   "item": "GI-10",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 7.4
   },
@@ -3411,7 +3496,14 @@
   {
    "escada": "interna",
    "item": "GI-11",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 5.2
+  },
+  {
+   "escada": "interna",
+   "item": "GI-11",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 5.2
   },
@@ -3432,7 +3524,14 @@
   {
    "escada": "interna",
    "item": "GI-2",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 2,
+   "kg": 6.3
+  },
+  {
+   "escada": "interna",
+   "item": "GI-2",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 2,
    "kg": 6.3
   },
@@ -3460,7 +3559,14 @@
   {
    "escada": "interna",
    "item": "GI-3",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 2,
+   "kg": 6.5
+  },
+  {
+   "escada": "interna",
+   "item": "GI-3",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 2,
    "kg": 6.5
   },
@@ -3495,7 +3601,14 @@
   {
    "escada": "interna",
    "item": "GI-4",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 5.9
+  },
+  {
+   "escada": "interna",
+   "item": "GI-4",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 5.9
   },
@@ -3530,7 +3643,14 @@
   {
    "escada": "interna",
    "item": "GI-5",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 4.7
+  },
+  {
+   "escada": "interna",
+   "item": "GI-5",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 4.7
   },
@@ -3565,7 +3685,14 @@
   {
    "escada": "interna",
    "item": "GI-6",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 1.9
+  },
+  {
+   "escada": "interna",
+   "item": "GI-6",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 1.9
   },
@@ -3600,7 +3727,14 @@
   {
    "escada": "interna",
    "item": "GI-7",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 1.7
+  },
+  {
+   "escada": "interna",
+   "item": "GI-7",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 1.7
   },
@@ -3635,7 +3769,14 @@
   {
    "escada": "interna",
    "item": "GI-8",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 2.9
+  },
+  {
+   "escada": "interna",
+   "item": "GI-8",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 2.9
   },
@@ -3670,7 +3811,14 @@
   {
    "escada": "interna",
    "item": "GI-9",
-   "desc": "corrimão tubo Ø38,1 × 2",
+   "desc": "corrimão tubo Ø38,1 × 2 superior 0,92",
+   "qt": 1,
+   "kg": 1.4
+  },
+  {
+   "escada": "interna",
+   "item": "GI-9",
+   "desc": "corrimão tubo Ø38,1 × 2 inferior 0,70",
    "qt": 1,
    "kg": 1.4
   },
@@ -3685,8 +3833,8 @@
    "escada": "interna",
    "item": "GI-R",
    "desc": "corrimão tubo Ø38,1 × 2",
-   "qt": 3,
-   "kg": 0.7
+   "qt": 6,
+   "kg": 1.5
   },
   {
    "escada": "interna",
@@ -3753,8 +3901,8 @@
   }
  ],
  "massa_kg": {
-  "interna": 1701.0,
-  "externa": 1512.0
+  "interna": 1752.0,
+  "externa": 1546.0
  },
  "pecas": [
   {
@@ -10544,7 +10692,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-1 corrimão tubo Ø38,1 × 2 (lance 1, lado livre (x 36,30))",
+   "marca": "GI-1 corrimão tubo Ø38,1 × 2 superior 0,92 (lance 1, lado livre (x 36,30))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -10555,12 +10703,12 @@
    "p0": [
     36.35905,
     8.35,
-    1.07955
+    1.09955
    ],
    "p1": [
     36.35905,
     5.55,
-    2.875
+    2.895
    ],
    "cima": [
     0.0,
@@ -10572,7 +10720,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-1 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance 1, lado livre (x 36,30))",
+   "marca": "GI-1 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance 1, lado livre (x 36,30))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -10583,12 +10731,68 @@
    "p0": [
     36.35905,
     8.35,
-    1.07955
+    1.09955
    ],
    "p1": [
     36.35905,
     8.65,
-    1.07955
+    1.09955
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-1 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance 1, lado livre (x 36,30))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.35905,
+    8.35,
+    0.87955
+   ],
+   "p1": [
+    36.35905,
+    5.55,
+    2.675
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-1 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance 1, lado livre (x 36,30))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.35905,
+    8.35,
+    0.87955
+   ],
+   "p1": [
+    36.35905,
+    8.65,
+    0.87955
    ],
    "cima": [
     0.0,
@@ -10712,7 +10916,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-2 corrimão tubo Ø38,1 × 2 (lance 1, lado do vão central (só corrimão))",
+   "marca": "GI-2 corrimão tubo Ø38,1 × 2 superior 0,92 (lance 1, lado do vão central (só corrimão))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -10723,12 +10927,12 @@
    "p0": [
     37.64095,
     8.23,
-    1.15649
+    1.17649
    ],
    "p1": [
     37.64095,
     5.6,
-    2.84294
+    2.86294
    ],
    "cima": [
     0.0,
@@ -10740,7 +10944,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-2 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance 1, lado do vão central (só corrimão))",
+   "marca": "GI-2 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance 1, lado do vão central (só corrimão))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -10751,12 +10955,68 @@
    "p0": [
     37.64095,
     8.23,
-    1.15649
+    1.17649
    ],
    "p1": [
     37.64095,
     8.65,
-    1.15649
+    1.17649
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-2 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance 1, lado do vão central (só corrimão))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.64095,
+    8.23,
+    0.95649
+   ],
+   "p1": [
+    37.64095,
+    5.6,
+    2.64294
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-2 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance 1, lado do vão central (só corrimão))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.64095,
+    8.23,
+    0.95649
+   ],
+   "p1": [
+    37.64095,
+    8.65,
+    0.95649
    ],
    "cima": [
     0.0,
@@ -10964,7 +11224,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-3 corrimão tubo Ø38,1 × 2 (lance 2, lado do vão central)",
+   "marca": "GI-3 corrimão tubo Ø38,1 × 2 superior 0,92 (lance 2, lado do vão central)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -10975,12 +11235,12 @@
    "p0": [
     37.85905,
     5.55,
-    3.05455
+    3.07455
    ],
    "p1": [
     37.85905,
     8.35,
-    4.85
+    4.87
    ],
    "cima": [
     0.0,
@@ -10992,7 +11252,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-3 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance 2, lado do vão central)",
+   "marca": "GI-3 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance 2, lado do vão central)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11003,12 +11263,68 @@
    "p0": [
     37.85905,
     8.35,
-    4.85
+    4.87
    ],
    "p1": [
     37.85905,
     8.65,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-3 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance 2, lado do vão central)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.85905,
+    5.55,
+    2.85455
+   ],
+   "p1": [
+    37.85905,
+    8.35,
+    4.65
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-3 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance 2, lado do vão central)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.85905,
+    8.35,
+    4.65
+   ],
+   "p1": [
+    37.85905,
+    8.65,
+    4.65
    ],
    "cima": [
     0.0,
@@ -11216,7 +11532,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-4 corrimão tubo Ø38,1 × 2 (lance 2, lado do eixo E (60 cm até a parede))",
+   "marca": "GI-4 corrimão tubo Ø38,1 × 2 superior 0,92 (lance 2, lado do eixo E (60 cm até a parede))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11227,12 +11543,12 @@
    "p0": [
     39.14095,
     5.55,
-    3.05455
+    3.07455
    ],
    "p1": [
     39.14095,
     8.35,
-    4.85
+    4.87
    ],
    "cima": [
     0.0,
@@ -11244,7 +11560,35 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar (curvas de 90°, luvas parafusadas)",
+   "marca": "GI-4 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance 2, lado do eixo E (60 cm até a parede))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    39.14095,
+    5.55,
+    2.85455
+   ],
+   "p1": [
+    39.14095,
+    8.35,
+    4.65
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,92 (curvas de 90°, luvas parafusadas)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11255,12 +11599,12 @@
    "p0": [
     37.64095,
     5.43,
-    2.875
+    2.895
    ],
    "p1": [
     37.85905,
     5.43,
-    2.875
+    2.895
    ],
    "cima": [
     0.0,
@@ -11272,7 +11616,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar (curvas de 90°, luvas parafusadas)",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,70 (curvas de 90°, luvas parafusadas)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11283,12 +11627,40 @@
    "p0": [
     37.64095,
     5.43,
-    2.875
+    2.675
+   ],
+   "p1": [
+    37.85905,
+    5.43,
+    2.675
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,92 (curvas de 90°, luvas parafusadas)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.64095,
+    5.43,
+    2.895
    ],
    "p1": [
     37.64095,
     5.525,
-    2.875
+    2.895
    ],
    "cima": [
     0.0,
@@ -11300,7 +11672,35 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar (curvas de 90°, luvas parafusadas)",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,70 (curvas de 90°, luvas parafusadas)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.64095,
+    5.43,
+    2.675
+   ],
+   "p1": [
+    37.64095,
+    5.525,
+    2.675
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,92 (curvas de 90°, luvas parafusadas)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11311,12 +11711,40 @@
    "p0": [
     37.85905,
     5.43,
-    2.875
+    2.895
    ],
    "p1": [
     37.85905,
     5.525,
-    2.875
+    2.895
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-R corrimão tubo Ø38,1 × 2 — retorno no patamar a 0,70 (curvas de 90°, luvas parafusadas)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    37.85905,
+    5.43,
+    2.675
+   ],
+   "p1": [
+    37.85905,
+    5.525,
+    2.675
    ],
    "cima": [
     0.0,
@@ -11524,7 +11952,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-5 corrimão tubo Ø38,1 × 2 (patamar +1,975, lado do P6–P7)",
+   "marca": "GI-5 corrimão tubo Ø38,1 × 2 superior 0,92 (patamar +1,975, lado do P6–P7)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11535,12 +11963,40 @@
    "p0": [
     36.418,
     4.13005,
-    2.875
+    2.895
    ],
    "p1": [
     39.082,
     4.13005,
-    2.875
+    2.895
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-5 corrimão tubo Ø38,1 × 2 inferior 0,70 (patamar +1,975, lado do P6–P7)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.418,
+    4.13005,
+    2.675
+   ],
+   "p1": [
+    39.082,
+    4.13005,
+    2.675
    ],
    "cima": [
     0.0,
@@ -11692,7 +12148,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-6 corrimão tubo Ø38,1 × 2 (patamar +1,975, lado x 36,30)",
+   "marca": "GI-6 corrimão tubo Ø38,1 × 2 superior 0,92 (patamar +1,975, lado x 36,30)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11703,12 +12159,40 @@
    "p0": [
     36.36905,
     4.32,
-    2.875
+    2.895
    ],
    "p1": [
     36.36905,
     5.401,
-    2.875
+    2.895
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-6 corrimão tubo Ø38,1 × 2 inferior 0,70 (patamar +1,975, lado x 36,30)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.36905,
+    4.32,
+    2.675
+   ],
+   "p1": [
+    36.36905,
+    5.401,
+    2.675
    ],
    "cima": [
     0.0,
@@ -11860,7 +12344,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-7 corrimão tubo Ø38,1 × 2 (patamar +1,975, lado do eixo E)",
+   "marca": "GI-7 corrimão tubo Ø38,1 × 2 superior 0,92 (patamar +1,975, lado do eixo E)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -11871,12 +12355,40 @@
    "p0": [
     39.13095,
     4.32,
-    2.875
+    2.895
    ],
    "p1": [
     39.13095,
     5.26,
-    2.875
+    2.895
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-7 corrimão tubo Ø38,1 × 2 inferior 0,70 (patamar +1,975, lado do eixo E)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    39.13095,
+    4.32,
+    2.675
+   ],
+   "p1": [
+    39.13095,
+    5.26,
+    2.675
    ],
    "cima": [
     0.0,
@@ -12056,7 +12568,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-8 corrimão tubo Ø38,1 × 2 (chegada +3,95, sobre a entrada do lance 1)",
+   "marca": "GI-8 corrimão tubo Ø38,1 × 2 superior 0,92 (chegada +3,95, sobre a entrada do lance 1)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -12067,12 +12579,40 @@
    "p0": [
     36.05,
     8.44005,
-    4.85
+    4.87
    ],
    "p1": [
     37.68,
     8.44005,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-8 corrimão tubo Ø38,1 × 2 inferior 0,70 (chegada +3,95, sobre a entrada do lance 1)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.05,
+    8.44005,
+    4.65
+   ],
+   "p1": [
+    37.68,
+    8.44005,
+    4.65
    ],
    "cima": [
     0.0,
@@ -12224,7 +12764,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-9 corrimão tubo Ø38,1 × 2 (chegada +3,95, lado do eixo E)",
+   "marca": "GI-9 corrimão tubo Ø38,1 × 2 superior 0,92 (chegada +3,95, lado do eixo E)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -12235,12 +12775,40 @@
    "p0": [
     39.13095,
     8.519,
-    4.85
+    4.87
    ],
    "p1": [
     39.13095,
     9.281,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-9 corrimão tubo Ø38,1 × 2 inferior 0,70 (chegada +3,95, lado do eixo E)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    39.13095,
+    8.519,
+    4.65
+   ],
+   "p1": [
+    39.13095,
+    9.281,
+    4.65
    ],
    "cima": [
     0.0,
@@ -12606,7 +13174,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-10 corrimão tubo Ø38,1 × 2 (laje +3,90, borda x 36,00 da abertura)",
+   "marca": "GI-10 corrimão tubo Ø38,1 × 2 superior 0,92 (laje +3,90, borda x 36,00 da abertura)",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -12617,12 +13185,40 @@
    "p0": [
     35.81595,
     4.11,
-    4.85
+    4.87
    ],
    "p1": [
     35.81595,
     8.25,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-10 corrimão tubo Ø38,1 × 2 inferior 0,70 (laje +3,90, borda x 36,00 da abertura)",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    35.81595,
+    4.11,
+    4.65
+   ],
+   "p1": [
+    35.81595,
+    8.25,
+    4.65
    ],
    "cima": [
     0.0,
@@ -12934,7 +13530,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GI-11 corrimão tubo Ø38,1 × 2 (laje +3,90, borda y 3,99 da abertura (sobre a VM-04))",
+   "marca": "GI-11 corrimão tubo Ø38,1 × 2 superior 0,92 (laje +3,90, borda y 3,99 da abertura (sobre a VM-04))",
    "grupo": "Escada metálica",
    "perfil": [
     "R",
@@ -12945,12 +13541,40 @@
    "p0": [
     36.12,
     3.80595,
-    4.85
+    4.87
    ],
    "p1": [
     39.05,
     3.80595,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GI-11 corrimão tubo Ø38,1 × 2 inferior 0,70 (laje +3,90, borda y 3,99 da abertura (sobre a VM-04))",
+   "grupo": "Escada metálica",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    36.12,
+    3.80595,
+    4.65
+   ],
+   "p1": [
+    39.05,
+    3.80595,
+    4.65
    ],
    "cima": [
     0.0,
@@ -13186,7 +13810,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-1 corrimão tubo Ø38,1 × 2 (lance de cima, lado externo (x −1,95))",
+   "marca": "GE-1 corrimão tubo Ø38,1 × 2 superior 0,92 (lance de cima, lado externo (x −1,95))",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13197,12 +13821,40 @@
    "p0": [
     -1.89095,
     6.82,
-    2.0414
+    2.0614
    ],
    "p1": [
     -1.89095,
     2.5,
-    4.81153
+    4.83153
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-1 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance de cima, lado externo (x −1,95))",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -1.89095,
+    6.82,
+    1.8414
+   ],
+   "p1": [
+    -1.89095,
+    2.5,
+    4.61153
    ],
    "cima": [
     0.0,
@@ -13279,7 +13931,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-2 corrimão tubo Ø38,1 × 2 (lance de cima, lado da parede)",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 superior 0,92 (lance de cima, lado da parede)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13290,12 +13942,12 @@
    "p0": [
     -0.60645,
     6.92,
-    1.97727
+    1.99727
    ],
    "p1": [
     -0.60645,
     2.44,
-    4.85
+    4.87
    ],
    "cima": [
     0.0,
@@ -13307,7 +13959,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-2 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance de cima, lado da parede)",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance de cima, lado da parede)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13318,12 +13970,12 @@
    "p0": [
     -0.60645,
     6.92,
-    1.97727
+    1.99727
    ],
    "p1": [
     -0.60645,
     7.22,
-    1.97727
+    1.99727
    ],
    "cima": [
     0.0,
@@ -13335,7 +13987,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-2 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance de cima, lado da parede)",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance de cima, lado da parede)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13346,12 +13998,96 @@
    "p0": [
     -0.60645,
     2.44,
-    4.85
+    4.87
    ],
    "p1": [
     -0.60645,
     2.14,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance de cima, lado da parede)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -0.60645,
+    6.92,
+    1.77727
+   ],
+   "p1": [
+    -0.60645,
+    2.44,
+    4.65
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance de cima, lado da parede)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -0.60645,
+    6.92,
+    1.77727
+   ],
+   "p1": [
+    -0.60645,
+    7.22,
+    1.77727
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-2 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance de cima, lado da parede)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -0.60645,
+    2.44,
+    4.65
+   ],
+   "p1": [
+    -0.60645,
+    2.14,
+    4.65
    ],
    "cima": [
     0.0,
@@ -13503,7 +14239,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-3 corrimão tubo Ø38,1 × 2 (lance de baixo, lado da linha 1)",
+   "marca": "GE-3 corrimão tubo Ø38,1 × 2 superior 0,92 (lance de baixo, lado da linha 1)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13514,12 +14250,12 @@
    "p0": [
     -3.07,
     6.97905,
-    1.07955
+    1.09955
    ],
    "p1": [
     -2.02,
     6.97905,
-    1.75284
+    1.77284
    ],
    "cima": [
     0.0,
@@ -13531,7 +14267,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-3 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance de baixo, lado da linha 1)",
+   "marca": "GE-3 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance de baixo, lado da linha 1)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13542,12 +14278,68 @@
    "p0": [
     -3.07,
     6.97905,
-    1.07955
+    1.09955
    ],
    "p1": [
     -3.37,
     6.97905,
-    1.07955
+    1.09955
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-3 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance de baixo, lado da linha 1)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -3.07,
+    6.97905,
+    0.87955
+   ],
+   "p1": [
+    -2.02,
+    6.97905,
+    1.55284
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-3 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance de baixo, lado da linha 1)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -3.07,
+    6.97905,
+    0.87955
+   ],
+   "p1": [
+    -3.37,
+    6.97905,
+    0.87955
    ],
    "cima": [
     0.0,
@@ -13699,7 +14491,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-4 corrimão tubo Ø38,1 × 2 (lance de baixo, lado da linha 2)",
+   "marca": "GE-4 corrimão tubo Ø38,1 × 2 superior 0,92 (lance de baixo, lado da linha 2)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13710,12 +14502,12 @@
    "p0": [
     -3.07,
     8.36095,
-    1.07955
+    1.09955
    ],
    "p1": [
     -2.02,
     8.36095,
-    1.75284
+    1.77284
    ],
    "cima": [
     0.0,
@@ -13727,7 +14519,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-4 corrimão tubo Ø38,1 × 2 — prolongamento de 30 cm (lance de baixo, lado da linha 2)",
+   "marca": "GE-4 corrimão tubo Ø38,1 × 2 superior 0,92 — prolongamento de 30 cm (lance de baixo, lado da linha 2)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13738,12 +14530,68 @@
    "p0": [
     -3.07,
     8.36095,
-    1.07955
+    1.09955
    ],
    "p1": [
     -3.37,
     8.36095,
-    1.07955
+    1.09955
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-4 corrimão tubo Ø38,1 × 2 inferior 0,70 (lance de baixo, lado da linha 2)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -3.07,
+    8.36095,
+    0.87955
+   ],
+   "p1": [
+    -2.02,
+    8.36095,
+    1.55284
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-4 corrimão tubo Ø38,1 × 2 inferior 0,70 — prolongamento de 30 cm (lance de baixo, lado da linha 2)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -3.07,
+    8.36095,
+    0.87955
+   ],
+   "p1": [
+    -3.37,
+    8.36095,
+    0.87955
    ],
    "cima": [
     0.0,
@@ -13923,7 +14771,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-5 corrimão tubo Ø38,1 × 2 (patamar +0,90, lado da linha 2)",
+   "marca": "GE-5 corrimão tubo Ø38,1 × 2 superior 0,92 (patamar +0,90, lado da linha 2)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -13934,12 +14782,40 @@
    "p0": [
     -1.815,
     8.35095,
-    1.79773
+    1.81773
    ],
    "p1": [
     -0.585,
     8.35095,
-    1.79773
+    1.81773
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-5 corrimão tubo Ø38,1 × 2 inferior 0,70 (patamar +0,90, lado da linha 2)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -1.815,
+    8.35095,
+    1.59773
+   ],
+   "p1": [
+    -0.585,
+    8.35095,
+    1.59773
    ],
    "cima": [
     0.0,
@@ -14119,7 +14995,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-6 corrimão tubo Ø38,1 × 2 (chegada +3,95, lado externo (x −1,95))",
+   "marca": "GE-6 corrimão tubo Ø38,1 × 2 superior 0,92 (chegada +3,95, lado externo (x −1,95))",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -14130,12 +15006,40 @@
    "p0": [
     -1.88995,
     0.26,
-    4.85
+    4.87
    ],
    "p1": [
     -1.88995,
     2.34,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-6 corrimão tubo Ø38,1 × 2 inferior 0,70 (chegada +3,95, lado externo (x −1,95))",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -1.88995,
+    0.26,
+    4.65
+   ],
+   "p1": [
+    -1.88995,
+    2.34,
+    4.65
    ],
    "cima": [
     0.0,
@@ -14315,7 +15219,7 @@
   {
    "g": "linear",
    "tipo": "viga",
-   "marca": "GE-7 corrimão tubo Ø38,1 × 2 (chegada +3,95, ponta da linha 1)",
+   "marca": "GE-7 corrimão tubo Ø38,1 × 2 superior 0,92 (chegada +3,95, ponta da linha 1)",
    "grupo": "Escada metálica externa",
    "perfil": [
     "R",
@@ -14326,12 +15230,40 @@
    "p0": [
     -1.84,
     0.26905,
-    4.85
+    4.87
    ],
    "p1": [
     -0.48,
     0.26905,
-    4.85
+    4.87
+   ],
+   "cima": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "obs": ""
+  },
+  {
+   "g": "linear",
+   "tipo": "viga",
+   "marca": "GE-7 corrimão tubo Ø38,1 × 2 inferior 0,70 (chegada +3,95, ponta da linha 1)",
+   "grupo": "Escada metálica externa",
+   "perfil": [
+    "R",
+    0.0381,
+    0.0381,
+    "tubo Ø38,1 × 2"
+   ],
+   "p0": [
+    -1.84,
+    0.26905,
+    4.65
+   ],
+   "p1": [
+    -0.48,
+    0.26905,
+    4.65
    ],
    "cima": [
     0.0,
