@@ -59,7 +59,7 @@ X_MONT_L2 = (4.935, 9.87, 14.81, 19.75, 24.69, 29.63, 32.90, 36.175, 37.84)
 # rev09c (24/10, decisão do Nathan: escada externa do arquitetônico entra no projeto, opção B do quadro decisao_escada_posicao)
 # Escada metálica em L encostada na fachada A, do térreo à porta do 2º pavimento (+3,90). Arquitetônico (bloco 55555): largura 1,50,
 # piso 28, 22 espelhos (5 no lance de baixo, ao longo de x; 17 no de cima, ao longo da fachada), patamar 1,50 × 1,50 na quina e
-# patamar de chegada de 0,20 a 2,44 (y). Deslocada 15 cm para fora em relação ao arquitetônico para passar livre das placas
+# patamar de chegada de 0,20 a 2,44 (y). Deslocada 30 cm para fora (e ~22 cm para a linha 2) em relação ao arquitetônico (sobreposição de 25/10) para passar livre das placas
 # (face externa das placas −0,425; folga 25 mm): face interna da escada em x = −0,45.
 ESCADA_EXT = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28,   # DEC-055: espelho 17,95, chegada no piso pronto +3,95
                   n_baixo=5, n_cima=17, largura=1.50,
