@@ -241,7 +241,11 @@ def desenhar_elev(pr, V, origem, esc):
         pts = [(a0, z0), (a1, z0), (a1, z1), (a0, z1)]
         vv.hachura(pts, "ANSI37", 3.0, "HACHURA")
         vv.poli(pts, "EIXO", fechada=True)
-        vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * (0.3 if rot == "porta" else 0.5)), {"portão": "PORTÃO 500 × 750 — livre até +7,50", "porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
+        if rot == "portão":                                                          # rev11: 2 linhas (cabe no vão)
+            vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * 0.5 + 60), "PORTÃO 500 × 750", "min", "BOTTOM_CENTER")
+            vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * 0.5 - 60), "livre até +7,50", "min", "TOP_CENTER")
+        else:
+            vv.texto(((a0 + a1) / 2, z0 + (z1 - z0) * (0.3 if rot == "porta" else 0.5)), {"porta": "PORTA", "esquadria": "esquadria"}[rot], "min", "MIDDLE_CENTER")
         if rot == "porta" and z0 == 0:                                              # rev06d: ombreiras OM-1 em U nos 2 lados (ND-LET-PP05)
             for xa in (a0 - 20, a1):
                 vv.ret(xa, 12, 20, z1 - 22, "METALICA")
@@ -505,7 +509,7 @@ def prancha_tipo():
     e.cota_h([0, NC_B, 2100, 2250, LD], H_PL, 16, total=False)
     e.cota_v([0, H_PL], 0, -10, total=False)
     e.cota_v([0, 60, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL - 60, H_PL], LD + 500 + LE, 10, total=False)
-    e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 30), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
+    e.chamada((NC_B / 2, Z_NC + NC_H / 2), (40, -30), "NC-1 nas 2 pontas, teto a 104 cm (det. 2)")
     e.chamada((2250, 60), (10, -16), "TSA M16 dos pinos guia PT-1: topo e base, a 0,21 L + 15 cm das pontas (DETALHE 3)")
     # DEC-035: desforma deitada por 4 pontos na face interna (de cima na fôrma), com balancim — a 0,104 L e 0,396 L de cada ponta
     for xi in (round(0.104 * 10160), LT - round(0.104 * 10160)):
@@ -520,7 +524,7 @@ def prancha_tipo():
     s.poli(pts, "CORTADO", fechada=True); s.hachura(pts, "AR-CONC", 0.03)
     s.cota_h([0, 30, 70, 100], 0, -10, total=False)
     s.cota_v([0, 35, 1250, 1280], 100, 10, total=False)
-    s.cota_h([0, 100], 0, -22, total=False)                                     # espessura total concretada
+    s.cota_h([0, 100], 0, -30, total=False)                                     # espessura total concretada
     s.cota_v([0, 1250], 0, -14, total=False)                                    # altura da placa (sem o macho)
     s.cota_v([0, 1280], 0, -26, total=False)                                    # altura com o macho
     s.chamada((50, 1265), (14, 12), "macho 4 × 3")
@@ -530,8 +534,8 @@ def prancha_tipo():
     import geo_fixacao as GF
     zt_cs = Z_NC + NC_H / 2 - GF.N['t_teto'] - GF.T['G']                     # topo da mesa do CS-1 (G = 50 sob o teto do nicho, PP03)
     # ---- detalhe 1: ponta da placa com o nicho NC-1 = dente Gerber (vista pela face interna, 1:10 mm)
-    d1 = pr.vista("DETALHE 1", (Q[0] + 338, Q[1] + 190), 10, titulo="DETALHE 1 — PONTA DA PLACA: NICHO NC-1 E ARMADURA DO DENTE",
-                  subtitulo="vista pela face interna; nariz acima do nicho calculado como dente Gerber (bielas e tirantes)", unidade="mm")
+    d1 = pr.vista("DETALHE 1", (Q[0] + 388, Q[1] + 190), 10, titulo="DETALHE 1 — PONTA: NICHO NC-1 E DENTE",
+                  subtitulo="face interna; nariz calculado como dente Gerber", unidade="mm")
     d1.poli([(0, 600), (0, H_PL), (420, H_PL)], "VISTA"); d1.interrupcao((420, 600), (420, H_PL)); d1.linha((0, 600), (420, 600), "VISTA")
     for z in [z_ for z_ in ZC_ if z_ > 600]:
         d1.linha((10, z), (420, z), "ARM_PROT")
@@ -552,8 +556,8 @@ def prancha_tipo():
              ponto_rotulo=(X_N7_[0], 1225), desloc=(-8, 12), camada="ARM_TRANSV")
     d1.cota_h([0, NC_B, NC_B + 50], 600, -10, total=False)
     d1.cota_v([600, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL], 0, -10, total=False)
-    d1.chamada((60, Z_NC), (70, -14), f"NC-1 caixa {NC_B:g} × {NC_H:g} × {NC_P:g} aberta na ponta e na face interna (PP01 det. 3)")
-    d1.chamada((60, Z_NC + NC_H / 2 - 6), (60, -3), f"teto {GF.N['t_teto']:g}: apoio do M16 de nível; armação completa N3–N7 no ND-LET-PP01".replace(".", ","))
+    d1.chamada((60, Z_NC), (40, -14), f"NC-1 {NC_B:g} × {NC_H:g} × {NC_P:g} (PP01 det. 3)")
+    d1.chamada((60, Z_NC + NC_H / 2 - 6), (40, -3), f"teto {GF.N['t_teto']:g}: apoio do M16 (PP01)".replace(".", ","))
     # ---- detalhe 2: planta da ligação placa × pilar
     d2 = pr.vista("DETALHE 2", (Q[0] + 760, Q[3] - 210), 5, titulo="DETALHE 2 — LIGAÇÃO PLACA × PILAR (PLANTA NA ALTURA DO CONSOLE)",
                   subtitulo=f"2 consoles CS-1 na CE-1 do pilar (CC-1 de fábrica na face C); junta {JUNTA} no eixo; folga 25", unidade="mm")
@@ -584,7 +588,7 @@ def prancha_tipo():
     d2.chamada((0, -FOLGA - 90), (6, -16), f"junta {JUNTA} mm: tarucel Ø25 + selante PU (±25 %)")
     # ---- detalhe 3: pino de travamento PT-1 (corte vertical na junta) e trava de pé PT-2 (planta)
     d3 = pr.vista("DETALHE 3", (Q[0] + 95, Q[1] + 490), 5, titulo="DETALHE 3 — PINO GUIA PT-1 (CARTOLA)",
-                  subtitulo="GUIA DE MONTAGEM (DEC-035): M16 só na placa de baixo; na de cima a aba encosta sem parafuso — não transmite esforço", unidade="mm")
+                  subtitulo="guia de montagem: M16 só na placa de baixo", unidade="mm")
     for z0_, z1_ in ((-150, -5), (5, 150)):
         pts = [(-E_PL, z0_), (0, z0_), (0, z1_), (-E_PL, z1_)]
         d3.poli(pts, "CORTADO", fechada=True); d3.hachura(pts, "AR-CONC", 0.03)
@@ -715,7 +719,7 @@ def prancha_tipo():
     # com carga por ponto; tabela das posições por tipo. NBR 9062:2017 5.3.2 (βa 1,3 saque/manuseio) e 5.3.3 (dispositivos βa 3,0).
     Lt = max(TIPOS)
     xs4 = [round(0.104 * Lt), round(0.396 * Lt), Lt - round(0.396 * Lt), Lt - round(0.104 * Lt)]
-    ei = pr.vista("IÇAMENTO", (Q[0] + 790, Q[1] + 190), 60, titulo="ESQUEMA DE DESFORMA E IÇAMENTO — 4 PONTOS NA FACE INTERNA (IZ-1)",
+    ei = pr.vista("IÇAMENTO", (Q[0] + 790, Q[1] + 160), 60, titulo="ESQUEMA DE DESFORMA E IÇAMENTO — 4 PONTOS NA FACE INTERNA (IZ-1)",
                   subtitulo=f"placa deitada na fôrma, face interna para cima; balancim duplo; placa {TIPO[Lt]} (L {Lt/10:.1f} cm) — demais tipos na tabela".replace(".", ","), unidade="cm")
     ei.ret(0, 0, Lt, H_PL, "VISTA")
     for xi in xs4:
@@ -738,7 +742,7 @@ def prancha_tipo():
         a1, a2 = round(0.104 * L_), round(0.396 * L_)
         pk = peso_t(L_) * 10 / 4
         rows_i.append([TIPO[L_], f"{L_/10:.1f}".replace(".", ","), f"{a1/10:.1f}".replace(".", ","), f"{a2/10:.1f}".replace(".", ","), f(pk, 1), f(1.3 * pk, 1)])
-    pr.tabela(Q[0] + 780, Q[1] + 150, "PONTOS DE DESFORMA / IÇAMENTO IZ-1 POR TIPO (4 por placa, face interna)", ["TIPO", "L (cm)", "a1 (cm)", "a2 (cm)", "Pk (kN)", "βa·Pk (kN)"],
+    pr.tabela(Q[0] + 780, Q[1] + 96, "PONTOS DE DESFORMA / IÇAMENTO IZ-1 POR TIPO (4 por placa, face interna)", ["TIPO", "L (cm)", "a1 (cm)", "a2 (cm)", "Pk (kN)", "βa·Pk (kN)"],
               rows_i, [22, 28, 28, 28, 28, 34], h_lin=4.6)
     # ---- tabelas
     y = Q[3] - 6
@@ -847,7 +851,7 @@ def prancha_cm():
         hachura_cor(lg, _r(0, yy_, 10, yy_ + 5), V_, 0.4)
         lg.poli(_r(0, yy_, 10, yy_ + 5), "VISTA", fechada=True)
         lg.texto((13, yy_ + 1), f"VISTA {V_} — {VISTAS[V_]['titulo'].split(' — ')[1].split(' (')[0]}", "min")
-    pr.imagem(XC, Q[1] + 168, XC + 186, Q[1] + 300, "/home/claude/letsara/pranchas/img/iso_fachadas.png",
+    pr.imagem(XC, Q[1] + 150, XC + 186, Q[1] + 262, "/home/claude/letsara/pranchas/img/iso_fachadas.png",
               titulo="ISOMÉTRICO DO FECHAMENTO — CORES POR PAREDE", subtitulo="placas com transparência de 60 %; pilares e vigas em cinza")
     pos = {"A": (19.75, 85.6), "B": (-5.5, 54.5), "C": (19.75, 25.5), "D": (45.0, 54.5), "E": (-5.5, 19.7), "F": (45.0, 19.7),
            "G": (19.75, 13.5), "H": (-5.5, 4.8), "I": (19.75, -3.6), "J": (45.0, 4.8)}
@@ -859,7 +863,8 @@ def prancha_cm():
         kp.texto((M(x), M(y) - 700), f"{len(DADOS[V][0])} pç", "min", "MIDDLE_CENTER")
         _fl = {"E": "PP-EF", "F": "PP-EF", "H": "PP-HJ", "J": "PP-HJ"}.get(V, f"PP-{V}")      # rev11: remissão à folha da vista
         kp.texto((M(x), M(y) - 2100), f"→ {_fl}", "min", "MIDDLE_CENTER")
-    kp.texto((M(24.7), M(45)), "PAVILHÃO (fechado por B, D, A e C)", "nota", "MIDDLE_CENTER")
+    kp.texto((M(24.7), M(45) + 1500), "PAVILHÃO", "nota", "MIDDLE_CENTER")
+    kp.texto((M(24.7), M(45) - 1500), "(fechado por B, D, A e C)", "nota", "MIDDLE_CENTER")
     kp.texto((M(24.7), M(23.0)), "laterais E e F abertas até +7,50", "min", "MIDDLE_CENTER")
     kp.texto((M(24.7), M(5.5)), "ANEXO / MEZANINO (H, J, I, G)", "nota", "MIDDLE_CENTER")
     for xp in (12.5, 27.0):
