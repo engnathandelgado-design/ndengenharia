@@ -30,17 +30,19 @@ def main():
     # 1) CE-1 dentro de uma face de concreto
     for p, (a, b) in ce:
         ok = False
-        for q, (c, d) in conc:
-            # a chapa encosta numa face (uma dimensão quase zero de folga) e cabe nas outras duas
-            for ax in range(3):
-                toca = min(abs(a[ax] - d[ax]), abs(b[ax] - c[ax]), abs(b[ax] - d[ax]), abs(a[ax] - c[ax])) < 0.003   # encostada ou rente
-                if not toca:
-                    continue
-                outros = [i for i in range(3) if i != ax]
-                if all(a[i] >= c[i] + 0.004 - 1e-6 and b[i] <= d[i] - 0.004 + 1e-6 for i in outros):
-                    ok = True
-                    break
-            if ok:
+        # rev12: a face pode ser formada por mais de uma caixa do mesmo pilar (corpo + cabeça rentes, peça monolítica):
+        # a chapa está ok se cada ponto de uma grade 9 × 9 sobre ela cai dentro (folga 4 mm) de alguma caixa que toca o plano dela
+        for ax in range(3):
+            outros = [i for i in range(3) if i != ax]
+            toc = [(c, d) for q, (c, d) in conc if min(abs(a[ax] - d[ax]), abs(b[ax] - c[ax]), abs(b[ax] - d[ax]), abs(a[ax] - c[ax])) < 0.003
+                   and all(c[i] < b[i] and d[i] > a[i] for i in outros)]
+            if not toc:
+                continue
+            lo = [a[o] - 0.004 for o in outros]; hi = [b[o] + 0.004 for o in outros]          # chapa + 4 mm de borda de concreto
+            pts = [(lo[0] + (hi[0] - lo[0]) * u / 8, lo[1] + (hi[1] - lo[1]) * w / 8) for u in range(9) for w in range(9)]
+            cob_ = lambda pt: any(c[outros[0]] - 1e-6 <= pt[0] <= d[outros[0]] + 1e-6 and c[outros[1]] - 1e-6 <= pt[1] <= d[outros[1]] + 1e-6 for c, d in toc)
+            if all(cob_(pt) for pt in pts):
+                ok = True
                 break
         if not ok:
             res["ce1_fora"].append(dict(peca=p.marca, xyz_min=[round(v, 3) for v in a], xyz_max=[round(v, 3) for v in b]))

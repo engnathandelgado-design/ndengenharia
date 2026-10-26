@@ -1,7 +1,7 @@
 """Letsara — conferência cruzada de insertos, conexões e furos entre peças (o que está na prancha de uma peça tem de
 bater com o que está na prancha da outra). Gera conexoes.json (lista usada pela página 3D) e imprime o resumo.
 
-Fontes: ligacoes.json (geometria dos apoios TS-01 × consolos, terças, berço da I130), cobertura_metalica.json
+Fontes: ligacoes.json (geometria dos apoios TS-01 × consolos, terças, berço da I120), cobertura_metalica.json
 (chumbadores e parafusos), definições das pranchas (TS-01, pilares, COB01, MON01/02). Unidades mm salvo indicação.
 """
 import json
@@ -19,14 +19,14 @@ def reg(grupo, peca_a, inserto_a, peca_b, inserto_b, verificacao, valor, ok, obs
                   verificacao=verificacao, valor=valor, ok=bool(ok), obs=obs))
 
 
-# ------------------------------------------------------------------ 1. TS-01 sem dente × assento do pilar / topo da I130 (rev03)
+# ------------------------------------------------------------------ 1. TS-01 sem dente × assento do pilar / topo da I120 (rev03)
 for a in LG["apoios"]:
-    onde = "recuo do pilar lateral (NEO-4 + 2 PN-3 Ø25)" if a["ponta"] == "ext" else "topo da I130 / pilar central (NEO-3 + 2 PN-5 Ø20)"
+    onde = "recuo do pilar lateral (NEO-4 + 2 PN-3 Ø25)" if a["ponta"] == "ext" else "topo da I120 / pilar central (NEO-3 + 2 PN-5 Ø20)"
     reg("TS-01 × apoio", a["peca"], f"ponta {a['ponta']} + 2 TB-3 Ø50", onde, "neoprene + 2 pinos",
         "folga da ponta / comprimento de apoio", f"{a['folga_mm']} / {a['apoio_mm']} mm", a["ok"], "apoio mínimo 250 (externo) / 150 (central)")
-for pino, d in (("PN-3 Ø25 (pilares laterais)", 25), ("PN-5 Ø20 (I130, P8A, P11)", 20)):
+for pino, d in (("PN-3 Ø25 (pilares laterais)", 25), ("PN-5 Ø20 (I120, P8A, P11)", 20)):
     folga = (46.8 - d) / 2
-    reg("TS-01 × apoio", "TS-01", "TB-3 tubo Ø50,8×2,0 (furo 46,8), y = ±100", "pilar / I130", pino,
+    reg("TS-01 × apoio", "TS-01", "TB-3 tubo Ø50,8×2,0 (furo 46,8), y = ±100", "pilar / I120", pino,
         "folga radial tubo × pino", f"{folga:.1f} mm ≥ {TOL['pino'] + TOL['consolo'] / 2:.0f}", folga >= TOL["pino"] + TOL["consolo"] / 2,
         "tubos grauteados; na linha 2 (P8A) com mastique (desliza em x)")
 reg("TS-01 × apoio", "TS-01", "8 cordoalhas: |x| ≤ 40 e x = ±155", "tubos TB-3", "y = ±100, Ø50", "folga livre cordoalha × tubo", "100 − 25 − 40 − 6,35 = 28,7 mm ≥ 22,8 (1,2 dmáx)", True, "")
@@ -93,10 +93,10 @@ reg("VM × laje (2º estágio)", "VM-01..04 I90", "N9 estribos salientes Ø8 c/1
     f"As {SE['interface']['As_adotada_cm2_m']} ≥ {SE['interface']['As_req_cm2_m']} cm²/m; fase 1 na seção pré-moldada, fase 2 na composta (I × {SE['secao_composta']['ganho_inercia']})")
 reg("VM × laje (2º estágio)", "VM", "topo da mesa (40) rugoso, pente 5 mm", "laje alveolar", "apoio 10 cm em neoprene 10", "enchimento entre a ponta da laje e a borda da mesa", "30 × 20 cm", True, "capa 5 cm por cima; N9 sai 17 cm do topo (dentro do enchimento + capa)")
 
-# ------------------------------------------------------------------ 5. I130 × pilares centrais (PN-2) e apoio da V405
-reg("I130 × PC", "V404/405/406/407 I130 (h 120)", "dente 780×350 + TB-2 tubo Ø60,3×3,6 (furo 53), sem chapa", "PC-01/02", "consolo CP-I130 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
+# ------------------------------------------------------------------ 5. I120 × pilares centrais (PN-2) e apoio da V405
+reg("I120 × PC", "V404/405/406/407 I120 (h 120)", "dente 780×350 + TB-2 tubo Ø60,3×3,6 (furo 53), sem chapa", "PC-01/02", "consolo CP-I120 + PN-2 Ø25", "folga radial tubo × pino", "14 mm ≥ 10", True,
     "neoprene 300×250×30 fretado (3 camadas); pressão 4,3 ≤ 10 MPa; pino grauteado numa ponta só")
-reg("I130 × PC", "V404", "dente na linha 9", "PF-04 (P14, linha 9, eixo C)", "consolo CP-I130 + PN-2 Ø25", "apoio da ponta da V404", f"+{LG['Z_ASS_I130']:.3f} (face interna do P14)", True, "DEC-058: V404 = P13B → linha 9 (16,517 m c-c); V406 L4 → P13 e V405 P13 → P13B, três vãos iguais")
+reg("I120 × PC", "V404", "dente na linha 9", "PF-04 (P14, linha 9, eixo C)", "consolo CP-I120 + PN-2 Ø25", "apoio da ponta da V404", f"+{LG['Z_ASS_I120']:.3f} (face interna do P14)", True, "DEC-058: V404 = P13B → linha 9 (16,517 m c-c); V406 L4 → P13 e V405 P13 → P13B, três vãos iguais")
 
 # ------------------------------------------------------------------ 6. cobertura escondida
 pl = LG["platibanda"]

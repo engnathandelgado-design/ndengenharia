@@ -5,7 +5,7 @@ Seções:
   1 estabilidade global (5.1.2, 5.2.3, Tab. 7) — modelo_global_r04(.json, _placas.json)
   2 aparelhos de apoio de elastômero (7.2.1.6)
   3 consolos (7.3) e cintamento do topo dos pilares (6.2.3)
-  4 apoios sem recorte (7.5) e dente Gerber da I130 (7.4)
+  4 apoios sem recorte (7.5) e dente Gerber da I120 (7.4)
   5 cálices (7.7, Tab. 15)
   6 situações transitórias (5.3.2, 6.1, 5.3.3, 6.2.4) e flechas (5.4.3.4)
   7 folgas e tolerâncias (3.1, 5.2.2)
@@ -127,7 +127,7 @@ th_ts = abs(theta(g_ts, TS.L_calc, EI_ts) - Pts * ets * TS.L_calc / (2 * EI_ts))
 thq_ts = theta(TS.car.q, TS.L_calc, EI_ts)
 Ng_ts, Nq_ts = g_ts * TS.L_calc / 2, TS.car.q * TS.L_calc / 2
 ah_ts = 40e-5 * TS.L / 1000 / 2 * 1000                              # mm — ε 40·10⁻⁵ (retração 20, fluência 5, ΔT ±15 °C) / 2 pontas
-# --- I130 (V406, a maior)
+# --- I120 (V406, a maior)
 v = I1J["V406"]
 sI = secao_I(1.30, bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
 EI_i = C40.Ecs * sI.I
@@ -157,9 +157,9 @@ NEO = [
     neo_simples("NEO-4 200×300×10 (simples)", 200, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no recuo dos pilares laterais P1/P2"),
     neo_simples("NEO-4 150×300×10 (simples)", 150, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no recuo — alternativa rev04"),
     neo_simples("NEO-3 100×300×10 (simples)", 100, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo do P11 (pilar central da linha 4)"),
-    neo_simples("NEO-3C 150×300×10 (simples, rev10)", 150, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I130 + consolo lateral CT-I130 (rev10, DEC-061)"),
-    neo_fretado("NEO-2 300×250 fretado (rev03)", 250, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130"),
-    neo_fretado("NEO-2 200×300 fretado (rev04)", 200, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I130 nos consolos CP-I130 — rev04 (a2 do consolo)"),
+    neo_simples("NEO-3C 150×300×10 (simples, rev10)", 150, 300, 10, Ng_ts, Nq_ts, ah_ts, th_ts, thq_ts, "TS-01 no topo da I120 + consolo lateral CT-I120 (rev10, DEC-061)"),
+    neo_fretado("NEO-2 300×250 fretado (rev03)", 250, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I120 nos consolos CP-I120"),
+    neo_fretado("NEO-2 200×300 fretado (rev04)", 200, 300, 10, 2, 2.5, Ng_i, Nq_i, ah_i, th_i, thq_i, "I120 nos consolos CP-I120 — rev04 (a2 do consolo)"),
     neo_fretado("NEO-5F 200×200 fretado (rev09)", 200, 200, 10, 2, 2.5, Ng_vm, Nq_vm, ah_vm, th_vm, thq_vm, "VM retangular 30 × 75 (dente 45 × 40) nos consolos CP-MEZ 40"),
     neo_simples("NEO-6 100×100×10 (rev04)", 100, 100, 10, Ng_vb, Nq_vb, 1.4, th_vb, thq_vb, "VB 15×60 (dente 30) nos consolos CP-VB — rev04"),
 ]
@@ -223,14 +223,14 @@ def consolo(nome, onde, b, proj, h, a, a_pad, b_pad, Vd, gn, fck=40, c=2.5, h_ex
 
 HD_VM = VM["premissas"]["dente"]["hd"]
 CON = [
-    consolo("CP-I130", "P8A, P11, P13, P14 — I130 h 120 (dente 78 × 35, recorte 42), NEO-2 200×300; mísula 10 (DEC-054)", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
+    consolo("CP-I120", "P8A, P11, P13, P14 — I120 h 120 (dente 78 × 35, recorte 42), NEO-2 200×300; mísula 10 (DEC-054)", 0.50, 0.40, 0.49, 0.20, 0.20, 0.30,
             max(x["linhas"]["Vd_kN"] for x in I1J.values()) * 1.25, 1.1, h_ext=0.39),   # DEC-054: extremidade 39 = recorte 42 − neoprene 3 (alinhada ao fundo da viga +6,58); face 49       # Vd do JSON da viga é por apoio com γ 1,4 do pré-dim.; 1,25 = reserva da reação real com as TS
     consolo("CP-MEZ", "pilares das linhas 1 e 2 e da escada — dente 45 × 40 da VM retangular 30 × 75, NEO-5F 200×200 fretado; consolo com a largura da face do pilar (40); h = recorte − neoprene (fundo alinhado)", VM["premissas"].get("b_consolo", VM["premissas"]["b"]), VM["premissas"]["dente"]["consolo_proj"], VM["premissas"]["dente"]["consolo_h"], VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
     consolo("DENTE VM", f"nariz do dente Gerber da VM retangular 30 × {VM['premissas']['h_pm']*100:.0f}, h {HD_VM*100:.0f}, LN {VM['premissas']['dente']['ln']*100:.0f} — 7.4 = consolo 7.3", VM["premissas"]["b"], VM["premissas"]["dente"]["ln"], HD_VM, 0.03 + VM["premissas"]["dente"]["ln"] - VM["premissas"]["x_pad"], 0.20, 0.20, m["cortante"]["Vd"], 1.2),
-    # rev10 (DEC-061): consolo lateral CT-I130 nas duas faces da mesa superior da I130 onde chega cada TS-01 (linhas 3, 5, 6, 7, 8):
-    # b 50 (ao longo da I130), projeção 20 além da mesa (40 → 80), h 30 na face e 15 na ponta (mísula), topo = topo da I130.
+    # rev10 (DEC-061): consolo lateral CT-I120 nas duas faces da mesa superior da I120 onde chega cada TS-01 (linhas 3, 5, 6, 7, 8):
+    # b 50 (ao longo da I120), projeção 20 além da mesa (40 → 80), h 30 na face e 15 na ponta (mísula), topo = topo da I120.
     # NEO-3C 150 × 300 de 12 a 27 cm da ponta da TS-01 (centro 3,25 cm além da face da mesa); a favor da segurança: Fd inteiro no consolo.
-    consolo("CT-I130", "I130 V400/V401/V402/V403 — apoio das TS-01 (linhas 3, 5, 6, 7, 8), nas duas faces da mesa superior; NEO-3C 150×300; mísula 15 (DEC-061)",
+    consolo("CT-I120", "I120 V400/V401/V402/V403 — apoio das TS-01 (linhas 3, 5, 6, 7, 8), nas duas faces da mesa superior; NEO-3C 150×300; mísula 15 (DEC-061)",
             0.50, 0.20, 0.30, 0.0325, 0.15, 0.30, 1.4 * (Ng_ts + Nq_ts), 1.2, fck=50, h_ext=0.15, c_tir=0.075),   # tirante a 7,5 cm do topo, abaixo do N3 6 Ø25 da mesa
     consolo("CP-VB", "pilares das fachadas 1 e 9 — dente 30 × 27 da VB 15×60, NEO-6 100×100", 0.15, 0.27, 0.29, 0.135, 0.10, 0.10, VBD["Vd"], 1.1),
 ]
@@ -281,9 +281,9 @@ OUT["dente_VB"] = dict(geometria="VB 15 × 60: dente 30 (nariz 27), recorte 30; 
                        viga=dict(Md=VBD["Md"], Md_neg=VBD["Md_neg"], inf=VBD["inf"], sup=VBD["sup"], flecha_mm=VBD["flecha_mm"], flecha_lim_mm=VBD["flecha_lim"],
                                  sigma_s=VBD["sigma_s"], sigma_lim=VBD["sigma_lim"]),
                        norma="NBR 9062:2017 7.4 (dente = consolo 7.3, γn 1,1) e Tab. 8; NBR 6118:2023 17.2, 17.3, 17.4 (calc_vb_dente.py)")
-d130 = DT["I130"]
+d130 = DT["I120"]
 _m130 = d130.get("mef", {})
-OUT["dente_I130"] = dict(MEF_Vu_kN=_m130.get("Vu_kN"), Fd_kN=d130["Vd"], Vd_reacao_kN=d130.get("Vd_reacao"), gama_n=d130.get("gama_n"), Hd_kN=d130["Hd"],
+OUT["dente_I120"] = dict(MEF_Vu_kN=_m130.get("Vu_kN"), Fd_kN=d130["Vd"], Vd_reacao_kN=d130.get("Vd_reacao"), gama_n=d130.get("gama_n"), Hd_kN=d130["Hd"],
                          FS=round(_m130["Vu_kN"] / d130["Vd"], 2) if _m130 else None, ok_MEF=_m130.get("ok"), armacao_MEF=_m130.get("armacao"),
                          adotado=d130["calculo"]["adotado"],
                          suspensao="estribos fechados concentrados junto ao recorte (até dvig/4), fyd ≤ 435 MPa, Fd total (7.4)",
@@ -314,10 +314,10 @@ def lebelle(nome, Iy, J, L, w, fcj):
 
 
 trans = []
-_HI = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))["H_I130"]
+_HI = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))["H_I120"]
 for nome, L, bf, h, w, Iy, Jt, fcj in (
         ("TS-01", TS.L / 1000, 0.40, 0.90, TS.car.g1, 0.12 * 0.40 ** 3 / 12 + 0.15 * 0.40 ** 3 / 12, 0.4 * 0.12 ** 3 / 3 + 0.4 * 0.15 ** 3 / 3 + 0.63 * 0.15 ** 3 / 3, 35),
-        ("I130 (V406)", v["L_peca"], 0.40, _HI, v["linhas"]["peso_kN_m"], 0.22 * 0.4 ** 3 / 12 + 0.25 * 0.4 ** 3 / 12, 0.4 * 0.22 ** 3 / 3 + 0.4 * 0.25 ** 3 / 3 + (_HI - 0.47) * 0.15 ** 3 / 3, v["arranjo"]["fckj"]),   # DEC-054: h 1,20, fckj 50
+        ("I120 (V406)", v["L_peca"], 0.40, _HI, v["linhas"]["peso_kN_m"], 0.22 * 0.4 ** 3 / 12 + 0.25 * 0.4 ** 3 / 12, 0.4 * 0.22 ** 3 / 3 + 0.4 * 0.25 ** 3 / 3 + (_HI - 0.47) * 0.15 ** 3 / 3, v["arranjo"]["fckj"]),   # DEC-054: h 1,20, fckj 50
         ("VM retangular 30 × 75", m["L_peca"], 0.30, 0.75, m["cargas"]["g_pm"], 0.75 * 0.30 ** 3 / 12, 0.75 * 0.30 ** 3 / 3 * (1 - 0.63 * 0.30 / 0.75), 32),
         ("VB 15×60", 9.43, 0.15, 0.60, 2.25, 0.60 * 0.15 ** 3 / 12, 0.60 * 0.15 ** 3 / 3 * (1 - 0.63 * 0.15 / 0.60), 25),
         ("Placa 125×10 (içada na vertical)", 10.15, 0.10, 1.25, 3.12, 1.25 * 0.10 ** 3 / 12, 1.25 * 0.10 ** 3 / 3 * 0.95, 25)):
@@ -333,12 +333,12 @@ OUT["transitorias"] = dict(
     pilar_PL=dict(peso_kN_m=6.0, L_m=11.0, M_basculamento_d=round(1.3 * (6.0 * 8.5 ** 2 / 8 - 6.0 * 2.5 ** 2 / 4), 1),
                   sigma_s_MPa=round(1.3 * (6.0 * 8.5 ** 2 / 8 - 6.0 * 2.5 ** 2 / 4) / (15.7e-4 * 0.9 * 0.35) / 1e3, 0), lim=250,
                   obs="basculamento pela alça de topo com a base no chão; transporte apoiado em 2 pontos a 0,21 L"),
-    resistencias_minimas="fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 " + f"{TS.P['fckj']:g}, I130 {I1J['V406']['arranjo']['fckj']:g}, VM {VM['premissas'].get('fckj', 32):g}, placas 25, VB/pilares 25",
+    resistencias_minimas="fcj ≥ 21 MPa para liberar protensão e manusear peças protendidas; ≥ 15 MPa peças armadas (8.2.2.2) — adotados: TS-01 " + f"{TS.P['fckj']:g}, I120 {I1J['V406']['arranjo']['fckj']:g}, VM {VM['premissas'].get('fckj', 32):g}, placas 25, VB/pilares 25",
     estoque="pressão nos calços ≤ 0,3 fcj (10.2)")
 OUT["flechas"] = [
     dict(peca="TS-01 (cobertura, i = 3 %, sem empoçamento)", final_mm=TS.R.linhas["flecha_final_mm"], lim_mm=round(TS.L_calc * 1000 / 250, 1), regra="Tab. 8: L/250",
          contraflecha_mm=round(Pts * ets * TS.L_calc ** 2 / (8 * EI_ts) * 1000, 1), lim_contraflecha_mm=round(TS.L_calc * 1000 / 150, 1)),
-    dict(peca="I130 V406 (linear, L > 20 m)", final_mm=v["linhas"]["flecha_final_mm"], lim_mm=round(v["L_calc"] * 1000 / 350, 1), regra="Tab. 9: L/350"),
+    dict(peca="I120 V406 (linear, L > 20 m)", final_mm=v["linhas"]["flecha_final_mm"], lim_mm=round(v["L_calc"] * 1000 / 350, 1), regra="Tab. 9: L/350"),
     dict(peca="VM retangular 30 × 75 (piso, solidarizada)", final_mm=m["flecha"]["final_mm"], lim_mm=m["flecha"]["lim_final_mm"], regra="Tab. 9: L/250 (L ≤ 15 m)",
          montagem_mm=m["flecha"]["montagem_mm"], lim_montagem_mm=m["flecha"]["lim_montagem_L500"]),
 ]
@@ -360,7 +360,7 @@ def folga(peca, L, adotada, apoio_nom, apoio_min, dT=15, eps_cs=0.0, tex_proj=No
 OUT["folgas"] = [
     folga("TS-01 — ponta no pilar lateral (face da platibanda)", 19.70, 25, 275, 200),
     folga("TS-01 — ponta central (metade do vão de 38; tolerância de projeto do comprimento ±10 mm)", 19.70, 19, 162, 100, tex_proj=10),
-    folga("I130 — ponta no pilar central (dente no CP-I130)", 24.13, 25, 350, 200),
+    folga("I120 — ponta no pilar central (dente no CP-I120)", 24.13, 25, 350, 200),
     folga("VM retangular — ponta no pilar (consolo CP-MEZ 40)", m["L_peca"], 30, 400 - 30, 200),
     folga("VB 15×60 — ponta no pilar (dente no CP-VB)", 9.43, 25, 270, 100),
     folga("Placa 125×10 — junta vertical no eixo do pilar (rev03: 10 mm)", 10.15, 10, None, 0, tex_proj=5),

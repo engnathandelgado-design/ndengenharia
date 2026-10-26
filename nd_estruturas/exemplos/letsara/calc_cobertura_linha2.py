@@ -67,7 +67,7 @@ def w_suc(x):
 # pilares — eixo dos pilares; nos eixos A/E a W apoia no recuo (30 cm da face externa da cabeça). DEC-050: a cabeça de concreto
 # sobe até o fundo da W; graute 20 + chapa CA-L2 250 × 250 × 19.
 T_CHAPA, T_GRAUTE = 0.019, 0.020
-APOIOS = [("A", 0.15, LG["REC"][0], "recuo do P1-L2"), ("B", X_EIXO["B"], 7.30, "topo do P8"), ("C", X_EIXO["C"], LG["Z_TOPO_I130"], "topo do P8A"),
+APOIOS = [("A", 0.15, LG["REC"][0], "recuo do P1-L2"), ("B", X_EIXO["B"], 7.30, "topo do P8"), ("C", X_EIXO["C"], LG["Z_TOPO_I120"], "topo do P8A"),
           ("D", X_EIXO["D"], 7.30, "topo do P8B"), ("P6", P6_L2[0], 7.30, "topo do P6 da linha 2"), ("E", X_EIXO["E"] - 0.15, LG["REC"][1], "recuo do P2-L2")]
 XA, XB = 0.025, X_EIXO["E"] - 0.025                           # pontas da W (25 mm da face da cabeça, como a TS-01)
 # DEC-052: montantes no meio de cada VM do +7,30 da linha 2 (entre as faces dos pilares; meia-largura dos pilares como no modelo 3D)

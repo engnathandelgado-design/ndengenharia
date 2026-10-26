@@ -96,10 +96,10 @@ lin = [["Peça", "Fd (kN)", "Asd = (Fd/1,2 + Hd)/fyd", "Ash = Asv = Fd/8fyd", "a
 for a in N9["apoios_sem_recorte"]:
     lin.append([a["peca"], f(a["Fd_kN"]), f(a["Asd_cm2"], 2), f(a["Ash_Asv_cm2"], 2), a["adotado"]])
 E += [tab(lin, [28, 14, 26, 24, 86]),
-      P(f"Dente da I130 (78 × 35): reação real Vd = {f(N9['dente_I130']['Vd_reacao_kN'])} kN (TS-01 fora do centro), Fd = γn {f(N9['dente_I130']['gama_n'])} × Vd = {f(N9['dente_I130']['Fd_kN'])} kN, "
-        f"Hd = 0,16 Fd = {f(N9['dente_I130']['Hd_kN'])} kN. MEF não linear com a armação da prancha ({N9['dente_I130']['adotado']['tirante']}; {N9['dente_I130']['adotado']['suspensao']}): "
-        f"Vu = {f(N9['dente_I130']['MEF_Vu_kN'])} kN, Vu/Fd = {f(N9['dente_I130']['FS'], 2)} ≥ 1,06 — {ok(N9['dente_I130']['ok_MEF'])}; {N9['dente_I130']['suspensao']}; "
-        f"{N9['dente_I130']['tirante']}; {N9['dente_I130']['restricao']}.")]
+      P(f"Dente da I120 (78 × 35): reação real Vd = {f(N9['dente_I120']['Vd_reacao_kN'])} kN (TS-01 fora do centro), Fd = γn {f(N9['dente_I120']['gama_n'])} × Vd = {f(N9['dente_I120']['Fd_kN'])} kN, "
+        f"Hd = 0,16 Fd = {f(N9['dente_I120']['Hd_kN'])} kN. MEF não linear com a armação da prancha ({N9['dente_I120']['adotado']['tirante']}; {N9['dente_I120']['adotado']['suspensao']}): "
+        f"Vu = {f(N9['dente_I120']['MEF_Vu_kN'])} kN, Vu/Fd = {f(N9['dente_I120']['FS'], 2)} ≥ 1,06 — {ok(N9['dente_I120']['ok_MEF'])}; {N9['dente_I120']['suspensao']}; "
+        f"{N9['dente_I120']['tirante']}; {N9['dente_I120']['restricao']}.")]
 
 # 5 VM meio vaso
 E += [PageBreak(), Paragraph("5. Vigas do mezanino — meio vaso com dente Gerber (skill ND de vigas de apoio de laje alveolar)", T2),

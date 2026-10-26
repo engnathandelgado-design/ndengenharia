@@ -1,5 +1,5 @@
 """Memória de cálculo ND-LET-MC08 (PDF) — peças protendidas e dentes Gerber da Letsara (DEC-032).
-Lê i110_r01.json (I130), vm_meio_vaso.json (VM), placas.json, dentes.json, mef_vm_dente_*.json, vb_dente.json e
+Lê i110_r01.json (I120), vm_meio_vaso.json (VM), placas.json, dentes.json, mef_vm_dente_*.json, vb_dente.json e
 o cálculo da TS-01 (pranchas/ts01_dados.py). Verificações por peça: perdas, ato da protensão, ELS, ELU, cortante,
 flecha, manuseio, transferência e dentes (biela, tirante, suspensão, MEF)."""
 import json, sys
@@ -47,7 +47,7 @@ doc = SimpleDocTemplate(str(AQ / "ND-LET-MC08-PROTENDIDAS-rev06.pdf"), pagesize=
                         bottomMargin=15 * mm, title="Letsara — memória MC08: peças protendidas e dentes Gerber", author="ND Engenharia")
 E = [Paragraph("ND ENGENHARIA — MEMÓRIA DE CÁLCULO ND-LET-MC08 (rev06, DEC-032)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Assunto: verificação das peças protendidas pré-tracionadas (TS-01, vigas centrais "
-       "I130, vigas do mezanino VM em meio vaso e placas de fechamento 125 × 10) em todas as fases — ato da protensão, ELS e ELU — e dos dentes Gerber. "
+       "I120, vigas do mezanino VM em meio vaso e placas de fechamento 125 × 10) em todas as fases — ato da protensão, ELS e ELU — e dos dentes Gerber. "
        "19/10/2026. Projeto da ND Engenharia — para aprovação."),
      Paragraph("1. Referencial e premissas", T2),
      P("NBR 6118:2023: 9.6.1.2.1 (σpi ≤ 0,77 fptk e 0,85 fpyk), 9.6.3 (perdas), 8.2.11 e Tab. 8.2 (fluência e retração), 8.4.8 e Tab. 8.4 (relaxação, "
@@ -79,8 +79,8 @@ lin = [["Verificação", "valor", "limite / resistência", "situação"],
        ["Flecha final", f"{f(R['flecha_final_mm'])} mm", f"{f(R['flecha_lim_mm'])} mm", ok(R["flecha_final_mm"] <= R["flecha_lim_mm"])]]
 E += [tab(lin, W)]
 
-# ------------------------------------------------------------------ 3 I130
-E += [Paragraph("3. Vigas centrais I130 — V405, V406, V407 (C50)", T2)]
+# ------------------------------------------------------------------ 3 I120
+E += [Paragraph("3. Vigas centrais I120 — V405, V406, V407 (C50)", T2)]
 for mk in ("V406", "V405", "V407"):
     v = I1J[mk]
     ar, pe, at, el, eu, co, fl, ic, de = (v[k] for k in ("arranjo", "perdas", "ato", "ELS", "ELU", "cortante", "flecha", "icamento", "dente"))
@@ -139,7 +139,7 @@ lin = [["Verificação", "valor", "limite / resistência", "situação"],
 E += [tab(lin, W)]
 
 # ------------------------------------------------------------------ 6 dentes
-d130 = DT["I130"]
+d130 = DT["I120"]
 c130 = d130["calculo"]
 m130 = d130.get("mef", {})
 a130 = c130["adotado"]
@@ -151,7 +151,7 @@ E += [PageBreak(), Paragraph("6. Dentes Gerber — biela, tirante, suspensão e 
         "ancorado no nariz por alças horizontais com dobra ≥ 8φ (Ø ≥ 20) ou 5φ; suspensão concentrada junto ao recorte para Fd total (fyd ≤ 435 MPa); "
         "costura horizontal. O MEF não linear (concreto com fissuração e esmagamento, barras e cordoalhas com a transferência real, nas posições da prancha) "
         "deve dar Vu ≥ 1,06·Fd (o modelo superestima a flexão em cerca de 6 % nos testes de validação).")]
-lin = [["Dente", "I130 (78 × 35)", f"VM ({round(P_['dente']['hd'] * 100)} × 35)", "VB (30 × 27)"],
+lin = [["Dente", "I120 (78 × 35)", f"VM ({round(P_['dente']['hd'] * 100)} × 35)", "VB (30 × 27)"],
        ["Reação Vd / γn / Fd (kN)", f"{f(d130.get('Vd_reacao'))} / {f(d130.get('gama_n'))} / {f(d130['Vd'])}", f"{f(MV['Vd_reacao'])} / {f(MV['gama_n'])} / {f(MV['Vd'])}", f"{f(vb['Vd'])} / 1,1 / {f(1.1 * vb['Vd'])}"],
        ["Hd (kN)", f(d130["Hd"]), f(MV["Hd"]), "0,16 Fd"],
        ["a/d · modelo", f"{f(c130['NBR']['a_d'], 2)} · {c130['NBR']['tipo']}", f"{f(cvm['NBR']['a_d'], 2)} · {cvm['NBR']['tipo']}", f"{f(vb['dente']['a_d'], 2)}"],
@@ -166,7 +166,7 @@ E += [tab(lin, [46, 44, 44, 44])]
 _e13 = json.loads((AQ / "estudo_mef_vm_x1300.json").read_text(encoding="utf-8"))["mef"] if (AQ / "estudo_mef_vm_x1300.json").exists() else None
 _e45 = json.loads((AQ / "estudo_mef_vm_x1300_c45.json").read_text(encoding="utf-8"))["mef"] if (AQ / "estudo_mef_vm_x1300_c45.json").exists() else None
 if _e13:
-    E += [P(f"Sensibilidade do MEF do dente da VM à posição da carga: com a carga no fim do maciço (1,0 m da ponta, a/h ≈ 1,25 como na I130) "
+    E += [P(f"Sensibilidade do MEF do dente da VM à posição da carga: com a carga no fim do maciço (1,0 m da ponta, a/h ≈ 1,25 como na I120) "
             f"Vu = {f(mvm['Vu_kN'])} kN ({f(mvm['Vu_kN'] / MV['Vd'], 2)} Fd). Com a carga a 1,3 m, Vu = {f(_e13['Vu_kN'])} kN ({f(_e13['Vu_kN'] / MV['Vd'], 2)} Fd)"
             + (f" e, com C45, {f(_e45['Vu_kN'])} kN ({f(_e45['Vu_kN'] / MV['Vd'], 2)} Fd)" if _e45 else "")
             + ": o limite é o esmagamento do nó do topo junto à face do dente (x ≈ 39 cm, y ≈ 76 cm), calculado com a reação TOTAL (fases 1 e 2) "
@@ -175,15 +175,15 @@ if _e13:
 
 # ------------------------------------------------------------------ 7 detalhamento
 E += [Paragraph("7. Detalhamento — ganchos, ancoragens e dobras (NBR 6118:2023 9.4 e 9.1)", T2),
-      P("Tirantes dos dentes (I130 N5, VM N6): alças horizontais (U deitado) com os dois ramos no nível do tirante e a curva junto à face do nariz, "
-        "diâmetro interno de dobramento ≥ 8φ para Ø20 (Tab. 9.1); o gancho para baixo que saía pelo fundo do dente da I130 foi eliminado. "
+      P("Tirantes dos dentes (I120 N5, VM N6): alças horizontais (U deitado) com os dois ramos no nível do tirante e a curva junto à face do nariz, "
+        "diâmetro interno de dobramento ≥ 8φ para Ø20 (Tab. 9.1); o gancho para baixo que saía pelo fundo do dente da I120 foi eliminado. "
         "Comprimento dos ramos = lb,nec além da face interna do dente (9.4.2.5, má aderência na metade superior da peça concretada deitada → η1 0,7 onde aplicável). "
         "Estribos de suspensão fechados, ganchos a 45° ou 90° com ponta reta ≥ 10φ (9.4.6.1), envolvendo o tirante. "
-        f"TS-01: N9 2 Ø10 no topo, {f(TS.L_N9 / 10, 0)} cm a partir de cada ponta (tração do ato). I130: N3 4 Ø20 no topo (tração do ato e compressão do ELU). "
-        "Quantidades da tabela de ferros da I130 corrigidas: as barras dos dentes (N5 a N8) entram para as duas pontas da peça."),
+        f"TS-01: N9 2 Ø10 no topo, {f(TS.L_N9 / 10, 0)} cm a partir de cada ponta (tração do ato). I120: N3 4 Ø20 no topo (tração do ato e compressão do ELU). "
+        "Quantidades da tabela de ferros da I120 corrigidas: as barras dos dentes (N5 a N8) entram para as duas pontas da peça."),
       Paragraph("8. Pendências", T2),
       P("(a) Confirmar Ep da cordoalha no certificado do fornecedor (adotado 195 GPa). (b) Furos da cabeceira da pista para as 2 cordoalhas da mesa "
-        "superior da I130 (y = 120 cm). (c) Laje alveolar LA-01: ato, perdas, cisalhamento sem estribo e ancoragem a cargo do fabricante, com o carregamento "
+        "superior da I120 (y = 120 cm). (c) Laje alveolar LA-01: ato, perdas, cisalhamento sem estribo e ancoragem a cargo do fabricante, com o carregamento "
         "do projeto (escritório/academia).")]
 doc.build(E)
 print("ok", doc.filename)

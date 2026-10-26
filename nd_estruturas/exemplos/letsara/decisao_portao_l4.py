@@ -48,7 +48,7 @@ q.opcao("A", "PG-01 a PG-04 viram apoio da TS-01A", gA, "ressalva", [
 q.opcao("B", "subir a linha 4 inteira 6 cm", gB, "ressalva", [
     "TS-01A V409/V410 6 cm acima das linhas 3 e 5: fundo 7,557 → depois de descer ~7,53 no PG-01",
     "telhado: terças passam pela linha 4 com 6 cm a mais (calço/ST mais alto só na linha 4) ou telha com degrau — mexe na cobertura",
-    "pilares da linha 4 (A, E) com recuo 6 cm acima e calço 6 cm sobre a I130 no P20"])
+    "pilares da linha 4 (A, E) com recuo 6 cm acima e calço 6 cm sobre a I120 no P20"])
 q.opcao("C", "portão B–P21 com 7,40", gC, "conflito", [
     "sem mudança estrutural; acabamento com placa/rufo entre 7,40 e a viga",
     "contraria a altura do arquitetônico (7,50) só neste portão"])

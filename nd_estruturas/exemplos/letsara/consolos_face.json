@@ -1,0 +1,121 @@
+{
+ "e_m": 0.225,
+ "Vd_kN": 38.5,
+ "Fd_kN": 42.4,
+ "Hd_kN": 6.8,
+ "norma": "NBR 9062:2017 7.3; NBR 6118:2023 17.2.5.2 e 17.5.1.5",
+ "pilares": {
+  "PF-01": {
+   "faces": [
+    "D"
+   ],
+   "x": 9.87,
+   "dM_kNm": 8.66,
+   "uso_antes": 0.295,
+   "uso_com_excentricidade": 0.309,
+   "comb": [
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "P3-L1"
+   ],
+   "Td_kNm": 1.53,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.008,
+   "ok": true
+  },
+  "PF-02": {
+   "faces": [
+    "B",
+    "D"
+   ],
+   "x": 19.75,
+   "dM_kNm": 17.32,
+   "uso_antes": 0.24,
+   "uso_com_excentricidade": 0.267,
+   "comb": [
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
+    "P4-L1"
+   ],
+   "Td_kNm": 3.06,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.016,
+   "ok": true
+  },
+  "PF-03": {
+   "faces": [
+    "B"
+   ],
+   "x": 29.63,
+   "dM_kNm": 8.66,
+   "uso_antes": 0.234,
+   "uso_com_excentricidade": 0.247,
+   "comb": [
+    "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
+    "P5-L1"
+   ],
+   "Td_kNm": 1.53,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.008,
+   "ok": true
+  },
+  "PF-05": {
+   "faces": [
+    "B"
+   ],
+   "x": 9.87,
+   "dM_kNm": 8.66,
+   "uso_antes": 0.565,
+   "uso_com_excentricidade": 0.584,
+   "comb": [
+    "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
+    "P3-L9"
+   ],
+   "Td_kNm": 1.53,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.008,
+   "ok": true
+  },
+  "PF-04": {
+   "faces": [
+    "B",
+    "D"
+   ],
+   "x": 19.75,
+   "dM_kNm": 17.32,
+   "uso_antes": 0.321,
+   "uso_com_excentricidade": 0.353,
+   "comb": [
+    "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,3",
+    "P14-L9"
+   ],
+   "Td_kNm": 3.06,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.016,
+   "ok": true
+  },
+  "PF-06": {
+   "faces": [
+    "D"
+   ],
+   "x": 29.63,
+   "dM_kNm": 8.66,
+   "uso_antes": 0.529,
+   "uso_com_excentricidade": 0.548,
+   "comb": [
+    "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
+    "P5-L9"
+   ],
+   "Td_kNm": 1.53,
+   "TRd2_kNm": 193.5,
+   "uso_torcao": 0.008,
+   "ok": true
+  }
+ },
+ "consolo": {
+  "geometria": "15 × 27 × 29 (igual ao C1)",
+  "tirante": "1 alça horizontal Ø12,5 (2 ramos, 2,45 cm²)",
+  "cobrimento_lateral_cm": 3.0,
+  "ok": true,
+  "obs": "rente à face C do pilar (face lateral do consolo no plano da face C); mesma Fd e mesma armadura do C1 (a carga continua centrada no consolo)"
+ },
+ "ok": true
+}

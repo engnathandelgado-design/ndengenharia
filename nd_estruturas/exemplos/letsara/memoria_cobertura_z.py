@@ -119,7 +119,7 @@ MI_ = json.loads((AQ / "modelo_integrado_r05.json").read_text(encoding="utf-8"))
 EST_ = json.loads((AQ / "estudo_contraventamento_integrado.json").read_text(encoding="utf-8"))
 CX_, S9_, LP_, CH_ = CB["contraventamento"], CB["ST1V_R"], CB["ligacao_portoes"], json.loads((AQ / "calha.json").read_text(encoding="utf-8"))
 E += [Paragraph("5. Modelo integrado e contraventamento (DEC-024 / DEC-025)", T2),
-      P("Toda a estrutura num modelo 3D OpenSeesPy (modelo_integrado_r05.py): pilares engastados no cálice com P-Delta e rigidez 0,4 EciIc, TS-01, I130, "
+      P("Toda a estrutura num modelo 3D OpenSeesPy (modelo_integrado_r05.py): pilares engastados no cálice com P-Delta e rigidez 0,4 EciIc, TS-01, I120, "
         "VB 15×60, vigas e laje do mezanino como diafragma rígido, terças Z contínuas (2·EI no transpasse) apoiadas em cada ST-1P/ST-1V por mola, correntes, "
         "tirantes rígidos, diagonais de ancoragem e X Ø16 só à tração; cabeça dos pilares dos portões ligada em y à TS-01. 33 combinações ELU com vento NBR 6123 "
         "em 4 direções, Cpi por compartimento (anexo, área aberta, pavilhão), excentricidade 0,075 a/b, desaprumo H/400 e a carga da calha cheia na 1ª terça. "

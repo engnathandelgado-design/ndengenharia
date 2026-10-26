@@ -16,19 +16,19 @@ SO = sys.argv[1:]            # opcional: nomes das vigas a rodar no MEF
 SO_DADOS = bool(os.environ.get("ND_SO_DADOS"))   # importado por outro script: não roda MEF nem grava
 
 # geometria (mm) — mesma fôrma I: largura 400, alma 150, chanfros 80
-# DEC-032: o dente da I130 usa a reação REAL (TS-01 fora do centro: 1,22·P no apoio do P13), lida de i110_r01.json
+# DEC-032: o dente da I120 usa a reação REAL (TS-01 fora do centro: 1,22·P no apoio do P13), lida de i110_r01.json
 # (calc_i110_r01.py) — Vd 555 kN, γn 1,1 (parcela permanente preponderante, NBR 9062:2017 7.3.1.1), Fd = γn·Vd e
 # Hd = 0,16·Fd; o MEF roda com a armação da prancha (armaduras_i130) e as cordoalhas, σp∞ e lbpt do cálculo da viga.
 I1J = json.loads((AQUI / "i110_r01.json").read_text(encoding="utf-8"))
 _V = max((k for k in I1J if k != "V407"), key=lambda k: I1J[k]["dente"]["Fd"])   # DEC-058: V405 (P13 → P13B, 2 TS-01 no topo)
 _DI = I1J[_V]["dente"]
 _FAT = {"Ø15.2": 140.0 / 98.7}.get(I1J[_V]["arranjo"].get("cordoalha"), 1.0)     # DEC-054: Ø15,2 no MEF como n·(140/98,7) cordoalhas Ø12,7 equivalentes
-_CORD_I130 = [dict(y=l["y"], n=len(l["xs"]) * _FAT, **({"isol": l["isol"]} if l["isol"] else {})) for l in I1J[_V]["arranjo"]["linhas"]]
-_H_I130 = round(json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))["H_I130"] * 1000)   # DEC-054: 1200
+_CORD_I120 = [dict(y=l["y"], n=len(l["xs"]) * _FAT, **({"isol": l["isol"]} if l["isol"] else {})) for l in I1J[_V]["arranjo"]["linhas"]]
+_H_I120 = round(json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))["H_I120"] * 1000)   # DEC-054: 1200
 VIGAS = {
-    # I130: dente 78 × 35; 28 cordoalhas embaixo (linhas 14 e 18 isoladas 2,0 e 4,0 m) + 2 na mesa superior (DEC-032)
-    "I130": dict(Vd=_DI["Fd"], Hd=_DI["Hd"], gama_n=_DI["gama_n"], Vd_reacao=_DI["Vd"], viga=_V, H=_H_I130, ti=250, ts=220, hd=780, ln=350,
-                 a_apoio=175, x_mac=1400, l_apoio=250, cord=_CORD_I130, estribo=(8.0, 150), sup=6 * AREA[25.0], inf=2 * AREA[10.0],
+    # I120: dente 78 × 35; 28 cordoalhas embaixo (linhas 14 e 18 isoladas 2,0 e 4,0 m) + 2 na mesa superior (DEC-032)
+    "I120": dict(Vd=_DI["Fd"], Hd=_DI["Hd"], gama_n=_DI["gama_n"], Vd_reacao=_DI["Vd"], viga=_V, H=_H_I120, ti=250, ts=220, hd=780, ln=350,
+                 a_apoio=175, x_mac=1400, l_apoio=250, cord=_CORD_I120, estribo=(8.0, 150), sup=6 * AREA[25.0], inf=2 * AREA[10.0],
                  d_tir=20.0, d_sus=16.0, Ls=3600.0, xP=1600.0, rampa_fim=True, robusto=True, du=0.02,   # DEC-054: passo de 0,02 mm (com 0,05 o 1º passo não converge depois da fissuração da protensão)
                  sig_pe=I1J[_V]["perdas"]["sig_pinf"], lt=I1J[_V]["ato"]["lbpt_m"] * 1000, prancha=True),
     "MEZ-I90": dict(Vd=383.0, Hd=65.0, H=900, ti=150, ts=120, hd=450, ln=300, a_apoio=150, x_mac=1200, l_apoio=200,
@@ -40,7 +40,7 @@ VIGAS = {
                     d_tir=20.0, d_sus=16.0),
 }
 NOTAS_H = {"MEZ-I70": "Hd = 0,16 Vd + diafragma",
-           "I130": "Fd = γn·Vd (NBR 9062:2017 7.3.1.1); Hd = 0,16 Fd (elastômero, 7.3.1.2) ≥ 1,4 × 23 kN do modelo global",
+           "I120": "Fd = γn·Vd (NBR 9062:2017 7.3.1.1); Hd = 0,16 Fd (elastômero, 7.3.1.2) ≥ 1,4 × 23 kN do modelo global",
            "MEZ-I90": "Hd = 0,16 Vd + diafragma"}
 
 
@@ -76,7 +76,7 @@ def armaduras(v, r):
 
 
 def x_n8(n, ln=350, x_tb=175, r_tb=30, c=60):
-    """Posições (mm, da ponta) dos estribos verticais N8 do dente da I130: entre 60 e ln − 60, afastados ≥ 40 mm (livre)
+    """Posições (mm, da ponta) dos estribos verticais N8 do dente da I120: entre 60 e ln − 60, afastados ≥ 40 mm (livre)
     do tubo TB-2 Ø60,3 do pino (eixo a x_tb) — metade antes e metade depois do tubo."""
     a1, b1 = c, x_tb - r_tb - 40 - 5
     a2, b2 = x_tb + r_tb + 40 + 5, ln - c
@@ -88,7 +88,7 @@ def x_n8(n, ln=350, x_tb=175, r_tb=30, c=60):
 
 
 def armaduras_i130(v, a):
-    """Armação da ponta da I130 exatamente como na prancha ND-LET-I130 / AR-VIG-02 (viga_i.dados_i110):
+    """Armação da ponta da I120 exatamente como na prancha ND-LET-I120 / AR-VIG-02 (viga_i.dados_i110):
     N5 tirante em alças horizontais Ø20 (todos os ramos no nível y_t = recorte + 55), N6 suspensão Ø16 a LN + 60 + 80k,
     N7 costura Ø10 a recorte + 150 + 100k até LN + 900, N8 Ø10 no dente (x_n8, fora do TB-2), N2 Ø8 (2 ramos) c/10 nos 2,0 m e
     c/15 depois, N3 4 Ø20 no topo, N12 2 Ø10 no fundo, N4 pele 2 Ø8 por face (y 500, 650, 800, 950)."""
@@ -136,7 +136,7 @@ for nome, v in VIGAS.items():
 
 # consolos que recebem os dentes (topo inclinado 3% quando recebe TS-01)
 res["consolos"] = [
-    consolo("CP-I130 pilar central (recebe I130)", VIGAS["I130"]["Vd"], VIGAS["I130"]["Hd"], 500, 490, a=200 + 25, diam=20.0),
+    consolo("CP-I120 pilar central (recebe I120)", VIGAS["I120"]["Vd"], VIGAS["I120"]["Hd"], 500, 490, a=200 + 25, diam=20.0),
     consolo("CP-MEZ pilar (recebe viga do mezanino)", 383, 65, 400, 550, a=175 + 25, diam=20.0),
 ]
 prev = {}

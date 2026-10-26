@@ -71,7 +71,7 @@ def armacao_prancha(a, Ls):
     return arm
 
 
-# carga concentrada no topo no fim do maciço (x = 1,0 m): vão de cisalhamento a/h ≈ 1,25, o mesmo da I130 (xP 1,6 m, h 1,3);
+# carga concentrada no topo no fim do maciço (x = 1,0 m): vão de cisalhamento a/h ≈ 1,25, o mesmo da I120 (xP 1,6 m, h 1,3);
 # estudo DEC-032: com xP 1,3 m o nó comprimido do topo junto ao dente (x 39, y 76 cm) esmaga em 452 kN com a reação TOTAL
 # aplicada só na peça pré-moldada (sem 2º estágio e capa) — ver estudo_mef_vm_x1300.json
 XP = float(os.environ.get("MEF_XP", 1000.0))

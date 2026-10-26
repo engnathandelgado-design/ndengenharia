@@ -125,7 +125,7 @@ Fv_M20 = 0.4 * 245e-6 * 800e3 / 1.35
 int_ca = (T_ca / Ft_M20) ** 2 + (V_ca / Fv_M20) ** 2
 
 # ---------------------------------------------------------------- DEC-044 (22/10/2026): placas recortadas PP-05RE/RD (parede G, L 9,86) e PP-08RE/RD (parede C, L 4,535)
-# O consolo CP-I130 (50 × 40, fundo 226 mm acima da base da fiada +6,25) e o nariz do I130 atravessam a parede: recorte de REC_B × (h − REC_Z0)
+# O consolo CP-I120 (50 × 40, fundo 226 mm acima da base da fiada +6,25) e o nariz do I120 atravessam a parede: recorte de REC_B × (h − REC_Z0)
 # na ponta do eixo C. O console CS-1 dessa ponta vai para X_CS_R = 330 mm da ponta (nicho NC-1 de 260 a 400, aberto na face do recorte):
 # o dente Gerber (N3–N7, ND-LET-PP01) fica igual ao típico, com a "ponta" na face do recorte. Abaixo sobra um toco 260 × 120 sem protensão.
 REC_B, REC_Z0, X_CS_R = 0.260, 0.120, 0.330

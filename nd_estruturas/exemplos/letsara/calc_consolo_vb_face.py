@@ -1,0 +1,71 @@
+"""rev12 — fresta das vigas de borda (decisão do engenheiro de 26/10/2026, opção B do quadro decisao_fresta_fechamento):
+VB 15×60 e consolo CP-VB alinhados à face externa do pilar de fachada (40×60, 60 ⊥ fachada), 2,5 cm até a placa.
+
+Aplicado nos vãos entre pilares de fachada PF (B–C e C–D das linhas 1 e 9: VB-02, VB-03, VB-06, VB-07): o eixo da VB sai
+e = 30,0 − 7,5 = 22,5 cm do eixo do pilar. Nos vãos de canto (A–B e D–E) a face do pilar de canto (40 em y) fica 10 cm
+atrás da dos PF: a VB reta não alinha com as duas faces — quadro decisao_fresta_canto (pendente).
+
+Verificações (NBR 9062:2017 7.3; NBR 6118:2023 17.2.5 e 17.5):
+ 1. consolo C1 rente à face C (marca nova): mesma geometria, armadura e carga do C1 (consolos.json CP-VB); tirante em alça
+    horizontal com cobrimento lateral 3,0 cm na face C (a alça entra no pilar pela face B/D, nada muda no nó);
+ 2. pilar: momento adicional ΔMd = Σ Vd·e no plano ⊥ à fachada (Mx), somado em valor absoluto ao Mx de TODAS as
+    combinações do modelo integrado (a favor da segurança), com a armadura existente (14 Ø20) — flexão oblíqua 17.2.5.2;
+ 3. torção no pilar pela força horizontal do apoio (Hd = 0,16 Fd, elastômero, NBR 9062 7.3.1.2): Td = Hd·e ≤ TRd2,
+    interação com a cortante (17.7.2.2) desprezível;
+ 4. VB: carga centrada no consolo (o consolo se move com a VB) → sem torção na viga.
+Saída: consolos_face.json (lido por pilares_familia, consolos_marcas, modelo_bim e folhas)."""
+import json, math, sys
+from pathlib import Path
+
+AQ = Path(__file__).resolve().parent
+sys.path.insert(0, str(AQ))
+sys.path.insert(0, str(AQ.parents[1]))
+import dimensionar_pilares_r05 as DP
+
+CONS = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))["CP-VB"]
+B_PIL_Y, B_VB = 0.60, 0.15
+E_VB = round(B_PIL_Y / 2 - B_VB / 2, 3)                 # 0,225 m
+VD, FD, HD = CONS["Vd_kN"], CONS["Fd_kN"], CONS["Hd_kN"]
+# faces dos PF com VB alinhada (linha 1: B do lado de x menor, D de x maior) — vãos B–C e C–D (entre PF)
+FACES = {"PF-01": ("D",), "PF-02": ("B", "D"), "PF-03": ("B",), "PF-05": ("B",), "PF-04": ("B", "D"), "PF-06": ("D",)}   # linha 9: pilar girado 180° (B do lado de x maior)
+X_PF = {"PF-01": 9.87, "PF-02": 19.75, "PF-03": 29.63, "PF-05": 9.87, "PF-04": 19.75, "PF-06": 29.63}
+
+
+def torcao_resistente(bx, by, fck=40.0):
+    """NBR 6118:2023 17.5.1.5: TRd2 = 0,5·αv2·fcd·Ae·he·sen 2θ (θ = 45°), seção vazada equivalente he = A/u."""
+    A, u = bx * by, 2 * (bx + by)
+    he = max(A / u, 2 * 0.045)
+    Ae = (bx - he) * (by - he)
+    av2 = 1 - fck / 250
+    return 0.5 * av2 * fck / 1.4 * 1000 * Ae * he
+
+
+out = dict(e_m=E_VB, Vd_kN=VD, Fd_kN=FD, Hd_kN=HD, norma="NBR 9062:2017 7.3; NBR 6118:2023 17.2.5.2 e 17.5.1.5", pilares={})
+for mk, faces in FACES.items():
+    pils = DP.GRUPOS[mk]
+    b0 = DP.EST[next(iter(DP.EST))]["2a"][pils[0]]
+    bx, by = b0["bx"], b0["by"]
+    a = DP.ATUAL[mk[:2]]
+    brs, _ = DP.barras(bx, by, a[0] if bx <= by else a[1], a[1] if bx <= by else a[0], a[2])
+    dM = len(faces) * VD * E_VB                          # kN·m, Mx (plano ⊥ à fachada)
+    u0, _ = DP.secao_ok(dict(brs=brs), pils)
+    orig = {}
+    for it in DP.EST.values():
+        for p in pils:
+            orig[(id(it), p)] = it["2a"][p]["Mx"]
+            it["2a"][p]["Mx"] = abs(it["2a"][p]["Mx"]) + dM
+    u1, onde = DP.secao_ok(dict(brs=brs), pils)
+    for it in DP.EST.values():
+        for p in pils:
+            it["2a"][p]["Mx"] = orig[(id(it), p)]
+    Td = len(faces) * HD * E_VB
+    TRd2 = torcao_resistente(bx, by)
+    out["pilares"][mk] = dict(faces=list(faces), x=X_PF[mk], dM_kNm=round(dM, 2), uso_antes=round(u0, 3), uso_com_excentricidade=round(u1, 3), comb=onde,
+                              Td_kNm=round(Td, 2), TRd2_kNm=round(TRd2, 1), uso_torcao=round(Td / TRd2, 3), ok=u1 <= 1.0 and Td <= TRd2)
+    print(mk, faces, f"ΔM {dM:.1f} kN·m  uso {u0:.3f} → {u1:.3f}  Td {Td:.2f} / TRd2 {TRd2:.0f}")
+out["consolo"] = dict(geometria=f"{CONS['b_m']*100:g} × {CONS['proj_m']*100:g} × {CONS['h_total_m']*100:g} (igual ao C1)", tirante=CONS["tirante"],
+                      cobrimento_lateral_cm=3.0, ok=CONS["ok"],
+                      obs="rente à face C do pilar (face lateral do consolo no plano da face C); mesma Fd e mesma armadura do C1 (a carga continua centrada no consolo)")
+out["ok"] = all(v["ok"] for v in out["pilares"].values()) and CONS["ok"]
+(AQ / "consolos_face.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+print("ok", out["ok"])

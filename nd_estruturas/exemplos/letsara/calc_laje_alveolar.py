@@ -39,6 +39,7 @@ SIG_PI = 1450.0                                 # MPa — NBR 6118:2023 9.6.1.2.
 CAA = "I"                                       # NBR 6118:2023 Tab. 6.1 nota b: ambiente interno seco e revestido (piso com revestimento, forro) — uma classe abaixo da II
 #   → Tab. 13.4: pré-tração em CAA I = protensão parcial (nível 1, ELS-W wk ≤ 0,2 mm na frequente); verificado sem fissura (ELS-F), o que dispensa a conta de abertura.
 #   Em CAA II seria protensão limitada (ELS-D na quase permanente obrigatório) — fica registrado como informativo.
+DY_PAR = 0.035                                  # 2 cordoalhas na nervura de borda: c/c 35 mm na vertical (livre 22 mm ≥ 20 mm e ≥ Ø, NBR 6118:2023 18.3.2.2)
 Y_CORD = 0.040                                  # eixo das cordoalhas a 40 mm do fundo (c ≥ 20 mm NBR 9062 9.2.1.1; c1 = 40 → Tab. 3 incêndio)
 
 GEOMETRIAS = {
@@ -46,10 +47,19 @@ GEOMETRIAS = {
     "LP26,5": dict(b=1.245, h=0.265, n=5, d=0.190, passo=0.240),        # 6 nervuras (2 de borda 47,5 + 4 internas 50)
 }
 OPCOES = {   # cordoalhas por nervura, da esquerda para a direita (uma por nervura, simétrico)
-    "LP20": [["15.2"] + ["12.7"] * 5 + ["15.2"], ["15.2", "12.7", "12.7", "15.2", "12.7", "12.7", "15.2"], ["12.7"] * 7, ["9.5"] + ["12.7"] * 5 + ["9.5"], ["9.5", "9.5"] + ["12.7"] * 3 + ["9.5", "9.5"], ["9.5"] * 7],
+    "LP20": [["2x12.7"] + ["12.7"] * 5 + ["2x12.7"], ["15.2"] + ["12.7"] * 5 + ["15.2"], ["15.2", "12.7", "12.7", "15.2", "12.7", "12.7", "15.2"], ["12.7"] * 7, ["9.5"] + ["12.7"] * 5 + ["9.5"], ["9.5", "9.5"] + ["12.7"] * 3 + ["9.5", "9.5"], ["9.5"] * 7],
     "LP26,5": [["12.7"] * 6, ["9.5"] + ["12.7"] * 4 + ["9.5"], ["9.5"] * 6],
 }
 FCKJ_OPC = (30.0, 35.0)                          # liberação ≥ 30 MPa (lbpt curto: cortante na ponta e transferência)
+
+
+def txt_arr(a):
+    """['2x12.7', '12.7', …] → '9 Ø12,7' (conta as cordoalhas de cada Ø)."""
+    n = {}
+    for d in a:
+        k, q = (d[2:], 2) if d.startswith("2x") else (d, 1)
+        n[k] = n.get(k, 0) + q
+    return " + ".join(f"{n[d]} Ø{d.replace('.', ',')}" for d in sorted(n, reverse=True))
 
 
 def sig_pd(eps):
@@ -108,9 +118,14 @@ def analisar(nome_geo, arranjo, fckj):
     xn = sec.x_nervuras()
     C_LAT = 0.027                                     # eixo da cordoalha de borda a 27 mm da face: cobrimento lateral ≥ 20 mm (NBR 9062 9.2.1.1, alveolar)
     xn = [max(xn[0], -g["b"] / 2 + C_LAT)] + xn[1:-1] + [min(xn[-1], g["b"] / 2 - C_LAT)]
-    cords = [(x, Y_CORD, dm) for x, dm in zip(xn, arranjo)]
+    cords = []
+    for x, dm in zip(xn, arranjo):                    # "2x12.7": 2 cordoalhas na mesma nervura (de borda), uma sobre a outra, c/c DY_PAR
+        if dm.startswith("2x"):                       # (rev12, decisão do engenheiro: LP20 9 Ø12,7; extrusora a confirmar com a fábrica)
+            cords += [(x, Y_CORD, dm[2:]), (x, Y_CORD + DY_PAR, dm[2:])]
+        else:
+            cords.append((x, Y_CORD, dm))
     Ap = sum(CORD[dm] for _, _, dm in cords)
-    yp = Y_CORD
+    yp = sum(CORD[dm] * y for _, y, dm in cords) / Ap
     e = sec.yc - yp
     g1 = sec.A * 25.0                                 # kN/m (peso da laje)
     g_capa = (H_CAPA * 25.0 + G_REJ) * B_MOD
@@ -217,7 +232,7 @@ def analisar(nome_geo, arranjo, fckj):
     Vd_x = Vd_ap - w_d * (lx - A_APOIO / 2)
     reg("ELU_cortante_tracao_alma_kN", Vd_x, VRdc, Vd_x / VRdc, "EN 1168 4.3.3.2.2 / EN 1992-1-1 eq. (6.4) — região não fissurada; NBR 14861:2022 (cortante sem estribos)")
     V["ELU_cortante_tracao_alma_kN"].update(alfa_l=round(al, 3), y_crit_mm=round(ycrit * 1000))
-    d_c = sec.h + H_CAPA - Y_CORD
+    d_c = sec.h + H_CAPA - yp
     VRd1 = vrd1_nbr(sec.bw_min, d_c, FCK_LAJE, Ap / (sec.bw_min * d_c), 0.9 * Pinf / sec.A / 1000)
     reg("ELU_cortante_flexao_VRd1_kN", Vd_ap, VRd1, Vd_ap / VRd1, "NBR 6118:2023 17.4.2.2 (bw = soma das nervuras, k = 1,6 − d, σcp com γp 0,9)")
     # ---- LA-01R: recorte 45 × 20 na ponta junto ao pilar (pilar 40 + 2 × 2,5 de folga) — corta as nervuras e cordoalhas centrais;
@@ -310,14 +325,14 @@ if __name__ == "__main__":
             for fj in FCKJ_OPC:
                 r = analisar(geo, arr, fj)
                 falhas = [k for k, v in r["verif"].items() if not v["ok"]]
-                estudos.append(dict(geometria=geo, arranjo=" + ".join(f"{arr.count(d)} Ø{d.replace('.', ',')}" for d in sorted(set(arr), reverse=True)),
+                estudos.append(dict(geometria=geo, arranjo=txt_arr(arr),
                                     Ap_mm2=r["Ap_mm2"], fckj=fj, ok=r["ok"], uso_max=r["uso_max"], falhas=falhas, f1_Hz=r["vibracao"]["f1_Hz"]))
                 print(f"{geo:7s} {estudos[-1]['arranjo']:22s} fckj {fj:4.0f}  Ap {r['Ap_mm2']:6.1f}  ok={r['ok']!s:5s} uso {r['uso_max']:.2f}  falhas {falhas}")
     # adotada: LP20 (não muda a VM nem o nível), menor Ap e menor fckj que passam
-    cand = [e for e in estudos if e["ok"] and e["geometria"] == "LP20"] or [e for e in estudos if e["ok"]]
+    cand = [e for e in estudos if e["ok"] and e["geometria"] == "LP20" and "15,2" not in e["arranjo"]] or [e for e in estudos if e["ok"] and "15,2" not in e["arranjo"]]   # cordoalha só Ø12,7 ou Ø9,5 (regra ND)
     esc = min(cand, key=lambda e: (e["Ap_mm2"], e["fckj"]))
     geo = esc["geometria"]
-    arr = next(a for a in OPCOES[geo] if " + ".join(f"{a.count(d)} Ø{d.replace('.', ',')}" for d in sorted(set(a), reverse=True)) == esc["arranjo"])
+    arr = next(a for a in OPCOES[geo] if txt_arr(a) == esc["arranjo"])
     R = analisar(geo, arr, esc["fckj"])
     R["estudo_alternativas"] = estudos
     R["normas"] = ["NBR 14861:2022", "NBR 6118:2023", "NBR 9062:2017", "EN 1168:2005+A3:2011 (referência)", "EN 1992-1-1:2004 (referência)", "PCI Design Handbook 8ª ed. (flechas)"]
@@ -331,7 +346,7 @@ if __name__ == "__main__":
     L_PECA = round(3.79 - 0.25 / 2 + A_APOIO - (0.25 / 2 - A_APOIO), 3)       # linha 1 (eixo + 2,5) à viga P6–P7 (eixo − 2,5)
     L = L_PECA - A_APOIO
     curta = None
-    for a_ in sorted(OPCOES[geo], key=lambda a: sum(CORD[d] for d in a)):
+    for a_ in sorted(OPCOES[geo], key=lambda a: sum(CORD[d[2:]] * 2 if d.startswith("2x") else CORD[d] for d in a)):
         for fj in FCKJ_OPC:
             rc = analisar(geo, a_, fj)
             if rc["ok"]:
@@ -341,7 +356,7 @@ if __name__ == "__main__":
             break
     if curta:
         a_, fj, rc = curta
-        R["LA03"] = dict(L_peca=L_PECA, arranjo=" + ".join(f"{a_.count(d)} Ø{d.replace('.', ',')}" for d in sorted(set(a_), reverse=True)), fckj=fj,
+        R["LA03"] = dict(L_peca=L_PECA, arranjo=txt_arr(a_), fckj=fj,
                          cordoalhas=rc["cordoalhas"], ok=rc["ok"], uso_max=rc["uso_max"], flechas_mm=rc["flechas_mm"], peso_t=rc["icamento"]["peso_t"] if "peso_t" in rc["icamento"] else None,
                          obs="laje curta entre a linha 1 e a viga P6–P7 (+3,90), só no vão da escada")
     else:

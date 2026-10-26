@@ -18,7 +18,7 @@ ATRAVESSA = ("pino", "espera", "es-", "bucha", "chumbador", "pn-", "n18", "gramp
              "tsa", "par tapper", "rebite", "esticador", "or-x", "insertos")
 PARES_OK = {frozenset(("Fixação das placas", "Placas de fechamento")), frozenset(("Telhas",)), frozenset(("Terças metálicas",)),
             frozenset(("Laje alveolar", "Concreto de 2º estágio (obra, com a capa)")), frozenset(("Vigas de mezanino (retangulares protendidas)", "Concreto de 2º estágio (obra, com a capa)")),
-            frozenset(("Vigas de mezanino (retangulares protendidas)",)), frozenset(("Vigas centrais I130",)), frozenset(("Pilares",)),
+            frozenset(("Vigas de mezanino (retangulares protendidas)",)), frozenset(("Vigas centrais I120",)), frozenset(("Pilares",)),
             frozenset(("Fixação das placas",)), frozenset(("Ligações da cobertura",)), frozenset(("Calha e descidas",)),
             frozenset(("Pilares", "Consolos")), frozenset(("Piso e fundações", "Pilares")), frozenset(("Piso e fundações",)),
             frozenset(("Rufos e acabamentos",)), frozenset(("Alças N9 (2º estágio)", "Concreto de 2º estágio (obra, com a capa)")),

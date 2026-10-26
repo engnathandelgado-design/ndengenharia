@@ -23,7 +23,7 @@ carga = 0.0
 for p in M.pil:
     carga += p["bx"] * p["by"] * 25 * (p["zs"][-1] - p["zs"][0]) * 1.3
 for e in M.ele:
-    if e["grupo"] in ("TS-01", "I130", "VB"):
+    if e["grupo"] in ("TS-01", "I120", "VB"):
         n1, n2 = ops.eleNodes(e["tag"])
         L = math.dist(ops.nodeCoord(n1), ops.nodeCoord(n2))
         carga += e["A"] * 25 * L * 1.3

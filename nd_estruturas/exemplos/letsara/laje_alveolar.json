@@ -34,8 +34,14 @@
   {
    "x_mm": -595.5,
    "y_mm": 40,
-   "diam": "15.2",
-   "F_macaco_kN": 203.0
+   "diam": "12.7",
+   "F_macaco_kN": 143.1
+  },
+  {
+   "x_mm": -595.5,
+   "y_mm": 75,
+   "diam": "12.7",
+   "F_macaco_kN": 143.1
   },
   {
    "x_mm": -396.0,
@@ -70,22 +76,28 @@
   {
    "x_mm": 595.5,
    "y_mm": 40,
-   "diam": "15.2",
-   "F_macaco_kN": 203.0
+   "diam": "12.7",
+   "F_macaco_kN": 143.1
+  },
+  {
+   "x_mm": 595.5,
+   "y_mm": 75,
+   "diam": "12.7",
+   "F_macaco_kN": 143.1
   }
  ],
- "Ap_mm2": 773.5,
- "n_cord": 7,
+ "Ap_mm2": 888.3,
+ "n_cord": 9,
  "fckj": 30.0,
  "sig_pi": 1450.0,
  "perdas": {
   "sig_pi": 1450.0,
   "d_cravacao": 9.75,
   "d_relax_inicial": 24.284,
-  "d_elastica": 55.419,
-  "sig_p0": 1360.548,
-  "P0": 1052.384,
-  "perda_imediata_pct": 6.169,
+  "d_elastica": 59.95,
+  "sig_p0": 1356.016,
+  "P0": 1204.549,
+  "perda_imediata_pct": 6.482,
   "alfa_p_j": 5.74,
   "Eci_j_MPa": 33971.788,
   "U": 65.0,
@@ -94,108 +106,108 @@
   "h_fic_cm": 9.697,
   "phi": 3.35,
   "eps_cs": -0.0,
-  "sig_c_p0g": 9.655,
+  "sig_c_p0g": 10.444,
   "processo": "9.6.3.4.2 com fases (superposição)",
-  "d_prog_9_6_3_4_2": 251.027,
-  "d_prog_9_6_3_4_3": 265.985,
-  "d_prog": 251.027,
-  "sig_pinf": 1109.521,
-  "Pinf": 858.214,
-  "perda_progressiva_pct": 17.312,
-  "perda_total_pct": 23.481
+  "d_prog_9_6_3_4_2": 264.003,
+  "d_prog_9_6_3_4_3": 275.378,
+  "d_prog": 264.003,
+  "sig_pinf": 1092.013,
+  "Pinf": 970.035,
+  "perda_progressiva_pct": 18.207,
+  "perda_total_pct": 24.689
  },
  "verif": {
   "ato_topo_fim_transferencia_MPa": {
-   "valor": -0.465,
+   "valor": -1.325,
    "limite": 3.476,
-   "uso": -0.134,
+   "uso": -0.381,
    "ok": true,
    "item": "NBR 6118:2023 17.2.4.3.2 b) (σt ≤ 1,2 fctm,j)"
   },
   "ato_fundo_MPa": {
-   "valor": -16.058,
+   "valor": -17.588,
    "limite": -21.0,
-   "uso": 0.765,
+   "uso": 0.838,
    "ok": true,
    "item": "NBR 6118:2023 17.2.4.3.2 a) (σc ≤ 0,7 fckj)"
   },
   "manuseio_topo_no_apoio_MPa": {
-   "valor": 0.517,
+   "valor": 0.265,
    "limite": 2.028,
-   "uso": 0.255,
+   "uso": 0.131,
    "ok": true,
    "item": "NBR 9062:2017 5.3.2 (βa 1,3) — sem fissura: σt ≤ fctk,inf(j)"
   },
   "manuseio_fundo_meio_MPa": {
-   "valor": -10.149,
+   "valor": -11.2,
    "limite": -21.0,
-   "uso": 0.483,
+   "uso": 0.533,
    "ok": true,
    "item": "NBR 9062:2017 5.3.2 (βa 1,3); compressão ≤ 0,7 fckj"
   },
   "transporte_topo_meio_favoravel_MPa": {
-   "valor": -3.523,
+   "valor": -4.644,
    "limite": 2.028,
-   "uso": -1.737,
+   "uso": -2.291,
    "ok": true,
    "item": "NBR 9062:2017 5.3.2.2 (βa 0,8, permanente favorável)"
   },
   "montagem_fundo_MPa": {
-   "valor": -3.092,
+   "valor": -3.766,
    "limite": 2.85,
    "uso": 0.0,
    "ok": true,
    "item": "NBR 9062:2017 5.2.1.4 — laje isolada com capa fresca + 1 kN/m²; σt ≤ fctk,inf"
   },
   "ELS_F_frequente_fundo_MPa": {
-   "valor": 1.258,
+   "valor": 0.584,
    "limite": 3.42,
-   "uso": 0.874,
+   "uso": 0.841,
    "ok": true,
    "item": "NBR 6118:2023 Tab. 13.4 — ELS-W (CAA I, parcial): sem fissura na frequente (ψ1 0,6), σ ≤ 1,2 fctk,inf → wk = 0"
   },
   "ELS_compressao_topo_laje_MPa": {
-   "valor": -11.827,
+   "valor": -12.749,
    "limite": -30.0,
-   "uso": 0.394,
+   "uso": 0.425,
    "ok": true,
    "item": "NBR 6118:2023 17.2.4.3 (σc ≤ 0,6 fck, rara)"
   },
   "ELU_flexao_kNm": {
    "valor": 198.326,
-   "limite": 217.004,
-   "uso": 0.914,
+   "limite": 232.912,
+   "uso": 0.852,
    "ok": true,
    "item": "NBR 6118:2023 17.2.2 — seção composta (NBR 9062 6.3: monolítica no ELU)",
-   "x_LN_mm": 63.9
+   "x_LN_mm": 69.3
   },
   "ELU_montagem_laje_isolada_kNm": {
    "valor": 93.462,
-   "limite": 170.999,
-   "uso": 0.547,
+   "limite": 180.266,
+   "uso": 0.518,
    "ok": true,
    "item": "NBR 9062:2017 5.4.1 / 11.3 — laje isolada, capa fresca"
   },
   "ELU_cortante_tracao_alma_kN": {
    "valor": 81.282,
-   "limite": 122.186,
-   "uso": 0.665,
+   "limite": 128.618,
+   "uso": 0.632,
    "ok": true,
    "item": "EN 1168 4.3.3.2.2 / EN 1992-1-1 eq. (6.4) — região não fissurada; NBR 14861:2022 (cortante sem estribos)",
-   "alfa_l": 0.144,
+   "alfa_l": 0.173,
    "y_crit_mm": 100
   },
   "ELU_cortante_flexao_VRd1_kN": {
    "valor": 83.947,
-   "limite": 139.077,
-   "uso": 0.604,
+   "limite": 145.701,
+   "uso": 0.576,
    "ok": true,
    "item": "NBR 6118:2023 17.4.2.2 (bw = soma das nervuras, k = 1,6 − d, σcp com γp 0,9)"
   },
   "LA01R_cortante_ponta_recortada_kN": {
    "valor": 83.947,
-   "limite": 118.6,
-   "uso": 0.685,
+   "limite": 125.7,
+   "uso": 0.647,
    "ok": true,
    "item": "LA-01R: EN 1168 4.3.3.2.2 + NBR 6118 17.4.2.2 com as nervuras que ficam (2 alvéolos preenchidos 60 cm, 50 % — NBR 14861:2022)"
   },
@@ -221,28 +233,28 @@
    "item": "fita de neoprene 10 × 50 mm contínua; σ ≤ 7 MPa (conferir catálogo)"
   },
   "flecha_final_mm": {
-   "valor": 12.812,
+   "valor": 13.069,
    "limite": 37.8,
-   "uso": 0.339,
+   "uso": 0.346,
    "ok": true,
    "item": "NBR 9062:2017 Tab. 9 (L ≤ 15 m: L/250), PCI 5.8.2.1"
   },
   "contraflecha_montagem_mm": {
-   "valor": 26.07,
+   "valor": 25.86,
    "limite": 37.8,
-   "uso": 0.69,
+   "uso": 0.684,
    "ok": true,
    "item": "NBR 9062:2017 Tab. 9 (contraflecha na montagem ≤ L/250)"
   },
   "contraflecha_fabricacao_mm": {
-   "valor": 14.925,
+   "valor": 14.809,
    "limite": 31.5,
-   "uso": 0.474,
+   "uso": 0.47,
    "ok": true,
    "item": "NBR 9062:2017 Tab. 9 (contraflecha de fabricação ≤ L/300)"
   }
  },
- "lbpt_m": 1.157,
+ "lbpt_m": 0.963,
  "icamento": {
   "metodo": "garra mecânica (pinça) nas 2 pontas, cabos verticais com balancim; sem alça embutida (NBR 9062 5.3.3: alça só em aço permitido)",
   "ponto_m": 0.3,
@@ -259,48 +271,48 @@
   "phi_capa": 3.29
  },
  "informativo_ELS_D": {
-  "valor": -0.236,
-  "uso": 0.983,
+  "valor": -0.91,
+  "uso": 0.937,
   "nota": "ELS-D (descompressão, ψ2 0,4) só seria exigido em CAA II (protensão limitada)"
  },
  "classe_protensao": "parcial (nível 1) — CAA I, ambiente interno seco e revestido",
- "ELS_rara_fundo_MPa": 4.246,
+ "ELS_rara_fundo_MPa": 3.572,
  "LA01R": {
   "sem_preencher": {
    "alveolos_preenchidos": [],
-   "n_cord_ponta": 4,
+   "n_cord_ponta": 6,
    "bw_mm": 195,
-   "VRd_tracao_alma": 72.0,
-   "VRd1": 82.1,
+   "VRd_tracao_alma": 76.9,
+   "VRd1": 90.2,
    "Vd": 81.3,
    "Vd_apoio": 83.9,
-   "uso": 1.129
+   "uso": 1.057
   },
   "alveolos_preenchidos": {
    "alveolos_preenchidos": [
     2,
     5
    ],
-   "n_cord_ponta": 4,
+   "n_cord_ponta": 6,
    "bw_mm": 343,
-   "VRd_tracao_alma": 118.6,
-   "VRd1": 123.9,
+   "VRd_tracao_alma": 125.7,
+   "VRd1": 133.9,
    "Vd": 81.3,
    "Vd_apoio": 83.9,
-   "uso": 0.685
+   "uso": 0.647
   },
   "adotado": "alveolos_preenchidos"
  },
  "flechas_mm": {
-  "contraflecha_fabricacao": 14.9,
+  "contraflecha_fabricacao": 14.8,
   "lim_L300": 31.5,
-  "contraflecha_montagem": 26.1,
+  "contraflecha_montagem": 25.9,
   "lim_L250": 37.8,
-  "peca_isolada_apos_capa": -19.0,
+  "peca_isolada_apos_capa": -18.7,
   "lim_L500": 18.9,
-  "solidarizada_sem_q": -4.6,
+  "solidarizada_sem_q": -4.3,
   "lim_L350": 27.0,
-  "final": 12.8,
+  "final": 13.1,
   "lim_final_L250": 37.8,
   "convencao": "positivo = para baixo nas flechas; contraflechas positivas para cima"
  },
@@ -329,8 +341,28 @@
   "Rk_kN": 60.6
  },
  "ok": true,
- "uso_max": 0.914,
+ "uso_max": 0.852,
  "estudo_alternativas": [
+  {
+   "geometria": "LP20",
+   "arranjo": "9 Ø12,7",
+   "Ap_mm2": 888.3,
+   "fckj": 30.0,
+   "ok": true,
+   "uso_max": 0.852,
+   "falhas": [],
+   "f1_Hz": 4.77
+  },
+  {
+   "geometria": "LP20",
+   "arranjo": "9 Ø12,7",
+   "Ap_mm2": 888.3,
+   "fckj": 35.0,
+   "ok": true,
+   "uso_max": 0.851,
+   "falhas": [],
+   "f1_Hz": 4.77
+  },
   {
    "geometria": "LP20",
    "arranjo": "2 Ø15,2 + 5 Ø12,7",
@@ -570,7 +602,7 @@
  ],
  "nivel_730": {
   "ok": true,
-  "uso_max": 0.765,
+  "uso_max": 0.838,
   "cargas": {
    "g1": 2.8,
    "capa_rejunte": 1.35,
@@ -583,15 +615,15 @@
    "Rk_kN": 40.9
   },
   "flechas_mm": {
-   "contraflecha_fabricacao": 14.9,
+   "contraflecha_fabricacao": 14.8,
    "lim_L300": 31.5,
-   "contraflecha_montagem": 26.1,
+   "contraflecha_montagem": 25.9,
    "lim_L250": 37.8,
-   "peca_isolada_apos_capa": -19.0,
+   "peca_isolada_apos_capa": -18.7,
    "lim_L500": 18.9,
-   "solidarizada_sem_q": 1.5,
+   "solidarizada_sem_q": 1.8,
    "lim_L350": 27.0,
-   "final": 5.0,
+   "final": 5.2,
    "lim_final_L250": 37.8,
    "convencao": "positivo = para baixo nas flechas; contraflechas positivas para cima"
   },

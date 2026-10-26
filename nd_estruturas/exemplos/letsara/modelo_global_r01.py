@@ -1,7 +1,7 @@
 """Letsara — modelo global 3D (OpenSeesPy) com a geometria do R01: deformadas e esforços em ELU e ELS.
 
 Sistema (pré-moldado): pilares engastados no cálice (barras 3D elásticas, cabeça recuada 40×30 acima do recuo); vigas TS-01,
-I130, VT, VB e VM articuladas (pino + neoprene) = barras de treliça; terças como escoras entre as vigas nos nós do
+I120, VT, VB e VM articuladas (pino + neoprene) = barras de treliça; terças como escoras entre as vigas nos nós do
 contraventamento e em todas as 26 linhas de terças (como no modelo 3D), inclusive nos vãos de oitão (L1–L2 e L8–L9, apoiadas na VB 15×90 modelada como viga articulada nos pilares); X Ø16 só nos vãos 2-3 e 7-8 (rev. 13/10/2026: retirados os X dos vãos 4-5 e 5-6 — esforço no X praticamente igual; só tração: as diagonais comprimidas foram retiradas, A ≈ 0); mezanino
 (laje alveolar + capa) como diafragma rígido nos níveis +3,15 e +6,55.
 
@@ -34,10 +34,10 @@ LARG, COMP, XC = X_EIXO["E"], Y_LIN[-1], X_EIXO["C"]
 Z0, I = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + I * x
 REC = tuple(LG["REC"])                    # assento da TS-01 no recuo dos pilares P1 / P2 (rev03, sem dente)
-Z_TOP_C = LG["Z_TOPO_I130"]                  # topo da I130 e dos pilares P8A/P11/P13 (TS-01 apoiada no topo)
+Z_TOP_C = LG["Z_TOPO_I120"]                  # topo da I120 e dos pilares P8A/P11/P13 (TS-01 apoiada no topo)
 Z_MEZ = (3.15, 6.55)
 Z_VT = (6.55, 7.80)                        # rev03: VT do eixo A rebaixada (+6,25/+6,85); eixo E mantida
-Z_I130 = LG["Z_ASS_I130"]                 # assento da I130 nos consolos CP-I130 (rev03)
+Z_I120 = LG["Z_ASS_I120"]                 # assento da I120 nos consolos CP-I120 (rev03)
 NOS = LG["nos_contraventamento_x_esq"]
 NOS_D = [round(x + (2 * XC - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"], 3) for x in NOS]
 G_COB = LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]   # + terça Ue 300×85×25×3,00 (12,5 kg/m)
@@ -110,17 +110,17 @@ def montar(fator_EI=1.0, pdelta=True):
             pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))
     for j, x in enumerate(XF[1:4]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", COMP)):
-            zs = [zf(x) - 0.01] + (list(Z_MEZ) if y == 0 else []) + ([Z_I130] if "P14" in nome else [])
+            zs = [zf(x) - 0.01] + (list(Z_MEZ) if y == 0 else []) + ([Z_I120] if "P14" in nome else [])
             pilar(nome, x, y, 0.40, 0.60, 10.0, zs, rec=math.ceil((zf(x) + 0.90) / 0.05) * 0.05, cab=(0.40, 0.30))
-    pilar("P8A", XC, Y_LIN[1], 0.40, 0.60, Z_TOP_C, [Z_I130] + list(Z_MEZ))
-    pilar("P11", XC, Y_LIN[3], 0.40, 0.40, Z_TOP_C, [Z_I130])
-    pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I130])
+    pilar("P8A", XC, Y_LIN[1], 0.40, 0.60, Z_TOP_C, [Z_I120] + list(Z_MEZ))
+    pilar("P11", XC, Y_LIN[3], 0.40, 0.40, Z_TOP_C, [Z_I120])
+    pilar("P13", XC, Y_P13, 0.60, 0.60, Z_TOP_C, [Z_I120])
     for nome, x in (("P8", X_EIXO["B"]), ("P8B", X_EIXO["D"])):
         pilar(nome, x, Y_LIN[1], 0.40, 0.60, Z_MEZ[1], list(Z_MEZ))
     for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
         pilar(nome, x, Y_LIN[LINHA_PORTOES], b, b, 7.50)
 
-    # ---------------- TS-01 (linhas 2 a 8) com nós nos pontos do contraventamento; apoio central no pilar (L2, L4) ou na I130
+    # ---------------- TS-01 (linhas 2 a 8) com nós nos pontos do contraventamento; apoio central no pilar (L2, L4) ou na I120
     lin_cen = {}
     for i in range(1, 8):
         y = Y_LIN[i]
@@ -130,17 +130,17 @@ def montar(fator_EI=1.0, pdelta=True):
         elif i == 3:
             nc = at("P11", Z_TOP_C)
         else:
-            nc = no_livre(XC, y, Z_TOP_C)            # TS-01 apoiada no topo da I130 (rev03)
+            nc = no_livre(XC, y, Z_TOP_C)            # TS-01 apoiada no topo da I120 (rev03)
         lin_cen[i] = nc
         cadeia = [nA] + [no_livre(x, y, zf(x) + 0.45) for x in sorted(NOS[1:-1] + MID)] + [nc]
         cadeia_d = [nc] + [no_livre(x, y, zf(x) + 0.45) for x in sorted(NOS_D[1:-1] + MID_D)] + [nE]
         for c in (cadeia, cadeia_d):
             for a, b in zip(c[:-1], c[1:]):
                 barra(a, b, 0.2225, "TS-01")
-    # I130: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14
-    ch = [at("P8A", Z_I130), lin_cen[2], at("P11", Z_I130), lin_cen[4], lin_cen[5], at("P13", Z_I130), lin_cen[6], lin_cen[7], at("P14-L9", Z_I130)]
+    # I120: P8A → L3 → P11 → L5 → L6 → P13 → L7 → L8 → P14
+    ch = [at("P8A", Z_I120), lin_cen[2], at("P11", Z_I120), lin_cen[4], lin_cen[5], at("P13", Z_I120), lin_cen[6], lin_cen[7], at("P14-L9", Z_I120)]
     for a, b in zip(ch[:-1], ch[1:]):
-        barra(a, b, 0.333, "I130")
+        barra(a, b, 0.333, "I120")
     # terças-escora entre linhas nos nós do contraventamento (todos os vãos internos) e X nos vãos contraventados
     def no_linha(x, i):
         y = Y_LIN[i]
@@ -240,7 +240,7 @@ def cargas_basicas():
         if i in (1, 3):
             n = at("P8A" if i == 1 else "P11", Z_TOP_C)
             add("G", n, [0, 0, -2 * g, 0, 0, 0]); add("Qc", n, [0, 0, -2 * q, 0, 0, 0])
-    # I130: reações (peso próprio + 2 TS por linha) nos pilares de apoio — vigas biapoiadas
+    # I120: reações (peso próprio + 2 TS por linha) nos pilares de apoio — vigas biapoiadas
     apo = [("P8A", Y_LIN[1]), ("P11", Y_LIN[3]), ("P13", Y_P13), ("P14-L9", COMP)]
     for (na, ya), (nb, yb) in zip(apo[:-1], apo[1:]):
         L = yb - ya
@@ -254,7 +254,7 @@ def cargas_basicas():
                 Ra_g += g * (yb - y) / L; Rb_g += g * (y - ya) / L
                 Ra_q += q * (yb - y) / L; Rb_q += q * (y - ya) / L
         for nome, Rg, Rq in ((na, Ra_g, Ra_q), (nb, Rb_g, Rb_q)):
-            n = at(nome, Z_I130)
+            n = at(nome, Z_I120)
             add("G", n, [0, 0, -Rg, 0, 0, 0]); add("Qc", n, [0, 0, -Rq, 0, 0, 0])
     # VT e VB (peso), mezanino (VM + laje + capa + revestimento; sobrecarga) — reações nos pilares
     for i in range(1, 8):

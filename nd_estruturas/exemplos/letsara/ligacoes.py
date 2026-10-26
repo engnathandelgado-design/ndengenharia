@@ -11,28 +11,28 @@ from pathlib import Path
 AQUI = Path(__file__).parent
 TOL = 0.005                     # 5 mm entre eixos de pino/tubo e furos
 I = 0.03                        # caimento da cobertura (3%)
-from geometria import Y_LIN as YL, X_EIXO
+from geometria import Y_LIN as YL, X_EIXO, y_vb
 X_CEN, X_P2 = X_EIXO["C"], X_EIXO["E"]
 NEO = 0.010                     # neoprene
 
 
 # rev03 (Nathan, 13–14/10/2026): terças a cada 1,20 m; telha zipada trapezoidal 0,65 (480 × 70) + lã de rocha 40 mm +
 # telha inferior TP40 0,50; painéis solares em toda a cobertura; folga ≥ 15 cm do topo do painel ao topo da platibanda (+10,00);
-# TS-01 sem dentes: apoiada no assento do pilar lateral (30 cm, recuo da cabeça) e no topo da I130 / pilares centrais.
+# TS-01 sem dentes: apoiada no assento do pilar lateral (30 cm, recuo da cabeça) e no topo da I120 / pilares centrais.
 PLATIBANDA = 10.00
 FOLGA_PLAT = 0.15
 PACOTE = dict(tp40=0.040, espacador_la=0.040, zipada=0.070, painel_solar=0.110)   # m acima do topo da terça (painel: grampo + trilho + módulo)
 H_TS, H_TERCA, Z_TERCA = 0.90, 0.30, 0.010             # terça 10 mm acima do concreto (suporte ST-1P)
 X_PONTA_ESQ = 0.025                                     # ponta a 25 mm da face da cabeça do P1 (x = 0); assento 0 → 0,30
-X_PONTA_CEN = X_CEN - 0.0375                            # 75 mm entre as pontas das duas TS-01 sobre a I130 (b = 40)
+X_PONTA_CEN = X_CEN - 0.0375                            # 75 mm entre as pontas das duas TS-01 sobre a I120 (b = 40)
 X_FIM = X_P2 - X_PONTA_ESQ                              # ponta da TS-01 direita (face da cabeça do P2)
 NEO_EXT = dict(x=0.200, y=0.300, e=0.010, xc=X_PONTA_ESQ + 0.125)        # neoprene no assento do pilar lateral (rev04: centro a 12,5 cm da ponta)
 PINO_TS = 0.0775                                                         # rev04: pinos a 7,75 cm da ponta nos 4 apoios (TS-01 simétrica: uma marca serve aos dois lados)
 NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neoprene no topo do pilar central P11 (x 19,585 → 19,685)
-# rev10 (DEC-061, Nathan 25/10/2026): consolo lateral CT-I130 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
-# da I130 onde chega cada TS-01 → assento de 36,25 cm (ponta da TS-01 até a ponta do consolo) e neoprene maior NEO-3C 150 × 300,
+# rev10 (DEC-061, Nathan 25/10/2026): consolo lateral CT-I120 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
+# da I120 onde chega cada TS-01 → assento de 36,25 cm (ponta da TS-01 até a ponta do consolo) e neoprene maior NEO-3C 150 × 300,
 # de 12 a 27 cm da ponta (dentro da cunha de 30 cm; pinos PN-5 a 7,75 cm fora do neoprene).
-CT_I130 = dict(b=0.50, proj=0.20, h=0.30, h_ext=0.15)
+CT_I120 = dict(b=0.50, proj=0.20, h=0.30, h_ext=0.15)
 NEO_CI = dict(x=0.150, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.195)
 H_PAC = H_TS + Z_TERCA + H_TERCA + sum(PACOTE.values())
 # cargas da cobertura (kN/m²) — rev03; pesos de catálogo usuais (conferir com os fornecedores da telha e dos painéis)
@@ -93,31 +93,31 @@ for it in inst:
 
 # rev04 (NBR 9062:2017 7.2.1.6: aparelho de apoio horizontal; face inclinada da peça → detalhe que deixe o aparelho horizontal):
 # cada ponta da TS-01 tem uma CUNHA rebaixada no fundo (fôrma com calço em cunha 3 %, 0 → 9 mm em 30 cm), que deixa a face de
-# apoio HORIZONTAL na posição montada; os assentos (recuo dos pilares, topo da I130 e dos pilares centrais) são horizontais.
+# apoio HORIZONTAL na posição montada; os assentos (recuo dos pilares, topo da I120 e dos pilares centrais) são horizontais.
 #   ponta baixa (lado A da peça): plano horizontal pelo fundo a 30 cm da ponta → cunha de 9 mm na ponta, 0 a 30 cm;
 #   ponta alta (lado E da peça): plano horizontal pelo fundo na ponta → 0 na ponta, 9 mm a 30 cm (degrau de 9 mm para o fundo).
-# As duas TS-01 da linha são a mesma marca; sobre a I130 a ponta alta da esquerda e a ponta baixa da direita ficam em níveis
-# diferentes → topo da I130 e dos pilares centrais em DOIS NÍVEIS (degrau no eixo C).
+# As duas TS-01 da linha são a mesma marca; sobre a I120 a ponta alta da esquerda e a ponta baixa da direita ficam em níveis
+# diferentes → topo da I120 e dos pilares centrais em DOIS NÍVEIS (degrau no eixo C).
 CUNHA = 0.30
 DEGRAU_CUNHA = round(I * CUNHA, 4)
 face_baixa = lambda x_ponta: round(z_fundo_viga(x_ponta + CUNHA), 4)       # x_ponta = ponta baixa (menor x)
 face_alta = lambda x_ponta: round(z_fundo_viga(x_ponta), 4)                # x_ponta = ponta alta (maior x)
 X_PONTA_DIR = 2 * X_CEN - X_PONTA_CEN
 REC = (round(face_baixa(X_PONTA_ESQ) - NEO_EXT["e"], 3), round(face_alta(X_FIM) - NEO_EXT["e"], 3))   # recuo (assento horizontal) P1 / P2
-Z_TOPO_I130 = round(face_alta(X_PONTA_CEN) - NEO_CEN["e"], 3)               # topo da I130 / P8A / P11 / P13 — metade do lado A (x < C)
-Z_TOPO_I130_DIR = round(face_baixa(X_PONTA_DIR) - NEO_CEN["e"], 3)          # metade do lado E (x > C)
-DEGRAU_C = round(Z_TOPO_I130_DIR - Z_TOPO_I130, 4)
+Z_TOPO_I120 = round(face_alta(X_PONTA_CEN) - NEO_CEN["e"], 3)               # topo da I120 / P8A / P11 / P13 — metade do lado A (x < C)
+Z_TOPO_I120_DIR = round(face_baixa(X_PONTA_DIR) - NEO_CEN["e"], 3)          # metade do lado E (x > C)
+DEGRAU_C = round(Z_TOPO_I120_DIR - Z_TOPO_I120, 4)
 apoios = dict(P1=dict(x_neo=NEO_EXT["xc"], z=REC[0], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
               P2=dict(x_neo=X_P2 - NEO_EXT["xc"], z=REC[1], comp_apoio=round(0.30 - X_PONTA_ESQ, 3), assento="horizontal"),
-              centro_esq=dict(x_neo=NEO_CEN["xc"], z=Z_TOPO_I130, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20), 4), assento="horizontal"),
-              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I130_DIR, assento="horizontal"),
-              i130_esq=dict(x_neo=NEO_CI["xc"], z=Z_TOPO_I130, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20 - CT_I130["proj"]), 4), assento="horizontal + consolo CT-I130"),
-              i130_dir=dict(x_neo=2 * X_CEN - NEO_CI["xc"], z=Z_TOPO_I130_DIR, assento="horizontal + consolo CT-I130"))
+              centro_esq=dict(x_neo=NEO_CEN["xc"], z=Z_TOPO_I120, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20), 4), assento="horizontal"),
+              centro_dir=dict(x_neo=2 * X_CEN - NEO_CEN["xc"], z=Z_TOPO_I120_DIR, assento="horizontal"),
+              i130_esq=dict(x_neo=NEO_CI["xc"], z=Z_TOPO_I120, comp_apoio=round(X_PONTA_CEN - (X_CEN - 0.20 - CT_I120["proj"]), 4), assento="horizontal + consolo CT-I120"),
+              i130_dir=dict(x_neo=2 * X_CEN - NEO_CI["xc"], z=Z_TOPO_I120_DIR, assento="horizontal + consolo CT-I120"))
 # conferência: neoprenes dentro do trecho da cunha nas duas pontas
 assert NEO_EXT["xc"] + NEO_EXT["x"] / 2 - X_PONTA_ESQ <= CUNHA and X_PONTA_CEN - (NEO_CEN["xc"] - NEO_CEN["x"] / 2) <= CUNHA
-assert X_PONTA_CEN - (NEO_CI["xc"] - NEO_CI["x"] / 2) <= CUNHA and NEO_CI["xc"] - NEO_CI["x"] / 2 >= X_CEN - 0.20 - CT_I130["proj"] + 0.03
-H_I130, HD_I130, NEO_I130 = 1.20, 0.78, 0.03                       # DEC-054: I130 com h 120 (antes 1,30), dente 78 × 35 nos consolos CP-I130 com mísula
-Z_ASS_I130 = round(Z_TOPO_I130 - H_I130 + (H_I130 - HD_I130) - NEO_I130, 3)   # assento do consolo CP-I130 (fundo do dente − neoprene)
+assert X_PONTA_CEN - (NEO_CI["xc"] - NEO_CI["x"] / 2) <= CUNHA and NEO_CI["xc"] - NEO_CI["x"] / 2 >= X_CEN - 0.20 - CT_I120["proj"] + 0.03
+H_I120, HD_I120, NEO_I120 = 1.20, 0.78, 0.03                       # DEC-054: I120 com h 120 (antes 1,30), dente 78 × 35 nos consolos CP-I120 com mísula
+Z_ASS_I120 = round(Z_TOPO_I120 - H_I120 + (H_I120 - HD_I120) - NEO_I120, 3)   # assento do consolo CP-I120 (fundo do dente − neoprene)
 rel, erros = [], 0
 for it in inst:
     x_ini = it["x0"]; x_fim = it["x0"] + TS["L"] * math.cos(math.atan(I))
@@ -162,6 +162,7 @@ for (ia, ib) in VAOS:
         s_b = 0.200 if ib == len(YL) - 1 else CT2["s_orelha"]       # VB do eixo 9: orelha a ±200 da terça (ES-2V fora das ES-1V)
         for nome, (x1, x2), z in (("/", (xa + CT2["s_orelha"], xb - s_b), CT2["z_baixo"]),
                                   ("\\", (xb - CT2["s_orelha"], xa + s_b), CT2["z_alto"])):
+            yb = y_vb(x2, YL[ib]) if ib == len(YL) - 1 else YL[ib] - y_or_b      # rev12: VB do eixo 9 rente à face dos PF (faixa B–D)
             fol = CT2["s_orelha"] - CT2["mesa_terca"]          # pior lado: mesa da terça voltada para a orelha
             furos = []
             for xt in x_ter:
@@ -182,16 +183,16 @@ folga_plat = dict(platibanda=PLATIBANDA, pacote_m=round(H_PAC, 3), pacote=PACOTE
                   folga_P2_mm=round((PLATIBANDA - z_topo(X_FIM)) * 1000), ok=PLATIBANDA - z_topo(X_FIM) >= FOLGA_PLAT - 1e-6)
 erros += not folga_plat["ok"]
 res = dict(tol_mm=TOL * 1000, erros=erros, platibanda=folga_plat, Z0_TS=Z0_TS, L_TS=TS["L"], passo_tercas=PASSO_T, s_tercas=TS["tercas"],
-           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I130=Z_TOPO_I130, Z_TOPO_I130_DIR=Z_TOPO_I130_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I130=Z_ASS_I130, H_I130=H_I130, HD_I130=HD_I130, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN, NEO_CI=NEO_CI, CT_I130=CT_I130,
+           X_PONTA_ESQ=X_PONTA_ESQ, X_PONTA_CEN=X_PONTA_CEN, apoios_ts=apoios, REC=REC, Z_TOPO_I120=Z_TOPO_I120, Z_TOPO_I120_DIR=Z_TOPO_I120_DIR, DEGRAU_C=DEGRAU_C, CUNHA=CUNHA, DEGRAU_CUNHA=DEGRAU_CUNHA, PINO_TS=PINO_TS, Z_ASS_I120=Z_ASS_I120, H_I120=H_I120, HD_I120=HD_I120, cargas_cob=CARGAS_COB, NEO_EXT=NEO_EXT, NEO_CEN=NEO_CEN, NEO_CI=NEO_CI, CT_I120=CT_I120,
            contraventamento=dict(chapa=CT2, n_tirantes=len(tir), subpaineis=N_SUB, amostra=tir[:4], tirantes=tir, borda_furo_fundo_terca_mm=furo_min,
            folga_min_terca_mm=min(t["folga_terca_no_mm"] for t in tir), comp_max_m=max(t["comp_m"] for t in tir),
            folga_cruzamento_mm=gap_cruz, ok=ok_tir), apoios=[r for r in rel if r["ligacao"] == "apoio"], tercas=[r for r in rel if r["ligacao"] == "terças"],
-           berco_I130=berco, nos_contraventamento_x_esq=paineis, idx_nos_x=IDX_NOS_X, x_tercas_esq=x_ter, painel_x=PAINEL_X, vaos_x=[ia for ia, _ in VAOS], nos_x_esq=nos_x,
+           berco_I120=berco, nos_contraventamento_x_esq=paineis, idx_nos_x=IDX_NOS_X, x_tercas_esq=x_ter, painel_x=PAINEL_X, vaos_x=[ia for ia, _ in VAOS], nos_x_esq=nos_x,
            alcas=TS["alcas"], estoque=TS["estoque"])
 (AQUI / "ligacoes.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
 print("erros:", erros)
 print("contraventamento:", json.dumps(res["contraventamento"], ensure_ascii=False)[:900])
 for r in rel[:4] + rel[-2:]:
     print(r)
-print("apoios:", apoios, "REC", REC, "I130", Z_TOPO_I130)
+print("apoios:", apoios, "REC", REC, "I120", Z_TOPO_I120)
 print("nós de contraventamento (x global, meia água esquerda):", paineis)

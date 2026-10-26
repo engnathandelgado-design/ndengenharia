@@ -1,4 +1,4 @@
-"""Letsara — vigas centrais I130 (V407, V406, V405, V404 — DEC-058), verificação completa da peça protendida (DEC-032). Gera i110_r01.json,
+"""Letsara — vigas centrais I120 (V407, V406, V405, V404 — DEC-058), verificação completa da peça protendida (DEC-032). Gera i110_r01.json,
 que é a ÚNICA fonte do arranjo de cordoalhas, σpi, fckj, isolamentos, lbpt e reações para as pranchas (viga_i.py,
 armaduras_vigas.py), o dente (calc_dentes.py) e a memória MC05 (calc_nbr9062.py / memoria_nbr9062.py).
 
@@ -46,7 +46,7 @@ TRIB = 10.075
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 L_TS = LG["L_TS"]
 G_COB = LG["cargas_cob"]["g_total_sem_terca"] + 0.123 / LG["passo_tercas"]
-g_ts = (0.2225 * 25 + G_COB * TRIB) * L_TS / 2          # reação de 1 TS-01 no topo da I130
+g_ts = (0.2225 * 25 + G_COB * TRIB) * L_TS / 2          # reação de 1 TS-01 no topo da I120
 q_ts = LG["cargas_cob"]["sobrecarga"] * TRIB * L_TS / 2
 P_g, P_q = 2 * g_ts, 2 * q_ts                           # duas TS por linha
 VIGAS = {"V407": (Y_LIN[1], Y_LIN[3], [Y_LIN[2]]), "V406": (Y_LIN[3], Y_PC_C[0], [Y_LIN[4]]),           # DEC-058: 3 vãos de 16,517 m

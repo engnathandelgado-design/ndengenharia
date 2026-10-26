@@ -5,7 +5,7 @@ Rev. 05 (17/10/2026): terças Z 302×90/82×2,30 (voestalpine Meincol / METSEC, 
 sobre cada viga; esforços por MEF de viga contínua (nd_estruturas.viga_continua) com 2·EI no trecho do transpasse;
 comprimento do transpasse escolhido como o menor que atende; parafusos do transpasse e do apoio (2 M12 8.8 na alma, sem
 mão-francesa). Rev. 05b (17/10/2026, DEC-024): N das escoras, forças do X, das correntes, dos apoios ST-1P/ST-1V e das
-ligações dos pilares dos portões lidos do MODELO INTEGRADO r05 (toda a estrutura num modelo: pilares, TS-01, I130, VB,
+ligações dos pilares dos portões lidos do MODELO INTEGRADO r05 (toda a estrutura num modelo: pilares, TS-01, I120, VB,
 mezanino rígido, terças contínuas, correntes, tirantes, diagonais e X; 33 combinações ELU, NBR 6123 completa);
 X nos vãos 4-5 a 8-9, painel de 8 terças, Ø16.
 Rev. 13/10/2026: esforços da terça-escora e do X lidos do modelo global R01; X só nos vãos 2-3 e 7-8; correntes Ø10.
@@ -26,7 +26,10 @@ AQUI = Path(__file__).parent
 R = {}
 
 # ------------------------------------------------------------------ dados
-from geometria import VAOS_Y
+from geometria import VAOS_Y as _VAOS_LIN, E_VB_FACE
+# rev12 (fresta, opção B): nos vãos entre PF a VB das fachadas 1 e 9 sai E_VB_FACE para fora → o 1º e o último vão das terças
+# dessa faixa crescem E_VB_FACE; o cálculo da terça usa esses vãos (a favor da segurança para as terças dos vãos de canto)
+VAOS_Y = [round(_VAOS_LIN[0] + E_VB_FACE, 3)] + list(_VAOS_LIN[1:-1]) + [round(_VAOS_LIN[-1] + E_VB_FACE, 3)]
 LG = json.loads((AQUI / "ligacoes.json").read_text(encoding="utf-8"))
 L = max(VAOS_Y)          # maior vão de terça (10,075 m)
 s = LG["passo_tercas"]   # espaçamento entre terças (ao longo da água)
@@ -248,16 +251,21 @@ R["terca"]["apoio"] = dict(desc="ST-1P com 4 M12 8.8 na alma (2 colunas a ±60 �
                            interno=ap_int, extremo=ap_ext, uso=max(ap_int["interacao"], ap_ext["interacao"]),
                            nota="tração T = R·e/z nos 2 parafusos de cima (binário com o apoio da alma no ST-1P) + corte √(R² + N²)/4; (T/TRd)² + (V/VRd)² ≤ 1")
 assert R["terca"]["apoio"]["uso"] <= 1 and R["terca"]["parafusos_transpasse"]["uso"] <= 1, R["terca"]
-# peças (METLAP): cada terça vence um vão e passa a do apoio interno; nas fachadas (VB, linhas 1 e 9) passa 110 além do eixo
-# (2 colunas de furos ±60 + borda 50). Furos do transpasse a 40 da ponta.
-EXT_FACH, BORDA_TR = 0.110, 0.040
-pecas = []
-for i, Lv in enumerate(VAOS_Y):
+# peças (METLAP): cada terça vence um vão e passa a do apoio interno; nas fachadas (VB, linhas 1 e 9) passa 85 além do eixo da VB
+# (2 colunas de furos ±60 + borda 25 ≥ 22 mm, NBR 8800:2024 Tab. 14, M12) — rev12: com a VB rente à face do pilar a ponta da terça
+# fica a 225 + 85 = 310 mm do eixo da linha, 15 mm antes da face interna da placa (325). Furos do transpasse a 40 da ponta.
+EXT_FACH, BORDA_TR = 0.085, 0.040
+pecas, pecas_pf = [], []
+for i, Lv in enumerate(_VAOS_LIN):
     e0 = EXT_FACH if i == 0 else A_TR
     e1 = EXT_FACH if i == n_v - 1 else A_TR
     pecas.append(dict(vao=f"{i+1}-{i+2}", L_vao_mm=round(Lv * 1000), ext_ini_mm=round(e0 * 1000), ext_fim_mm=round(e1 * 1000),
                       L_mm=round((Lv + e0 + e1) * 1000)))
-R["pecas"] = dict(transpasse_cada_lado_mm=round(A_TR * 1000), transpasse_total_mm=round(2 * A_TR * 1000), extensao_fachada_mm=round(EXT_FACH * 1000),
+    if i in (0, n_v - 1):                                   # faixa entre PF: VB deslocada E_VB_FACE para fora
+        Lp = VAOS_Y[i]
+        pecas_pf.append(dict(vao=f"{i+1}-{i+2}", L_vao_mm=round(Lp * 1000), ext_ini_mm=round(e0 * 1000), ext_fim_mm=round(e1 * 1000),
+                             L_mm=round((Lp + e0 + e1) * 1000), desloc_vb_mm=round(E_VB_FACE * 1000)))
+R["pecas"] = dict(por_vao_faixa_pf=pecas_pf, faixa_pf_x=[9.87, 29.63], transpasse_cada_lado_mm=round(A_TR * 1000), transpasse_total_mm=round(2 * A_TR * 1000), extensao_fachada_mm=round(EXT_FACH * 1000),
                   furos_transpasse_da_ponta_mm=round(BORDA_TR * 1000), colunas_apoio_mm=[-60, 60], furos_z_mm=[Z["F"], Z["bw"] - Z["E"]],
                   furo_corrente_z_mm=round(Z["bw"] / 2), por_vao=pecas, L_max_mm=max(p_["L_mm"] for p_ in pecas))
 assert R["pecas"]["L_max_mm"] <= 12000

@@ -22,8 +22,8 @@ MV = J("mef_vm_ret_dente_750_450.json")
 EX, I1 = J("escada_externa.json"), J("i110_r01.json")
 ESD, PJ, DP = J("escadas.json"), J("portao_l4.json"), J("arranjo_pilares.json")
 NOME_I = {"V407": "V400", "V406": "V401", "V405": "V402", "V404": "V403"}
-DI = J("dentes.json")["I130"]
-N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I130"][0]
+DI = J("dentes.json")["I120"]
+N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I120"][0]
 P_ = VM["premissas"]
 f = lambda v, d=1: (f"{v:.{d}f}".replace(".", ",") if isinstance(v, (int, float)) else str(v))
 ok = lambda b: "ok" if b else "NÃO"
@@ -53,7 +53,7 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV0
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Decisões do Nathan: DEC-045 (pisos +3,90 / +7,30, abertura e escada metálica, "
        "P6/P7 da escada e P6 da linha 2), DEC-046 (laje de cima: laje de cobertura do bloco, acesso apenas para manutenção), DEC-047 (vigas do mezanino retangulares protendidas com 2º estágio, sem meio vaso), "
        "DEC-048 (linha 2 sem TS-01, cobertura metálica), DEC-049 (VM 30 × 75 com dente Gerber 45 em todas as marcas) e, em 24/10, DEC-050/052 (linha 2: W 200 × 15,0 contínua nos pilares e em montantes no meio dos vãos), "
-       "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A), DEC-054 (I130 com h 120, dente Gerber e consolo com mísula), "
+       "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A), DEC-054 (I120 com h 120, dente Gerber e consolo com mísula), "
        "DEC-055 (2º pavimento = topo da capa +3,90, piso pronto ~+3,95: as duas escadas chegam no piso pronto com 22 espelhos de 17,95), DEC-056 (doca com piso nivelado) e DEC-057 (sem ponte rolante). "
        "Documento para análise do Nathan antes da emissão do zip com DXF e IFC."),
      Paragraph("1. Níveis e cargas do mezanino", T2),
@@ -157,8 +157,8 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
           [18, 34, 86, 24, 14]),
       P("Pé-direito livre (≥ 2,10 m): " + "; ".join(f"{q['faixa']} {f(q['pe_direito_min_m'], 2) + ' m' if q['pe_direito_min_m'] else 'livre'}" for q in ESD["pe_direito"]) + "."),
       P(f"Massa: escada interna {f(ESD['massa_kg']['interna'] * 1.03, 0)} kg e externa {f(ESD['massa_kg']['externa'] * 1.03, 0)} kg (com 3 % de parafusos; sem as ombreiras OM-2)."),
-      Paragraph("10. Vigas centrais I130 h 120 com cordoalha Ø12,7 (calc_i110_r01.py, calc_dentes.py) — DEC-054/058", T2),
-      P("Eixo C no arranjo C (DEC-058): P20 na linha 4, P22 (antes P13) em y 46,317 e pilar novo P23 em y 62,833 — três vãos iguais de 16,517 m; as três I130 novas (V401, V402 e V403) são uma só marca de fôrma e de armação, e a V400 (20,15 m) segue igual. "
+      Paragraph("10. Vigas centrais I120 h 120 com cordoalha Ø12,7 (calc_i110_r01.py, calc_dentes.py) — DEC-054/058", T2),
+      P("Eixo C no arranjo C (DEC-058): P20 na linha 4, P22 (antes P13) em y 46,317 e pilar novo P23 em y 62,833 — três vãos iguais de 16,517 m; as três I120 novas (V401, V402 e V403) são uma só marca de fôrma e de armação, e a V400 (20,15 m) segue igual. "
         "h 120, dente Gerber 78 × 35, consolo com mísula, protensão LIMITADA (ELS-D na quase permanente com margem de −0,25 MPa, ELS-F na frequente), C50, liberação só com fckj 50 MPa, cordoalha Ø12,7 CP-190 RB. "
         "Busca automática: para cada marca, os arranjos candidatos × os 4 padrões de isolamento escalonado (linha de baixo sempre aderente); adotado o que passa em tudo (ELU, ELS-D, ELS-F, ato, flecha, içamento e dente) com MENOS cordoalha."),
       tab([["VIGA", "L (m)", "Ø12,7", "padrão de isolamento (mm)", "Md / MRd (kN·m)", "σ ELS-D (MPa)", "σ ELS-F (MPa)", "ato topo / base (MPa)", "flecha final (mm)", "Fd dente (kN)"]] +
@@ -178,10 +178,10 @@ E += [PageBreak(), Paragraph("5. Laje alveolar LP20 (calc_laje_alveolar.py)", T2
       P(f"Dente (NBR 9062:2017 7.4, Fd = {f(I1['V405']['dente']['Fd'])} kN com γn 1,1, Hd = {f(I1['V405']['dente']['Hd'])} kN, reação real da V402, a mais carregada): {DI['calculo']['adotado']['tirante']}; {DI['calculo']['adotado']['suspensao']}; {DI['calculo']['adotado']['costura']}. "
         + (f"MEF não linear (mef_dente.analisar com a armação da prancha e as cordoalhas Ø12,7, passo de deslocamento 0,02 mm): Vu = {f(DI['mef']['Vu_kN'])} kN, FS = Vu/Fd = {f(DI['mef']['FS'], 2)} ≥ 1,06 ({ok(DI['mef']['ok'])})."
            if DI.get("mef") else "MEF: ver estudo_i130_h120_mef.json.")),
-      P(f"Cordoalha total das 4 I130: {f(sum(I1[mk]['arranjo']['n_cord'] for mk in I1) * 0.792 * 0 + sum(I1[mk]['arranjo']['n_cord'] * I1[mk]['L_peca'] for mk in I1) * 0.792, 0)} kg (comprimento das peças; a pista de 60 m entra no consumo da fábrica)."),
-      P(f"Consolo CP-I130 com MÍSULA de concreto (NBR 9062:2017 7.3): {f(CO['CP-I130']['b_m'] * 100, 0)} × {f(CO['CP-I130']['proj_m'] * 100, 0)}, h {f(CO['CP-I130']['h_total_m'] * 100, 0)} junto ao pilar e {f(CO['CP-I130']['h_consolo_m'] * 100, 0)} na ponta "
-        f"(fundo da ponta alinhado ao fundo da viga +6,576; ponta ≥ h/2), a/d {f(CO['CP-I130']['a_d'], 2)} ({CO['CP-I130']['tipo']}), Fd {f(CO['CP-I130']['Fd_kN'])} kN: τwd {f(CO['CP-I130']['tau_wd_MPa'], 2)} ≤ {f(CO['CP-I130']['tau_wu_MPa'], 2)} MPa "
-        f"(na seção da carga, com a altura reduzida pela mísula: {f(N9C['tau_carga_MPa'], 2)} MPa); tirante {CO['CP-I130']['tirante']} (As {f(CO['CP-I130']['As_tir_cm2'], 2)} cm², uso {f(CO['CP-I130']['As_tir_cm2'] / 16.09, 2)}). "
+      P(f"Cordoalha total das 4 I120: {f(sum(I1[mk]['arranjo']['n_cord'] for mk in I1) * 0.792 * 0 + sum(I1[mk]['arranjo']['n_cord'] * I1[mk]['L_peca'] for mk in I1) * 0.792, 0)} kg (comprimento das peças; a pista de 60 m entra no consumo da fábrica)."),
+      P(f"Consolo CP-I120 com MÍSULA de concreto (NBR 9062:2017 7.3): {f(CO['CP-I120']['b_m'] * 100, 0)} × {f(CO['CP-I120']['proj_m'] * 100, 0)}, h {f(CO['CP-I120']['h_total_m'] * 100, 0)} junto ao pilar e {f(CO['CP-I120']['h_consolo_m'] * 100, 0)} na ponta "
+        f"(fundo da ponta alinhado ao fundo da viga +6,576; ponta ≥ h/2), a/d {f(CO['CP-I120']['a_d'], 2)} ({CO['CP-I120']['tipo']}), Fd {f(CO['CP-I120']['Fd_kN'])} kN: τwd {f(CO['CP-I120']['tau_wd_MPa'], 2)} ≤ {f(CO['CP-I120']['tau_wu_MPa'], 2)} MPa "
+        f"(na seção da carga, com a altura reduzida pela mísula: {f(N9C['tau_carga_MPa'], 2)} MPa); tirante {CO['CP-I120']['tirante']} (As {f(CO['CP-I120']['As_tir_cm2'], 2)} cm², uso {f(CO['CP-I120']['As_tir_cm2'] / 16.09, 2)}). "
         "Pilares PC-01, PC-02, PC-03 (P22 e P23) e PF-04 com o consolo novo; assento +6,966 inalterado."),
       Paragraph("8. Pilares novos e cargas na fundação (tf, 1 tf = 10 kN)", T2)]
 lin = [["PILAR", "Nk G + Q", "Nd máx", "Nd mín", "Md res máx (tf·m)", "Hd máx"]]
@@ -192,7 +192,7 @@ pc3 = DP["PC-03"]
 E += [tab(lin, [46, 22, 22, 22, 32, 20]),
       P(f"PC-03 40 × 40 (P22 e P23): {pc3['n']} Ø{f(pc3['d'], 0)} (As {f(pc3['As_cm2'], 2)} cm², barras ≤ Ø20), uso da seção {f(pc3['uso_secao'], 3)} no método geral com 2ª ordem (dimensionar_pilares_r05.py), λ/λ1 {f(pc3['lambda_u'], 2)}; "
         f"manuseio: " + "; ".join(f"{m_['caso']} uso {f(m_['uso'], 2)}" for m_ in pc3["manuseio"]) + "."),
-      P("Modelo global r05 (modelo_integrado_r05.py) revisto nesta emissão: (1) I130 como vãos simplesmente apoiados (antes cadeia contínua, que subestimava o P22); (2) montantes da linha 2 (DEC-052) incluídos; "
+      P("Modelo global r05 (modelo_integrado_r05.py) revisto nesta emissão: (1) I120 como vãos simplesmente apoiados (antes cadeia contínua, que subestimava o P22); (2) montantes da linha 2 (DEC-052) incluídos; "
         "(3) a combinação com G favorável só tira painéis e instalações quando há vento (antes valia também nos casos característicos e reduzia as cargas da CG01). Cargas de todos os pilares na ND-LET-CG01, em tf."),
       Paragraph("11. Portões da linha 4 — opção A (calc_portao_l4.py) — DEC-059", T2),
       P("Os PG-01 a PG-04 passam a APOIAR a TS-01A (neoprene + graute depois da montagem): a viga fica contínua sobre os PG para g2 + q e o fundo no vão do portão fica em +7,50 (portões 500 × 750 livres). "

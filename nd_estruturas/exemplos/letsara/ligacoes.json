@@ -66,27 +66,27 @@
    "x_neo": 19.5175,
    "z": 7.776,
    "comp_apoio": 0.3625,
-   "assento": "horizontal + consolo CT-I130"
+   "assento": "horizontal + consolo CT-I120"
   },
   "i130_dir": {
    "x_neo": 19.9825,
    "z": 7.788,
-   "assento": "horizontal + consolo CT-I130"
+   "assento": "horizontal + consolo CT-I120"
   }
  },
  "REC": [
   7.195,
   8.369
  ],
- "Z_TOPO_I130": 7.776,
- "Z_TOPO_I130_DIR": 7.788,
+ "Z_TOPO_I120": 7.776,
+ "Z_TOPO_I120_DIR": 7.788,
  "DEGRAU_C": 0.012,
  "CUNHA": 0.3,
  "DEGRAU_CUNHA": 0.009,
  "PINO_TS": 0.0775,
- "Z_ASS_I130": 6.966,
- "H_I130": 1.2,
- "HD_I130": 0.78,
+ "Z_ASS_I120": 6.966,
+ "H_I120": 1.2,
+ "HD_I120": 0.78,
  "cargas_cob": {
   "zipada_050": 0.051,
   "la_rocha_fsr32_40": 0.013,
@@ -116,7 +116,7 @@
   "e": 0.01,
   "xc": 19.5175
  },
- "CT_I130": {
+ "CT_I120": {
   "b": 0.5,
   "proj": 0.2,
   "h": 0.3,
@@ -1454,7 +1454,7 @@
    "ok": true
   }
  ],
- "berco_I130": [],
+ "berco_I120": [],
  "nos_contraventamento_x_esq": [
   0.517,
   10.619,

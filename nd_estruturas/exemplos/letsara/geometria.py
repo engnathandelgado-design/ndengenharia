@@ -32,7 +32,7 @@ PILARES_ESPECIAIS = [
 ]
 # DEC-058 (24/10/2026, decisão do Nathan, arranjo C de estudo_i130_pilar_extra): o P13 (PC-03) sai de y 54,575 (60×60) e
 # vai para y 46,317; entra um pilar novo (P13B, também PC-03, 40×40) em y 62,833 → 3 vãos iguais de 16,517 m da linha 4
-# à linha 9; a I130 da linha 2 à 4 (20,15 m) não muda. Os dois PC-03 ficam fora das linhas da cobertura (TS-01 no topo da I130).
+# à linha 9; a I120 da linha 2 à 4 (20,15 m) não muda. Os dois PC-03 ficam fora das linhas da cobertura (TS-01 no topo da I120).
 Y_PC_C = (46.317, 62.833)
 Y_P13 = Y_PC_C[0]
 LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
@@ -65,3 +65,16 @@ ESCADA_EXT = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28,   # DEC-055: 
                   n_baixo=5, n_cima=17, largura=1.50,
                   x_int=-0.45, x_ext=-1.95, y_chegada=(0.20, 2.44), y_lance_cima=(2.44, 6.92), y_patamar=(6.92, 8.42),
                   x_lance_baixo=(-1.95, -3.07), porta_y=(0.89, 1.79), porta_h=2.14)
+
+# rev12 (fresta das vigas de borda, opção B): nos vãos entre pilares de fachada PF (B–C e C–D das linhas 1 e 9) a VB 15×60 e o
+# consolo CP-VB ficam rentes à face externa do pilar (60 ⊥ fachada): eixo da VB a E_VB_FACE para fora do eixo da linha.
+# Vãos de canto (A–B, D–E): VB no eixo da linha até a decisão do quadro decisao_fresta_canto.
+E_VB_FACE = 0.225
+
+
+def y_vb(x_meio, y_linha):
+    """eixo (y) da VB do vão que contém x_meio, na linha de fachada y_linha (0 ou COMP)."""
+    entre_pf = X_FACH[1] < x_meio < X_FACH[-2]
+    if not entre_pf:
+        return y_linha
+    return y_linha - E_VB_FACE if y_linha < COMP / 2 else y_linha + E_VB_FACE

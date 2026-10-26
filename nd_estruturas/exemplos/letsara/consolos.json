@@ -1,6 +1,6 @@
 {
- "CP-I130": {
-  "onde": "P8A, P11, P13, P14 — I130 h 120 (dente 78 × 35, recorte 42), NEO-2 200×300; mísula 10 (DEC-054)",
+ "CP-I120": {
+  "onde": "P8A, P11, P13, P14 — I120 h 120 (dente 78 × 35, recorte 42), NEO-2 200×300; mísula 10 (DEC-054)",
   "b_m": 0.5,
   "proj_m": 0.4,
   "a_m": 0.2,
@@ -63,8 +63,8 @@
   "ok": true,
   "norma": "NBR 9062:2017 7.3.2 a 7.3.9"
  },
- "CT-I130": {
-  "onde": "I130 V400/V401/V402/V403 — apoio das TS-01 (linhas 3, 5, 6, 7, 8), nas duas faces da mesa superior; NEO-3C 150×300; mísula 15 (DEC-061)",
+ "CT-I120": {
+  "onde": "I120 V400/V401/V402/V403 — apoio das TS-01 (linhas 3, 5, 6, 7, 8), nas duas faces da mesa superior; NEO-3C 150×300; mísula 15 (DEC-061)",
   "b_m": 0.5,
   "proj_m": 0.2,
   "a_m": 0.0325,

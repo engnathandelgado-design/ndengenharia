@@ -4,7 +4,7 @@ Elementos:
   - pilares engastados na base (barras 3D, P-Δ), cabeças com recuo, mezanino com laje como diafragma rígido (+3,15/+6,55)
     e vigas VM;
   - TS-01 como vigas 3D (rigidez vertical E lateral: leva a carga no plano da cobertura), apoiadas por pinos nos recuos
-    dos pilares e no topo da I130 / P8A (furo oblongo em x) / P11; I130 e VB 15×60 como vigas 3D;
+    dos pilares e no topo da I120 / P8A (furo oblongo em x) / P11; I120 e VB 15×60 como vigas 3D;
   - terças Z 302×90/82×2,30 METSEC contínuas nos 8 vãos (barra 3D; 2 perfis no transpasse ±0,45 m), ligadas a cada
     TS-01 / VB pelo ST-1P: translações e torção (eixo da terça) presas, flexões livres (furos e transpasse);
   - correntes Ø10 (só tração) a L/4, L/2 e 3L/4 entre todas as terças; tirantes rígidos L 51×51×3,2 no 1º espaço de cada
@@ -39,7 +39,7 @@ LARG, COMP, XC = X_EIXO["E"], Y_LIN[-1], X_EIXO["C"]
 XF = [X_EIXO[k] for k in "ABCDE"]
 Z0, INCL = LG["Z0_TS"], 0.03
 zf = lambda x: Z0 + INCL * x                 # fundo da TS-01
-REC = tuple(LG["REC"]); Z_TOP_C = LG["Z_TOPO_I130"]; Z_I130 = LG["Z_ASS_I130"]
+REC = tuple(LG["REC"]); Z_TOP_C = LG["Z_TOPO_I120"]; Z_I120 = LG["Z_ASS_I120"]
 Z_MEZ = Z_PISOS                               # rev09 (DEC-045): topo da capa +3,90 / +7,30 (corte AA' do R01)
 A_VM, G_2E = 0.30 * 0.75, (0.30 - 0.12) * 0.26 * 25   # rev09 (DEC-049): VM retangular 30 × 75 + faixa de 2º estágio 18 × 26
 CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
@@ -161,12 +161,12 @@ def montar(cfg):
             pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))
     for j, x in enumerate(XF[1:4]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", COMP)):
-            zs = [zf(x) + 0.30] + (list(Z_MEZ) if y == 0 else []) + ([Z_I130] if "P14" in nome else []) + [7.50, 8.75]
+            zs = [zf(x) + 0.30] + (list(Z_MEZ) if y == 0 else []) + ([Z_I120] if "P14" in nome else []) + [7.50, 8.75]
             pilar(nome, x, y, 0.40, 0.60, 10.0, zs, rec=math.ceil((zf(x) + 0.90) / 0.05) * 0.05, cab=(0.40, 0.30))
-    pilar("P8A", XC, Y[1], 0.40, 0.60, Z_L2["C"], [Z_I130, Z_TOP_C] + list(Z_MEZ))
-    pilar("P11", XC, Y[3], 0.40, 0.40, Z_TOP_C, [Z_I130])
-    pilar("P13", XC, Y_PC_C[0], 0.40, 0.40, Z_TOP_C, [Z_I130])          # DEC-058: PC-03 40×40 em y 46,317 e 62,833
-    pilar("P13B", XC, Y_PC_C[1], 0.40, 0.40, Z_TOP_C, [Z_I130])
+    pilar("P8A", XC, Y[1], 0.40, 0.60, Z_L2["C"], [Z_I120, Z_TOP_C] + list(Z_MEZ))
+    pilar("P11", XC, Y[3], 0.40, 0.40, Z_TOP_C, [Z_I120])
+    pilar("P13", XC, Y_PC_C[0], 0.40, 0.40, Z_TOP_C, [Z_I120])          # DEC-058: PC-03 40×40 em y 46,317 e 62,833
+    pilar("P13B", XC, Y_PC_C[1], 0.40, 0.40, Z_TOP_C, [Z_I120])
     for nome, x, ap in (("P8", XF[1], "B"), ("P8B", XF[3], "D")):
         pilar(nome, x, Y[1], 0.40, 0.60, Z_L2[ap], list(Z_MEZ))
     # rev09 (DEC-045): pilares da escada (R01) — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7), P6 da linha 2 até o +7,30
@@ -238,11 +238,11 @@ def montar(cfg):
             ops.element("elasticBeamColumn", t, n1_, n2_, A_VM, Ev, Gv, 0.003, I_eq, I_eq, TR_X, "-releasey", rel, "-releasez", rel)
             ele.append(dict(tag=t, grupo="VM montante L2", n1=n1_, n2=n2_, A=A_VM))
         barra(cadeia[xs_w.index(xm_)], nmid, _A_mont, "montante L2", 11, extra=dict(nome=mt["nome"]))
-    # I130 (DEC-058): P8A → L3 → P11 → L5 → P13 → L6 → L7 → P13B → L8 → P14 (viga 3D nos consolos dos pilares)
-    # DEC-058 (24/10/2026): I130 h 120 (seção real) e vigas BIAPOIADAS (dentes Gerber nos consolos): cada vão com nós próprios nos
+    # I120 (DEC-058): P8A → L3 → P11 → L5 → P13 → L6 → L7 → P13B → L8 → P14 (viga 3D nos consolos dos pilares)
+    # DEC-058 (24/10/2026): I120 h 120 (seção real) e vigas BIAPOIADAS (dentes Gerber nos consolos): cada vão com nós próprios nos
     # apoios (antes a cadeia era contínua sobre os pilares e tirava carga do P13). Apoio: translações + torção (pino PN-2 no consolo).
     from nd_estruturas.prefabricados import secao_I as _sI
-    _sec = _sI(LG["H_I130"], bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
+    _sec = _sI(LG["H_I120"], bs=0.40, ts=0.22, ms=0.08, bw=0.15, bi=0.40, ti=0.25, mi=0.08)
     A_I, Iy_I, Iz_I, J_I = _sec.A, _sec.I, 0.0029, 0.0030
     vaos_i = [[("P8A", Y[1]), ("L3", Y[2]), ("P11", Y[3])], [("P11", Y[3]), ("L5", Y[4]), ("P13", Y_PC_C[0])],
               [("P13", Y_PC_C[0]), ("L6", Y[5]), ("L7", Y[6]), ("P13B", Y_PC_C[1])], [("P13B", Y_PC_C[1]), ("L8", Y[7]), ("P14-L9", COMP)]]
@@ -251,15 +251,15 @@ def montar(cfg):
         nos_v = []
         for k_, (nome, y) in enumerate(vao):
             if 0 < k_ < len(vao) - 1:
-                ni[nome] = no(XC, y, Z_I130 + 0.65, unico=True)
+                ni[nome] = no(XC, y, Z_I120 + 0.65, unico=True)
                 nos_v.append(ni[nome])
             else:
-                n_ = no(XC, y, Z_I130 + 0.65, unico=True)
-                ops.equalDOF(at(nome, Z_I130), n_, 1, 2, 3, 5)
+                n_ = no(XC, y, Z_I120 + 0.65, unico=True)
+                ops.equalDOF(at(nome, Z_I120), n_, 1, 2, 3, 5)
                 nos_v.append(n_)
         for a_, b_ in zip(nos_v[:-1], nos_v[1:]):
-            viga(a_, b_, A_I, Iy_I, Iz_I, J_I, "I130", TR_Y)
-    # TS-01 no centro: linha 2 sobre o P8A (oblongo em x), linha 4 sobre o P11, demais sobre a I130
+            viga(a_, b_, A_I, Iy_I, Iz_I, J_I, "I120", TR_Y)
+    # TS-01 no centro: linha 2 sobre o P8A (oblongo em x), linha 4 sobre o P11, demais sobre a I120
     for i, ns in lin_cen.items():
         for n in ns:
             if i == 3:
@@ -553,7 +553,7 @@ def aplicar(caso, fatores, desaprumo):
             addn(p["ns"][k], [0, 0, -P / 2, 0, 0, 0]); addn(p["ns"][k + 1], [0, 0, -P / 2, 0, 0, 0])
     # vigas (peso próprio distribuído)
     for e in ele:
-        if e["grupo"] in ("TS-01", "I130", "VB"):
+        if e["grupo"] in ("TS-01", "I120", "VB"):
             ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, -e["A"] * 25 * fG)
         elif e["grupo"] == "W linha 2":
             ops.eleLoad("-ele", e["tag"], "-type", "-beamUniform", 0.0, -e["A"] * 78.5 * fG)
@@ -631,12 +631,12 @@ def coletar(cfg):
                 pior = dict(it=round(it, 3), linha=e["linha"], x=X_TER[e["linha"]], vao=e["vao"], N=round(N, 1), My=round(My, 2), Mz=round(Mz, 2),
                             transpasse=e["transpasse"])
     R["terca"] = pior
-    for g in ("corrente", "tirante rígido", "diagonal de ancoragem", "X", "TS-01", "VB", "I130", "W linha 2", "montante linha 2"):
+    for g in ("corrente", "tirante rígido", "diagonal de ancoragem", "X", "TS-01", "VB", "I120", "W linha 2", "montante linha 2"):
         vals = []
         for e in ele:
             if e["grupo"] != g:
                 continue
-            if g in ("TS-01", "VB", "I130", "W linha 2", "montante linha 2"):
+            if g in ("TS-01", "VB", "I120", "W linha 2", "montante linha 2"):
                 f = ops.eleResponse(e["tag"], "localForce")
                 vals.append(max(abs(f[5]), abs(f[11])))          # momento lateral (eixo fraco: plano da cobertura)
             else:

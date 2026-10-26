@@ -1,5 +1,5 @@
 {
- "I130": {
+ "I120": {
   "geometria": {
    "H": 1200,
    "hd": 780,
@@ -893,7 +893,7 @@
  },
  "consolos": [
   {
-   "nome": "CP-I130 pilar central (recebe I130)",
+   "nome": "CP-I120 pilar central (recebe I120)",
    "tipo": "curto",
    "a_d": 0.517,
    "As_tir": 848,
