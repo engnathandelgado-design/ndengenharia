@@ -70,7 +70,7 @@ I.solda(va, (yn - e2, 4), (-40, 70), a=AS["porca"], tipo="filete", lado="seta", 
 I.solda(va, (0, co["z0"] + 30), (-24, -20), a=FXJ["solda"]["filete_mm"], tipo="filete", lado="seta", campo=True, comp=round(co["z1"] - co["z0"]), cauda="OBRA: costas × CE-1, 2 lados verticais")
 
 # ================================================================== VISTA FRONTAL (do lado da placa) 1:1,5
-vf = pr.vista("VISTA FRONTAL", (Q[0] + 300, Q[1] + 410), 1.5, titulo="VISTA FRONTAL", subtitulo="pelo lado da placa", unidade="mm")
+vf = pr.vista("VISTA FRONTAL", (Q[0] + 308, Q[1] + 410), 1.5, titulo="VISTA FRONTAL", subtitulo="pelo lado da placa", unidade="mm")
 vf.ret(-co["b"] / 2, co["z0"], co["b"], co["z1"] - co["z0"], "VISTA")              # costas ao fundo
 for xa in (-al["x"], al["x"]):
     ch(vf, xa - al["t"] / 2, -al["h_ponta"], al["t"], al["h_ponta"] - me["t"])     # topo das almas na ponta
@@ -84,12 +84,12 @@ vf.circulo((0, zf), 8, "METALICA"); I.hexagono(vf, (0, zf), 8, "METALICA", rot=0
 vf.ret(-HX["s"] / 2, 0, HX["s"], HX["m"], "METALICA"); vf.ret(-HX["s"] / 2, HX["m"], HX["s"], HX["m_fina"], "METALICA")
 vf.ret(-8, HX["m"] + HX["m_fina"], 16, hb - HX["m"] - HX["m_fina"], "METALICA"); vf.ret(-HX["s"] / 2, hb, HX["s"], HX["k"], "METALICA")
 vf.cota_h(sorted({round(v_, 3) for v_ in (-co["b"] / 2, -me["b"] / 2, -de["x0"] - de["b"], -de["x0"], de["x0"], de["x0"] + de["b"], me["b"] / 2, co["b"] / 2)}), co["z0"], -8, total=True)
-vf.cota_h([-al["x"] - al["t"] / 2, -al["x"] + al["t"] / 2, al["x"] - al["t"] / 2, al["x"] + al["t"] / 2], co["z1"], 16, total=False)
+vf.cota_h([-al["x"] - al["t"] / 2, -al["x"] + al["t"] / 2, al["x"] - al["t"] / 2, al["x"] + al["t"] / 2], co["z1"], 26, total=False)
 vf.cota_v([po["z0"], zf, po["z1"]], co["b"] / 2, 10, total=False)
 vf.chamada((0, zf), (46, -26), "prisioneiro M16 (sext. interno 8)")
 
 # ================================================================== VISTA SUPERIOR 1:1,5
-vs = pr.vista("VISTA SUPERIOR", (Q[0] + 300, Q[1] + 475), 1.5, titulo="VISTA SUPERIOR", subtitulo="face da CE-1 embaixo", unidade="mm")
+vs = pr.vista("VISTA SUPERIOR", (Q[0] + 308, Q[1] + 475), 1.5, titulo="VISTA SUPERIOR", subtitulo="face da CE-1 embaixo", unidade="mm")
 ch(vs, -co["b"] / 2, 0, co["b"], co["t"])
 ch(vs, -me["b"] / 2, me["y0"], me["b"], me["y1"] - me["y0"])
 for sg in (-1, 1):
@@ -101,7 +101,7 @@ vs.cota_v([0, co["t"], yn, me["y1"]], co["b"] / 2, 10, total=False)
 
 # ================================================================== isométricos
 cam = I.Camera((1.1, 1.35, 0.85))
-vi = pr.vista("ISO", (Q[0] + 418, Q[1] + 430), 2.2, titulo="ISOMÉTRICO", subtitulo="lado da placa", unidade="mm")
+vi = pr.vista("ISO", (Q[0] + 428, Q[1] + 528), 2.2, titulo="ISOMÉTRICO", subtitulo="lado da placa", unidade="mm")
 I.desenhar_iso(vi, GF.cs1_solidos(0), cam)
 ve = pr.vista("EXPLODIDO", (Q[0] + 498, Q[1] + 440), 2.8, titulo="ISOMÉTRICO EXPLODIDO", subtitulo="balões = itens", unidade="mm")
 SE = GF.cs1_solidos(34)
@@ -167,8 +167,8 @@ vp.texto((X18 + C["L_frontal"] / 2, 12), "sext. interno 8 × 6, ponta plana", "n
 X15 = 0
 Y15 = -70
 I.porca_lateral(vp, X15, Y15, HX["m"], HX["s"])
-vp.cota_h([X15, X15 + HX["m"]], Y15 - HX["e"] / 2, -6, total=False)
-vp.cota_v([Y15 - HX["s"] / 2, Y15 + HX["s"] / 2], X15 + HX["m"], 6, total=False)
+vp.cota_h([X15, X15 + HX["m"]], Y15 - HX["e"] / 2, -11, total=False)
+vp.cota_v([Y15 - HX["s"] / 2, Y15 + HX["s"] / 2], X15 + HX["m"], 10, total=False)
 I.hexagono(vp, (X15 + 45, Y15), HX["s"]); I.furo_roscado(vp, (X15 + 45, Y15), 16)
 vp.texto((X15 + 25, Y15 - 28), "15 — porca M16 ISO 4032 cl. 8 (m 14,8, s 24)", "nota", "TOP_CENTER")
 X17 = 95

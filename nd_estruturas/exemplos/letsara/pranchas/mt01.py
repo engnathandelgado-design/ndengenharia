@@ -51,7 +51,7 @@ pr.revisao("06", "18/10/2026", "EMISSÃO PARA PRODUÇÃO NA METALÚRGICA")
 Q = pr.quadro
 pr.cabecalho_peca("MT", f"NICHO NC-1 ({N_E} + {N_D} NC-1' ESPELHADO = {N_NC} PÇ) · CONSOLE CS-1 ({N_CS} PÇ) — FABRICAÇÃO",
                   "aço A572-50 (parede do nicho e grampos A36) · solda de oficina MIG · galvanizado a fogo · cotas em mm", largura=Q[2] - Q[0] - 10)
-DY = 250
+DY = 241
 desenhar("/home/claude/letsara/pranchas/pp02.py", Proxy(pr, 0, DY, "NC "))
 desenhar("/home/claude/letsara/pranchas/pp03.py", Proxy(pr, 585, DY, "CS "))
 pr.linha((Q[0] + 588, Q[1] + 300), (Q[0] + 588, Q[3] - 34), "VISTA")
@@ -79,7 +79,7 @@ for _mk, _e in (("CS-1C", 100), ("CS-1D", 75)):                            # DEC
     _q = _n01[_mk.replace("-", "")]
     qt.append([_mk, f"CS-1 (dos acima) + caixa de calço 120 × 330 × {_e} ch. 9,5 soldada nas costas (PP06)", _q, math.ceil(_q * RES), _q + math.ceil(_q * RES), f(_cal[_mk]["kg_caixa"] * _q, 0)])
 qt.append(["CE-1L", "chapa de espera 840 × 330 × 12,5 com asas (PP06; pinos como a CE-1)", _n01["CE1L"], 0, _n01["CE1L"], f(GF.kg_ch(840, 330, GF.TCE) * _n01["CE1L"], 0)])
-y2 = pr.tabela(Q[0] + 440, Q[1] + 292, "QUANTIDADES DE PRODUÇÃO", ["PEÇA", "USO", "OBRA", "RESERVA 5 %", "PRODUZIR", "kg (obra)"], qt, [16, 78, 14, 20, 18, 20], h_lin=5.2)
+y2 = pr.tabela(Q[0] + 440, Q[1] + 292, "QUANTIDADES DE PRODUÇÃO", ["PEÇA", "USO", "OBRA", "RESERVA 5 %", "PRODUZIR", "kg (obra)"], qt, [16, 72, 14, 20, 24, 20], h_lin=5.2)
 pr.notas(Q[0] + 440, y2 - 4, [
     "Medidas em mm. Tolerâncias gerais NBR ISO 2768-1 classe m; furos Ø18 ± 0,3; esquadros ± 0,5°; NC-1: vão interno teto–base 178 ± 1 e profundidade 47,5 ± 1 (gabarito).",
     "Corte a laser ou plasma de alta definição; sem rebarbas; quebrar cantos vivos 1 mm. Chapas A572-50 (parede do NC-1 e grampos em A36).",
@@ -91,7 +91,7 @@ pr.notas(Q[0] + 440, y2 - 4, [
     f"DEC-044 (ND-LET-PP06): {_n01['CS1C']} CS-1C e {_n01['CS1D']} CS-1D = CS-1 comum com caixa de calço 120 × 330 (e = 100 / 75, chapa 9,5 A36) soldada nas costas na oficina (filete 5, 2 × 130), galvanizada junto; marcar CS-1C / CS-1D. {_n01['CE1L']} CE-1L (840 × 330 × 12,5, mesmos 4 pinos) para a fábrica dos pilares.",
     "PROJETO DA ND ENGENHARIA."], 300)
 av1 = pr.salvar("/home/claude/letsara/pranchas/ND-LET-MT01-1")
-print("MT01-1", len([a for a in av1 if a[0] == "ERRO"]), "erros,", len(av1), "avisos", [a for a in av1 if a[0] == "ERRO" or "sobrep" in a[1] or "sai" in a[1]][:20])
+print("MT01-1", len([a for a in av1 if a[0] == "ERRO"]), "erros,", len(av1), "avisos", av1)
 
 # ================================================================== folha 02/02 — imagens e plano de corte (A1)
 p2 = Prancha("A1", dict(DADOS, conteudo="PEÇAS DE FIXAÇÃO DAS PLACAS — IMAGENS DAS PEÇAS E PLANO DE CORTE", desenho="ND-LET-MT01", folha="02/02"))

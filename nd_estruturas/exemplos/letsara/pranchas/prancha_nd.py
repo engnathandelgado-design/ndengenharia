@@ -1154,22 +1154,40 @@ class Vista:
                (mx + ux * 0.7 - nx * 3, my + uy * 0.7 - ny * 3), (mx + ux * 2, my + uy * 2), (x2, y2)]
         return self._add(self.pr.msp.add_lwpolyline(pts, dxfattribs={"layer": camada}))
 
+    def _linhas_cadeia(self, vs):
+        """rev11: trecho cujo número não cabe entre as linhas de chamada vai para uma linha de cota mais afastada
+        (2ª linha; trechos curtos vizinhos alternam entre a 2ª e a 3ª) — texto de cota 3,5 sem sobrepor."""
+        h = self.pr.doc.dimstyles.get("ND").dxf.dimtxt
+        nivel, ult = [], -1
+        for k, (a, b) in enumerate(zip(vs[:-1], vs[1:])):
+            larg = abs(b - a) / self.esc
+            if _wtext(self.fmt(abs(b - a)), h) + 1.0 <= larg or len(vs) <= 2:
+                nivel.append(0)
+            else:
+                nv = 2 if (k > 0 and nivel[-1] == 1) else 1
+                nivel.append(nv)
+        return nivel
+
     def cota_h(self, xs, y_ref, dist_papel=-10.0, total=True):
         dist_papel = dist_papel * DIM_K
-        yb = y_ref + dist_papel * self.esc
-        for a, b in zip(xs[:-1], xs[1:]):
+        sg = math.copysign(1, dist_papel)
+        niv = self._linhas_cadeia(xs)
+        for (a, b), nv in zip(zip(xs[:-1], xs[1:]), niv):
+            yb = y_ref + (dist_papel + sg * DIM_DLI * nv) * self.esc
             self._dim((a, yb), (a, y_ref), (b, y_ref), 0)
         if total and len(xs) > 2:
-            yt = yb + math.copysign(DIM_DLI, dist_papel) * self.esc
+            yt = y_ref + (dist_papel + sg * DIM_DLI * (max(niv) + 1)) * self.esc
             self._dim((xs[0], yt), (xs[0], y_ref), (xs[-1], y_ref), 0)
 
     def cota_v(self, ys, x_ref, dist_papel=-10.0, total=True):
         dist_papel = dist_papel * DIM_K
-        xb = x_ref + dist_papel * self.esc
-        for a, b in zip(ys[:-1], ys[1:]):
+        sg = math.copysign(1, dist_papel)
+        niv = self._linhas_cadeia(ys)
+        for (a, b), nv in zip(zip(ys[:-1], ys[1:]), niv):
+            xb = x_ref + (dist_papel + sg * DIM_DLI * nv) * self.esc
             self._dim((xb, a), (x_ref, a), (x_ref, b), 90)
         if total and len(ys) > 2:
-            xt = xb + math.copysign(DIM_DLI, dist_papel) * self.esc
+            xt = x_ref + (dist_papel + sg * DIM_DLI * (max(niv) + 1)) * self.esc
             self._dim((xt, ys[0]), (x_ref, ys[0]), (x_ref, ys[-1]), 90)
 
     def cota_ord(self, xs, y_ref, dist_papel=12.0, x0=None, rotulos=None):

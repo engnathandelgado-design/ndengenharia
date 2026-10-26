@@ -62,14 +62,14 @@ I.solda(vf, (XG[3], H + 20), (40, 6), a=AS["grampo"], tipo="filete", lado="ambos
 vf.marcador_corte((25, -45), (25, H + 60), "A", lado=1)
 
 # ================================================================== CORTE A-A (lateral) 1:1,5
-va = pr.vista("CORTE A-A", (Q[0] + 205, Q[1] + 345), 2.0, titulo="CORTE A-A", subtitulo="boca à esquerda", unidade="mm")
+va = pr.vista("CORTE A-A", (Q[0] + 236, Q[1] + 345), 2.0, titulo="CORTE A-A", subtitulo="boca à esquerda", unidade="mm")
 va.ret(0, tb, pf, H - tt - tb, "VISTA")                                        # parede lateral vista ao fundo
 chapa_lat(va, 0, H - tt, pf, tt)
 chapa_lat(va, 0, 0, pf, tb)
 chapa_lat(va, pf, 0, tf, H)
 chapa_lat(va, 0, za, ta, ha)
 va.ret(yg - dg / 2, H, dg, hgt, "ARMADURA"); va.ret(yg - dg / 2, -hgb, dg, hgb, "ARMADURA")
-va.cota_h([0, ta, yg, pf, P], -hgb, -8, total=True)
+va.cota_h([0, ta, yg], -hgb, -8, total=False); va.cota_h([yg, pf, P], -hgb, -15, total=False); va.cota_h([0, P], -hgb, -22, total=False)   # rev11: cadeia em 2 níveis (texto 3,5)
 va.cota_v([-hgb, 0, tb, za, H - tt, H, H + hgt], P, 14, total=False)
 va.texto((-4, H / 2), "BOCA", "nota", "MIDDLE_CENTER", rot=90)
 I.solda(va, (pf, H - tt / 2), (22, 16), a=AS["teto_fundo"], tipo="filete", lado="ambos", cauda="teto × fundo")
