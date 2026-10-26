@@ -486,7 +486,7 @@
      "58",
      "PP01",
      "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — ARMADURA DA PONTA, CONJUNTO MONTADO, TOLERÂNCIA...",
-     "A1",
+     "A0",
      "09",
      "03 p.9"
     ],
@@ -630,7 +630,7 @@
      "76",
      "COB02",
      "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS",
-     "A1",
+     "A0",
      "09",
      "04 p.4"
     ],
@@ -638,7 +638,7 @@
      "77",
      "COB03",
      "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS",
-     "A1",
+     "A0",
      "09",
      "04 p.5"
     ],
@@ -646,7 +646,7 @@
      "78",
      "COB04",
      "COBERTURA — ACABAMENTOS DE FUNILARIA (FEITOS NA OBRA): BEIRAIS, ENCOSTOS, PLATIBANDA ...",
-     "A1",
+     "A0",
      "09",
      "04 p.6"
     ],
@@ -662,7 +662,7 @@
      "80",
      "COB05",
      "COBERTURA METÁLICA DA LINHA 2 — W 200 × 15,0 NOS PILARES E EM MONTANTES SOBRE AS VM D...",
-     "A1",
+     "A0",
      "02",
      "04 p.8"
     ],

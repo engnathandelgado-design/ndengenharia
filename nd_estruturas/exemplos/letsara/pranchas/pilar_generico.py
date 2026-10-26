@@ -351,12 +351,17 @@ def prancha_pilar(P):
                     + [es["z"] for es in P.get("esperas_face", []) if es["face"] == face or (face == "A" and es["face"] not in P["vistas"])]
                     + (list(AL) if face == af_ or DIR[face] == af_ or ESQ[face] == af_ else [])          # rev11: posição das alças AL-2 cotada
                     + ([FI["z"]] if face in FI["eixo"] else [])))                                   # rev11: furo FI-1 cotado
-        v.cota_v(zs, -EXT[-1], -9)
+        from ezdxf import bbox as _bb                                         # rev11: as cadeias ficam fora do que foi desenhado (consolo mais largo que a face)
+        _g = [e_ for e_ in v.ents if e_.dxftype() not in ("TEXT", "MTEXT", "DIMENSION") and e_.dxf.layer not in ("CHAMADA", "EIXO")]
+        _x = _bb.extents(_g, fast=True) if _g else None
+        _xmin = min(-EXT[-1], (_x.extmin.x - v.o[0]) * v.esc) if _x and _x.has_data else -EXT[-1]
+        _xmax = max(W + EXT[1], (_x.extmax.x - v.o[0]) * v.esc) if _x and _x.has_data else W + EXT[1]
+        v.cota_v(zs, _xmin, -11)
         v.zs_cota = list(zs)
         ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
         v.zs_ords = list(ords) if len(ords) > 3 else []
         if len(ords) > 3:
-            v.cota_v(ords, W + EXT[1], 9)                                                    # rev06e: cadeia + total (usina), sem acumuladas
+            v.cota_v(ords, _xmax, 11)                                                    # rev06e: cadeia + total (usina), sem acumuladas
         v.cota_h([0, W], 0, -8)
         if REC and (dl or dr):
             v.cota_h(sorted(set([0, dl, W - dr, W])), L_TOT, 8, total=False)
@@ -536,7 +541,7 @@ def prancha_pilar(P):
         d1.ret(c0["pino_x"] - c0["pino_d"] / 2, zc0 - c0["pino_emb"] + 5, c0["pino_d"], c0["pino_emb"], "OCULTA")
         d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
         d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
-        d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0])), proj, 10, total=False)          # rev08: caimento no subtítulo (cota de 1,2 cruzava as linhas)
+        d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0])), proj, 15, total=False)          # rev08: caimento no subtítulo (cota de 1,2 cruzava as linhas)
         d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -12, total=False); d1.cota_h([-PW, 0], Z1, -15)
         d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L={c0['pino_L']/10:g}")
         d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")

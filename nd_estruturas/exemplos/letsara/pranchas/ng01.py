@@ -241,7 +241,7 @@ def gerar():
     S = "/home/claude/letsara/pranchas/img_ng01/"
     xa, xb = x0 + 275, x0 + 590
     pr.imagem(xa, yt - 205, xb, yt - 28, S + "ng01_estrutura_c.png", "ESTRUTURA — ISOMÉTRICO", "pilares, vigas, mezanino e cobertura metálica (sem telhas e sem placas)")
-    pr.imagem(xa, yt - 420, xb, yt - 243, S + "ng01_completa_c.png", "OBRA COMPLETA — ISOMÉTRICO", "com as placas de fechamento, telhas e rufos")
+    pr.imagem(xa, yt - 408, xb - 14, yt - 249, S + "ng01_completa_c.png", "OBRA COMPLETA — ISOMÉTRICO", "com as placas de fechamento, telhas e rufos")
     # ---------- materiais (coluna 2, abaixo)
     ym = pr.tabela(xa, yt - 445, "MATERIAIS E RESISTÊNCIAS POR PEÇA (MPa, cm)", ["PEÇA", "CONCRETO", "fcj LIBERAÇÃO", "fcj DESFORMA/IÇAMENTO", "PROTENSÃO (força no macaco por cabo)", "COBRIMENTO", "CAA"],
                    MATERIAIS, [64, 20, 26, 40, 96, 42, 18], h_lin=5.2)
