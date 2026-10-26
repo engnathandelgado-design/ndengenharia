@@ -3,7 +3,7 @@ import json, sys, numpy as np, pyvista as pv
 pv.OFF_SCREEN=True
 s=open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/saidas/letsara_3d.html').read()
 i=s.find('const DATA = ')+13; j=s.find('\n',i); D=json.loads(s[i:j].rstrip(';'))
-COR={'Pilares':'#c9c4bb','Vigas I90 de cobertura':'#b9b3a8','Vigas centrais I130':'#a9a398','Consolos':'#9c968b','Vigas de borda':'#b0aa9f',
+COR={'Pilares':'#c9c4bb','Vigas I90 de cobertura':'#b9b3a8','Vigas centrais I120':'#a9a398','Consolos':'#9c968b','Vigas de borda':'#b0aa9f',
  'Terças metálicas':'#5b7490','Ligações da cobertura':'#e8742c','Esperas e insertos embutidos':'#444444','Parafusos da cobertura':'#dddddd',
  'Contraventamento':'#b0272d','Correntes, tirantes rígidos e diagonais':'#2a9d6f','Pinos, tubos e neoprenes':'#222222',
  'Vigas de mezanino (retangulares protendidas)':'#b9b3a8','Cobertura metálica da linha 2':'#5b7490','Escada metálica':'#4a6a8a','Laje alveolar':'#d8d4cc','Concreto de 2º estágio (obra, com a capa)':'#8fa3b8','Alças N9 (2º estágio)':'#22aa88',

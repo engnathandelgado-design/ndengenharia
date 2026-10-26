@@ -1,5 +1,8 @@
 """Isométrico 3D (PyVista) — TS-01 com chaparia nomeada. Gera ISO-TS01-geral.png e ISO-TS01-ponta.png."""
 import json, math, numpy as np, pyvista as pv
+import sys
+sys.path.insert(0, "/home/claude/letsara/pranchas")
+import ts01_dados as TD
 pv.OFF_SCREEN = True
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 L, H, MAC = LG["L_TS"], 0.90, 1.20
@@ -70,11 +73,11 @@ cena(p)
 rot(p, [(ALCAS[0], 0, H + 0.14), (TERCAS[3] - 0.075, 0.06, H + 0.12), (NOS[2] + 0.14, 0.14, H + 0.05),
         (L - 0.0775, 0.2, 0.0), (0.14, 0.2, 0.0)],
     ["AL-1 (4 alças de cordoalha)", "ES-1: 2 esperas M16 do ST-1P (terça)", "ES-2: esperas das orelhas OR-X (nó do X)",
-     "apoio no topo da I130: NEO-3 + 2 TB-3", "apoio no pilar: NEO-4 + 2 TB-3 (sem dente)"])
+     "apoio no topo da I120: NEO-3 + 2 TB-3", "apoio no pilar: NEO-4 + 2 TB-3 (sem dente)"])
 p.enable_parallel_projection()
 p.camera_position = [(L * 0.5 - 8, -14, 9), (L * 0.5, 0, 0.45), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(2.3)
-p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · 12,0 t · 14 peças".replace(".", ","), font_size=16, position="upper_left", color="#111111")
+p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · {TD.peso/10:.2f} t · {TD.P['qtd']} peças".replace(".", ","), font_size=16, position="upper_left", color="#111111")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-geral.png")
 from PIL import Image, ImageChops
 im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-geral.png").convert("RGB")

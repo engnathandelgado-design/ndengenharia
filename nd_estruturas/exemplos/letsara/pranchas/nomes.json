@@ -1,5 +1,5 @@
 {
- "regras": "Nomenclatura das peças da Letsara — padrão do Nathan (22/10/2026). FASE 1: só calcula; as folhas ainda não usam.\n\nRegras\n- Pilares: P1, P2, P3… — um nome por PEÇA (por posição), em sentido de leitura da planta de locação como desenhada na\n  ND-LET-LOC01: horizontal da planta = linhas 1 → 9 (obra y), vertical = eixos A (embaixo) → E (em cima) (obra x).\n  Lê-se de cima para baixo por fila de eixo (E, D, C, B, A) e, em cada fila, da esquerda para a direita (linha 1 → 9).\n  Pilar fora do eixo entra na fila do eixo mais próximo (pela coordenada vertical da planta); empate na mesma linha\n  (mesma coordenada horizontal) resolve de cima para baixo.\n- Vigas: série por nível — V100 nível zero (não há), V200 = 1º nível acima (mezanino +3,90), V300 = +7,30,\n  V400 = cobertura (TS-01, VB, I130). Um nome por peça. Convenção de leitura (padrão usual de projeto):\n  primeiro as vigas HORIZONTAIS da planta (de cima para baixo e, na mesma fila, da esquerda para a direita),\n  depois as VERTICAIS (da esquerda para a direita e, na mesma coluna, de cima para baixo).\n- Peças iguais continuam com UMA folha; a folha lista os nomes que detalha (\"P5, P6, P7, P8 — 4 peças\").\n- Lajes (LA) e placas (PP) mantêm o nome atual.",
+ "regras": "Nomenclatura das peças da Letsara — padrão do Nathan (22/10/2026). FASE 1: só calcula; as folhas ainda não usam.\n\nRegras\n- Pilares: P1, P2, P3… — um nome por PEÇA (por posição), em sentido de leitura da planta de locação como desenhada na\n  ND-LET-LOC01: horizontal da planta = linhas 1 → 9 (obra y), vertical = eixos A (embaixo) → E (em cima) (obra x).\n  Lê-se de cima para baixo por fila de eixo (E, D, C, B, A) e, em cada fila, da esquerda para a direita (linha 1 → 9).\n  Pilar fora do eixo entra na fila do eixo mais próximo (pela coordenada vertical da planta); empate na mesma linha\n  (mesma coordenada horizontal) resolve de cima para baixo.\n- Vigas: série por nível — V100 nível zero (não há), V200 = 1º nível acima (mezanino +3,90), V300 = +7,30,\n  V400 = cobertura (TS-01, VB, I120). Um nome por peça. Convenção de leitura (padrão usual de projeto):\n  primeiro as vigas HORIZONTAIS da planta (de cima para baixo e, na mesma fila, da esquerda para a direita),\n  depois as VERTICAIS (da esquerda para a direita e, na mesma coluna, de cima para baixo).\n- Peças iguais continuam com UMA folha; a folha lista os nomes que detalha (\"P5, P6, P7, P8 — 4 peças\").\n- Lajes (LA) e placas (PP) mantêm o nome atual.",
  "pecas": [
   {
    "nome": "P1",
@@ -757,7 +757,7 @@
    "nome": "V400",
    "tipo": "viga",
    "marca": "V407",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "nivel": "cobertura",
    "orientacao_planta": "H",
    "x0": 19.75,
@@ -770,7 +770,7 @@
    "nome": "V401",
    "tipo": "viga",
    "marca": "V406",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "nivel": "cobertura",
    "orientacao_planta": "H",
    "x0": 19.75,
@@ -783,7 +783,7 @@
    "nome": "V402",
    "tipo": "viga",
    "marca": "V405",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "nivel": "cobertura",
    "orientacao_planta": "H",
    "x0": 19.75,
@@ -796,7 +796,7 @@
    "nome": "V403",
    "tipo": "viga",
    "marca": "V404",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "nivel": "cobertura",
    "orientacao_planta": "H",
    "x0": 19.75,

@@ -6,7 +6,7 @@ Verificações implementadas nesta versão (as demais estão listadas em PENDENT
  C2  resumo do aço da folha × soma da tabela de ferros (kg por Ø, +10 %) — tolerância 1 %;
  C3  quantitativos (xlsx) × soma das folhas: aço CA-50 total — tolerância 2 %;
  C4  regras da ND nos textos das folhas: cordoalha Ø15,2 em laje/viga protendida; "W 310"; "Kingspan" nos acabamentos;
-     NEO-3 (sem C) no apoio das TS-01 na I130; "sem uso" na laje +7,30 (deve ser laje de cobertura);
+     NEO-3 (sem C) no apoio das TS-01 na I120; "sem uso" na laje +7,30 (deve ser laje de cobertura);
  C5  marcas de consolo: toda marca C1…Cn citada nas folhas existe no registro (consolos_marcas.json);
  C6  nomes de peça (P1…, V100…) citados nas plantas existem no registro de nomes (nomes.json).
 Saída: conferencia_cruzada.json e .md na pasta das pranchas; código de saída 1 se houver ERRO."""
@@ -100,8 +100,8 @@ for fl in idx:
         su = [t for t in tx if "7,30" in t and "sem uso" in t.lower()]
         r(not su, "C4 laje +7,30 descrita como laje de cobertura", fl, "ok" if not su else su[0][:80])
         if fl.startswith("ND-LET-TS01"):
-            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I130" in t or "topo" in t.lower()) and "100×300" not in t and "P11" not in t]   # NEO-3 só no topo do P11 (linha 4)
-            r(not neo, "C4 NEO-3C no apoio das TS-01 sobre a I130", fl, "ok" if not neo else neo[0][:80])
+            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I120" in t or "topo" in t.lower()) and "100×300" not in t and "P11" not in t]   # NEO-3 só no topo do P11 (linha 4)
+            r(not neo, "C4 NEO-3C no apoio das TS-01 sobre a I120", fl, "ok" if not neo else neo[0][:80])
         # C5 — marcas de consolo
         mcs = {m for t in tx for m in re.findall(r"(?<![A-Z0-9-])C(\d{1,2})(?![0-9×x])", t)}
         mcs = {"C" + m for m in mcs}
@@ -115,6 +115,71 @@ if os.path.exists(qj):
     tq = Q.get("aco_total_kg")
     if tq:
         r(abs(tq - aco_folhas) <= 0.02 * max(tq, 1), "C3 quantitativos × soma das folhas (aço CA-50)", "QUANTITATIVOS", f"quantitativos {tq:.0f} kg × folhas {aco_folhas:.0f} kg")
+
+# ------------------------------------------------------------------ rev12 — itens da seção 10 do CHECKLIST_REVISAO
+# C7  travas de geometria (renomear.conferir_pilar): pilar citado num apoio/vista pertence à linha/eixo dele
+tg = PR + "travas_geometria.jsonl"
+if os.path.exists(tg):
+    falhas = [json.loads(l) for l in open(tg, encoding="utf-8") if l.strip()]
+    falhas = [f for f in falhas if not f.get("ok")]
+    r(not falhas, "C7 trava de geometria (pilar × linha/eixo do apoio)", "JOGO", "ok" if not falhas else "; ".join(f"{f['pilar']} em {f['onde']}: {f['detalhe']}" for f in falhas[:6]))
+else:
+    r(False, "C7 trava de geometria (pilar × linha/eixo do apoio)", "JOGO", "travas_geometria.jsonl não gerado")
+# C8–C14 nos textos de cada folha
+DIAM_EXC = json.load(open(PR + "excecoes_bitola.json", encoding="utf-8")) if os.path.exists(PR + "excecoes_bitola.json") else {}
+ocup = {}
+for fl in idx:
+    dx = PR + fl + ".dxf"
+    tx = textos(dx) if os.path.exists(dx) else []
+    if not tx:
+        continue
+    t8 = [t for t in tx if re.search(r"DEC-\d{3}", t) or re.search(r"\bNathan\b", t)]
+    r(not t8, "C8 nota interna (DEC-0xx / Nathan) em folha do cliente", fl, "ok" if not t8 else f"{len(t8)}: {t8[0][:80]}")
+    t9 = [t for t in tx if "I130" in t]
+    r(not t9, "C9 nome da família I120 (sem I130)", fl, "ok" if not t9 else f"{len(t9)}: {t9[0][:80]}")
+    lib = [t for t in tx if "LIBERADO" in t.upper() and "AGUARDANDO" not in t.upper()]
+    r(not lib, "C10 LIBERADO só sem pendência (local, ART, decisões)", fl, "ok" if not lib else lib[0][:80])
+    gros = sorted({m for t in tx for m in re.findall(r"Ø\s?(2[2-9]|3[0-9]|4[0-9])(?![,.0-9])", t)} - set(DIAM_EXC.get(fl, [])))
+    r(not gros, "C11 bitola > Ø20 sem exceção registrada", fl, "ok" if not gros else "Ø" + ", Ø".join(gros))
+    n61 = [t for t in tx if re.search(r"6123\s*:\s*19", t)]
+    r(not n61, "C12 norma vigente (NBR 6123:2023)", fl, "ok" if not n61 else n61[0][:80])
+    dp = [t for t in tx if re.search(r"(?<![\d.,/])\d+\.\d+\s?(cm|m³|t\b|kN|MPa|m\b)", t) and "http" not in t]
+    r(not dp, "C13 vírgula decimal", fl, "ok" if not dp else dp[0][:80])
+    for t in tx:
+        tl = t.lower()
+        if "mezanino" in tl and ("escritório" in tl or "depósito" in tl):
+            ocup.setdefault("escritório" if "escritório" in tl else "depósito", []).append(fl)
+    zero = [t for t in tx if re.fullmatch(r"\s*0,0 MPa\s*", t)] if fl == "ND-LET-IC01" else []
+    if fl == "ND-LET-IC01":
+        r(not zero and any("βa" in t for t in tx), "C14 IC01 com βa e sem cálculo zerado", fl, "ok" if not zero else "σ = 0,0 MPa")
+r(len(ocup) <= 1, "C15 mesma ocupação do mezanino em todas as notas", "JOGO", "ok" if len(ocup) <= 1 else str({k: v[:3] for k, v in ocup.items()}))
+# C16 densidade única: peso da IC01 = lista de peças (PR01/quantitativos) ±0,1 t
+try:
+    TI = json.load(open(PR + "ND-LET-IC01.tabelas.json", encoding="utf-8"))
+    import quantitativos as _QT
+    PES = {}
+    for p_ in _QT.pecas:
+        PES.setdefault(p_[1], p_[7])
+    difs = []
+    for t in TI["tabelas"]:
+        for l in t["linhas"]:
+            mk = str(l[0]).replace("\x0e", "").replace("\x0f", "")
+            if mk in PES:
+                try:
+                    v = float(str(l[2]).replace(",", "."))
+                except Exception:
+                    continue
+                if abs(v - PES[mk]) > 0.1:
+                    difs.append(f"{mk} IC01 {v} × lista {PES[mk]}")
+    r(not difs, "C16 peso único (IC01 × lista de peças/PR01, 2,50 t/m³)", "ND-LET-IC01", "ok" if not difs else "; ".join(difs[:6]))
+except Exception as e:
+    r(False, "C16 peso único (IC01 × lista de peças/PR01, 2,50 t/m³)", "ND-LET-IC01", f"não conferido: {e}")
+# C17 carimbo: última revisão = 12 em todas as folhas
+for fl in idx:
+    tj = PR + fl + ".tabelas.json"
+    if os.path.exists(tj):
+        d = json.load(open(tj, encoding="utf-8")).get("dados", {})
+        r(str(d.get("rev")) == "12", "C17 carimbo REV 12 (pacote rev12)", fl, f"rev {d.get('rev')}")
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]

@@ -17,7 +17,8 @@ nomes = lambda mk: [q["nome"] for q in NOMES["pecas"] if q.get("marca") == mk]
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="IÇAMENTO E MANUSEIO DAS PEÇAS — PILARES (FÁBRICA E OBRA), VIGAS, PLACAS, LAJES ALVEOLARES E PEÇAS METÁLICAS",
                         desenho="ND-LET-IC01", folha="01/01", fase="PARA APROVAÇÃO"))
-pr.revisao("00", "26/10/2026", "EMISSÃO INICIAL: IÇAMENTO POR TIPO DE PEÇA (PEDIDO DO NATHAN)")
+pr.revisao("00", "26/10/2026", "EMISSÃO INICIAL: IÇAMENTO POR TIPO DE PEÇA")
+pr.revisao("R12", "26/10/2026", "NOMES DOS PILARES E VIGAS CORRIGIDOS; PESOS DA LISTA DE PEÇAS (2,50 t/m³); σ NO FURO EM MPa; TODAS AS MARCAS; COLUNA βa")
 Q = pr.quadro
 pr.texto(Q[0] + 8, Q[3] - 16, "IÇAMENTO E MANUSEIO DAS PEÇAS", "grande", "TITULO")
 pr.texto(Q[0] + 8, Q[3] - 26, "Pontos, cargas e acessórios por tipo de peça. Dados das folhas de cada peça (mesmo registro). NBR 9062:2017 5.3.2 e 5.3.3.", "nota", "TEXTO")
@@ -37,7 +38,7 @@ def esquema_pilar(x, y):
     v.circulo((x2 + 300, L - 1800), 60, "METALICA")
     v.linha((x2 + 300, L - 1800), (x2 + 300, L + 1500), "CHAMADA")
     v.texto((x2 + 900, L - 1800), "FI-1: pino passante + 2 manilhas", "nota", "MIDDLE_LEFT")
-    v.texto((x2 + 300, -300), "OBRA: verticalizar e colocar no cálice", "nota", "TOP_CENTER")
+    v.texto((x2 + 300, -1100), "OBRA: verticalizar e colocar no cálice", "nota", "TOP_CENTER")
 
 
 def esquema_viga(x, y):
@@ -80,7 +81,13 @@ esquema_placa(Q[0] + 60, Q[3] - 460)
 esquema_laje(Q[0] + 60, Q[3] - 580)
 
 # ------------------------------------------------------------------ tabelas (mesmo registro das folhas)
+# rev12: pesos e volumes da MESMA lista de peças do PR01 e dos quantitativos (quantitativos.pecas, 2,50 t/m³);
+# nomes novos protegidos (RN.N) e conferidos pela geometria; σ no furo em MPa; coluna βa em todas as tabelas.
+import quantitativos as QT
 BA, GF = 1.3, 1.3
+PESO = {}
+for p_ in QT.pecas:
+    PESO.setdefault(p_[1], p_[7])
 lin_p = []
 for fj in sorted(glob.glob(PR + "arm/*.json")):
     J = json.load(open(fj, encoding="utf-8"))
@@ -89,40 +96,53 @@ for fj in sorted(glob.glob(PR + "arm/*.json")):
         G = json.load(open(PR + f"{mk}_geom.json", encoding="utf-8"))
     except Exception:
         G = {}
-    peso = J["V"] * 25.0
+    if mk not in PESO:
+        raise SystemExit(f"IC01: pilar {mk} sem peso na lista de peças (quantitativos)")
+    peso_t = PESO[mk]
     al = sorted(J.get("al") or [])
     fi = (G.get("fi") or {}).get("z")
-    nm = ", ".join(nomes(mk)) or mk
-    Pk = peso / 2
-    sig = GF * BA * peso / (60 * min(J["B"], J["H"])) * 1000 / 1000      # MPa: furo Ø60 × largura da peça
-    lin_p.append([mk, nm[:40], f1(peso / 10.0, 2), "2 AL-2: " + " e ".join(f"{z / 10:.0f}" for z in al) + " cm da base" if al else "—", f1(Pk),
-                  (f"FI-1 a {(J['L_TOT'] - fi) / 10:.0f} cm do topo" if fi else "FI-1"), f"{f1(sig)} MPa"])
-pr.tabela(Q[0] + 420, Q[3] - 40, "PILARES — FÁBRICA (AL-2) E OBRA (FI-1)", ["MARCA", "PEÇAS", "PESO (t)", "FÁBRICA: ALÇAS AL-2", "Pk/alça (kN)", "OBRA: FURO", "σ no furo (d)"],
-          lin_p, [20, 70, 18, 60, 22, 48, 24], h_lin=5.6)
+    ns = nomes(mk)
+    for n_ in ns:
+        q_ = next(q for q in NOMES["pecas"] if q["nome"] == n_)
+        RN.conferir_pilar(n_, f"IC01 {mk}", x=q_["x"], y=q_["y"])
+    nm = RN.N(", ".join(ns)) if ns else mk
+    Pk = peso_t * 10 / 2                                                # kN por alça (2 alças, cabos verticais)
+    sig = GF * BA * peso_t * 10 * 1000 / (60 * min(J["B"], J["H"]))     # MPa = N/mm²: furo Ø60 × menor lado (mm)
+    lin_p.append([RN.N(mk), nm, f1(peso_t, 2), "2 AL-2: " + " e ".join(f"{z / 10:.0f}" for z in al) + " cm da base" if al else "—", f1(Pk),
+                  (f"FI-1 a {(J['L_TOT'] - fi) / 10:.0f} cm do topo" if fi else "FI-1"), f"{f1(sig)} MPa", f1(BA)])
+pr.tabela(Q[0] + 420, Q[3] - 40, "PILARES — FÁBRICA (AL-2) E OBRA (FI-1)", ["MARCA", "PEÇAS", "PESO (t)", "FÁBRICA: ALÇAS AL-2", "Pk/alça (kN)", "OBRA: FURO", "σ no furo (d)", "βa"],
+          lin_p, [20, 92, 18, 60, 22, 48, 24, 12], h_lin=5.6)
 I1 = json.load(open(AQ + "i110_r01.json", encoding="utf-8"))
 LG = json.load(open(AQ + "ligacoes.json", encoding="utf-8"))
 lin_v = []
-for k, v_ in I1.items():
-    ic = v_.get("icamento") if isinstance(v_, dict) else None
-    if ic:
-        nv = RN.novo(k) if hasattr(RN, "novo") else k
-        lin_v.append([nv, "I130", f1(ic["peso_kN"] / 10.0, 2), f"2 AL-3 a {f1(ic['a_alca_m'], 2)} m das pontas", f1(ic["peso_kN"] / 2), f"{ic['n_lacos']} laços Ø12,7; Fd(βa 3) {f1(ic['F_alca_beta3_kN'])} kN"])
+for k in ("V407", "V406", "V405", "V404"):
+    ic = I1[k]["icamento"]
+    pt = PESO[k]
+    lin_v.append([RN.N(", ".join(nomes(k))), "I120", f1(pt, 2), f"2 AL-3 a {f1(ic['a_alca_m'], 2)} m das pontas", f1(pt * 10 / 2),
+                  f"{ic['n_lacos']} laços Ø12,7 por alça; Fd(βa 3) {f1(ic['F_alca_beta3_kN'])} kN", f1(BA)])
 al_ts = LG["alcas"]
-lin_v.append(["V408 … V419", "TS-01", "12,0", "4 AL-1 a " + ", ".join(f1(a, 2) for a in al_ts) + " m (2 balancins)", f1(120 / 4), "laço Ø12,7, 2 pernas"])
-lin_v.append(["VM-01 … VM-04", "VM 30×75", "—", "2 AL-1 a 1,10 m das pontas", "—", "laço Ø12,7, 2 pernas"])
-lin_v.append(["VB", "VB 15×60", "—", "2 AL-1 a 1,50 m das pontas", "—", "laço Ø12,7, 2 pernas"])
-y = pr.tabela(Q[0] + 420, Q[3] - 330, "VIGAS — ALÇAS DE CORDOALHA (não engraxada, NBR 9062 5.3.3)", ["MARCA", "TIPO", "PESO (t)", "PONTOS", "Pk/ponto (kN)", "ALÇA"],
-              lin_v, [34, 22, 18, 76, 22, 90], h_lin=5.6)
+ts_n = RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")
+lin_v.append([RN.N(RN.lista(ts_n)), RN.N("TS-01 I90"), f1(PESO["TS-01"], 2), "4 AL-1 a " + ", ".join(f1(a, 2) for a in al_ts) + " m (2 balancins)",
+              f1(PESO["TS-01"] * 10 / 4), "laço Ø12,7, 2 pernas", f1(BA)])
+for p_ in QT.pecas:
+    if p_[0] == "Mezanino" and p_[1].startswith("VM"):
+        a_ = json.load(open(AQ + "vm_retangular.json", encoding="utf-8"))[p_[1]].get("icamento", {})
+        lin_v.append([RN.N(RN.lista(RN.nomes_de(p_[1])) or p_[1]), RN.N(f"{p_[1]} 30×75"), f1(p_[7], 2),
+                      f"2 AL-1 a {f1(a_.get('a_alca_m', 1.10), 2)} m das pontas", f1(p_[7] * 10 / 2), "laço Ø12,7, 2 pernas", f1(BA)])
+    if p_[0] == "Vigas de borda":
+        lin_v.append([RN.N(RN.lista(RN.nomes_de(p_[1])) or p_[1]), RN.N(f"{p_[1]} 15×60"), f1(p_[7], 2), "2 AL-1 a 1,50 m das pontas", f1(p_[7] * 10 / 2), "laço Ø12,7, 2 pernas", f1(BA)])
+y = pr.tabela(Q[0] + 420, Q[3] - 330, "VIGAS — ALÇAS DE CORDOALHA (não engraxada, NBR 9062 5.3.3)", ["PEÇAS", "MARCA / SEÇÃO", "PESO (t)", "PONTOS", "Pk/ponto (kN)", "ALÇA", "βa"],
+              lin_v, [92, 26, 18, 66, 22, 76, 12], h_lin=5.6)
 PL = json.load(open(AQ + "placas_icamento_4p.json", encoding="utf-8"))
 LA = json.load(open(AQ + "laje_alveolar.json", encoding="utf-8"))["icamento"]
-lin_o = [["PLACAS PP", f1(PL["peso_t"], 2), PL["pontos"], f"{f1(PL['Pk_kN'])} (Pd {f1(PL['Pd_kN'])} ≤ {f1(PL['P_disp_kN'])})", "IZ-1 (inserto de içamento) + balancim duplo"],
-         ["LAJE ALVEOLAR LA-01", f1(LA["peso_t"], 2), f"2 garras a {f1(LA['ponto_m'], 2)} m das pontas", f"Fd {f1(LA['F_por_garra_d_kN'])} por garra", "garra mecânica; fcj ≥ " + f1(LA["fcj_icamento"], 0) + " MPa"],
-         ["ESCADAS METÁLICAS", "ver ES01/ES02", "2 cintas nas longarinas, a 1/4 do comprimento", "—", "cintas de poliéster; sem içar pelos guarda-corpos"],
-         ["W 200 × 15,0 (linha 2)", "≈ 0,18 por módulo de 12 m", "2 cintas a 1/4 do comprimento", "—", "cintas; montar e parafusar antes de soltar"]]
-y2 = pr.tabela(Q[0] + 420, y - 8, "PLACAS, LAJES E PEÇAS METÁLICAS", ["PEÇA", "PESO (t)", "PONTOS", "CARGA POR PONTO (kN)", "ACESSÓRIO"], lin_o, [44, 24, 120, 50, 104], h_lin=5.6)
+lin_o = [["PLACAS PP (maior)", f1(PL["peso_t"], 2), PL["pontos"], f"{f1(PL['Pk_kN'])} (Pd {f1(PL['Pd_kN'])} ≤ {f1(PL['P_disp_kN'])})", "IZ-1 (inserto de içamento) + balancim duplo", f1(BA)],
+         ["LAJE ALVEOLAR (maior)", f1(LA["peso_t"], 2), f"2 garras a {f1(LA['ponto_m'], 2)} m das pontas", f"Fd {f1(LA['F_por_garra_d_kN'])} por garra", "garra mecânica; fcj ≥ " + f1(LA["fcj_icamento"], 0) + " MPa", f1(BA)],
+         ["ESCADAS METÁLICAS", "ver ES01/ES02", "2 cintas nas longarinas, a 1/4 do comprimento", "peso/2", "cintas de poliéster; sem içar pelos guarda-corpos", f1(BA)],
+         ["W 200 × 15,0 (linha 2)", f1(0.015 * 12, 2) + " por módulo de 12 m", "2 cintas a 1/4 do comprimento", f1(0.015 * 12 * 10 / 2), "cintas; montar e parafusar antes de soltar", f1(BA)]]
+y2 = pr.tabela(Q[0] + 420, y - 8, "PLACAS, LAJES E PEÇAS METÁLICAS", ["PEÇA", "PESO (t)", "PONTOS", "CARGA POR PONTO (kN)", "ACESSÓRIO", "βa"], lin_o, [44, 30, 110, 50, 100, 12], h_lin=5.6)
 pr.notas(Q[0] + 420, y2 - 8, [
     "Pilares: AL-2 (alças de cordoalha Ø12,7 CP-190 RB não engraxada) só na FÁBRICA — tirar da fôrma, estocar e carregar no caminhão. FI-1 (furo de içamento, tubo Ø60,3 perdido) só na OBRA — verticalizar e colocar no cálice, com pino de aço passante e 2 manilhas, o pé apoiado no chão sobre madeira. Pontos fora da platibanda.",
-    "Cargas: Pk = peso/nº de pontos (cabos verticais). Alças dimensionadas com βa 3,0 e γf 1,3 (NBR 9062:2017 5.3.2); saque, manuseio e montagem com βa 1,3. σ no furo = γf·βa·peso/(Ø60 × menor lado), muito abaixo de fcd.",
+    "Cargas: Pk = peso/nº de pontos (cabos verticais). Alças dimensionadas com βa 3,0 e γf 1,3 (NBR 9062:2017 5.3.2); saque, manuseio e montagem com βa 1,3. σ no furo = γf·βa·peso/(Ø60 × menor lado) em MPa, muito abaixo de fcd.",
     "Placas: desforma deitada pelos 4 IZ-1 da face interna com balancim duplo (cargas iguais), giro e montagem de pé pelos mesmos 4 pontos (ND-LET-PP00 e MON03, det. 2). Lajes: garra mecânica, sem alça embutida. Içar só com fcj indicado na folha da peça.",
     "Estoque: calços alinhados na vertical, nas posições das alças (pilares e vigas) ou a 0,30 m das pontas (lajes); nunca sobre consolos ou insertos."], 400)
 av = pr.salvar(PR + "ND-LET-IC01")

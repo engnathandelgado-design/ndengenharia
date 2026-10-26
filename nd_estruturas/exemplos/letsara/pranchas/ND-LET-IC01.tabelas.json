@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "IÇAMENTO E MANUSEIO DAS PEÇAS — PILARES (FÁBRICA E OBRA), VIGAS, PLACAS, LAJES ALVEOLARES E PEÇAS METÁLICAS",
   "desenho": "ND-LET-IC01",
-  "rev": "00",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -24,347 +24,476 @@
     "FÁBRICA: ALÇAS AL-2",
     "Pk/alça (kN)",
     "OBRA: FURO",
-    "σ no furo (d)"
+    "σ no furo (d)",
+    "βa"
    ],
    "linhas": [
     [
-     "PC-01",
-     "P18",
-     "6,46",
+     "\u000ePC-01\u000f",
+     "\u000eP18\u000f",
+     "6,34",
      "2 AL-2: 250 e 695 cm da base",
      "31,7",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,5 MPa",
+     "1,3"
     ],
     [
-     "PC-02",
-     "P20",
-     "4,03",
+     "\u000ePC-02\u000f",
+     "\u000eP20\u000f",
+     "3,95",
      "2 AL-2: 250 e 628 cm da base",
      "19,8",
      "FI-1 a 145 cm do topo",
-     "0,0 MPa"
+     "2,8 MPa",
+     "1,3"
     ],
     [
-     "PC-03",
-     "P22, P23",
-     "4,03",
+     "\u000ePC-03\u000f",
+     "\u000eP22, P23\u000f",
+     "3,95",
      "2 AL-2: 250 e 628 cm da base",
      "19,8",
      "FI-1 a 65 cm do topo",
-     "0,0 MPa"
+     "2,8 MPa",
+     "1,3"
     ],
     [
-     "PE-01",
-     "P3",
-     "1,36",
+     "\u000ePE-01\u000f",
+     "\u000eP3\u000f",
+     "1,34",
      "2 AL-2: 240 e 250 cm da base",
      "6,7",
      "FI-1 a 58 cm do topo",
-     "0,0 MPa"
+     "1,5 MPa",
+     "1,3"
     ],
     [
-     "PE-02",
-     "P2",
-     "3,11",
+     "\u000ePE-02\u000f",
+     "\u000eP2\u000f",
+     "3,05",
      "2 AL-2: 240 e 250 cm da base",
-     "15,3",
+     "15,2",
      "FI-1 a 58 cm do topo",
-     "0,0 MPa"
+     "2,1 MPa",
+     "1,3"
     ],
     [
-     "PE-03",
-     "P5",
-     "2,87",
+     "\u000ePE-03\u000f",
+     "\u000eP5\u000f",
+     "2,82",
      "2 AL-2: 250 e 744 cm da base",
      "14,1",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "3,2 MPa",
+     "1,3"
     ],
     [
-     "PF-01",
-     "P25",
-     "6,75",
+     "\u000ePF-01\u000f",
+     "\u000eP25\u000f",
+     "6,63",
      "2 AL-2: 330 e 780 cm da base",
      "33,1",
      "FI-1 a 238 cm do topo",
-     "0,0 MPa"
+     "4,7 MPa",
+     "1,3"
     ],
     [
-     "PF-02",
-     "P17",
-     "6,85",
+     "\u000ePF-02\u000f",
+     "\u000eP17\u000f",
+     "6,72",
      "2 AL-2: 330 e 780 cm da base",
      "33,6",
      "FI-1 a 208 cm do topo",
-     "0,0 MPa"
+     "4,7 MPa",
+     "1,3"
     ],
     [
-     "PF-03",
-     "P13",
-     "6,94",
+     "\u000ePF-03\u000f",
+     "\u000eP13\u000f",
+     "6,81",
      "2 AL-2: 330 e 780 cm da base",
      "34,0",
      "FI-1 a 188 cm do topo",
-     "0,0 MPa"
+     "4,8 MPa",
+     "1,3"
     ],
     [
-     "PF-04",
-     "P24",
-     "6,61",
+     "\u000ePF-04\u000f",
+     "\u000eP24\u000f",
+     "6,51",
      "2 AL-2: 345 e 780 cm da base",
-     "32,4",
+     "32,5",
      "FI-1 a 208 cm do topo",
-     "0,0 MPa"
+     "4,6 MPa",
+     "1,3"
     ],
     [
-     "PF-05",
-     "P28",
-     "6,30",
+     "\u000ePF-05\u000f",
+     "\u000eP28\u000f",
+     "6,18",
      "2 AL-2: 345 e 780 cm da base",
      "30,9",
      "FI-1 a 238 cm do topo",
-     "0,0 MPa"
+     "4,4 MPa",
+     "1,3"
     ],
     [
-     "PF-06",
-     "P16",
-     "6,48",
+     "\u000ePF-06\u000f",
+     "\u000eP16\u000f",
+     "6,36",
      "2 AL-2: 345 e 780 cm da base",
      "31,8",
      "FI-1 a 188 cm do topo",
-     "0,0 MPa"
+     "4,5 MPa",
+     "1,3"
     ],
     [
-     "PG-01",
-     "P27",
-     "3,45",
+     "\u000ePG-01\u000f",
+     "\u000eP27\u000f",
+     "3,39",
      "2 AL-2: 250 e 597 cm da base",
      "16,9",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "2,4 MPa",
+     "1,3"
     ],
     [
-     "PG-02",
-     "P21",
-     "1,37",
+     "\u000ePG-02\u000f",
+     "\u000eP21\u000f",
+     "1,35",
      "2 AL-2: 250 e 613 cm da base",
-     "6,7",
+     "6,8",
      "FI-1 a 75 cm do topo",
-     "0,0 MPa"
+     "1,5 MPa",
+     "1,3"
     ],
     [
-     "PG-03",
-     "P15",
-     "3,69",
+     "\u000ePG-03\u000f",
+     "\u000eP15\u000f",
+     "3,62",
      "2 AL-2: 250 e 656 cm da base",
      "18,1",
      "FI-1 a 60 cm do topo",
-     "0,0 MPa"
+     "2,5 MPa",
+     "1,3"
     ],
     [
-     "PG-04",
-     "P19",
-     "1,42",
+     "\u000ePG-04\u000f",
+     "\u000eP19\u000f",
+     "1,39",
      "2 AL-2: 250 e 640 cm da base",
-     "7,0",
+     "6,9",
      "FI-1 a 42 cm do topo",
-     "0,0 MPa"
+     "1,6 MPa",
+     "1,3"
     ],
     [
-     "PL-01",
-     "P33, P34, P35, P36",
-     "5,87",
+     "\u000ePL-01\u000f",
+     "\u000eP33, P34, P35, P36\u000f",
+     "5,76",
      "2 AL-2: 345 e 780 cm da base",
      "28,8",
      "FI-1 a 325 cm do topo",
-     "0,0 MPa"
+     "4,1 MPa",
+     "1,3"
     ],
     [
-     "PL-02",
-     "P30",
-     "6,30",
+     "\u000ePL-02\u000f",
+     "\u000eP30\u000f",
+     "6,18",
      "2 AL-2: 330 e 780 cm da base",
      "30,9",
      "FI-1 a 254 cm do topo",
-     "0,0 MPa"
+     "4,4 MPa",
+     "1,3"
     ],
     [
-     "PL-03",
-     "P29",
-     "6,99",
+     "\u000ePL-03\u000f",
+     "\u000eP29\u000f",
+     "6,14",
      "2 AL-2: 330 e 780 cm da base",
-     "34,3",
+     "30,7",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,3 MPa",
+     "1,3"
     ],
     [
-     "PL-04",
-     "P37",
-     "6,76",
+     "\u000ePL-04\u000f",
+     "\u000eP37\u000f",
+     "5,92",
      "2 AL-2: 345 e 780 cm da base",
-     "33,1",
+     "29,6",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,2 MPa",
+     "1,3"
     ],
     [
-     "PL-05",
-     "P8, P9, P10, P11",
-     "6,23",
+     "\u000ePL-05\u000f",
+     "\u000eP8, P9, P10, P11\u000f",
+     "6,11",
      "2 AL-2: 345 e 780 cm da base",
      "30,6",
      "FI-1 a 208 cm do topo",
-     "0,0 MPa"
+     "4,3 MPa",
+     "1,3"
     ],
     [
-     "PL-06",
-     "P4",
-     "6,66",
+     "\u000ePL-06\u000f",
+     "\u000eP4\u000f",
+     "6,53",
      "2 AL-2: 330 e 780 cm da base",
-     "32,7",
+     "32,6",
      "FI-1 a 129 cm do topo",
-     "0,0 MPa"
+     "4,6 MPa",
+     "1,3"
     ],
     [
-     "PL-07",
-     "P1",
-     "6,99",
+     "\u000ePL-07\u000f",
+     "\u000eP1\u000f",
+     "6,59",
      "2 AL-2: 330 e 780 cm da base",
-     "34,3",
+     "33,0",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,6 MPa",
+     "1,3"
     ],
     [
-     "PL-08",
-     "P12",
-     "6,76",
+     "\u000ePL-08\u000f",
+     "\u000eP12\u000f",
+     "6,37",
      "2 AL-2: 345 e 780 cm da base",
-     "33,1",
+     "31,9",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,5 MPa",
+     "1,3"
     ],
     [
-     "PL-09",
-     "P31",
-     "5,87",
+     "\u000ePL-09\u000f",
+     "\u000eP31\u000f",
+     "5,76",
      "2 AL-2: 330 e 780 cm da base",
      "28,8",
      "FI-1 a 325 cm do topo",
-     "0,0 MPa"
+     "4,1 MPa",
+     "1,3"
     ],
     [
-     "PL-10",
-     "P32",
-     "5,87",
+     "\u000ePL-10\u000f",
+     "\u000eP32\u000f",
+     "5,76",
      "2 AL-2: 345 e 780 cm da base",
      "28,8",
      "FI-1 a 325 cm do topo",
-     "0,0 MPa"
+     "4,1 MPa",
+     "1,3"
     ],
     [
-     "PL-11",
-     "P6",
-     "6,23",
+     "\u000ePL-11\u000f",
+     "\u000eP6\u000f",
+     "6,11",
      "2 AL-2: 330 e 780 cm da base",
      "30,6",
      "FI-1 a 208 cm do topo",
-     "0,0 MPa"
+     "4,3 MPa",
+     "1,3"
     ],
     [
-     "PL-12",
-     "P7",
-     "6,23",
+     "\u000ePL-12\u000f",
+     "\u000eP7\u000f",
+     "6,11",
      "2 AL-2: 345 e 780 cm da base",
      "30,6",
      "FI-1 a 208 cm do topo",
-     "0,0 MPa"
+     "4,3 MPa",
+     "1,3"
     ],
     [
-     "PM-01",
-     "P26",
-     "6,05",
+     "\u000ePM-01\u000f",
+     "\u000eP26\u000f",
+     "5,94",
      "2 AL-2: 250 e 665 cm da base",
      "29,7",
      "FI-1 a 68 cm do topo",
-     "0,0 MPa"
+     "4,2 MPa",
+     "1,3"
     ],
     [
-     "PM-02",
-     "P14",
-     "6,42",
+     "\u000ePM-02\u000f",
+     "\u000eP14\u000f",
+     "6,29",
      "2 AL-2: 250 e 724 cm da base",
-     "31,5",
+     "31,4",
      "FI-1 a 70 cm do topo",
-     "0,0 MPa"
+     "4,4 MPa",
+     "1,3"
     ]
    ]
   },
   {
    "titulo": "VIGAS — ALÇAS DE CORDOALHA (não engraxada, NBR 9062 5.3.3)",
    "cab": [
-    "MARCA",
-    "TIPO",
+    "PEÇAS",
+    "MARCA / SEÇÃO",
     "PESO (t)",
     "PONTOS",
     "Pk/ponto (kN)",
-    "ALÇA"
+    "ALÇA",
+    "βa"
    ],
    "linhas": [
     [
-     "\u0001V407",
-     "I130",
-     "16,64",
+     "\u000eV400\u000f",
+     "I130 (h 120)",
+     "15,50",
      "2 AL-3 a 2,50 m das pontas",
-     "81,6",
-     "2 laços Ø12,7; Fd(βa 3) 244,8 kN"
+     "77,5",
+     "2 laços Ø12,7 por alça; Fd(βa 3) 244,8 kN",
+     "1,3"
     ],
     [
-     "\u0001V406",
-     "I130",
-     "13,78",
+     "\u000eV401\u000f",
+     "I130 (h 120)",
+     "12,70",
      "2 AL-3 a 2,50 m das pontas",
-     "67,6",
-     "2 laços Ø12,7; Fd(βa 3) 202,8 kN"
+     "63,5",
+     "2 laços Ø12,7 por alça; Fd(βa 3) 202,8 kN",
+     "1,3"
     ],
     [
-     "\u0001V405",
-     "I130",
-     "13,78",
+     "\u000eV402\u000f",
+     "I130 (h 120)",
+     "12,70",
      "2 AL-3 a 2,50 m das pontas",
-     "67,6",
-     "2 laços Ø12,7; Fd(βa 3) 202,7 kN"
+     "63,5",
+     "2 laços Ø12,7 por alça; Fd(βa 3) 202,7 kN",
+     "1,3"
     ],
     [
-     "\u0001V404",
-     "I130",
-     "13,70",
+     "\u000eV403\u000f",
+     "I130 (h 120)",
+     "12,60",
      "2 AL-3 a 2,50 m das pontas",
-     "67,2",
-     "2 laços Ø12,7; Fd(βa 3) 201,6 kN"
+     "63,0",
+     "2 laços Ø12,7 por alça; Fd(βa 3) 201,6 kN",
+     "1,3"
     ],
     [
-     "V408 … V419",
-     "TS-01",
-     "12,0",
+     "\u000eV408, V409, V410, V411, V412, V413, V414, V415, V416, V417, V418, V419\u000f",
+     "\u000eTS-01 I90\u000f",
+     "11,78",
      "4 AL-1 a 2,10, 7,60, 12,10, 17,60 m (2 balancins)",
-     "30,0",
-     "laço Ø12,7, 2 pernas"
+     "29,4",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
     ],
     [
-     "VM-01 … VM-04",
-     "VM 30×75",
-     "—",
-     "2 AL-1 a 1,10 m das pontas",
-     "—",
-     "laço Ø12,7, 2 pernas"
-    ],
-    [
-     "VB",
-     "VB 15×60",
-     "—",
+     "\u000eV407\u000f",
+     "\u000eVB-01 15×60\u000f",
+     "2,04",
      "2 AL-1 a 1,50 m das pontas",
-     "—",
-     "laço Ø12,7, 2 pernas"
+     "10,2",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV406\u000f",
+     "\u000eVB-02 15×60\u000f",
+     "2,06",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,3",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV405\u000f",
+     "\u000eVB-03 15×60\u000f",
+     "2,06",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,3",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV404\u000f",
+     "\u000eVB-04 15×60\u000f",
+     "2,04",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,2",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV423\u000f",
+     "\u000eVB-05 15×60\u000f",
+     "2,04",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,2",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV422\u000f",
+     "\u000eVB-06 15×60\u000f",
+     "2,06",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,3",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV421\u000f",
+     "\u000eVB-07 15×60\u000f",
+     "2,06",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,3",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV420\u000f",
+     "\u000eVB-08 15×60\u000f",
+     "2,04",
+     "2 AL-1 a 1,50 m das pontas",
+     "10,2",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV200, V203, V208, V300, V303, V308\u000f",
+     "\u000eVM-01 30×75\u000f",
+     "5,06",
+     "2 AL-1 a 1,10 m das pontas",
+     "25,3",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV201, V202, V206, V207, V301, V302, V306, V307\u000f",
+     "\u000eVM-02 30×75\u000f",
+     "5,12",
+     "2 AL-1 a 1,10 m das pontas",
+     "25,6",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV205, V305\u000f",
+     "\u000eVM-03 30×75\u000f",
+     "3,28",
+     "2 AL-1 a 1,10 m das pontas",
+     "16,4",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
+    ],
+    [
+     "\u000eV204, V304\u000f",
+     "\u000eVM-04 30×75\u000f",
+     "1,42",
+     "2 AL-1 a 1,10 m das pontas",
+     "7,1",
+     "laço Ø12,7, 2 pernas",
+     "1,3"
     ]
    ]
   },
@@ -375,36 +504,41 @@
     "PESO (t)",
     "PONTOS",
     "CARGA POR PONTO (kN)",
-    "ACESSÓRIO"
+    "ACESSÓRIO",
+    "βa"
    ],
    "linhas": [
     [
-     "PLACAS PP",
+     "PLACAS PP (maior)",
      "3,23",
      "4 IZ-1 na face interna, 0,104 L e 0,396 L de cada ponta, meia altura; balancim duplo (cargas iguais), cabos a prumo",
      "7,9 (Pd 10,3 ≤ 23,8)",
-     "IZ-1 (inserto de içamento) + balancim duplo"
+     "IZ-1 (inserto de içamento) + balancim duplo",
+     "1,3"
     ],
     [
-     "LAJE ALVEOLAR LA-01",
+     "LAJE ALVEOLAR (maior)",
      "3,41",
      "2 garras a 0,30 m das pontas",
      "Fd 28,3 por garra",
-     "garra mecânica; fcj ≥ 30 MPa"
+     "garra mecânica; fcj ≥ 30 MPa",
+     "1,3"
     ],
     [
      "ESCADAS METÁLICAS",
      "ver ES01/ES02",
      "2 cintas nas longarinas, a 1/4 do comprimento",
-     "—",
-     "cintas de poliéster; sem içar pelos guarda-corpos"
+     "peso/2",
+     "cintas de poliéster; sem içar pelos guarda-corpos",
+     "1,3"
     ],
     [
      "W 200 × 15,0 (linha 2)",
-     "≈ 0,18 por módulo de 12 m",
+     "0,18 por módulo de 12 m",
      "2 cintas a 1/4 do comprimento",
-     "—",
-     "cintas; montar e parafusar antes de soltar"
+     "0,9",
+     "cintas; montar e parafusar antes de soltar",
+     "1,3"
     ]
    ]
   }

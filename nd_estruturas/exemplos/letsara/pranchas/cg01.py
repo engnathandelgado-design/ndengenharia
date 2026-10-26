@@ -31,7 +31,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         desenho="ND-LET-CG01", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
 pr.revisao("07", "21/10/2026", "EMISSÃO: CARGAS NA FUNDAÇÃO DO MODELO GLOBAL INTEGRADO (G, Q, V CARACTERÍSTICAS E ENVOLTÓRIA ELU)")
 pr.revisao("09", "23/10/2026", "DEC-045/049: PISOS +3,90/+7,30; PILARES DA ESCADA; VM 30 × 75; LINHA 2 METÁLICA")
-pr.revisao("10", "24/10/2026", "DEC-058/059: 2 PC-03 NO EIXO C (I130 EM 3 VÃOS DE 16,517 m, Ø12,7); PG-01 A PG-04 APOIAM A TS-01A (PORTÕES)")
+pr.revisao("10", "24/10/2026", "DEC-058/059: 2 PC-03 NO EIXO C (I120 EM 3 VÃOS DE 16,517 m, Ø12,7); PG-01 A PG-04 APOIAM A TS-01A (PORTÕES)")
 E = 100
 import math
 from prancha_nd import DIM_K, DIM_DLI

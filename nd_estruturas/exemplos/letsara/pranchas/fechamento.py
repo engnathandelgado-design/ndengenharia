@@ -15,7 +15,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
 import geo_fixacao as GF
-from geometria import X_FACH, Y_LIN, X_L4, LARG, COMP
+from geometria import X_FACH, Y_LIN, X_L4, LARG, COMP, X_EIXO
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 PL = json.load(open(AQ + "placas.json"))
@@ -38,7 +38,7 @@ FX = json.load(open(AQ + "fixacao_placas.json"))        # rev06 (DEC-026): siste
 NC_B, NC_H, NC_P, Z_NC = GF.N["B"], GF.N["H"], GF.N["P"], 940   # rev06e: geometria do GEO (DEC-031: nicho 140)              # nicho NC-1: comprimento a partir da ponta, altura, profundidade, centro acima da base da placa
 X_CS = NC_B / 2                                         # eixo do console = eixo do nicho, a partir da ponta da placa (70)
 CE_B, CE_H, Z_CE = 380, 330, 922                        # CE-1 no pilar: largura, altura, centro acima da base da fiada
-# DEC-044 (22/10): o I130 do eixo C atravessa as paredes internas G (linha 2) e C (linha 4) — consolo CP-I130 (50 × 40) e nariz do dente
+# DEC-044 (22/10): o I120 do eixo C atravessa as paredes internas G (linha 2) e C (linha 4) — consolo CP-I120 (50 × 40) e nariz do dente
 # entram 24 / 19 cm na placa de cima dessas paredes. Recorte na ponta do eixo C das 4 placas da fiada +6,25 (PP-xxR): b = 260 mm desde
 # a ponta (consolo 240 + folga 20), de z0 = 160 mm acima da base (fundo do consolo 226 − janela 40 − folga ≥ 20; abaixo do fio de 156: os 10 fios param na face do recorte) até o topo.
 # O console CS-1 dessa ponta passa para 330 mm da ponta (nicho NC-1 de 260 a 400) e cai fora da CE-1 do pilar: CE-1L (840 × 330).
@@ -81,12 +81,12 @@ def eixos_transv(xs, nomes, larg):
 TRANSV = eixos_transv(X_FACH, ["A", "B", "C", "D", "E"], [600, 400, 400, 400, 600])
 VISTAS = {
     "A": dict(titulo="VISTA A — FACHADA DA LINHA 9 (vista de fora)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
-              fiadas=lambda k, b: True, nomes_pil=["P1C", "P3", "P14", "P5", "P2C"]),
+              fiadas=lambda k, b: True),
     "B": dict(titulo="VISTA B — LATERAL DO EIXO A, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
               fiadas=lambda k, b: True),
     "C": dict(titulo="VISTA C — PAREDE INTERNA DA LINHA 4 (PORTÕES)",
               pil=eixos_transv(X_L4, ["A", "", "", "C", "", "", "E"], [600, 400, 250, 400, 250, 400, 600]), ini=FACE_X[0], fim=FACE_X[1],
-              fiadas=lambda k, b: k <= (4 if b == 0 else 5), portoes=[1, 4], nomes_pil=["P1", "P9", "P10", "P11", "P10", "P12", "P2"]),
+              fiadas=lambda k, b: k <= (4 if b == 0 else 5), portoes=[1, 4]),
     "D": dict(titulo="VISTA D — LATERAL DO EIXO E, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
               fiadas=lambda k, b: True),
     "E": dict(titulo="VISTA E — LATERAL DO EIXO A, LINHAS 2 A 4 (aberta até +7,50)", pil=eixos_lat(1, 3), ini=M(Y_LIN[1]) + JUNTA // 2, fim=M(Y_LIN[3]) - JUNTA // 2,
@@ -94,14 +94,30 @@ VISTAS = {
     "F": dict(titulo="VISTA F — LATERAL DO EIXO E, LINHAS 2 A 4 (aberta até +7,50)", pil=eixos_lat(1, 3), ini=M(Y_LIN[1]) + JUNTA // 2, fim=M(Y_LIN[3]) - JUNTA // 2,
               fiadas=lambda k, b: k >= 6),
     "G": dict(titulo="VISTA G — PAREDE INTERNA DA LINHA 2 (face do pavilhão)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
-              fiadas=lambda k, b: k <= (4 if b == 0 else 5), nomes_pil=["P1B", "P8", "P8A", "P8B", "P2B"]),
+              fiadas=lambda k, b: k <= (4 if b == 0 else 5)),
     "H": dict(titulo="VISTA H — LATERAL DO ANEXO, EIXO A, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
               fiadas=lambda k, b: k not in ESQ, esquadria=True, porta=(0, 3, PORTA_H)),
     "I": dict(titulo="VISTA I — FACHADA DA LINHA 1 (anexo, vista de fora)", pil=TRANSV, ini=FACE_X[0], fim=FACE_X[1],
-              fiadas=lambda k, b: k not in ESQ, esquadria=True, porta=(2, 0, PORTA_I), nomes_pil=["P1A", "P3", "P4", "P5", "P2A"]),
+              fiadas=lambda k, b: k not in ESQ, esquadria=True, porta=(2, 0, PORTA_I)),
     "J": dict(titulo="VISTA J — LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2", pil=eixos_lat(0, 1), ini=FACE_Y[0], fim=M(Y_LIN[1]) - JUNTA // 2,
               fiadas=lambda k, b: k not in ESQ, esquadria=True),
 }
+# rev12 (revisão independente rev11, item 4): nome de cada pilar das vistas calculado pela GEOMETRIA (posição do pilar na parede),
+# nunca digitado com o nome do R01 — e conferido (trava): o pilar tem de estar na linha/eixo da vista.
+import renomear as _RN
+_LIN_V = {"A": 9, "C": 4, "G": 2, "I": 1}
+_EIX_V = {"B": "A", "E": "A", "H": "A", "D": "E", "F": "E", "J": "E"}
+for _V, _d in VISTAS.items():
+    _ns, _mks = [], []
+    for _s, _b, _ in _d["pil"]:
+        if _V in _LIN_V:
+            _x, _y = _s / 1000, Y_LIN[_LIN_V[_V] - 1]
+        else:
+            _x, _y = X_EIXO[_EIX_V[_V]], _s / 1000
+        _n = _RN.pilar_em(_x, _y)
+        _RN.conferir_pilar(_n, f"vista {_V}", linha=_LIN_V.get(_V), eixo=_EIX_V.get(_V))
+        _ns.append(_RN.N(_n)); _mks.append(next(q["marca"] for q in _RN._D["pecas"] if q["nome"] == _n))
+    _d["nomes_pil"], _d["marcas_pil"] = _ns, _mks
 ORDEM_VISTAS = ["C", "G", "I", "H", "J", "E", "F", "B", "D", "A"]      # rev08 (MON03): internas C e G antes da viga de cobertura da própria linha (TS-01 / W 310); depois as externas
 
 
@@ -136,7 +152,7 @@ def montar(V):
                 esp = bool(d.get("porta") and d["porta"][0] == b and d["porta"][1] == 0 and k == 2)     # placa sobre a porta (PP-05P): recebe o topo das 2 OM-1; mesma protensão da típica (DEC-035) + 2 buchas BR-1
                 if esp:
                     ap = "2 CS-1 + topo das 2 OM-1"
-                # DEC-044: recorte na ponta do eixo C da fiada +6,25 das paredes internas (I130 + CP-I130 atravessam a parede)
+                # DEC-044: recorte na ponta do eixo C da fiada +6,25 das paredes internas (I120 + CP-I120 atravessam a parede)
                 rec = None
                 if V in REC_VISTAS and k == 5 and x_c is not None:
                     rec = "s1" if abs(t1 - x_c) <= JUNTA else "s0" if abs(t0 - x_c) <= JUNTA else None
@@ -225,7 +241,7 @@ def desenhar_elev(pr, V, origem, esc):
     nomes = d.get("nomes_pil")
     for i, (s, b, _) in enumerate(d["pil"]):
         zt = Z_TOPO
-        if nomes and nomes[i] in ("P9", "P10", "P12"):                # rev06: cabeça a 2 cm do fundo da TS-01 (ligação em y)
+        if nomes and d["marcas_pil"][i].startswith("PG") and not d["marcas_pil"][i] == "PG-00":                # rev06: cabeça a 2 cm do fundo da TS-01 (ligação em y)
             _lg = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
             zt = round((_lg["Z0_TS"] + 0.03 * s / 1000) * 1000 - 20)
         vv.ret(s - b / 2, -500, b, zt + 500, "OCULTA")
@@ -455,7 +471,7 @@ def prancha_vista(Vs, desenho, folha):
         notas.append("E (eixo A) e F (eixo E): abertas até +7,50; as 2 fiadas de cima ficam nos seus consoles CS-1 e vencem o vão entre os pilares; cada uma trava no pé com 2 PT-2 nos pilares (sem vigas de travamento — não há ponte rolante; NBR 9062:2017 5.1.2.1).")
     recs = [p for p in lista if p.get("rec")]
     if recs:
-        notas.append(f"DEC-044 — {', '.join(p['id'] for p in recs)} ({', '.join(sorted(set(TIPO[p['Lk']] for p in recs)))}): recorte de {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} cm na ponta do eixo C (o consolo CP-I130 e o nariz do I130 atravessam a parede); o console CS-1 dessa ponta fica a {X_CS_R / 10:g} cm da ponta, numa CE-1L (840 × 330) no pilar P11 — fôrma, armação e CE-1L na ND-LET-PP06.")
+        notas.append(f"DEC-044 — {', '.join(p['id'] for p in recs)} ({', '.join(sorted(set(TIPO[p['Lk']] for p in recs)))}): recorte de {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} cm na ponta do eixo C (o consolo CP-I120 e o nariz do I120 atravessam a parede); o console CS-1 dessa ponta fica a {X_CS_R / 10:g} cm da ponta, numa CE-1L (840 × 330) no pilar P11 — fôrma, armação e CE-1L na ND-LET-PP06.")
     calcs = sorted(set(CALCO_MARCA[c_] for p in lista for c_ in p["calco"] if c_))
     if calcs:
         n_cal = {m_: sum(1 for p in lista for c_ in p["calco"] if c_ and CALCO_MARCA[c_] == m_) for m_ in calcs}
@@ -778,7 +794,7 @@ def prancha_tipo():
     y = pr.tabela(XC, y - 4, "AÇO PASSIVO POR TIPO (+10% perdas)", ["TIPO", "QT", "N2 (macho/fêmea)", "N1 Q92 (m²/pl)", "kg/pl (c/ N3–N7)", "kg total"], rows_a, [16, 12, 44, 38, 30, 30])
     pr.notas(XC, y - 4, [
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão (GRADUAL e simétrica — lbpt {f(P['protensao']['lbpt_gradual_m'] * 100, 0)} cm; liberação brusca proibida: c/φ 1,6), desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento da protensão 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
-        f"PP-05RE/RD e PP-08RE/RD (G-17/G-11 e C-17/C-11): mesma fôrma e protensão da PP-05 / PP-08 com recorte de {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} cm na ponta do eixo C (I130 + CP-I130), nicho NC-1 a {REC_B / 10:g} cm da ponta e armadura do toco — ND-LET-PP06 (DEC-044).",
+        f"PP-05RE/RD e PP-08RE/RD (G-17/G-11 e C-17/C-11): mesma fôrma e protensão da PP-05 / PP-08 com recorte de {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} cm na ponta do eixo C (I120 + CP-I120), nicho NC-1 a {REC_B / 10:g} cm da ponta e armadura do toco — ND-LET-PP06 (DEC-044).",
         f"PP-05P (placa I-15, sobre a porta da vista I): mesma fôrma e protensão da PP-05 e 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, nos eixos das ombreiras OM-1. Placa típica: {NC_} {CB_} Ø{DCt_} {AC_} aderentes, {NC_ // 2} por face, {ALN_}, a " + " / ".join(f(z / 10, 1) for z in ZC_) + f" cm da base (eixo a {f(EX_ / 10, 2)} cm das faces), σpi = {SIG_PI_:.0f} MPa — {f(P['protensao']['F_macaco_kN'])} kN por {"fio" if _PR.get("aco") == "fio" else "cordoalha"} no macaco; alongamento teórico {ALONG_} mm em pista de 60 m (Ep {EP_ / 1000:.0f} GPa) (tolerância ±7 %).",
         f"Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); desforma deitada, giro e montagem de pé pelos MESMOS 4 pontos da face interna (insertos IZ-1 a 0,104 L e 0,396 L de cada ponta, meia altura) com balancim duplo — 4 cargas iguais (sem balancim a face de cima fica no limite de tração); de pé o IZ-1 trabalha ao cisalhamento: usar cabeçote universal certificado a 90° (ND-LET-MON03 det. 2a–2c); sem alças no topo; estocagem EM PÉ em cavalete (placa na posição de montagem, apoiada nos 2 calços a 0,21 L da base) — não estocar deitada: deitada a placa flecha ~7 mm na hora e ~27 mm com a fluência e fica empenada; {PRT_} simétricos nas 2 faces e em altura, sem curvatura na liberação.",
         f"Montagem (sistema Trejor, DEC-026/031): consoles da face C já concretados com o pilar (CC-1); nas faces laterais soldar o CS-1 na CE-1 no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G {GF.T['G']:g} ± {GF.T['G_tol']:g}), afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g} pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa é independente e leva só o próprio peso nos seus 2 consoles: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos guia PT-1 (só na placa de baixo) na junta (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",

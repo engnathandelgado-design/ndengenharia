@@ -73,27 +73,27 @@ v.cota_h([-25, 25], 450, 6)
 v.chamada((25, 0), (6, 6), "tubo Ø50,8×2,0 L=900, passante")
 v.chamada((25, -440), (6, -6), "graute ≥ 40 MPa")
 
-v = pr.vista("PN-3", (700, 505), 10, titulo="PN-3 / PN-5", subtitulo="pinos nos pilares / na I130")
+v = pr.vista("PN-3", (700, 505), 10, titulo="PN-3 / PN-5", subtitulo="pinos nos pilares / na I120")
 v.ret(-12.5, -300, 25, 600, "METALICA")
 v.ret(60 - 10, -300, 20, 600, "METALICA")
 v.linha((-60, 0), (100, 0), "EIXO")
 v.cota_v([-300, 0, 300], -12.5, -8, total=False)
 v.chamada((0, 150), (-8, 10), "PN-3 Ø25 L=600 (laterais)")
-v.chamada((0, -150), (-8, -10), "PN-5 Ø20 L=600 (I130/centro)")
+v.chamada((0, -150), (-8, -10), "PN-5 Ø20 L=600 (I120/centro)")
 v.chamada((-60, 0), (-6, 4), "topo do apoio")
 
-v = pr.vista("NEO-4", (130, 290), 5, titulo="NEO-4 / NEO-3C", subtitulo="neoprene 10 mm, 60 Shore A (rev11: NEO-3C na I130 com CT-I130)")
+v = pr.vista("NEO-4", (130, 290), 5, titulo="NEO-4 / NEO-3C", subtitulo="neoprene 10 mm, 60 Shore A (rev11: NEO-3C na I120 com CT-I120)")
 v.ret(-100, -150, 200, 300, "VISTA")
 for yy in (-100, 100):
     furo(v, (0, yy), 35)
-v.ret(160, -150, 150, 300, "VISTA")                          # rev11 (DEC-061): NEO-3C 150 × 300 × 10 sobre a mesa + consolo CT-I130
+v.ret(160, -150, 150, 300, "VISTA")                          # rev11 (DEC-061): NEO-3C 150 × 300 × 10 sobre a mesa + consolo CT-I120
 for yy in (-100, 100):
     furo(v, (235, yy), 30)
 v.cota_h([-100, 0, 100], -150, -8, total=False)
 v.cota_h([160, 235, 310], -150, -8, total=False)
 v.cota_v([-150, -100, 100, 150], 310, 8, total=False)
 v.chamada((0, 0), (4, 40), "NEO-4 200×300 (pilar lateral)")
-v.chamada((235, 0), (10, 50), "NEO-3C 150×300 (I130, linhas 3 e 5–8); NEO-3 100×300 só no P11 (linha 4)")
+v.chamada((235, 0), (10, 50), "NEO-3C 150×300 (I120, linhas 3 e 5–8); NEO-3 100×300 só no P11 (linha 4)")
 
 # ------------------------------------------------------------------ ST-1P (1:5)
 st = CB["ST1P"]
@@ -146,9 +146,9 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
          ["OR-X", "L 102×76×6,3 L=80", "-", 80, "0,7"],
          ["CL-P", "L 102×102×9,5 L=250 (pilar do portão × TS-01A)", "-", 8, "3,6"],
          ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 2 * NTS, "2,3"],
-         ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 2 * NTS, "1,5"],
+         ["PN-5", "pino Ø20 CA-50 L=600 (I120/pilar central)", "-", 2 * NTS, "1,5"],
          ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", NTS, "-"],
-         ["NEO-3C", "neoprene 150×300×10, 2 furos Ø30 (no consolo CT-I130, linhas 3 e 5–8)", "-", NTS - 2, "-"],
+         ["NEO-3C", "neoprene 150×300×10, 2 furos Ø30 (no consolo CT-I120, linhas 3 e 5–8)", "-", NTS - 2, "-"],
          ["NEO-3", "neoprene 100×300×10, 2 furos Ø30 (só no topo do P11, linha 4)", "-", 2, "-"]]
 y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
               [16, 92, 18, 22, 32])
@@ -158,7 +158,7 @@ notas = ["ST-1FL (DEC-042): os pilares de canto P1 e P9 têm seção cheia até 
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
          "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",
          "OR-X só nos nós dos vãos com X (4-5 a 8-9; 72 nas TS-01 das linhas 4 a 8 + 8 na VB do eixo 9); as esperas ES-2 existem nos 3 nós de todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",
-         "Pinos PN-3/PN-5 concretados no pilar / na I130, passando pelo neoprene e pelos tubos TB-3, grauteados após o alinhamento das vigas.",
+         "Pinos PN-3/PN-5 concretados no pilar / na I120, passando pelo neoprene e pelos tubos TB-3, grauteados após o alinhamento das vigas.",
          "Proteção: esperas, barras e peças galvanizadas a fogo (NBR 6323); retocar com tinta rica em zinco após a montagem.",
          "Cálculo das esperas pelo ACI 318-19 cap. 17 (C50, concreto fissurado) e das peças pela NBR 8800:2024 — memória de cálculo em separado.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

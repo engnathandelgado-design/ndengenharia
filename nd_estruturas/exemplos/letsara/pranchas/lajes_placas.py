@@ -371,7 +371,7 @@ def placas():
     for x in (40, 110):
         for yy in (200, 1050):
             s.ponto_barra((x, yy), 9.5)
-    s.poli([(30, 30), (120, 30), (120, 1220), (30, 1220)], "ARMADURA", fechada=True)
+    s.poli([(30, 30), (120, 30), (120, 1220), (30, 1220)], "ARM_TRANSV", fechada=True)
     s.poli([(0, H_PL), (20, H_PL - 20), (E_PL - 20, H_PL - 20), (E_PL, H_PL)], "VISTA"); s.poli([(0, 0), (20, 20), (E_PL - 20, 20), (E_PL, 0)], "VISTA")
     s.cota_h([0, 40, 110, E_PL], 0, -8, total=True); s.cota_v([0, 200, 1050, H_PL], E_PL, 10, total=False)
     s.chamada((110, 1050), (12, -6), "C1 — 4 cord. Ø9,5 CP-190 RB (2 + 2), 56 kN cada")

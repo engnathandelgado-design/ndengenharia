@@ -1,6 +1,6 @@
 """Geometria do pórtico transversal da Letsara (eixos 2 e 3), gerada dos mesmos dados do modelo 3D (ligacoes.json, cob_linha2.json,
 vm_retangular.json, consolos.json). rev11 (26/10/2026): extraída da ND-LET-CT01 para ser usada também no corte 1-1 da ND-LET-MON01;
-terças Z 302 × 90/82 × 19 × 2,30 em seção real (linha média + enrijecedores, igual à COB01), ST-1P com aba e 4 M12, consolo CT-I130
+terças Z 302 × 90/82 × 19 × 2,30 em seção real (linha média + enrijecedores, igual à COB01), ST-1P com aba e 4 M12, consolo CT-I120
 com mísula e NEO-3C 150 × 300 na linha 3 (DEC-061)."""
 import json, math
 from prancha_nd import Prancha, _seg_rect
@@ -17,9 +17,9 @@ zf = lambda x: LG["Z0_TS"] * 1000 + I * x  # fundo da TS-01 (mm, x global em mm)
 H = 900.0
 t3 = 27.0 / 900.0
 Z_TOP_PIL = 10000.0
-Z_TOP_C = LG["Z_TOPO_I130"] * 1000                                     # topo da I130 e dos pilares centrais
-H_I130 = LG["H_I130"] * 1000
-Z_ASS_I130 = LG["Z_ASS_I130"] * 1000
+Z_TOP_C = LG["Z_TOPO_I120"] * 1000                                     # topo da I120 e dos pilares centrais
+H_I120 = LG["H_I120"] * 1000
+Z_ASS_I120 = LG["Z_ASS_I120"] * 1000
 import sys as _s; _s.path.insert(0, '/home/claude/ndengenharia/nd_estruturas/exemplos/letsara')
 from geometria import Z_PISOS, P6_L2
 from lajes_placas import vigas_nivel
@@ -124,9 +124,9 @@ def terca_z(R, xt, zt):
 
 
 def ct_i130(R):
-    """rev11 (DEC-061): consolos CT-I130 com mísula nas duas faces da mesa superior da I130 (linhas 3, 5–8), topo no topo da viga;
+    """rev11 (DEC-061): consolos CT-I120 com mísula nas duas faces da mesa superior da I120 (linhas 3, 5–8), topo no topo da viga;
     NEO-3C 150 × 300 × 10 sob a ponta de cada TS-01, de 12 a 27 cm da ponta (consolos.json / ligacoes.json)."""
-    CT = json.load(open(AQ + "consolos.json"))["CT-I130"]
+    CT = json.load(open(AQ + "consolos.json"))["CT-I120"]
     bm = 200.0                                                                   # meia largura da mesa superior (b 40)
     pj, ht, hc = CT["proj_m"] * 1000, CT["h_total_m"] * 1000, CT["h_consolo_m"] * 1000
     for sg in (-1, 1):
@@ -208,14 +208,14 @@ def estrutura(R, eixo):
             x_ = a_["x"] * 1000
             R.ret(x_ - 125, a_["z_concreto"] * 1000 + 20, 250, 19, "METALICA")
     else:
-        _H = H_I130                                                 # DEC-054: h 120
+        _H = H_I120                                                 # DEC-054: h 120
         sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, _H - 300), (200, _H - 220), (200, _H), (-200, _H), (-200, _H - 220),
                (-75, _H - 300), (-75, 330), (-200, 250)]
-        base = Z_TOP_C - H_I130
+        base = Z_TOP_C - H_I120
         R.poli([(XC + x, base + y) for x, y in sec], "CORTADO", True)
         R.hach([(XC + x, base + y) for x, y in sec])
     if eixo != 2:
-        ct_i130(R)                                                                 # rev11: consolo CT-I130 + NEO-3C (DEC-061)
+        ct_i130(R)                                                                 # rev11: consolo CT-I120 + NEO-3C (DEC-061)
         for x0 in X0:
             ts(R, x0)
 

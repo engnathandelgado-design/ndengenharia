@@ -1307,7 +1307,7 @@
   },
   {
    "ok": true,
-   "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
+   "item": "C4 NEO-3C no apoio das TS-01 sobre a I120",
    "folha": "ND-LET-TS01-1",
    "detalhe": "ok",
    "pendente": false
@@ -1335,7 +1335,7 @@
   },
   {
    "ok": true,
-   "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
+   "item": "C4 NEO-3C no apoio das TS-01 sobre a I120",
    "folha": "ND-LET-TS01-2",
    "detalhe": "ok",
    "pendente": false
@@ -1363,7 +1363,7 @@
   },
   {
    "ok": true,
-   "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
+   "item": "C4 NEO-3C no apoio das TS-01 sobre a I120",
    "folha": "ND-LET-TS01-3",
    "detalhe": "ok",
    "pendente": false
@@ -1371,56 +1371,56 @@
   {
    "ok": true,
    "item": "C1 tabela × desenho (posições)",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "todas as posições da tabela aparecem no desenho",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 1034.3 kg × resumo 1034.4 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 858.7 kg × resumo 858.8 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 866.6 kg × resumo 866.7 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 855.0 kg × resumo 855.1 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "nenhuma",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "nenhuma",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C4 laje +7,30 descrita como laje de cobertura",
-   "folha": "ND-LET-I130",
+   "folha": "ND-LET-I120",
    "detalhe": "ok",
    "pendente": false
   },

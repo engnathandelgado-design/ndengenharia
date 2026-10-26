@@ -23,7 +23,7 @@ def malha(p):
 
 pv.OFF_SCREEN = True
 pl = pv.Plotter(off_screen=True, window_size=(2400, 1700)); pl.set_background("white")
-cinza = {"Pilares": "#9a9a9a", "Vigas I90 de cobertura": "#c8c8c8", "Vigas centrais I130": "#c8c8c8", "Vigas de borda": "#c8c8c8"}
+cinza = {"Pilares": "#9a9a9a", "Vigas I90 de cobertura": "#c8c8c8", "Vigas centrais I120": "#c8c8c8", "Vigas de borda": "#c8c8c8"}
 por_v = {}
 for p in m.pecas:
     if p.grupo in cinza:

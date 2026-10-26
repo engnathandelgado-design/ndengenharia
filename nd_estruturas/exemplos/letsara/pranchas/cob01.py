@@ -6,6 +6,7 @@ Metálica em mm. A1. Padrão de apresentação: planta do banzo superior / plant
 """
 import math
 from prancha_nd import Prancha
+import cob_comum as CC
 from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, Z_FURO, Z_COR, Z_DIAG, Z_X, NOS_X, NOS_X_D, ORE_S, ORE_S9, ORE_Y, PAINEL_X, IDX_X, furos_x, sufixo_x, marca,
                        H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, T_Z, PESO_UE, PERFIL_TXT, IDX_2A, L_TERCA, EXT, BASE_K, NT, A_TR,
                        EXT_F, B_TR, Y_COL, furos_ponta, lista_marcas, cabecalho, CB, LG, f)
@@ -32,9 +33,9 @@ for yl in YLmm:
     v.ret(yl - 300, X_C - 200, 600, 400, "CORTADO")
     v.ret(yl - 200, -300, 400, 600, "CORTADO"); v.ret(yl - 200, X_E - 300, 400, 600, "CORTADO")
 for k in range(8):
-    ya, yb = YLmm[k] - EXT[k][0], YLmm[k + 1] + EXT[k][1]          # peça: passa o transpasse (ou EXT_F na fachada)
     dx = 0 if k % 2 == 0 else 40                                  # peças de vãos alternados desenhadas 40 deslocadas (ver transpasse)
-    for x in XT:
+    for i_, x in enumerate(XT):
+        ya, yb = CC.y_peca(k, i_)                                 # peça: passa o transpasse (ou EXT_F na fachada); rev12: VB deslocada na faixa PF
         v.linha(M(ya, x - B_TERCA + dx), M(yb, x - B_TERCA + dx), "METALICA")
         v.linha(M(ya, x + B_INF + dx), M(yb, x + B_INF + dx), "METALICA")
         for yy in (ya, yb):
@@ -71,12 +72,13 @@ for lbl, x in (("A", 0), ("C", X_C), ("E", X_E)):
     pr.texto(xp, yp, lbl, "sub", "TITULO", "MIDDLE_CENTER")
 for k in range(8):
     ym = (YLmm[k] + YLmm[k + 1]) / 2
-    for x in (XT[NT // 2 - 1] + 700, XT[NT + NT // 2 - 1] + 700):
-        xp, yp = v.P(M(ym + 1800, x))
+    for i_b in (NT // 2 - 1, NT + NT // 2 - 1):
+        xp, yp = v.P(M(ym + 1800, XT[i_b] + 700))
         pr.msp.add_circle((xp, yp), 4.0, dxfattribs={"layer": "INDICACAO"})
-        pr.texto(xp, yp, BASE_K[k], "nota", "TITULO", "MIDDLE_CENTER")
+        pr.texto(xp, yp, BASE_K[CC.kv(k, i_b)], "nota", "TITULO", "MIDDLE_CENTER")
     for kk in (NT // 2 + 1, NT + NT // 2 + 1):                      # rev08: entre duas terças, paralelo a elas
-        v.texto(M(YLmm[k] + 0.375 * VAOS[k], (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L {L_TERCA[k]}", "min", "MIDDLE_CENTER")   # rev11: entre as correntes
+        q_ = CC.kv(k, kk)
+        v.texto(M(YLmm[k] + 0.375 * VAOS[k], (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L {L_TERCA[q_]}" + (f" ({BASE_K[q_]})" if q_ != k else ""), "min", "MIDDLE_CENTER")   # rev11: entre as correntes
 v.cota_h(YLmm, -900, -10, total=False)
 v.cota_h([YLmm[0], YLmm[-1]], X_E + 3000, 8, total=False)
 v.cota_v([XT[0], XT[NT - 1]], YLmm[0] - 900, -12, total=False)
@@ -98,7 +100,7 @@ ch_dir(M(YLmm[7] + VAOS[7] * 0.15, (XT[2 * NT - 2] + XT[2 * NT - 1]) / 2), 2, "d
 _ym = (YLmm[6] + YLmm[7]) / 2
 v.chamada(M(YLmm[7] + 7200, NOS_X[1] - 2300), (40, -22), "X Ø16 c/ esticador (vãos 4-5 a 8-9, painéis de 8 e 7 terças; COB02)")
 v.chamada(M(YLmm[8], XT[NT + 2]), (16, -6), f"fachada: terça passa {EXT_F} do eixo, ST-1V na VB (eixo 9: ST-1V-R, det. 2)")
-v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I130 (eixo C)")
+v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I120 (eixo C)")
 v.marcador_detalhe(M(YLmm[5], (XT[NT + 8] + XT[NT + 9]) / 2), 600, 1, ang=0, dist=0.5)     # rev11: número no vão entre terças
 v.marcador_detalhe(M(YLmm[8], (XT[NT + 11] + XT[NT + 12]) / 2), 500, 2, ang=180, dist=0.5)
 
@@ -269,7 +271,7 @@ t20.cota_h([0] + fp_t, 0, -10, total=False)
 t20.cota_h([LT - x_ for x_ in reversed(fp_f)] + [LT], 0, -10, total=False)
 t20.texto((LT / 2, H_TERCA + 60), "L (ver tabela)", "nota", "BOTTOM_CENTER")
 t20.texto((500, H_TERCA + 60), "ponta de transpasse", "min", "BOTTOM_CENTER")
-t20.texto((LT - 500, H_TERCA + 60), "ponta de fachada (T1, T5)", "min", "BOTTOM_CENTER")
+t20.texto((LT - 500, H_TERCA + 60), "ponta de fachada (T1, T5, T6, T7)", "min", "BOTTOM_CENTER")
 t20.chamada((A_TR + 400, Z_COR), (30, 30), "correntes a L/4, L/2, 3L/4 do eixo do apoio")
 t20.chamada((B_TR, Z_FURO[1]), (-6, 20), f"emenda: a {B_TR} e {2 * A_TR - B_TR}")
 t20.chamada((A_TR + Y_COL, Z_FURO[0]), (14, -22), f"apoio: a {A_TR - Y_COL} e {A_TR + Y_COL}")
@@ -313,7 +315,7 @@ lm = [["ES-1", "2 esperas M16 por apoio, concretadas na TS-01 (TS01-3)", f"{6 * 
       ["M20", "porca + arruela + contraporca, galvanizadas", f"{3 * 2 * N_T}", "ES-1R (eixo 9)"]]
 y = pr.tabela(x0, y - 4, "LISTA DE MATERIAIS — APOIOS E EMENDAS DAS TERÇAS (SEM SOLDA)", ["MARCA", "DESCRIÇÃO", "QT", "ONDE"], lm, [18, 106, 14, 58])
 cc = LG["cargas_cob"]
-notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z275) contínuas nos 8 vãos pelo sistema de transpasse (METLAP): cada peça vence um vão e passa {A_TR} além do eixo de cada TS-01 (transpasse total {2*A_TR}); nas fachadas passa {EXT_F} além do eixo da VB. Marca = peça (T1..T5) + furação: D = 2ª terça das pontas de meia água (diagonais), Xj / Yj = j-ésima terça dentro do painel do X de 8 espaços (X1..X7) ou de 7 espaços (Y1..Y6), com os 2 furos oblongos da tabela de furos do X.",
+notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z275) contínuas nos 8 vãos pelo sistema de transpasse (METLAP): cada peça vence um vão e passa {A_TR} além do eixo de cada TS-01 (transpasse total {2*A_TR}); nas fachadas passa {EXT_F} além do eixo da VB. Marca = peça (T1..T7; T6/T7 = vãos 1-2/8-9 das terças entre os eixos B e D, onde a VB fica rente à face externa dos pilares, 22,5 cm além do eixo da linha) + furação: D = 2ª terça das pontas de meia água (diagonais), Xj / Yj = j-ésima terça dentro do painel do X de 8 espaços (X1..X7) ou de 7 espaços (Y1..Y6), com os 2 furos oblongos da tabela de furos do X.",
          f"Aba superior de 90 voltada para o lado A (sobre a aba vertical do ST-1P); aba inferior de 82 para o lado E. No transpasse os 2 perfis encaixam um no outro conforme o sistema METLAP do fabricante; furação de fábrica METSEC (E 55 / F 52) — conferir com a voestalpine Meincol antes do pedido.",
          f"Sem mão-francesa: em cada apoio 4 M12 8.8 atravessam o ST-1P (ou ST-1V) e as almas (2 colunas a ±{Y_COL} do eixo, furos a {Z_FURO[0]} e {Z_FURO[1]} do fundo); em cada ponta do transpasse 2 M12 8.8 pelas 2 almas, a {B_TR} da ponta.",
          f"Cobertura Isoeste — Telha Zipada Dupla com lã de rocha FSR-32 (manual de instalação, p. 28): 1º TP-40 STD 980 #0,65 na terça (PB 12-14 × 3/4\" P03, 4 por telha por terça); 2º perfil cartola #0,65 sobre cada terça, costurado na TP-40 com PB 1/4\"-14 × 7/8\" P01 EM TODAS AS ONDAS (o manual indica a cada 2 ondas: não passa na sucção desta obra); 3º lã de rocha FSR 32 40 mm; 4º clipe fixo/deslizante #0,65 na cartola (2 PB 12-14 × 3/4\"); 5º zipada 455 #0,50; painéis solares nas costuras da zipada. Cargas permanentes {f(cc['g_total_sem_terca'],3)} kN/m² + terças; sobrecarga {f(cc['sobrecarga'],2)} kN/m².",

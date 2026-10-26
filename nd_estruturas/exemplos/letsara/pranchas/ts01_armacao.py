@@ -11,7 +11,7 @@ pr.revisao("01", "12/10/2026", "ARMADURA DOS DENTES GERBER (NBR 9062 + PCI, VERI
 pr.revisao("02", "12/10/2026", "GEOMETRIA DO R01")
 pr.revisao("03", "14/10/2026", "SEM DENTES: ARMADURA DE APOIO DIRETO; 8 CORDOALHAS (2 ISOLADAS 3,00 m)")
 pr.revisao("06", "19/10/2026", "DEC-032: N9 2 Ø10 NO TOPO DAS PONTAS (ATO); PERDAS 9.6.3; FORÇA NO MACACO E lbpt NAS NOTAS")
-pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {f(L/10,1)} cm (entre pontas, a prumo) · 14 PEÇAS",
+pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {f(L/10,1)} cm (entre pontas, a prumo) · {P["qtd"]} PEÇAS",
                   f"PESO {f(peso/10.0,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes   ·   caimento 3 %", 560)
 sk = lambda h: h * DX / H
 LC, EC = P["cunha"]["L"], P["cunha"]["e"]            # rev04: cunhas no fundo das pontas (ver folha 01)

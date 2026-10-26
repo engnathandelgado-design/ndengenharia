@@ -44,9 +44,9 @@ CONS_J = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsar
 LG = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))
 ZF = lambda x: LG["Z0_TS"] + 0.03 * x
 ASS_TS = lambda x: round((ZF(x) + 0.45 * (1 / (1 + 0.03 ** 2)) ** 0.5 - 0.01) * 1000)
-Z_I130 = round(LG["Z_ASS_I130"] * 1000)                          # rev03: assento da I130 = topo − 1,30 + recorte 0,52 − neoprene 0,03
-Z_TOP_C = round(LG["Z_TOPO_I130"] * 1000)                         # rev03: topo dos pilares centrais = topo da I130 (TS-01 apoiada no topo)
-Z_TOP_CD = round(LG["Z_TOPO_I130_DIR"] * 1000)                    # rev04: metade do lado E do topo (degrau, NBR 9062 7.2.1.6: assentos horizontais)
+Z_I120 = round(LG["Z_ASS_I120"] * 1000)                          # rev03: assento da I120 = topo − 1,30 + recorte 0,52 − neoprene 0,03
+Z_TOP_C = round(LG["Z_TOPO_I120"] * 1000)                         # rev03: topo dos pilares centrais = topo da I120 (TS-01 apoiada no topo)
+Z_TOP_CD = round(LG["Z_TOPO_I120_DIR"] * 1000)                    # rev04: metade do lado E do topo (degrau, NBR 9062 7.2.1.6: assentos horizontais)
 _VMP = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json"))["premissas"]
 from geometria import Z_PISOS
 # rev09 (DEC-045/047/048): VM retangular 30 × 75 com dente: assento do CP-MEZ = topo da capa − 26 − h da VM + recorte − neoprene fretado 21
@@ -177,8 +177,8 @@ def prancha_pilar(P):
                    if not P.get("rec") else "CABEÇA COM ARMADURA PRÓPRIA (N13 POR TRASPASSE)") + "; PLANTA-CHAVE COM NOMES")
     if P["marca"] in ("PM-01", "PC-01", "PE-03"):
         pr.revisao("", "24/10/2026", "DEC-050/052: SEM MONTANTE NO PILAR; CABEÇA DE CONCRETO ATÉ O FUNDO DA W 200 × 15,0 (MONTANTES NO MEIO DOS VÃOS); 4 BR-M16 L 450 + CA-L2" + ("; P14 PASSA A SER O PM-02" if P["marca"] == "PM-01" else ""))
-    if any(c["tipo"] == "CP-I130" for c in P.get("consolos", [])):
-        pr.revisao("", "24/10/2026", "DEC-054: I130 COM h 120; CONSOLO CP-I130 COM MÍSULA (49 NO PILAR, 39 NA PONTA, FUNDO ALINHADO À VIGA)")
+    if any(c["tipo"] == "CP-I120" for c in P.get("consolos", [])):
+        pr.revisao("", "24/10/2026", "DEC-054: I120 COM h 120; CONSOLO CP-I120 COM MÍSULA (49 NO PILAR, 39 NA PONTA, FUNDO ALINHADO À VIGA)")
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -244,12 +244,15 @@ def prancha_pilar(P):
         EXT = {1: 0.0, -1: 0.0}                                                              # rev06e: saliências laterais (cotas por fora)
         for c in cons:
             zc, proj, h, hp, larg = c["z"], c["proj"], c["h"], c["hp"], c["larg"]
+            u_ = c.get("exc", 0) * (1 if DIR[face] == c.get("exc_face") else -1 if ESQ[face] == c.get("exc_face") else 0)   # rev12: consolo rente à face
             if c["face"] == face:                                                            # frontal
-                v.ret((W - larg) / 2, zc - h, larg, h, "VISTA")
-                v.linha(((W - larg) / 2, zc - hp), ((W + larg) / 2, zc - hp), "VISTA")
-                v.ret(W / 2 - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
-                v.chapa(W / 2 - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
-                v.chapa(W / 2 - c["neo"][0] / 2, zc, c["neo"][0], 10)
+                v.ret((W - larg) / 2 + u_, zc - h, larg, h, "VISTA")
+                v.linha(((W - larg) / 2 + u_, zc - hp), ((W + larg) / 2 + u_, zc - hp), "VISTA")
+                v.ret(W / 2 + u_ - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
+                v.chapa(W / 2 + u_ - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
+                v.chapa(W / 2 + u_ - c["neo"][0] / 2, zc, c["neo"][0], 10)
+                if u_:
+                    v.cota_h([0, (W - larg) / 2 + u_, (W + larg) / 2 + u_, W], zc - h, -8, total=False)
                 # rev11: só a MARCA do consolo (C1, C2…) dentro da face; geometria, pino e neoprene no quadro APOIOS E ESPERAS e no DET. 1
                 import apoios_pilar as AP_
                 zl_ = zc - h
@@ -257,9 +260,9 @@ def prancha_pilar(P):
                     for z_al in AL:
                         if zc - h - 6.0 * ESC < z_al < zc - h:
                             zl_ = min(zl_, z_al - 12)
-                v.texto((W / 2, zl_ - 1.5 * ESC), AP_.marca_consolo(c), "nota", "TOP_CENTER")
+                v.texto((W / 2 + u_, zl_ - 1.5 * ESC - (12 * ESC if u_ else 0)), AP_.marca_consolo(c), "nota", "TOP_CENTER")
             elif c["face"] == OPOSTA[face]:
-                v.ret((W - larg) / 2, zc - h, larg, h, "OCULTA")
+                v.ret((W - larg) / 2 + u_, zc - h, larg, h, "OCULTA")
             else:                                                                            # lateral: projeção para fora
                 lado = 1 if (VISTA[face][0] == "y" and c["face"] == "B") or (VISTA[face][0] == "x" and c["face"] == "A") else -1
                 lado *= sg if VISTA[face][0] == "y" else 1
@@ -679,11 +682,11 @@ KP_CEN = [("P6E", 36.175, 3.79, 250, 400, "PE-01"), ("P7E", 39.50, 3.79, 600, 40
           ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-03"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-04")]
 F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
-I130 = lambda face: consolo(face, Z_I130, "CP-I130", 500, 400, H_C["CP-I130"], HP_C["CP-I130"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I130"]["tirante"].split(" (")[0], CONS_J["CP-I130"]["n_ramos"], CONS_J["CP-I130"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
+I120 = lambda face: consolo(face, Z_I120, "CP-I120", 500, 400, H_C["CP-I120"], HP_C["CP-I120"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I120"]["tirante"].split(" (")[0], CONS_J["CP-I120"]["n_ramos"], CONS_J["CP-I120"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
 TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
 MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(_VMP.get("b_consolo", _VMP["b"]) * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], H_C["CP-MEZ"], ("PN-1", 20, 630, 230, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75; pino 230 no consolo de 27,9 (não sai pelo fundo) + 400 no dente
 EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
-NOTA_CONS = "Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ 29 cm; CP-I130 com MÍSULA de concreto: 49 cm junto ao pilar e 39 cm na ponta, fundo inclinado — DEC-054; memória consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
+NOTA_CONS = "Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ 29 cm; CP-I120 com MÍSULA de concreto: 49 cm junto ao pilar e 39 cm na ponta, fundo inclinado — DEC-054; memória consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
 NOTA_MEZ = " Acima dos CP-MEZ, na largura da VM (25) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."
 # rev09b (DEC-050, decisão do Nathan 24/10): sem montantes — a cabeça de concreto sobe até o fundo da W 310 da linha 2 (cada pilar na sua
 # altura, seguindo a inclinação); a W apoia direto na chapa CA-L2 250 × 250 × 19 sobre graute 20 mm, parafusada em 4 BR-M20 embutidas
@@ -741,48 +744,48 @@ PN5_TOPO = dict(nome="PN-5", d=20, L=600, emb=300, xy=[(sx * 115, sy * 100) for 
 
 
 def dados_pc1():
-    cons = [I130("B"), MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
+    cons = [I120("B"), MEZ("A", Z_MEZ_ASS[0]), MEZ("C", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
     return base("PC-01", 1, 600, 400, Z_L2["C"], cons, bars_ret(600, 400, 4, 3), "ND-LET-PC01",
                 "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 2 (P8A); 40 em x × 60 em y", "PILAR CENTRAL PC-01",
-                [["PC-01", "P8A (C2)", 1, f"topo +{F(Z_L2['C'])}: {W_L2} direto (CA-L2 + 4 BR-M16); CP-I130 (B); 2 CP-MEZ (A, C)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
-                [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I130", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo) — CP-MEZ", 4, "faces A e C"], BRM20_INS,
-                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I130"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"],
+                [["PC-01", "P8A (C2)", 1, f"topo +{F(Z_L2['C'])}: {W_L2} direto (CA-L2 + 4 BR-M16); CP-I120 (B); 2 CP-MEZ (A, C)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I120", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo) — CP-MEZ", 4, "faces A e C"], BRM20_INS,
+                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I120"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"],
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 5, "face B, centrada, fiadas 0 a 4"],
                  ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas G-11/G-17 (DEC-044, PP06)", 1, "face B, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
-                 NOTA_W.format(z=F(Z_L2["C"])) + f" A cabeça passa {(Z_L2['C'] - Z_TOP_C) / 10:g} cm acima do topo da I130 (+{F(Z_TOP_C)}); CP-I130 na face B (+{F(Z_I130)}) para a ponta da V400; CP-MEZ nas faces A e C para as VM dos dois níveis. Apoio FIXO da W (furos redondos).",
+                 NOTA_W.format(z=F(Z_L2["C"])) + f" A cabeça passa {(Z_L2['C'] - Z_TOP_C) / 10:g} cm acima do topo da I120 (+{F(Z_TOP_C)}); CP-I120 na face B (+{F(Z_I120)}) para a ponta da V400; CP-MEZ nas faces A e C para as VM dos dois níveis. Apoio FIXO da W (furos redondos).",
                  "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede interna da linha 2 (vista G)."],
                 ip01=[dict(face="B", z=IP_C, largo={5: 840})]) | dict(pinos_topo=BRM20_TOPO)
 
 
 def dados_pc2():
-    cons = [I130("B"), I130("D")]
+    cons = [I120("B"), I120("D")]
     return base("PC-02", 1, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 3, 3), "ND-LET-PC02",
                 "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 4 (P11), parede dos portões", "PILAR CENTRAL PC-02",
-                [["PC-02", "P11 (C4)", 1, "topo: 2 TS-01; CP-I130 (B, D)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
-                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I130", 2, "faces B e D"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
-                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I130"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
+                [["PC-02", "P11 (C4)", 1, "topo: 2 TS-01; CP-I120 (B, D)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I120", 2, "faces B e D"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
+                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I120"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
                  ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista C)", 5, "face B, centrada, fiadas 0 a 4"],
                  ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas C-11/C-17 (DEC-044, PP06)", 1, "face B, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 8 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
-                 f"CP-I130 nas faces B (V406) e D (V407), assento +{F(Z_I130)}; TS-01 da linha 4 apoiadas no topo (topo horizontal em 2 níveis: +{F(Z_TOP_C)} lado A / +{F(Z_TOP_CD)} lado E), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, grauteados nos tubos TB-3.",
+                 f"CP-I120 nas faces B (V406) e D (V407), assento +{F(Z_I120)}; TS-01 da linha 4 apoiadas no topo (topo horizontal em 2 níveis: +{F(Z_TOP_C)} lado A / +{F(Z_TOP_CD)} lado E), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, grauteados nos tubos TB-3.",
                  "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede dos portões (vista C, fiadas até +7,50)."],
                 ip01=[dict(face="B", z=IP_C, largo={5: 840})]) | dict(pinos_topo=PN5_TOPO)
 
 
 def dados_pc3():
     # DEC-058 (24/10/2026, arranjo C): dois PC-03 40×40 (P13 em y 46,317 e P13B em y 62,833), fora das linhas da cobertura
-    cons = [I130("B"), I130("D")]
+    cons = [I120("B"), I120("D")]
     return base("PC-03", 2, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 4, 3), "ND-LET-PC03",
                 "PILARES CENTRAIS PC-03 (P13, P13B, 40×40) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, y = 46,317 m (P13) e y = 62,833 m (P13B) — 3 vãos iguais de 16,517 m da linha 4 à linha 9 (DEC-058)", "PILAR CENTRAL PC-03",
-                [["PC-03", "P13 (y 46,317)", 1, "CP-I130 (B, D)", "2 AL-2"], ["PC-03", "P13B (y 62,833)", 1, "CP-I130 (B, D)", "2 AL-2"]],
-                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I130", 2, "faces B e D"], ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I130"],
+                [["PC-03", "P13 (y 46,317)", 1, "CP-I120 (B, D)", "2 AL-2"], ["PC-03", "P13B (y 62,833)", 1, "CP-I120 (B, D)", "2 AL-2"]],
+                [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I120", 2, "faces B e D"], ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I120"],
                  ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø16 retos (dimensionar_pilares_r05: uso 0,54); estribos N2 Ø6,3 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
-                 f"CP-I130 nas faces B e D, assento +{F(Z_I130)}: P13 recebe V406 (B) e V405 (D); P13B recebe V405 (B) e V404 (D); sem TS-01 no topo (os dois ficam fora das linhas 5 a 8 — TS-01 no topo da I130)."])
+                 f"CP-I120 nas faces B e D, assento +{F(Z_I120)}: P13 recebe V406 (B) e V405 (D); P13B recebe V405 (B) e V404 (D); sem TS-01 no topo (os dois ficam fora das linhas 5 a 8 — TS-01 no topo da I120)."])
 
 
 def _pm(marca, nome, ap, eixo):

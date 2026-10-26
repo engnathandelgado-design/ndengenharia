@@ -19,6 +19,10 @@ H_C = G.H_C
 # rev03: VT do eixo A desce uma fiada (+6,25/+6,85; assento +6,54) para o consolo CP-VT ficar no corpo do pilar, abaixo do recuo (+7,19);
 # no eixo E a VT continua em +7,50/+8,10 (assento +7,79), abaixo do recuo (+8,37)
 Z_ASS_VT = {"P1": 6540, "P2": 7790}
+# rev12: consolos CP-VB alinhados à face externa (VB nos vãos entre PF) — calc_consolo_vb_face.py
+_VBF = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos_face.json", encoding="utf-8"))
+VB_FACE = {mk: dict(faces=v["faces"]) for mk, v in _VBF["pilares"].items()}
+VB_FACE["e_m"] = _VBF["e_m"]
 
 
 def cons_marca(txt, lado="P1"):
@@ -38,8 +42,8 @@ def cons_marca(txt, lado="P1"):
                     c = G.MEZ(fc, za); c["incl"] = 0; out.append(c)
             elif tipo == "CP-VB":
                 c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0; out.append(c)   # rev04: topo horizontal (NBR 9062 7.2.1.6)
-            elif tipo == "CP-I130":
-                c = G.I130(fc); c["incl"] = 0; out.append(c)
+            elif tipo == "CP-I120":
+                c = G.I120(fc); c["incl"] = 0; out.append(c)
     return out
 
 
@@ -147,6 +151,9 @@ def dados(mk):
     if canto:                                                                # DEC-042 (decisão do Nathan 22/10): canto SEM platibanda recuada,
         d = {}                                                               # seção cheia 40 × 60 até +10,00
     cons = cons_marca(cons_t, "P2" if lado_e else "P1")
+    for c in cons:                                                         # rev12 (fresta, opção B): CP-VB rente à face externa C
+        if c["tipo"] == "CP-VB" and c["face"] in VB_FACE.get(mk, {}).get("faces", ()):
+            c["exc"], c["exc_face"] = round(VB_FACE["e_m"] * 1000), "C"
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
@@ -159,9 +166,9 @@ def dados(mk):
     if n_pn6:
         ins.append(["PN-6", "Barra roscada Ø20 A36 L=700 (300 no consolo)", n_pn6, "CP-VB"])
     if n_pn2:
-        ins.append(["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo)", n_pn2, "CP-I130"])
+        ins.append(["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo)", n_pn2, "CP-I120"])
     for tipo, nm, desc in (("CP-MEZ", "NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)"), ("CP-VB", "NEO-6", "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)"),
-                           ("CP-I130", "NEO-2", "Neoprene 300×200×31 fretado (2 × 10 + 2 × 2,5, chapas inox 2 mm)")):
+                           ("CP-I120", "NEO-2", "Neoprene 300×200×31 fretado (2 × 10 + 2 × 2,5, chapas inox 2 mm)")):
         n = sum(1 for c in cons if c["tipo"] == tipo)
         if n:
             ins.append([nm, desc, n, tipo])

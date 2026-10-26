@@ -19,7 +19,7 @@ MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE LOCAÇÃO DOS PILARES — EIXOS, MARCAS, SEÇÕES E FACES",
                         desenho="ND-LET-LOC01", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
-pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES; COBERTURA REBAIXADA; I130; PLACAS 10 cm")
+pr.revisao("03", "14/10/2026", "TS-01 SEM DENTES; COBERTURA REBAIXADA; I120; PLACAS 10 cm")
 pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; VB 15×60 COM DENTE")
 pr.revisao("05", "17/10/2026", "TERÇAS Z 302 CONTÍNUAS POR TRANSPASSE")
 pr.revisao("06", "20/10/2026", "X DA COBERTURA NOS VÃOS 4-5 A 8-9; VB-01 A VB-08")

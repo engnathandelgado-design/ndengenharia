@@ -30,7 +30,7 @@ def marca_consolo(c):
 
 def chave(c):
     return "|".join(str(x) for x in (c["tipo"], c["larg"], c["proj"], c["h"], c["hp"], c.get("incl", 0.03), c["pino_nome"], c["pino_d"], c["pino_L"],
-                                       c["pino_emb"], c["pino_x"], tuple(c["neo"]), c["n_tir"], c["d_tir"]))
+                                       c["pino_emb"], c["pino_x"], tuple(c["neo"]), c["n_tir"], c["d_tir"], c.get("exc", 0)))
 
 
 def aco_pino(nome):
@@ -58,7 +58,7 @@ def linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H):
         dim = f"{g(c['larg'] / 10)}×{g(c['proj'] / 10)}×{g(round(c['h'] / 10, 1))}" + (f"/{g(round(c['hp'] / 10, 1))}" if c["hp"] != c["h"] else "")
         rows.append([f"{mk} ({c['tipo']})", f"{c['face']}", f"{niv(c['z'])} ({g(c['z'] / 10)})", dim,
                      f"1 {c['pino_nome']} Ø{g(c['pino_d'])}", g(emb / 10), g(livre / 10), g(tot / 10),
-                     f"{aco_pino(c['pino_nome'])}; reta; a {g(c['pino_x'] / 10)} cm da face, no eixo do consolo; neoprene {c['neo'][0]}×{c['neo'][1]}×{c['neo'][2]}"])
+                     f"{aco_pino(c['pino_nome'])}; reta; a {g(c['pino_x'] / 10)} cm da face, no eixo do consolo; " + (f"consolo RENTE À FACE {c['exc_face']} (eixo do consolo a {g(c['exc'] / 10)} cm do eixo da face {c['face']}); " if c.get("exc") else "") + f"neoprene {c['neo'][0]}×{c['neo'][1]}×{c['neo'][2]}"])
         chk(f"{mk} face {c['face']} {niv(c['z'])}", emb, livre, tot)
     AS = P.get("assento")
     if AS and REC:

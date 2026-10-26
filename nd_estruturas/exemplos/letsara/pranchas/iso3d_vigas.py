@@ -1,5 +1,5 @@
-"""Isométricos 3D (PyVista) das vigas I130, VB e VM para a produção ver a peça inteira (rev08, 21/10/2026).
-Projeto da fábrica: imagens SEM marca. Gera ISO-I130-geral/ponta, ISO-VB-geral/ponta, ISO-VM-geral (PNG recortados).
+"""Isométricos 3D (PyVista) das vigas I120, VB e VM para a produção ver a peça inteira (rev08, 21/10/2026).
+Projeto da fábrica: imagens SEM marca. Gera ISO-I120-geral/ponta, ISO-VB-geral/ponta, ISO-VM-geral (PNG recortados).
 Uso: python iso3d_vigas.py [i130 vb vm]"""
 import json, math, sys
 import numpy as np
@@ -88,7 +88,7 @@ def salvar(p, arq, cam, zoom):
     print("ok", arq)
 
 
-# ================================================================== I130 (V406)
+# ================================================================== I120 (V406)
 def i130():
     import viga_i as VI
     P = VI.dados_i110()
@@ -116,7 +116,7 @@ def i130():
             if not (x_ini <= s0 <= x_fim):
                 continue
             CT = P.get("ct")
-            if CT:                                                     # rev10 (DEC-061): consolo lateral CT-I130 com mísula nas 2 faces
+            if CT:                                                     # rev10 (DEC-061): consolo lateral CT-I120 com mísula nas 2 faces
                 pj, hh, he = CT["proj"] / 1e3, CT["h"] / 1e3, CT["h_ext"] / 1e3
                 for sg in (-1, 1):
                     pol = [(sg * BW / 2, H - hh), (sg * B / 2, H - hh), (sg * (B / 2 + pj), H - he), (sg * (B / 2 + pj), H), (sg * BW / 2, H)]
@@ -132,23 +132,23 @@ def i130():
     peca(p)
     s0 = P["pinos_topo"][0] / 1e3
     rot(p, [(P["alcas"][0] / 1e3, 0, H + 0.14), (s0 + 0.115, 0.10, H + 0.30), (LN / 2, 0.2, H - HD), (P["pino_x"] / 1e3, 0, H + 0.02), (MAC + 1.0, 0.2, H * 0.5)],
-        ["AL-3 alça de içamento (2x)", "apoio das TS-01: consolos CT-I130 com mísula + NEO-3C + 4 PN-5", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
+        ["AL-3 alça de içamento (2x)", "apoio das TS-01: consolos CT-I120 com mísula + NEO-3C + 4 PN-5", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
          "TB-2 passante no dente", f"seção I{round(H * 100)} (b 40, bw 15)"], fs=13)
-    salvar(p, "ISO-I130-geral.png", [(L * 0.5 - 6, -15, 11), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
-    # ponta no consolo CP-I130 do pilar central
+    salvar(p, "ISO-I120-geral.png", [(L * 0.5 - 6, -15, 11), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
+    # ponta no consolo CP-I120 do pilar central
     p = pv.Plotter(off_screen=True, window_size=(1500, 1200)); p.set_background("white")
     F = 0.075                                                                              # ponta da viga a 75 mm da face do pilar
     p.add_mesh(box(-0.60 - F, -F, -0.30, 0.30, -1.2, H + 0.25), **PIL_)                    # pilar 60 × 60 (até o topo da viga)
-    PJ = 0.40                                                                              # projeção do CP-I130 (consolos.json): termina 25 mm antes do corpo da viga
-    _CJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))["CP-I130"]   # DEC-054: consolo com mísula
+    PJ = 0.40                                                                              # projeção do CP-I120 (consolos.json): termina 25 mm antes do corpo da viga
+    _CJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))["CP-I120"]   # DEC-054: consolo com mísula
     _zt = H - HD - 0.031
     p.add_mesh(prisma([(-F, _zt - _CJ["h_total_m"]), (-F + PJ, _zt - _CJ["h_consolo_m"]), (-F + PJ, _zt), (-F, _zt)], -0.25, 0.25, "xz"), **PIL_)   # consolo
     p.add_mesh(box(P["pino_x"] / 1e3 - 0.10, P["pino_x"] / 1e3 + 0.10, -0.15, 0.15, H - HD - 0.031, H - HD), **NEO)   # NEO-2 fretado
     p.add_mesh(cil((P["pino_x"] / 1e3, 0, H - HD + 0.05), 0.025, 0.60), **ACO)                # PN-2
     peca(p, 0, 3.2)
     rot(p, [(P["pino_x"] / 1e3, 0.15, H - HD - 0.015), (P["pino_x"] / 1e3, 0, H - HD + 0.35), (PJ / 2, 0.30, H - HD - 0.4), (-0.3, 0.3, H)],
-        ["NEO-2 300×200×31 fretado", "PN-2 Ø25 no TB-2 (graute numa ponta)", "consolo CP-I130 com mísula (49 / 39)", "pilar central PC"])
-    salvar(p, "ISO-I130-ponta.png", [(3.2, -4.6, -0.2), (0.6, 0, H * 0.4), (0, 0, 1)], 1.1)   # DEC-054: vista um pouco de baixo (mísula do consolo)
+        ["NEO-2 300×200×31 fretado", "PN-2 Ø25 no TB-2 (graute numa ponta)", "consolo CP-I120 com mísula (49 / 39)", "pilar central PC"])
+    salvar(p, "ISO-I120-ponta.png", [(3.2, -4.6, -0.2), (0.6, 0, H * 0.4), (0, 0, 1)], 1.1)   # DEC-054: vista um pouco de baixo (mísula do consolo)
 
 
 # ================================================================== VB (VB-02)

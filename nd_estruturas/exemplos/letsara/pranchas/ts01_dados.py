@@ -11,7 +11,7 @@ L_H = round((LG["X_PONTA_CEN"] - LG["X_PONTA_ESQ"]) * 1000)   # rev03: sem dente
 L = round(L_H / math.cos(math.atan(I_CAI)))           # comprimento de fabricação ao longo do eixo (ponto 0 a ponto 0)
 H = 900
 DX = round(H * I_CAI)                                 # ponta a prumo: topo deslocado 27 mm
-HD, LN = 0, 0                                         # rev03: sem dente Gerber (apoio direto no assento do pilar / topo da I130)
+HD, LN = 0, 0                                         # rev03: sem dente Gerber (apoio direto no assento do pilar / topo da I120)
 N_ESP = len(LG["s_tercas"]) - 1
 PASSO_T = round(LG["passo_tercas"] * 1000)
 P = dict(marca="TS-01", qtd=12, L=L, h=H, b=400, ts=120, ti=150, m=80, bw=150, mac=500,

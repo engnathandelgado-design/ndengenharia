@@ -61,7 +61,7 @@ def kg_aco(nome):
 
 
 def aco_viga(fam, marca):
-    """kg/peça da relação da marca (armaduras_vigas): nomes 'I130 V407', 'VM VM-01', 'VB VB-01/05' (a marca e a sua espelhada)."""
+    """kg/peça da relação da marca (armaduras_vigas): nomes 'I120 V407', 'VM VM-01', 'VB VB-01/05' (a marca e a sua espelhada)."""
     for nome, _, _, kd, _ in Q.aco:
         if not nome.startswith(fam + " "):
             continue
@@ -97,13 +97,13 @@ def linha(p):
         kg = kg_aco("TS-01")
         ic = f"desforma: {TS_DESF[1]} ({TS_DESF[2]}) — {icamento('ND-LET-TS01-1')}"
         est = f"{TS_EST[1]} ({TS_EST[2]}); transportar nos mesmos pontos"
-    elif fl == "I130":
+    elif fl == "I120":
         fam = "Vigas de cobertura"
         a = IJ[mk]["arranjo"]
         lib = desf = f"{a['fckj']:.0f}"
         forma = f"pista {PISTA:g} m (≤ {por_pista(L)} por pista)"
         prot = f"{a['n_cord']} Ø12,7 CP-190 RB, {f(a['F_macaco_kN'])} kN"
-        kg = aco_viga("I130", mk)
+        kg = aco_viga("I120", mk)
         ic = "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — " + icamento(folha)
         est = "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte"
     elif fl == "VM01":

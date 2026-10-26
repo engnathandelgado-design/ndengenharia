@@ -27,7 +27,7 @@ def num(s):
         s = s.replace(".", "")
     return float(s)
 KGM = {6.3: 0.245, 8.0: 0.395, 10.0: 0.617, 12.5: 0.963, 16.0: 1.578, 20.0: 2.466, 25.0: 3.853}
-DIAMS = [6.3, 8.0, 10.0, 12.5, 16.0, 20.0, 25.0]   # DEC-054: N3 6 Ø25 da I130
+DIAMS = [6.3, 8.0, 10.0, 12.5, 16.0, 20.0, 25.0]   # DEC-054: N3 6 Ø25 da I120
 
 
 def tab(folha, inicio):
@@ -92,8 +92,8 @@ for f_ in PIL_OUTROS:
 q = quadro("TS01-1")
 pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 3–8 (2 por linha; linha 2 metálica, DEC-048)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
               num(q["VOLUME"].split()[0]), round(num(q["VOLUME"].split()[0]) * 2.5, 2), "C50", "ND-LET-TS01"))
-for mk, pos, qt, L, p in tab("I130", "MARCAS")["linhas"]:
-    pecas.append(("Vigas de cobertura", mk, pos, "I130", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I130"))
+for mk, pos, qt, L, p in tab("I120", "MARCAS")["linhas"]:
+    pecas.append(("Vigas de cobertura", mk, pos, "I120", num(L) / 100, int(qt), round(num(p) / 2.5, 2), num(p), "C50", "ND-LET-I120"))
 _PV = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/portao_l4.json"))["placa_PV1"]   # DEC-059
 pecas.append(("Placas de fechamento", "PV-1", "sobre o portão PG-04–PG-03 da linha 4 (+7,50 a +7,88)", "10 × 37", _PV["L_m"], 1,
               round(0.10 * _PV["h_m"] * _PV["L_m"], 3), round(_PV["peso_kN"] / 10, 3), "C40", "ND-LET-PV01"))
@@ -117,7 +117,7 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
 for f_ in PIL_OUTROS:
     aco.append((f"Pilar {quadro(f_)['MARCA']}", f"ND-LET-{f_}", int(quadro(f_)["QUANTIDADE"].split()[0]), kg_diam(f_), ""))
 import armaduras_vigas as AV
-FOLHA_VIGA = {"TS-01": "ND-LET-TS01-1", "I130": "ND-LET-I130", "VM": "ND-LET-VM01", "VB": "ND-LET-VB01"}   # rev07: fôrma + armação na mesma folha
+FOLHA_VIGA = {"TS-01": "ND-LET-TS01-1", "I120": "ND-LET-I120", "VM": "ND-LET-VM01", "VB": "ND-LET-VB01"}   # rev07: fôrma + armação na mesma folha
 for k_, (fam_, fn_) in enumerate(AV.SPECS, 1):
     for m_ in fn_()["marcas"]:
         kd_ = {d: 0.0 for d in DIAMS}
@@ -155,9 +155,9 @@ for nome, f_, L, qt in ((_RNq.MARCA_NOVO + _RNq.lista(_RNq.TS_TODAS), "TS01-1", 
 for _mk in ("VM-01", "VM-02", "VM-03", "VM-04"):                          # rev09: cordoalhas por marca (vm_retangular.json)
     _q = next(p[5] for p in pecas if p[1] == _mk)
     cord.append((_RNq.MARCA_NOVO + _RNq.lista(_RNq.nomes_de(_mk)), 12.7, VMJ[_mk]["n_cord"], VMJ[_mk]["L_peca"], _q, ""))
-_IJ = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))          # I130: número e Ø das cordoalhas por marca (DEC-054: Ø15,2, V407 18, V405/V406 24)
-for p_ in [p for p in pecas if p[9] == "ND-LET-I130"]:
-    cord.append((f"I130 {p_[1]}", float(_IJ[p_[1]]["arranjo"].get("cordoalha", "Ø12.7")[1:]), _IJ[p_[1]]["arranjo"]["n_cord"], _IJ[p_[1]]["L_peca"], p_[5], ""))
+_IJ = json.loads((AQ / "i110_r01.json").read_text(encoding="utf-8"))          # I120: número e Ø das cordoalhas por marca (DEC-054: Ø15,2, V407 18, V405/V406 24)
+for p_ in [p for p in pecas if p[9] == "ND-LET-I120"]:
+    cord.append((f"I120 {p_[1]}", float(_IJ[p_[1]]["arranjo"].get("cordoalha", "Ø12.7")[1:]), _IJ[p_[1]]["arranjo"]["n_cord"], _IJ[p_[1]]["L_peca"], p_[5], ""))
 _PLJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/placas.json"))["protensao"]
 _OMJ = __import__("json").load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))["placa_I15"]
 n, d = _PLJ["n"], _PLJ["diam_mm"]                                          # DEC-035: 10 fios Ø6 CP-175 RB
@@ -192,7 +192,7 @@ for p_ in [p for p in pecas if p[1][:2] in ("PL", "PF")]:
     add_ins(p_[9].replace("ND-LET-", ""), p_[1], p_[5])
 for f_ in ("PC01", "PC02", "PC03", "PM01", "PG01", "PG02", "PG03", "PG04"):
     add_ins(f_, quadro(f_)["MARCA"], int(quadro(f_)["QUANTIDADE"].split()[0]))
-add_ins("I130", "I130", 4); add_ins("VM01", "VM", sum(p[5] for p in pecas if p[1].startswith("VM-"))); add_ins("VB01", "VB", 8)
+add_ins("I120", "I120", 4); add_ins("VM01", "VM", sum(p[5] for p in pecas if p[1].startswith("VM-"))); add_ins("VB01", "VB", 8)
 for k in ("ES-1", "ES-2", "TB-3", "AL-1"):
     l = chap_ts[k]
     ins.append(("ND-LET-TS01-3", "TS-01", k, l[1], int(l[2]), 12))

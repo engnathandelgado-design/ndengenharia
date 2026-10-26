@@ -52,7 +52,7 @@ ORDEM = (["ND-LET-NG01", "ND-LET-PR01", "ND-LET-LOC01", "ND-LET-CG01", "ND-LET-C
          + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)]
          + [f"ND-LET-PC{k:02d}" for k in range(1, 4)] + ["ND-LET-PM01", "ND-LET-PM02"] + [f"ND-LET-PG{k:02d}" for k in range(1, 5)] + [f"ND-LET-PE{k:02d}" for k in range(1, 4)]
          + ["ND-LET-CS01"]
-         + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01", "ND-LET-LA01"]
+         + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I120", "ND-LET-VM01", "ND-LET-VB01", "ND-LET-LA01"]
          + [f"ND-LET-ES{k:02d}" for k in range(1, 6)]
          + ["ND-LET-CM01"] + [f"ND-LET-PP{k:02d}" for k in range(0, 7)] + [f"ND-LET-PP-{v}" for v in ("A", "B", "C", "D", "EF", "G", "HJ", "I")] + ["ND-LET-PV01"]
          + ["ND-LET-COB01", "ND-LET-COB07", "ND-LET-COB08", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-COB06", "ND-LET-COB05", "ND-LET-COB09", "ND-LET-MT01-1", "ND-LET-MT01-2", "ND-LET-EX01"])
@@ -120,7 +120,7 @@ def corta(png, saida, borda=30):
 
 # ------------------------------------------------------------------ dados das notas (das fontes)
 TSQ = quadro("ND-LET-TS01-1")
-I130Q = quadro("ND-LET-I130")
+I120Q = quadro("ND-LET-I120")
 VMQ = quadro("ND-LET-VM01", "QUADRO DA PEÇA")
 VBQ = quadro("ND-LET-VB01")
 LAQ = quadro("ND-LET-LA01", "QUADRO DAS LAJES")
@@ -138,7 +138,7 @@ MATERIAIS = [
     ["Pilares PL, PF, PC, PM, PG", PLQ["CONCRETO"], "—", "25", "armado (CA-50)", PLQ["COBRIMENTO"].replace(" (CAA II)", ""), "II"],
     ["Viga TS-01 (I90 de cobertura)", "C50", TSQ["CONCRETO"].split("fckj ")[1], TSQ["CONCRETO"].split("fckj ")[1],
      f"{ncord(TS_CORD)} Ø12,7 CP-190 RB — {TS_CORD[0][4]} kN", "3,0", "II"],
-    ["Vigas I130 (V404, V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
+    ["Vigas I120 (V404, V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
      " / ".join(f"{k} {v['arranjo']['n_cord']}" for k, v in IJ.items()) + f" Ø12,7 — {f(IJ['V406']['arranjo']['F_macaco_kN'])} kN", "3,0", "II"],
     ["Vigas do mezanino VM-01 a VM-04 (30 × 75)", f"C{VMJ['premissas']['fck']:.0f}", f"{VMJ['premissas']['fckj']:.0f}", f"{VMJ['premissas']['fcj_icamento']:.0f}",
      f"{ncord(VM_CORD)} Ø12,7 CP-190 RB — {VM_CORD[0][4]} kN", "2,5 estribo / 3,0 cord.", "II"],
@@ -156,7 +156,7 @@ NORMAS = ("NBR 9062:2017 (projeto e execução de estruturas de concreto pré-mo
           "NBR 7480 (barras CA-50/CA-60); NBR 7482 (fios de protensão); NBR 7483 (cordoalhas); NBR 12655 (controle do concreto); NBR 6323 (galvanização a fogo).")
 
 N_GERAIS = [
-    "Estrutura pré-moldada do pavilhão Letsara: pilares engastados nos cálices, vigas articuladas (TS-01 de cobertura, I130 centrais, VB de borda, VM do mezanino), "
+    "Estrutura pré-moldada do pavilhão Letsara: pilares engastados nos cálices, vigas articuladas (TS-01 de cobertura, I120 centrais, VB de borda, VM do mezanino), "
     "lajes alveolares com capa nos pisos +3,90 (depósito, 5,0 kN/m²) e +7,30 (laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²), escada metálica do térreo ao +3,90 (ND-LET-ES01), cobertura da linha 2 metálica: W 200 × 15,0 nos pilares e em montantes W 150 × 13,0 sobre as VM do +7,30 (ND-LET-COB05), cobertura metálica Isoeste (telha zipada dupla com lã de rocha) sobre terças Z escondida na platibanda (+10,00) e fechamento lateral em placas protendidas 125 × 10 por fora dos pilares.",
     f"Classificação: {NBR['classificacao']['tipo']}. Coeficientes adotados: γc {f(NBR['classificacao']['gama_c'])}, γs {f(NBR['classificacao']['gama_s'], 2)}, "
     f"γn {f(NBR['classificacao']['gama_n_permanente'])} (consolos com permanente preponderante) e {f(NBR['classificacao']['gama_n_outros'])} (demais) — NBR 9062:2017 7.3.1 e 8.1.",
@@ -200,8 +200,8 @@ N_PRODUCAO = [
 
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
-    "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I130 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
-    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 200 × 15,0 da linha 2 (na cabeça dos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
+    "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I120 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
+    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I120 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 200 × 15,0 da linha 2 (na cabeça dos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
     "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
@@ -256,8 +256,8 @@ def gerar():
     lin_n = [[RN.novo(RN.lista(v)), RN.novo(f"{k} L1 a L9 (pilares laterais do eixo {'A' if k == 'P1' else 'E'})" if k in ("P1", "P2") else k)]
              for k, v in sorted(por_lado.items(), key=lambda kv: int(kv[1][0][1:]))]
     grp = lambda *mks: RN.lista([n for m in mks for n in RN.nomes_de(m)])
-    lin_n += [[RN.novo(grp("V407")), RN.novo("V407 (I130, linhas 2–4)")], [RN.novo(grp("V406")), RN.novo("V406 (I130, linha 4 → PC-03 y 46,317)")],
-              [RN.novo(grp("V405")), RN.novo("V405 (I130, PC-03 → PC-03, y 46,317 → 62,833)")], [RN.novo(grp("V404")), RN.novo("V404 (I130, PC-03 y 62,833 → linha 9)")],
+    lin_n += [[RN.novo(grp("V407")), RN.novo("V407 (I120, linhas 2–4)")], [RN.novo(grp("V406")), RN.novo("V406 (I120, linha 4 → PC-03 y 46,317)")],
+              [RN.novo(grp("V405")), RN.novo("V405 (I120, PC-03 → PC-03, y 46,317 → 62,833)")], [RN.novo(grp("V404")), RN.novo("V404 (I120, PC-03 y 62,833 → linha 9)")],
               [RN.novo(grp("VM-01", "VM-02", "VM-03", "VM-04")), RN.novo("vigas do mezanino (+3,90 e +7,30)")],
               [RN.novo(grp(*[f"VB-0{k}" for k in range(1, 9)])), RN.novo("vigas de borda das fachadas 1 e 9")],
               [RN.novo(grp("TS-01", "TS-01A", "TS-01B")), RN.novo("vigas de cobertura das linhas 3 a 8")]]

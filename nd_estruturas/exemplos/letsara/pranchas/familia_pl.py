@@ -41,7 +41,7 @@ MARCAS = [
     ("PF-02", "P4 L1", 1, f"CP-VB +{VBz(19.75, -1)} (B); CP-VB +{VBz(19.75, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(19.75)}", "6 CE-1 (C)"),
     ("PF-03", "P5 L1", 1, f"CP-VB +{VBz(29.63, -1)} (B); CP-VB +{VBz(29.63, 1)} (D); 4 CP-MEZ (B, D); recuo +{RV(29.63)}", "6 CE-1 (C)"),
     ("PF-05", "P3 L9", 1, f"CP-VB +{VBz(9.87, 1)} (B); CP-VB +{VBz(9.87, -1)} (D); recuo +{RV(9.87)}", "8 CE-1 (C)"),
-    ("PF-04", "P14 L9", 1, f"CP-VB +{VBz(19.75, 1)} (B); CP-VB +{VBz(19.75, -1)} (D); CP-I130 +{f(LG['Z_ASS_I130'], 3)} (A); recuo +{RV(19.75)}", "8 CE-1 (C)"),
+    ("PF-04", "P14 L9", 1, f"CP-VB +{VBz(19.75, 1)} (B); CP-VB +{VBz(19.75, -1)} (D); CP-I120 +{f(LG['Z_ASS_I120'], 3)} (A); recuo +{RV(19.75)}", "8 CE-1 (C)"),
     ("PF-06", "P5 L9", 1, f"CP-VB +{VBz(29.63, 1)} (B); CP-VB +{VBz(29.63, -1)} (D); recuo +{RV(29.63)}", "8 CE-1 (C)"),
 ]
 

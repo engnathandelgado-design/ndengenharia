@@ -7,7 +7,7 @@ Regras
   Pilar fora do eixo entra na fila do eixo mais próximo (pela coordenada vertical da planta); empate na mesma linha
   (mesma coordenada horizontal) resolve de cima para baixo.
 - Vigas: série por nível — V100 nível zero (não há), V200 = 1º nível acima (mezanino +3,90), V300 = +7,30,
-  V400 = cobertura (TS-01, VB, I130). Um nome por peça. Convenção de leitura (padrão usual de projeto):
+  V400 = cobertura (TS-01, VB, I120). Um nome por peça. Convenção de leitura (padrão usual de projeto):
   primeiro as vigas HORIZONTAIS da planta (de cima para baixo e, na mesma fila, da esquerda para a direita),
   depois as VERTICAIS (da esquerda para a direita e, na mesma coluna, de cima para baixo).
 - Peças iguais continuam com UMA folha; a folha lista os nomes que detalha ("P5, P6, P7, P8 — 4 peças").
@@ -84,7 +84,7 @@ def vigas_obra():
             v.append((niv, "VM-04", "V", P6_L2[0], Y_LIN[1], X_FACH[4], Y_LIN[1], "linha 2, P6–E"))
         else:
             v.append((niv, "VM-04", "V", P6_ESC[0], P6_ESC[1], P7_ESC[0], P7_ESC[1], "escada, P6–P7 (y 3,79)"))
-    # cobertura: I130 no eixo C (horizontal na planta)
+    # cobertura: I120 no eixo C (horizontal na planta)
     xc = X_EIXO["C"]
     for mk, ya, yb, d in (("V407", Y_LIN[1], Y_LIN[3], "eixo C, linhas 2–4"), ("V406", Y_LIN[3], Y_PC_C[0], "eixo C, linha 4 → PC-03"),   # DEC-058
                           ("V405", Y_PC_C[0], Y_PC_C[1], "eixo C, PC-03 → PC-03"), ("V404", Y_PC_C[1], Y_LIN[8], "eixo C, PC-03 → linha 9")):
@@ -102,7 +102,7 @@ def vigas_obra():
 
 
 SERIE = {"+3,90": 200, "+7,30": 300, "cobertura": 400}
-FOLHA_V = {"VM": "ND-LET-VM01", "VB": "ND-LET-VB01", "TS": "ND-LET-TS01-1", "V4": "ND-LET-I130"}
+FOLHA_V = {"VM": "ND-LET-VM01", "VB": "ND-LET-VB01", "TS": "ND-LET-TS01-1", "V4": "ND-LET-I120"}
 
 
 def numerar_vigas():

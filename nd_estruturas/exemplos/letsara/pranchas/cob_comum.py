@@ -72,6 +72,36 @@ for k in range(8):
     j = _tipos.index(tk) if tk in _tipos else _tipos.index((L_TERCA[k], EXT[k][::-1]))
     BASE_K[k] = f"T{j+1}"
 BASE = {L_TERCA[k]: BASE_K[k] for k in range(8)}          # compatível com o uso por comprimento
+# rev12 (fresta, opção B): terças da faixa entre os pilares de fachada PF (eixos B a D) apoiam na VB deslocada para fora →
+# o vão 1-2 e o 8-9 dessas terças são mais longos. Índices virtuais de vão: 8 = vão 1-2 na faixa PF, 9 = vão 8-9 na faixa PF.
+PF_X = tuple(round(x * 1000) for x in PC.get("faixa_pf_x", (9.87, 29.63)))
+IDX_PF = {i for i, x in enumerate(XT) if PF_X[0] < x < PF_X[1]} if PC.get("por_vao_faixa_pf") else set()
+K_REAL = {k: k for k in range(8)}
+DESL_VB = 0
+for kv, pp in zip((8, 9), PC.get("por_vao_faixa_pf", [])):
+    kr = 0 if kv == 8 else 7
+    K_REAL[kv] = kr
+    DESL_VB = pp["desloc_vb_mm"]
+    VAOS.append(pp["L_vao_mm"]); L_TERCA.append(pp["L_mm"]); EXT.append((pp["ext_ini_mm"], pp["ext_fim_mm"]))
+    tk = (pp["L_mm"], EXT[kv])
+    j_ = next((BASE_K[q] for q in (8,) if q in BASE_K and (L_TERCA[q], EXT[q][::-1]) == tk), None)
+    BASE_K[kv] = j_ or f"T{len(set(BASE_K.values())) + 1}"
+K_TODOS = sorted(K_REAL)
+
+
+def kv(k, i):
+    """vão virtual da terça i no vão k (0..7): 8/9 nas terças da faixa PF dos vãos de fachada."""
+    if i in IDX_PF and k in (0, 7) and (8 if k == 0 else 9) in K_REAL:
+        return 8 if k == 0 else 9
+    return k
+
+
+def y_peca(k, i):
+    """(ya, yb) mm da peça da terça i no vão k, com a VB deslocada na faixa PF."""
+    q = kv(k, i)
+    ya = YLmm[k] - EXT[q][0] - (DESL_VB if q == 8 else 0)
+    yb = YLmm[k + 1] + EXT[q][1] + (DESL_VB if q == 9 else 0)
+    return ya, yb
 
 
 def furos_ponta(ext):
@@ -84,7 +114,7 @@ def furos_ponta(ext):
 def marca(k, i):
     """Marca da terça do vão k (0..7) na linha i: peça-base + furação (D = diagonais, X = cruzamento do X)."""
     suf = ("D" if i in IDX_2A else "") + (sufixo_x(i) if (k in VAOS_X and i in IDX_X) else "")
-    return BASE_K[k] + suf
+    return BASE_K[kv(k, i)] + suf
 
 
 def sufixo_x(i):
@@ -102,10 +132,11 @@ def furos_x(k, i):
     meia = NOS_X if i < NT else NOS_X_D
     x = XT[i]
     a, b = next((a, b) for a, b in zip(meia[:-1], meia[1:]) if a < x < b)
-    ya, yb = ORE_Y, VAOS[k] - (0 if k == 7 else ORE_Y)
+    ya = ORE_Y
     sb = ORE_S9 if k == 7 else ORE_S
     out = []
     for nome, x1, x2, z in (("/", a + ORE_S, b - sb, Z_X[0]), ("\\", b - ORE_S, a + sb, Z_X[1])):
+        yb = VAOS[k] - (0 if k == 7 else ORE_Y) + (DESL_VB if k == 7 and PF_X[0] < x2 < PF_X[1] else 0)   # rev12: orelha no eixo da VB deslocada
         t = (x - x1) / (x2 - x1)
         out.append((round(ya + t * (yb - ya)), z, nome))
     return out
@@ -116,9 +147,9 @@ def lista_marcas():
     for k in range(8):
         for i in range(2 * NT):
             m = marca(k, i)
-            q.setdefault(m, dict(L=L_TERCA[k], qt=0, vaos=set()))
+            q.setdefault(m, dict(L=L_TERCA[kv(k, i)], qt=0, vaos=set(), k=kv(k, i)))
             q[m]["qt"] += 1
-            q[m]["vaos"].add(f"{k+1}-{k+2}")
+            q[m]["vaos"].add(f"{k+1}-{k+2}" + (" (B–D)" if kv(k, i) >= 8 else ""))
     return dict(sorted(q.items()))
 
 

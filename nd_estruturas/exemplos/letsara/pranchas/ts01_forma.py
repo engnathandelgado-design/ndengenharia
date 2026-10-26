@@ -1,6 +1,6 @@
 import renomear as RN
 """ND-LET-TS01-1 — TS-01: fôrma, insertos e manuseio (A0). Padrão de prancha de peça pré-moldada (cast unit).
-Rev. 03 (14/10/2026): sem dentes Gerber (apoio direto: assento do pilar lateral e topo da I130 / pilar central), terças a
+Rev. 03 (14/10/2026): sem dentes Gerber (apoio direto: assento do pilar lateral e topo da I120 / pilar central), terças a
 cada ~1,20 m, todas as ligações da cobertura parafusadas em esperas de barra roscada (sem solda), 8 cordoalhas."""
 import json
 from prancha_nd import Prancha
@@ -19,7 +19,7 @@ pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADA
 pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA (1ª A 40 cm DA CALHA); ES-2 SÓ NOS 3 NÓS DO X; GRAMPO NAS ES-1; TS-01A COM IT-P")
 pr.revisao("07", "24/10/2026", "DEC-059: TS-01A APOIADA NOS PG-01 A PG-04 (NEOPRENE + GRAUTE), PORTÕES LIVRES ATÉ +7,50")
 pr.revisao("08", "25/10/2026", "DEC-062: COTA DA DIFERENÇA TOPO × FUNDO NA PONTA (DETALHE D1)")
-pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
+pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · {P["qtd"]} PEÇAS".replace(".", ","),
                   f"PESO {f(peso/10.0,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
 TER, NOS, ALC, EST = P["tercas"], P["nos"], P["alcas"], P["estoque"]
@@ -121,8 +121,8 @@ for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
 vi.chamada((LC / 2, 150), (10, 18), f"cunha: fundo rebaixado {EC} → 0 mm (ponta baixa)")
 vi.chamada((L - LC / 2, 150), (-10, 18), f"cunha: fundo rebaixado 0 → {EC} mm (ponta alta)")
-vi.chamada((S_TB[0], 100), (14, 30), "NEO-4 (pilar) ou NEO-3C (I130 + CT-I130)")
-vi.chamada((S_TB[1], 100), (-14, 30), "NEO-3C (I130 + CT-I130) ou NEO-4 (pilar)")
+vi.chamada((S_TB[0], 100), (14, 30), "NEO-4 (pilar) ou NEO-3C (I120 + CT-I120)")
+vi.chamada((S_TB[1], 100), (-14, 30), "NEO-3C (I120 + CT-I120) ou NEO-4 (pilar)")
 vi.chamada((EST[0], -260), (30, -22), "calço de estoque/transporte (2x)")
 vi.cota_ord([0, S_TB[0], LC, L - LC, S_TB[1], L], -200, -6, x0=0, rotulos=["0", vi.fmt(S_TB[0]), vi.fmt(LC), vi.fmt(L - LC), vi.fmt(S_TB[1]), vi.fmt(L)])
 vi.cota_v([-200, -100, 100, 200], 0, -8)
@@ -271,7 +271,7 @@ d4.chamada((-150, -500), (-34, -38), f"assento HORIZONTAL +{f(LG['REC'][1], 3)}"
 d4.chamada((xt4, 450), (-16, 26), "TB-3 a prumo / 2 PN-3 Ø25")
 
 # DETALHE 3 — rev11 (Nathan 26/10/2026): gerado dos MESMOS dados do modelo/cálculo (viga_i.dados_i110, ligacoes.json, DEC-061):
-# corte transversal da I130 na linha 5 com o consolo CT-I130 (mísula) nas duas faces da mesa, as duas TS-01 com marca real,
+# corte transversal da I120 na linha 5 com o consolo CT-I120 (mísula) nas duas faces da mesa, as duas TS-01 com marca real,
 # NEO-3C sobre a mesa + consolo (12 a 27 cm da ponta), PN-5 (embutido / livre / total), níveis dos dois lados e cotas do assento.
 import sys as _s
 _s.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
@@ -283,17 +283,17 @@ _BI, _TS, _M, _BW = _PI["b"], _PI["ts"], _PI["m"], _PI["bw"]
 _NA = RN.viga_em("cobertura", 9.875, _YL[4], marcas=["TS"]); _NE = RN.viga_em("cobertura", 29.625, _YL[4], marcas=["TS"])
 _NI = RN.viga_em("cobertura", 19.75, _YL[4] - 3)
 DG = round(LG["DEGRAU_C"] * 1000)
-FOLGA_C = 37.5                                                # ponta da TS-01 a 3,75 cm do eixo da I130 (folga 7,5 cm entre pontas)
+FOLGA_C = 37.5                                                # ponta da TS-01 a 3,75 cm do eixo da I120 (folga 7,5 cm entre pontas)
 d3 = pr.vista("DETALHE 3", (862, 120), 20, titulo=f"DETALHE 3 — APOIO NO TOPO DA {_NI}",
-              subtitulo=f"corte na linha 5: {_NA} (lado A) e {_NE} (lado E); CT-I130 nas 2 faces", unidade="cm")
+              subtitulo=f"corte na linha 5: {_NA} (lado A) e {_NE} (lado E); CT-I120 nas 2 faces", unidade="cm")
 zl, xl = viga_montada(d3, -FOLGA_C, -1, 0)                       # lado A
 zr, xr = viga_montada(d3, FOLGA_C, 1, DG - EC, DG)               # lado E
-X_CT = _BI / 2 + _CT["proj"]                                   # ponta do consolo a partir do eixo da I130
+X_CT = _BI / 2 + _CT["proj"]                                   # ponta do consolo a partir do eixo da I120
 sec = [(-_BW / 2, -900), (-_BW / 2, -_CT["h"]), (-_BI / 2, -_CT["h"]), (-X_CT, -_CT["h_ext"]), (-X_CT, 0), (0, 0), (0, DG), (X_CT, DG),
        (X_CT, DG - _CT["h_ext"]), (_BI / 2, DG - _CT["h"]), (_BW / 2, DG - _CT["h"]), (_BW / 2, -900)]      # corte pela linha 5: alma + consolos
 d3.poli(sec, "CORTADO", fechada=True); d3.hachura(sec, "AR-CONC", 0.03)
 d3.interrupcao((-_BW / 2, -900), (_BW / 2, -900))
-for sg in (-1, 1):                                             # mesa da I130 fora do consolo (oculta)
+for sg in (-1, 1):                                             # mesa da I120 fora do consolo (oculta)
     d3.poli([(sg * _BW / 2, -_TS - _M), (sg * _BI / 2, -_TS), (sg * _BI / 2, 0 if sg < 0 else DG)], "OCULTA")
 a_neo = _CT["a_neo"]
 for sg, xp, zt in ((-1, -FOLGA_C, 0), (1, FOLGA_C, DG)):
@@ -305,10 +305,10 @@ d3.cota_h([-FOLGA_C, FOLGA_C], DG + H + 300, 14, total=False)
 d3.cota_h([-FOLGA_C - 120 - a_neo, -FOLGA_C - 120, -FOLGA_C], DG + H + 300, 6, total=False)
 d3.cota_v([-_CT["h"], -_CT["h_ext"], 0], -X_CT, -12, total=False)
 d3.chamada((FOLGA_C + 120 + a_neo / 2, DG - 5), (22, -8), f"NEO-3C {a_neo}×300×10 (12 a 27 cm da ponta)")
-d3.chamada((X_CT - 40, DG - _CT["h_ext"] / 2), (20, -20), f"CT-I130 {_CT['b']/10:g}×{_CT['proj']/10:g}×{_CT['h']/10:g}/{_CT['h_ext']/10:g} (mísula), 2 faces")
+d3.chamada((X_CT - 40, DG - _CT["h_ext"] / 2), (20, -20), f"CT-I120 {_CT['b']/10:g}×{_CT['proj']/10:g}×{_CT['h']/10:g}/{_CT['h_ext']/10:g} (mísula), 2 faces")
 d3.chamada((xr, DG - 250), (24, -32), "PN-5 Ø20: L 600 = 300 emb. + 300 livre")
-d3.chamada((100, DG - 10), (16, 30), f"topo +{f(LG['Z_TOPO_I130_DIR'], 3)} (lado E, {_NE})")
-d3.chamada((-100, -10), (-40, 34), f"topo +{f(LG['Z_TOPO_I130'], 3)} (lado A, {_NA})")
+d3.chamada((100, DG - 10), (16, 30), f"topo +{f(LG['Z_TOPO_I120_DIR'], 3)} (lado E, {_NE})")
+d3.chamada((-100, -10), (-40, 34), f"topo +{f(LG['Z_TOPO_I120'], 3)} (lado A, {_NA})")
 d3.chamada((0, -600), (14, -4), f"{_NI}: assento {(X_CT - FOLGA_C)/10:g} cm por lado")
 
 # ------------------------------------------------------------------ DETALHE 2 — alça AL-1 (1:10)
@@ -341,17 +341,17 @@ qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
       ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/10.0,2)} t)"],
       ["CONCRETO", f"C{P['fck']} / fckj {P['fckj']}", "PROTENSÃO", f"{P['n_cord']} cord. Ø12,7"],
-      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", f"I130 + CT-I130, {(X_CT - FOLGA_C)/10:g} cm"],
+      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", f"I120 + CT-I120, {(X_CT - FOLGA_C)/10:g} cm"],
       ["CUNHAS", f"{LC/10:.0f} cm, 0 → {EC} mm", "TUBOS TB-3", f"a {f(PIN/10, 2)} cm das 2 pontas"]]
 y = pr.tabela(x0, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 60])
 mn = [["Desforma / içamento", "4 alças AL-1 + 2 balancins", f"{f(ALCA_Fd,1)} kN por alça"],
       ["Estoque / transporte", f"2 calços a {EST[0]/10:.0f} cm das pontas", f"{f(peso/2,1)} kN por calço"],
       ["Liberação", f"fckj ≥ {P['fckj']} MPa", "—"]]
 y = pr.tabela(x0, y - 4, "MANUSEIO", ["FASE", "APOIO", "CARGA"], mn, [50, 70, 60])
-notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab. 2 da NBR 9062:2017 — 5.2.1.2): necessária para a folga de 19 mm entre as pontas das duas TS-01 sobre a I130; seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm. Estabilidade lateral no içamento: L/bf 49 ≤ 50 (6.1).",
+notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab. 2 da NBR 9062:2017 — 5.2.1.2): necessária para a folga de 19 mm entre as pontas das duas TS-01 sobre a I120; seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm. Estabilidade lateral no içamento: L/bf 49 ≤ 50 (6.1).",
          f"Fabricar a peça reta com {f(L/10,1)} cm de fundo; cabeceiras inclinadas 3 % (topo deslocado {f(DX/10,1)} cm) para ficarem a prumo na montagem.",
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo, lado do pilar P1/P2) com o plano do fundo.",
-         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no consolo CT-I130 com mísula da I130 (NEO-3C 150×300×10; só no topo do P11 da linha 4, NEO-3 100×300×10), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
+         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no consolo CT-I120 com mísula da I120 (NEO-3C 150×300×10; só no topo do P11 da linha 4, NEO-3 100×300×10), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
          f"CUNHAS no fundo das duas pontas (NBR 9062:2017 7.2.1.6 — aparelho de apoio horizontal): calço de aço em cunha 3 % fixado no fundo da fôrma, {LC/10:.0f} cm × 40 cm; ponta baixa rebaixo {EC} → 0 mm, ponta alta 0 → {EC} mm (degrau de {EC} mm). Na montagem a face de apoio fica horizontal sobre o neoprene e sobre o assento horizontal.",
          f"Cordoalhas: {T.TXT_LINHAS} (x = 0, ±4, ±15,5 nas duas linhas); as {T.N_ISOL} de {P['y2']/10:g} cm em x = ±4 e ±15,5 isoladas com bainha nos {P['isol']['L']/1000:.2f} m de cada ponta (faixa de armação abaixo).".replace("3.00", "3,00"),
          "Esperas ES-1/ES-2 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",

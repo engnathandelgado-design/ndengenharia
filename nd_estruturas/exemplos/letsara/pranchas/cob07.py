@@ -67,16 +67,20 @@ w.chamada((X_E, -250), (-14, -36), f"eixo E: {X_E - XT[-1]} da última terça")
 w.chamada((0, -250), (14, -36), f"eixo A: {XT[0]} até a 1ª terça (calha)")
 
 # ------------------------------------------------------------------ 3. tabelas
+import cob_comum as CC
 lin = []
-for k in range(8):
-    lin.append([f"{k + 1}-{k + 2}", fm(VAOS[k]), f"{EXT[k][0]}", f"{EXT[k][1]}", fm(L_TERCA[k]), BASE_K[k], f"{2 * NT}",
-                f(2 * NT * L_TERCA[k] / 1000 * PESO_UE, 0)])
-tot = sum(2 * NT * L_TERCA[k] / 1000 * PESO_UE for k in range(8))
+n_pf = len(CC.IDX_PF)
+for k in CC.K_TODOS:
+    kr = CC.K_REAL[k]
+    n_k = n_pf if k >= 8 else (2 * NT - n_pf if kr in (0, 7) and n_pf else 2 * NT)
+    lin.append([f"{kr + 1}-{kr + 2}" + (" (B–D)" if k >= 8 else (" (A–B, D–E)" if kr in (0, 7) and n_pf else "")), fm(VAOS[k]), f"{EXT[k][0]}", f"{EXT[k][1]}", fm(L_TERCA[k]), BASE_K[k], f"{n_k}",
+                f(n_k * L_TERCA[k] / 1000 * PESO_UE, 0)])
+tot = sum(float(l[-1].replace(".", "").replace(",", ".")) for l in lin)
 lin.append(["TOTAL", fm(YLmm[-1] - YLmm[0]), "", "", fm(sum(L_TERCA) - 7 * 2 * A_TR) + " *", "", f"{16 * NT}", f(tot, 0)])
 x0t = Q[0] + 8
 y = pr.tabela(x0t, Q[3] - 360, "COMPRIMENTO DAS TERÇAS POR VÃO", ["VÃO", "ENTRE EIXOS", "ANTES DO EIXO INICIAL", "DEPOIS DO EIXO FINAL", "L DA PEÇA",
                                                                     "PEÇA", "QT", "kg"], lin, [18, 26, 38, 38, 26, 16, 14, 22], destaque_ultima=True)
-pr.notas(x0t, y - 2, [f"* comprimento da linha montada de ponta a ponta = soma das peças − 7 transpasses de {2 * A_TR} = {fm(y_fim - y_ini)}."], 200, titulo="")
+pr.notas(x0t, y - 2, [f"* comprimento da linha montada de ponta a ponta = soma das peças − 7 transpasses de {2 * A_TR} = {fm(y_fim - y_ini)} (terças dos vãos de canto; entre os eixos B e D a linha tem {fm(y_fim - y_ini + 2 * CC.DESL_VB)}: a VB das fachadas fica {CC.DESL_VB} além do eixo da linha, rente à face dos pilares, e as peças T6/T7 são {CC.DESL_VB} mais longas)."], 200, titulo="")
 FOL = [["transpasse em cada apoio interno", f"{2 * A_TR} ({A_TR} para cada lado do eixo)", "2 Z encaixados (METLAP); sem folga ponta a ponta"],
        ["ponta da terça na fachada", f"{EXT_F} além do eixo da VB = {EXT_F - 75} além da face", "folga até a placa de fechamento ≥ 75"],
        ["furos da alma (M12)", "Ø14 (+2 mm)", "fábrica; proibido furar na obra"],

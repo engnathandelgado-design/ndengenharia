@@ -1,8 +1,8 @@
 """ND-LET-CT03 — CORTE LONGITUDINAL DA OBRA (eixo C) + PLANTA-CHAVE DOS CORTES + 3D (rev executiva, 21/10/2026).
 
 CORTE 6-6 (1:100): plano no eixo C (x = 19,75 m), olhando para o eixo E — pilares do eixo C cortados (PF-02, PC-01, PC-02,
-PC-03, PF-04), vigas centrais I130 V407/V406/V405 cortadas no eixo (dentes nos consolos CP-I130), pontas das TS-01 do lado E
-sobre a I130 (linhas 3 a 8; na linha 2 a W 310 metálica, DEC-048), mezanino (VM ao fundo, lajes LA-01R e capa cortadas), VB das fachadas, placas I e A cortadas, paredes G e C,
+PC-03, PF-04), vigas centrais I120 V407/V406/V405 cortadas no eixo (dentes nos consolos CP-I120), pontas das TS-01 do lado E
+sobre a I120 (linhas 3 a 8; na linha 2 a W 310 metálica, DEC-048), mezanino (VM ao fundo, lajes LA-01R e capa cortadas), VB das fachadas, placas I e A cortadas, paredes G e C,
 pacote da cobertura e níveis. PLANTA-CHAVE (1:400) com todos os cortes do jogo executivo e a folha de cada um.
 Geometria dos mesmos JSON do cálculo (ligacoes, consolos, vm_retangular, cob_linha2, laje_alveolar) e do quantitativo (comprimentos). A0."""
 import json, math, sys
@@ -28,12 +28,12 @@ I3 = 0.03
 YL = [M(y) for y in Y_LIN]
 COMP = YL[-1]
 XC = M(X_EIXO["C"])
-ZT_I = M(LG["Z_TOPO_I130"]); ZT_ID = M(LG["Z_TOPO_I130_DIR"])
-H_I, HD_I = M(LG["H_I130"]), M(LG["HD_I130"])
-Z_ASS = M(LG["Z_ASS_I130"])
-CPI = CO["CP-I130"]
+ZT_I = M(LG["Z_TOPO_I120"]); ZT_ID = M(LG["Z_TOPO_I120_DIR"])
+H_I, HD_I = M(LG["H_I120"]), M(LG["HD_I120"])
+Z_ASS = M(LG["Z_ASS_I120"])
+CPI = CO["CP-I120"]
 HC, PC_ = M(CPI["h_total_m"]), M(CPI["proj_m"])
-LN_I = 350.0                                              # nariz do dente da I130 (78 × 35)
+LN_I = 350.0                                              # nariz do dente da I120 (78 × 35)
 FOLGA_I = 75.0
 NIV = [z * 1000 for z in Z_PISOS]
 ASS_M = [float(z) for z in _G.Z_MEZ_ASS]
@@ -41,7 +41,7 @@ HV = VMP["h_pm"] * 1000; BT = VMP["b"] * 1000; HCMZ = VMP["dente"]["consolo_h"] 
 ZTV = [n - 260 for n in NIV]
 PAC = LG["platibanda"]["pacote"]
 zf = lambda x: M(LG["Z0_TS"]) + I3 * x                   # fundo da TS-01 (x em mm)
-X_TS_E = XC + 37.5                                         # ponta da TS-01 do lado E sobre a I130
+X_TS_E = XC + 37.5                                         # ponta da TS-01 do lado E sobre a I120
 Z_TS_E = ZT_ID + 10                                        # fundo da ponta (NEO-3 de 10 mm)
 Z_VB = zf(XC + 225) + 300                                  # fundo da VB-03 junto ao PF (zf + 0,30)
 PLAT = 10000.0
@@ -50,21 +50,21 @@ O_PL = 375.0
 # pilares do eixo C: (marca, y, by, z_topo, rec)
 _ZC = M(next(a_ for a_ in CB2["apoios_diretos"] if a_["nome"] == "C")["z_concreto"])     # rev09b (DEC-050): P8A até o fundo da W 310
 PIL = [("PF-02", YL[0], 600, PLAT), ("PC-01", YL[1], 600, _ZC), ("PC-02", YL[3], 400, ZT_I), ("PC-03", M(Y_PC_C[0]), 400, ZT_I), ("PC-03", M(Y_PC_C[1]), 400, ZT_I), ("PF-04", YL[8], 600, PLAT)]   # DEC-058
-# I130 entre faces + folga 7,5 (comprimentos = quantitativos)
-I130 = []
+# I120 entre faces + folga 7,5 (comprimentos = quantitativos)
+I120 = []
 _YP = {"P13": M(Y_PC_C[0]), "P13B": M(Y_PC_C[1])}
 for mk, (ia, ya_f), (ib, yb_f) in (("V407", (1, 300), (3, 200)), ("V406", (3, 200), ("P13", 200)), ("V405", ("P13", 200), ("P13B", 200)), ("V404", ("P13B", 200), (8, 300))):
     ya = (YL[ia] if isinstance(ia, int) else _YP[ia]) + ya_f + FOLGA_I
     yb = (YL[ib] if isinstance(ib, int) else _YP[ib]) - yb_f - FOLGA_I
-    I130.append((mk, ya, yb))
+    I120.append((mk, ya, yb))
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="CORTE LONGITUDINAL DA OBRA (EIXO C), PLANTA-CHAVE DOS CORTES E VISTAS 3D DA ESTRUTURA",
                         desenho="ND-LET-CT03", folha="01/01", fase="EXECUTIVO", rev="00"))
 pr.revisao("00", "21/10/2026", "EMISSÃO: CORTE 6-6 LONGITUDINAL, PLANTA-CHAVE DOS CORTES E 3D")
 pr.revisao("01", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; LINHA 2 METÁLICA (DEC-048)")
-pr.revisao("02", "24/10/2026", "DEC-052/054: LINHA 2 COM W 200 × 15,0; I130 COM h 120 E CONSOLO COM MÍSULA")
-pr.revisao("03", "24/10/2026", "DEC-058: 2 PC-03 40×40 NO EIXO C, I130 EM 3 VÃOS DE 16,517 m (V406, V405, V404)")
+pr.revisao("02", "24/10/2026", "DEC-052/054: LINHA 2 COM W 200 × 15,0; I120 COM h 120 E CONSOLO COM MÍSULA")
+pr.revisao("03", "24/10/2026", "DEC-058: 2 PC-03 40×40 NO EIXO C, I120 EM 3 VÃOS DE 16,517 m (V406, V405, V404)")
 Q = pr.quadro
 
 
@@ -163,13 +163,13 @@ def corte(v):
         conc(v, pts, esc=0.012)
         import pe_pilar as PP                                               # rev11: cálice em corte + cota do embutimento
         PP.pe(v, X_EIXO["C"], y / 1000, y, "y", cotar=(y == YL[0]), lado=-1)
-    for mk, ya, yb in I130:                                    # I130 cortada no eixo, dentes 78 × 35 nos consolos
+    for mk, ya, yb in I120:                                    # I120 cortada no eixo, dentes 78 × 35 nos consolos
         zb = ZT_I - H_I
         pts = [(ya, ZT_I - HD_I), (ya + LN_I, ZT_I - HD_I), (ya + LN_I, zb), (yb - LN_I, zb), (yb - LN_I, ZT_I - HD_I), (yb, ZT_I - HD_I), (yb, ZT_I), (ya, ZT_I)]
         conc(v, pts, esc=0.012)
-        for yy, sg in ((ya - FOLGA_I, 1), (yb + FOLGA_I, -1)):  # consolo CP-I130 (no plano, cortado com o pilar)
+        for yy, sg in ((ya - FOLGA_I, 1), (yb + FOLGA_I, -1)):  # consolo CP-I120 (no plano, cortado com o pilar)
             conc(v, [(yy, Z_ASS - HC), (yy + sg * PC_, Z_ASS - HC), (yy + sg * PC_, Z_ASS), (yy, Z_ASS)], esc=0.012)
-        v.texto((ya + 0.3 * (yb - ya), ZT_I - H_I / 2), f"{mk} — I130, L {fd(PQ[mk][4], 2)} m", "min", "MIDDLE_CENTER")
+        v.texto((ya + 0.3 * (yb - ya), ZT_I - H_I / 2), f"{mk} — I120, L {fd(PQ[mk][4], 2)} m", "min", "MIDDLE_CENTER")
     for i in range(2, 8):                                      # pontas das TS-01 do lado E (linhas 3 a 8), vistas
         y = YL[i]
         v.poli([(y - 200, Z_TS_E), (y + 200, Z_TS_E), (y + 200, Z_TS_E + 900), (y - 200, Z_TS_E + 900)], "VISTA", True)
@@ -207,14 +207,14 @@ def corte(v):
     v.cota_v([0, NIV[0], NIV[1], PLAT], -2400, -4, total=False)
     for z, t in ((0, "±0,000"), (NIV[0], f"piso mezanino {f(NIV[0] / 1000)}"), (NIV[1], f"piso mezanino {f(NIV[1] / 1000)}"), (PLAT, f"platibanda {f(PLAT / 1000)}")):
         nivel(v, -700, z, t, -1)
-    for z, t in ((ZT_I - H_I, f"fundo I130 {f((ZT_I - H_I) / 1000)}"), (Z_ASS, f"assento I130 {f(Z_ASS / 1000)}"), (ZT_I, f"topo I130 {f(ZT_I / 1000)} / {f(ZT_ID / 1000)}"),
+    for z, t in ((ZT_I - H_I, f"fundo I120 {f((ZT_I - H_I) / 1000)}"), (Z_ASS, f"assento I120 {f(Z_ASS / 1000)}"), (ZT_I, f"topo I120 {f(ZT_I / 1000)} / {f(ZT_ID / 1000)}"),
                  (PLAT, f"platibanda {f(PLAT / 1000)}")):
         nivel(v, COMP + 700, z, t, 1)
     import pe_pilar as PP, renomear as RN_
     for mk, y, by, zt in PIL:                                                  # rev11: nome, seção e comprimento total
         v.texto((y + (by / 2 + 120 if y < COMP else -by / 2 - 120), 180), PP.rotulo(RN_.pilar_em(X_EIXO["C"], y / 1000)), "nota", "BOTTOM_LEFT" if y < COMP else "BOTTOM_RIGHT")
     nivel(v, COMP + 700, -1000, "fundo dos pilares −1,000; cálice −1,050 (graute 5 cm)", 1)
-    v.chamada((YL[2], Z_TS_E + 450), (6, 10), "TS-01 (ponta do lado E) no topo da I130: NEO-3 + 2 PN-5")
+    v.chamada((YL[2], Z_TS_E + 450), (6, 10), "TS-01 (ponta do lado E) no topo da I120: NEO-3 + 2 PN-5")
     v.chamada((YL[1], zw + DW), (-6, 12), "linha 2: W 200 × 15,0 na cabeça do P8A (ND-LET-COB05)")
     v.chamada((YL[6] + 2500, z_ter + 302), (6, 8), "terças Z 302 + TP-40 + lã de rocha 40 + zipada #0,50 + painéis solares (ND-LET-COB01)")
     v.chamada((YL[0] + 75, Z_VB + 300), (8, 9), "VB-03 15×60 (fachada 1)")
@@ -224,14 +224,14 @@ def corte(v):
     v.chamada((YL[1] + O_PL, 1250 * 4 + 600), (8, -8), "parede G (vista)")
     v.chamada((YL[3] + 275, 1250 * 4 + 600), (8, -8), "parede C — portões (vista)")
     v.chamada((5000, NIV[1]), (6, 8), "mezanino: LP20 + capa 5 (ND-LET-CT02)")
-    v.chamada((YL[1] + 300 + PC_ / 2, Z_ASS - HC / 2), (8, -14), "CP-I130 50 × 40 × 49 + NEO-2")
+    v.chamada((YL[1] + 300 + PC_ / 2, Z_ASS - HC / 2), (8, -14), "CP-I120 50 × 40 × 49 + NEO-2")
 
 
 
 E = 50
 YS = YL[4]                                                 # divisão na linha 5
 v1 = pr.vista("CORTE 6-6", (Q[0] + 70 + 1600 / E, Q[3] - 6 - 10700 / E), E, titulo="CORTE 6-6 — LONGITUDINAL NO EIXO C (x = 19,75 m) — LINHAS 1 A 5",
-              subtitulo="olhando para o eixo E; pilares do eixo C e vigas I130 cortados; TS-01 do lado E no topo da I130; mezanino entre as linhas 1 e 2; continua abaixo", unidade="cm")
+              subtitulo="olhando para o eixo E; pilares do eixo C e vigas I120 cortados; TS-01 do lado E no topo da I120; mezanino entre as linhas 1 e 2; continua abaixo", unidade="cm")
 v2 = pr.vista("CORTE 6-6 (CONT.)", (Q[0] + 70 + 1600 / E - (YS - 1200) / E, Q[3] - 6 - 10700 / E - 290), E, titulo="CORTE 6-6 (CONTINUAÇÃO) — LINHAS 5 A 9",
               subtitulo="olhando para o eixo E; continuação do corte acima a partir da linha 5", unidade="cm")
 corte(Clip(v1, -1600, YS + 1200))
@@ -281,13 +281,13 @@ def recorte_png(src):
 pr.imagem(Q[0] + 330, 48, Q[0] + 630, 238, recorte_png("/home/claude/letsara/pranchas/img_ct03/geral.png"),
           titulo="3D — ESTRUTURA COMPLETA", subtitulo="modelo da obra sem telhas e placas")
 pr.imagem(Q[0] + 655, 48, Q[0] + 955, 238, recorte_png("/home/claude/letsara/pranchas/img_ct03/eixoC.png"),
-          titulo="3D — RECORTE NO EIXO C", subtitulo="pilares centrais, I130 e TS-01 apoiadas no topo")
+          titulo="3D — RECORTE NO EIXO C", subtitulo="pilares centrais, I120 e TS-01 apoiadas no topo")
 xt, ytop = Q[2] - 180, Q[3] - 6
 lin = [[nm + "-" + nm, ds, fl] for nm, _, _, fl, ds in CORTES]
 yy = pr.tabela(xt, ytop, "CORTES DA OBRA", ["CORTE", "POSIÇÃO", "FOLHA"], lin, [20, 105, 55], h_lin=5.2)
-notas = ["Corte 6-6 gerado da mesma geometria do modelo e das pranchas das peças: pilares do eixo C cortados (PF-02 e PF-04 com a cabeça recuada no lado interno acima de +8,70), vigas centrais I130 cortadas no eixo, consolos CP-I130 no plano.",
-         f"I130: V407 (PC-01 → PC-02), V406 (PC-02 → P13), V405 (P13 → P13B), V404 (P13B → PF-04) — DEC-058; folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
-         "TS-01 das linhas 3 a 8 apoiadas no topo da I130 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes no meio dos vãos (DEC-052, ND-LET-COB05).",
+notas = ["Corte 6-6 gerado da mesma geometria do modelo e das pranchas das peças: pilares do eixo C cortados (PF-02 e PF-04 com a cabeça recuada no lado interno acima de +8,70), vigas centrais I120 cortadas no eixo, consolos CP-I120 no plano.",
+         f"I120: V407 (PC-01 → PC-02), V406 (PC-02 → P13), V405 (P13 → P13B), V404 (P13B → PF-04) — DEC-058; folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
+         "TS-01 das linhas 3 a 8 apoiadas no topo da I120 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes no meio dos vãos (DEC-052, ND-LET-COB05).",
          "Placas de fechamento por fora dos pilares nas fachadas I (linha 1) e A (linha 9); paredes internas G (linha 2) e C (linha 4, portões) do lado do pavilhão; cada placa nos seus 2 consoles, folgas de 0,5 cm na altura e 2 cm no comprimento.",
          "Cortes transversais: ND-LET-CT01 (eixos 2 e 3); mezanino: CT02; apoios como montados: CT04; montagem: MON01 a MON03.",
          "Cotas em cm, níveis em m. Não medir no desenho. EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]

@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PC02",
-  "rev": "11",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO",
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "PC-02",
   "qtd": 1,
   "peso": "39,5",
@@ -33,7 +33,7 @@
      "PC-02",
      "P11 (C4)",
      "1",
-     "topo: 2 TS-01; CP-I130 (B, D)",
+     "topo: 2 TS-01; CP-I120 (B, D)",
      "5 CE-1 + 1 CE-1L (B); 2 AL-2"
     ]
    ]
@@ -148,7 +148,7 @@
    ],
    "linhas": [
     [
-     "C4 (CP-I130)",
+     "C4 (CP-I120)",
      "B",
      "+6,97 (796,6)",
      "50×40×49/39",
@@ -158,7 +158,7 @@
      "90"
     ],
     [
-     "C4 (CP-I130)",
+     "C4 (CP-I120)",
      "D",
      "+6,97 (796,6)",
      "50×40×49/39",
@@ -190,7 +190,7 @@
    "linhas": [
     [
      "PN-2",
-     "Pino Ø25 CA-50 L=900 — CP-I130",
+     "Pino Ø25 CA-50 L=900 — CP-I120",
      "2",
      "faces B e D"
     ],
@@ -204,7 +204,7 @@
      "NEO-2",
      "Neoprene 300×200×31 fretado (rev04)",
      "2",
-     "CP-I130"
+     "CP-I120"
     ],
     [
      "NEO-3",

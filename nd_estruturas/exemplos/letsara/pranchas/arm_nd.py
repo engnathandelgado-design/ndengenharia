@@ -174,7 +174,7 @@ class Arm:
         """TABELA DE FERROS — n UNIDADE(S): TIPO, POS., BIT., QUANT., C.UNIT (cm), C.TOT (cm)."""
         # rev11 (regra do Nathan, 26/10/2026): em VIGAS, armadura longitudinal passiva com Ø ≥ 12,5 (estribos/costuras pelo cálculo)
         cod_ = str(self.pr.dados.get("desenho", "")).replace("ND-LET-", "")
-        if cod_.startswith(("I130", "I110", "VM", "TS01", "VB", "VT", "PV", "AR-VIG")):
+        if cod_.startswith(("I120", "I110", "VM", "TS01", "VB", "VT", "PV", "AR-VIG")):
             for b_ in barras:
                 if (b_.get("geo") or {}).get("k") in ("R", "L", "C") and float(b_["diam"]) < 12.5 - 1e-6:
                     self.pr.avisos_extra.append(("ERRO", f"viga: longitudinal passiva {b_['pos']} Ø{b_['diam']:g} < Ø12,5 (regra ND)"))

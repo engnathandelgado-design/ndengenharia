@@ -107,11 +107,12 @@ def spec_i(qual):
     zs = zonas_txt(xs_e, "N2", d_est)
     pts = VI.sec_pts(B, H, ts, ti, P["m"], bw)
     N3n, N3d, _ = P.get("n3", (2, 10.0, ""))
-    xs3 = (-B / 2 + cob + 10, B / 2 - cob - 10) if N3n == 2 else tuple(-B / 2 + cob + 10 + k * (B - 2 * cob - 20) / (N3n - 1) for k in range(N3n))
+    _p3 = VI.pos_n3(P, B, H, cob)
+    xs3 = [x for x, _ in _p3]
     s1_ents = [([(-bw / 2 + cob, cob), (bw / 2 - cob, cob), (bw / 2 - cob, H - cob), (-bw / 2 + cob, H - cob)], "ARM_TRANSV", True),
                ([(-B / 2 + cob, cob), (B / 2 - cob, cob), (B / 2 - cob, ti - cob), (-B / 2 + cob, ti - cob)], "ARM_TRANSV", True),
                ([(-B / 2 + cob, H - ts + cob), (B / 2 - cob, H - ts + cob), (B / 2 - cob, H - cob), (-B / 2 + cob, H - cob)], "ARM_TRANSV", True)]
-    discos = [(x, H - cob - 5 - N3d / 2, N3d) for x in xs3] + [(x, cob + 5, 10) for x in (-B / 2 + cob, B / 2 - cob)]
+    discos = [(x, y3, N3d) for x, y3 in _p3] + [(x, cob + 5, 10) for x in (-B / 2 + cob, B / 2 - cob)]
     discos += [(x, yy, 8) for yy in P.get("pele", []) for x in (-bw / 2 + cob, bw / 2 - cob)]
     bol = [("N2", (bw / 2 - cob, (ti + H - ts) / 2), (10, 2)), ("N3", (xs3[-1], H - cob - 5), (8, 6)), ("N13", (-B / 2 + cob, H - ts + cob + 20), (-8, 2)),
            ("N11", (-B / 2 + cob, ti - cob - 20), (-8, -2)), ("N12", (B / 2 - cob, cob + 5), (8, -6))]
@@ -140,7 +141,7 @@ def spec_i(qual):
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
     blocos_extra = []
     CTp = P.get("ct")
-    if CTp:                                                                  # rev10 (DEC-061): consolo lateral CT-I130
+    if CTp:                                                                  # rev10 (DEC-061): consolo lateral CT-I120
         bw2, pj, hc, he = bw / 2, CTp["proj"], CTp["h"], CTp["h_ext"]
         pdd = [(-B / 2, H - 450), (-bw2, H - 450), (-bw2, H - hc), (-B / 2, H - hc), (-B / 2 - pj, H - he), (-B / 2 - pj, H), (B / 2 + pj, H), (B / 2 + pj, H - he),
                (B / 2, H - hc), (bw2, H - hc), (bw2, H - 450)]
@@ -149,7 +150,7 @@ def spec_i(qual):
         for sg in (-1, 1):
             x0_, x1_ = sg * (B / 2 + 30), sg * (B / 2 + pj - cob)
             ents_ct.append(([(x0_, H - 120), (x1_, H - 120), (x1_, H - cob), (x0_, H - cob)], "ARM_TRANSV", True))
-        blocos_extra.append(dict(nome="DETALHE D2 — CONSOLO LATERAL CT-I130", sub=f"nas 2 faces, em cada linha de TS-01; b {CTp['b']/10:g}, projeção {pj/10:g}, h {hc/10:g}/{he/10:g}", esc=10,
+        blocos_extra.append(dict(nome="DETALHE D2 — CONSOLO LATERAL CT-I120", sub=f"nas 2 faces, em cada linha de TS-01; b {CTp['b']/10:g}, projeção {pj/10:g}, h {hc/10:g}/{he/10:g}", esc=10,
                                  contorno=[pdd], ents=ents_ct, discos=[], prot=[],
                                  bolhas=[("N14", (xe * 0.6, H - CTp["c_tir"]), (6, 10)), ("N15", (-xe * 0.6, H - 200), (-6, -10)), ("N16", (B / 2 + pj - cob, H - 120), (10, -8))],
                                  formas=["N14", "N15", "N16"],
@@ -167,7 +168,7 @@ def spec_i(qual):
             nc_mk = VI.I1J[mk]["arranjo"]["n_cord"] if "arranjo" in VI.I1J[mk] else n_cord
             marcas.append(dict(marca=mk, qtd=1, L=Lm, barras=bm, V=Vm, area=_area_I(pts, B, H, Lm), cord=(nc_mk, nc_mk * Lm / 1000), traspasse=TRm,
                                ctxt=P.get("cord_txt", "Ø12,7"), kgc={"Ø15,2": 1.102}.get(P.get("cord_txt"), KG_CORD)))   # DEC-054: Ø15,2 = 1,102 kg/m
-        fam, tit, forma = "I130", f"VIGAS CENTRAIS I{H // 10} PROTENDIDAS — V404, V405, V406, V407", "ND-LET-I130"
+        fam, tit, forma = "I120", f"VIGAS CENTRAIS I120 PROTENDIDAS — V404, V405, V406, V407", "ND-LET-I120"
     else:
         L1 = round((VI.X_EIXO["B"] - 0.20 - 0.30 - 0.10) * 1000)
         for mk, Lm in (("VM-01", L1), ("VM-02", L)):
@@ -426,7 +427,7 @@ def spec_vt():
                        "Dentes Gerber 30 × 20 nos consolos CP-VT: N5 tirante 2 Ø12,5 por ponta, N6 suspensão 2 estribos Ø8, N7 3 estribos Ø6,3 no dente (NBR 9062:2017 7.4)."])
 
 
-SPECS = [("TS-01", spec_ts01), ("I130", lambda: spec_i("i110")), ("VM", spec_vm), ("VB", spec_vb)]          # rev04: sem VT
+SPECS = [("TS-01", spec_ts01), ("I120", lambda: spec_i("i110")), ("VM", spec_vm), ("VB", spec_vb)]          # rev04: sem VT
 
 
 # ================================================================== desenho
@@ -483,7 +484,7 @@ def folha(num, total, S):
                             desenho=f"ND-LET-AR-VIG-{num:02d}", folha=f"{num:02d}/{total:02d}", fase="PARA APROVAÇÃO"))
     pr.revisao("00", "13/10/2026", "EMISSÃO INICIAL — PADRÃO DE ARMADURAS")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM VT; VM EM MEIO VASO COM DENTE")
-    pr.revisao("06", "19/10/2026", "DEC-032: I130 28 + 2 CORD., N5 EM ALÇAS HORIZONTAIS, BARRAS DOS DENTES NAS 2 PONTAS; DENTE DA VM PELO MEF COM A ARMAÇÃO DA PRANCHA; TS-01 N9")
+    pr.revisao("06", "19/10/2026", "DEC-032: I120 28 + 2 CORD., N5 EM ALÇAS HORIZONTAIS, BARRAS DOS DENTES NAS 2 PONTAS; DENTE DA VM PELO MEF COM A ARMAÇÃO DA PRANCHA; TS-01 N9")
     A = Arm(pr)
     Q = pr.quadro
     rep = next(m for m in S["marcas"] if m["marca"] == S.get("rep", S["marcas"][0]["marca"]))

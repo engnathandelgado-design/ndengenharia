@@ -1,5 +1,5 @@
 """ND-LET-COB08 — terças: furação de fabricação por marca, alma planificada (rev11, Nathan 26/10/2026, checklist 8).
-Uma faixa por peça-base (T1..T5) com todos os furos comuns (pontas, correntes) em ordenadas a partir da ponta inicial e os furos
+Uma faixa por peça-base (T1..T7) com todos os furos comuns (pontas, correntes) em ordenadas a partir da ponta inicial e os furos
 das diagonais (marcas D); tabela por marca com os furos próprios (Ø18 das diagonais e oblongos do X), já medidos da ponta inicial.
 Fonte: cob_comum.py (furos_ponta, furos_x, marca, lista_marcas) — a mesma da COB01, da lista e do 3D. Cotas em mm. A1."""
 import sys
@@ -36,17 +36,18 @@ def furos_d(k):
 
 
 # ------------------------------------------------------------------ faixas por peça-base
+import cob_comum as CC
 bases = []
-for k in range(8):
+for k in CC.K_TODOS:
     if BASE_K[k] not in [b for b, _ in bases]:
         bases.append((BASE_K[k], k))
 y_top = Q[3] - 30
 for j, (bm, k) in enumerate(bases):
     L = L_TERCA[k]
-    vaos = ", ".join(f"{i + 1}-{i + 2}" for i in range(8) if BASE_K[i] == bm)
+    vaos = ", ".join(f"{CC.K_REAL[i] + 1}-{CC.K_REAL[i] + 2}" + (" B–D" if i >= 8 else "") for i in CC.K_TODOS if BASE_K[i] == bm)
     org = (Q[0] + 22, y_top - j * 98 - 46)
     v = pr.vista(f"PEÇA {bm}", org, E, titulo=f"PEÇA {bm} — L = {fm(L)} (VÃOS {vaos})",
-                 subtitulo=f"alma planificada vista do lado da aba inferior; ponta inicial à esquerda (eixo {k + 1})")
+                 subtitulo=f"alma planificada vista do lado da aba inferior; ponta inicial à esquerda (eixo {CC.K_REAL[k] + 1})")
     v.ret(0, 0, L, H_TERCA, "METALICA")
     fb = furos_base(k)
     for s, z, d, tp in fb:
@@ -64,11 +65,11 @@ for j, (bm, k) in enumerate(bases):
 LM = lista_marcas()
 lin = []
 for m, dd in LM.items():
-    k = next(i for i in range(8) if BASE_K[i] == m[:2] and any(marca(i, ii) == m for ii in range(2 * NT)))
-    i = next(ii for ii in range(2 * NT) if marca(k, ii) == m)
-    dsc = " · ".join(fm(s) for s in furos_d(k)) if i in IDX_2A else "-"
+    k, i = next((kk, ii) for kk in range(8) for ii in range(2 * NT) if marca(kk, ii) == m)
+    k = CC.kv(k, i) if False else k
+    dsc = " · ".join(fm(s) for s in furos_d(CC.kv(k, i))) if i in IDX_2A else "-"
     fx = furos_x(k, i)
-    xs = " / ".join(fm(EXT[k][0] + y) for y, z, nm in fx) if fx else "-"
+    xs = " / ".join(fm(EXT[CC.kv(k, i)][0] + (CC.DESL_VB if CC.kv(k, i) == 8 else 0) + y) for y, z, nm in fx) if fx else "-"
     lin.append([m, m[:2], fm(dd["L"]), f"{dd['qt']}", dsc, xs])
 x0t = Q[2] - 182
 y = pr.tabela(x0t, Q[3] - 4, "FUROS PRÓPRIOS DE CADA MARCA (DA PONTA INICIAL, mm)",

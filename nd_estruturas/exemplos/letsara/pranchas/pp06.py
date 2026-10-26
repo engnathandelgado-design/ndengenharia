@@ -1,6 +1,6 @@
-"""ND-LET-PP06 — DEC-044 (22/10/2026): o I130 do eixo C atravessa as paredes internas G (linha 2) e C (linha 4).
+"""ND-LET-PP06 — DEC-044 (22/10/2026): o I120 do eixo C atravessa as paredes internas G (linha 2) e C (linha 4).
 (1) Placas recortadas PP-05RE/RD (G-17/G-11) e PP-08RE/RD (C-17/C-11): recorte 260 × 1130 na ponta do eixo C em volta do consolo
-    CP-I130 e do nariz do I130; console CS-1 dessa ponta a 330 da ponta (nicho NC-1 de 260 a 400); toco 260 × 120 embaixo.
+    CP-I120 e do nariz do I120; console CS-1 dessa ponta a 330 da ponta (nicho NC-1 de 260 a 400); toco 260 × 120 embaixo.
 (2) CE-1L 840 × 330 × 12,5 com asas de 220 além das faces do pilar (P8A e P11, fiada +6,25) para esse console.
 (3) CS-1C (calço 100: cantos e P1B/P2B) e CS-1D (calço 75: P10 da parede C): caixa 120 × 330 × e soldada na fábrica nas costas do
     CS-1, fundo soldado na CE-1 na obra — nos pilares cuja face fica atrás do plano dos consoles.
@@ -29,19 +29,19 @@ tipos = sorted(set(FCH.TIPO[p["Lk"]] for _, p in recs))
 n_c, n_d = PP01["CS1C"], PP01["CS1D"]
 
 pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="PLACAS RECORTADAS NO I130 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C / CS-1D (DEC-044)",
+                        conteudo="PLACAS RECORTADAS NO I120 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C / CS-1D (DEC-044)",
                         desenho="ND-LET-PP06", folha="01/01", fase="PARA APROVAÇÃO", rev="08"))
-pr.revisao("08", "22/10/2026", "EMISSÃO: RECORTE DAS PLACAS NO I130 DO EIXO C; CE-1L; CS-1 COM CALÇO (DEC-044)")
+pr.revisao("08", "22/10/2026", "EMISSÃO: RECORTE DAS PLACAS NO I120 DO EIXO C; CE-1L; CS-1 COM CALÇO (DEC-044)")
 Q = pr.quadro
 XC = Q[2] - 235
 pr.cabecalho_peca(", ".join(tipos), f"PLACAS RECORTADAS ({len(recs)} PÇ: {', '.join(p['id'] for _, p in recs)}) · CE-1L ({PP01['CE1L']} PÇ) · CS-1C ({n_c} PÇ) · CS-1D ({n_d} PÇ)",
-                  f"recorte {gg(RB / 10)} × {gg((H_PL - RZ) / 10)} cm na ponta do eixo C (consolo CP-I130 + nariz do I130) · console dessa ponta a {gg(XCS / 10)} cm da ponta, na CE-1L · "
+                  f"recorte {gg(RB / 10)} × {gg((H_PL - RZ) / 10)} cm na ponta do eixo C (consolo CP-I120 + nariz do I120) · console dessa ponta a {gg(XCS / 10)} cm da ponta, na CE-1L · "
                   f"calço de 100 / 75 mm entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles · placa típica: PP00; CS-1: PP03; CE-1: PP04",
                   largura=XC - Q[0] - 10)
 
 # ================================================================== 1. ponta recortada — elevação pela face interna (1:10)
 e = pr.vista("PONTA RECORTADA", (Q[0] + 112, Q[3] - 60 - (H_PL + 150) / 10), 10, titulo="DETALHE 1 — PONTA RECORTADA (face interna; RE — RD espelhada)",
-             subtitulo="x a partir da ponta do eixo C; o consolo CP-I130 e o nariz do I130 (tracejados) passam pelo recorte; toco 26 × 12 embaixo", unidade="cm")
+             subtitulo="x a partir da ponta do eixo C; o consolo CP-I120 e o nariz do I120 (tracejados) passam pelo recorte; toco 26 × 12 embaixo", unidade="cm")
 LV = 1100
 cont = [(0, 0), (LV, 0), (LV, H_PL), (RB, H_PL), (RB, RZ), (0, RZ)]
 e.poli(cont, "VISTA", fechada=True)
@@ -54,8 +54,8 @@ e.chapa(RB + NC_B - N["t_parede"], Z_NC - NC_H / 2 + N["t_base"], N["t_parede"],
 e.chapa(RB, Z_NC - NC_H / 2, NC_B - 9.5, 9.5, 0.15)
 for (xa_, xb_) in N["x_gr"]:
     e.poli([(RB + xa_, Z_NC + NC_H / 2), (RB + xa_, Z_NC + NC_H / 2 + 40), (RB + xb_, Z_NC + NC_H / 2 + 40), (RB + xb_, Z_NC + NC_H / 2)], "METALICA")
-# consolo CP-I130 (50 × 49, fundo 226 acima da base) e nariz do I130 (40 largo, de 746 a 1526): atravessam a parede, em tracejado
-X_AX = -FCH.JUNTA / 2                                                                # eixo do pilar/I130: 10 mm além da ponta
+# consolo CP-I120 (50 × 49, fundo 226 acima da base) e nariz do I120 (40 largo, de 746 a 1526): atravessam a parede, em tracejado
+X_AX = -FCH.JUNTA / 2                                                                # eixo do pilar/I120: 10 mm além da ponta
 e.ret(X_AX - 250, 226, 500, 490, "OCULTA")
 e.ret(X_AX - 200, 746, 400, H_PL + 150 - 746, "OCULTA")
 e.ret(X_AX - 200, -500, 400, 500 + 226 - 40, "OCULTA")                                # pilar P8A / P11 (400 na direção da parede)
@@ -81,8 +81,8 @@ e.cota_h([X_AX - 250, X_AX, X_AX + 250], H_PL + 150, 8, total=False)
 e.cota_v([0, RZ, 226, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL], 0, -14, total=False)
 e.cota_v([0, H_PL], LV, 10, total=False)
 e.chamada((RB + NC_B - 20, Z_NC + NC_H / 2), (30, 50), f"NC-1 a {gg(RB / 10)} da ponta (PP02)")
-e.chamada((X_AX - 100, 600), (-16, 30), "CP-I130 50 × 49 (folga 2)")
-e.chamada((X_AX - 100, 1000), (-16, 30), "nariz do I130 (folga 7)")
+e.chamada((X_AX - 100, 600), (-16, 30), "CP-I120 50 × 49 (folga 2)")
+e.chamada((X_AX - 100, 1000), (-16, 30), "nariz do I120 (folga 7)")
 e.chamada((130, RZ - 40), (16, -22), f"toco {gg(RB / 10)} × {gg(RZ / 10)} sem fios")
 e.marcador_corte((60, -250), (60, RZ + 150), "A", lado=1)
 # ---- corte A-A pelo toco (1:5)
@@ -136,11 +136,11 @@ for sg in (-1, 1):
     for dx in (-C["alma"]["x"], C["alma"]["x"]):
         v2.chapa(xc + dx - C["alma"]["t"] / 2, -C["alma"]["y1"], C["alma"]["t"], C["alma"]["y1"] - C["costas"]["t"], 0.4)
     v2.ret(min(x0, xr), -FOL - E_PL, abs(xr - x0), E_PL, "OCULTA")                     # toco (abaixo do nível do corte)
-v2.ret(-250, -FOL - 20 - 400, 500, 400, "OCULTA")                                       # consolo CP-I130 (50 × 40) atrás/abaixo
+v2.ret(-250, -FOL - 20 - 400, 500, 400, "OCULTA")                                       # consolo CP-I120 (50 × 40) atrás/abaixo
 v2.cota_h([-420, -340, -200, 0, 200, 340, 420], 300, 8, total=False)
 v2.cota_h([-FCH.JUNTA / 2 - RB - NC_B, -FCH.JUNTA / 2 - RB, -FCH.JUNTA / 2, FCH.JUNTA / 2, FCH.JUNTA / 2 + RB, FCH.JUNTA / 2 + RB + NC_B], -FOL - E_PL, -8, total=False)
 v2.cota_v([-FOL - E_PL - 20 - 400, -FOL - E_PL, -FOL - NC_P, -FOL, 0, TCE, 300], -600, -8, total=False)
-v2.chamada((0, -FOL - E_PL - 200), (40, -60), "CP-I130 50 × 40 (face B), abaixo do nível do console")
+v2.chamada((0, -FOL - E_PL - 200), (40, -60), "CP-I120 50 × 40 (face B), abaixo do nível do console")
 v2.chamada((FCH.JUNTA / 2 + RB / 2, -FOL - E_PL), (26, -14), f"toco 26 × 12 (abaixo); junta {FCH.JUNTA} no eixo")
 v2.chamada((-340, -C["alma"]["y1"]), (10, -40), "CS-1 no nicho NC-1 da placa recortada")
 
@@ -222,10 +222,10 @@ for mk_ in ("CS-1C", "CS-1D"):
         pos.append([mk_, f"vista {V}", nm, len(ks), ", ".join(f"+{f(k * 1.25, 2)}" for k in sorted(ks))])
 y = pr.tabela(XC, y - 8, "ONDE VÃO OS CALÇOS (por pilar e fiada — base da fiada)", ["MARCA", "VISTA", "PILAR", "QT", "FIADAS (base)"], pos, [16, 20, 20, 10, 124], h_lin=4.6)
 pr.notas(XC, y - 4, [
-    f"DEC-044: o I130 do eixo C (V407 na linha 2; V406/V407 na linha 4) e seus consolos CP-I130 atravessam as paredes internas G e C. As 4 placas da fiada +6,25 que chegam ao eixo C ({', '.join(p['id'] for _, p in recs)}) recebem recorte de {gg(RB / 10)} × {gg((H_PL - RZ) / 10)} cm nessa ponta (folga 2 cm ao consolo, 7 cm ao nariz; {REC['folga_consolo_mm']} mm entre o toco e o fundo do consolo descontada a janela de montagem de 40). RE/RD = recorte à esquerda/direita na elevação das PP-G/PP-C (não é a mesma peça virada: a face interna fica para o pilar).",
+    f"DEC-044: o I120 do eixo C (V407 na linha 2; V406/V407 na linha 4) e seus consolos CP-I120 atravessam as paredes internas G e C. As 4 placas da fiada +6,25 que chegam ao eixo C ({', '.join(p['id'] for _, p in recs)}) recebem recorte de {gg(RB / 10)} × {gg((H_PL - RZ) / 10)} cm nessa ponta (folga 2 cm ao consolo, 7 cm ao nariz; {REC['folga_consolo_mm']} mm entre o toco e o fundo do consolo descontada a janela de montagem de 40). RE/RD = recorte à esquerda/direita na elevação das PP-G/PP-C (não é a mesma peça virada: a face interna fica para o pilar).",
     f"Placa recortada: fôrma, seção, {FCH.NC_} fios, insertos e alças da PP00; os fios param na face do recorte (lbpt {gg(PLJ['protensao']['lbpt_gradual_m'])} m contada dela). Console dessa ponta a {gg(XCS / 10)} cm da ponta: nicho NC-1 de {gg(RB / 10)} a {gg((RB + NC_B) / 10)} cm, aberto na face do recorte; dente Gerber N3–N7 igual à PP01 (det. 1) com a ponta na face do recorte. Toco {gg(RB / 10)} × {gg(RZ / 10)} sem protensão: N8/N9 2 Ø8 de borda, N10 2 Ø8 diagonais no canto reentrante, N11 estribos Ø6,3 c/8 (mínima {gg(REC['toco']['As_min_cm2'])} cm²). Tela N1 recortada no nicho e no recorte.",
     f"Verificação (placas.json): desforma deitada em 4 pontos com balancim (0,104 L / 0,396 L, como a típica): face do recorte {gg(REC['desforma']['sig_face_MPa'])} MPa, toco {gg(REC['desforma']['sig_toco_MPa'])} MPa, ponto de desforma {gg(REC['desforma']['sig_ponto_desforma_MPa'])} MPa ≤ {gg(REC['desforma']['lim_MPa'])} (fctk,j/1,5); montada nos 2 consoles (vão {gg(REC['montada']['L_vao_m'])} m): {gg(REC['montada']['sig_MPa'])} MPa ≤ 0 (descompressão). Içamento em pé pelas alças AL-P (0,21 L, fora do recorte) como a típica.",
-    f"CE-1L (fixacao_placas.json): chapa 840 × 330 × {gg(TCE)} A36 com os mesmos 4 pinos e N18 da CE-1, centrada no pilar, fiada +6,25 dos P8A (PC-01) e P11 (PC-02); as asas de 220 ficam no plano da face, além do pilar — balanço de {gg(CEL['asa']['balanco_mm'])} mm até o CS-1: flexão no plano {gg(CEL['asa']['sigma_MPa'])} MPa + torção {gg(CEL['asa']['tau_MPa'])} MPa → von Mises {gg(CEL['asa']['von_mises_MPa'])} ≤ {gg(CEL['asa']['lim_MPa'])} MPa; giro da asa {gg(CEL['asa']['rotacao_rad'])} rad ({gg(CEL['asa']['flecha_ponta_console_mm'])} mm na ponta do console). Folga de 4 cm entre a CE-1L e o topo do CP-I130. Na fôrma do pilar: asas por fora da fôrma lateral (gabarito), posição ±5.",
+    f"CE-1L (fixacao_placas.json): chapa 840 × 330 × {gg(TCE)} A36 com os mesmos 4 pinos e N18 da CE-1, centrada no pilar, fiada +6,25 dos P8A (PC-01) e P11 (PC-02); as asas de 220 ficam no plano da face, além do pilar — balanço de {gg(CEL['asa']['balanco_mm'])} mm até o CS-1: flexão no plano {gg(CEL['asa']['sigma_MPa'])} MPa + torção {gg(CEL['asa']['tau_MPa'])} MPa → von Mises {gg(CEL['asa']['von_mises_MPa'])} ≤ {gg(CEL['asa']['lim_MPa'])} MPa; giro da asa {gg(CEL['asa']['rotacao_rad'])} rad ({gg(CEL['asa']['flecha_ponta_console_mm'])} mm na ponta do console). Folga de 4 cm entre a CE-1L e o topo do CP-I120. Na fôrma do pilar: asas por fora da fôrma lateral (gabarito), posição ±5.",
     f"CS-1C / CS-1D (DEC-044): nos cantos (vistas A e I: {', '.join(sorted(set(r[2] for r in pos if r[1] in ('vista A', 'vista I'))))}), nos PL-02/PL-06 da vista G e nos P10 da vista C a face do pilar fica 100 / 75 mm atrás do plano dos consoles (40 ou 25 ⊥ à parede, contra 60 dos PF). O CS-1 (PP03) recebe na fábrica uma caixa fechada de chapa 9,5, 120 × 330 × e, soldada nas costas (filete 5 de oficina, 2 × 130); na obra o fundo da caixa é soldado na CE-1 (filete {gg(CAL['CS-1C']['solda_campo']['filete_mm'])} E70XX nos 2 lados verticais de 330, inspeção visual 100 % + LP 10 %, galvanização a frio). Nesses pilares a CE-1 recebe 1 console só.",
     f"Verificação do calço (fixacao_placas.json, Vd {gg(FXJ['cargas_por_console']['Vd_kN'])} kN por console): CS-1C braço {gg(CAL['CS-1C']['braco_mm'])} mm, M {gg(CAL['CS-1C']['M_kNm'])} kN·m — pinos da CE-1 T {gg(CAL['CS-1C']['CE1_1_console']['T_linha_sup_kN'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['phiN_linha_kN'])} kN (interação {gg(CAL['CS-1C']['CE1_1_console']['interacao'])}), flexão local da CE-1 {gg(CAL['CS-1C']['CE1_1_console']['flexao_chapa_MPa'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['lim_MPa'])} MPa, caixa {gg(CAL['CS-1C']['caixa']['von_mises_MPa'])} MPa, solda de campo {gg(CAL['CS-1C']['solda_campo']['f_res_MPa'])} ≤ {gg(CAL['CS-1C']['solda_campo']['fw_Rd_MPa'])} MPa; CS-1D: M {gg(CAL['CS-1D']['M_kNm'])} kN·m, interação {gg(CAL['CS-1D']['CE1_1_console']['interacao'])}, flexão local {gg(CAL['CS-1D']['CE1_1_console']['flexao_chapa_MPa'])} MPa. Regulagem (G, afastamento, janela) igual à PP03.",
     "Galvanização a fogo da caixa com o CS-1 (NBR 6323); CE-1L galvanizada após os pinos. Tolerâncias NBR ISO 2768-1 m. Cotas de concreto em cm, metálica em mm; não medir no desenho.",

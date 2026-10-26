@@ -10,7 +10,7 @@ import vb_geom as VG
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 LG = json.load(open(AQ + "ligacoes.json"))
 CO = json.load(open(AQ + "consolos.json"))
-DT = json.load(open(AQ + "dentes.json"))["I130"]["geometria"]
+DT = json.load(open(AQ + "dentes.json"))["I120"]["geometria"]
 VMP = json.load(open(AQ + "vm_retangular.json"))["premissas"]
 from geometria import Z_PISOS
 f = lambda v, d=3: f"{v:+.{d}f}".replace(".", ",")
@@ -21,7 +21,7 @@ zf = lambda x: Z0 + I3 * x                      # fundo da TS-01 (x global, mm)
 HV = 900 / C3
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="CORTES DE MONTAGEM DAS VIGAS — APOIOS COMO MONTADOS (TS-01, I130, VM, VB, LAJE ALVEOLAR)",
+                        conteudo="CORTES DE MONTAGEM DAS VIGAS — APOIOS COMO MONTADOS (TS-01, I120, VM, VB, LAJE ALVEOLAR)",
                         desenho="ND-LET-CT04", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
 pr.revisao("07", "21/10/2026", "EMISSÃO: CORTES DE MONTAGEM DE CADA APOIO (ANTES NOS DETALHES DA LOC01/CT01)")
 pr.revisao("09", "23/10/2026", "DEC-045/047/048/049: VM RETANGULAR 30 × 75 NO CP-MEZ (NEO-5F); PISOS +3,90/+7,30")
@@ -52,7 +52,7 @@ def pino(v, x, z0, z1, d):
 CELL = [(Q[0] + 5, Q[3] - 10), (Q[0] + 325, Q[3] - 10), (Q[0] + 645, Q[3] - 10),
         (Q[0] + 5, Q[3] - 330), (Q[0] + 325, Q[3] - 330), (Q[0] + 645, Q[3] - 330)]
 IMG = ["a1", "a2", "a3", "a4", "a5", "a6"]
-LEG = ["TS-01 no recuo", "2 TS-01 na I130", "I130 no CP-I130", "VM no CP-MEZ", "VB no CP-VB", "laje na VM de borda"]
+LEG = ["TS-01 no recuo", "2 TS-01 na I120", "I120 no CP-I120", "VM no CP-MEZ", "VB no CP-VB", "laje na VM de borda"]
 
 
 def org(i, xr, zr, esc=20, dx=75, dz=210):
@@ -102,9 +102,9 @@ d.chamada((xp, zap + 600), (14, 10), "TB-3 Ø50 na viga, a prumo")
 d.chamada((-150, REC + 1200), (21, 10), "cabeça 40×30 até +10,00")
 d.chamada((-375, zb + 300), (8, -14), "placa 10 (folga 2,5)")
 
-# ------------------------------------------------------------------ 2. TS-01 no topo da I130 (eixo C)
-ZT = LG["Z_TOPO_I130"] * 1000
-d = pr.vista("DET2", org(1, 0, ZT, esc=10, dx=115, dz=110), 10, titulo="2 — DUAS TS-01 NO TOPO DA I130 / PILAR CENTRAL (EIXO C)",
+# ------------------------------------------------------------------ 2. TS-01 no topo da I120 (eixo C)
+ZT = LG["Z_TOPO_I120"] * 1000
+d = pr.vista("DET2", org(1, 0, ZT, esc=10, dx=115, dz=110), 10, titulo="2 — DUAS TS-01 NO TOPO DA I120 / PILAR CENTRAL (EIXO C)",
              subtitulo="topo em 2 níveis (lado E 12 mm mais alto); NEO-3 + 2 PN-5 por TS-01", unidade="cm")
 sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, 1000), (200, 1080), (200, 1300), (-200, 1300), (-200, 1080), (-75, 1000), (-75, 330), (-200, 250)]
 zbI = ZT - 1300
@@ -123,18 +123,18 @@ for sg in (-1, 1):
     neo(d, sg * 115 - 50, za_, 100, 10)
     pino(d, sg * 115, za_ - 300, za_ + 300, 20)
 d.cota_h([-200, -115, -37.5, 37.5, 115, 200], ZT, 8, total=False)
-nivel(d, -700, ZT, f"topo I130 {f(ZT / 1000)} (lado A)", -1)
+nivel(d, -700, ZT, f"topo I120 {f(ZT / 1000)} (lado A)", -1)
 nivel(d, 700, ZT + dg, f"{f((ZT + dg) / 1000)} (lado E)", 1)
 d.chamada((-115, ZT + 5), (-18, -16), "NEO-3 100×300×10 (apoio 16,25)")
 d.chamada((115, ZT - 200), (16, -16), "2 PN-5 Ø20 L=600 por TS-01")
 d.chamada((0, ZT + 400), (4, 18), "folga 7,5 entre as pontas")
 
-# ------------------------------------------------------------------ 3. I130 no consolo CP-I130
-ZA = LG["Z_ASS_I130"] * 1000
-cp = CO["CP-I130"]
+# ------------------------------------------------------------------ 3. I120 no consolo CP-I120
+ZA = LG["Z_ASS_I120"] * 1000
+cp = CO["CP-I120"]
 hcp, pcp = cp["h_total_m"] * 1000, cp["proj_m"] * 1000
 hd, ln = DT["hd"], DT["ln"]
-d = pr.vista("DET3", org(2, 0, ZA, esc=10, dx=55, dz=120), 10, titulo="3 — I130 NO CONSOLO CP-I130 (P8A / P11 / P13 / P14)",
+d = pr.vista("DET3", org(2, 0, ZA, esc=10, dx=55, dz=120), 10, titulo="3 — I120 NO CONSOLO CP-I120 (P8A / P11 / P13 / P14)",
              subtitulo="vista na direção A–E; dente 78 × 35, fundo do consolo = fundo da viga", unidade="cm")
 zbv = ZT - 1300
 conc(d, [(-450, zbv - 300), (0, zbv - 300), (0, ZT + 200), (-450, ZT + 200)])
@@ -239,9 +239,9 @@ d.chamada((ba + 50 + _x1 + _p, 100 + _r), (10, 22), "LP20 1245 × 200, 6 alvéol
 
 for i_ in range(6):
     foto(i_)
-notas = ["Apoios desenhados na posição montada, com as folgas reais (NBR 9062:2017 3.1): TS-01 2,5 cm da cabeça do pilar e 7,5 cm entre pontas no eixo C; I130 7,5 cm; VM 3 cm (junta grauteada); VB 2,5 cm.",
-         "Neoprenes: NEO-2 fretado 300×200×31 (I130); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5F 200×200×21 fretado (VM); NEO-6 100×100×10 (VB); fita 1 cm sob a laje alveolar.",
-         "Pinos: grautear o tubo/nicho só depois do alinhamento e do nível conferidos; nas I130 e VB, graute numa ponta só (a outra livre para dilatar).",
+notas = ["Apoios desenhados na posição montada, com as folgas reais (NBR 9062:2017 3.1): TS-01 2,5 cm da cabeça do pilar e 7,5 cm entre pontas no eixo C; I120 7,5 cm; VM 3 cm (junta grauteada); VB 2,5 cm.",
+         "Neoprenes: NEO-2 fretado 300×200×31 (I120); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5F 200×200×21 fretado (VM); NEO-6 100×100×10 (VB); fita 1 cm sob a laje alveolar.",
+         "Pinos: grautear o tubo/nicho só depois do alinhamento e do nível conferidos; nas I120 e VB, graute numa ponta só (a outra livre para dilatar).",
          "VM (DEC-039): sem cantoneira antigiro — montar a VM, concretar as pontas dos dois lados (junta 3 cm VM × pilar, graute ou concreto fck ≥ 30 MPa, do recorte do dente ao topo; ND-LET-VM01 det. 2), aguardar fcj ≥ 20 MPa e só então montar as lajes.",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): nível dos apoios ±1,0 cm; apoio da laje ≥ 10 cm medido depois de montada.",
          "Imagens 3D: recortes do modelo da obra (concreto das vigas transparente para mostrar neoprene e pinos).",

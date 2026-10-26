@@ -12,7 +12,7 @@
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO",
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "PF-04",
   "qtd": 1,
   "peso": "64,9",
@@ -33,7 +33,7 @@
      "PF-04",
      "P14 L9",
      "1",
-     "CP-VB +8,388 (B); CP-VB +8,367 (D); CP-I130 +6,966 (A); recuo +8,70",
+     "CP-VB +8,388 (B); CP-VB +8,367 (D); CP-I120 +6,966 (A); recuo +8,70",
      "8 CC-1 (C)"
     ]
    ]
@@ -217,7 +217,7 @@
    ],
    "linhas": [
     [
-     "C5 (CP-I130)",
+     "C5 (CP-I120)",
      "A",
      "+6,97 (796,6)",
      "50×40×49/39",
@@ -267,7 +267,7 @@
      "PN-2",
      "Pino Ø25 CA-50 L=900 (350 no consolo)",
      "1",
-     "CP-I130"
+     "CP-I120"
     ],
     [
      "NEO-6",
@@ -279,7 +279,7 @@
      "NEO-2",
      "Neoprene 300×200×31 fretado (2 × 10 + 2 × 2,5, chapas inox 2 mm)",
      "1",
-     "CP-I130"
+     "CP-I120"
     ],
     [
      "CC-1",

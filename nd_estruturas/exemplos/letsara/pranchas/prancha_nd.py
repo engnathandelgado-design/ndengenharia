@@ -26,7 +26,7 @@ ALTURAS = {"min": 2.5, "nota": 2.5, "cota": 2.5, "peca": 3.5, "sub": 3.0, "titul
 ALTURAS_GERAL = dict(ALTURAS)
 ALTURAS_PECA = {"min": 3.0, "nota": 3.0, "cota": 3.5, "peca": 3.5, "sub": 3.5, "titulo": 6.0, "grande": 8.0}
 MIN_TIPO = {"geral": dict(cota=2.5, texto=2.5), "peca": dict(cota=3.5, texto=3.0)}
-_PECA_PREF = ("PL", "PF", "PC", "PM", "PG", "PE", "TS01", "I130", "VM01", "VB01", "LA01", "PP0", "PV01", "ES0", "MT01", "COB06", "COB07", "COB08", "COB09", "IC01", "EX01", "AR-", "PE0", "IC01")
+_PECA_PREF = ("PL", "PF", "PC", "PM", "PG", "PE", "TS01", "I120", "VM01", "VB01", "LA01", "PP0", "PV01", "ES0", "MT01", "COB06", "COB07", "COB08", "COB09", "IC01", "EX01", "AR-", "PE0", "IC01")
 
 
 def tipo_folha(desenho):
@@ -41,7 +41,7 @@ CAMADAS = {
     "MOLDURA": (7, 50, "Continuous"), "CARIMBO": (7, 35, "Continuous"), "CARIMBO_FINO": (8, 18, "Continuous"),
     "CORTADO": (7, 35, "Continuous"), "VISTA": (7, 25, "Continuous"), "OCULTA": (8, 18, "ACAD_ISO02W100"),
     "EIXO": (8, 13, "ACAD_ISO10W100"), "ARMADURA": (3, 25, "Continuous"), "ARM_SECAO": (3, 25, "Continuous"),
-    "ARM_TRANSV": (3, 18, "Continuous"), "ARM_PROT": (6, 35, "Continuous"), "ARM_PROT_SECAO": (6, 35, "Continuous"),
+    "ARM_TRANSV": (5, 18, "Continuous"), "ARM_PROT": (6, 35, "Continuous"), "ARM_PROT_SECAO": (6, 35, "Continuous"),
     "METALICA": (7, 25, "Continuous"), "TERRENO": (34, 25, "Continuous"), "HACHURA": (8, 9, "Continuous"),
     "COTA": (32, 13, "Continuous"), "TEXTO": (7, 18, "Continuous"), "TITULO": (7, 25, "Continuous"),
     "CHAMADA": (7, 13, "Continuous"), "INDICACAO": (7, 25, "Continuous"), "TABELA": (7, 25, "Continuous"),
@@ -51,8 +51,10 @@ CAMADAS = {
 # Emissão executiva (21/10/2026, decisão do Nathan): toda folha gerada sai liberada para produção e montagem.
 # Uma revisão nova é acrescentada automaticamente (número = maior revisão da folha + 1) e a nota antiga
 # "PARA APROVAÇÃO, NÃO EXECUTAR" é trocada. EMISSAO = None volta ao comportamento anterior.
-EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM", fase="EXECUTIVO — LIBERADO",
-               nota="EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM.")
+EMISSAO = dict(data="21/10/2026", desc="EMISSÃO EXECUTIVA", fase="EXECUTIVO — AGUARDANDO LIBERAÇÃO",
+               nota="EMISSÃO EXECUTIVA — PRODUZIR SÓ DEPOIS DE RESOLVIDAS AS PENDÊNCIAS LISTADAS NA ND-LET-NG01 (LOCAL DA OBRA, ART E DECISÕES EM ABERTO).")
+# rev12 (checklist 10): "LIBERADO" só sem pendência; com LOCAL "A CONFIRMAR", ART em branco ou decisão em aberto a fase é a de cima.
+FASE_LIBERADO = "EXECUTIVO — LIBERADO"
 # Reemissão do pacote rev09 (23/10/2026, DEC-045/047/048): depois da revisão da emissão executiva, mais uma revisão com a data
 # abaixo; revisões manuais da folha com esta data viram a descrição dela (sem número próprio). Folha sem revisão manual
 # nesta data recebe a descrição padrão. REEMISSAO = None desliga.
@@ -63,7 +65,10 @@ REEMISSAO2 = dict(data="24/10/2026")
 REEMISSAO3 = dict(data="25/10/2026")
 # rev11 (26/10/2026): TODAS as folhas mudam (textos e cotas ≥ 2,5 mm no papel, imagens ≥ 400 ppi) — revisão automática em todas;
 # as folhas com revisão manual nesta data acrescentam a descrição própria.
-REEMISSAO4 = dict(data="26/10/2026", padrao="REV11: TEXTOS E COTAS ≥ 2,5 MM NO PAPEL; IMAGENS EM ALTA RESOLUÇÃO; PÉ DOS PILARES NO CÁLICE NOS CORTES")
+REEMISSAO4 = dict(data="26/10/2026", padrao="TEXTOS E COTAS ≥ 2,5 MM NO PAPEL; IMAGENS EM ALTA RESOLUÇÃO; PÉ DOS PILARES NO CÁLICE NOS CORTES")
+# rev12 (26/10/2026, revisão independente): última linha de TODA folha = REV 12 (número = pacote); revisões manuais da rev12
+# entram com pr.revisao("R12", data, descrição) e viram a descrição desta linha.
+REEMISSAO5 = dict(rev="12", padrao="REV12: NOMES CONFERIDOS PELA GEOMETRIA; PESOS COM 2,50 t/m³; SEM NOTAS INTERNAS")
 _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
@@ -188,8 +193,20 @@ class Prancha:
     def carimbo_bbox(self):
         x0, y0, x1, y1 = self.quadro
         extra = 8 if self.dados.get("marca") else 0
-        n = max(len(self.revisoes), 1) + (1 if EMISSAO and not getattr(self, "_emitida", False) else 0)
+        if getattr(self, "_emitida", False):
+            n = sum(len(self._rev_linhas(ds)) for _, _, ds in self.revisoes) or 1
+        else:                                                   # antes da emissão: reserva as linhas automáticas (estimativa por cima)
+            n = sum(len(self._rev_linhas(ds)) for _, _, ds in self.revisoes) + (6 if EMISSAO else 0)
         return (x1 - 180, y0, x1, y0 + 78 + extra + 5 * n + 6)
+
+    def _rev_linhas(self, ds):
+        """rev12: descrição da revisão inteira, quebrada em linhas (antes era cortada em 70 caracteres)."""
+        salvo = dict(ALTURAS)
+        ALTURAS.update(ALTURAS_CARIMBO)
+        try:
+            return quebrar(str(ds), 180 - 40 - 3, ALTURAS["min"]) or [""]
+        finally:
+            ALTURAS.clear(); ALTURAS.update(salvo)
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
@@ -545,7 +562,7 @@ class Prancha:
         self.texto(cx0 + 19, y + 2.0, f"ART Nº: {d.get('art') or '________________'}", "min")
         self.texto(cx1 - 2, y + h5 - 6, d.get("fase", ""), "nota", "TITULO", "BOTTOM_RIGHT")
         y += h5
-        nrev = max(len(self.revisoes), 1)
+        nrev = sum(len(self._rev_linhas(ds)) for _, _, ds in self.revisoes) or 1
         self.ret(cx0, y, cx1, y + 6)
         for a, lab in [(0, "REV"), (14, "DATA"), (40, "DESCRIÇÃO")]:
             self.texto(cx0 + a + 1.5, y + 1.8, lab, "min")
@@ -553,11 +570,14 @@ class Prancha:
         self.linha((cx0 + 40, y), (cx0 + 40, y + 6 + 5 * nrev))
         y += 6
         for r, dt, ds in (self.revisoes or [(d["rev"], d["data"], "EMISSÃO INICIAL")]):
-            self.ret(cx0, y, cx1, y + 5, "CARIMBO_FINO")
-            self.texto(cx0 + 7, y + 1.5, r, "min", alinh="BOTTOM_CENTER")
-            self.texto(cx0 + 27, y + 1.5, dt, "min", alinh="BOTTOM_CENTER")
-            self.texto(cx0 + 41.5, y + 1.5, _MNOVO + ds[:70], "min")   # histórico de revisões fica como foi emitido
-            y += 5
+            ls = self._rev_linhas(ds)
+            hr = 5 * len(ls)
+            self.ret(cx0, y, cx1, y + hr, "CARIMBO_FINO")
+            self.texto(cx0 + 7, y + hr - 3.5, r, "min", alinh="BOTTOM_CENTER")
+            self.texto(cx0 + 27, y + hr - 3.5, dt, "min", alinh="BOTTOM_CENTER")
+            for k_, t_ in enumerate(ls):                                  # rev12: descrição inteira, sem corte
+                self.texto(cx0 + 41.5, y + hr - 3.5 - 5 * k_, _MNOVO + _RENOMEAR(t_), "min")
+            y += hr
         sx, sy = cx0 - 22, cy0 + 6   # símbolo 1º diedro
         self.msp.add_circle((sx + 15, sy + 5), 4, dxfattribs={"layer": "CARIMBO"})
         self.msp.add_circle((sx + 15, sy + 5), 2, dxfattribs={"layer": "CARIMBO"})
@@ -867,6 +887,21 @@ class Prancha:
 
     def _emitir(self):
         if EMISSAO and not getattr(self, "_emitida", False):
+            r12 = [d for r, _, d in self.revisoes if r == "R12"]
+            self.revisoes = [t for t in self.revisoes if t[0] != "R12"]
+            self._emitir0()
+            if REEMISSAO5:                                           # rev12: última linha = 12 em toda folha
+                hist = list(self.revisoes)
+                if any(str(r).isdigit() and int(r) >= int(REEMISSAO5["rev"]) for r, _, _ in hist):
+                    hist = hist[-int(REEMISSAO5["rev"]):]
+                    n0 = int(REEMISSAO5["rev"]) - len(hist)
+                    hist = [(f"{n0 + k:02d}", dt, ds) for k, (_, dt, ds) in enumerate(hist)]
+                self.revisoes = hist + [(REEMISSAO5["rev"], "26/10/2026", "; ".join([REEMISSAO5["padrao"]] + r12))]
+                self.dados["rev"], self.dados["data"] = REEMISSAO5["rev"], "26/10/2026"
+            self._emitida = True
+
+    def _emitir0(self):
+        if True:
             tardias = []                                           # reemissões de 24/10 e 25/10 (só nas folhas com revisão manual na data)
             for RE in (REEMISSAO2, REEMISSAO3, REEMISSAO4):
                 if not RE:
@@ -881,14 +916,12 @@ class Prancha:
                 for k, (dt, nv) in enumerate(tardias):
                     self.revisoes.append((f"{k:02d}", dt, "; ".join(nv)))
                     self.dados["rev"], self.dados["data"] = f"{k:02d}", dt
-                self._emitida = True
                 return
             self._emitir1()
             for dt, nv in tardias:
                 r = f"{int(self.dados['rev']) + 1:02d}"
                 self.revisoes.append((r, dt, "; ".join(nv)))
                 self.dados["rev"], self.dados["data"] = r, dt
-            self._emitida = True
 
     def _emitir1(self):
         if True:

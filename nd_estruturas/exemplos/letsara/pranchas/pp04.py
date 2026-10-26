@@ -48,7 +48,7 @@ TC = GF.TCE
 v2.chapa(0, -165, TC, 330, 1.0)
 for z in (-140, 140):
     v2.ret(TC, z - 8, 140, 16, "METALICA"); v2.ret(TC + 140, z - 16, 10, 32, "METALICA")
-v2.poli([(30, 300), (30, -150), (90, -150), (90, 300)], "ARMADURA")
+v2.poli([(30, 300), (30, -150), (90, -150), (90, 300)], "ARM_TRANSV")
 v2.cota_h([0, TC + 140, TC + 150], -165, -8, total=False)
 v2.cota_h([0, TC], -165, -16, total=False)                                        # rev08: espessura da CE-1 em linha própria
 v2.cota_v([-165, -140, 140, 165], TC + 150, 10, total=False)

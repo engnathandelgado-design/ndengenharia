@@ -11,7 +11,7 @@ jobs = {
  "a5": ((9.55, 11.1, -0.35, 0.45, 7.2, 8.8), [(11.9, 2.0, 7.5), (10.25, 0.0, 8.0), (0, 0, 1)]),
  "a6": ((4.4, 5.7, -0.35, 1.0, 2.75, 4.0), [(6.9, 1.9, 3.65), (5.0, 0.15, 3.5), (0, 0, 1)]),
 }
-TR = {'a1': ('Vigas I90 de cobertura',), 'a2': ('Vigas I90 de cobertura', 'Vigas centrais I130'), 'a3': ('Vigas centrais I130', 'Consolos'), 'a4': ('Vigas de mezanino (retangulares protendidas)', 'Concreto de 2º estágio (obra, com a capa)', 'Laje alveolar'), 'a5': ('Vigas de borda',), 'a6': ('Concreto de 2º estágio (obra, com a capa)', 'Laje alveolar')}
+TR = {'a1': ('Vigas I90 de cobertura',), 'a2': ('Vigas I90 de cobertura', 'Vigas centrais I120'), 'a3': ('Vigas centrais I120', 'Consolos'), 'a4': ('Vigas de mezanino (retangulares protendidas)', 'Concreto de 2º estágio (obra, com a capa)', 'Laje alveolar'), 'a5': ('Vigas de borda',), 'a6': ('Concreto de 2º estágio (obra, com a capa)', 'Laje alveolar')}
 for k, (box, cam) in [(k_, jobs[k_]) for k_ in (sys.argv[1:] or jobs)]:
     cena(O + k + ".png", box, cam, excl=EX + (('Esperas e insertos embutidos',) if k == 'a3' else ()), titulo="", transp=TR.get(k, ()), k=1.6)
     print(k, flush=True)

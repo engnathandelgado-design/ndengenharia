@@ -9,7 +9,7 @@ malha = ler_malha_ifc(ifc)
 doc = ezdxf.new("R2010", setup=True)
 doc.units = ezdxf.units.M
 msp = doc.modelspace()
-CORES = {"Pilares": 8, "Consolos": 9, "Vigas centrais I130": 5, "Vigas I90 de cobertura": 5, "Vigas de borda": 4, "Vigas de travamento VT": 4,
+CORES = {"Pilares": 8, "Consolos": 9, "Vigas centrais I120": 5, "Vigas I90 de cobertura": 5, "Vigas de borda": 4, "Vigas de travamento VT": 4,
          "Vigas de mezanino": 3, "Laje alveolar": 7, "Placas de fechamento": 252, "Terças metálicas": 30, "Telhas": 254,
          "Insertos metálicos": 1, "Pinos, tubos e neoprenes": 6, "Piso e fundações": 251}
 n = 0

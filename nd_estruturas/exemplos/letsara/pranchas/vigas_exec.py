@@ -389,7 +389,7 @@ def ts01():
 def i130():
     import viga_i as VI
     S = AV.spec_i("i110")
-    return compor_ok("ND-LET-I130", "VIGAS CENTRAIS I130 V404 / V405 / V406 / V407 — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO", "01/01",
+    return compor_ok("ND-LET-I120", "VIGAS CENTRAIS I120 V404 / V405 / V406 / V407 — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO", "01/01",
                   lambda fab: (setattr(VI, "Prancha", fab), VI.prancha_viga(VI.dados_i110())), S)
 
 

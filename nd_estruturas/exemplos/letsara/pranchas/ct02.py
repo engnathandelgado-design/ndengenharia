@@ -47,7 +47,7 @@ Y1, Y2 = M(Y_LIN[0]), M(Y_LIN[1])
 XA = {k: M(v) for k, v in X_EIXO.items()}
 LARG = XA["E"]
 VM_N = [[(mk, M(xa), M(xb)) for mk, xa, xb, y in vigas_nivel(iz) if abs(y - Y_LIN[1]) < 0.01] for iz in (0, 1)]   # VM da linha 2 por nível
-PIL2 = [(RN.pilar_em(x / 1000, Y_LIN[1]), x, b, zt) for x, b, zt in ((XA["A"], 600, 10000.0), (XA["B"], 400, NIV[1]), (XA["C"], 400, LG["Z_TOPO_I130"] * 1000),
+PIL2 = [(RN.pilar_em(x / 1000, Y_LIN[1]), x, b, zt) for x, b, zt in ((XA["A"], 600, 10000.0), (XA["B"], 400, NIV[1]), (XA["C"], 400, LG["Z_TOPO_I120"] * 1000),
         (XA["D"], 400, NIV[1]), (M(P6_L2[0]), 250, NIV[1]), (XA["E"], 600, 10000.0))]
 O_PL = 375.0                                              # eixo das placas: face do pilar 30 + folga 2,5 + meia placa 5
 Z_VIS = 8000.0                                            # vista interrompida acima do mezanino superior
