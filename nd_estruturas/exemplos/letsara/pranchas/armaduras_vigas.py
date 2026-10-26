@@ -136,7 +136,7 @@ def spec_i(qual):
     det += [([(LN if y < H - HD else 0, y), (LD, y)], "ARM_PROT", False) for y, _, _ in P["cord"]]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
               cotas=[((0, H - HD), (LN, 0), 0, -100, f"{fd(LN/10)}"), ((0, H - HD), (0, H), 90, -60, f"{fd(HD/10)}"), ((LN, 0), (LN, H - HD), 90, -60, f"{fd((H-HD)/10)} (recorte)"), ((LD, 0), (LD, H), 90, 120, f"{fd(H/10)}")],
-              bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (8, -8)), ("N8", (100, H - 100), (-26, 14))],
+              bolhas=[("N5", (LN + 300, y_t), (4, 8)), ("N6", (LN + 60, H / 2), (10, -10)), ("N7", (LN + 500, H - HD + 150), (10, -14)), ("N8", (100, H - 100), (-26, 14))],
               formas=["N5", "N6", "N7", "N8"], corte_x=LD)
     blocos_extra = []
     CTp = P.get("ct")

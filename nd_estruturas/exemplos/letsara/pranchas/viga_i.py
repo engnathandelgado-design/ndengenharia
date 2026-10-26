@@ -164,7 +164,7 @@ def prancha_viga(P):
         ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 26), "apoio das TS-01: 2 NEO-3C + 4 PN-5 Ø20 por linha" if CTp else "apoio das TS-01: 2 NEO-3 + 4 PN-5 Ø20 por linha")
     if CTp and P.get("pinos_topo"):
         ve.chamada((P["pinos_topo"][0] - CTp["b"] / 2, H - CTp["h"] / 2), (-14, -18), f"consolo CT-I130 {CTp['b']/10:g} × {CTp['proj']/10:g} × {CTp['h']/10:g}/{CTp['h_ext']/10:g} (mísula) nas 2 faces — CORTE D-D")
-        ve.marcador_corte((P["pinos_topo"][0] + CTp["b"] / 2 + 150, -22 * ESC), (P["pinos_topo"][0] + CTp["b"] / 2 + 150, H + 24 * ESC), "D", lado=1)
+        ve.marcador_corte((P["pinos_topo"][0] + CTp["b"] / 2 + 150, -22 * ESC), (P["pinos_topo"][0] + CTp["b"] / 2 + 150, H + 30 * ESC), "D", lado=1)
     if P.get("consolos"):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
     xA = L / 2 + 1200                                                       # fora dos textos centrais das cotas
@@ -262,7 +262,7 @@ def prancha_viga(P):
     _sets = [xs_ for xs_ in _sets if not any(set(xs_) < set(o_) for o_ in _sets)]   # subconjuntos já cotados (X5 dentro do X7)
     for k_, xs_ in enumerate(_sets):
         va.cota_h(list(xs_), 0, -12 - 8 * k_, total=False)
-    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 315), YR), "maciço da ponta (TB e CH-A)", macico=True)
+    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 336), YR), "maciço da ponta (TB e CH-A)", macico=True)
     vb.chapa(-P["tb"][0] / 2, 0, P["tb"][0], H - HD if HD else H * 0.6)
     if P.get("cha", True):
         vb.chapa(-150, -12.5, 300, 12.5)
