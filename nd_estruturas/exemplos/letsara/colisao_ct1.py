@@ -77,7 +77,7 @@ for nivel in MB.NIVEIS_MEZ:
     for y, so in ((Y_LIN[0], -1), (Y_LIN[1], 1)):
         for fa, fb in faces:
             for xf, sg in ((fa, 1), (fb, -1)):
-                vm = next(p for p, bb in caixas if p.tipo == "viga" and "alma" in p.marca and f"{nivel:+.2f}" in p.marca and abs(((bb[0][1] + bb[1][1]) / 2) - (y + so * (bt / 2 - VMP["b_alma"] / 2))) < 0.01 and bb[0][0] - 0.05 <= xf + sg * 0.5 <= bb[1][0] + 0.05), None)
+                vm = next((p for p, bb in caixas if p.tipo == "viga" and "alma" in p.marca and f"{nivel:+.2f}" in p.marca and abs(((bb[0][1] + bb[1][1]) / 2) - (y + so * (bt / 2 - VMP["b_alma"] / 2))) < 0.01 and bb[0][0] - 0.05 <= xf + sg * 0.5 <= bb[1][0] + 0.05), None)
                 if vm is None:                                   # rev11: VM do 3D com outro nome/geometria — estudo da DEC antiga
                     continue
                 pil, pbb = pilar_em(xf - sg * 0.05, y, za - 0.1)

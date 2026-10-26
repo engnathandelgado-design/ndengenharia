@@ -51,6 +51,12 @@ def main():
                 continue                                         # rufos: chapas dobradas sobre a cabeça (a caixa envolvente engloba o concreto)
                 continue
             e = pen(cb, bb)
+            if e > 0.001 and p.perfil.b <= 0.04 and p.perfil.h <= 0.04 and p.comprimento > 0.5:
+                # rev11: barra esbelta inclinada (X Ø16, corrente): a caixa envolvente engana — testa o eixo amostrado
+                r_ = max(p.perfil.b, p.perfil.h) / 2
+                n_ = max(2, int(p.comprimento / 0.002))
+                e = max(min(min(p.p0[i] + (p.p1[i] - p.p0[i]) * k / n_ - (cb[0][i] - r_), (cb[1][i] + r_) - (p.p0[i] + (p.p1[i] - p.p0[i]) * k / n_))
+                            for i in range(3)) for k in range(n_ + 1))
             if e > 0.001:
                 res["colisoes"].append(dict(cabeca=q.marca, peca=p.marca, grupo=p.grupo, penetracao_mm=round(e * 1000, 1)))
     (AQ / "colisao_platibanda.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")

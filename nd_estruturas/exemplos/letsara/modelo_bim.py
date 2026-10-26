@@ -890,8 +890,8 @@ if __name__ == "__main__":
                 continue
             doc = pymupdf.open(arq)
             for k, pg in enumerate(doc):
-                pix = pg.get_pixmap(dpi=int(1300 / pg.rect.width * 72))   # rev06c: 1300 px (página ≤ 16 MB)
-                img = pix.tobytes("jpeg", jpg_quality=55)
+                pix = pg.get_pixmap(dpi=int(1100 / pg.rect.width * 72))   # rev06c: 1100 px (rev11: página ≤ 16 MB)
+                img = pix.tobytes("jpeg", jpg_quality=50)
                 pranchas.append(dict(nome=nome + (f" ({k + 1}/{len(doc)})" if len(doc) > 1 else ""), desc=desc,
                                      img="data:image/jpeg;base64," + base64.b64encode(img).decode()))
     cx = json.loads((AQ / "conexoes.json").read_text(encoding="utf-8")) if (AQ / "conexoes.json").exists() else []
