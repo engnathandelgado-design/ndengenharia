@@ -193,6 +193,8 @@ class Prancha:
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
+        if not isinstance(h, str) and not self._carimbo_ativo:          # rev11: altura numérica abaixo do mínimo sobe ao mínimo (nunca reduzir)
+            hh = max(hh, MIN_TIPO[self.tipo]["texto"])
         if not self._carimbo_ativo and hh < MIN_TIPO[self.tipo]["texto"] - 1e-6 and str(s).strip():
             self._txt_pequenos.append((round(hh, 2), str(s)[:30]))
         s = _RENOMEAR(_emissao_txt(s))
@@ -365,11 +367,16 @@ class Prancha:
         self.ret(x, y_topo - 8, x + W, y_topo, "TABELA")
         self.texto(x + W / 2, y_topo - 4, "RELAÇÃO DO AÇO — CROQUIS DE DOBRAMENTO", "sub", "TITULO", "MIDDLE_CENTER")
         y = y_topo - 8
-        self.linha((x, y - 6), (x + W, y - 6), "TABELA")
+        hn = ALTURAS["nota"]
+        cel = [quebrar(c, w - 1.6, hn) if _wtext(c, hn) > w - 1.6 else [c] for c, w in zip(cab, larg)]   # rev11: cabeçalho quebra na célula
+        hc = max(6.0, max(len(c_) for c_ in cel) * hn * 1.45 + 1.6)
+        self.linha((x, y - hc), (x + W, y - hc), "TABELA")
         xx = x
-        for c, w in zip(cab, larg):
-            self.texto(xx + w / 2, y - 3, c, "nota", "TEXTO", "MIDDLE_CENTER"); xx += w
-        y -= 6
+        for ls, w in zip(cel, larg):
+            for k, t in enumerate(ls):
+                self.texto(xx + w / 2, y - hc / 2 + (len(ls) - 1) * hn * 1.45 / 2 - k * hn * 1.45, t, "nota", "TEXTO", "MIDDLE_CENTER")
+            xx += w
+        y -= hc
         resumo, total = {}, 0.0
         for b in barras:
             ct = b["qtd"] * b["comp"] / 100.0

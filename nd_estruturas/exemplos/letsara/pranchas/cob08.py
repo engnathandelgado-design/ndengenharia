@@ -57,7 +57,6 @@ for j, (bm, k) in enumerate(bases):
     xs_cima = sorted({s for s, z, d, tp in fb})
     v.cota_ord(xs_cima, H_TERCA, 6, x0=0)
     v.cota_ord(furos_d(k), 0, -6, x0=0)
-    v.cota_h([0, L], 0, -27, total=False)
     v.texto((L + 250, H_TERCA / 2), "ponta final", "nota", "MIDDLE_LEFT")
     v.texto((-250, H_TERCA / 2), "inicial", "nota", "MIDDLE_RIGHT")
 

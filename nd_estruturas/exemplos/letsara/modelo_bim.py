@@ -69,7 +69,7 @@ import geo_fixacao as GF
 import numpy as np
 from lajes_placas import paineis_mez, paineis_nivel
 PAINEIS_MEZ = paineis_mez()[0]
-# rev09b (DEC-050): cabeça de concreto dos pilares da linha 2 sobe até o fundo da W 310 (sem montantes)
+# rev09b (DEC-050): cabeça de concreto dos pilares da linha 2 sobe até o fundo da W da linha 2 (sem montantes)
 Z_L2 = {a["nome"]: a["z_concreto"] for a in json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))["apoios_diretos"]}                                                   # placas: mesma fonte das pranchas PP (vistas do R01)
 
 
@@ -172,17 +172,17 @@ def montar() -> ModeloBIM:
             m.pilar(f"{nome}-L{1 if sg > 0 else 9} cabeça", x, y - sg * 0.15, 0.40, 0.30, zr, TOPO_PLAT, obs="cabeça 40×30")
     # centrais: P8A 40×60, P11 40×40, P13 e P13B 40×40 (DEC-058) — topo = topo da I130
     for (marca, y), (bx, by) in zip(CENTRAIS, ((0.40, 0.60), (0.40, 0.40), (0.40, 0.40), (0.40, 0.40))):
-        zt_c = Z_L2["C"] if marca == "P8A" else Z_I130_TOPO             # rev09b: P8A sobe até o fundo da W 310 da linha 2
+        zt_c = Z_L2["C"] if marca == "P8A" else Z_I130_TOPO             # rev09b: P8A sobe até o fundo da W da linha 2 da linha 2
         m.pilar(marca, X_C, y, bx, by, Z_CALICE, zt_c, obs=(f"{bx*100:.0f}×{by*100:.0f}; apoio I130 / TS-01; topo em 2 níveis" if marca == "P11" else f"{bx*100:.0f}×{by*100:.0f}; PC-03, apoio das I130 (DEC-058)") if marca != "P8A" else
-                f"{bx*100:.0f}×{by*100:.0f}; CP-I130 da V400; topo +{zt_c:.3f} = fundo da W 310 − 40 mm (DEC-050)".replace(".", ","))
+                f"{bx*100:.0f}×{by*100:.0f}; CP-I130 da V400; topo +{zt_c:.3f} = fundo da W da linha 2 − 40 mm (DEC-050)".replace(".", ","))
         if marca == "P11":                                     # rev04: metade do lado E 12 mm mais alta (assentos das TS-01); rev09: P8A sem TS-01
             m.bloco("pilar", f"{marca} degrau do topo", (X_C + bx / 4, y, LG["Z_TOPO_I130_DIR"]), bx / 2, by, LG["DEGRAU_C"], "Pilares")
     for marca, x, ap in (("P8", X_EIXO["B"], "B"), ("P8B", X_EIXO["D"], "D")):
-        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, Z_L2[ap], obs=f"mezanino 40×60; cabeça até +{Z_L2[ap]:.3f} = fundo da W 310 − 40 mm (DEC-050)".replace(".", ","))
+        m.pilar(marca, x, Y_LIN[1], 0.40, 0.60, Z_CALICE, Z_L2[ap], obs=f"mezanino 40×60; cabeça até +{Z_L2[ap]:.3f} = fundo da W da linha 2 − 40 mm (DEC-050)".replace(".", ","))
     # rev09 (DEC-045): pilares da escada do R01 — P6 25×40 e P7 40×60 até o +3,90 (viga P6–P7); P6 da linha 2 até o +7,30
     m.pilar("P6", P6_ESC[0], P6_ESC[1], 0.25, 0.40, Z_CALICE, NIVEIS_MEZ[0], obs="25×40, escada: viga P6–P7 no +3,90 e patamar +1,95")
     m.pilar("P7", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_CALICE, NIVEIS_MEZ[0], obs="40×60 no eixo E, escada: viga P6–P7 no +3,90 e patamar +1,95")
-    m.pilar("P6 (linha 2)", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_CALICE, Z_L2["P6"], obs=f"25×40, linha 2: vigas D–P6 e P6–E; cabeça até +{Z_L2['P6']:.3f} = fundo da W 310 − 40 mm (DEC-050)".replace(".", ","))
+    m.pilar("P6 (linha 2)", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_CALICE, Z_L2["P6"], obs=f"25×40, linha 2: vigas D–P6 e P6–E; cabeça até +{Z_L2['P6']:.3f} = fundo da W da linha 2 − 40 mm (DEC-050)".replace(".", ","))
     # pilares dos portões (linha 4), rev06 (DEC-024): cabeça a 2 cm do fundo da TS-01, ligada em y por 2 cantoneiras CL-P
     for nome, x, b_ in (("P9 (PG-01)", 9.87, 0.40), ("P10 (PG-02)", 15.195, 0.25), ("P10 (PG-04)", 24.305, 0.25), ("P12 (PG-03)", 29.63, 0.40)):
         zt_ = round(zf(x) - 0.02, 2)
@@ -552,7 +552,7 @@ def montar() -> ModeloBIM:
                         m.linear("laje", f"{mk} {nivel:+.2f}", PerfilRetangular(b - a, H_LAJE, f"Laje alveolar (recorte) {b - a:.2f}"),
                                  ((a + b) / 2, t0, nivel - H_LAJE / 2), ((a + b) / 2, t1, nivel - H_LAJE / 2), "Laje alveolar")
 
-    # 5b. rev09 (DEC-048): cobertura metálica da linha 2 — W 310 contínua (topo na inclinação da cobertura) sobre montantes W 150
+    # 5b. rev09 (DEC-048/052): cobertura metálica da linha 2 — W 200 contínua (topo na inclinação da cobertura) sobre montantes W 150
     #     nos pilares (A recuo, B, C, D, P6, E recuo); emendas parafusadas; ST-W das terças e mão-francesa em toda terça
     CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))
     GL2 = "Cobertura metálica da linha 2"
@@ -566,33 +566,40 @@ def montar() -> ModeloBIM:
     for k_, (x0w, x1w) in enumerate(zip(cortes[:-1], cortes[1:])):
         m.linear("viga", f"W-L2 módulo {k_ + 1} ({CB2['perfil']})", PW, (x0w + 0.002, y2, zc_w(x0w + 0.002)), (x1w - 0.002, y2, zc_w(x1w - 0.002)), GL2, material="aco",
                  obs=f"{CB2['perfil']} A572-50, L = {x1w - x0w:.2f} m; topo na inclinação da cobertura (3 %)")
-    for xe in CB2["emendas_x"]:
-        for dz in (W_.d / 2000 + 0.0063, -W_.d / 2000 - 0.0063):
-            m.linear("inserto", "TL-1 tala de mesa 12,5 × 100 × 400 + 8 M16", PerfilRetangular(0.10, 0.0125), (xe - 0.20, y2, zc_w(xe) + dz), (xe + 0.20, y2, zc_w(xe) + dz), GL2, material="aco")
-        for dy in (-W_.tw / 2000 - 0.005, W_.tw / 2000 + 0.005):
-            m.linear("inserto", "TL-2 tala de alma 9,5 × 200 × 300 + 6 M16", PerfilRetangular(0.0095, 0.20), (xe - 0.15, y2 + dy, zc_w(xe)), (xe + 0.15, y2 + dy, zc_w(xe)), GL2, material="aco")
-    for a_ in CB2["apoios_diretos"]:                         # rev09b (DEC-050): W direto na cabeça do pilar — graute 20 + CA-L2 250×250×19 + 4 BR-M20
-        xm, zc_ = a_["x"], a_["z_concreto"]
-        caixa(m, f"GR-L2 graute de nivelamento 20 mm ({a_['nome']})", xm - 0.14, xm + 0.14, y2 - 0.14, y2 + 0.14, zc_, zc_ + 0.020, GL2)
-        caixa(m, f"CA-L2 chapa de apoio 250×250×19 ({a_['nome']})", xm - 0.125, xm + 0.125, y2 - 0.125, y2 + 0.125, zc_ + 0.020, zc_ + 0.039, GL2)
-        zfw = z_top(xm) - W_.d / 1000
-        for dx in (-0.075, 0.075):
-            for dy in (-0.075, 0.075):
-                barra_v(m, "BR-M20 barra roscada M20 8.8 L=520 embutida 400 + grampo (por fora da mesa da W)", xm + dx, y2 + dy, zc_ - 0.40, zc_ + 0.120, 0.020, GE)
-                caixa(m, "CL-L2 calço 12,5 × 40 × 50 na barra", xm + dx - 0.025, xm + dx + 0.025, y2 + dy - 0.020, y2 + dy + 0.020, zc_ + 0.039, zc_ + 0.0515, GL2)
-        for dy in (-0.075, 0.075):                           # 1 presilha por lado da alma, sobre as 2 barras desse lado, apertando a borda da mesa
-            caixa(m, "PR-L2 presilha 19 × 80 × 200 (prende a mesa da W)", xm - 0.100, xm + 0.100, y2 + dy - 0.040, y2 + dy + 0.040, zc_ + 0.0515, zc_ + 0.0705, GL2)
+    # rev11 (26/10/2026): emendas, apoios nos pilares, montantes e ST-W/MF-1 gerados de lig_cob.py — a mesma geometria dos
+    # isométricos da ND-LET-COB09 (DEC-052: CA-L2 + 4 BR-M16 no gabarito 55; montantes W 150 com CB-M1/CB-M2 nas esperas EM-L2)
+    import lig_cob as LCB
 
+    def _lig(partes, ox, oy, oz, grupo):
+        for p_ in partes:
+            if p_["ctx"] or p_["marca"] == "T":
+                continue
+            nm_ = f"{p_['marca']} {p_['desc']}".strip() or p_["marca"]
+            if p_["g"] == "caixa":
+                x0_, x1_, y0_, y1_, z0_, z1_ = p_["b"]
+                caixa(m, nm_, ox + x0_ / 1000, ox + x1_ / 1000, oy + y0_ / 1000, oy + y1_ / 1000, oz + z0_ / 1000, oz + z1_ / 1000, grupo)
+            elif p_["g"] in ("cil", "hex"):
+                c_, h_, r_ = p_["c"], p_["h"] / 1000, p_["r"] / 1000
+                a_ = (ox + c_[0] / 1000, oy + c_[1] / 1000, oz + c_[2] / 1000)
+                ax_ = "xyz".index(p_["eixo"])
+                b_ = list(a_); b_[ax_] += h_
+                if abs(h_) > 1e-4:
+                    m.linear("inserto", nm_, PerfilRetangular(2 * r_, 2 * r_, p_["marca"]), a_, tuple(b_), "Parafusos da cobertura",
+                             cima=(0.0, 0.0, 1.0) if ax_ != 2 else (0.0, 1.0, 0.0), material="aco")
+            elif p_["g"] == "barra":
+                a_ = tuple(o + v / 1000 for o, v in zip((ox, oy, oz), p_["a"]))
+                b_ = tuple(o + v / 1000 for o, v in zip((ox, oy, oz), p_["b"]))
+                m.linear("inserto", nm_, PerfilRetangular(0.051, 0.051, "L 51×51×4,8"), a_, b_, grupo, material="aco")
+
+    for xe in CB2["emendas_x"]:
+        _lig(LCB.emenda_w(), xe, y2, zc_w(xe) - W_.d / 2000, GL2)
+    for a_ in CB2["apoios_diretos"]:
+        _lig(LCB.apoio_w_pilar(), a_["x"], y2, a_["z_concreto"], GL2)
+    for mt_ in CB2["montantes"]:
+        _lig(LCB.montante(mt_["L_m"] * 1000), mt_["x"], y2, mt_["z_base"] - 0.020, GL2)
     for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
         xw = xt_ - 0.027
-        zc = z_top(xw)
-        suporte_st(m, "ST-W (terça na W 310 da linha 2; 2 M12 na mesa)", xw, y2, zc, esperas=())
-        for dy in (-0.06, 0.06):
-            m.linear("inserto", "M12 8.8 (ST-W × mesa da W)", PARAF, (xw - 0.075, y2 + dy, zc - 0.02), (xw - 0.075, y2 + dy, zc + 0.02), "Parafusos da cobertura", material="aco")
-        for sy in (-1, 1):                                   # mão-francesa L 51 × 51 × 4,8: da terça (fundo) à mesa inferior da W
-            pa = (xw + 0.03, y2 + sy * 0.30, zc + 0.010 + 0.05)
-            pb = (xw + 0.03, y2 + sy * (W_.bf / 2000 + 0.01), zc - W_.d / 1000 + W_.tf / 1000)
-            m.linear("inserto", "MF-1 mão-francesa L 51×51×4,8 (1 M12 em cada ponta)", PerfilRetangular(0.051, 0.051), pa, pb, GL2, material="aco")
+        _lig(LCB.terca_w(), xw, y2, z_top(xw), GL2)
 
     # 5c/5d. rev09d (DEC-060, 24/10): escadas metálicas interna (ES01) e externa (ES02) com guarda-corpos e corrimãos (RT CBMRS 11)
     # e todas as ligações parafusadas — peças geradas por escadas_detalhe.py (fonte única: pranchas ES01/ES02/ES03, lista e 3D)
@@ -667,7 +674,7 @@ def montar() -> ModeloBIM:
 
     # 7. insertos e ligações (conferência no 3D)
     INS, PIN = "Insertos metálicos", "Pinos, tubos e neoprenes"
-    for i in range(3, 9):                                  # rev09: linha 2 sem TS-01 (W 310 + ST-W, mais abaixo)
+    for i in range(3, 9):                                  # rev09: linha 2 sem TS-01 (W 200 + ST-W, mais abaixo)
         y = Y_LIN[i - 1]
         AP, PT = LG["apoios_ts"], LG["PINO_TS"]                 # rev04: assentos horizontais; pinos a 7,75 cm das 4 pontas
         # rev10 (DEC-061): nas linhas sobre a I130 (3, 5, 6, 7, 8) a TS-01 assenta na mesa + consolo lateral CT-I130 com NEO-3C 150 × 300;

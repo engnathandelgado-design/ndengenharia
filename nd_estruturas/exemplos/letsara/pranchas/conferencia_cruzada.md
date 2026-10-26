@@ -1,14 +1,9 @@
-# Conferência cruzada — 284 verificações, 7 divergências
+# Conferência cruzada — 307 verificações, 1 divergências
 
 | resultado | item | folha | detalhe |
 |---|---|---|---|
-| ERRO | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB03 | 8. Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada  |
-| ERRO | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB04 | LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE) |
-| ERRO | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CT01 | DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; EIXO 2 COM W 310 M |
-| ERRO | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-LA01 | 12 ocorrência(s): mezanino, pisos (topo da capa) +3,90 e +7,30; apoio 10 cm no topo das  |
-| ERRO | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PM02 | EMISSÃO INICIAL: P14 SEPARADO DO PM-01 (CABEÇA ATÉ O FUNDO DA W 310, D |
-| ERRO | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-1 | NEO-4 (pilar) ou NEO-3 (I130) |
-| ERRO | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-3 | NEO-3 100×300 (I130 / centro) |
+| PENDENTE | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-LA01 | PENDENTE DEC-068: 7 Ø12,7 (uma por nervura) dá uso 1,004 no ELU; alternativas no quadro decisao_laje_sem_152 aguardam o Nathan — 14 ocorrência(s): mezanino, pisos (topo da capa) +3,90 e +7,30; apoio 10 cm no topo das  |
+| ERRO | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-3 | NEO-3C 150×300 (I130, linhas 3 e 5–8); NEO-3 100×300 só no P20 (linha 4) |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CG01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-CG01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CM01 | nenhuma |
@@ -20,12 +15,30 @@
 | ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB02 | ok |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB02 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB03 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB03 | ok |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB03 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB04 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB04 | ok |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB04 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB05 | nenhuma |
 | ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB05 | ok |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB05 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB06 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB06 | ok |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB06 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB07 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB07 | ok |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB07 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB08 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB08 | ok |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB08 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-COB09 | nenhuma |
+| ok | C4 acabamentos de funilaria (sem marca de catálogo) | ND-LET-COB09 | ok |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-COB09 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CS01 | nenhuma |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-CS01 | ok |
+| ok | C5 marcas de consolo existem no registro | ND-LET-CS01 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CT01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-CT01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CT02 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-CT02 | ok |
@@ -43,14 +56,18 @@
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-ES04 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-ES05 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-ES05 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-EX01 | nenhuma |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-EX01 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-I130 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 943.6 kg × resumo 943.8 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 784.0 kg × resumo 784.2 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 791.8 kg × resumo 792.0 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 780.7 kg × resumo 780.9 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 1034.3 kg × resumo 1034.4 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 858.7 kg × resumo 858.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 866.6 kg × resumo 866.7 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-I130 | TABELA DE FERROS — 1 UNIDADE: tabela 855.0 kg × resumo 855.1 kg |
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-I130 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-I130 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-I130 | ok |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-IC01 | nenhuma |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-IC01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-LA01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-LA01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-LOC01 | nenhuma |
@@ -217,6 +234,7 @@
 | ok | C5 marcas de consolo existem no registro | ND-LET-PM01 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PM02 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-PM02 | TABELA DE FERROS — 1 UNIDADE: tabela 363.8 kg × resumo 363.8 kg |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PM02 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PM02 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PM02 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PP-A | nenhuma |
@@ -259,30 +277,35 @@
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-TS01-1 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-TS01-1 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-TS01-1 | ok |
+| ok | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-1 | ok |
+| ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-TS01-2 | nenhuma |
+| ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-TS01-2 | nenhuma |
+| ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-TS01-2 | ok |
+| ok | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-2 | ok |
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-TS01-3 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-TS01-3 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-TS01-3 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-VB01 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 118.9 kg × resumo 118.9 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 237.7 kg × resumo 237.8 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 119.9 kg × resumo 120.0 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 239.8 kg × resumo 239.9 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 119.9 kg × resumo 120.0 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 239.8 kg × resumo 239.9 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 118.9 kg × resumo 118.9 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 237.7 kg × resumo 237.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 141.0 kg × resumo 141.0 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 282.0 kg × resumo 282.0 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 142.3 kg × resumo 142.3 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 284.5 kg × resumo 284.5 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 142.3 kg × resumo 142.3 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 284.5 kg × resumo 284.5 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 141.0 kg × resumo 141.0 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 282.0 kg × resumo 282.0 kg |
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-VB01 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-VB01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-VB01 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-VM01 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 319.2 kg × resumo 319.4 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 6 UNIDADES: tabela 1915.5 kg × resumo 1916.3 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 320.3 kg × resumo 320.5 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 8 UNIDADES: tabela 2562.6 kg × resumo 2563.8 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 253.4 kg × resumo 253.5 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 2 UNIDADES: tabela 506.8 kg × resumo 507.1 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 184.3 kg × resumo 184.4 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 2 UNIDADES: tabela 368.7 kg × resumo 368.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 339.8 kg × resumo 339.9 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 6 UNIDADES: tabela 2038.8 kg × resumo 2039.4 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 341.1 kg × resumo 341.2 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 8 UNIDADES: tabela 2729.2 kg × resumo 2730.0 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 266.8 kg × resumo 266.9 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 2 UNIDADES: tabela 533.6 kg × resumo 533.7 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 1 UNIDADE: tabela 190.1 kg × resumo 190.1 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-VM01 | TABELA DE FERROS — 2 UNIDADES: tabela 380.2 kg × resumo 380.3 kg |
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-VM01 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-VM01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-VM01 | ok |

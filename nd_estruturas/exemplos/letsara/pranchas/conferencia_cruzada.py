@@ -100,7 +100,7 @@ for fl in idx:
         su = [t for t in tx if "7,30" in t and "sem uso" in t.lower()]
         r(not su, "C4 laje +7,30 descrita como laje de cobertura", fl, "ok" if not su else su[0][:80])
         if fl.startswith("ND-LET-TS01"):
-            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I130" in t or "topo" in t.lower()) and "P11" not in t]   # NEO-3 só no topo do P11 (linha 4)
+            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I130" in t or "topo" in t.lower()) and "100×300" not in t and "P11" not in t]   # NEO-3 só no topo do P11 (linha 4)
             r(not neo, "C4 NEO-3C no apoio das TS-01 sobre a I130", fl, "ok" if not neo else neo[0][:80])
         # C5 — marcas de consolo
         mcs = {m for t in tx for m in re.findall(r"(?<![A-Z0-9-])C(\d{1,2})(?![0-9×x])", t)}

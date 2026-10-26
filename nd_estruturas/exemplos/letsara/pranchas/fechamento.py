@@ -323,8 +323,8 @@ def corte_parede(pr, V, origem, esc=50):
     return c
 
 
-def planta_chave(pr, Vs, origem, esc=1000):
-    k = pr.vista("PLANTA-CHAVE", origem, esc, titulo="PLANTA-CHAVE", subtitulo="parede da(s) vista(s) em destaque", unidade="cm")
+def planta_chave(pr, Vs, origem, esc=1000, subtitulo="parede da(s) vista(s) em destaque"):
+    k = pr.vista("PLANTA-CHAVE", origem, esc, titulo="PLANTA-CHAVE", subtitulo=subtitulo, unidade="cm")
     k.ret(FACE_X[0], FACE_Y[0], FACE_X[1] - FACE_X[0], FACE_Y[1] - FACE_Y[0], "VISTA")
     for i, y in enumerate(Y_LIN):
         k.linha((FACE_X[0] - 1500, M(y)), (FACE_X[1] + 1500, M(y)), "EIXO")
@@ -356,6 +356,29 @@ def planta_chave(pr, Vs, origem, esc=1000):
         k.circulo((cx + off[0], cy + off[1]), 1800, "INDICACAO")
         k.texto((cx + off[0], cy + off[1]), V, "nota", "MIDDLE_CENTER")
     return k
+
+
+def chave_todas(pr, esc=1000):
+    """rev11 (checklist 6): folhas de detalhe comuns a todas as fachadas (PP00–PP06) levam a planta-chave com todas as paredes
+    nas cores da paleta A–J, posta num espaço livre da folha (procura automática fora das vistas, tabelas e carimbo)."""
+    from prancha_nd import Prancha as _P
+    sub = "detalhe vale para todas as paredes (cores A–J)"
+    t = _P(pr.formato if hasattr(pr, "formato") else "A1", dict(pr.dados))
+    kk = planta_chave(t, list("ABCDEFGHIJ"), (0, 0), esc, sub)
+    b = kk.bbox_papel()
+    bx0, by0, bx1, by1 = b[0], b[1] - 14, b[2], b[3]
+    w_ = max(bx1 - bx0, 150)
+    caixas = [v.bbox_papel() for v in pr.vistas] + [tuple(t_[:4]) for t_ in pr.blocos_livres] + [pr.carimbo_bbox]
+    caixas = [c for c in caixas if c]
+    qx0, qy0, qx1, qy1 = pr.quadro
+    livre = lambda x0, y0: all(x0 + w_ / 2 + (bx1 - bx0) / 2 + 3 < c[0] or x0 - (w_ - (bx1 - bx0)) / 2 - 3 > c[2] or y0 + (by1 - by0) + 3 < c[1] or y0 - 3 > c[3]
+                                for c in caixas)
+    for yy in [qy0 + 4 + 5 * i for i in range(int((qy1 - qy0 - (by1 - by0) - 8) / 5))]:
+        for xx in [qx0 + 4 + (w_ - (bx1 - bx0)) / 2 + 5 * j for j in range(int((qx1 - qx0 - w_ - 8) / 5))]:
+            if livre(xx, yy):
+                return planta_chave(pr, list("ABCDEFGHIJ"), (xx - bx0, yy - by0), esc, sub)
+    pr.avisos_extra.append(("ERRO", "sem espaço livre para a planta-chave das fachadas (dividir a folha)"))
+    return None
 
 
 # ================================================================== prancha de produção/montagem por vista
