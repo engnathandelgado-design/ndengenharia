@@ -6,7 +6,7 @@ from cob_comum import cabecalho, XT, PASSO, H_TERCA, B_TERCA, B_INF, D_SUP, D_IN
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CH = json.load(open(AQ + "calha.json"))
-pr = Prancha("A1", cabecalho("ND-LET-COB03", "03/04", "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS"))
+pr = Prancha("A0", cabecalho("ND-LET-COB03", "03/04", "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS"))
 pr.revisao("06", "18/10/2026", "CALHA 300×150 NO EIXO A; 9 DESCIDAS Ø200; RUFOS TRANSFERIDOS PARA A ND-LET-COB04 (FUNILARIA)")
 C45 = math.cos(math.radians(45))
 I3 = 0.03
@@ -51,7 +51,7 @@ def suporte(v):
 
 
 # ------------------------------------------------------------------ CORTE 1 — ENTRE PILARES (placa da platibanda)
-c1 = pr.vista("CORTE 1", (140, 300), 5, titulo="CORTE 1 — CALHA NO EIXO A, ENTRE PILARES", subtitulo="seção transversal à calha; placa de 10 cm por fora dos pilares (rufos na ND-LET-COB04); cotas em mm")
+c1 = pr.vista("CORTE 1", (140, 420), 5, titulo="CORTE 1 — CALHA NO EIXO A, ENTRE PILARES", subtitulo="seção transversal à calha; placa de 10 cm por fora dos pilares (rufos na ND-LET-COB04); cotas em mm")
 ZB = Z_FUNDO - 250
 ZTOPO = Z_TOP_CALHA + 650
 c1.ret(-400, ZB, 100, ZTOPO - ZB, "CORTADO"); c1.hachura([(-400, ZB), (-300, ZB), (-300, ZTOPO), (-400, ZTOPO)], "AR-CONC", 0.03)
@@ -74,7 +74,7 @@ c1.chamada((280, ZT0 + H_TERCA + 30), (10, 52), "telha avança 150 além da aba 
 c1.chamada((X_T0, ZT0 + 150), (20, 12), "1ª terça Z 302 (40 cm livres)")
 
 # ------------------------------------------------------------------ CORTE 2 — NA LINHA DO PILAR (descida ao lado)
-c2 = pr.vista("CORTE 2", (405, 300), 10, titulo="CORTE 2 — CALHA NA LINHA DO PILAR P1", subtitulo="cabeça do pilar 40×30 até +10,00; TS-01 no recuo; descida Ø200 ao lado do pilar")
+c2 = pr.vista("CORTE 2", (470, 420), 10, titulo="CORTE 2 — CALHA NA LINHA DO PILAR P1", subtitulo="cabeça do pilar 40×30 até +10,00; TS-01 no recuo; descida Ø200 ao lado do pilar")
 REC = LG["REC"][0] * 1000 - ZREF
 c2.ret(-300, ZB, 600, REC - ZB, "CORTADO"); c2.hachura([(-300, ZB), (300, ZB), (300, REC), (-300, REC)], "AR-CONC", 0.03)
 c2.ret(-300, REC, 300, PLAT - REC, "CORTADO"); c2.hachura([(-300, REC), (0, REC), (0, PLAT), (-300, PLAT)], "AR-CONC", 0.03)
@@ -95,7 +95,7 @@ for z, t in ((REC, "+" + f((REC + ZREF) / 1000, 3)), (Z_FUNDO, "+" + f((Z_FUNDO 
     c2.texto((-600, z), t, "min", "MIDDLE_RIGHT")
 
 # ------------------------------------------------------------------ PLANTA PARCIAL 1:50 (linhas 1 a 3)
-pp = pr.vista("PLANTA", (606, 296), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares P1 de todas as linhas; caimento 0,5 % para as saídas")
+pp = pr.vista("PLANTA", (760, 416), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares P1 de todas as linhas; caimento 0,5 % para as saídas")
 Y3 = YLmm[1] + 3000
 pp.ret(-400, -300, 100, Y3 + 300, "CORTADO")
 for y in YLmm[:2]:
@@ -114,7 +114,7 @@ pp.chamada((-350, YLmm[0] - 200), (20, -12), "extravasor Ø100 (saída por dentr
 pp.chamada((XC0 + BC, YLmm[1] + 2400), (14, 24), f"calha {BC}×{HC} contínua, juntas a cada ≈ 20 m")
 
 # ------------------------------------------------------------------ DETALHE SC-1 e RUFOS
-d = pr.vista("SC-1", (170, 150), 5, titulo="DETALHE 3 — SUPORTE DA CALHA SC-1", subtitulo="ferro chato 38 × 6,35 A36 galvanizado, a cada 750 mm")
+d = pr.vista("SC-1", (170, 170), 5, titulo="DETALHE 3 — SUPORTE DA CALHA SC-1", subtitulo="ferro chato 38 × 6,35 A36 galvanizado, a cada 750 mm")
 d.poli([(0, 0), (-60, 0), (-60 - (X_T0 - 60 - XC0 - BC - 6), -(ZT0 + 60 - Z_FUNDO + 6)), (-X_T0 + XC0 - 6, -(ZT0 + 60 - Z_FUNDO + 6)), (-X_T0 + XC0 - 6, -(ZT0 + 60 - Z_FUNDO + 6) + 96)], "METALICA")
 d.ret(-3, -40, 3, 400, "METALICA")
 for zz in (-15, 25):

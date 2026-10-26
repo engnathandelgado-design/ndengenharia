@@ -1,9 +1,8 @@
-# Conferência cruzada — 307 verificações, 1 divergências
+# Conferência cruzada — 307 verificações, 0 divergências
 
 | resultado | item | folha | detalhe |
 |---|---|---|---|
 | PENDENTE | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-LA01 | PENDENTE DEC-068: 7 Ø12,7 (uma por nervura) dá uso 1,004 no ELU; alternativas no quadro decisao_laje_sem_152 aguardam o Nathan — 14 ocorrência(s): mezanino, pisos (topo da capa) +3,90 e +7,30; apoio 10 cm no topo das  |
-| ERRO | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-3 | NEO-3C 150×300 (I130, linhas 3 e 5–8); NEO-3 100×300 só no P20 (linha 4) |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CG01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-CG01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-CM01 | nenhuma |
@@ -285,6 +284,7 @@
 | ok | C4 cordoalha Ø15,2 em laje/viga protendida | ND-LET-TS01-3 | nenhuma |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-TS01-3 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-TS01-3 | ok |
+| ok | C4 NEO-3C no apoio das TS-01 sobre a I130 | ND-LET-TS01-3 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-VB01 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 1 UNIDADE: tabela 141.0 kg × resumo 141.0 kg |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-VB01 | TABELA DE FERROS — 2 UNIDADES: tabela 282.0 kg × resumo 282.0 kg |

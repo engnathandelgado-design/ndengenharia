@@ -361,6 +361,7 @@ class Prancha:
         self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp", "forma", "trechos", "esp", "obs") if k in b} for b in barras]))
         """Relação do aço com croqui de dobramento (padrão de mercado BIM). barras: dict(pos, diam, qtd, comp (cm),
         forma=[(x,y) cm ...] polilinha da barra, trechos=['84','14',...] rótulos na ordem dos segmentos)."""
+        h_lin = max(h_lin, 4 * ALTURAS["min"] + 2.0)                 # rev11: rótulos dos trechos (3,0 mm) cabem acima e abaixo do croqui
         larg = [13, 13, 14, 20, 66, 20, 20]
         W = sum(larg)
         cab = ["POS", "Ø", "QUANT", "C. UNIT (cm)", "CROQUI (cm)", "C. TOTAL (m)", "MASSA (kg)"]
@@ -394,7 +395,7 @@ class Prancha:
                     pts = b.get("forma") or [(0, 0), (b["comp"], 0)]
                     xs_, ys_ = [p[0] for p in pts], [p[1] for p in pts]
                     bw_, bh_ = max(xs_) - min(xs_), max(ys_) - min(ys_)
-                    esc = min((w - 16) / max(bw_, 1e-6), (h_lin - 6) / max(bh_, 1e-6))
+                    esc = min((w - 16) / max(bw_, 1e-6), (h_lin - 2 * (ALTURAS["min"] + 1.2)) / max(bh_, 1e-6))
                     cx0 = xx + w / 2 - bw_ * esc / 2 - min(xs_) * esc
                     cy0 = y - h_lin / 2 - bh_ * esc / 2 - min(ys_) * esc
                     pp = [(cx0 + px * esc, cy0 + py * esc) for px, py in pts]
@@ -440,9 +441,9 @@ class Prancha:
         y0 = Q[3] - 30                                                    # altura fixa: nada abaixo precisa mudar
         self.ret(Q[0] + 4, y0, Q[0] + larg, Q[3] - 4, "CARIMBO")
         if duas:                                                          # linha de dados, nomes e título em 3 linhas
-            self.texto(Q[0] + 10, Q[3] - 10, linha2, "nota", "TEXTO")
-            self.texto(Q[0] + 10, Q[3] - 18.5, _MNOVO + marca, "grande", "TITULO")
-            self.texto(Q[0] + 10, Q[3] - 26.5, titulo, "titulo", "TITULO")
+            self.texto(Q[0] + 10, Q[3] - 8.6, linha2, "nota", "TEXTO")
+            self.texto(Q[0] + 10, Q[3] - 20.0, _MNOVO + marca, "grande", "TITULO")
+            self.texto(Q[0] + 10, Q[3] - 27.6, titulo, "titulo", "TITULO")
         else:
             self.texto(Q[0] + 10, Q[3] - 14, linha2, "nota", "TEXTO")
             self.texto(Q[0] + 10, Q[3] - 24, _MNOVO + marca, "grande", "TITULO")

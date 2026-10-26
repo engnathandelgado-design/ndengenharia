@@ -76,7 +76,7 @@ for k in range(8):
         pr.msp.add_circle((xp, yp), 4.0, dxfattribs={"layer": "INDICACAO"})
         pr.texto(xp, yp, BASE_K[k], "nota", "TITULO", "MIDDLE_CENTER")
     for kk in (NT // 2 + 1, NT + NT // 2 + 1):                      # rev08: entre duas terças, paralelo a elas
-        v.texto(M(ym - 1300, (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L = {L_TERCA[k]}", "min", "MIDDLE_CENTER")
+        v.texto(M(YLmm[k] + 0.375 * VAOS[k], (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L {L_TERCA[k]}", "min", "MIDDLE_CENTER")   # rev11: entre as correntes
 v.cota_h(YLmm, -900, -10, total=False)
 v.cota_h([YLmm[0], YLmm[-1]], X_E + 3000, 8, total=False)
 v.cota_v([XT[0], XT[NT - 1]], YLmm[0] - 900, -12, total=False)
@@ -99,8 +99,8 @@ _ym = (YLmm[6] + YLmm[7]) / 2
 v.chamada(M(YLmm[7] + 7200, NOS_X[1] - 2300), (40, -22), "X Ø16 c/ esticador (vãos 4-5 a 8-9, painéis de 8 e 7 terças; COB02)")
 v.chamada(M(YLmm[8], XT[NT + 2]), (16, -6), f"fachada: terça passa {EXT_F} do eixo, ST-1V na VB (eixo 9: ST-1V-R, det. 2)")
 v.chamada(M(YLmm[8] - 200, X_C), (16, -8), "pilar central / I130 (eixo C)")
-v.marcador_detalhe(M(YLmm[5], XT[NT + 8]), 600, 1, ang=60, dist=8)
-v.marcador_detalhe(M(YLmm[8], XT[NT + 11]), 500, 2, ang=-50, dist=8)
+v.marcador_detalhe(M(YLmm[5], (XT[NT + 8] + XT[NT + 9]) / 2), 600, 1, ang=0, dist=0.5)     # rev11: número no vão entre terças
+v.marcador_detalhe(M(YLmm[8], (XT[NT + 11] + XT[NT + 12]) / 2), 500, 2, ang=180, dist=0.5)
 
 # ------------------------------------------------------------------ geometria dos detalhes (mm)
 ST1 = dict(t=9.5, larg=220, h=290, aba=150)   # ST-1P: chapa dobrada 9,5 × 220 (ao longo da terça); aba vertical 290, horizontal 150
@@ -127,7 +127,7 @@ def parafuso_h(vw, x0, x1, z):
 # ------------------------------------------------------------------ DETALHE 1 — APOIO INTERNO NA TS-01 E EMENDA POR TRANSPASSE (elevação 1:10)
 E10, E5 = 10, 5
 XL = A_TR + 250
-e = pr.vista("DETALHE 1A", (148, 385), E10, titulo="DETALHE 1 — APOIO NA TS-01 E EMENDA POR TRANSPASSE (METLAP)",
+e = pr.vista("DETALHE 1A", (148, 385), E10, titulo="DETALHE 1 — APOIO E EMENDA POR TRANSPASSE (METLAP)",
              subtitulo=f"elevação no plano da alma; terça do vão da esquerda por trás, a da direita na frente; transpasse {2 * A_TR}")
 e.ret(-XL, -150, 2 * XL, 150, "CORTADO"); e.hachura([(-XL, -150), (XL, -150), (XL, 0), (-XL, 0)], "AR-CONC", 0.03)
 for yy in (-60, 60):
@@ -252,7 +252,7 @@ s5.chamada((0, Z_DIAG), (-34, -8), "diagonal Ø18 (marcas D)")
 s5.chamada((0, Z_X[0]), (-34, -14), "X: oblongos 18×28 (marcas X / Y)")
 s5.chamada((-B_TERCA + 8, H_TERCA - 8), (-10, 10), f"enrijecedores {D_SUP} / {D_INF} a 45°")
 
-t20 = pr.vista("ESQUEMA DA TERÇA", (760, 300), 12.5, titulo="ESQUEMA DE FURAÇÃO DAS TERÇAS",
+t20 = pr.vista("ESQUEMA DA TERÇA", (760, 244), 12.5, titulo="ESQUEMA DE FURAÇÃO DAS TERÇAS",
                subtitulo="cotas a partir de cada ponta; pontas de transpasse (vãos internos) e de fachada (VB)")
 LT = 2600
 t20.ret(0, 0, 1000, H_TERCA, "METALICA"); t20.ret(LT - 1000, 0, 1000, H_TERCA, "METALICA")

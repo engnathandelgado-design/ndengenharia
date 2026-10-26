@@ -8,7 +8,7 @@ from prancha_nd import Prancha
 from cob_comum import (YLmm, VAOS, X_C, X_E, LTS, X0E, X0D, XT, PASSO, NOS, NOS_D, VAOS_X, FOLGA, Z_COR, Z_DIAG, Z_X, NOS_X, NOS_X_D, ORE_S, ORE_Y, PAINEL_X, furos_x,
                        H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, A_TR, IDX_2A, NT, marca, cabecalho, CB, LG, f)
 
-pr = Prancha("A1", cabecalho("ND-LET-COB02", "02/04", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
+pr = Prancha("A0", cabecalho("ND-LET-COB02", "02/04", "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS"))
 pr.revisao("01", pr.dados["data"], "desdobrada da COB01; correntes no meio da alma; diagonais no ST-1")
 pr.revisao("02", pr.dados["data"], "X de nó a nó com esticador (sem CH-X); tirantes rígidos L 51; detalhes no padrão de referência")
 pr.revisao("03", "14/10/2026", "17 TERÇAS POR MEIA ÁGUA (c/1,20 m); ORELHAS OR-X PARAFUSADAS NAS ESPERAS ES-2 (SEM SOLDA)")
@@ -22,7 +22,7 @@ ORE = dict(s=140, y=140, larg=60, t=9.5, h_baixo=80, h_alto=120)        # orelha
 Z0T = 10                                     # fundo da terça acima do concreto
 
 # ------------------------------------------------------------------ PLANTA DO VÃO TÍPICO 1:100 (papel: horizontal = x da obra)
-v = pr.vista("PLANTA", (64, 436), 100, titulo="PLANTA DE TRAVAMENTO — VÃO ENTRE OS EIXOS 5 E 6 (TÍPICO DOS VÃOS COM X)",
+v = pr.vista("PLANTA", (64, 676), 100, titulo="PLANTA DE TRAVAMENTO — VÃO ENTRE OS EIXOS 5 E 6 (TÍPICO DOS VÃOS COM X)",
              subtitulo="X nos vãos 4-5 a 8-9 (painéis de 8 e 7 terças); vãos 1-2 a 3-4 iguais, sem o X e sem os furos X das terças")
 for y in (0, VAO):
     v.ret(X0E, y - 200, LTS, 400, "VISTA"); v.ret(X0D, y - 200, LTS, 400, "VISTA")
@@ -68,12 +68,12 @@ _p = v.P(((XT[NT + 7] + XT[NT + 8]) / 2, q[0]))
 v.chamada(((XT[NT + 7] + XT[NT + 8]) / 2, q[0]), (v.P((X_E, 0))[0] + 16 - _p[0], -4), "corrente flexível Ø10 (det. 6)")
 v.chamada((XT[2 * NT - 1] + B_INF, VAO + A_TR), (16, 20), f"terça Z 302 contínua: passa {A_TR} além de cada eixo (transpasse — COB01 det. 1)")
 v.marcador_detalhe((NOS_X[1], 0), 450, 4, ang=60, dist=10)
-v.marcador_detalhe((XT[1], q[0]), 450, 6, ang=-110, dist=8)
+v.marcador_detalhe((XT[1], q[0]), 450, 6, ang=-70, dist=8)
 v.marcador_detalhe((XT[0], 0), 400, 7, ang=-150, dist=6)
 v.marcador_detalhe((XT[3], q[1]), 400, 8, ang=110, dist=6)
 
 # ------------------------------------------------------------------ DETALHE 4 — FIXAÇÃO DO TIRANTE NA CH-T2 (planta 1:5) + CORTE C-C
-d4 = pr.vista("DETALHE 4", (108, 300), 5, titulo="DETALHE 4 — FIXAÇÃO DO X NAS ORELHAS OR-X", subtitulo="planta no topo da viga, nó do contraventamento (sem solda)")
+d4 = pr.vista("DETALHE 4", (108, 470), 5, titulo="DETALHE 4 — FIXAÇÃO DO X NAS ORELHAS OR-X", subtitulo="planta no topo da viga, nó do contraventamento (sem solda)")
 d4.ret(-260, -200, 520, 400, "VISTA")                                         # topo da viga (400)
 d4.chapa(-150, -110, 150, 220, 0.3)                                           # ST-1P (aba horizontal)
 for yy in (-60, 60):
@@ -99,7 +99,7 @@ d4.chamada((-ORE["s"] - 14 * ux, -ORE["y"] - 14 * uy), (6, -22), "arruela + porc
 d4.chamada((ORE["s"] + 120 * ux, -ORE["y"] - 120 * uy), (10, -8), f"X Ø16 a {cx['ang_graus']:.0f}° do eixo da viga")
 d4.chamada((-120, 80), (4, 40), "ST-1P nas esperas ES-1 (ND-LET-COB01)")
 
-c4 = pr.vista("CORTE C-C", (238, 300), 5, titulo="CORTE C-C — PELA ORELHA OR-X", subtitulo="orelhas: baixa (45) e alta (85)")
+c4 = pr.vista("CORTE C-C", (258, 470), 5, titulo="CORTE C-C — PELA ORELHA OR-X", subtitulo="orelhas: baixa (45) e alta (85)")
 c4.ret(-160, -60, 320, 60, "CORTADO"); c4.hachura([(-160, -60), (160, -60), (160, 0), (-160, 0)], "AR-CONC", 0.03)
 c4.chapa(-150, -12.5, 300, 12.5, 0.2)
 c4.chapa(-120, 0, 76, 6.3, 0.25); c4.chapa(-50.3, 0, 6.3, 102, 0.25)                # OR-X (L 102×76×6,3)
@@ -111,7 +111,7 @@ c4.chamada((-47, 85), (12, 12), "2 furos Ø18: X '/' a 45 e X '\\' a 85 do concr
 c4.chamada((-82, 20), (50, 10), "porca M16 + arruela; OR-X apoiada no concreto")
 
 # ------------------------------------------------------------------ DETALHE 5 — TIRANTE Ø16 COM ESTICADOR (1:10, comprimento fora de escala)
-d5 = pr.vista("DETALHE 5", (330, 362), 10, titulo="DETALHE 5 — TIRANTE DO X Ø16 COM ESTICADOR",
+d5 = pr.vista("DETALHE 5", (430, 540), 10, titulo="DETALHE 5 — TIRANTE DO X Ø16 COM ESTICADOR",
               subtitulo="trechos A e B unidos por esticador M16; comprimento fora de escala")
 R = 8
 d5.chapa(-10, -40, 10, 80, 0.25); d5.chapa(2390, -40, 10, 80, 0.25)                       # orelhas das duas pontas
@@ -126,7 +126,7 @@ d5.chamada((60, R), (-4, 16), "rosca M16 120, porca + contraporca + arruela")
 d5.chamada((1500, 18), (6, 14), "esticador M16 forjado galvanizado (corpo 200), rosca direita/esquerda")
 
 # ------------------------------------------------------------------ DETALHE 6 — TRAVAMENTO DAS TERÇAS (planta 1:10) + CORTE D-D (1:5)
-d6 = pr.vista("DETALHE 6", (66, 170), 15, titulo="DETALHE 6 — TRAVAMENTO DAS TERÇAS", subtitulo="planta; 1º espaço da meia água (1ª e 2ª terça), linha L/4")
+d6 = pr.vista("DETALHE 6", (66, 210), 15, titulo="DETALHE 6 — TRAVAMENTO DAS TERÇAS", subtitulo="planta; 1º espaço da meia água (1ª e 2ª terça), linha L/4")
 for x in (0, PASSO):
     d6.ret(x, -350, 3, 700, "METALICA"); d6.ret(x, -350, B_TERCA, 3, "METALICA"); d6.linha((x + B_TERCA, -350), (x + B_TERCA, 350), "OCULTA")
 d6.linha((PASSO + 3, 0), (PASSO + 300, 0), "ARMADURA"); d6.interrupcao((PASSO + 300, 0), (PASSO + 400, 0), "ARMADURA")
@@ -142,12 +142,12 @@ d6.cota_h([0, 43, PASSO - 40, PASSO], -350, -10, total=False)
 d6.chamada(((43 + PASSO - 40) / 2, 25), (4, 24), f"tirante rígido L 51×51×3,2, L = {PASSO - 83}")
 d6.chamada((PASSO + 200, 0), (6, 16), "corrente Ø10")
 d6.chamada((PASSO - 15, 55), (12, 26), "calço biselado")
-d6.chamada((PASSO * 0.5, -150), (4, -14), "diagonal Ø16 → ST-1P (det. 7)")
+d6.chamada((PASSO * 0.5, -150), (14, -26), "diagonal Ø16 → ST-1P (det. 7)")
 d6.chamada((3, -300), (4, -10), "1ª terça")
 d6.chamada((PASSO + 3, -300), (6, -6), "2ª terça (D)")
 d6.marcador_corte((PASSO - 25, -160), (PASSO - 25, 160), "D", lado=-1)
 
-c6 = pr.vista("CORTE D-D", (250, 160), 5, titulo="CORTE D-D", subtitulo="clipe do tirante rígido na alma da terça")
+c6 = pr.vista("CORTE D-D", (260, 200), 5, titulo="CORTE D-D", subtitulo="clipe do tirante rígido na alma da terça")
 C45 = math.cos(math.radians(45))
 u = [(B_INF - D_INF * C45, D_INF * C45), (B_INF, 0), (0, 0), (0, H_TERCA), (-B_TERCA, H_TERCA), (-B_TERCA + D_SUP * C45, H_TERCA - D_SUP * C45)]
 c6.poli(u, "METALICA")
@@ -161,7 +161,7 @@ c6.chamada((0, Z_COR), (24, -12), "furo Ø12 (corrente M10)")
 c6.chamada((0, Z_DIAG), (34, 8), "furo Ø18 (diagonal, só marcas D)")
 
 # ------------------------------------------------------------------ DETALHE 7 — DIAGONAL DE ANCORAGEM NO ST-1 (planta 1:10)
-d7 = pr.vista("DETALHE 7", (378, 185), 10, titulo="DETALHE 7 — DIAGONAL NO SUPORTE ST-1P", subtitulo="planta no topo da viga; 1ª terça das pontas de meia água")
+d7 = pr.vista("DETALHE 7", (420, 225), 10, titulo="DETALHE 7 — DIAGONAL NO SUPORTE ST-1P", subtitulo="planta no topo da viga; 1ª terça das pontas de meia água")
 d7.ret(-200, -600, 400, 1200, "VISTA")
 d7.chapa(-100, -100, 200, 200, 0.2)
 d7.chapa(-8, -110, 8, 220, 0.3)
@@ -175,7 +175,7 @@ d7.chamada((-30, 0), (36, 14), "calço biselado + 2 porcas")
 d7.cota_h([-200, -8, B_INF, 200], -600, -10, total=False)
 
 # ------------------------------------------------------------------ DETALHE 8 — CRUZAMENTO DO X NA TERÇA (elevação 1:5)
-d8 = pr.vista("DETALHE 8", (546, 180), 5, titulo="DETALHE 8 — PASSAGEM DO X PELA TERÇA",
+d8 = pr.vista("DETALHE 8", (660, 220), 5, titulo="DETALHE 8 — PASSAGEM DO X PELA TERÇA",
               subtitulo="terças X1..X7 e Y1..Y6; posições y na tabela da COB01")
 d8.ret(-400, 0, 800, H_TERCA, "METALICA"); d8.linha((-400, D_INF), (400, D_INF), "OCULTA"); d8.linha((-400, H_TERCA - D_SUP), (400, H_TERCA - D_SUP), "OCULTA")
 for z, xx in ((Z_X[0], -150), (Z_X[1], 150)):

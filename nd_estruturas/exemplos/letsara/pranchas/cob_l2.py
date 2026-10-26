@@ -35,7 +35,7 @@ MF = CB["mao_francesa"]
 L_ANG, T_ANG = 102, 12.7                                    # L 102 × 102 × 12,7
 Y_M = 30                                                    # eixo do montante 30 mm para o lado da borda (faixa de 2º estágio)
 
-pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo=f"COBERTURA METÁLICA DA LINHA 2 — {NW} NOS PILARES E EM MONTANTES SOBRE AS VM DO +7,30: ELEVAÇÃO, APOIOS, ESPERA, EMENDAS, ST-W E LISTA",
                         desenho="ND-LET-COB05", folha="01/01", fase="PARA APROVAÇÃO", rev="03"))
 pr.revisao("00", "23/10/2026", "EMISSÃO INICIAL (DEC-048): LINHA 2 METÁLICA, SEM TS-01")
@@ -82,7 +82,7 @@ v.chamada((M(MTS[1]["x"]), 7325 + M(MTS[1]["L_m"]) / 2), (8, 16), f"montante {NM
 v.chamada((M(MTS[2]["x"]) + 700, 7040 - 300), (-10, -14), "VM do +7,30 (espera EM-L2 no 2º estágio)")
 
 # ------------------------------------------------------------------ DETALHE 1 — apoio da W na cabeça do pilar (1:10), corte ⊥ à W
-d1 = pr.vista("DETALHE 1", (Q[0] + 490, Q[1] + 150), 10, titulo="DETALHE 1 — APOIO NA CABEÇA DO PILAR", subtitulo="corte ⊥ à W", unidade="mm")
+d1 = pr.vista("DETALHE 1", (Q[0] + 600, Q[1] + 150), 10, titulo="DETALHE 1 — APOIO NA CABEÇA DO PILAR", subtitulo="corte ⊥ à W", unidade="mm")
 pil = [(-200, -400), (200, -400), (200, 0), (-200, 0)]
 d1.poli(pil, "CORTADO", fechada=True); d1.hachura(pil, "AR-CONC", 0.03); d1.interrupcao((-200, -400), (200, -400))
 d1.ret(-140, 0, 280, 20, "VISTA"); d1.ret(-125, 20, 250, 19, "METALICA")
@@ -95,7 +95,7 @@ for yy in (-27.5, 27.5):
 d1.poli([(-27.5, -350), (-27.5, -390), (27.5, -390), (27.5, -350)], "ARMADURA")
 d1.cota_h([-125, -27.5, 27.5, 125], -400, -14, total=False); d1.cota_v([-350, 0], 230, 8, total=False)
 d1.chamada((-27.5, -200), (-24, -8), "4 BR-M16 8.8 L 450")
-d1.chamada((-27.5, -390), (-10, -8), "grampo U Ø10")
+d1.chamada((-27.5, -390), (-24, 6), "grampo U Ø10")
 d1.chamada((130, 10), (14, 8), "graute 20 (±10)")
 d1.chamada((-110, 30), (-6, 20), "CA-L2 250 × 250 × 19")
 d1.chamada((27.5, z_w + TF_W + 20), (14, 18), "porca + contraporca")
@@ -148,7 +148,7 @@ d2.chamada((Y_M, 120), (30, -4), f"{NM}")
 d2.texto((0, -620), "VM 30 × 75 (+7,30, linha 2)", "min", "TOP_CENTER")
 
 # ------------------------------------------------------------------ DETALHE 3 — montante: vista ao longo da W (1:10)
-d3 = pr.vista("DETALHE 3", (Q[0] + 335, Q[1] + 120), 10, titulo="DETALHE 3 — MONTANTE AO LONGO DA W", subtitulo="cantoneiras nas mesas do montante; barras a ±150 nas alças", unidade="mm")
+d3 = pr.vista("DETALHE 3", (Q[0] + 380, Q[1] + 120), 10, titulo="DETALHE 3 — MONTANTE AO LONGO DA W", subtitulo="cantoneiras nas mesas do montante; barras a ±150 nas alças", unidade="mm")
 d3.ret(-450, -450, 900, 190, "VISTA"); d3.interrupcao((-450, -450), (450, -450))
 c2 = [(-450, -260), (450, -260), (450, 0), (-450, 0)]
 d3.poli(c2, "VISTA", fechada=True); d3.hachura(c2, "AR-CONC", 0.015)
@@ -178,7 +178,7 @@ d3.chamada((D_M / 2 + 55, zf - 10), (20, -4), "furo oblongo ao longo da W")
 d3.texto((0, -620), "faixa de 2º estágio da VM", "min", "TOP_CENTER")
 
 # ------------------------------------------------------------------ DETALHE 4 — emenda (1:10)
-d4 = pr.vista("DETALHE 4", (Q[0] + 470, Q[1] + 238), 10, titulo=f"DETALHE 4 — EMENDA DA {NW}", subtitulo="TL-1 nas mesas + TL-2 na alma; M16 8.8", unidade="mm")
+d4 = pr.vista("DETALHE 4", (Q[0] + 560, Q[1] + 290), 10, titulo=f"DETALHE 4 — EMENDA DA {NW}", subtitulo="TL-1 nas mesas + TL-2 na alma; M16 8.8", unidade="mm")
 d4.ret(-400, 0, 800, D_W, "METALICA"); d4.linha((0, 0), (0, D_W), "METALICA")
 d4.ret(-150, D_W, 300, 9.5, "METALICA"); d4.ret(-150, -9.5, 300, 9.5, "METALICA"); d4.ret(-100, (D_W - 130) / 2, 200, 130, "OCULTA")
 for xx in (-110, -50, 50, 110):
@@ -191,7 +191,7 @@ d4.chamada((110, D_W + 9), (10, 12), "TL-1 9,5 × 100 × 300 (2 por emenda), 8 M
 d4.chamada((50, D_W / 2 + 35), (30, 6), "TL-2 6,3 × 130 × 200 (2), 4 M16")
 
 # ------------------------------------------------------------------ DETALHE 5 — terça na W: ST-W e mão-francesa (seção, 1:10)
-d5 = pr.vista("DETALHE 5", (Q[0] + 604, Q[1] + 150), 10, titulo="DETALHE 5 — TERÇA NA W", subtitulo="ST-W e MF-1", unidade="mm")
+d5 = pr.vista("DETALHE 5", (Q[0] + 800, Q[1] + 150), 10, titulo="DETALHE 5 — TERÇA NA W", subtitulo="ST-W e MF-1", unidade="mm")
 d5.ret(-BF_W / 2, D_W - TF_W, BF_W, TF_W, "METALICA"); d5.ret(-BF_W / 2, 0, BF_W, TF_W, "METALICA"); d5.ret(-TW_W / 2, TF_W, TW_W, D_W - 2 * TF_W, "METALICA")
 d5.poli([(-90, D_W + 6.3), (90, D_W + 6.3), (90, D_W + 6.3 + 150)], "METALICA")
 d5.ret(-45, D_W + 6.3, 90, 302, "OCULTA")

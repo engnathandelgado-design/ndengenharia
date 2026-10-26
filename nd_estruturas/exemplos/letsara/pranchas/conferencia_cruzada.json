@@ -1,6 +1,6 @@
 {
  "total": 307,
- "erros": 1,
+ "erros": 0,
  "pendentes_decisao": 1,
  "itens": [
   {
@@ -1362,10 +1362,10 @@
    "pendente": false
   },
   {
-   "ok": false,
+   "ok": true,
    "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
    "folha": "ND-LET-TS01-3",
-   "detalhe": "NEO-3C 150×300 (I130, linhas 3 e 5–8); NEO-3 100×300 só no P20 (linha 4)",
+   "detalhe": "ok",
    "pendente": false
   },
   {
