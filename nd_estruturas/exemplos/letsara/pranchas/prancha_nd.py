@@ -979,7 +979,7 @@ class Prancha:
         return avisos
 
 
-DESEMBARACAR = True                             # rev11: desloca rótulos e chamadas em conflito antes de verificar
+DESEMBARACAR = __import__("os").environ.get("ND_DESEMB", "1") == "1"                            # rev11: desloca rótulos e chamadas em conflito antes de verificar
 PPI_MIN = 400                                   # rev11: resolução mínima das imagens raster no tamanho impresso
 _CAP, _DESC = 0.729, 0.236                      # DejaVu Sans: altura de maiúscula e descendente (fração do corpo)
 
@@ -1302,8 +1302,12 @@ class Vista:
         self._bbox_titulo = (cx - w1 / 2, y - 7, cx + w1 / 2, y + 5)
 
     def mover(self, dx, dy):
+        import copy as _cp
         for e in self.ents + getattr(self, "_tit", []):
+            pat = _cp.deepcopy(e.pattern.lines) if e.dxftype() == "HATCH" and getattr(e, "pattern", None) else None
             e.translate(dx, dy, 0)
+            if pat is not None:                      # o translate do ezdxf aplica a escala do padrão nas linhas (padrão 33× mais denso)
+                e.pattern.lines = pat
         if getattr(self, "_bbox_titulo", None):
             t = self._bbox_titulo
             self._bbox_titulo = (t[0] + dx, t[1] + dy, t[2] + dx, t[3] + dy)

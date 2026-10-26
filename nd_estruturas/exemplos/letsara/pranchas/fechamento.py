@@ -847,7 +847,7 @@ def prancha_cm():
         hachura_cor(lg, _r(0, yy_, 10, yy_ + 5), V_, 0.4)
         lg.poli(_r(0, yy_, 10, yy_ + 5), "VISTA", fechada=True)
         lg.texto((13, yy_ + 1), f"VISTA {V_} — {VISTAS[V_]['titulo'].split(' — ')[1].split(' (')[0]}", "min")
-    pr.imagem(XC, Q[1] + 140, XC + 186, Q[1] + 290, "/home/claude/letsara/pranchas/img/iso_fachadas.png",
+    pr.imagem(XC, Q[1] + 168, XC + 186, Q[1] + 300, "/home/claude/letsara/pranchas/img/iso_fachadas.png",
               titulo="ISOMÉTRICO DO FECHAMENTO — CORES POR PAREDE", subtitulo="placas com transparência de 60 %; pilares e vigas em cinza")
     pos = {"A": (19.75, 85.6), "B": (-5.5, 54.5), "C": (19.75, 25.5), "D": (45.0, 54.5), "E": (-5.5, 19.7), "F": (45.0, 19.7),
            "G": (19.75, 13.5), "H": (-5.5, 4.8), "I": (19.75, -3.6), "J": (45.0, 4.8)}
