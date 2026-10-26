@@ -18,8 +18,24 @@ MASSA_ACO = {5.0: 0.154, 6.3: 0.245, 8.0: 0.395, 10.0: 0.617, 12.5: 0.963, 16.0:
              20.0: 2.466, 22.0: 2.984, 25.0: 3.853, 32.0: 6.313, 40.0: 9.865}
 # rev06e: padrão gráfico da usina (SP201/SP202/SP301/SP302): texto 1,8–2,0, cota 1,8 marrom com seta, armadura verde fina,
 # concreto preto, chapa preta com hachura cinza, hierarquia de espessuras corte > vista > armadura > cota > hachura
-ALTURAS = {"min": 1.6, "nota": 2.0, "cota": 1.8, "sub": 2.5, "titulo": 3.5, "grande": 5.0}
-DIM_K, DIM_DLI = 0.65, 4.5                 # cadeias: distância à peça = 0,65 × a pedida pelo gerador; parcial → total 4,5 mm
+# rev11 (26/10/2026, pedido do Nathan — legibilidade no celular e impresso): alturas no PAPEL (mm), iguais em qualquer escala
+# (o motor desenha em mm de papel; h_modelo = h_papel × denominador). Cota ≥ 2,5; notas/rótulos ≥ 2,5; nomes de peça 3,5; títulos 5,0.
+ALTURAS = {"min": 2.5, "nota": 2.5, "cota": 2.5, "peca": 3.5, "sub": 3.0, "titulo": 5.0, "grande": 6.0}
+# rev11 (Nathan 26/10/2026 — quem lê na fábrica são pessoas idosas): folhas de DETALHAMENTO DE PEÇA (vão para a produção) com
+# texto maior: cota 3,5; rótulos de barra/posição 3,5; tabelas e notas 3,0; títulos de vista 6,0; nome/seção/L da peça 8,0.
+ALTURAS_GERAL = dict(ALTURAS)
+ALTURAS_PECA = {"min": 3.0, "nota": 3.0, "cota": 3.5, "peca": 3.5, "sub": 3.5, "titulo": 6.0, "grande": 8.0}
+MIN_TIPO = {"geral": dict(cota=2.5, texto=2.5), "peca": dict(cota=3.5, texto=3.0)}
+_PECA_PREF = ("PL", "PF", "PC", "PM", "PG", "PE", "TS01", "I130", "VM01", "VB01", "LA01", "PP0", "PV01", "ES0", "MT01", "AR-", "PE0", "IC01")
+
+
+def tipo_folha(desenho):
+    """'peca' para as folhas de detalhamento que vão para a produção; 'geral' para plantas, cortes, montagem e gerais."""
+    cod = str(desenho).replace("ND-LET-", "")
+    return "peca" if cod.startswith(_PECA_PREF) and not cod.startswith("PP-") else "geral"
+ALTURAS_CARIMBO = {"min": 1.6, "nota": 2.0, "cota": 1.8, "sub": 2.5, "titulo": 3.5, "grande": 5.0}   # selo: tamanhos da rev10
+H_COTA_MIN = 2.5                            # gerar_tudo: ERRO se algum texto de cota sair menor que isto no papel
+DIM_K, DIM_DLI = 0.65, 6.0                 # cadeias: distância à peça = 0,65 × a pedida pelo gerador; parcial → total 4,5 mm
 COR_COTA = (149, 74, 0)                    # marrom da usina
 CAMADAS = {
     "MOLDURA": (7, 50, "Continuous"), "CARIMBO": (7, 35, "Continuous"), "CARIMBO_FINO": (8, 18, "Continuous"),
@@ -45,6 +61,9 @@ REEMISSAO = dict(data="23/10/2026", desc="REEMISSÃO EXECUTIVA (PACOTE REV09): P
 REEMISSAO2 = dict(data="24/10/2026")
 # 25/10/2026 (pacote rev10, DEC-061/062): terceira reemissão — só nas folhas com revisão manual desta data
 REEMISSAO3 = dict(data="25/10/2026")
+# rev11 (26/10/2026): TODAS as folhas mudam (textos e cotas ≥ 2,5 mm no papel, imagens ≥ 400 ppi) — revisão automática em todas;
+# as folhas com revisão manual nesta data acrescentam a descrição própria.
+REEMISSAO4 = dict(data="26/10/2026", padrao="REV11: TEXTOS E COTAS ≥ 2,5 MM NO PAPEL; IMAGENS EM ALTA RESOLUÇÃO; PÉ DOS PILARES NO CÁLICE NOS CORTES")
 _NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
@@ -132,6 +151,9 @@ class Prancha:
                           data=datetime.date.today().strftime("%d/%m/%Y"), folha="01/01",
                           projeto=EMPRESA["rt"], desenhista="ND Engenharia", verificado="", fase="EXECUTIVO")
         self.dados.update(dados or {})
+        self.tipo = tipo_folha(self.dados.get("desenho", ""))                  # rev11: tamanhos de texto por tipo de folha
+        ALTURAS.clear(); ALTURAS.update(ALTURAS_PECA if self.tipo == "peca" else ALTURAS_GERAL)
+        self._carimbo_ativo, self._txt_pequenos = False, []
         if EMISSAO:
             self.dados["fase"] = EMISSAO["fase"]
         self.cor = cor
@@ -152,9 +174,9 @@ class Prancha:
             doc.layers.add(n, color=c, lineweight=lw, linetype=lt)
         doc.layers.get("COTA").rgb = COR_COTA
         ds = doc.dimstyles.new("ND")
-        for k, v in dict(dimtxsty="ND", dimtxt=ALTURAS["cota"], dimtsz=0, dimasz=1.6, dimexo=1.0, dimexe=1.0,
+        for k, v in dict(dimtxsty="ND", dimtxt=ALTURAS["cota"], dimtsz=0, dimasz=3.0 if self.tipo == "peca" else 2.5, dimexo=1.5, dimexe=1.5,
                          dimdle=0, dimgap=0.5, dimdli=DIM_DLI, dimtad=1, dimtih=0, dimtoh=0, dimdec=0, dimzin=8,
-                         dimdsep=ord(","), dimclrd=256, dimclre=256, dimclrt=256, dimlwd=13, dimlwe=13, dimtmove=0).items():
+                         dimdsep=ord(","), dimclrd=256, dimclre=256, dimclrt=256, dimlwd=18, dimlwe=18, dimtmove=0).items():
             setattr(ds.dxf, k, v)
 
     @property
@@ -171,6 +193,8 @@ class Prancha:
 
     def texto(self, x, y, s, h="nota", camada="TEXTO", alinh="BOTTOM_LEFT", rot=0, registrar=True):
         hh = ALTURAS[h] if isinstance(h, str) else h
+        if not self._carimbo_ativo and hh < MIN_TIPO[self.tipo]["texto"] - 1e-6 and str(s).strip():
+            self._txt_pequenos.append((round(hh, 2), str(s)[:30]))
         s = _RENOMEAR(_emissao_txt(s))
         t = self.msp.add_text(s, height=hh, rotation=rot, dxfattribs={"layer": camada, "style": "ND"})
         t.set_placement((x, y), align=TextEntityAlignment[alinh])
@@ -425,6 +449,17 @@ class Prancha:
         self.dados["rev"] = rev
 
     def _moldura_carimbo(self):
+        """rev11: o carimbo (selo padrão ND) mantém as alturas de texto da rev10 — o aumento vale para os desenhos."""
+        salvo = dict(ALTURAS)
+        ALTURAS.update(ALTURAS_CARIMBO)
+        self._carimbo_ativo = True
+        try:
+            return self._moldura_carimbo0()
+        finally:
+            ALTURAS.clear(); ALTURAS.update(salvo)
+            self._carimbo_ativo = False
+
+    def _moldura_carimbo0(self):
         self._emitir()
         x0, y0, x1, y1 = self.quadro
         self.ret(0, 0, self.W, self.H, "CARIMBO_FINO")
@@ -535,6 +570,13 @@ class Prancha:
             if not str(self.dados.get(k, "")).strip():
                 avisos.append(("ERRO", f"carimbo: campo '{k}' vazio"))
         avisos += self._checar_textos() + self.avisos_extra
+        # rev11: tamanhos mínimos no papel por tipo de folha (peça: cota 3,5 / texto 3,0; geral: 2,5 / 2,5)
+        mn = MIN_TIPO[self.tipo]
+        ds_ = self.doc.dimstyles.get("ND")
+        if ds_.dxf.dimtxt < mn["cota"] - 1e-6:
+            avisos.append(("ERRO", f"texto de cota {ds_.dxf.dimtxt:g} mm < {mn['cota']:g} mm (folha de {self.tipo})"))
+        for hh_, t_ in self._txt_pequenos[:5]:
+            avisos.append(("ERRO", f"texto de {hh_:g} mm < {mn['texto']:g} mm (folha de {self.tipo}): '{t_}'"))
         qx0, qy0, qx1, qy1 = self.quadro
         caixas = [(v.nome, v.bbox_papel()) for v in self.vistas] + [(t[4], t[:4]) for t in self.blocos_livres]
         caixas = [(n, b) for n, b in caixas if b]
@@ -612,11 +654,13 @@ class Prancha:
     def _emitir(self):
         if EMISSAO and not getattr(self, "_emitida", False):
             tardias = []                                           # reemissões de 24/10 e 25/10 (só nas folhas com revisão manual na data)
-            for RE in (REEMISSAO2, REEMISSAO3):
+            for RE in (REEMISSAO2, REEMISSAO3, REEMISSAO4):
                 if not RE:
                     continue
                 nv = [d for _, dt, d in self.revisoes if dt == RE["data"]]
                 self.revisoes = [t for t in self.revisoes if t[1] != RE["data"]]
+                if RE.get("padrao"):
+                    nv = [RE["padrao"]] + nv
                 if nv:
                     tardias.append((RE["data"], nv))
             if not self.revisoes and tardias:                      # folha nova: só as emissões dessas datas
@@ -653,6 +697,7 @@ class Prancha:
                 self.dados["rev"], self.dados["data"] = r, REEMISSAO["data"]
 
     def salvar(self, base, png_dpi=110):
+        self.ppi_imagens = []
         for v in self.vistas:
             v._finalizar()
         self._moldura_carimbo()
@@ -676,13 +721,29 @@ class Prancha:
                 for x0, y0, x1, y1, cam in self.imagens:
                     if not _os.path.exists(cam):
                         continue
-                    pg.insert_image(pymupdf.Rect(x0 * k + 1, (self.H - y1) * k + 1, x1 * k - 1, (self.H - y0) * k - 1),
-                                    filename=cam, keep_proportion=True)
+                    rr = pymupdf.Rect(x0 * k + 1, (self.H - y1) * k + 1, x1 * k - 1, (self.H - y0) * k - 1)
+                    if cam.lower().endswith(".pdf"):                      # rev11: desenho vetorial (matplotlib → PDF) entra como vetor
+                        src = pymupdf.open(cam)
+                        pg.show_pdf_page(rr, src, 0, keep_proportion=True)
+                        src.close()
+                        continue
+                    pg.insert_image(rr, filename=cam, keep_proportion=True)
+                    # rev11 (26/10/2026): nitidez no zoom do celular — raster com ≥ 400 ppi efetivos no tamanho impresso
+                    try:
+                        from PIL import Image as _Im
+                        with _Im.open(cam) as _im:
+                            wpx, hpx = _im.size
+                        ppi = max(wpx / ((x1 - x0) / 25.4), hpx / ((y1 - y0) / 25.4))
+                        self.ppi_imagens.append((_os.path.basename(cam), wpx, hpx, round(ppi)))
+                        if ppi < PPI_MIN and not any(k_ in _os.path.basename(cam).lower() for k_ in ("logo", "marques")):   # logos: exceção
+                            avisos.append(("AVISO", f"imagem com {ppi:.0f} ppi (< {PPI_MIN}) no tamanho impresso: {_os.path.basename(cam)} — re-renderizar"))
+                    except Exception:
+                        pass
                 pdf.save(base + ".pdf", incremental=True, encryption=0)
                 pdf.close()
                 chk = pymupdf.open(base + ".pdf")
                 n_img = len(chk[0].get_images())
-                if n_img < len({c for *_, c in self.imagens if _os.path.exists(c)}):
+                if n_img < len({c for *_, c in self.imagens if _os.path.exists(c) and not c.lower().endswith(".pdf")}):
                     avisos.append(("ERRO", f"PDF saiu com {n_img} imagens de {len(self.imagens)} previstas"))
                 chk.close()
             pymupdf.open(base + ".pdf")[0].get_pixmap(dpi=png_dpi).save(base + ".png")
@@ -690,10 +751,11 @@ class Prancha:
             avisos.append(("ERRO", f"falha ao inserir imagens/PNG: {e}"))
         if os.environ.get("AVISOS_LOG"):                 # rev08: log depois das imagens, para os erros delas entrarem
             with open(os.environ["AVISOS_LOG"], "a", encoding="utf-8") as fh:
-                fh.write(_json.dumps({"folha": os.path.basename(base), "avisos": avisos}, ensure_ascii=False) + "\n")
+                fh.write(_json.dumps({"folha": os.path.basename(base), "avisos": avisos, "imagens": self.ppi_imagens}, ensure_ascii=False) + "\n")
         return avisos
 
 
+PPI_MIN = 400                                   # rev11: resolução mínima das imagens raster no tamanho impresso
 _CAP, _DESC = 0.729, 0.236                      # DejaVu Sans: altura de maiúscula e descendente (fração do corpo)
 
 

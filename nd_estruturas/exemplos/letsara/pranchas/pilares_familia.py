@@ -217,9 +217,14 @@ def dados(mk):
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"], aresta_C=ip["aresta_C"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06"):
-        P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25")
+        P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25",
+                            x_pinos=(102.5,), marca_b="PN-3", aco="CA-50 (NBR 7480), barra lisa de aço nervurado", anc="reta, por aderência (300 = 12 Ø)", rosca=0, viga="TS-01",
+                            pilha=[("NEO-4", 10)], destino="furo Ø50 da ponta da TS-01, grauteado (≥ 290 dentro da viga)")   # rev11: item 13
     elif mk in ("PL-02", "PL-06"):                                             # rev09: base do montante da W 310 (chapa 250 × 250 e 4 BR-M20)
-        P["assento"] = dict(neo=(250, 250, 19), neo_nome="CA-L2 chapa de apoio 250×250×19", x_neo=(25, 275), x_pino=75, y_pinos=(-27.5, 27.5), d=16, L=450, emb=350, pino="BR-M16")
+        P["assento"] = dict(neo=(250, 250, 19), neo_nome="CA-L2 chapa de apoio 250×250×19", x_neo=(25, 275), x_pino=75, y_pinos=(-27.5, 27.5), d=16, L=450, emb=350, pino="BR-M16",
+                            x_pinos=(75, 225), marca_b="BR-M16", aco="barra roscada M16 classe 8.8 (ISO 898-1), zincada a fogo", anc="grampo U Ø10 CA-50 na ponta embutida", rosca=150, viga=G.W_L2,
+                            pilha=[("graute", 20), ("CA-L2", 19), ("mesa da W", 5.2), ("arruela", 3), ("porca", 13), ("contraporca", 13), ("2 fios de rosca", 4)],
+                            destino="atravessa a CA-L2 e a mesa inferior da W (furo Ø18; oblongo nos apoios deslizantes)")   # rev11: item 13
     if canto:
         P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
                  faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
