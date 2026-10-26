@@ -139,7 +139,7 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
     if BR:
         v.linha((xs[0] - 30, livre - BR), (xs[-1] + 30, livre - BR), "OCULTA")
     v.cota_v([-emb, 0, livre], -HW, -9)
-    v.cota_h([0] + list(xs) + [R], zb, -13, total=False)
+    v.cota_h([0] + list(xs) + [R], zb, -19, total=False)
     v.cota_h([-HW, 0], hc, 8)
     v.chamada((xs[-1], -emb + 90), ((R - xs[-1]) / 10 + 30, -4), f"{AS.get('marca_b', AS['pino'])} Ø{g(AS['d'])}: L {g(AS['L'])} = {g(emb)} emb. + {g(livre)} livre")
     v.chamada((xs[-1], -emb + 30), ((R - xs[-1]) / 10 + 30, -14), AS.get("anc", ""))

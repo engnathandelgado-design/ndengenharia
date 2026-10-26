@@ -59,8 +59,8 @@ def lab(v, org, pt, lado, dy, texto):
     v.chamada(pt, ((xcol - pt[0]) / 50, dy), texto)
 
 
-for k, (px, titulo, sub) in enumerate(((Q[0] + 20, "PLANTA NO PATAMAR +1,975", "lance 1, patamar +1,975 e guarda-corpos (térreo → +1,975)"),
-                                       (Q[0] + 166, "PLANTA NA CHEGADA +3,95", "lance 2, chegada +3,95 e guarda-corpos da abertura da laje"))):
+for k, (px, titulo, sub) in enumerate(((Q[0] + 20, "PLANTA NO PATAMAR +1,975", "lance 1, patamar e guarda-corpos"),
+                                       (Q[0] + 172, "PLANTA NA CHEGADA +3,95", "lance 2, chegada e guarda-corpos"))):
     v = pr.vista(f"PLANTA {k + 1}", (px - 34800 / 50, Q[3] - 190 - 3000 / 50), 50, titulo=titulo, subtitulo=sub, unidade="mm")
     yl2 = M(Y_LIN[1])
     v.eixo((35300, yl2), (40300, yl2), 400); v.circulo((34500, yl2), 300, "VISTA"); v.texto((34500, yl2), "2", "nota", "MIDDLE_CENTER")
@@ -89,8 +89,8 @@ for k, (px, titulo, sub) in enumerate(((Q[0] + 20, "PLANTA NO PATAMAR +1,975", "
 
 # ------------------------------------------------------------------ CORTE A-A 1:25 (plano y-z, olhando para +x: lance 1 em vista, lance 2 ao fundo)
 YZ = lambda x, y, z: (y * 1000, z * 1000)
-c = pr.vista("CORTE A-A", (Q[0] + 330 - 3500 / 25, Q[3] - 275), 25, titulo="CORTE A-A — LANCE 1 EM VISTA (OLHANDO PARA O EIXO E)",
-             subtitulo="peças do modelo 3D; lance 2 ao fundo (oculto); pé-direito livre ≥ 2,10 m em toda a faixa de circulação", unidade="mm")
+c = pr.vista("CORTE A-A", (Q[0] + 338 - 3500 / 25, Q[3] - 283), 25, titulo="CORTE A-A — LANCE 1 EM VISTA (OLHANDO PARA O EIXO E)",
+             subtitulo="lance 2 ao fundo (oculto); topo do lance: det. 5; pé-direito livre ≥ 2,10 m", unidade="mm")
 c.linha((3300, 0), (10000, 0), "TERRENO")
 E.projetar(c, YZ, E.interna, tf=lambda pc: None if camada(pc) is None else ("OCULTA" if E.bbox(pc)[0][0] > 37.70 and not E.cod(pc).startswith("VP") else camada(pc)))
 for yy in (M(P6_ESC[1]), M(Y_LIN[1])):
@@ -102,13 +102,13 @@ c.texto((M(V["VP2"]["eixo"]) + 200, ZP + 1150), "patamar +1,975", "min", "BOTTOM
 c.texto((M(V["VP3"]["eixo"]) + 100, M(Z_PISO_PRONTO) + 1150), "chegada +3,95", "min", "BOTTOM_LEFT")
 pd = min(p["pe_direito_min_m"] for p in EJ["pe_direito"] if p["pe_direito_min_m"])
 c.texto((5600, 6000), f"pé-direito mínimo {f(pd, 2)} m (chegada, sob o fundo da laje +7,30)", "min", "BOTTOM_LEFT")
-for cc, dxy, tx in (("EI-L1-T", (-30, -10), "topo do lance (det. 5)"), ("EI-L1-DG", (12, -6), "degrau (det. 1)"), ("SA-1", (-20, -12), "SA-1 (det. 2)"),
+for cc, dxy, tx in (("EI-L1-DG", (12, -6), "degrau (det. 1)"), ("SA-1", (-20, -12), "SA-1 (det. 2)"),
                     ("GI-1 corr", (8, 14), "corrimão duplo 0,92 / 0,70 · guarda 0,92 (ES03/ES04)")):
     c.chamada(E.centro(cc, YZ), dxy, tx)
 
 # ------------------------------------------------------------------ DETALHES 1:5
 lg = {l["cod"]: l for l in EJ["ligacoes"]}
-d1 = pr.vista("DETALHE 1", (Q[0] + 30, Q[1] + 190), 5, titulo="DETALHE 1 — DEGRAU NA LONGARINA", subtitulo=lg["EI-L1-1"]["furos"], unidade="mm")
+d1 = pr.vista("DETALHE 1", (Q[0] + 30, Q[1] + 205), 5, titulo="DETALHE 1 — DEGRAU NA LONGARINA", subtitulo=lg["EI-L1-1"]["furos"], unidade="mm")
 d1.ret(0, 0, 48.8, 152.4, "METALICA"); d1.ret(5.1, 0, 43.7, 8.7, "VISTA"); d1.ret(5.1, 143.7, 43.7, 8.7, "VISTA")
 d1.ret(48.8, 70, 4.8, 51, "METALICA"); d1.ret(48.8, 121, 51, 4.8, "METALICA")
 d1.poli([(53.6, 125.8), (330, 125.8), (330, 90)], "METALICA")
@@ -121,7 +121,7 @@ d1.chamada((75, 125.8), (10, 18), "1 M8 escareado")
 d1.chamada((250, 125.8), (8, 10), "DG chapa xadrez 4,75 dobrada")
 d1.chamada((60, 80), (16, -14), "CT L 51 × 51 × 4,8 × 80")
 d1.chamada((24, 30), (-10, -14), I["longarina"]["perfil"].split(" (")[0])
-d2 = pr.vista("DETALHE 2", (Q[0] + 240, Q[1] + 190), 5, titulo="DETALHE 2 — VIGA NO ASSENTO SA-1", subtitulo=lg["EI-SA"]["furos"], unidade="mm")
+d2 = pr.vista("DETALHE 2", (Q[0] + 268, Q[1] + 199), 5, titulo="DETALHE 2 — VIGA NO ASSENTO SA-1", subtitulo=lg["EI-SA"]["furos"], unidade="mm")
 pts = [(-200, -150), (0, -150), (0, 260), (-200, 260)]
 d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, "AR-CONC", 0.03)
 d2.ret(0, 0, 9.5, 102, "METALICA"); d2.ret(0, 92.5, 152, 9.5, "METALICA")
@@ -130,11 +130,11 @@ for zz in (30, 70):
     d2.linha((-150, zz), (25, zz), "METALICA")
 d2.circulo((35, 97), 6.5, "METALICA"); d2.circulo((85, 97), 6.5, "METALICA")
 d2.cota_v([0, 102, 248], -230, -8, total=False)
-d2.chamada((-100, 30), (-6, -40), "2 BR-M16 8.8 embutidas 150 + grampo (fábrica do pilar)")
+d2.chamada((-100, 30), (26, -46), "2 BR-M16 8.8 embutidas 150 + grampo (fábrica do pilar)")
 d2.chamada((85, 97), (18, -24), "2 M12 na mesa inferior")
 d2.chamada((120, 97), (16, -6), "SA-1 L 152 × 102 × 9,5 × 160")
-d2.chamada((59, 180), (14, 14), "VP-2 W 150 × 9,2")
-d3 = pr.vista("DETALHE 3", (Q[0] + 400, Q[1] + 190), 5, titulo="DETALHE 3 — PILARETE (TOPO E BASE)", subtitulo="tubo 60 × 60 × 2 + 2 L 76 × 76 × 6,3 × 100 em cada ponta", unidade="mm")
+d2.chamada((59, 180), (24, 2), "VP-2 W 150 × 9,2")
+d3 = pr.vista("DETALHE 3", (Q[0] + 470, Q[1] + 205), 5, titulo="DETALHE 3 — PILARETE (TOPO E BASE)", subtitulo="tubo 60 × 60 × 2 + 2 L 76 × 76 × 6,3 × 100 em cada ponta", unidade="mm")
 d3.ret(-30, 20, 60, 230, "METALICA"); d3.ret(-60, 0, 120, 20, "VISTA"); d3.linha((-200, 0), (200, 0), "TERRENO")
 for sg in (-1, 1):
     x0 = 30 if sg > 0 else -30 - 6.3
@@ -147,7 +147,7 @@ d3.chamada((70, -60), (14, -8), "2 chumbadores químicos M12 hef 100")
 d3.chamada((40, 60), (16, 6), "1 M12 passante no tubo (base e topo)")
 d3.chamada((-60, 250), (-14, 10), "2 M12 na mesa (a 25 da alma)")
 d3.chamada((-50, 10), (-12, -6), "graute 20")
-d4 = pr.vista("DETALHE 4", (Q[0] + 548, Q[1] + 190), 5, titulo="DETALHE 4 — BASE METÁLICA BM-1", subtitulo="U 152 em pé entre as longarinas: pé do lance 1 e 1º degrau", unidade="mm")
+d4 = pr.vista("DETALHE 4", (Q[0] + 330, Q[1] + 95), 5, titulo="DETALHE 4 — BASE METÁLICA BM-1", subtitulo="U 152 em pé entre as longarinas: pé do lance 1 e 1º degrau", unidade="mm")
 d4.linha((-170, 0), (300, 0), "TERRENO")
 d4.ret(-60, 10, 48.8, 8.7, "METALICA"); d4.ret(-60, 10, 5.1, 152.4, "METALICA"); d4.ret(-60, 153.7, 48.8, 8.7, "METALICA")
 d4.ret(-80, 0, 100, 10, "VISTA")
@@ -160,7 +160,7 @@ d4.chamada((-100, -60), (14, -10), "CB-1 L 76 + chumbador químico M12 hef 100 (
 d4.chamada((-36, 100), (-12, 18), "BM-1 U 152 × 12,2")
 d4.chamada((30, 33), (14, -12), lg["EI-L1-P"]["furos"].replace("; ", " "))
 d4.chamada((-60, 5), (-20, -8), "graute 10")
-d5 = pr.vista("DETALHE 5", (Q[0] + 60, Q[1] + 130), 5, titulo="DETALHE 5 — TOPO DO LANCE NA VIGA", subtitulo=lg["EI-L1-T"]["furos"], unidade="mm")
+d5 = pr.vista("DETALHE 5", (Q[0] + 90, Q[1] + 95), 5, titulo="DETALHE 5 — TOPO DO LANCE NA VIGA", subtitulo=lg["EI-L1-T"]["furos"], unidade="mm")
 d5.ret(-49, 0, 98, 3.6, "METALICA"); d5.ret(-1.55, 3.6, 3.1, 138.8, "METALICA"); d5.ret(-49, 142.4, 98, 3.6, "METALICA")
 d5.ret(1.55, 30, 6.3, 80, "METALICA"); d5.ret(1.55, 30, 102, 6.3, "METALICA")
 d5.ret(60, 10, 5.1, 130, "METALICA")

@@ -126,7 +126,7 @@ def lajes():
     # ================= FÔRMA — plantas de paginação dos 2 níveis (diferentes: abertura da escada no +3,90)
     PIL_L1 = [(0.0, 600, 400)] + [(xx, 400, 600) for xx in X_FACH[1:4]] + [(LARG, 600, 400)]
     for iz, (yo, sub) in enumerate(((Q[3] - 175, "painéis de A para E; LA-02 (70 cm) nas pontas; R = recorte na ponta junto a pilar; abertura da escada entre P6, P7 e a linha 2 (LA-03 / LA-04 curtas)"),
-                                    (Q[3] - 355, "laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²; contínua (sem abertura); P6 da linha 2 com recorte"))):
+                                    (Q[3] - 370, "laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²; contínua (sem abertura); P6 da linha 2 com recorte"))):
         v = pr.vista(f"PLANTA {NIVS[iz]}", (Q[0] + 50, yo), 100, titulo=f"PLANTA DE PAGINAÇÃO — PISO {NIVS[iz]}", subtitulo=sub, unidade="cm")
         PN = paineis_nivel(iz)
         for x in X_FACH:
@@ -188,7 +188,7 @@ def lajes():
         s.circulo((xa, H_P / 2), D_AL / 2, "VISTA")
     s.hachura([(0, H_P), (B_P, H_P), (B_P, H_P + 50), (0, H_P + 50)], "AR-CONC", 0.02); s.linha((0, H_P + 50), (B_P, H_P + 50), "VISTA")
     s.poli([(0, H_P), (-25, 150), (-25, 60), (0, 40)], "VISTA"); s.poli([(B_N, H_P), (B_N + 25, 150), (B_N + 25, 60), (B_N, 40)], "VISTA")
-    s.cota_h([0] + XAL + [B_N], 0, -8, total=True)
+    s.cota_h([0] + XAL + [B_N], 0, -11, total=True)
     s.cota_h([0, B_P], H_P + 50, 10)
     s.cota_v([0, H_P / 2, H_P, H_P + 50], B_N + 25, 10, total=True)
     s.chamada((B_N + 25, 60), (24, -16), "chaveta grauteada (graute ≥ 30 MPa)")
@@ -239,7 +239,7 @@ def lajes():
     F15 = next(c["F_macaco_kN"] for c in LJ["cordoalhas"] if c["diam"] == "15.2")
     F12 = next(c["F_macaco_kN"] for c in LJ["cordoalhas"] if c["diam"] == "12.7")
     F95 = L3["cordoalhas"][0]["F_macaco_kN"]
-    a = pr.vista("SEÇÃO DE ARMAÇÃO", (Q[0] + 60, Q[1] + 205), 5, titulo="SEÇÃO DE ARMAÇÃO — LA-01",
+    a = pr.vista("SEÇÃO DE ARMAÇÃO", (Q[0] + 90, Q[1] + 205), 5, titulo="SEÇÃO DE ARMAÇÃO — LA-01",
                  subtitulo=f"{N15} Ø15,2 nas nervuras de borda + {N12} Ø12,7 nas internas, CP-190 RB aderentes, eixo a {Y_C / 10:g} cm do fundo; capa com tela Q138".replace(".", ","), unidade="cm")
     a.ret(0, 0, B_N, H_P, "CORTADO")
     for xa in XAL:
@@ -250,11 +250,12 @@ def lajes():
     a.linha((25, H_P + 25), (B_P - 25, H_P + 25), "ARMADURA")
     a.cota_v([0, Y_C, H_P, H_P + 25, H_P + 50], B_N + 10, 12, total=False)
     a.cota_h([0] + [round(x, 3) for x, _, _ in CRD] + [B_N], 0, -10, total=True)
-    a.chamada((CRD[0][0], Y_C), (-14, -24), f"C1 — {N15} Ø15,2 (nervuras de borda)")
+    a.chamada((CRD[0][0], Y_C), (6, -34), f"C1 — {N15} Ø15,2 (nervuras de borda)")
     a.chamada((CRD[4][0], Y_C), (20, -26), f"C2 — {N12} Ø12,7 (nervuras internas), a {Y_C / 10:g} cm do fundo".replace(".", ","))
     a.chamada((B_P * 0.7, H_P + 25), (14, 12), "tela Q138 a meia altura da capa (2,5 cm)")
-    a.texto((0, -190), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F15)} kN (Ø15,2) e {f(F12)} kN (Ø12,7) por cordoalha no macaco, todas aderentes; LA-03/LA-04: 7 Ø9,5 a {f(F95)} kN; liberação gradual com fckj ≥ {FCKJ:.0f} MPa; lbpt = {LBPT * 100:.0f} cm.", "nota")
-    n3 = pr.vista("DETALHE 3", (Q[0] + 85, Q[1] + 90), 10, titulo="DETALHE 3 — NEGATIVA N1 E ALVÉOLOS NA PONTA (CORTE LONGITUDINAL)",
+    a.texto((0, -250), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F15)} kN (Ø15,2) e {f(F12)} kN (Ø12,7) por cordoalha no macaco, todas aderentes;", "nota")
+    a.texto((0, -300), f"LA-03/LA-04: 7 Ø9,5 a {f(F95)} kN; liberação gradual com fckj ≥ {FCKJ:.0f} MPa; lbpt = {LBPT * 100:.0f} cm.", "nota")
+    n3 = pr.vista("DETALHE 3", (Q[0] + 85, Q[1] + 80), 10, titulo="DETALHE 3 — NEGATIVA N1 E ALVÉOLOS NA PONTA (CORTE LONGITUDINAL)",
                   subtitulo="2 Ø10 por painel em cada apoio, dentro da capa (construtiva — laje biapoiada); alvéolos tampados 20 cm na ponta", unidade="cm")
     lam = [(0, 0), (2300, 0), (2300, H_P), (0, H_P)]
     n3.poli(lam, "VISTA", fechada=True); n3.interrupcao((2300, 0), (2300, H_P + 50))
@@ -268,13 +269,13 @@ def lajes():
     n3.cota_h([-300, 0, 200, 1800], 0, -10, total=False)
     n3.cota_v([0, Y_C, H_P, H_P + 50], 2300, 10, total=False)
     n3.chamada((100, H_P / 2), (14, 3), "alvéolo tampado 20 cm (na fábrica)")
-    n3.chamada((1900, Y_C), (14, -12), "C1 / C2 aderentes até a ponta")
+    n3.chamada((2100, Y_C), (20, -14), "C1 / C2 aderentes até a ponta")
     n3.chamada((-150, H_P + 25), (-14, 14), "2º estágio / apoio na VM")
     n3.chamada((2000, H_P + 20), (14, 8), "tela Q138 (capa)")
     br = [dict(pos="N1", diam=10.0, qtd=4, comp=200, trechos=["200"])]
     XT = Q[0] + 420
     tq = pr.tabela_croqui(XT, Y_SPLIT - 18, br, h_lin=10.0)
-    yy = pr.tabela(XT, tq["y_base"] - 4, "PROTENSÃO — POR PAINEL (LA-02: 4 Ø12,7; LA-01R: ficam 4 na ponta recortada)",
+    yy = pr.tabela(XT, tq["y_base"] - 4, "PROTENSÃO POR PAINEL",
                    ["POS", "Ø (mm)", "QUANT", "y (mm)", "σpi (MPa)", "F MACACO (kN)", "PAINEL"],
                    [["C1", "15,2", N15, Y_C, f"{SIG_PI:.0f}", f(F15), "LA-01 / LA-01R"], ["C2", "12,7", N12, Y_C, f"{SIG_PI:.0f}", f(F12), "LA-01 / LA-01R"],
                     ["C3", "9,5", len(L3["cordoalhas"]), Y_C, f"{SIG_PI:.0f}", f(F95), "LA-03 / LA-03R / LA-04"]], [14, 18, 18, 18, 24, 28, 40])
@@ -306,7 +307,7 @@ def lajes():
     y = pr.tabela(XC, y - 4, "QUADRO DAS LAJES", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
     import negativa_vm as NV                                                # rev11: continuidade das VM (mesmo registro da EX01)
     apn = NV.apoios()
-    y = pr.tabela(XC, y - 4, "ARMADURA DE CONTINUIDADE DAS VM SOBRE OS PILARES (OBRA, NA CAPA E 2º ESTÁGIO)", ["NÍVEL", "PILAR", "VM ESQ.", "VM DIR.", "N11 (bainhas no pilar)", "N12 (capa)"],
+    y = pr.tabela(XC, y - 4, "CONTINUIDADE DAS VM SOBRE OS PILARES (OBRA)", ["NÍVEL", "PILAR", "VM ESQ.", "VM DIR.", "N11 (bainhas no pilar)", "N12 (capa)"],
                   [[a["niv"], a["pilar"], a["esq"], a["dir"], NV.txt(a["N11"]), NV.txt(a["N12"])] for a in apn], [16, 16, 18, 18, 58, 56])
     CG = LJ["cargas"]
     VB = LJ["vibracao"]

@@ -75,8 +75,8 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     for (ya, yb), (_, _, t) in zip(zip(ys[:-1], ys[1:]), segs):
         if yb - ya > _wtext(t, ALTURAS["min"]) + 3:
             A.tx(xch + 1.0, (ya + yb) / 2, t, "min", "TOP_CENTER", rot=90)
-        else:
-            A.tx(xch + 3.0, (ya + yb) / 2, t, "min", "MIDDLE_LEFT")
+        else:                                                            # rev11: zona curta — texto em pé a partir do início da zona (não sai da coluna)
+            A.tx(xch + 1.0, ya + 0.5, t, "min", "TOP_LEFT", rot=90)
     A.tx(Pp(-H / 2 - 150, 0)[0] - 1, y0 + LC / ESC_E, "±0,000", "min", "MIDDLE_RIGHT")
     pr.posicoes_desenho.update({"N2"} | ({"N3"} if "N3" in bar else set()) | ({"N3A"} if "N3A" in bar else set()) | ({"N14"} if P["z_cab"] else set()))
     # seções

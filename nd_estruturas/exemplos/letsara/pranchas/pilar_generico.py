@@ -619,7 +619,7 @@ def prancha_pilar(P):
     rows_ap, err_ap = AP.linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H)
     pr.avisos_extra += err_ap
     if rows_ap:                                                                            # rev11 (item 13): apoios e esperas completos
-        y = tabela_q(pr, XC, y - 4, f"APOIOS E ESPERAS ({P['marca']}) — níveis em m (base em cm), barras em cm",
+        y = tabela_q(pr, XC, y - 4, f"APOIOS E ESPERAS — níveis em m (base em cm), barras em cm",
                      ["APOIO", "FACE", "NÍVEL (BASE)", "PEÇA / CHAPA", "BARRA", "EMB.", "LIVRE", "TOTAL"], [r_[:8] for r_ in rows_ap], [24, 15, 25, 30, 46, 13, 14, 15], h_lin=6.0)
         y = pr.notas(XC, y - 2, [f"{r_[0]}: {r_[8]}." for r_ in rows_ap], 182)
     y = tabela_q(pr, XC, y - 4, f"INSERTOS POR PILAR ({P['marca']}) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins_, [19, 80, 8, 75])
@@ -642,9 +642,9 @@ def prancha_pilar(P):
     if _os.path.exists(ISO_) and ra["ymeio"] - y_iso0 > 140:
         from PIL import Image as _Im
         wi_, hi_ = _Im.open(ISO_).size
-        hh_ = min(ra["ymeio"] - 6 - y_iso0, 470, (228 - 6) * hi_ / wi_)
+        hh_ = min(ra["ymeio"] - 6 - y_iso0, 470, (220 - 6) * hi_ / wi_)
         ww_ = hh_ * wi_ / hi_ + 6
-        xi0 = QX_ARM + 158 + (230 - ww_) / 2
+        xi0 = QX_ARM + 158 + (226 - ww_) / 2
         yi0 = y_iso0 + (ra["ymeio"] - 6 - y_iso0 - hh_) / 2
         pr.imagem(xi0, yi0, xi0 + ww_, yi0 + hh_, ISO_, titulo="ISOMÉTRICO DA PEÇA", subtitulo="duas vistas; sem escala")
     nota_fi = [] if FI["livre"] else [f"FI-1 (faces {FI['eixo'][0]}–{FI['eixo'][1]}): há {FI['obst']} acima do furo numa das faces por onde sobem as lingas. Verticalizar e montar com balancim (lingas verticais) e afastadores de madeira entre a linga e a saliência; a linga nunca pode apoiar na quina."]

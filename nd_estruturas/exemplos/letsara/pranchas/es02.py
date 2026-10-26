@@ -65,7 +65,7 @@ pilar(v, *P_(0, 0), 600, 400); pilar(v, *P_(0, M(Y_LIN[1])), 600, 400)
 v.texto(P_(400, -250), "P28", "min", "BOTTOM_LEFT"); v.texto(P_(400, M(Y_LIN[1]) + 250), "P29", "min", "TOP_LEFT")
 for y0_, y1_ in ((-200, PY0 - 20), (PY1 + 20, M(Y_LIN[1]) - 10)):
     v.poli([P_(-425, y0_), P_(-325, y0_), P_(-325, y1_), P_(-425, y1_)], "VISTA", fechada=True)
-v.texto(P_(-200, (PY0 + PY1) / 2), "PORTA 90 × 214", "min", "MIDDLE_LEFT", rot=90)
+v.chamada(P_(-60, (PY0 + PY1) / 2), (-26, 6), "porta 90 × 214")
 E.projetar(v, PXY, lambda pc: E.externa(pc) or (pc["grupo"] == "Piso e fundações" and E.bbox(pc)[1][0] < 0),
            tf=lambda pc: "OCULTA" if E.cod(pc) in ("CX-1", "CX-O") or "concreto" in pc["marca"] else camada(pc))
 def lab(pt, lado, dy, tx):
@@ -102,7 +102,7 @@ b.cota_h([XB1, XEX, XI], -800, -10, total=True)
 b.cota_v([0, ZP], XB1 - 900, -6, total=False)
 
 # ------------------------------------------------------------------ DETALHES 1:10 / 1:5
-d2 = pr.vista("DETALHE 2", (110, 140), 10, titulo="DETALHE 2 — PILARETE NO BLOCO BE-1", subtitulo="chapa 200 × 200 × 12,5, 4 químicos M16, 2 L 102 (sem solda)", unidade="mm")
+d2 = pr.vista("DETALHE 2", (104, 140), 10, titulo="DETALHE 2 — PILARETE NO BLOCO BE-1", subtitulo="chapa 200 × 200 × 12,5, 4 químicos M16, 2 L 102 (sem solda)", unidade="mm")
 d2.linha((-500, 0), (500, 0), "TERRENO")
 pts = [(-300, -600), (300, -600), (300, -20), (-300, -20)]
 d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, "AR-CONC", 0.05)
@@ -114,9 +114,9 @@ d2.cota_h([-300, -100, 100, 300], -600, -8, total=True)
 d2.cota_v([-600, -20], -340, -8, total=False)
 d2.chamada((70, -100), (28, -4), "4 chumbadores químicos M16 hef 120")
 d2.chamada((200, -450), (16, -10), "BE-1 60 × 60 × 60 C25 (malha Ø8 c/15)")
-d2.chamada((50, 300), (14, 8), "PE tubo 60 × 60 × 2 + 2 L 76 × 76 × 6,3 × 100 (1 M12 passante + 2 M12 na chapa)")
+d2.chamada((50, 300), (10, 8), "PE tubo 60 × 60 × 2 + 2 L 76 × 76 × 6,3 × 100")
 d2.chamada((-90, -10), (-14, 12), "graute 20 + chapa 12,5")
-d3 = pr.vista("DETALHE 3", (330, 135), 5, titulo="DETALHE 3 — CONTRAVENTAMENTO X (CX-1)", subtitulo=f"barra {CX['barra']}, garfo + pino M12 na orelha, esticador; Nd {f(CX['Nd'])} ≤ {f(CX['NRd'])} kN", unidade="mm")
+d3 = pr.vista("DETALHE 3", (300, 135), 5, titulo="DETALHE 3 — CONTRAVENTAMENTO X (CX-1)", subtitulo=f"barra {CX['barra']}, garfo + pino M12 na orelha, esticador; Nd {f(CX['Nd'])} ≤ {f(CX['NRd'])} kN", unidade="mm")
 d3.ret(-30, -200, 60, 400, "METALICA")
 d3.ret(30, -50, 6.3, 100, "METALICA"); d3.ret(30, -3.15, 76, 6.3, "METALICA")
 d3.poli([(80, 0), (300, 160)], "METALICA"); d3.poli([(80, -10), (300, 150)], "METALICA")
@@ -128,7 +128,7 @@ d3.chamada((40, 30), (12, 26), "1 M12 passante no tubo")
 d3.chamada((33, -40), (-20, -18), "orelha L 76 × 76 × 6,3 × 100")
 d3.chamada((250, 124), (10, 10), "barra Ø12,5 (pontas M12) + esticador")
 d3.chamada((0, 150), (-16, 10), "PE tubo 60 × 60 × 2")
-d4 = pr.vista("DETALHE 4", (600, 40), 25, titulo="DETALHE 4 — OMBREIRA OM-2 (PORTA DO 2º PAV.)", subtitulo="U 152 interna do piso a +5,00; console L 102 da placa da fiada +3,75", unidade="mm")
+d4 = pr.vista("DETALHE 4", (590, 54), 25, titulo="DETALHE 4 — OMBREIRA OM-2 (PORTA DO 2º PAV.)", subtitulo="U 152 interna do piso a +5,00; console L 102 da placa da fiada +3,75", unidade="mm")
 d4.linha((-600, 0), (600, 0), "TERRENO")
 d4.ret(-425, 0, 100, 3740, "VISTA"); d4.ret(-425, 5010, 100, 1240, "VISTA")
 d4.ret(-425, 3760, 100, 1240, "VISTA")
@@ -137,10 +137,10 @@ d4.ret(-325, 3740.5, 102, 9.5, "METALICA")
 for zt in (3900, 4900):
     d4.ret(-325, zt - 38, 152, 76, "OCULTA")
 d4.cota_v([0, 3750, 5000, 6250], 450, 8, total=False)
-d4.chamada((-325, 3745), (-14, -6), "console L 102 × 102 × 9,5 + 2 M12 (ponta da placa H-03/H-04)")
-d4.chamada((-325, 2000), (-14, 0), "OM-2 U 152 × 12,2 (interna, atrás das fiadas 0 e 2)")
-d4.chamada((-325, 4900), (-14, 8), "travas L 76: até o P28 (+4,30/+4,90) ou sob a soleira (+3,88)")
-d4.chamada((-325, 6), (-14, -8), "chapa 200 × 200 × 12,5 + 4 químicos M12 (piso do térreo)")
+d4.chamada((-325, 3745), (-14, -6), "console L 102 × 9,5 + 2 M12 (placa H-03/H-04)")
+d4.chamada((-325, 2000), (-14, 0), "OM-2 U 152 × 12,2 (interna)")
+d4.chamada((-325, 4900), (-14, 8), "travas L 76 (P28 ou soleira)")
+d4.chamada((-325, 6), (-14, -8), "chapa 200 × 200 × 12,5 + 4 químicos M12")
 
 # ------------------------------------------------------------------ lista e notas (verificações na memória MC09)
 y = Q[3] - 6
@@ -151,7 +151,7 @@ lin += [[a, b_, str(q), f(q * kg, 1)] for a, b_, q, kg in om2]
 massa = EJ["massa_kg"]["externa"] + sum(q * kg for _, _, q, kg in om2)
 lin.append(["", "parafusos M8/M10/M12/M16 8.8 galv., chumbadores químicos M12/M16, garfos, pinos e esticadores do X (+3 %)", "", f(massa * 0.03, 0)])
 lin.append(["", "TOTAL", "", f(massa * 1.03, 0)])
-y = pr.tabela(XC, y, "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", ["ITEM", "DESCRIÇÃO", "QT", "kg"], lin, [16, 124, 10, 20], h_lin=4.4, destaque_ultima=True)
+y = pr.tabela(XC, y, "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", ["ITEM", "DESCRIÇÃO", "QT", "kg"], lin, [22, 118, 10, 20], h_lin=4.4, destaque_ultima=True)
 n_be = sum(1 for pc in E.P if pc["marca"].startswith("BE-1 "))
 lin2 = [["BE-1", "bloco de concreto C25 60 × 60 × 60 sob cada pilarete (malha Ø8 c/15 + 4 Ø8)", str(n_be), f(n_be * 0.216, 2) + " m³"],
         ["BE-2", "viga de concreto C25 1,80 × 0,40 × 0,40 sob o pé do lance de baixo (4 Ø10 + Ø5 c/20)", "1", f(1.8 * 0.16, 2) + " m³"]]

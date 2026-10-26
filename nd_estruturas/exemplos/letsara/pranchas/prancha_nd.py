@@ -615,7 +615,35 @@ class Prancha:
             avisos.append(("AVISO", f"posições na tabela sem chamada no desenho: {sorted(sob)}"))
         return avisos
 
-    def _desembaracar(self, tol=0.25, passo=1.0, dmax=9.0):
+    def _afastar_vistas(self, folga=2.0, dmax=24.0):
+        """rev11: vista que encosta noutra (ou numa tabela) anda até dmax mm para o lugar livre mais próximo."""
+        qx0, qy0, qx1, qy1 = self.quadro
+        cb = self.carimbo_bbox
+        cand = sorted({(dx, dy) for dx in range(-int(dmax), int(dmax) + 1, 2) for dy in range(-int(dmax), int(dmax) + 1, 2)
+                       if 0 < math.hypot(dx, dy) <= dmax}, key=lambda d: (math.hypot(d[0], d[1]), d))
+        for _ in range(3):
+            mexeu = False
+            for v in self.vistas:
+                b = v.bbox_papel()
+                if not b:
+                    continue
+                outros = [o.bbox_papel() for o in self.vistas if o is not v] + [t[:4] for t in self.blocos_livres]
+                outros = [o for o in outros if o]
+                if not any(_ovl(b, o, folga) for o in outros):
+                    continue
+                for dx, dy in cand:
+                    b2 = (b[0] + dx, b[1] + dy, b[2] + dx, b[3] + dy)
+                    if b2[0] < qx0 + 1 or b2[2] > qx1 - 1 or b2[1] < qy0 + 1 or b2[3] > qy1 - 1 or _ovl(b2, cb, 1.0):
+                        continue
+                    if any(_ovl(b2, o, folga + 0.5) for o in outros):
+                        continue
+                    v.mover(dx, dy)
+                    mexeu = True
+                    break
+            if not mexeu:
+                break
+
+    def _desembaracar(self, tol=0.25, passo=1.0, dmax=14.0):
         """rev11 (26/10/2026): com o texto maior (DEC-066), rótulos soltos e textos de chamada que cruzam linhas ou outros textos
         são deslocados para o lugar livre mais próximo (até dmax mm); a chamada acompanha (a ponta da seta fica no ponto).
         Não mexe em cotas, tabelas, notas nem no carimbo. Retorna o número de textos movidos."""
@@ -885,8 +913,14 @@ class Prancha:
             v._finalizar()
         self._moldura_carimbo()
         if DESEMBARACAR:
+            self._afastar_vistas()
             self._desembaracar()
         avisos = self.verificar()
+        if __import__("os").environ.get("DEBUG_BBOX"):
+            for v_ in self.vistas:
+                print("BBOX", v_.nome, [round(c_) for c_ in (v_.bbox_papel() or (0, 0, 0, 0))])
+            for t_ in self.blocos_livres:
+                print("BLOCO", t_[4][:30], [round(c_) for c_ in t_[:4]])
         import os, json as _json
         with open(base + ".tabelas.json", "w", encoding="utf-8") as fh:
             _json.dump(dict(folha=os.path.basename(base), dados=getattr(self, "dados", {}), tabelas=self.__dict__.get("_tabs", []),
@@ -1260,7 +1294,15 @@ class Vista:
         cx, y = (b[0] + b[2]) / 2, b[1] - 8
         t1 = self.titulo.upper()
         w1 = _wtext(t1, ALTURAS["titulo"])
-        self.pr.texto(cx, y, t1, "titulo", "TITULO", "BOTTOM_CENTER")
+        self._tit = [self.pr.texto(cx, y, t1, "titulo", "TITULO", "BOTTOM_CENTER")]
         self._add(self.pr.msp.add_line((cx - w1 / 2, y - 1.2), (cx + w1 / 2, y - 1.2), dxfattribs={"layer": "TITULO"}))
-        self.pr.texto(cx, y - 5.0, f"ESC. 1:{self.esc:g} — COTAS EM {self.unidade.upper()}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")
+        self._tit += [self.pr.texto(cx, y - 5.0, f"ESC. 1:{self.esc:g} — COTAS EM {self.unidade.upper()}" + (f" — {self.subtitulo}" if self.subtitulo else ""), "nota", "TEXTO", "BOTTOM_CENTER")]
         self._bbox_titulo = (cx - w1 / 2, y - 7, cx + w1 / 2, y + 5)
+
+    def mover(self, dx, dy):
+        for e in self.ents + getattr(self, "_tit", []):
+            e.translate(dx, dy, 0)
+        if getattr(self, "_bbox_titulo", None):
+            t = self._bbox_titulo
+            self._bbox_titulo = (t[0] + dx, t[1] + dy, t[2] + dx, t[3] + dy)
+        self.o = (self.o[0] + dx, self.o[1] + dy)
