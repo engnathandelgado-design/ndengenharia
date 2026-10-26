@@ -621,13 +621,14 @@ class Prancha:
         cb = self.carimbo_bbox
         cand = sorted({(dx, dy) for dx in range(-int(dmax), int(dmax) + 1, 2) for dy in range(-int(dmax), int(dmax) + 1, 2)
                        if 0 < math.hypot(dx, dy) <= dmax}, key=lambda d: (math.hypot(d[0], d[1]), d))
+        BB = {id(v): v.bbox_papel() for v in self.vistas}
         for _ in range(3):
             mexeu = False
             for v in self.vistas:
-                b = v.bbox_papel()
+                b = BB[id(v)]
                 if not b:
                     continue
-                outros = [o.bbox_papel() for o in self.vistas if o is not v] + [t[:4] for t in self.blocos_livres]
+                outros = [BB[id(o)] for o in self.vistas if o is not v] + [t[:4] for t in self.blocos_livres]
                 outros = [o for o in outros if o]
                 if not any(_ovl(b, o, folga) for o in outros):
                     continue
@@ -638,6 +639,7 @@ class Prancha:
                     if any(_ovl(b2, o, folga + 0.5) for o in outros):
                         continue
                     v.mover(dx, dy)
+                    BB[id(v)] = b2
                     mexeu = True
                     break
             if not mexeu:

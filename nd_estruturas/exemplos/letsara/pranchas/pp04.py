@@ -14,7 +14,7 @@ NN = PP01["n"]
 FXJ = GF.FX
 HT = 0.45
 
-pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINO PT-1, TRAVA PT-2 E FIXADORES DO SISTEMA",
                         desenho="ND-LET-PP04", folha="01/01", fase="PARA APROVAÇÃO", rev="06"))
 pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DA CE-1, PT-1 E PT-2; TABELA DE FIXADORES E TORQUES")
@@ -43,7 +43,7 @@ v1.cota_v([-165, -140, 0, 140, 165], 190, 10, total=True)
 v1.chamada((XC1, 60), (60, 18), f"CS-1 (eixo a {XC1:g} do eixo do pilar)")
 v1.chamada((120, 140), (20, 14), "pino com cabeça (21)")
 # corte com pinos e N18 (armadura do pilar)
-v2 = pr.vista("CE-1 CORTE", (Q[0] + 240, Q[1] + 440), 3.0, titulo="CE-1 — CORTE", subtitulo="pinos por solda de arco (stud welding) na oficina", unidade="mm")
+v2 = pr.vista("CE-1 CORTE", (Q[0] + 300, Q[1] + 440), 3.0, titulo="CE-1 — CORTE", subtitulo="pinos por solda de arco (stud welding) na oficina", unidade="mm")
 TC = GF.TCE
 v2.chapa(0, -165, TC, 330, 1.0)
 for z in (-140, 140):
@@ -57,7 +57,7 @@ v2.chamada((60, -150), (30, -16), "N18 — 2 U Ø10 C=96 (armadura do pilar)")
 I.solda(v2, (TC, 140 + 8), (16, 16), tipo="ponto", lado="seta", cauda="stud ISO 13918 SD Ø16")
 v2.texto((-4, 0), "FACE DO PILAR", "nota", "MIDDLE_CENTER", rot=90)
 # rev06e (DEC-031): CC-1 — conjunto de fábrica concretado na face C do pilar (corte pelo eixo de um console)
-vc = pr.vista("CC-1 CORTE", (Q[0] + 415, Q[1] + 314), 4.0, titulo="CC-1 — CORTE", subtitulo="CE-1 + CS-1 soldados na fábrica do pilar; face C para cima na fôrma", unidade="mm")
+vc = pr.vista("CC-1 CORTE", (Q[0] + 520, Q[1] + 314), 4.0, titulo="CC-1 — CORTE", subtitulo="CE-1 + CS-1 soldados na fábrica do pilar; face C para cima na fôrma", unidade="mm")
 Cc = GF.C
 vc.chapa(0, -165, TC, 330, 1.0)                                                    # CE-1 (x > 0 = dentro do pilar)
 for z in (-140, 140):
@@ -76,7 +76,7 @@ I.solda(vc, (-co_["t"], zb + co_["z0"] + 20), (-30, -10), a=FXJ["solda"]["filete
 vc.texto((TC + 4, -150), "DENTRO DO PILAR", "nota", "TOP_LEFT")
 # isométrico com balões
 cam = I.Camera((1.0, -1.2, 0.7))
-v3 = pr.vista("CE-1 ISO", (Q[0] + 420, Q[1] + 445), 5.0, titulo="CE-1 — ISOMÉTRICO", subtitulo="explodido", unidade="mm")
+v3 = pr.vista("CE-1 ISO", (Q[0] + 640, Q[1] + 470), 5.0, titulo="CE-1 — ISOMÉTRICO", subtitulo="explodido", unidade="mm")
 S3 = GF.ce1_solidos(60)
 pj = I.desenhar_iso(v3, S3, cam)
 I.balao(v3, pj(S3[0].centro), (-14, 12), 20)
@@ -84,12 +84,12 @@ I.balao(v3, pj(S3[1].centro), (12, 12), 21)
 
 # ================================================================== PT-1 — cartola (1:1,5)
 hat = [(0, -110), (6.3, -110), (6.3, -40), (36.3, -40), (36.3, 40), (6.3, 40), (6.3, 110), (0, 110), (0, 33.7), (30, 33.7), (30, -33.7), (0, -33.7)]
-p1 = pr.vista("PT-1", (Q[0] + 60, Q[1] + 175), 1.5, titulo="PT-1 — CARTOLA (VISTA LATERAL)", subtitulo="ch. 6,3 A36 dobrada; raio interno 6", unidade="mm")
+p1 = pr.vista("PT-1", (Q[0] + 80, Q[1] + 175), 1.5, titulo="PT-1 — CARTOLA (VISTA LATERAL)", subtitulo="ch. 6,3 A36 dobrada; raio interno 6", unidade="mm")
 p1.poli(hat, "METALICA", fechada=True); p1.hachura(hat, "ANSI31", HT, "METALICA")
 p1.cota_v([-110, -70, -40, 0, 40, 70, 110], 36.3, 10, total=True)
 p1.cota_h([0, 6.3, 36.3], -110, -8, total=False)
 p1.texto((-6, -70), "Ø18", "nota", "MIDDLE_RIGHT"); p1.texto((-6, 70), "oblongo 18 × 40", "nota", "MIDDLE_RIGHT")
-p2 = pr.vista("PT-1 DESENV", (Q[0] + 135, Q[1] + 175), 1.5, titulo="PT-1 — DESENVOLVIMENTO", subtitulo="corte a laser, dobrar nas linhas", unidade="mm")
+p2 = pr.vista("PT-1 DESENV", (Q[0] + 185, Q[1] + 175), 1.5, titulo="PT-1 — DESENVOLVIMENTO", subtitulo="corte a laser, dobrar nas linhas", unidade="mm")
 p2.chapa(0, -140, 80, 280, HT)
 for zz in (-140 + 70, -140 + 100, 140 - 100, 140 - 70):
     p2.linha((0, zz), (80, zz), "EIXO")
@@ -98,7 +98,7 @@ p2.poli([(31, 80), (31, 120), (49, 120), (49, 80)], "METALICA", fechada=True)
 p2.cota_v([-140, -100, -70, -40, 40, 70, 100, 140], 80, 10, total=True)
 p2.cota_h([0, 40, 80], -140, -8, total=False)
 # montagem PT-1 na junta (1:3)
-p3 = pr.vista("PT-1 MONT", (Q[0] + 300, Q[1] + 175), 2.5, titulo="PT-1 — GUIA NA JUNTA HORIZONTAL", subtitulo="2 por junta; M16 só na placa de baixo (guia, sem esforço — DEC-035)", unidade="mm")
+p3 = pr.vista("PT-1 MONT", (Q[0] + 395, Q[1] + 175), 2.5, titulo="PT-1 — GUIA NA JUNTA HORIZONTAL", subtitulo="2 por junta; M16 só na placa de baixo (guia, sem esforço — DEC-035)", unidade="mm")
 for z0_, z1_ in ((-150, -2.5), (2.5, 150)):
     pts = [(-100, z0_), (0, z0_), (0, z1_), (-100, z1_)]
     p3.poli(pts, "CORTADO", fechada=True); p3.hachura(pts, "AR-CONC", 0.03)
@@ -114,13 +114,13 @@ p3.chamada((-50, 0), (-30, -44), "junta 5 (macho-fêmea)")
 
 # ================================================================== PT-2 — cantoneira (1:1,5)
 ang = [(0, 0), (102, 0), (102, 9.5), (9.5, 9.5), (9.5, 102), (0, 102)]
-q1 = pr.vista("PT-2", (Q[0] + 400, Q[1] + 185), 1.5, titulo="PT-2 — CANTONEIRA (SEÇÃO)", subtitulo="L 102 × 102 × 9,5 A36, L = 150", unidade="mm")
+q1 = pr.vista("PT-2", (Q[0] + 590, Q[1] + 185), 1.5, titulo="PT-2 — CANTONEIRA (SEÇÃO)", subtitulo="L 102 × 102 × 9,5 A36, L = 150", unidade="mm")
 q1.poli(ang, "METALICA", fechada=True); q1.hachura(ang, "ANSI31", HT, "METALICA")
-q1.cota_h([0, 9.5, 52, 102], 0, -8, total=False)
+q1.cota_h([0, 9.5, 52, 102], 0, -12, total=False)
 q1.cota_v([0, 9.5, 52, 102], 0, -10, total=False)
-q1.chamada((52, 5), (16, -16), "aba na placa: oblongo 18 × 40 horizontal")
+q1.chamada((52, 5), (34, -24), "aba na placa: oblongo 18 × 40 horizontal")
 q1.chamada((5, 52), (14, 18), "aba no pilar: oblongo 18 × 40 vertical")
-q2 = pr.vista("PT-2 ABAS", (Q[0] + 510, Q[1] + 205), 1.5, titulo="PT-2 — FURAÇÃO DAS ABAS", subtitulo="as 2 abas rebatidas", unidade="mm")
+q2 = pr.vista("PT-2 ABAS", (Q[0] + 720, Q[1] + 205), 1.5, titulo="PT-2 — FURAÇÃO DAS ABAS", subtitulo="as 2 abas rebatidas", unidade="mm")
 q2.chapa(0, 0, 150, 102, HT)
 q2.poli([(55, 43), (95, 43), (95, 61), (55, 61)], "METALICA", fechada=True)
 q2.chapa(0, 120, 150, 102, HT)
@@ -160,4 +160,4 @@ pr.notas(XC, y - 4, [
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
 FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP04")
-print("PP04", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])
+print("PP04", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", av)

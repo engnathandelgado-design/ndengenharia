@@ -312,4 +312,4 @@ json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=k
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")
-print("PP01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])
+print("PP01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", av)

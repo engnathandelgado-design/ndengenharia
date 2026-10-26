@@ -376,7 +376,7 @@ def _chave_todas(pr, esc=1000, ultimo=True):
     b = kk.bbox_papel()
     bx0, by0, bx1, by1 = b[0], b[1] - 14, b[2], b[3]
     w_ = max(bx1 - bx0, 150)
-    caixas = [v.bbox_papel() for v in pr.vistas] + [tuple(t_[:4]) for t_ in pr.blocos_livres] + [(pr.carimbo_bbox[0], pr.carimbo_bbox[1], pr.carimbo_bbox[2], pr.carimbo_bbox[3] + 8 + 4.5 * len(pr.revisoes))]
+    caixas = [(lambda b_: (b_[0], b_[1] - 15, b_[2], b_[3]) if b_ else None)(v.bbox_papel()) for v in pr.vistas] + [tuple(t_[:4]) for t_ in pr.blocos_livres] + [(pr.carimbo_bbox[0], pr.carimbo_bbox[1], pr.carimbo_bbox[2], pr.carimbo_bbox[3] + 8 + 4.5 * len(pr.revisoes))]
     caixas = [c for c in caixas if c]
     qx0, qy0, qx1, qy1 = pr.quadro
     livre = lambda x0, y0: all(x0 + w_ / 2 + (bx1 - bx0) / 2 + 3 < c[0] or x0 - (w_ - (bx1 - bx0)) / 2 - 3 > c[2] or y0 + (by1 - by0) + 3 < c[1] or y0 - 3 > c[3]
@@ -784,7 +784,7 @@ def prancha_tipo():
         "Cotas de concreto em cm, metálicas em mm. Não medir no desenho."], 190)
     chave_todas(pr)                                                   # rev11 (checklist 6)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP00")
-    print("PP00", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
+    print("PP00", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", avisos)
 
 
 # ================================================================== ND-LET-CM01 rev 02 — locação e ordem das vistas
@@ -892,7 +892,7 @@ def prancha_cm():
         "Rev04: sem vigas de travamento VT (só entram com ponte rolante ou carga especificada); o fechamento é isostático (consoles com folga e pinos com furo oblongo vertical) e não é contado no contraventamento — a contribuição medida no modelo global foi desprezível (9,9 → 9,8 mm).",
         "Cotas de concreto em cm, níveis em m. Não medir no desenho."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CM01")
-    print("CM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
+    print("CM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", avisos)
 
 
 # ================================================================== ND-LET-VT01 rev 02 — vigas de travamento
@@ -992,7 +992,7 @@ def prancha_vt():
                          "Linhas 2–4: vista E (eixo A) aberta até +6,25 e vista F (eixo E) até +7,50; a VT fica aparente por dentro e escondida por fora pela fiada de placas.",
                          "Cotas de concreto em cm, níveis em m. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 190)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VT01")
-    print("VT01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
+    print("VT01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", avisos)
 
 
 PRANCHAS_VISTA = [(["A"], "ND-LET-PP-A"), (["B"], "ND-LET-PP-B"), (["C"], "ND-LET-PP-C"), (["D"], "ND-LET-PP-D"), (["E", "F"], "ND-LET-PP-EF"),

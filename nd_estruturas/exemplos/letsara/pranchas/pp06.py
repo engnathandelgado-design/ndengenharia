@@ -28,7 +28,7 @@ recs = FCH.RECORTADAS
 tipos = sorted(set(FCH.TIPO[p["Lk"]] for _, p in recs))
 n_c, n_d = PP01["CS1C"], PP01["CS1D"]
 
-pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLACAS RECORTADAS NO I130 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C / CS-1D (DEC-044)",
                         desenho="ND-LET-PP06", folha="01/01", fase="PARA APROVAÇÃO", rev="08"))
 pr.revisao("08", "22/10/2026", "EMISSÃO: RECORTE DAS PLACAS NO I130 DO EIXO C; CE-1L; CS-1 COM CALÇO (DEC-044)")
@@ -236,4 +236,4 @@ pr.texto(Q[0] + 40, Q[3] - 282, "AÇO DA PONTA RECORTADA (1 PONTA; N3–N7 da PP
 pr.tabela_aco(Q[0] + 40, Q[3] - 286, bar)
 FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP06")
-print("PP06", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])
+print("PP06", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", av)

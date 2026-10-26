@@ -52,7 +52,7 @@ def perspectiva(esc, arq):
     d = max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2])
     pl.camera_position = [(c[0] - 1.6 * d, c[1] - 1.9 * d, c[2] + 1.4 * d), tuple(c), (0, 0, 1)]
     pl.reset_camera(); pl.camera.zoom(1.15)
-    pl.screenshot(arq); pl.close()
+    pl.screenshot(arq, scale=3); pl.close()                         # rev11: ≥ 400 ppi
     im = Image.open(arq).convert("RGB")
     bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()
     im.crop((max(bb[0] - 20, 0), max(bb[1] - 20, 0), min(bb[2] + 20, im.width), min(bb[3] + 20, im.height))).save(arq)
@@ -119,7 +119,7 @@ def folha(esc):
     pre = "GI-" if esc == "interna" else "GE-"
     fn = E.interna if esc == "interna" else E.externa
     G = [g for g in EJ["guardas"] if g["cod"].startswith(pre)]
-    pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+    pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo=f"ESCADA METÁLICA {esc.upper()} — GUARDA-CORPO E CORRIMÃO DUPLO: DETALHES DE CONSTRUÇÃO E MONTAGEM",
                             desenho=des, folha="01/01", fase="PARA APROVAÇÃO", rev="00"))
     pr.revisao("00", "25/10/2026", "EMISSÃO INICIAL (rev10): DETALHAMENTO DO GUARDA-CORPO E DO CORRIMÃO DUPLO, LISTAS DE MATERIAL E NOTAS TÉCNICAS")
@@ -139,14 +139,14 @@ def folha(esc):
     SUP = lambda x, y, z: (x * 1000, y * 1000)
     LAT = lambda x, y, z: (y * 1000, z * 1000)
     x0v = Q[0] + 262
-    vs = pr.vista("VISTA SUPERIOR", (x0v - lo[0] * 1000 / ESC, Q[3] - 44 - hi[1] * 1000 / ESC), ESC, titulo="VISTA SUPERIOR", subtitulo="esc. 1:50 — cotas em mm", unidade="mm")
+    vs = pr.vista("VISTA SUPERIOR", (x0v - lo[0] * 1000 / ESC, Q[3] - 44 - hi[1] * 1000 / ESC), ESC, titulo="VISTA SUPERIOR", subtitulo="planta do trecho", unidade="mm")
     E.projetar(vs, SUP, lambda pc: fn(pc) and not E.guarda(pc) and pc["grupo"] != "Piso e fundações", cam="OCULTA")
     E.projetar(vs, SUP, lambda pc: fn(pc) and E.guarda(pc), cam="METALICA")
     vs.cota_h([lo[0] * 1000, hi[0] * 1000], lo[1] * 1000, -8, total=False)
     vs.cota_v([lo[1] * 1000, hi[1] * 1000], hi[0] * 1000, 8, total=False)
     w_sup = (hi[0] - lo[0]) * 1000 / ESC
     x0l = x0v + w_sup + 70
-    vl = pr.vista("VISTA LATERAL", (x0l - lo[1] * 1000 / ESC, Q[3] - 60 - hi[2] * 1000 / ESC), ESC, titulo="VISTA LATERAL", subtitulo="esc. 1:50 — guarda-corpo cotado nos montantes; corrimão duplo", unidade="mm")
+    vl = pr.vista("VISTA LATERAL", (x0l - lo[1] * 1000 / ESC, Q[3] - 60 - hi[2] * 1000 / ESC), ESC, titulo="VISTA LATERAL", subtitulo="guarda-corpo cotado nos montantes; corrimão duplo", unidade="mm")
     E.projetar(vl, LAT, lambda pc: fn(pc) and not E.guarda(pc) and pc["grupo"] != "Piso e fundações", cam="OCULTA")
     E.projetar(vl, LAT, lambda pc: fn(pc) and E.guarda(pc), cam="METALICA")
     gref = next(g for g in G if not g["so_corrimao"] and g["fix"] == "longarina")
@@ -164,8 +164,8 @@ def folha(esc):
     bm, tr, s = gc["montante"]["b"], gc["travessa"]["b"], round(gd["s"] * 1000)
     h = round(gd["h"] * 1000)
     br = gc["barra"]
-    yb = Q[1] + 232 - max(0, h - 1050) / 20
-    d1 = pr.vista("DET GC", (Q[0] + 40, yb), 20, titulo="DETALHE DO GUARDA-CORPO", subtitulo=f"{gd['cod']} ({gd['nome']}) — módulo típico; esc. 1:20 — cotas em mm", unidade="mm")
+    yb = Q[1] + 420 - max(0, h - 1050) / 20
+    d1 = pr.vista("DET GC", (Q[0] + 40, yb), 20, titulo="DETALHE DO GUARDA-CORPO", subtitulo=f"{gd['cod']} ({gd['nome']}) — módulo típico", unidade="mm")
     d1.linha((-250, 0), (2 * s + 250, 0), "TERRENO")
     for k in range(3):
         x = k * s
@@ -188,7 +188,7 @@ def folha(esc):
         d1.linha((-250, zc), (2 * s + 250, zc), "VISTA")
     d1.cota_h([0, s, 2 * s], -190, -8, total=True)
     xs_b = [bm / 2 + (s - bm) / max(1, round((s - bm) / br["s_mm"])) * (j + 0.5) for j in range(2)]
-    d1.cota_v([0, 100, round(H2 * 1000), round(H1 * 1000), h - 50, h], -bm / 2, -10, total=False)
+    d1.cota_v([0, 100, round(H2 * 1000), round(H1 * 1000), h - 50, h], -bm / 2, -16, total=False)
     d1.chamada((s, h - tr / 2), (6, 14), f"travessa {gc['travessa']['perfil']}")
     d1.chamada((2 * s + bm / 2, h * 0.30), (28, 0), f"montante {gc['montante']['perfil']} c/{f(gd['s'] * 100, 1)} cm (≤ 120)")
     d1.chamada((2 * s - bm, 100), (34, -6), "L 38 × 38 × 4,8 (2 por vão), 1 M10 em cada montante")
@@ -198,8 +198,8 @@ def folha(esc):
     # ---- detalhe do corrimão duplo 1:20 (trecho inclinado + prolongamento + terminal)
     ang = math.atan2(17.95, 28.0)
     Lh = 1800
-    xc0 = Q[0] + 342
-    d2 = pr.vista("DET CR", (xc0, yb - 27), 20, titulo="DETALHE DO CORRIMÃO DUPLO", subtitulo=f"nos dois lados dos lances; {f(H1, 2)} e {f(H2, 2)} m acima do bocel; esc. 1:20 — cotas em mm", unidade="mm")
+    xc0 = Q[0] + 400
+    d2 = pr.vista("DET CR", (xc0, yb - 27), 20, titulo="DETALHE DO CORRIMÃO DUPLO", subtitulo=f"nos dois lados dos lances; {f(H1, 2)} e {f(H2, 2)} m acima do bocel", unidade="mm")
     zt = lambda x: x * math.tan(ang)
     pts_n = []
     for k in range(7):
@@ -223,7 +223,7 @@ def folha(esc):
     d2.chamada((1260, zt(1260) + H1 * 1000 + 60), (-8, 12), "montante (suportes CR-S nas 2 alturas)")
     # ---- corte A-A 1:10 (seção do guarda-corpo na longarina)
     yc_ = Q[1] + 70
-    ca = pr.vista("CORTE A-A", (Q[0] + 545, Q[1] + 205), 10, titulo="CORTE A-A", subtitulo="na longarina; esc. 1:10", unidade="mm")
+    ca = pr.vista("CORTE A-A", (Q[0] + 760, Q[1] + 405), 5, titulo="CORTE A-A", subtitulo="na longarina", unidade="mm")
     hc_ = min(h, 1050)
     ca.ret(-152, -190, 152, 152, "METALICA")                                   # longarina U (vista de topo da seção)
     ca.ret(0, -190, bm, hc_ - tr + 190, "METALICA")
@@ -245,7 +245,7 @@ def folha(esc):
     ca.chamada((-76, -100), (-2, -24), "longarina (mesas para fora)")
     ca.chamada((bm + 10, -105), (12, -8), "2 M12 + bucha (DETALHE 1)")
     # ---- peça 1 (suporte CR-S) e peça 2 (tampa do montante) 1:5
-    p1 = pr.vista("PEÇA 1", (Q[0] + 545, Q[1] + 50), 5, titulo="PEÇA 1 — SUPORTE CR-S", subtitulo="# 4,75 × 40 + abraçadeira; esc. 1:5", unidade="mm")
+    p1 = pr.vista("PEÇA 1", (Q[0] + 790, Q[1] + 70), 5, titulo="PEÇA 1 — SUPORTE CR-S", subtitulo="# 4,75 × 40 + abraçadeira", unidade="mm")
     p1.ret(0, 0, 4.75, 70, "METALICA"); p1.ret(-40, 0, 40, 4.75, "METALICA")
     p1.circulo((2.4, 45), 5.5, "VISTA")
     p1.circulo((-40 - 19.05 - 2, 2.4), 19.05, "METALICA"); p1.circulo((-40 - 19.05 - 2, 2.4), 22.05, "METALICA")
@@ -253,14 +253,14 @@ def folha(esc):
     p1.cota_v([0, 45, 70], -90, -6, total=False)
     p1.chamada((2.4, 45), (12, 6), "furo Ø11 (M10 no montante)")
     p1.chamada((-61, 24.5), (-10, 10), "abraçadeira 2 M8 (furos Ø9)")
-    p2 = pr.vista("PEÇA 2", (Q[0] + 545, Q[1] + 120), 5, titulo="PEÇA 2 — TAMPA DO MONTANTE", subtitulo="chapa dobrada # 3, 1 M6, sem solda; esc. 1:5", unidade="mm")
+    p2 = pr.vista("PEÇA 2", (Q[0] + 790, Q[1] + 170), 5, titulo="PEÇA 2 — TAMPA DO MONTANTE", subtitulo="chapa dobrada # 3, 1 M6, sem solda", unidade="mm")
     p2.ret(0, 20, bm + 6, 3, "METALICA"); p2.ret(0, 0, 3, 20, "METALICA"); p2.ret(bm + 3, 0, 3, 20, "METALICA")
     p2.ret(3, -60, bm, 80, "OCULTA")
     p2.cota_h([0, bm + 6], 23, 10, total=False)
     p2.cota_v([0, 20], bm + 6, 8, total=False)
     p2.chamada((bm + 4.5, 10), (12, -6), "1 M6 (furo Ø7) na aba")
     # ---- detalhes 1, 2, 3 de fixação (1:5)
-    dA = pr.vista("DETALHE 1", (Q[0] + 60, Q[1] + 70), 5, titulo="DETALHE 1 — MONTANTE NA LONGARINA / VIGA", subtitulo="2 M12 8.8 a 70 + bucha Ø21,3 × 2,6 entre as mesas; esc. 1:5", unidade="mm")
+    dA = pr.vista("DETALHE 1", (Q[0] + 110, Q[1] + 110), 5, titulo="DETALHE 1 — MONTANTE NA LONGARINA / VIGA", subtitulo="2 M12 8.8 a 70 + bucha Ø21,3 × 2,6 entre as mesas", unidade="mm")
     dA.ret(0, 0, 5.1, 152.4, "METALICA"); dA.ret(5.1, 0, 43.7, 8.7, "METALICA"); dA.ret(5.1, 143.7, 43.7, 8.7, "METALICA")
     dA.ret(48.8, -60, bm, 330, "METALICA")
     for zz in (41, 111):
@@ -271,7 +271,7 @@ def folha(esc):
     dA.chamada((-12, 111), (-12, 10), "M12 × 110 + porca + 2 arruelas")
     if esc == "interna":
         lg = next(l for l in EJ["ligacoes"] if l["cod"] == "GC-LAJE")
-        dB = pr.vista("DETALHE 2", (Q[0] + 215, Q[1] + 110), 5, titulo="DETALHE 2 — MONTANTE NA LAJE (GI-10 / GI-11)", subtitulo="esc. 1:5", unidade="mm")
+        dB = pr.vista("DETALHE 2", (Q[0] + 330, Q[1] + 150), 5, titulo="DETALHE 2 — MONTANTE NA LAJE (GI-10 / GI-11)", subtitulo="2 L 102 + 4 químicos M10", unidade="mm")
         pts = [(-150, -200), (250, -200), (250, 0), (-150, 0)]
         dB.poli(pts, "CORTADO", fechada=True); dB.hachura(pts, "AR-CONC", 0.03)
         dB.ret(100, 0, 50, 250, "METALICA")
@@ -281,11 +281,11 @@ def folha(esc):
         dB.linha((80, 60), (170, 60), "METALICA")
         dB.cota_h([-2, 45, 100, 150, 205, 252], 0, -8, total=False)
         dB.cota_v([-70, 0, 60, 102], 252, 10, total=False)
-        dB.chamada((45, -50), (-10, -34), "chumbador químico M10 hef 70 (4) — conferir catálogo")
+        dB.chamada((45, -50), (40, -50), "chumbador químico M10 hef 70 (4) — conferir catálogo")
         dB.chamada((170, 60), (14, 12), "2 L 102 × 102 × 9,5 × 150 + 2 M12 passantes")
         dB.chamada((-120, -100), (-6, -16), "borda da laje ≥ 60")
     else:
-        dB = pr.vista("DETALHE 2", (Q[0] + 250, Q[1] + 90), 5, titulo="DETALHE 2 — MONTANTE DO CORRIMÃO NA ALMA (GE-2)", subtitulo="lado da parede; esc. 1:5", unidade="mm")
+        dB = pr.vista("DETALHE 2", (Q[0] + 365, Q[1] + 130), 5, titulo="DETALHE 2 — MONTANTE DO CORRIMÃO NA ALMA (GE-2)", subtitulo="lado da parede", unidade="mm")
         dB.ret(0, -150, 6.3, 300, "METALICA")
         dB.ret(-40, -20, 40, 240, "METALICA")
         dB.ret(-90, -24, 90, 4, "VISTA")
@@ -295,7 +295,7 @@ def folha(esc):
         dB.chamada((3, 120), (12, 10), "alma da longarina (lado dos degraus)")
         dB.chamada((-20, 180), (-14, 10), "montante 40 × 40 × 4 + 2 M12 8.8")
         dB.chamada((-60, -22), (-10, -12), "degrau (apoio do pé)")
-    dC = pr.vista("DETALHE 3", (Q[0] + 400, Q[1] + 120), 10, titulo="DETALHE 3 — TERMINAL E EMENDA DO CORRIMÃO", subtitulo="esc. 1:10", unidade="mm")
+    dC = pr.vista("DETALHE 3", (Q[0] + 560, Q[1] + 160), 10, titulo="DETALHE 3 — TERMINAL E EMENDA DO CORRIMÃO", subtitulo="terminal com curva e emenda com luva", unidade="mm")
     Dm = D
     dC.ret(0, 0, 180, Dm, "METALICA")
     dC.poli([(0, 0), (-30, -30), (-30 - Dm, -30), (-Dm, Dm)], "METALICA")
@@ -312,7 +312,7 @@ def folha(esc):
     # ---- tabelas e notas
     tg, tc_, nmont = quantitativos(esc)
     y = Q[3] - 6
-    y = pr.tabela(XC, y, f"LISTA DE MATERIAIS — GUARDA-CORPO ({', '.join(g['cod'] for g in G if not g['so_corrimao'])})", ["ITEM", "DESCRIÇÃO", "MATERIAL", "QUANT.", "UN."], tg, [10, 104, 42, 18, 12], h_lin=4.6)
+    y = pr.tabela(XC, y, "LISTA DE MATERIAIS — GUARDA-CORPO", ["ITEM", "DESCRIÇÃO", "MATERIAL", "QUANT.", "UN."], tg, [10, 104, 42, 18, 12], h_lin=4.6)
     y = pr.tabela(XC, y - 4, f"LISTA DE MATERIAIS — CORRIMÃO DUPLO ({f(H1, 2)} / {f(H2, 2)} m)", ["ITEM", "DESCRIÇÃO", "MATERIAL", "QUANT.", "UN."], tc_, [10, 104, 42, 18, 12], h_lin=4.6)
     notas = ["Medidas em mm, níveis em m. Cotas de alturas do guarda-corpo e do corrimão medidas na vertical a partir da linha dos bocéis (lances) ou do piso acabado (patamares e laje).",
              "Aço: tubos estruturais ASTM A500 gr. B, tubo do corrimão ASTM A53 / NBR 5590 (Ø38,1 × 2), chapas e cantoneiras ASTM A36, barras do fechamento SAE 1020 com pontas roscadas.",

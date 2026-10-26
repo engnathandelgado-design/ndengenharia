@@ -25,7 +25,7 @@ YF = H / 2                                    # face externa das abas (62,5)
 YP = 50.0                                     # faces da placa (±50)
 XP = -JU                                      # ponta da placa (−20), x medido da face da alma voltada para a porta (+ para dentro do vão)
 
-pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="FIXAÇÃO DAS PLACAS — OMBREIRA METÁLICA OM-1 DA PORTA DA VISTA I (FABRICAÇÃO E MONTAGEM)",
                         desenho="ND-LET-PP05", folha="01/01", fase="PARA APROVAÇÃO", rev="06"))
 pr.revisao("06", "18/10/2026", "EMISSÃO: OMBREIRA OM-1 EM U NA PORTA DA VISTA I (DEC-028)")
@@ -36,7 +36,7 @@ pr.cabecalho_peca("OM", f"OMBREIRA OM-1 — U 125 × 80 × 6,3 — L = {LU:.0f} 
                   largura=XC - Q[0] - 10)
 
 # ================================================================== V1 — vista pela porta (alma), 1:10
-v1 = pr.vista("VISTA PELA PORTA", (Q[0] + 70, Q[1] + 105), 10.0, titulo="OM-1 — VISTA PELA PORTA", subtitulo="face da alma; placa I-13 atrás (tracejada)", unidade="mm")
+v1 = pr.vista("VISTA PELA PORTA", (Q[0] + 85, Q[1] + 105), 10.0, titulo="OM-1 — VISTA PELA PORTA", subtitulo="face da alma; placa I-13 atrás (tracejada)", unidade="mm")
 v1.chapa(-YF, TB, H, LU, 1.2)
 v1.chapa(-100, 0, 200, TB, 0.6)
 v1.ret(-YP, 0, 2 * YP, 1250 - 5, "OCULTA")
@@ -55,7 +55,7 @@ v1.chamada((-30, 700), (-32, 6), "placa I-13 (atrás)")
 I.solda(v1, (-YF, TB), (-16, -16), a=5, tipo="filete", contorno=True, cauda="oficina")
 
 # ================================================================== V2 — vista lateral pela face interna, 1:10
-v2 = pr.vista("VISTA LATERAL", (Q[0] + 215, Q[1] + 105), 10.0, titulo="OM-1 — VISTA LATERAL (FACE INTERNA)", subtitulo="x a partir da face da alma; porta à direita", unidade="mm")
+v2 = pr.vista("VISTA LATERAL", (Q[0] + 265, Q[1] + 105), 10.0, titulo="OM-1 — VISTA LATERAL (FACE INTERNA)", subtitulo="x a partir da face da alma; porta à direita", unidade="mm")
 v2.chapa(-BF, TB, BF, LU, 1.2)
 v2.chapa(XP, 0, 160 - XP, TB, 0.6)
 v2.ret(-400, 0, 400 + XP, 1250 - 5, "VISTA")
@@ -77,10 +77,10 @@ v2.cota_v([0, ZP[0], ZP[1], 1250, ZCLU, ZI15, ZCLB, CL0 + CLL], 200, 10, total=F
 v2.chamada((-50, ZP[0]), (-40, 10), "4 — M16 passante (Ø18)")
 v2.chamada((-BF / 2, ZCLB), (-40, 12), "CL-1: M16 em bucha BR-1")
 v2.chamada((B["ex"][1], -60), (14, -8), "2 chumbadores químicos M16 hef 100")
-v2.chamada((XP, 600), (-6, -16), "ponta da placa a 20")
+v2.chamada((XP, 600), (-50, -34), "ponta da placa a 20")
 
 # ================================================================== V3 — planta (corte a +0,60), 1:2
-v3 = pr.vista("PLANTA", (Q[0] + 423, Q[1] + 345), 2.0, titulo="CORTE HORIZONTAL A +0,60 (PLANTA)", subtitulo="lado de fora embaixo; vão da porta à direita", unidade="mm")
+v3 = pr.vista("PLANTA", (Q[0] + 520, Q[1] + 470), 2.0, titulo="CORTE HORIZONTAL A +0,60 (PLANTA)", subtitulo="lado de fora embaixo; vão da porta à direita", unidade="mm")
 v3.ret(-250, -YP, 250 + XP, 2 * YP, "CORTADO")
 v3.hachura([(-250, -YP), (XP, -YP), (XP, YP), (-250, YP)], "AR-CONC", 0.03)
 U_pts = [(-BF, -YF), (0, -YF), (0, YF), (-BF, YF), (-BF, YF - T), (-T, YF - T), (-T, -YF + T), (-BF, -YF + T)]
@@ -106,7 +106,7 @@ v3.texto((-200, YF + 30), "LADO DE DENTRO", "min", "BOTTOM_LEFT")
 v3.texto((-240, -YF - 30), "LADO DE FORA", "min", "TOP_LEFT")
 
 # ================================================================== V4 — chapa de base, 1:3 · V5 — CL-1, 1:3
-v4 = pr.vista("BASE", (Q[0] + 330, Q[1] + 175), 3.0, titulo="2 — CHAPA DE BASE (PLANTA)", subtitulo="12,5 × 200 × 180 A36; U soldado na oficina", unidade="mm")
+v4 = pr.vista("BASE", (Q[0] + 420, Q[1] + 175), 3.0, titulo="2 — CHAPA DE BASE (PLANTA)", subtitulo="12,5 × 200 × 180 A36; U soldado na oficina", unidade="mm")
 v4.chapa(XP, -100, 160 - XP, 200, HT)
 v4.poli([(max(-BF, XP), -YF), (0, -YF), (0, YF), (max(-BF, XP), YF)], "VISTA")
 for x in B["ex"]:
@@ -114,7 +114,7 @@ for x in B["ex"]:
 v4.cota_h([XP, 0, B["ex"][0], B["ex"][1], 160], -100, -8, total=True)
 v4.cota_v([-100, 0, 100], 160, 8, total=True)
 v4.texto((95, -30), "2 furos Ø18", "nota", "TOP_CENTER")
-v5 = pr.vista("CL-1", (Q[0] + 425, Q[1] + 130), 3.0, titulo="3 — CHAPA CL-1", subtitulo="12,5 × 100 × 360 A36", unidade="mm")
+v5 = pr.vista("CL-1", (Q[0] + 560, Q[1] + 130), 3.0, titulo="3 — CHAPA CL-1", subtitulo="12,5 × 100 × 360 A36", unidade="mm")
 v5.chapa(0, 0, CL["b"], CLL, HT)
 v5.circulo((50, ZCLU - CL0), 9, "METALICA")
 v5.poli([(41, ZCLB - CL0 - 20), (59, ZCLB - CL0 - 20), (59, ZCLB - CL0 + 20), (41, ZCLB - CL0 + 20)], "METALICA", fechada=True)
@@ -136,7 +136,7 @@ for z in ZP:
 for x in B["ex"]:
     S.append(I.cilindro((x, 0, -600), "z", 8, 160, item=6, cor=I.CINZA_PAR, liso=True))
 S.append(I.caixa(-BF + 10, XP - 2, YP + 80, YP + 80 + NEO, 60, 1200, item=7, cor=(70, 70, 70)))
-v6 = pr.vista("ISO", (Q[0] + 569, Q[1] + 132), 9.0, titulo="OM-1 — ISOMÉTRICO EXPLODIDO", subtitulo="balões = itens da lista", unidade="mm")
+v6 = pr.vista("ISO", (Q[0] + 720, Q[1] + 150), 9.0, titulo="OM-1 — ISOMÉTRICO EXPLODIDO", subtitulo="balões = itens da lista", unidade="mm")
 pj = I.desenhar_iso(v6, S, cam)
 I.balao(v6, pj((0, 0, 1700)), (14, 6), 1)
 I.balao(v6, pj((80, 0, -300)), (14, -6), 2)
@@ -179,4 +179,4 @@ pr.notas(XC, y - 4, [
     "Medidas em mm."], 250)
 FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP05")
-print("PP05", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])
+print("PP05", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", av)

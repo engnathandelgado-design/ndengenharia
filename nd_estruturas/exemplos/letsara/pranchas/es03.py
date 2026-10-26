@@ -84,8 +84,8 @@ for row in linhas:
 lg = {}
 for l in EJ["ligacoes"]:
     lg.setdefault(l["cod"], l)
-yb = Q[1] + 62
-dA = pr.vista("DETALHE A", (Q[0] + 60, yb), 5, titulo="DETALHE A — MONTANTE NA LONGARINA", subtitulo="2 M12 8.8 a 70 + bucha Ø21,3 × 2,6 (mesas para fora)", unidade="mm")
+yb = Q[1] + 68
+dA = pr.vista("DETALHE A", (Q[0] + 46, yb), 5, titulo="DETALHE A — MONTANTE NA LONGARINA", subtitulo="2 M12 8.8 a 70 + bucha Ø21,3 × 2,6 (mesas para fora)", unidade="mm")
 dA.ret(0, 0, 5.1, 152.4, "METALICA"); dA.ret(5.1, 0, 43.7, 8.7, "METALICA"); dA.ret(5.1, 143.7, 43.7, 8.7, "METALICA")
 dA.ret(48.8, -60, 50, 330, "METALICA")
 for zz in (41, 111):
@@ -95,7 +95,7 @@ dA.chamada((80, 200), (12, 10), "montante tubo 50 × 50 × 2 (60 × 60 × 2 na e
 dA.chamada((25, 41), (-16, -14), "bucha L 46")
 dA.chamada((-10, 111), (-14, 10), "2 M12 8.8")
 dA.chamada((2, 75), (-16, 0), "longarina U")
-dB = pr.vista("DETALHE B", (Q[0] + 228, yb), 5, titulo="DETALHE B — MONTANTE NA LAJE (GI-10 / GI-11)", subtitulo=lg["GC-LAJE"]["furos"][:60], unidade="mm")
+dB = pr.vista("DETALHE B", (Q[0] + 270, yb), 5, titulo="DETALHE B — MONTANTE NA LAJE (GI-10 / GI-11)", subtitulo=lg["GC-LAJE"]["furos"][:60], unidade="mm")
 pts = [(-150, -200), (250, -200), (250, 0), (-150, 0)]
 dB.poli(pts, "CORTADO", fechada=True); dB.hachura(pts, "AR-CONC", 0.03)
 dB.ret(100, 0, 50, 250, "METALICA")
@@ -106,7 +106,7 @@ dB.linha((80, 60), (170, 60), "METALICA")
 dB.chamada((45, -50), (-30, -36), "chumbador químico M10 hef 70 (4)")
 dB.chamada((170, 60), (14, 12), "2 L 102 × 102 × 9,5 × 150 + 2 M12 passantes")
 dB.chamada((-120, -100), (-6, -16), "borda da laje ≥ 60")
-dC = pr.vista("DETALHE C", (Q[0] + 378, yb), 5, titulo="DETALHE C — SUPORTE DO CORRIMÃO", subtitulo=lg["CR-S"]["furos"], unidade="mm")
+dC = pr.vista("DETALHE C", (Q[0] + 446, yb), 5, titulo="DETALHE C — SUPORTE DO CORRIMÃO", subtitulo=lg["CR-S"]["furos"], unidade="mm")
 dC.ret(0, -100, 50, 250, "METALICA")
 dC.poli([(50, 60), (90, 60), (90, 110)], "METALICA")
 dC.circulo((109, 129), 19.05, "METALICA"); dC.circulo((109, 129), 17.05, "METALICA")
@@ -114,7 +114,7 @@ dC.cota_h([50, 90], 30, -8, total=False)
 dC.chamada((70, 60), (10, -18), "chapa dobrada 4,75 × 40 em L + 1 M10")
 dC.chamada((125, 140), (12, 10), "corrimão Ø38,1 × 2 + abraçadeira 2 M8")
 dC.chamada((25, 0), (-14, -8), "montante")
-dD = pr.vista("DETALHE D", (Q[0] + 535, yb), 5, titulo="DETALHE D — FECHAMENTO EM BARRAS", subtitulo="barras com as pontas roscadas, porca e contraporca nas L 38", unidade="mm")
+dD = pr.vista("DETALHE D", (Q[0] + 490, yb + 127), 5, titulo="DETALHE D — FECHAMENTO EM BARRAS", subtitulo="barras com as pontas roscadas, porca e contraporca nas L 38", unidade="mm")
 dD.ret(0, 0, 38, 4.8, "METALICA"); dD.ret(0, 0, 4.8, 38, "METALICA")
 dD.ret(0, 250, 38, 4.8, "METALICA"); dD.ret(0, 216.2, 4.8, 38, "METALICA")
 for xb in (19, 149):
@@ -130,22 +130,15 @@ y = Q[3] - 6
 lin = []
 for g in G:
     gc = g["gc"]
-    lin.append([g["cod"], g["nome"][:48], f(g["h"], 2), gc["montante"]["perfil"].replace("tubo ", ""), f(gc["montante"]["uso"], 2), g["fix"]])
-y = pr.tabela(XC, y, "TRECHOS DE GUARDA-CORPO E CORRIMÃO", ["COD", "LOCAL", "h (m)", "MONTANTE", "USO", "FIXAÇÃO"], lin, [14, 80, 14, 26, 12, 24], h_lin=4.4)
-lin = []
-vistos = set()
-for l in EJ["ligacoes"]:
-    if l["cod"] in vistos:
-        continue
-    vistos.add(l["cod"])
-    lin.append([l["cod"], l["tipo"][:30], l["furos"][:62], f(l["uso"], 2), "ok" if l["ok"] else "NÃO"])
-y = pr.tabela(XC, y - 3, f"LIGAÇÕES DAS ESCADAS — {EJ['n_conflitos']} CONFLITOS (escadas_detalhe.py)", ["COD", "LIGAÇÃO", "PARAFUSOS / ELEMENTOS", "USO", ""], lin, [18, 40, 92, 12, 8], h_lin=4.2)
+    lin.append([g["cod"], g["nome"][:48], f(g["h"], 2), gc["montante"]["perfil"].replace("tubo ", ""), g["fix"]])
+y = pr.tabela(XC, y, "TRECHOS DE GUARDA-CORPO E CORRIMÃO", ["COD", "LOCAL", "h (m)", "MONTANTE", "FIXAÇÃO"], lin, [16, 90, 14, 28, 24], h_lin=4.4)
+# rev11: tabela de verificação das ligações fora da folha do cliente (fica na memória e no escadas_detalhe.py)
 lin = [[p["faixa"][:46], f(p["pe_direito_min_m"], 2) if p["pe_direito_min_m"] else "livre", p["sob"][:40]] for p in EJ["pe_direito"]]
 y = pr.tabela(XC, y - 3, "PÉ-DIREITO LIVRE (≥ 2,10 m)", ["FAIXA", "m", "LIMITADO POR"], lin, [70, 16, 84], h_lin=4.4)
 c = EJ["cargas"]
 notas = ["RT CBMRS nº 11 Parte 01/2016 e NBR 9050:2020: corrimão DUPLO nos DOIS lados de todos os lances, a 0,92 m (faixa CBMRS 0,80–0,92) e 0,70 m do bocel, tubo redondo Ø38,1 (faixa 38–65), afastado 40 mm de qualquer peça ou parede, contínuo nos patamares, com prolongamento de 30 cm nas pontas livres.",
          "Guarda-corpo em todo lado livre: 0,92 m nos lances internos (vertical do bocel), 1,05 m nos patamares internos e na abertura da laje +3,90, 1,30 m em toda a escada externa; fechamento em barras verticais que não deixam passar a esfera de 15 cm.",
-         f"Cargas: {f(c['guarda_corpo_kN_m'], 2)} kN/m horizontal no topo, {f(c['fechamento_kPa'], 2)} kPa no fechamento (não simultâneas) e {f(c['corrimao_kN'], 2)} kN concentrada no corrimão; γf 1,5. Montantes a ≤ 1,20 m, perfis no limite (uso na tabela).",
+         f"Cargas: {f(c['guarda_corpo_kN_m'], 2)} kN/m horizontal no topo, {f(c['fechamento_kPa'], 2)} kPa no fechamento (não simultâneas) e {f(c['corrimao_kN'], 2)} kN concentrada no corrimão; γf 1,5. Montantes a ≤ 1,20 m.",
          "Ligações todas parafusadas, sem solda: montante encostado nas pontas das mesas da longarina/viga com 2 M12 a 70 e bucha (det. A); na laje, 2 cantoneiras L 102 e 4 chumbadores químicos M10 (det. B — conferir catálogo do chumbador); corrimão em suporte de chapa dobrada (det. C).",
          "As elevações são desenvolvidas ao longo de cada trecho, projetadas do modelo 3D (traço cheio: guarda-corpo; tracejado: longarina, vigas e degraus de apoio). Plantas e cortes nas ND-LET-ES01 e ES02.",
          "Aço ASTM A36 galvanizado a fogo depois da fabricação. Cotas em mm, níveis em m. Não medir no desenho."]

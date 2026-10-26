@@ -22,7 +22,6 @@
     "LOCAL",
     "h (m)",
     "MONTANTE",
-    "USO",
     "FIXAÇÃO"
    ],
    "linhas": [
@@ -31,7 +30,6 @@
      "lance 1, lado livre (x 36,30)",
      "0,92",
      "50 × 50 × 2",
-     "0,93",
      "longarina"
     ],
     [
@@ -39,7 +37,6 @@
      "lance 1, lado do vão central (só corrimão)",
      "0,92",
      "40 × 40 × 4",
-     "0,87",
      "longarina"
     ],
     [
@@ -47,7 +44,6 @@
      "lance 2, lado do vão central",
      "0,92",
      "40 × 40 × 4",
-     "0,87",
      "longarina"
     ],
     [
@@ -55,7 +51,6 @@
      "lance 2, lado do eixo E (60 cm até a parede)",
      "0,92",
      "50 × 50 × 2",
-     "0,93",
      "longarina"
     ],
     [
@@ -63,7 +58,6 @@
      "patamar +1,975, lado do P6–P7",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -71,7 +65,6 @@
      "patamar +1,975, lado x 36,30",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -79,7 +72,6 @@
      "patamar +1,975, lado do eixo E",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -87,7 +79,6 @@
      "chegada +3,95, sobre a entrada do lance 1",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -95,7 +86,6 @@
      "chegada +3,95, lado do eixo E",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -103,7 +93,6 @@
      "laje +3,90, borda x 36,00 da abertura",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "laje"
     ],
     [
@@ -111,7 +100,6 @@
      "laje +3,90, borda y 3,99 da abertura (sobre a VM",
      "1,05",
      "50 × 50 × 2",
-     "0,93",
      "laje"
     ],
     [
@@ -119,7 +107,6 @@
      "lance de cima, lado externo (x −1,95)",
      "1,30",
      "60 × 60 × 2",
-     "0,78",
      "longarina"
     ],
     [
@@ -127,7 +114,6 @@
      "lance de cima, lado da parede",
      "0,92",
      "40 × 40 × 4",
-     "0,87",
      "degrau"
     ],
     [
@@ -135,7 +121,6 @@
      "lance de baixo, lado da linha 1",
      "1,30",
      "60 × 60 × 2",
-     "0,76",
      "longarina"
     ],
     [
@@ -143,7 +128,6 @@
      "lance de baixo, lado da linha 2",
      "1,30",
      "60 × 60 × 2",
-     "0,76",
      "longarina"
     ],
     [
@@ -151,7 +135,6 @@
      "patamar +0,90, lado da linha 2",
      "1,30",
      "50 × 50 × 2",
-     "0,93",
      "viga"
     ],
     [
@@ -159,7 +142,6 @@
      "chegada +3,95, lado externo (x −1,95)",
      "1,30",
      "60 × 60 × 2",
-     "0,75",
      "viga"
     ],
     [
@@ -167,209 +149,7 @@
      "chegada +3,95, ponta da linha 1",
      "1,30",
      "50 × 50 × 2",
-     "0,93",
      "viga"
-    ]
-   ]
-  },
-  {
-   "titulo": "LIGAÇÕES DAS ESCADAS — 0 CONFLITOS (escadas_detalhe.py)",
-   "cab": [
-    "COD",
-    "LIGAÇÃO",
-    "PARAFUSOS / ELEMENTOS",
-    "USO",
-    ""
-   ],
-   "linhas": [
-    [
-     "EI-BR",
-     "barrote × viga",
-     "1 M12 8.8 em cada ponta",
-     "0,08",
-     "ok"
-    ],
-    [
-     "EI-L1-1",
-     "degrau × longarina",
-     "2 M10 8.8 na alma + 1 M8 escareado no degrau",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EI-L1-T",
-     "topo do lance × viga",
-     "2 M12 8.8 na alma da viga + 2 M12 8.8 na alma da longarina",
-     "0,10",
-     "ok"
-    ],
-    [
-     "EI-L2-1",
-     "degrau × longarina",
-     "2 M10 8.8 na alma + 1 M8 escareado no degrau",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EI-L2-T",
-     "topo do lance × viga",
-     "2 M12 8.8 na alma da viga + 2 M12 8.8 na alma da longarina",
-     "0,11",
-     "ok"
-    ],
-    [
-     "EI-L2-P",
-     "pé do lance × patamar",
-     "2 M12 na alma da longarina; 1 M12 na mesa da VP-1 e 1 M12 na c",
-     "0,10",
-     "ok"
-    ],
-    [
-     "EI-L1-P",
-     "pé do lance × base metálica",
-     "2 M12 na alma da BM-1 + 2 M12 na alma da longarina",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EI-PL-T",
-     "topo do pilarete × viga",
-     "1 M12 passante no tubo + 2 M12 na mesa inferior da viga (1 por",
-     "0,04",
-     "ok"
-    ],
-    [
-     "EI-PL-B",
-     "base do pilarete × piso",
-     "1 M12 passante no tubo + 2 chumbadores químicos M12 hef 100",
-     "0,04",
-     "ok"
-    ],
-    [
-     "EI-SA",
-     "viga de fundo × pilar (assento",
-     "2 BR-M16 8.8 embutidas 150 mm + grampo (fábrica do pilar) + 2 ",
-     "0,12",
-     "ok"
-    ],
-    [
-     "EE-LC-1",
-     "degrau × longarina",
-     "2 M10 8.8 na alma + 1 M8 escareado no degrau",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EE-LC-T",
-     "topo do lance × viga",
-     "2 M12 8.8 na alma da viga + 2 M12 8.8 na alma da longarina",
-     "0,18",
-     "ok"
-    ],
-    [
-     "EE-LC-P",
-     "pé do lance × patamar",
-     "2 M12 na alma da longarina + 2 M12 na mesa da VE-3",
-     "0,17",
-     "ok"
-    ],
-    [
-     "EE-LB-1",
-     "degrau × longarina",
-     "2 M10 8.8 na alma + 1 M8 escareado no degrau",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EE-LB-T",
-     "topo do lance × viga",
-     "2 M12 8.8 na alma da viga + 2 M12 8.8 na alma da longarina",
-     "0,04",
-     "ok"
-    ],
-    [
-     "EE-LB-P",
-     "pé do lance × base metálica",
-     "2 M12 na alma da BM-2 + 2 M12 na alma da longarina; BM-2 com 3",
-     "0,02",
-     "ok"
-    ],
-    [
-     "EE-PE",
-     "pilarete × vigas e base",
-     "topo: 1 M12 passante + 2 M12 na mesa (a 25 mm da alma); base: ",
-     "0,03",
-     "ok"
-    ],
-    [
-     "EE-V12",
-     "viga de borda × viga transvers",
-     "2 M12 em cada alma",
-     "0,08",
-     "ok"
-    ],
-    [
-     "EE-X",
-     "diagonal do X × pilarete",
-     "pino M12 do garfo na aba B (corte duplo) + 1 M12 passante no t",
-     "0,32",
-     "ok"
-    ],
-    [
-     "VB-V",
-     "viga de borda × viga principal",
-     "2 M12 8.8 em cada alma",
-     "0,06",
-     "ok"
-    ],
-    [
-     "GC-LAJE",
-     "montante × laje (+3,90)",
-     "2 M12 passantes no montante + 4 chumbadores químicos M10 hef 7",
-     "0,70",
-     "ok"
-    ],
-    [
-     "GC-L0,92",
-     "montante × longarina",
-     "2 M12 8.8 a 70 mm, atravessando o montante, a bucha e a alma d",
-     "0,64",
-     "ok"
-    ],
-    [
-     "GC-L1,30",
-     "montante × longarina",
-     "2 M12 8.8 a 70 mm, atravessando o montante, a bucha e a alma d",
-     "0,80",
-     "ok"
-    ],
-    [
-     "GC-V1,05",
-     "montante × viga do piso",
-     "2 M12 8.8 a 70 mm na alma da viga (faixa livre 128)",
-     "0,67",
-     "ok"
-    ],
-    [
-     "GC-V1,30",
-     "montante × viga do piso",
-     "2 M12 8.8 a 70 mm na alma da viga (faixa livre 128)",
-     "0,80",
-     "ok"
-    ],
-    [
-     "CR-S",
-     "corrimão × montante",
-     "1 M10 no montante + 2 M8 na abraçadeira",
-     "0,07",
-     "ok"
-    ],
-    [
-     "GC-B",
-     "barras do fechamento × cantone",
-     "porca + contraporca em cada ponta (vão livre 117 mm < 150)",
-     "0,01",
-     "ok"
     ]
    ]
   },
