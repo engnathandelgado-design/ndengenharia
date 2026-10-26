@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "COBERTURA METÁLICA DA LINHA 2 — W 200 × 15,0 NOS PILARES E EM MONTANTES SOBRE AS VM DO +7,30: ELEVAÇÃO, APOIOS, ESPERA, EMENDAS, ST-W E LISTA",
   "desenho": "ND-LET-COB05",
-  "rev": "01",
-  "data": "24/10/2026",
+  "rev": "02",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -132,17 +132,17 @@
     ],
     [
      "ST-W",
-     "clip da terça, chapa dobrada 6,3",
+     "clip da terça, chapa dobrada 6,3 × 220 (ISO 5, COB09)",
      "32",
      "-",
      "102"
     ],
     [
      "MF-1",
-     "mão-francesa L 51 × 51 × 4,8 L 361",
+     "mão-francesa L 51 × 51 × 4,8 L 461",
      "64",
-     "0,36",
-     "84"
+     "0,46",
+     "107"
     ],
     [
      "M16 8.8",
@@ -153,8 +153,8 @@
     ],
     [
      "M12 8.8",
-     "parafuso + porca + 2 arruelas (ST-W e MF-1)",
-     "256",
+     "ST-W × mesa (2/terça), MF-1 × mesa inf. (1/MF); almas: COB01",
+     "128",
      "-",
      "-"
     ],
@@ -163,7 +163,7 @@
      "TOTAL (sem parafusos)",
      "",
      "",
-     "975"
+     "998"
     ]
    ]
   },

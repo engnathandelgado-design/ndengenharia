@@ -209,6 +209,15 @@ def hachura_cor(vv, pts, V, transp=0.6):
     return vv._add(h)
 
 
+def swatch(pr, x0, y0, x1, y1, V, transp=0.0):
+    """rev11: amostra de cor da vista V em coordenadas de papel (mm), com contorno."""
+    h = pr.msp.add_hatch(dxfattribs={"layer": "COR_FACHADA"})
+    h.set_solid_fill(rgb=COR_VISTA[V])
+    h.transparency = transp
+    h.paths.add_polyline_path([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], is_closed=True)
+    pr.ret(x0, y0, x1, y1, "TABELA_FINA")
+
+
 def desenhar_elev(pr, V, origem, esc):
     d = VISTAS[V]
     pecas, ca1, abert = DADOS[V]
@@ -287,6 +296,7 @@ def corte_parede(pr, V, origem, esc=50):
         z0 = k * H_PL
         pts = [(-FOLGA - E_PL, z0 + 5), (-FOLGA, z0 + 5), (-FOLGA, z0 + H_PL - 5), (-FOLGA - E_PL, z0 + H_PL - 5)]
         c.poli(pts, "CORTADO", fechada=True); c.hachura(pts, "AR-CONC", 0.02)
+        hachura_cor(c, pts, V)                                                                   # rev11: cor da fachada no corte típico
         zt = z0 + Z_NC + NC_H / 2 - 12.5 - 50                                                      # topo do braço do CS-1
         c.chapa(0, z0 + Z_CE - CE_H / 2, 16, CE_H, 3.0)                                             # CE-1 (embutida no pilar)
         c.chapa(-16, zt + GF.C["costas"]["z0"], 16, GF.C["costas"]["z1"] - GF.C["costas"]["z0"], 3.0)                                                        # CS-1: costas soldadas na CE-1
@@ -327,12 +337,18 @@ def planta_chave(pr, Vs, origem, esc=1000):
               "B": ((FACE_X[0], M(Y_LIN[3])), (FACE_X[0], FACE_Y[1])), "D": ((FACE_X[1], M(Y_LIN[3])), (FACE_X[1], FACE_Y[1])),
               "E": ((FACE_X[0], M(Y_LIN[1])), (FACE_X[0], M(Y_LIN[3]))), "F": ((FACE_X[1], M(Y_LIN[1])), (FACE_X[1], M(Y_LIN[3]))),
               "H": ((FACE_X[0], FACE_Y[0]), (FACE_X[0], M(Y_LIN[1]))), "J": ((FACE_X[1], FACE_Y[0]), (FACE_X[1], M(Y_LIN[1])))}
+    for V_, (a, b) in linhas.items():                                     # rev11: todas as paredes nas suas cores (60 % de transparência)
+        if V_ in Vs:
+            continue
+        horiz = a[1] == b[1]
+        e_ = 350
+        bx_ = [(min(a[0], b[0]) - (0 if horiz else e_), min(a[1], b[1]) - (e_ if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else e_), min(a[1], b[1]) - (e_ if horiz else 0)),
+               (max(a[0], b[0]) + (0 if horiz else e_), max(a[1], b[1]) + (e_ if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else e_), max(a[1], b[1]) + (e_ if horiz else 0))]
+        hachura_cor(k, bx_, V_, 0.6)
     for V in Vs:
         (a, b) = linhas[V]
         horiz = a[1] == b[1]
         k.ret(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0), abs(b[0] - a[0]) + (0 if horiz else 1200), abs(b[1] - a[1]) + (1200 if horiz else 0), "CORTADO")
-        k.hachura([(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
-                   (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], "SOLID", 1, "CORTADO")
         hachura_cor(k, [(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
                         (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], V, 0.0)
         cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
@@ -358,7 +374,7 @@ def prancha_vista(Vs, desenho, folha):
     XC = Q[2] - 190
     pesos = sum(peso_t(p["Lk"]) for p in lista)
     pr.cabecalho_peca(f"VISTA {nome}", f"PLACAS PROTENDIDAS 125 × 10 — {len(lista)} PEÇAS — {f(pesos, 1)} t",
-                      " · ".join(VISTAS[V]["titulo"].split(" — ")[1] for V in Vs) + " · produzir e montar na ordem dos números · placa típica: ND-LET-PP00",
+                      " · ".join(VISTAS[V]["titulo"].split(" — ")[1] for V in Vs) + " · produzir e montar na ordem dos números · placa típica: ND-LET-PP00 · locação e ordem das vistas: ND-LET-CM01",
                       largura=XC - Q[0] - 10)
     larg_util = XC - Q[0] - 50
     y_band = Q[1] + 255                                   # faixa de baixo: corte da parede + planta-chave
@@ -396,7 +412,7 @@ def prancha_vista(Vs, desenho, folha):
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 (500 × 750) livres até +7,50 (DEC-059): os PG-01 a PG-04 apoiam a TS-01A (neoprene + graute depois da montagem) e a viga não desce no vão; sobre o portão entre o PG-04 e o PG-03, placa PV-1 de 10 × 37 (+7,50 a +7,88) apoiada nas cantoneiras CL-V dos PG (ND-LET-PV01).")
     if "G" in Vs:
-        notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25, mantido do rev08 por conservadorismo); acima, fechamento metálico leve até a telha, fixado na W 310 da linha 2 (rev09, DEC-048: sem TS-01 nesta linha, ND-LET-COB05).")
+        notas.append("Placas na face do pavilhão (a laje do mezanino passa na face do anexo), até +7,50 (vão A–B até +6,25, mantido do rev08 por conservadorismo); acima, fechamento metálico leve até a telha, fixado na W 200 × 15,0 da linha 2 (rev09, DEC-048/052: sem TS-01 nesta linha, ND-LET-COB05).")
     if any(V in Vs for V in ("H", "J", "I")):
         notas.append("Faixas hachuradas: esquadrias do anexo (R01), sem placa, de +1,25 a +2,50 e de +5,00 a +6,25; toda placa fica nos seus 2 consoles CS-1, também acima das faixas." + (" Porta: 180 × 250 (a confirmar); as placas ao lado da porta têm console só na ponta do pilar e apoiam no baldrame / na placa de baixo do lado da porta." if "I" in Vs else ""))
     if any(V in Vs for V in ("E", "F")):
@@ -459,7 +475,6 @@ def prancha_tipo():
     e.cota_v([0, 60, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL - 60, H_PL], LD + 500 + LE, 10, total=False)
     e.chamada((NC_B / 2, Z_NC + NC_H / 2), (75, 30), "NC-1 nicho Trejor encostado nas 2 pontas, teto a 104 cm da base (DETALHE 2)")
     e.chamada((2250, 60), (10, -16), "TSA M16 dos pinos guia PT-1: topo e base, a 0,21 L + 15 cm das pontas (DETALHE 3)")
-    e.chamada((2100, H_PL + 120), (24, 12), "AL-P cordoalha Ø12,7 (2/placa, 0,21 L) — cortar após montar")
     # DEC-035: desforma deitada por 4 pontos na face interna (de cima na fôrma), com balancim — a 0,104 L e 0,396 L de cada ponta
     for xi in (round(0.104 * 10160), LT - round(0.104 * 10160)):
         e.ret(xi - 40, H_PL / 2 - 40, 80, 80, "METALICA"); e.circulo((xi, H_PL / 2), 20, "METALICA")
@@ -602,16 +617,7 @@ def prancha_tipo():
     d6.chamada((5, 60), (14, 14), "PT-2 L 102×102×9,5 L=150; oblongo 18 × 40 vertical na aba do pilar")
     d6.chamada((-60, 52), (30, 26), "bucha BR-2 M16 hef 100 (face lateral do pilar)")
     d6.chamada((51, -FOLGA - 50), (16, -24), "bucha BR-1 M16 hef 70 (placa)")
-    # ---- detalhe 5: alça AL-P (1:10)
-    d5 = pr.vista("DETALHE 5", (Q[0] + 520, Q[3] - 110), 10, titulo="DETALHE 5 — ALÇA AL-P", subtitulo="cordoalha Ø12,7 CP-190 RB — cortada rente ao topo após a montagem, ponta com epóxi", unidade="cm")
-    d5.ret(-250, -600, 500, 600, "VISTA")
-    d5.poli([(-60, -550), (-60, 80), (0, 120), (60, 80), (60, -550)], "ARMADURA")
-    for xx in (-60, 60):
-        d5.linha((xx, -550), (xx - 40, -620), "ARMADURA")
-    d5.linha((-110, 0), (110, 0), "OCULTA")
-    d5.chamada((80, 0), (26, -14), "linha de corte rente ao topo (após montar)")
-    d5.cota_v([-550, 0, 120], 250, 8, total=False)
-    d5.chamada((0, 120), (-30, 10), f"laço de 1,40 m; {f(P['transitorias']['F_alca_kN'])} kN por alça")
+    # rev11 (26/10/2026): sem alças AL-P — desforma, giro e montagem de pé pelos 4 IZ-1 da face interna (regra do Nathan; ND-LET-MON03 det. 2a–2c)
     # ================= ARMAÇÃO E PROTENSÃO
     Lmax = max(L for L in TIPOS if L == int(L))
     ea = pr.vista("ELEVAÇÃO DE ARMAÇÃO", (Q[0] + 45, Y_SPLIT - 85), 25, titulo=f"ELEVAÇÃO DE ARMAÇÃO — PLACA TÍPICA (face interna; barras para o {TIPO[Lmax]})",
@@ -670,7 +676,7 @@ def prancha_tipo():
         if t_.dxf.text == "protensão (cordoalhas)" and _PR.get("aco") == "fio":
             t_.dxf.text = "protensão (fios)"
     pr.imagem(Q[0] + 12, Q[1] + 40, Q[0] + 300, Q[1] + 168, "/home/claude/letsara/pranchas/img/iso_pp_tipica.png",
-              titulo="ISOMÉTRICO — PLACA TÍPICA (FACE INTERNA)", subtitulo="NC-1 nas 2 pontas, alças AL-P e luvas TSA no topo, macho-fêmea")
+              titulo="ISOMÉTRICO — PLACA TÍPICA (FACE INTERNA)", subtitulo="NC-1 nas 2 pontas, 4 IZ-1 na face interna, luvas TSA no topo, macho-fêmea")
     pr.imagem(Q[0] + 560, Q[1] + 40, Q[0] + 760, Q[1] + 165, "/home/claude/letsara/pranchas/img/iso_pp_ponta.png",
               titulo="ISOMÉTRICO — PONTA DA PLACA", subtitulo="nicho NC-1 aberto na ponta e na face interna")
     # ---- rev10 (Nathan 25/10/2026): ESQUEMA DOS 4 PONTOS DE DESFORMA/IÇAMENTO NUMA FACE, placa inteira (sem interrupção), cotado,
@@ -709,10 +715,18 @@ def prancha_tipo():
         vis = sorted(set(v for v, _ in TIPOS[L]))
         rows.append([TIPO[L], f"{L/10:.1f}".replace(".", ","), len(TIPOS[L]), f(peso_t(L), 2), ", ".join(vis)])
     rows.append(["", "total", N_TOT, f(PESO_TOT, 1), ""])
-    y = pr.tabela(XC, y, f"TIPOS DE PLACA — {N_TOT} PEÇAS", ["TIPO", "L (cm)", "QT", "PESO (t)", "VISTAS"], rows, [18, 22, 14, 22, 114], destaque_ultima=True)
+    for r_ in rows:
+        r_.append("")
+    y0_t = y
+    y = pr.tabela(XC, y, f"TIPOS DE PLACA — {N_TOT} PEÇAS", ["TIPO", "L (cm)", "QT", "PESO (t)", "VISTAS", "COR DAS VISTAS"], rows, [18, 22, 14, 22, 70, 44], destaque_ultima=True)
+    for i_, r_ in enumerate(rows[:-1]):                                        # rev11: amostra da cor de cada vista onde o tipo é usado
+        vs_ = [v_.strip() for v_ in r_[4].split(",") if v_.strip()]
+        yc_ = y0_t - 8 - 6.0 - (i_ + 0.5) * 6.0
+        for j_, v_ in enumerate(vs_):
+            xs_ = XC + 18 + 22 + 14 + 22 + 70 + 2 + j_ * 4.2
+            swatch(pr, xs_, yc_ - 1.8, xs_ + 3.6, yc_ + 1.8, v_)
     ins = [["NC-1", f"Caixa {NC_B:g}×{NC_H:g}×{NC_P:g} (ND-LET-PP02)", 2, "face int., 2 pontas (1 junto à porta)"],
            ["TSA", "Luva roscada M16 hef 70 (PT-1)", 4, "topo e base, 0,21 L + 15"],
-           ["AL-P", "Laço de cordoalha Ø12,7 (1,40 m)", 2, "topo, a 0,21 L; cortar após montar"],
            ["IZ-1", "Inserto de içamento M16, trabalho ≥ 1,3 t (FS ≥ 3)", 4, "face int., 0,104 e 0,396 L, meia altura"],
            ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
            ["CS-1", "Console (ND-LET-PP03)", "2", "CC-1 na face C ou CE-1 lateral"],
@@ -730,7 +744,7 @@ def prancha_tipo():
         f"Concreto C{P['secao']['fck']:.0f}; liberar a protensão (GRADUAL e simétrica — lbpt {f(P['protensao']['lbpt_gradual_m'] * 100, 0)} cm; liberação brusca proibida: c/φ 1,6), desformar e bascular com fckj ≥ {P['secao']['fckj']:.0f} MPa. Cobrimento da protensão 2,0 cm (faces interna e externa): elemento delgado, exige fábrica com controle de pré-fabricado (NBR 9062:2017 9.2.1.1 e 12.1.2), fck ≥ 40 MPa, a/c ≤ 0,45 e CAA II — confirmar.",
         f"PP-05RE/RD e PP-08RE/RD (G-17/G-11 e C-17/C-11): mesma fôrma e protensão da PP-05 / PP-08 com recorte de {REC_B / 10:g} × {(H_PL - REC_Z0) / 10:g} cm na ponta do eixo C (I130 + CP-I130), nicho NC-1 a {REC_B / 10:g} cm da ponta e armadura do toco — ND-LET-PP06 (DEC-044).",
         f"PP-05P (placa I-15, sobre a porta da vista I): mesma fôrma e protensão da PP-05 e 2 buchas BR-1 M16 hef 70 na face interna, 150 acima da base, nos eixos das ombreiras OM-1. Placa típica: {NC_} {CB_} Ø{DCt_} {AC_} aderentes, {NC_ // 2} por face, {ALN_}, a " + " / ".join(f(z / 10, 1) for z in ZC_) + f" cm da base (eixo a {f(EX_ / 10, 2)} cm das faces), σpi = {SIG_PI_:.0f} MPa — {f(P['protensao']['F_macaco_kN'])} kN por {"fio" if _PR.get("aco") == "fio" else "cordoalha"} no macaco; alongamento teórico {ALONG_} mm em pista de 60 m (Ep {EP_ / 1000:.0f} GPa) (tolerância ±7 %).",
-        f"Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); basculamento e montagem pelas alças AL-P do topo; depois de montada a placa, cortar as alças rente ao topo (disco, sem aquecer o concreto) e proteger as pontas com epóxi antes de montar a placa de cima (junta de 5 mm); desforma deitada por 4 pontos na face interna (insertos IZ-1 a 0,104 L e 0,396 L de cada ponta, meia altura) com balancim (sem balancim a face de cima fica no limite de tração); estocagem EM PÉ em cavalete (placa na posição de montagem, apoiada nos 2 calços a 0,21 L da base) — não estocar deitada: deitada a placa flecha ~7 mm na hora e ~27 mm com a fluência e fica empenada; {PRT_} simétricos nas 2 faces e em altura, sem curvatura na liberação.",
+        f"Produção deitada, face interna para cima: nichos NC-1 e luvas TSA presos na fôrma com gabarito; armadura N3–N7 da ponta (ND-LET-PP01 det. 1 e 2); desforma deitada, giro e montagem de pé pelos MESMOS 4 pontos da face interna (insertos IZ-1 a 0,104 L e 0,396 L de cada ponta, meia altura) com balancim duplo — 4 cargas iguais (sem balancim a face de cima fica no limite de tração); de pé o IZ-1 trabalha ao cisalhamento: usar cabeçote universal certificado a 90° (ND-LET-MON03 det. 2a–2c); sem alças no topo; estocagem EM PÉ em cavalete (placa na posição de montagem, apoiada nos 2 calços a 0,21 L da base) — não estocar deitada: deitada a placa flecha ~7 mm na hora e ~27 mm com a fluência e fica empenada; {PRT_} simétricos nas 2 faces e em altura, sem curvatura na liberação.",
         f"Montagem (sistema Trejor, DEC-026/031): consoles da face C já concretados com o pilar (CC-1); nas faces laterais soldar o CS-1 na CE-1 no nível da topografia; a placa encosta no pilar com o braço entrando no NC-1 e desce até o teto apoiar no M16 de nível (G {GF.T['G']:g} ± {GF.T['G_tol']:g}), afastamento {GF.T['a']:g} ± {GF.T['a_tol']:g} pelo prisioneiro frontal (sequência na ND-LET-PP01). Cada placa é independente e leva só o próprio peso nos seus 2 consoles: folga de 5 mm na junta macho-fêmea, sem elastômero. Pinos guia PT-1 (só na placa de baixo) na junta (ou PT-2 no pé, nas placas de pacote suspenso) antes de soltar o guindaste.",
         f"Cargas por console: G = {f(FX['cargas_por_console']['G_k_kN'])} kN (k), Vd = {f(FX['cargas_por_console']['Vd_kN'])} kN (montagem, γf·βa = 1,69), vento {f(FX['cargas_por_console']['vento_d_kN'])} kN (d); PT-1 só guia de montagem (não transmite esforço — DEC-035), PT-2 {f(FX['trava_pe_PT2']['F_d_kN'])} kN. Medidas do CS-1/NC-1 de pré-dimensionamento: confirmar com o catálogo Trejor (consoles para painéis de fachada).",
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",
@@ -810,6 +824,8 @@ def prancha_cm():
         kp.circulo((M(x), M(y)), 1500, "INDICACAO")
         kp.texto((M(x), M(y) + 250), V, "titulo", "MIDDLE_CENTER")
         kp.texto((M(x), M(y) - 700), f"{len(DADOS[V][0])} pç", "min", "MIDDLE_CENTER")
+        _fl = {"E": "PP-EF", "F": "PP-EF", "H": "PP-HJ", "J": "PP-HJ"}.get(V, f"PP-{V}")      # rev11: remissão à folha da vista
+        kp.texto((M(x), M(y) - 2100), f"→ {_fl}", "min", "MIDDLE_CENTER")
     kp.texto((M(24.7), M(45)), "PAVILHÃO (fechado por B, D, A e C)", "nota", "MIDDLE_CENTER")
     kp.texto((M(24.7), M(23.0)), "laterais E e F abertas até +7,50", "min", "MIDDLE_CENTER")
     kp.texto((M(24.7), M(5.5)), "ANEXO / MEZANINO (H, J, I, G)", "nota", "MIDDLE_CENTER")

@@ -166,3 +166,36 @@ def viga_em(nivel, x, y, tol=0.6, marcas=None):
         if d < dmin - 1e-9:
             best, dmin = p["nome"], d
     return best if dmin <= tol else None
+
+
+# rev11 (26/10/2026, pedido do Nathan): plantas de fôrmas/montagem indicam NOME + SEÇÃO de cada peça (ex.: "V400 I130 h120",
+# "V200 30×75", "P11 40×40"). Seções lidas das fontes das folhas de detalhamento (nada digitado solto).
+def _secoes_vigas():
+    AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
+    LG = json.load(open(AQ + "ligacoes.json"))
+    vp = json.load(open(AQ + "vm_retangular.json"))["premissas"]          # mesma fonte da MON02 / VM01
+    b_vm, h_vm = round(vp["b"] * 100), round(vp["h_pm"] * 100)
+    import ts01_dados as TD
+    return {"VM": f"{b_vm}×{h_vm}", "VB": "15×60", "TS": f"I{TD.H // 10} h{TD.H // 10}", "V4": f"I130 h{round(LG['H_I130'] * 100)}"}
+
+
+_SEC_V = None
+
+
+def secao(nome):
+    """seção da peça (cm) pelo nome novo (P…, V…)."""
+    global _SEC_V
+    p = next((q for q in _D["pecas"] if q["nome"] == nome), None)
+    if p is None:
+        return ""
+    if p["tipo"] == "pilar":
+        return p["secao"]
+    if _SEC_V is None:
+        _SEC_V = _secoes_vigas()
+    return _SEC_V.get(p["marca"][:2], "")
+
+
+def rotulo(nome):
+    """'V400 I130 h120' — nome por extenso + seção (já marcado como nome novo)."""
+    s = secao(nome)
+    return novo(f"{nome} {s}" if s else nome)

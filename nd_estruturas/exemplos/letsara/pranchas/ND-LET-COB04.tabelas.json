@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "COBERTURA — ACABAMENTOS KINGSPAN (ZIPADA DUPLA COM LÃ DE ROCHA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS",
+  "conteudo": "COBERTURA — ACABAMENTOS DE FUNILARIA (FEITOS NA OBRA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS",
   "desenho": "ND-LET-COB04",
-  "rev": "08",
-  "data": "23/10/2026",
+  "rev": "09",
+  "data": "26/10/2026",
   "folha": "04/04",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -16,7 +16,7 @@
  },
  "tabelas": [
   {
-   "titulo": "LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE)",
+   "titulo": "LISTA DE RUFOS — FUNILARIA DA OBRA (chapa dobrada)",
    "cab": [
     "MARCA",
     "DESCRIÇÃO",
@@ -29,7 +29,7 @@
     [
      "RF-2",
      "rufo de fechamento placa → calha, entre pilares; aba verti…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "560",
      "75,8",
      "28"
@@ -37,7 +37,7 @@
     [
      "RF-2C",
      "contra-rufo na face da cabeça dos P1 (pilares do eixo A), …",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "290",
      "5,4",
      "9"
@@ -45,15 +45,15 @@
     [
      "PG-1",
      "perfil pingadeira sob a ponta da zipada, 100 mm dentro da …",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "230",
-     "79,6",
+     "78,9",
      "29"
     ],
     [
      "RF-3",
      "rufo de topo liso sobre a ponta da zipada (aba de 150 + 60…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "890",
      "75,8",
      "28"
@@ -69,7 +69,7 @@
     [
      "RF-3P",
      "rufo de topo liso nos pilares P2: até a face da cabeça, po…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "580",
      "5,4",
      "9"
@@ -77,7 +77,7 @@
     [
      "RF-4",
      "rufo de acabamento lateral, da placa até a última onda da …",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "370",
      "78,4",
      "29"
@@ -85,7 +85,7 @@
     [
      "RF-4C",
      "contra-rufo lateral na placa, paralelo à água (3 %): PAR T…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "110",
      "80,3",
      "29"
@@ -93,7 +93,7 @@
     [
      "RB-1/2",
      "rufo de acabamento de borda sobre a última onda (RB-1 no i…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "180",
      "78,4",
      "29"
@@ -101,18 +101,26 @@
     [
      "RF-1",
      "rufo chapéu da platibanda sobre a placa de 10 cm, caimento…",
-     "#0,65 pré-pintado",
-     "380",
+     "galvalume #0,50",
+     "370",
      "229,5",
      "82"
     ],
     [
      "RF-1C",
      "rufo chapéu sobre a cabeça do pilar + placa (largura 100 +…",
-     "#0,65 pré-pintado",
+     "galvalume #0,50",
      "720",
      "10,8",
      "18"
+    ],
+    [
+     "RF-4P",
+     "rufo de recorte nas cabeças dos pilares de fachada (peça d…",
+     "galvalume #0,50",
+     "210",
+     "4,4",
+     "6"
     ]
    ]
   },
@@ -147,7 +155,7 @@
     [
      "PB 1/4\"-14 × 7/8\" P01",
      "costuras dos rufos e da pingadeira",
-     "1082"
+     "1091"
     ],
     [
      "selante PU (sachê 600 ml)",
@@ -172,7 +180,7 @@
    ],
    "linhas": [
     [
-     "Telha zipada 455 #0,50 pré-pintada (Kingspan)",
+     "Telha zipada 455 #0,50 pré-pintada (Isoeste)",
      "pç",
      "176",
      "176",

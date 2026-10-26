@@ -2,8 +2,8 @@
 
 PLANTA (1:200): paredes de placas (vistas A a J do R01), ordem de montagem das paredes e sentido de montagem vão a vão.
 ELEVAÇÃO TÍPICA (1:50): vista B, linhas 5 a 7 — ordem das placas no vão (de baixo para cima), consoles nos nichos NC-1, pinos
-guia PT-1 na junta de baixo, alças AL-P do topo, folgas de 0,5 cm na altura e 2 cm no comprimento (junta no eixo do pilar).
-DETALHE 1 (1:10): junta no pilar vista de fora. DETALHE 2 (1:50): içamento da placa de pé pelas 2 alças do topo.
+guia PT-1 na junta de baixo, 4 IZ-1 de içamento por placa, folgas de 0,5 cm na altura e 2 cm no comprimento (junta no eixo do pilar).
+DETALHE 1 (1:10): junta no pilar vista de fora. DETALHE 2a/2b/2c: desforma, giro e montagem de pé da placa pelos 4 IZ-1 de uma face com balancim duplo (rev11).
 Tabelas: sequência geral da obra e içamento por tipo de peça (pesos da lista de peças). Dados de fechamento.py (mesmas peças das
 pranchas PP) e de placas.json. A0."""
 import json, sys
@@ -99,8 +99,8 @@ for p in sel:
     w.poli([(s0, z0), (s1, z0), (s1, z1), (s0, z1)], "VISTA", True)
     w.circulo(((s0 + s1) / 2, (z0 + z1) / 2), 220, "INDICACAO"); w.texto(((s0 + s1) / 2, (z0 + z1) / 2), str(p["seq"]), "nota", "MIDDLE_CENTER")
     w.texto(((s0 + s1) / 2 + 400, (z0 + z1) / 2), p["id"], "min", "MIDDLE_LEFT")
-    for xa in (s0 + 0.21 * p["L"], s1 - 0.21 * p["L"]):   # alças AL-P do topo (montagem em pé)
-        w.poli([(xa - 60, z1), (xa - 60, z1 + 120), (xa + 60, z1 + 120), (xa + 60, z1)], "ARMADURA")
+    for xa in (s0 + 0.104 * p["L"], s0 + 0.396 * p["L"], s1 - 0.396 * p["L"], s1 - 0.104 * p["L"]):   # rev11: 4 IZ-1 de içamento (face interna, meia altura)
+        w.circulo((xa, (z0 + z1) / 2 + 300), 45, "METALICA")
     if p["k"] > 0:
         for xp in (s0 + FCH.X_PT(p["L"]), s1 - FCH.X_PT(p["L"])):   # pinos guia PT-1 na junta de baixo
             w.circulo((xp, z0), 60, "OCULTA")
@@ -119,7 +119,7 @@ w.chamada((YL[5] + 70, FCH.Z_NC + 4 * H_PL), (12, 12), "console CS-1 / CC-1 no n
 p_ = [p for p in sel if p["k"] == 3][-1]
 w.chamada((p_["s1"] - FCH.X_PT(p_["L"]), p_["z0"] + FOLGA_H), (-10, 4), "PT-1 pino guia (só na placa de baixo)")
 p_ = [p for p in sel if p["k"] == 7][0]
-w.chamada((p_["s0"] + 0.21 * p_["L"], p_["z1"] + 120), (8, 10), "AL-P alças de montagem (0,21 L)")
+w.chamada((p_["s0"] + 0.104 * p_["L"], (p_["z0"] + p_["z1"]) / 2 + 300), (8, 10), "IZ-1 (4 por placa, face interna): desforma, giro e montagem — DET. 2a–2c")
 
 # ================================================================== DETALHE 1 — junta no pilar (vista de fora), 1:10
 E3 = 10
@@ -149,23 +149,70 @@ d.chamada((300, ZJ + FOLGA_H / 2), (50, -18), "junta horizontal 0,5 cm: macho-f�
 d.chamada((JUNTA / 2 + FCH.X_CS, ZJ - H_PL + FCH.Z_NC - FCH.NC_H / 2), (82, -10), "nicho NC-1 + console (2 por placa)")
 d.chamada((-200, ZJ - 500), (-12, -10), "pilar (oculto)")
 
-# ================================================================== DETALHE 2 — içamento da placa de pé, 1:50
-E4 = 50
+# ================================================================== DETALHE 2 — içamento da placa: 4 pontos IZ-1 numa face (rev11)
+# rev11 (26/10/2026, regra do Nathan): desforma, giro e montagem de pé pelos MESMOS 4 IZ-1 da face interna (0,104 L e 0,396 L de
+# cada ponta, meia altura — ND-LET-PP00), balancim duplo (2 balancins secundários + 1 principal: as 4 cargas iguais). Cargas e
+# verificações: placas_icamento_4p.json (calc_placa_icamento_4p.py).
+IC4 = _jj.load(open(AQ + "placas_icamento_4p.json"))
+E4 = 75
 Lp = PLJ["secao"]["L_max_m"] * 1000
-q = pr.vista("DET2", (Q[0] + 300, 190), E4, titulo="DETALHE 2 — IÇAMENTO DA PLACA PARA MONTAGEM (DE PÉ)",
-             subtitulo=f"2 alças AL-P no topo a 0,21 L; balancim e cabos verticais; maior placa {fd(Lp / 1000, 2)} m, {fd(PESO_PL, 2)} t", unidade="cm")
-q.poli([(0, 0), (Lp, 0), (Lp, H_PL), (0, H_PL)], "VISTA", True)
-xa = [0.21 * Lp, 0.79 * Lp]
-for x in xa:
-    q.poli([(x - 60, H_PL), (x - 60, H_PL + 120), (x + 60, H_PL + 120), (x + 60, H_PL)], "ARMADURA")
-    q.linha((x, H_PL + 120), (x, H_PL + 1600), "METALICA")
-q.poli([(xa[0] - 200, H_PL + 1600), (xa[1] + 200, H_PL + 1600), (xa[1] + 200, H_PL + 1750), (xa[0] - 200, H_PL + 1750)], "METALICA", True)
-q.linha((xa[0], H_PL + 1750), (Lp / 2, H_PL + 3300), "METALICA"); q.linha((xa[1], H_PL + 1750), (Lp / 2, H_PL + 3300), "METALICA")
-q.circulo((Lp / 2, H_PL + 3450), 150, "METALICA")
-q.cota_h([0, xa[0], xa[1], Lp], 0, -10, total=False)
-q.chamada((xa[1] + 200, H_PL + 1675), (10, 0), "balancim (cabos verticais nas alças)")
-q.chamada((xa[1], H_PL + 60), (12, 14), f"AL-P: {PLJ['transitorias']['F_alca_kN']:.1f} kN por alça (cálculo, βa 1,3)".replace(".", ","))
-q.texto((Lp / 2, H_PL / 2), "placa de pé — face externa para fora", "nota", "MIDDLE_CENTER")
+xs4 = [round(0.104 * Lp), round(0.396 * Lp), Lp - round(0.396 * Lp), Lp - round(0.104 * Lp)]
+fk = lambda v: f"{v:.1f}".replace(".", ",")
+
+
+def balancim(v, xs, z0, z1, z2, z3):
+    """cabos a prumo dos 4 pontos (z0) aos 2 balancins secundários (z1), destes ao principal (z2) e ao gancho (z3)."""
+    for x in xs:
+        v.linha((x, z0), (x, z1), "METALICA")
+    cs = [(xs[0] + xs[1]) / 2, (xs[2] + xs[3]) / 2]
+    for (a, b), c_ in zip(((xs[0], xs[1]), (xs[2], xs[3])), cs):
+        v.poli([(a - 150, z1), (b + 150, z1), (b + 150, z1 + 120), (a - 150, z1 + 120)], "METALICA", True)
+        v.linha((c_, z1 + 120), (c_, z2), "METALICA")
+    v.poli([(cs[0] - 150, z2), (cs[1] + 150, z2), (cs[1] + 150, z2 + 150), (cs[0] - 150, z2 + 150)], "METALICA", True)
+    xm = (cs[0] + cs[1]) / 2
+    v.linha((cs[0], z2 + 150), (xm, z3), "METALICA"); v.linha((cs[1], z2 + 150), (xm, z3), "METALICA")
+    v.circulo((xm, z3 + 150), 150, "METALICA")
+    return cs
+
+
+X2 = Q[0] + 250
+# (a) desforma — placa deitada na fôrma, face interna para cima (elevação ao longo da placa)
+qa = pr.vista("DET2A", (X2, 250), E4, titulo="DETALHE 2a — DESFORMA (DEITADA)", subtitulo="4 IZ-1 na face interna (para cima); balancim duplo; cabos a prumo", unidade="cm")
+qa.poli([(0, 0), (Lp, 0), (Lp, E_PL), (0, E_PL)], "CORTADO", True); qa.hachura([(0, 0), (Lp, 0), (Lp, E_PL), (0, E_PL)], "AR-CONC", 0.03)
+for x in xs4:
+    qa.circulo((x, E_PL + 40), 40, "METALICA")
+balancim(qa, xs4, E_PL + 80, 1500, 2700, 4000)
+qa.cota_h([0] + xs4 + [Lp], 0, -10, total=False)
+qa.chamada((xs4[0], E_PL + 40), (-10, 16), f"IZ-1 (4x): {fk(IC4['Pk_kN'])} kN por ponto; βa 1,3 → {fk(IC4['Pd_kN'])} kN")
+# (b) giro / verticalização — vista de topo da placa (seção 125 × 10): deitada → 45° → de pé, girando sobre a borda inferior
+qb = pr.vista("DET2B", (X2 + 205, 250), 50, titulo="DETALHE 2b — GIRO (VERTICALIZAÇÃO)", subtitulo="seção da placa; gira sobre a borda inferior apoiada em calço de borracha; os mesmos 4 IZ-1", unidade="cm")
+import math as _m
+Hb = FCH.H_PL
+for k_, ang in enumerate((0, 45, 90)):
+    x0 = k_ * 2000
+    a = _m.radians(ang)
+    u, n = (_m.cos(a), _m.sin(a)), (-_m.sin(a), _m.cos(a))
+    pts = [(x0, 0), (x0 + u[0] * Hb, u[1] * Hb), (x0 + u[0] * Hb + n[0] * E_PL, u[1] * Hb + n[1] * E_PL), (x0 + n[0] * E_PL, n[1] * E_PL)]
+    qb.poli(pts, "CORTADO", True); qb.hachura(pts, "AR-CONC", 0.03)
+    pi = (x0 + u[0] * Hb / 2 + n[0] * E_PL, u[1] * Hb / 2 + n[1] * E_PL)          # IZ-1 na face interna, meia altura
+    qb.circulo(pi, 35, "METALICA")
+    qb.linha(pi, (pi[0], 2600), "METALICA")
+    qb.texto((x0 + 400, -350), ["1 — deitada (desforma)", "2 — girando (45°)", "3 — de pé"][k_], "nota", "TOP_CENTER")
+qb.ret(-150, -60, 300, 60, "METALICA")
+qb.chamada((-150, -30), (-8, -14), "calço de borracha na borda inferior")
+qb.chamada((2000 + 400, 1700), (10, 10), "cabo sempre a prumo; o guindaste sobe e a placa gira sobre o calço")
+# (c) montagem de pé (elevação, vista pela face interna)
+qc = pr.vista("DET2C", (X2 + 330, 250), E4, titulo="DETALHE 2c — MONTAGEM DE PÉ", subtitulo=f"4 IZ-1 na face interna (meia altura) e balancim duplo; maior placa {fd(Lp / 1000, 2)} m, {fd(PESO_PL, 2)} t", unidade="cm")
+qc.poli([(0, 0), (Lp, 0), (Lp, H_PL), (0, H_PL)], "VISTA", True)
+for x in xs4:
+    qc.circulo((x, H_PL / 2), 50, "METALICA")
+    qc.linha((x, H_PL / 2 + 50), (x, H_PL + 100), "METALICA")
+balancim(qc, xs4, H_PL + 100, H_PL + 1500, H_PL + 2700, H_PL + 4000)
+qc.cota_h([0] + xs4 + [Lp], 0, -10, total=False)
+qc.cota_v([0, H_PL / 2, H_PL], Lp, 8, total=False)
+qc.chamada((xs4[3], H_PL / 2), (10, -14), f"IZ-1 de pé: {fk(IC4['Pk_kN'])} kN por ponto (βa → {fk(IC4['Pd_kN'])} kN), em cisalhamento — cabeçote universal certificado a 90°")
+qc.chamada(((xs4[1] + xs4[2]) / 2, H_PL + 2775), (12, 8), "balancim duplo: 4 cargas iguais")
+qc.texto((Lp / 2, H_PL * 0.25), "placa de pé — face externa para fora", "nota", "MIDDLE_CENTER")
 
 # ================================================================== TABELAS: sequência geral e içamento
 seq = [["1", "Locação dos cálices e conferência dos níveis", "±1,0 cm em planta; fundo nivelado", "LOC01, CG01"],
@@ -175,8 +222,8 @@ seq = [["1", "Locação dos cálices e conferência dos níveis", "±1,0 cm em p
        ["5", "TS-01 L8 → L3 e VB-05 a VB-08 (guindaste de ré)", "pinos nos TB-3; VB escoradas", "MON01, CT04"],
        ["6", "Cobertura dos vãos 3–4 a 8–9 (terças, correntes, X, telhas)", "tudo parafusado; atrás do guindaste", "COB01 a COB04"],
        ["7", "Mezanino +3,90 e +7,30: VM, pontas concretadas (fcj ≥ 20), lajes, 2º estágio, capa; escada", "cobertura dos vãos 1–3 aberta; capa ≥ 20 MPa", "MON02, CT02"],
-       ["8", "Parede G (linha 2) — antes da W 310 da linha 2", "cada placa nos seus 2 consoles", "MON03, PP-G"],
-       ["9", "W 310 da linha 2, VB-01 a VB-04, terças dos vãos 1–2 e 2–3", "ST-W e MF-1 em toda terça da linha 2", "MON01, COB01, COB05"],
+       ["8", "Parede G (linha 2) — antes da W 200 da linha 2", "cada placa nos seus 2 consoles", "MON03, PP-G"],
+       ["9", "W 200 × 15,0 da linha 2 e montantes W 150 × 13,0, VB-01 a VB-04, terças dos vãos 1–2 e 2–3", "ST-W e MF-1 em toda terça da linha 2", "MON01, COB01, COB05"],
        ["10", "Placas externas I, H, J, E, F, B, D e A (por fora)", "guindaste no perímetro", "MON03, PP"],
        ["11", "Telhas, rufos e calhas dos vãos 1–3; acabamentos", "após a estrutura travada", "COB03, COB04"]]
 yt = pr.tabela(Q[0] + 560, Q[3] - 330, "SEQUÊNCIA GERAL DA OBRA", ["ETAPA", "SERVIÇO", "CONDIÇÃO PARA SEGUIR", "FOLHAS"], seq, [13, 118, 104, 44], h_lin=5.2)
@@ -189,7 +236,7 @@ ica = [["Pilares", fd(pz(pil), 1), fd(Lz(pil), 2), "2 alças AL-2 (desforma) + f
        ["VM-01 / VM-02", fd(pz(["VM-01", "VM-02"]), 1), fd(Lz(["VM-01", "VM-02"]), 2), "2 alças AL-1", "cabos ≥ 45°"],
        ["VB-01 a VB-08", fd(pz([f"VB-0{k}" for k in range(1, 9)]), 1), fd(Lz([f"VB-0{k}" for k in range(1, 9)]), 2), "2 alças AL-1", "escorar após montar"],
        ["Lajes LA-01/01R/02", fd(pz(["LA-01", "LA-01R", "LA-02"]), 1), fd(Lz(["LA-01"]), 2), "garra mecânica nas 2 pontas", "sem alça embutida"],
-       ["Placas PP", fd(PESO_PL, 1), fd(Lp / 1000, 2), "2 alças AL-P no topo (montagem de pé)", "balancim; desforma por 4 IZ-1"]]
+       ["Placas PP", fd(PESO_PL, 1), fd(Lp / 1000, 2), "4 IZ-1 na face interna (desforma, giro e montagem de pé)", "balancim duplo; DET. 2a–2c"]]
 pr.tabela(Q[0] + 560, yt - 6, "IÇAMENTO POR TIPO DE PEÇA (PESO DA PEÇA MAIS PESADA)", ["PEÇA", "PESO (t)", "L (m)", "PONTOS DE IÇAMENTO", "ACESSÓRIO"],
           ica, [38, 16, 14, 128, 83], h_lin=5.2)
 
@@ -198,7 +245,7 @@ notas = [f"Placas protendidas 125 × 10 (10 fios Ø6 CP-175 RB), dimensionadas s
          "Montagem de cada parede vão a vão no sentido da seta e, em cada vão, de baixo para cima (número da elevação). A placa desce encostada no pilar com o braço do console entrando no nicho NC-1 até o teto apoiar no M16 de nível; aferir o afastamento pelo prisioneiro frontal; instalar os PT-1 (ou as travas PT-2 no pé das placas de pacote suspenso) antes de soltar o guindaste (ND-LET-PP00 e PP01).",
          "Consoles: os da face C dos pilares já vêm concretados (CC-1); nos pilares das faces laterais e das paredes internas, soldar o CS-1 na CE-1 no nível da topografia antes da placa (ND-LET-PP03).",
          "As placas são montadas de pé e concretadas deitadas: desforma por 4 insertos IZ-1 numa face com balancim, basculamento e estocagem EM PÉ em cavalete; transporte em pé (cavalete A). Não estocar nem transportar deitada (empena).",
-         "Sequência (decisão do Nathan, 21/10/2026): pilares → vigas → cobertura → mezanino → fechamento. Não dá para cumprir 100 % com guindaste: (a) a laje de 9,55 m não passa entre a VB da linha 1 e a W 310 da linha 2 e as VM ficam embaixo delas → W 310 L2, VB-01 a 04 e terças dos vãos 1–2 e 2–3 só depois do mezanino; (b) a placa de 10 m das paredes G e C sobe pelo topo e o balancim não passa entre a viga de cobertura e as terças → C antes da TS-01 L4 e G antes da W 310 L2.",
+         "Sequência (decisão do Nathan, 21/10/2026): pilares → vigas → cobertura → mezanino → fechamento. Não dá para cumprir 100 % com guindaste: (a) a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2 e as VM ficam embaixo delas → W 200 L2 (com os montantes W 150), VB-01 a 04 e terças dos vãos 1–2 e 2–3 só depois do mezanino; (b) a placa de 10 m das paredes G e C sobe pelo topo e o balancim não passa entre a viga de cobertura e as terças → C antes da TS-01 L4 e G antes da W 200 L2.",
          "Abaixo da cobertura montada a altura livre é de +7,19 (eixo A) a +7,78 (eixo C) no fundo da TS-01; sobre o piso +7,30 sobram 0,1 a 0,8 m: manipulador telescópico ou mini-guindaste sob a cobertura NÃO servem para lajes, VM nem placas (só para terças, chaparia e peças leves).",
          f"Guindastes: principal autopropelido classe 90–100 t (I130 V407 {fd(PQ['V407'][7], 1)} t a ~10–12 m, dentro do pavilhão, trabalhando de ré da linha 9 para a 3); mezanino e parede G com o guindaste no vão 2–3, entrando pela abertura lateral E/F (livre até +7,50); placas externas com guindaste de ~40–60 t no perímetro (3,24 t a até ~14 m). Conferir as classes na tabela de carga do equipamento e o solo das patolas; plano de rigging (NBR 9062:2017 3.17 e Seção 11) da montadora.",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): ±1,0 cm em planta e no nível dos apoios; prumo ±H/300 até 2,5 cm; juntas medidas após a montagem.",

@@ -1,0 +1,246 @@
+{
+ "folha": "ND-LET-COB06",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA — FUNILARIA DA OBRA: PERFIS DOBRADOS DOS RUFOS (ABAS, DOBRAS E LARGURA DE CORTE), CANTOS, EMENDAS E CONFERÊNCIA COM O MANUAL ISOESTE",
+  "desenho": "ND-LET-COB06",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "TABELA DE FUNILARIA — ABAS (mm), DOBRAS, LARGURA DE CORTE, COMPRIMENTO E PEÇAS DE 3 m",
+   "cab": [
+    "MARCA",
+    "ABAS (mm, na ordem)",
+    "DOBRAS",
+    "CORTE",
+    "CHAPA",
+    "m",
+    "PÇ 3 m",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "RF-2",
+     "150 / 336 / 60",
+     "95° / 95°",
+     "546",
+     "galv. #0,50",
+     "75,8",
+     "28",
+     "162"
+    ],
+    [
+     "RF-2C",
+     "240 / 36",
+     "124°",
+     "276",
+     "galv. #0,50",
+     "5,4",
+     "2",
+     "6"
+    ],
+    [
+     "PG-1",
+     "120 / 41 / 60",
+     "113° / 159°",
+     "221",
+     "galv. #0,50",
+     "78,9",
+     "29",
+     "68"
+    ],
+    [
+     "RF-3",
+     "70 / 595 / 215",
+     "92° / 92°",
+     "880",
+     "galv. #0,50",
+     "75,8",
+     "28",
+     "262"
+    ],
+    [
+     "CR-1",
+     "40 / 40",
+     "90°",
+     "80",
+     "#1,25 galv.",
+     "75,8",
+     "28",
+     "60"
+    ],
+    [
+     "RF-3P",
+     "70 / 270 / 230",
+     "91° / 91°",
+     "570",
+     "galv. #0,50",
+     "5,4",
+     "2",
+     "12"
+    ],
+    [
+     "RF-4",
+     "90 / 236 / 32",
+     "94° / 94°",
+     "358",
+     "galv. #0,50",
+     "78,4",
+     "29",
+     "110"
+    ],
+    [
+     "RF-4C",
+     "42 / 60",
+     "135°",
+     "102",
+     "galv. #0,50",
+     "80,3",
+     "29",
+     "32"
+    ],
+    [
+     "RB-1/2",
+     "74 / 100",
+     "90°",
+     "174",
+     "galv. #0,50",
+     "78,4",
+     "29",
+     "54"
+    ],
+    [
+     "RF-1",
+     "21 / 82 / 140 / 120",
+     "135° / 87° / 93°",
+     "363",
+     "galv. #0,50",
+     "229,5",
+     "82",
+     "327"
+    ],
+    [
+     "RF-1C",
+     "21 / 95 / 465 / 105 / 21",
+     "135° / 88° / 92° / 135°",
+     "708",
+     "galv. #0,50",
+     "10,8",
+     "4",
+     "30"
+    ]
+   ]
+  },
+  {
+   "titulo": "CONFERÊNCIA COM O MANUAL ISOESTE",
+   "cab": [
+    "ITEM (PÁG.)",
+    "MANUAL",
+    "PROJETO",
+    "SITUAÇÃO"
+   ],
+   "linhas": [
+    [
+     "Sistema (p. 5, 27–28)",
+     "Zipada Dupla com lã de rocha: TP-40 STD 980 #0,65 + cartola #0,65 + lã FSR-32 + clipe + zipada 455 #0,50",
+     "igual",
+     "confere"
+    ],
+    [
+     "Inclinação mínima (p. 4)",
+     "2,5 %",
+     "3 %",
+     "confere"
+    ],
+    [
+     "Clipes (p. 29–30)",
+     "fixo ou deslizante a cada terça, 2 PB 12-14 × 3/4\" P03",
+     "igual; fixos nas 2 terças do meio da água",
+     "confere"
+    ],
+    [
+     "Base deslizante (p. 30)",
+     "#0,80 sob o clipe deslizante",
+     "igual",
+     "confere"
+    ],
+    [
+     "TP-40 × terça (p. 28)",
+     "4 PB 12-14 × 3/4\" P03 por telha por terça",
+     "igual (uso 0,22 na sucção de borda)",
+     "confere"
+    ],
+    [
+     "Cartola × TP-40 (p. 28)",
+     "PB 1/4\"-14 × 7/8\" P01 a cada 2 ondas",
+     "em todas as ondas (sucção de borda)",
+     "mais rigoroso"
+    ],
+    [
+     "Lã de rocha (p. 28)",
+     "FSR-32 em rolos 600 × 3600, enchendo o vão entre telhas",
+     "FSR-32 40 mm (altura da cartola)",
+     "confere"
+    ],
+    [
+     "Dilatação (p. 31–32)",
+     "clipes deslizantes; junta de dilatação quando necessário",
+     "ponto fixo no meio da água de 39,6 m (≈ 12 mm por ponta)",
+     "confirmar curso com a Isoeste"
+    ],
+    [
+     "Beiral na calha (p. 42)",
+     "rufo pingadeira",
+     "PG-1, 100 dentro da calha",
+     "confere"
+    ],
+    [
+     "Lado alto (p. 40)",
+     "rufo de topo liso + veda-onda",
+     "RF-3 + veda-onda + massa",
+     "confere"
+    ],
+    [
+     "Bordas laterais (p. 34, 37, 41)",
+     "RB-1 / RB-2 e rufo de acabamento lateral",
+     "RB-1/2 + RF-4 + RF-4C",
+     "confere"
+    ],
+    [
+     "Platibanda (p. 46–47)",
+     "rufo chapéu",
+     "RF-1 / RF-1C",
+     "confere"
+    ],
+    [
+     "Acabamentos (p. 39–47)",
+     "catálogo #0,65 pré-pintado",
+     "funilaria da obra galvalume #0,50 (Nathan)",
+     "decisão ND"
+    ],
+    [
+     "Vão entre terças",
+     "manual de instalação sem tabela vão × carga",
+     "terças a 813–1264 mm; fixações verificadas (MC06)",
+     "pedir tabela à Isoeste"
+    ],
+    [
+     "Painéis solares",
+     "não tratado no manual",
+     "trilhos nas costuras da zipada, sem furar",
+     "confirmar com o fornecedor"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PC01",
-  "rev": "10",
-  "data": "24/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -167,6 +167,81 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PC-01) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "C2 (CP-MEZ)",
+     "A",
+     "+3,17 (416,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "C2 (CP-MEZ)",
+     "C",
+     "+3,17 (416,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "C2 (CP-MEZ)",
+     "A",
+     "+6,57 (756,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "C2 (CP-MEZ)",
+     "C",
+     "+6,57 (756,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "C4 (CP-I130)",
+     "B",
+     "+6,97 (796,6)",
+     "50×40×49/39",
+     "1 PN-2 Ø25",
+     "35",
+     "55",
+     "90"
+    ],
+    [
+     "ESP-2 (BR-M16)",
+     "topo",
+     "+8,45 (944,8)",
+     "topo do pilar",
+     "4 BR-M16 Ø16",
+     "35",
+     "10",
+     "45"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PC-01) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -277,14 +352,6 @@
      "3,0 cm (CAA II)"
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

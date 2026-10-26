@@ -22,7 +22,7 @@ def render(solidos, arq, elev=24, azim=-58, titulo="", rotulos=False, alpha_conc
         for f, n in zip(s.faces, s.normais):
             k = 0.45 + 0.55 * max(0.0, float(n @ L))
             polys.append(f); cols.append(np.clip(base * k * 1.05, 0, 1))
-    pc = Poly3DCollection(polys, facecolors=cols, edgecolors=(0.15, 0.17, 0.19, 0.55), linewidths=0.35)
+    pc = Poly3DCollection(polys, facecolors=cols, edgecolors=(0.15, 0.17, 0.19, 0.55), linewidths=0.55)   # rev11: ≥ 0,18 mm impresso
     ax.add_collection3d(pc)
     P = np.vstack([np.vstack(s.faces) for s in solidos])
     c, r = (P.max(0) + P.min(0)) / 2, (P.max(0) - P.min(0)).max() / 2 * 0.78
@@ -40,6 +40,7 @@ def render(solidos, arq, elev=24, azim=-58, titulo="", rotulos=False, alpha_conc
         fig.text(0.02, 0.95, titulo, fontsize=12, weight="bold", color="#1d2327")
     plt.subplots_adjust(0, 0, 1, 1)
     fig.savefig(arq, dpi=200, facecolor="white")
+    fig.savefig(arq.replace(".png", ".pdf"), facecolor="white")      # rev11: versão vetorial (entra como vetor na MT01-2)
     plt.close(fig)
 
 

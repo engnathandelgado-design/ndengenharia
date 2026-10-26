@@ -158,7 +158,7 @@ def prancha_pilar(P):
     if P["marca"] == "PM-02":                                           # DEC-050: P14 sai do PM-01 e vira folha nova (só a emissão de 24/10)
         _rv = pr.revisao
         pr.revisao = lambda n, d, t, _rv=_rv: _rv(n, d, t) if d == "24/10/2026" else None
-        pr.revisao("", "24/10/2026", "EMISSÃO INICIAL: P14 SEPARADO DO PM-01 (CABEÇA ATÉ O FUNDO DA W 310, DEC-050)")
+        pr.revisao("", "24/10/2026", "EMISSÃO INICIAL: P14 SEPARADO DO PM-01 (CABEÇA ATÉ O FUNDO DA VIGA METÁLICA DA LINHA 2, DEC-050)")
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     pr.revisao("04", "16/10/2026", "NBR 9062: SEM CP-VT; CONSOLOS COM ALÇAS; NEOPRENES REVISTOS; CP-MEZ P/ DENTE DA VM; CP-VB 15×27×29 P/ DENTE DA VB; PL 14 Ø20")
     r06 = ["CE-1 DOS CONSOLES CS-1 DAS PLACAS (TREJOR) NO LUGAR DOS TRILHOS TR-1"]
@@ -348,7 +348,9 @@ def prancha_pilar(P):
                 v.chamada((xA(es["da"][0]), es["z"]), (9 * sg_, (L_TOT - es["z"]) / ESC + 6), es["rot"])   # texto acima do topo do pilar
         cf = [c for c in cons if c["face"] == face]
         zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]
-                    + [es["z"] for es in P.get("esperas_face", []) if es["face"] == face or (face == "A" and es["face"] not in P["vistas"])]))
+                    + [es["z"] for es in P.get("esperas_face", []) if es["face"] == face or (face == "A" and es["face"] not in P["vistas"])]
+                    + (list(AL) if face == af_ or DIR[face] == af_ or ESQ[face] == af_ else [])          # rev11: posição das alças AL-2 cotada
+                    + ([FI["z"]] if face in FI["eixo"] else [])))                                   # rev11: furo FI-1 cotado
         v.cota_v(zs, -EXT[-1], -9)
         v.zs_cota = list(zs)
         ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))

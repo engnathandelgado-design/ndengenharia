@@ -1,5 +1,5 @@
 """rev07 (21/10/2026): isométricos sombreados das peças de produção — laje alveolar LA-01/LA-01R e placa protendida PP
-(nichos NC-1, luvas TSA, alças AL-P, macho-fêmea). PNG em img/, sem marca (projeto da fábrica). Medidas em mm,
+(nichos NC-1, luvas TSA, insertos IZ-1, macho-fêmea). PNG em img/, sem marca (projeto da fábrica). Medidas em mm,
 das mesmas constantes das pranchas (lajes_placas.py / fechamento.py / geo_fixacao.py)."""
 import sys, math
 sys.path.insert(0, "/home/claude/letsara/pranchas")
@@ -121,10 +121,7 @@ def placa(L, arq, ponta=False):
         za, zb = Z_NC - NC_H / 2, Z_NC + NC_H / 2
         objs += [(caixa(xa, xa + NC_B, E - NC_P, E, zb - GF.N["t_teto"], zb), ACO), (caixa(xa, xa + NC_B, E - NC_P, E, za, za + GF.N["t_base"]), ACO),
                  (caixa(xa, xa + NC_B, E - NC_P, E - NC_P + GF.N["t_fundo"], za, zb), ACO)]
-    # alças AL-P (laço de cordoalha) no topo a 0,21 L e luvas TSA (topo e base) a 0,21 L + 15 cm
-    for xa in (0.21 * L, L - 0.21 * L):
-        ring = pv.Spline(np.array([(xa - 60, E / 2, 1280), (xa - 60, E / 2, 1360), (xa, E / 2, 1400), (xa + 60, E / 2, 1360), (xa + 60, E / 2, 1280)]), 40).tube(radius=7)
-        objs.append((ring, PROT))
+    # rev11: sem alças AL-P (içamento pelos 4 IZ-1 da face); luvas TSA (topo e base) a 0,21 L + 15 cm (pinos PT-1)
     for xt in (0.21 * L + 150, L - 0.21 * L - 150):
         for zt in (1281, -1):
             objs.append((pv.Cylinder(center=(xt, E / 2, zt), direction=(0, 0, 1), radius=14, height=6), ACO))
@@ -135,7 +132,7 @@ def placa(L, arq, ponta=False):
         tit = "PP — ponta da placa (face interna): nicho NC-1 aberto na ponta e na face, macho no topo, fêmea na base"
         return cena(objs, arq, cam, tit, zoom=1.0)
     cam = [(-0.10 * L, 0.95 * L, 0.42 * L), (L / 2, 50, 640), (0, 0, 1)]
-    tit = f"PP — placa protendida 125 × 10, L = {L / 10:.1f} cm (face interna): NC-1 nas pontas, alças AL-P e luvas TSA no topo".replace(".", ",")
+    tit = f"PP — placa protendida 125 × 10, L = {L / 10:.1f} cm (face interna): NC-1 nas pontas, 4 IZ-1 de içamento na face e luvas TSA no topo".replace(".", ",")
     return cena(objs, arq, cam, tit, w=1800, h=800, zoom=1.9, paralela=True)
 
 

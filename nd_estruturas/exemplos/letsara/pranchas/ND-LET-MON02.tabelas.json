@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PLANTA DE MONTAGEM DO MEZANINO (+3,90 E +7,30) — VIGAS VM, LAJES ALVEOLARES, CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
   "desenho": "ND-LET-MON02",
-  "rev": "06",
-  "data": "23/10/2026",
+  "rev": "07",
+  "data": "26/10/2026",
   "folha": "02/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -107,14 +107,14 @@
      "Pilar 40×60 do mezanino (B2), L 915",
      "1",
      "5,9",
-     "cálice −1,00; cabeça até a W 310"
+     "cálice −1,00; cabeça até a W 200"
     ],
     [
      "PM-02",
      "Pilar 40×60 do mezanino (D2), L 974",
      "1",
      "6,3",
-     "cálice −1,00; cabeça até a W 310"
+     "cálice −1,00; cabeça até a W 200"
     ],
     [
      "PE-01",

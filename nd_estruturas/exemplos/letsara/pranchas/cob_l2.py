@@ -199,7 +199,7 @@ for sy in (-1, 1):
     d5.linha((sy * 300, D_W + 60), (sy * (BF_W / 2 + 10), TF_W), "METALICA")
 d5.cota_v([0, D_W, D_W + 6.3 + 302], 360, 8, total=False); d5.cota_h([-300, 0, 300], -40, -8, total=False)
 d5.chamada((-200, D_W - 20), (-12, 16), "MF-1 L 51 × 51 × 4,8")
-d5.chamada((60, D_W + 80), (22, 26), "ST-W 6,3 + 4 M12")
+d5.chamada((60, D_W + 80), (22, 26), "ST-W 6,3: 2 M12 na mesa + 4 M12 nas almas (ISO 5, COB09)")
 d5.chamada((-20, D_W + 250), (-16, 20), "terça Z 302 (COB01)")
 
 # ------------------------------------------------------------------ tabelas e notas
@@ -216,12 +216,12 @@ lin += [["CB-M1", "L 102 × 102 × 12,7 × 100 (base do montante), 2 + 2 furos �
         ["BR-M16", "barra roscada M16 8.8 L 450 + grampo (embutida no pilar)", str(4 * na), "0,45", f(4 * na * 0.45 * KG_M16, 1)],
         ["TL-1", "tala de mesa 9,5 × 100 × 300", str(2 * n_e), "0,30", f(2 * n_e * 2.24, 1)],
         ["TL-2", "tala de alma 6,3 × 130 × 200", str(2 * n_e), "0,20", f(2 * n_e * 1.29, 1)],
-        ["ST-W", "clip da terça, chapa dobrada 6,3", str(NT), "-", f(NT * 3.2, 0)]]
+        ["ST-W", "clip da terça, chapa dobrada 6,3 × 220 (ISO 5, COB09)", str(NT), "-", f(NT * 3.2, 0)]]
 if MF:
     lin.append(["MF-1", f"mão-francesa L 51 × 51 × 4,8 L {M(L_mf):.0f}", str(2 * NT), f(L_mf, 2), f(2 * NT * L_mf * 3.63, 0)])
 n_m16 = n_e * 20 + nm * 8
 lin += [["M16 8.8", "parafuso + porca + 2 arruelas (emendas e montantes); porcas das barras", f"{n_m16} + {2 * (4 * na + 4 * nm)}", "-", "-"],
-        ["M12 8.8", "parafuso + porca + 2 arruelas (ST-W e MF-1)", str(NT * 4 + (2 * 2 * NT if MF else 0)), "-", "-"]]
+        ["M12 8.8", "ST-W × mesa (2/terça), MF-1 × mesa inf. (1/MF); almas: COB01", str(NT * 2 + (2 * NT if MF else 0)), "-", "-"]]
 TOT = sum(float(l[4].replace(",", ".")) for l in lin if l[4] != "-")
 lin.append(["", "TOTAL (sem parafusos)", "", "", f(TOT, 0)])
 y = pr.tabela(XC, Q[3] - 6, "LISTA DE MATERIAL — COBERTURA DA LINHA 2", ["MARCA", "DESCRIÇÃO", "QT", "L (m)", "kg"], lin, [18, 100, 12, 18, 22], destaque_ultima=True)

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR PRÉ-MOLDADO PF-06 (FAMÍLIA 40×60) — P5 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PF06",
-  "rev": "10",
-  "data": "23/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -180,6 +180,41 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PF-06) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "C1 (CP-VB)",
+     "D",
+     "+8,66 (966,4)",
+     "15×27×29",
+     "1 PN-6 Ø20",
+     "30",
+     "40",
+     "70"
+    ],
+    [
+     "C1 (CP-VB)",
+     "B",
+     "+8,68 (968,4)",
+     "15×27×29",
+     "1 PN-6 Ø20",
+     "30",
+     "40",
+     "70"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PF-06) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -272,14 +307,6 @@
      ""
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

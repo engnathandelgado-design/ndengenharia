@@ -108,7 +108,11 @@ for mk, x, b, zt in PIL2:                                  # pilares da linha 2 
         v.linha((x - b / 2, ztop), (x + b / 2, ztop), "VISTA")
     if zt > Z_VIS:
         v.interrupcao((x - b / 2, Z_VIS), (x + b / 2, Z_VIS))
-    v.texto((x + (b / 2 + 120 if x < LARG else -b / 2 - 120), 150), f"{mk} ao fundo", "min", "BOTTOM_LEFT" if x < LARG else "BOTTOM_RIGHT")
+    import pe_pilar as PP                                                   # rev11: pé no cálice (ao fundo, tracejado) + nome, seção e L
+    nm_ = PP.pe(v, x / 1000, Y_LIN[1], x, "x", cotar=(x == PIL2[0][1]), lado=-1, oculto=True)
+    _p6 = 35000 < x < LARG - 1                                              # P6 da linha 2 perto do eixo E: rótulo uma linha acima, para dentro
+    v.texto((x + (b / 2 + 120 if (x < LARG and not _p6) else -b / 2 - 120), 150 + (900 if _p6 else 0)), RN.novo(PP.rotulo(nm_)[1:] + " — ao fundo"), "min",
+            "BOTTOM_LEFT" if (x < LARG and not _p6) else "BOTTOM_RIGHT")
 for iz, za in enumerate(ASS):                              # consolos CP-MEZ nas pontas de cada VM da linha 2 (ocultos atrás da VM)
     for _, xa, xb in VM_N[iz]:
         for xf, sg in ((xa - 30, 1), (xb + 30, -1)):
@@ -149,7 +153,7 @@ for zt, n, za in zip(ZTV, NIV, ASS):
 nivel(v, LARG + 900, 0, "±0,000")
 PAI = PAI_N[1]
 v.chamada((PAI[3][0] + PAI[3][1] / 2, ZTV[1] + FITA + H_LA + H_CP), (8, 12), "capa 5 cm C30 + tela Q138 (obra)")
-v.chamada((PAI[4][0] + 600, ZTV[1] + FITA + H_LA / 2), (10, -18), f"LP20 {B_LA:.0f} × {H_LA:.0f}, 6 alvéolos Ø{2 * R_AL / 10:.1f}".replace(".", ","))
+v.chamada((PAI[4][0] + 600, ZTV[1] + FITA + H_LA / 2), (10, -18), f"LP20 {B_LA:.0f} × {H_LA:.0f}, 6 alvéolos de {2 * R_AL / 10:.1f} cm".replace(".", ","))
 v.chamada((PAI[0][0] + 350, ZTV[0] + FITA + H_LA / 2), (12, -22), "LA-02 70 × 20 (borda, 3 alvéolos)")
 v.chamada((12000, ZTV[0] - HV / 2), (8, -14), "VM retangular 30 × 75 ao fundo (linha 2)")
 v.chamada((M(ABERTURA["x0"] + ABERTURA["x1"]) / 2, NIV[0] - 300), (-30, 24), "+3,90: vão da escada metálica, sem laje (ND-LET-ES01)")
@@ -166,7 +170,9 @@ w.linha((-900, 0), (Y2 + 900, 0), "TERRENO")
 for y, mk, b in ((Y1, RN.pilar_em(X_EIXO["C"], Y_LIN[0]), 600), (Y2, RN.pilar_em(X_EIXO["C"], Y_LIN[1]), 600)):     # pilares do eixo C ao fundo (60 em y)
     w.poli([(y - b / 2, 0), (y + b / 2, 0), (y + b / 2, Z_VIS), (y - b / 2, Z_VIS)], "VISTA", True)
     w.interrupcao((y - b / 2, Z_VIS), (y + b / 2, Z_VIS))
-    w.texto((y + (b / 2 + 80 if y == Y1 else -b / 2 - 80), 120), f"{mk} ao fundo (eixo C)", "min", "BOTTOM_LEFT" if y == Y1 else "BOTTOM_RIGHT")
+    import pe_pilar as PP                                                   # rev11
+    PP.pe(w, X_EIXO["C"], y / 1000, y, "y", cotar=(y == Y1), lado=-1, oculto=True)
+    w.texto((y + (b / 2 + 80 if y == Y1 else -b / 2 - 80), 120), RN.novo(PP.rotulo(mk)[1:] + " — ao fundo (eixo C)"), "min", "BOTTOM_LEFT" if y == Y1 else "BOTTOM_RIGHT")
 
 
 def secao_vm(yc, zt, so):
@@ -272,7 +278,7 @@ d.chamada((B2E / 2, FITA + H_LA / 2), (-14, 14), "2º estágio C30, faixa de 18 
 d.chamada((B2E - 15, -100), (-30, -40), "alças N9 Ø10 c/15 (saem 20 cm da VM)")
 d.chamada((xl + 400, FITA + H_LA + 25), (12, 14), "tela Q138 a meia altura da capa")
 d.chamada((xl + LAJ["cordoalhas"][4]["x_mm"] + B_LA / 2, FITA + 40), (8, -34), "Ø15,2 nas nervuras de borda, Ø12,7 nas internas, eixo a 4 cm")
-d.chamada((x_al[1], FITA + H_LA / 2 + R_AL), (10, 26), "LP20: alvéolos Ø15,2 no passo 19,8; nervura de borda 5,15")
+d.chamada((x_al[1], FITA + H_LA / 2 + R_AL), (10, 26), "LP20: alvéolos de 15,2 cm no passo 19,8; nervura de borda 5,15")
 d.chamada((BT / 2, -HV / 2 + 100), (22, -8), "VM 30 × 75 protendida (ND-LET-VM01)")
 nivel(d, xl + LV + 300, FITA + H_LA + H_CP, f"piso ({f(NIV[0] / 1000)} / {f(NIV[1] / 1000)})")
 nivel(d, xl + LV + 300, 0, f"topo da VM ({f(ZTV[0] / 1000)} / {f(ZTV[1] / 1000)})")
@@ -289,8 +295,8 @@ niv = [["Topo da capa = piso (capa 5 cm C30)", f"{f(NIV[0] / 1000)} / {f(NIV[1] 
        ["Fundo da VM e dos consolos", f"{f((ZTV[0] - HV) / 1000)} / {f((ZTV[1] - HV) / 1000)}"]]
 yy = pr.tabela(xt, ytop, "NÍVEIS DO MEZANINO (m)", ["ELEMENTO", "INFERIOR / SUPERIOR"], niv, [112, 68], h_lin=5.2)
 c39, c73 = CGM["piso_390"], CGM["laje_730"]
-notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos Ø15,2, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; 2 Ø15,2 + 5 Ø12,7 CP-190 RB por painel (uma por nervura), σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
-         f"Cargas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m²; {f(NIV[0] / 1000, 2)}: revestimento {fd(c39['revestimento'])} e sobrecarga {fd(c39['sobrecarga'])} kN/m² (depósito); {f(NIV[1] / 1000, 2)} (sem uso): {fd(c73['revestimento'])} e {fd(c73['sobrecarga'])} kN/m²; montagem sem escoramento com a capa fresca + 1,0 kN/m².",
+notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos de 15,2 cm, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; 2 Ø15,2 + 5 Ø12,7 CP-190 RB por painel (uma por nervura), σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
+         f"Cargas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m²; {f(NIV[0] / 1000, 2)}: revestimento {fd(c39['revestimento'])} e sobrecarga {fd(c39['sobrecarga'])} kN/m² (depósito); {f(NIV[1] / 1000, 2)} (laje de cobertura do bloco, acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {fd(c73['sobrecarga'])} + regularização/impermeabilização {fd(c73['revestimento'])} kN/m²; montagem sem escoramento com a capa fresca + 1,0 kN/m².",
          "VM-01 a VM-04 retangulares 30 × 75 protendidas (DEC-049), dente Gerber 45 × 40 nos consolos CP-MEZ 40 × 40 × 27,9 com NEO-5F 200 × 200; topo da VM = apoio da laje (ND-LET-VM01).",
          "Apoio da laje 10 cm no topo da VM sobre fita de neoprene 10 × 100 contínua, com folga de 2 cm até a faixa de 2º estágio; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",
          "2º estágio na faixa de 18 cm sobre a VM (do lado da borda, até o topo da capa) e capa concretados juntos, por quem executa a capa, depois de todo o nível montado; alças N9 Ø10 c/15 da VM ancoram o 2º estágio; negativas N11/N12 sobre os pilares (ND-LET-VM01) e N1 2 Ø10 sobre os apoios das lajes (ND-LET-LA01).",

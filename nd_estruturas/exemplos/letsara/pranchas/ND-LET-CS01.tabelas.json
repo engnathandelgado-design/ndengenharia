@@ -1,0 +1,225 @@
+{
+ "folha": "ND-LET-CS01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "CONSOLOS DOS PILARES — MARCAS C1 A C5: FÔRMA, PINO, NEOPRENE, ARMADURA E PILARES QUE USAM",
+  "desenho": "ND-LET-CS01",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "C1 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "15 × 27 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "29 / 29 cm"
+    ],
+    [
+     "PINO",
+     "PN-6 Ø20 L 700 (emb. 300, livre 400, a 135 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "100×100×10 mm"
+    ],
+    [
+     "TIRANTE",
+     "1 alça horizontal Ø12,5 (2 ramos Ø12.5)"
+    ],
+    [
+     "ARMADURA",
+     "N4 2 Ø12,5 (U) · N5 2 Ø10 (costura) · N6 3 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "16 consolos"
+    ],
+    [
+     "PILARES",
+     "P29, P37, P1, P12, P25, P17, P13, P28, P24, P16"
+    ]
+   ]
+  },
+  {
+   "titulo": "C2 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "40 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "27,9 / 27,9 cm"
+    ],
+    [
+     "PINO",
+     "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "200×200×21 mm"
+    ],
+    [
+     "TIRANTE",
+     "4 alças horizontais Ø16 (8 ramos Ø16)"
+    ],
+    [
+     "ARMADURA",
+     "N4 8 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "17 consolos"
+    ],
+    [
+     "PILARES",
+     "P3, P2, P5, P18, P26, P14"
+    ]
+   ]
+  },
+  {
+   "titulo": "C3 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "40 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "27,9 / 27,9 cm"
+    ],
+    [
+     "PINO",
+     "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "200×200×21 mm"
+    ],
+    [
+     "TIRANTE",
+     "4 alças horizontais Ø16 (8 ramos Ø16)"
+    ],
+    [
+     "ARMADURA",
+     "N4 8 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "20 consolos"
+    ],
+    [
+     "PILARES",
+     "P30, P29, P4, P1, P25, P17, P13"
+    ]
+   ]
+  },
+  {
+   "titulo": "C4 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "50 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "49 / 39 cm"
+    ],
+    [
+     "PINO",
+     "PN-2 Ø25 L 900 (emb. 350, livre 550, a 200 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "300×200×31 mm"
+    ],
+    [
+     "TIRANTE",
+     "3 alças horizontais Ø16 (6 ramos Ø16)"
+    ],
+    [
+     "ARMADURA",
+     "N4 6 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "5 consolos"
+    ],
+    [
+     "PILARES",
+     "P18, P20, P22, P23"
+    ]
+   ]
+  },
+  {
+   "titulo": "C5 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "50 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "49 / 39 cm"
+    ],
+    [
+     "PINO",
+     "PN-2 Ø25 L 900 (emb. 350, livre 550, a 200 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "300×200×31 mm"
+    ],
+    [
+     "TIRANTE",
+     "3 alças horizontais Ø16 (6 ramos Ø16)"
+    ],
+    [
+     "ARMADURA",
+     "N4 6 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "1 consolos"
+    ],
+    [
+     "PILARES",
+     "P24"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR PRÉ-MOLDADO PL-06 (FAMÍLIA 40×60) — P2 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PL06",
-  "rev": "10",
-  "data": "23/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -33,7 +33,7 @@
      "PL-06",
      "P2 L2",
      "1",
-     "2 CP-MEZ (A); recuo +9,036 (W 310 direto)",
+     "2 CP-MEZ (A); recuo +9,036 (W 200 direto)",
      "6 CC-1 (C) + 6 (D, vista G)"
     ]
    ]
@@ -167,6 +167,51 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PL-06) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "C3 (CP-MEZ)",
+     "A",
+     "+3,17 (416,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "C3 (CP-MEZ)",
+     "A",
+     "+6,57 (756,9)",
+     "40×40×27,9",
+     "1 PN-1 Ø20",
+     "23",
+     "40",
+     "63"
+    ],
+    [
+     "ESP-1 (BR-M16)",
+     "recuo A",
+     "+9,04 (1003,6)",
+     "CA-L2 chapa de apoio 250×250×19",
+     "4 BR-M16 Ø16",
+     "35",
+     "10",
+     "45"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PL-06) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -277,14 +322,6 @@
      ""
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

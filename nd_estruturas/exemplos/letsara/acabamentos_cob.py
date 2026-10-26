@@ -1,4 +1,4 @@
-"""Letsara rev06c — acabamentos da cobertura no sistema Kingspan Isoeste "zipada dupla com lã de rocha" (manual de
+"""Letsara rev06c — acabamentos da cobertura no sistema Isoeste "zipada dupla com lã de rocha" (manual de
 instalação da zipada, p. 28–47): pacote, rufos, fixações e quantitativos. Geometria única para a prancha ND-LET-COB04 e o IFC.
 
 Bordas da cobertura (água única de 3 %, do eixo A ao eixo E; platibanda +10,00 em todo o perímetro, placas por fora dos pilares):
@@ -48,7 +48,7 @@ def z_zip(x):
 
 
 Z_TOP_CALHA = z_terca_topo(X_TELHA_A) - 0.040            # borda da calha 40 mm abaixo da face inferior da TP-40 na ponta
-ESP = 0.00065                                            # chapa dos rufos #0,65 pré-pintada
+ESP = 0.00050                                            # rev11 (Nathan 26/10): funilaria em galvalume #0,50 (feita na obra pelo funileiro)
 
 
 def secoes():
@@ -106,10 +106,10 @@ def quantitativos():
         comp = L[mk]
         n3 = round(comp / 0.6) if mk in ("RF-2C", "RF-3P", "RF-1C") else math.ceil(comp / 2.8)   # peças de 600 nos pilares; demais de 3 m com 200 de transpasse
         linhas.append(dict(marca=mk, borda=borda, desenv_mm=round(d / 10) * 10 + 10, comprimento_m=round(comp, 1), pecas=n3,
-                           chapa="#1,25 galv." if mk == "CR-1" else "#0,65 pré-pintado", descricao=desc))
+                           chapa="#1,25 galv." if mk == "CR-1" else "galvalume #0,50", descricao=desc))
     # 22/10 (colisão): RF-4P — rufo de recorte em volta das 6 cabeças 40 × 30 dos pilares de fachada (B, C, D das linhas 1 e 9):
     # peça de 600 dobrada nas 3 faces (16 + 42 + 16 cm de contorno), aba de 150 subindo na cabeça + 60 sobre a zipada
-    linhas.append(dict(marca="RF-4P", borda="1/9", desenv_mm=210, comprimento_m=round(6 * 0.74, 1), pecas=6, chapa="#0,65 pré-pintado",
+    linhas.append(dict(marca="RF-4P", borda="1/9", desenv_mm=210, comprimento_m=round(6 * 0.74, 1), pecas=6, chapa="galvalume #0,50",
                        descricao="rufo de recorte nas cabeças dos pilares de fachada (peça de 600 dobrada nas 3 faces, rebitada e selada)"))
     n_zip = math.ceil((Y_TELHA_9 - Y_TELHA_1) / 0.455)                    # telhas zipadas (455 úteis)
     tapper = math.ceil((L["RF-2"] + L["RF-2C"] + L["CR-1"] + L["RF-3P"] + L["RF-4C"] + L["RF-1"] + L["RF-1C"]) / 0.5)
@@ -132,7 +132,7 @@ def x_tercas():
 
 
 def quantitativos_telhas(L_MAX_TP=12.0, TRANSP=0.200, L_CART=3.0, PERDA=0.05):
-    """pacote Kingspan (manual p. 28): TP-40 STD 980 #0,65, cartola #0,65, lã FSR 32, clipes e zipada 455 #0,50; líquido e compra."""
+    """pacote Isoeste — Telha Zipada Dupla com lã de rocha FSR-32 (manual de instalação Kingspan Isoeste, p. 27–28): TP-40 STD 980 #0,65, cartola #0,65, lã FSR 32, clipes e zipada 455 #0,50; líquido e compra."""
     XT = x_tercas()
     fi = 1 / math.cos(math.atan(I))                                 # comprimento na inclinação / projeção
     larg = Y_TELHA_9 - Y_TELHA_1                                    # largura coberta (direção y)
@@ -153,7 +153,7 @@ def quantitativos_telhas(L_MAX_TP=12.0, TRANSP=0.200, L_CART=3.0, PERDA=0.05):
     n_fixo = n_zip * len(meio)
     ondas = math.ceil(larg / 0.245)                                 # cristas da TP-40 a cada 245 (costura em TODAS as ondas)
     area = larg * comp
-    it = [dict(item="Telha zipada 455 #0,50 pré-pintada (Kingspan)", un="pç", liq=n_zip, compra=n_zip, obs=f"peça única de {comp:.2f} m (perfilada na obra), {n_zip * comp:.0f} m; área {area:.0f} m²"),
+    it = [dict(item="Telha zipada 455 #0,50 pré-pintada (Isoeste)", un="pç", liq=n_zip, compra=n_zip, obs=f"peça única de {comp:.2f} m (perfilada na obra), {n_zip * comp:.0f} m; área {area:.0f} m²"),
           dict(item="Telha TP-40 STD 980 #0,65 (inferior)", un="pç", liq=n_tp * len(pecas_tp), compra=n_tp * len(pecas_tp),
                obs=f"{n_tp} colunas × {len(pecas_tp)} peças ({' + '.join(f'{v:.2f}' for v in pecas_tp)} m), transpasse {TRANSP * 1000:.0f} sobre terça; {n_tp * sum(pecas_tp):.0f} m"),
           dict(item="Perfil cartola #0,65 h 40 (sobre cada terça)", un="pç 3 m", liq=n_cart_lin * nT, compra=n_cart_lin * nT,
@@ -161,7 +161,7 @@ def quantitativos_telhas(L_MAX_TP=12.0, TRANSP=0.200, L_CART=3.0, PERDA=0.05):
           dict(item="Perfil cartola especial (bordas laterais, linhas 1 e 9)", un="m", liq=round(2 * comp, 1), compra=math.ceil(2 * comp * (1 + PERDA)), obs="ao longo da água, com as bases deslizantes #0,80"),
           dict(item="Lã de rocha FSR 32 e = 40 (entre cartolas)", un="m²", liq=round(area), compra=math.ceil(area * (1 + PERDA)), obs="painéis entre as cartolas, sem frestas; manter seca"),
           dict(item="Clipe fixo #0,65", un="pç", liq=n_fixo, compra=math.ceil(n_fixo * (1 + PERDA)), obs=f"1 por zipada nas 2 terças do meio da água (x = {XT[meio[0]]:.2f} e {XT[meio[1]]:.2f} m)"),
-          dict(item="Clipe deslizante #0,65 + base deslizante", un="cj", liq=n_clip - n_fixo, compra=math.ceil((n_clip - n_fixo) * (1 + PERDA)), obs="1 por zipada nas demais terças; a zipada dilata a partir do ponto fixo (≈ 12 mm em cada ponta para ΔT 50 °C — conferir curso do clipe com a Kingspan)"),
+          dict(item="Clipe deslizante #0,65 + base deslizante", un="cj", liq=n_clip - n_fixo, compra=math.ceil((n_clip - n_fixo) * (1 + PERDA)), obs="1 por zipada nas demais terças; a zipada dilata a partir do ponto fixo (≈ 12 mm em cada ponta para ΔT 50 °C — conferir curso do clipe com a Isoeste)"),
           dict(item='PB 12-14 × 3/4" P03 (TP-40 × terça)', un="pç", liq=n_tp * nT * 4, compra=math.ceil(n_tp * nT * 4 * (1 + PERDA)), obs="4 por telha em cada terça"),
           dict(item='PB 12-14 × 3/4" P03 (clipe × cartola)', un="pç", liq=2 * n_clip, compra=math.ceil(2 * n_clip * (1 + PERDA)), obs="2 por clipe"),
           dict(item='PB 1/4"-14 × 7/8" P01 (cartola × TP-40)', un="pç", liq=ondas * nT, compra=math.ceil(ondas * nT * (1 + PERDA)), obs="costura em TODAS as ondas (sucção de borda — calc_fixacao_telhas)")]
@@ -174,7 +174,7 @@ NIVEIS = dict(zip_A=round(z_zip(X_TELHA_A), 3), zip_E=round(z_zip(X_TELHA_E), 3)
               platibanda=PLAT, folga_zip_platibanda_E=round(PLAT - z_zip(X_TELHA_E) - PAC["zipada"], 3))
 
 if __name__ == "__main__":
-    R = dict(sistema="Kingspan Isoeste zipada dupla com lã de rocha (manual p. 28)", niveis=NIVEIS, **quantitativos(), telhas=quantitativos_telhas(),
+    R = dict(sistema="Isoeste — Telha Zipada Dupla com lã de rocha FSR-32 (manual de instalação Kingspan Isoeste, p. 27–28)", niveis=NIVEIS, **quantitativos(), telhas=quantitativos_telhas(),
              secoes={k: dict(borda=v[0], pts=[(round(a, 4), round(b, 4)) for a, b in v[1]], descricao=v[2]) for k, v in secoes().items()})
     (AQ / "acabamentos_cobertura.json").write_text(json.dumps(R, indent=1, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(R["niveis"], indent=1), json.dumps(R["rufos"], indent=1, ensure_ascii=False)[:3000])

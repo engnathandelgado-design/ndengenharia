@@ -105,7 +105,7 @@ quadros = []
 for k, (arq, tit) in enumerate(IM):
     cx = Q2[0] + 8 + (k % 3) * (W_IM + 8)
     cy = Q2[3] - 40 - (k // 3 + 1) * (H_IM + 8)
-    p2.imagem(cx, cy + 16, cx + W_IM, cy + H_IM, "/home/claude/letsara/pranchas/img/" + arq, titulo=tit)   # rev08: pelo motor (entra no PDF da folha)
+    p2.imagem(cx, cy + 16, cx + W_IM, cy + H_IM, "/home/claude/letsara/pranchas/img/" + arq.replace(".png", ".pdf"), titulo=tit)   # rev11: vetor   # rev08: pelo motor (entra no PDF da folha)
     quadros.append((arq, cx, cy))
 # plano de corte (chapas por espessura)
 corte = {}

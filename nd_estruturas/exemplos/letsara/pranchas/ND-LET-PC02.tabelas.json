@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PC02",
-  "rev": "10",
-  "data": "24/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -135,6 +135,51 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PC-02) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "C4 (CP-I130)",
+     "B",
+     "+6,97 (796,6)",
+     "50×40×49/39",
+     "1 PN-2 Ø25",
+     "35",
+     "55",
+     "90"
+    ],
+    [
+     "C4 (CP-I130)",
+     "D",
+     "+6,97 (796,6)",
+     "50×40×49/39",
+     "1 PN-2 Ø25",
+     "35",
+     "55",
+     "90"
+    ],
+    [
+     "ESP-2 (PN-5)",
+     "topo",
+     "+7,78 (877,6)",
+     "topo do pilar",
+     "4 PN-5 Ø20",
+     "30",
+     "30",
+     "60"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PC-02) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -233,14 +278,6 @@
      "3,0 cm (CAA II)"
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

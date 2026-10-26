@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "TS-01 — ESPERAS, INSERTOS E PEÇAS DE LIGAÇÃO DA COBERTURA (SEM SOLDA)",
   "desenho": "ND-LET-TS01-3",
-  "rev": "10",
-  "data": "23/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "02/02",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -117,10 +117,17 @@
      "-"
     ],
     [
-     "NEO-3",
-     "neoprene 100×300×10, 2 furos Ø30",
+     "NEO-3C",
+     "neoprene 150×300×10, 2 furos Ø30 (no consolo CT-I130, linhas 3 e 5–8)",
      "-",
-     "12",
+     "10",
+     "-"
+    ],
+    [
+     "NEO-3",
+     "neoprene 100×300×10, 2 furos Ø30 (só no topo do P11, linha 4)",
+     "-",
+     "2",
      "-"
     ]
    ]

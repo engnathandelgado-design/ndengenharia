@@ -1,0 +1,1716 @@
+{
+ "total": 284,
+ "erros": 7,
+ "itens": [
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": false,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; EIXO 2 COM W 310 M"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 377.6 kg × resumo 377.6 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL01",
+   "detalhe": "TABELA DE FERROS — 4 UNIDADES: tabela 1510.5 kg × resumo 1510.6 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 340.2 kg × resumo 340.2 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL03",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 404.6 kg × resumo 404.7 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL04",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL05",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 294.0 kg × resumo 294.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL05",
+   "detalhe": "TABELA DE FERROS — 4 UNIDADES: tabela 1175.8 kg × resumo 1176.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL06",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 337.3 kg × resumo 337.4 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL07",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 404.6 kg × resumo 404.7 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL08",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL09",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 264.7 kg × resumo 264.7 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL10",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 384.1 kg × resumo 384.2 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL11",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 237.2 kg × resumo 237.2 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PL12",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 301.8 kg × resumo 301.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 406.7 kg × resumo 406.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 409.7 kg × resumo 409.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF03",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 438.1 kg × resumo 438.1 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF04",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 359.3 kg × resumo 359.4 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF05",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 344.7 kg × resumo 344.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PF06",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 354.3 kg × resumo 354.3 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PC01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 391.5 kg × resumo 391.6 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PC02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 277.3 kg × resumo 277.3 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PC03",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 248.9 kg × resumo 249.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PC03",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 497.9 kg × resumo 497.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PM01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 351.0 kg × resumo 351.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PM02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 363.8 kg × resumo 363.8 kg"
+  },
+  {
+   "ok": false,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "EMISSÃO INICIAL: P14 SEPARADO DO PM-01 (CABEÇA ATÉ O FUNDO DA W 310, D"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PG01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 132.0 kg × resumo 132.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PG02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 84.8 kg × resumo 84.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PG03",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 162.8 kg × resumo 162.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PG04",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 117.8 kg × resumo 117.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PE01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 78.2 kg × resumo 78.2 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PE02",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 120.5 kg × resumo 120.5 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-PE03",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 320.6 kg × resumo 320.6 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C5 marcas de consolo existem no registro",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 257.7 kg × resumo 257.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "TABELA DE FERROS — 12 UNIDADES: tabela 3092.4 kg × resumo 3093.4 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok"
+  },
+  {
+   "ok": false,
+   "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "NEO-4 (pilar) ou NEO-3 (I130)"
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok"
+  },
+  {
+   "ok": false,
+   "item": "C4 NEO-3C no apoio das TS-01 sobre a I130",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "NEO-3 100×300 (I130 / centro)"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-I130",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I130",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 943.6 kg × resumo 943.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I130",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 784.0 kg × resumo 784.2 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I130",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 791.8 kg × resumo 792.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I130",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 780.7 kg × resumo 780.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-I130",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-I130",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-I130",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 319.2 kg × resumo 319.4 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 6 UNIDADES: tabela 1915.5 kg × resumo 1916.3 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 320.3 kg × resumo 320.5 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 8 UNIDADES: tabela 2562.6 kg × resumo 2563.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 253.4 kg × resumo 253.5 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 506.8 kg × resumo 507.1 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 184.3 kg × resumo 184.4 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VM01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 368.7 kg × resumo 368.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-VM01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "todas as posições da tabela aparecem no desenho"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 118.9 kg × resumo 118.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 237.7 kg × resumo 237.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 119.9 kg × resumo 120.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 239.8 kg × resumo 239.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 119.9 kg × resumo 120.0 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 239.8 kg × resumo 239.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 118.9 kg × resumo 118.9 kg"
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-VB01",
+   "detalhe": "TABELA DE FERROS — 2 UNIDADES: tabela 237.7 kg × resumo 237.8 kg"
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-VB01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": false,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-LA01",
+   "detalhe": "12 ocorrência(s): mezanino, pisos (topo da capa) +3,90 e +7,30; apoio 10 cm no topo das "
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 acabamentos de funilaria (sem marca de catálogo)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 acabamentos de funilaria (sem marca de catálogo)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": false,
+   "item": "C4 acabamentos de funilaria (sem marca de catálogo)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "8. Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada "
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": false,
+   "item": "C4 acabamentos de funilaria (sem marca de catálogo)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE)"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 acabamentos de funilaria (sem marca de catálogo)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok"
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "nenhuma"
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok"
+  }
+ ],
+ "pendentes": [
+  "comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
+  "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
+  "MC × desenho (armadura adotada)",
+  "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"
+ ]
+}

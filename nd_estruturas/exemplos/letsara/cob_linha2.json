@@ -700,12 +700,12 @@
   "perfil": "L 51 × 51 × 4,8 (2\" × 3/16\")",
   "em": "todas as terças da linha 2 (dos dois lados da W)",
   "F_d": 3.5,
-  "L_m": 0.361,
-  "Ncr_kN": 440.3,
-  "parafusos": "1 M12 8.8 em cada ponta",
+  "L_m": 0.461,
+  "Ncr_kN": 269.7,
+  "parafusos": "1 M12 8.8 em cada ponta (em cima, no parafuso da ponta do transpasse; embaixo, na mesa inferior da W)",
   "norma": "NBR 8800:2024 4.11 (travamento: 2 % da força na mesa)"
  },
- "terca_sobre_W": "ST-W: chapa dobrada 6,3 (igual ao ST-1P) parafusada na mesa superior da W com 2 M12 e na alma da terça com 2 M12 (furos da terça iguais)",
+ "terca_sobre_W": "ST-W: chapa dobrada 6,3 × 220 (como o ST-1P) parafusada na mesa superior da W com 2 M12 (gabarito 55) e nas 2 almas do transpasse com 4 M12 (furos de apoio da terça a ±60)",
  "espera": "EM-L2 (por montante): 4 barras roscadas M16 8.8 L 330 com gancho de 180° laçado na alça N9 da VM (2 ramos Ø10; as 2 barras de cada lado na mesma alça, eixo do montante sobre uma alça e barras a ±150), postas por quem faz a capa com gabarito de chapa 6,3 (furos a 300 × 60), na faixa de 2º estágio (18 cm) do +7,30 da linha 2, a 0 e 60 mm do eixo da linha 2 (para o lado da borda); saem 60 mm acima da capa",
  "aco_kg": {
   "viga": 592,

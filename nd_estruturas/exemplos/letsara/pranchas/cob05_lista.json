@@ -1,5 +1,5 @@
 {
- "total_kg": 975,
+ "total_kg": 998,
  "linhas": [
   [
    "W-L2 1",
@@ -108,17 +108,17 @@
   ],
   [
    "ST-W",
-   "clip da terça, chapa dobrada 6,3",
+   "clip da terça, chapa dobrada 6,3 × 220 (ISO 5, COB09)",
    "32",
    "-",
    "102"
   ],
   [
    "MF-1",
-   "mão-francesa L 51 × 51 × 4,8 L 361",
+   "mão-francesa L 51 × 51 × 4,8 L 461",
    "64",
-   "0,36",
-   "84"
+   "0,46",
+   "107"
   ],
   [
    "M16 8.8",
@@ -129,8 +129,8 @@
   ],
   [
    "M12 8.8",
-   "parafuso + porca + 2 arruelas (ST-W e MF-1)",
-   "256",
+   "ST-W × mesa (2/terça), MF-1 × mesa inf. (1/MF); almas: COB01",
+   "128",
    "-",
    "-"
   ],
@@ -139,7 +139,7 @@
    "TOTAL (sem parafusos)",
    "",
    "",
-   "975"
+   "998"
   ]
  ]
 }

@@ -1,0 +1,223 @@
+{
+ "folha": "ND-LET-EX01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "EXECUÇÃO EM OBRA — CAPEAMENTO, CHAVETEAMENTO E 2º ESTÁGIO DAS VIGAS DO MEZANINO (+3,90 E +7,30)",
+  "desenho": "ND-LET-EX01",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "ARMADURA DE CONTINUIDADE POR APOIO (VM sobre pilar)",
+   "cab": [
+    "NÍVEL",
+    "PILAR",
+    "VM ESQ.",
+    "VM DIR.",
+    "N11 (bainhas)",
+    "N12 (capa)",
+    "GRAUTE"
+   ],
+   "linhas": [
+    [
+     "+3,90",
+     "P13",
+     "V201",
+     "V200",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+3,90",
+     "P17",
+     "V202",
+     "V201",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+3,90",
+     "P25",
+     "V203",
+     "V202",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+3,90",
+     "P14",
+     "V206",
+     "V205",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+3,90",
+     "P18",
+     "V207",
+     "V206",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+3,90",
+     "P26",
+     "V208",
+     "V207",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P13",
+     "V301",
+     "V300",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P17",
+     "V302",
+     "V301",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P25",
+     "V303",
+     "V302",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P5",
+     "V305",
+     "V304",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P14",
+     "V306",
+     "V305",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P18",
+     "V307",
+     "V306",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ],
+    [
+     "+7,30",
+     "P26",
+     "V308",
+     "V307",
+     "6 Ø16 L 600",
+     "9 Ø12,5 L 600",
+     "2 bainhas Ø50"
+    ]
+   ]
+  },
+  {
+   "titulo": "MATERIAIS DE OBRA",
+   "cab": [
+    "ITEM",
+    "QUANTIDADE",
+    "OBS."
+   ],
+   "linhas": [
+    [
+     "N11 Ø16 CA-50 L 600",
+     "78 barras",
+     "813 kg (+10 %)"
+    ],
+    [
+     "N12 Ø12,5 CA-50 L 600",
+     "117 barras",
+     "744 kg (+10 %)"
+    ],
+    [
+     "tela Q138 (capa)",
+     "área dos dois níveis",
+     "conforme planta da LA01"
+    ],
+    [
+     "graute ≥ 30 MPa não retrátil",
+     "26 bainhas + chavetas",
+     "chavetas: ≈ 1,2 L/m"
+    ],
+    [
+     "concreto C30 (capa 5 cm + 2º estágio)",
+     "por nível",
+     "ver quantitativos"
+    ]
+   ]
+  },
+  {
+   "titulo": "ESPECIFICAÇÕES",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "concreto da capa e 2º estágio",
+     "C30, abatimento 10 ± 2 cm, brita 1 (máx. 19 mm)"
+    ],
+    [
+     "graute",
+     "≥ 30 MPa, não retrátil, fluido"
+    ],
+    [
+     "aço",
+     "CA-50 (NBR 7480); tela Q138"
+    ],
+    [
+     "cobrimento",
+     "2,5 cm na capa; 3,0 cm no 2º estágio"
+    ],
+    [
+     "cura",
+     "úmida 7 dias; carregar só com fck ≥ 20 MPa"
+    ],
+    [
+     "carga de montagem",
+     "até 1,0 kN/m² sem escoramento (concreto fresco + pessoas)"
+    ],
+    [
+     "sobrecarga final",
+     "+3,90: 5,0 kN/m²; +7,30: 1,0 kN/m² (laje de cobertura)"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

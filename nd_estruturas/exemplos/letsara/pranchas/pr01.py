@@ -138,7 +138,7 @@ def linha(p):
         forma = f"pista {PISTA:g} m, deitada face interna p/ cima (≤ {por_pista(L)} por pista)"
         prot = f"{n} fios Ø{P_['diam_mm']:g} CP-175 RB ({n // 2} por face), {f(P_['F_macaco_kN'])} kN"
         kg = (Q.num(PP_ACO[mk][4]) - Q.num(PP_ACO[mk][3]) * 1.48 * 1.10) if mk in PP_ACO else None    # sem a tela Q92 (como nas listas)
-        ic = f"desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L"
+        ic = f"desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)"
         est = "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)"
     return dict(fam=fam, marca=mk, qt=qt, sec=sec, L=L, v=v, peso=peso, conc=conc, lib=lib, desf=desf, forma=forma, prot=prot,
                 kg=kg, ic=ic, est=est, folha=fl)

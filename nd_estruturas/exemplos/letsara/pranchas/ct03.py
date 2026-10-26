@@ -62,7 +62,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="CORTE LONGITUDINAL DA OBRA (EIXO C), PLANTA-CHAVE DOS CORTES E VISTAS 3D DA ESTRUTURA",
                         desenho="ND-LET-CT03", folha="01/01", fase="EXECUTIVO", rev="00"))
 pr.revisao("00", "21/10/2026", "EMISSÃO: CORTE 6-6 LONGITUDINAL, PLANTA-CHAVE DOS CORTES E 3D")
-pr.revisao("01", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; LINHA 2 METÁLICA (W 310)")
+pr.revisao("01", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; LINHA 2 METÁLICA (DEC-048)")
 pr.revisao("02", "24/10/2026", "DEC-052/054: LINHA 2 COM W 200 × 15,0; I130 COM h 120 E CONSOLO COM MÍSULA")
 pr.revisao("03", "24/10/2026", "DEC-058: 2 PC-03 40×40 NO EIXO C, I130 EM 3 VÃOS DE 16,517 m (V406, V405, V404)")
 Q = pr.quadro
@@ -161,7 +161,8 @@ def corte(v):
         else:
             pts = [(y - by / 2, -1000), (y + by / 2, -1000), (y + by / 2, zt), (y - by / 2, zt)]
         conc(v, pts, esc=0.012)
-        v.linha((y - by / 2 - 150, 0), (y + by / 2 + 150, 0), "VISTA")
+        import pe_pilar as PP                                               # rev11: cálice em corte + cota do embutimento
+        PP.pe(v, X_EIXO["C"], y / 1000, y, "y", cotar=(y == YL[0]), lado=-1)
     for mk, ya, yb in I130:                                    # I130 cortada no eixo, dentes 78 × 35 nos consolos
         zb = ZT_I - H_I
         pts = [(ya, ZT_I - HD_I), (ya + LN_I, ZT_I - HD_I), (ya + LN_I, zb), (yb - LN_I, zb), (yb - LN_I, ZT_I - HD_I), (yb, ZT_I - HD_I), (yb, ZT_I), (ya, ZT_I)]
@@ -201,7 +202,7 @@ def corte(v):
     for k, y in enumerate(YL):
         v.linha((y, -1700), (y, PLAT + 700), "EIXO")
         v.circulo((y, -2250), 450, "BOLHA"); v.texto((y, -2250), str(k + 1), "sub", "MIDDLE_CENTER")
-    v.cota_h(YL, -1000, -4, total=False)
+    v.cota_h(YL, -1300, -4, total=False)                                     # rev11: abaixo do cálice
     v.cota_v([0, ZT_I - H_I, Z_ASS, ZT_I, PLAT], COMP + 2400, 4, total=False)
     v.cota_v([0, NIV[0], NIV[1], PLAT], -2400, -4, total=False)
     for z, t in ((0, "±0,000"), (NIV[0], f"piso mezanino {f(NIV[0] / 1000)}"), (NIV[1], f"piso mezanino {f(NIV[1] / 1000)}"), (PLAT, f"platibanda {f(PLAT / 1000)}")):
@@ -209,8 +210,10 @@ def corte(v):
     for z, t in ((ZT_I - H_I, f"fundo I130 {f((ZT_I - H_I) / 1000)}"), (Z_ASS, f"assento I130 {f(Z_ASS / 1000)}"), (ZT_I, f"topo I130 {f(ZT_I / 1000)} / {f(ZT_ID / 1000)}"),
                  (PLAT, f"platibanda {f(PLAT / 1000)}")):
         nivel(v, COMP + 700, z, t, 1)
-    for mk, y, by, zt in PIL:
-        v.texto((y + (by / 2 + 120 if y < COMP else -by / 2 - 120), 180), mk, "nota", "BOTTOM_LEFT" if y < COMP else "BOTTOM_RIGHT")
+    import pe_pilar as PP, renomear as RN_
+    for mk, y, by, zt in PIL:                                                  # rev11: nome, seção e comprimento total
+        v.texto((y + (by / 2 + 120 if y < COMP else -by / 2 - 120), 180), PP.rotulo(RN_.pilar_em(X_EIXO["C"], y / 1000)), "nota", "BOTTOM_LEFT" if y < COMP else "BOTTOM_RIGHT")
+    nivel(v, COMP + 700, -1000, "fundo dos pilares −1,000; cálice −1,050 (graute 5 cm)", 1)
     v.chamada((YL[2], Z_TS_E + 450), (6, 10), "TS-01 (ponta do lado E) no topo da I130: NEO-3 + 2 PN-5")
     v.chamada((YL[1], zw + DW), (-6, 12), "linha 2: W 200 × 15,0 na cabeça do P8A (ND-LET-COB05)")
     v.chamada((YL[6] + 2500, z_ter + 302), (6, 8), "terças Z 302 + TP40 + lã 40 + zipada + painéis solares (ND-LET-COB01)")
@@ -234,9 +237,9 @@ v2 = pr.vista("CORTE 6-6 (CONT.)", (Q[0] + 70 + 1600 / E - (YS - 1200) / E, Q[3]
 corte(Clip(v1, -1600, YS + 1200))
 corte(Clip(v2, YS - 1200, COMP + 1600))
 for vv, (ya_, yb_), yy_ in ((v1, (0, YS), YS + 1200), (v2, (YS, COMP), YS - 1200)):   # interrupção e total de cada parte
-    vv.interrupcao((yy_, -1000), (yy_, PLAT + 400))
-    yt = -1000 - 4 * DIM_K * E - DIM_DLI * E
-    total(vv, (ya_, -1000), (yb_, -1000), (ya_, yt), 0, (ya_ + 0.62 * (yb_ - ya_), yt))
+    vv.interrupcao((yy_, -1300), (yy_, PLAT + 400))
+    yt = -1300 - 4 * DIM_K * E - DIM_DLI * E
+    total(vv, (ya_, -1300), (yb_, -1300), (ya_, yt), 0, (ya_ + 0.62 * (yb_ - ya_), yt))
 
 # ================================================================== PLANTA-CHAVE DOS CORTES (1:400)
 EK = 400

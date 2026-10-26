@@ -1,0 +1,298 @@
+{
+ "folha": "ND-LET-COB09",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W)",
+  "desenho": "ND-LET-COB09",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "ITENS DOS ISOMÉTRICOS (QT POR LIGAÇÃO)",
+   "cab": [
+    "ISO",
+    "ITEM",
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT"
+   ],
+   "linhas": [
+    [
+     "1",
+     "0",
+     "V4xx",
+     "viga de cobertura das linhas 3 a 8 (topo, referência)",
+     "1"
+    ],
+    [
+     "1",
+     "1",
+     "ES-1",
+     "espera M16 (hef 150 + gancho + grampo U Ø10), na viga",
+     "2"
+    ],
+    [
+     "1",
+     "2",
+     "ST-1P",
+     "chapa dobrada 9,5 × 220 A36 galv. (aba 290 + aba 150, 2 oblongos 18 × 40, 4 Ø14)",
+     "1"
+    ],
+    [
+     "1",
+     "3",
+     "T",
+     "terça Z 302 do vão anterior (ponta a +450)",
+     "1"
+    ],
+    [
+     "1",
+     "4",
+     "T",
+     "terça Z 302 do vão seguinte (ponta a −450), encaixada",
+     "1"
+    ],
+    [
+     "1",
+     "5",
+     "M12 × 35 8.8",
+     "apoio: ST-1P + 2 almas — torque 85 N·m",
+     "4"
+    ],
+    [
+     "1",
+     "6",
+     "M12 × 25 8.8",
+     "emenda: ponta do transpasse, 2 almas — torque 85 N·m",
+     "4"
+    ],
+    [
+     "1",
+     "7",
+     "M16",
+     "porca + contraporca + arruela na ES-1",
+     "2"
+    ],
+    [
+     "2",
+     "0",
+     "PILAR",
+     "cabeça do pilar",
+     "1"
+    ],
+    [
+     "2",
+     "1",
+     "GRAUTE",
+     "graute de nivelamento 20 (±10)",
+     "1"
+    ],
+    [
+     "2",
+     "2",
+     "BR-M16",
+     "barra roscada M16 8.8 L 450 (hef 350 + grampo U Ø10), embutida no pilar",
+     "4"
+    ],
+    [
+     "2",
+     "3",
+     "CA-L2",
+     "chapa de apoio 250 × 250 × 19, 4 furos Ø18 (no C) / oblongos 18 × 40 em x (demais)",
+     "1"
+    ],
+    [
+     "2",
+     "4",
+     "W-L2",
+     "W 200 × 15,0 da linha 2 (furos na mesa inferior, gabarito 55)",
+     "1"
+    ],
+    [
+     "2",
+     "5",
+     "M16",
+     "arruela + porca + contraporca (por dentro da W)",
+     "4"
+    ],
+    [
+     "3",
+     "0",
+     "VM",
+     "VM 30 × 75 do +7,30 + capa (2º estágio)",
+     "1"
+    ],
+    [
+     "3",
+     "1",
+     "GRAUTE",
+     "graute 20",
+     "1"
+    ],
+    [
+     "3",
+     "2",
+     "EM-L2",
+     "barra roscada M16 8.8 L 330 com gancho laçado na alça N9 (espera do 2º estágio)",
+     "4"
+    ],
+    [
+     "3",
+     "3",
+     "MT-L2",
+     "montante W 150 × 13,0",
+     "2"
+    ],
+    [
+     "3",
+     "4",
+     "CB-M1",
+     "L 102 × 102 × 12,7 × 100 (base), 2 + 2 furos Ø18",
+     "2"
+    ],
+    [
+     "3",
+     "5",
+     "CB-M2",
+     "L 102 × 102 × 12,7 × 130 (topo), 2 + 2 furos Ø18",
+     "2"
+    ],
+    [
+     "3",
+     "6",
+     "M16 × 40 8.8",
+     "cantoneira × mesa do montante — torque 210 N·m",
+     "4"
+    ],
+    [
+     "3",
+     "7",
+     "M16 × 40 8.8",
+     "CB-M2 × mesa inferior da W (gabarito 55) — torque 210 N·m",
+     "4"
+    ],
+    [
+     "3",
+     "8",
+     "W-L2",
+     "W 200 × 15,0",
+     "1"
+    ],
+    [
+     "3",
+     "9",
+     "M16",
+     "arruela + porca + contraporca",
+     "4"
+    ],
+    [
+     "4",
+     "1",
+     "W-L2",
+     "módulo da W (esquerda)",
+     "2"
+    ],
+    [
+     "4",
+     "2",
+     "TL-1",
+     "tala de mesa 9,5 × 100 × 300, 8 furos Ø18",
+     "2"
+    ],
+    [
+     "4",
+     "3",
+     "TL-2",
+     "tala de alma 6,3 × 130 × 200, 4 furos Ø18",
+     "2"
+    ],
+    [
+     "4",
+     "4",
+     "M16 × 40 8.8",
+     "talas de mesa (16 por emenda) — torque 210 N·m",
+     "16"
+    ],
+    [
+     "4",
+     "5",
+     "M16 × 40 8.8",
+     "talas de alma (4 por emenda) — torque 210 N·m",
+     "4"
+    ],
+    [
+     "5",
+     "0",
+     "W-L2",
+     "W 200 × 15,0 da linha 2",
+     "1"
+    ],
+    [
+     "5",
+     "1",
+     "ST-W",
+     "chapa dobrada 6,3 × 220 A36 galv. (aba 290 + aba 150), 2 Ø14 na aba + 4 Ø14 na alma",
+     "1"
+    ],
+    [
+     "5",
+     "2",
+     "M12 × 30 8.8",
+     "ST-W × mesa superior da W (gabarito 55) — torque 85 N·m",
+     "2"
+    ],
+    [
+     "5",
+     "3",
+     "T",
+     "terça do vão 1-2 (ponta a +450)",
+     "1"
+    ],
+    [
+     "5",
+     "4",
+     "T",
+     "terça do vão 2-3 (ponta a −450)",
+     "1"
+    ],
+    [
+     "5",
+     "5",
+     "M12 × 30 8.8",
+     "ST-W + 2 almas — torque 85 N·m",
+     "4"
+    ],
+    [
+     "5",
+     "6",
+     "MF-1",
+     "mão-francesa L 51 × 51 × 4,8 L 461, 1 M12 em cada ponta",
+     "2"
+    ],
+    [
+     "5",
+     "7",
+     "M12 × 30 8.8",
+     "MF-1 × ponta do transpasse (o mesmo furo da emenda, parafuso 10 mm mais longo) — torque 85 N·m",
+     "2"
+    ],
+    [
+     "5",
+     "8",
+     "M12 × 30 8.8",
+     "MF-1 × mesa inferior da W (ponta dobrada, furo Ø14 na mesa) — torque 85 N·m",
+     "2"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

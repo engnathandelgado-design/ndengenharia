@@ -95,6 +95,11 @@ ve.chamada((S_TB[0] + 12, 700), (-14, 18), "TB-3 Ø50 a prumo")
 ve.chamada((S_TB[1] + 12, 700), (14, 18), "TB-3 Ø50 a prumo")
 ve.chamada((ES1(TER[3]) + DX, H + 120), (-6, 14), "ES-1 (saliência 12)")
 ve.cota_h([0, ALC[0], ALC[1], ALC[2], ALC[3], L], 0, -14)
+# rev11 (Nathan 26/10): trechos de seção em cadeia — cunha | maciço retangular (corte B) | seção I corrente (corte A) | maciço | cunha
+_TR = [0, CUN["L"], mac, L - mac, L - CUN["L"], L]
+assert abs(sum(b_ - a_ for a_, b_ in zip(_TR[:-1], _TR[1:])) - L) < 1, "cadeia dos trechos não fecha com o comprimento"
+ve.cota_h([x + DX for x in _TR], H, 22, total=True)
+ve.chamada((mac / 2 + DX, H - 40), (4, 30), f"maciço retangular {mac/10:g} (corte B) — transição em degrau p/ seção I (corte A)")
 ve.cota_v([0, 100, H], 0, -10)
 ve.marcador_corte((TER[5] + 60, -470), (TER[5] + 60 + DX, H + 60), "A", lado=1)
 ve.marcador_corte((S_TB[0] + 60, -470), (S_TB[0] + 60 + DX, H + 60), "B", lado=1)
@@ -346,7 +351,7 @@ y = pr.tabela(x0, y - 4, "MANUSEIO", ["FASE", "APOIO", "CARGA"], mn, [50, 70, 60
 notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab. 2 da NBR 9062:2017 — 5.2.1.2): necessária para a folga de 19 mm entre as pontas das duas TS-01 sobre a I130; seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm. Estabilidade lateral no içamento: L/bf 49 ≤ 50 (6.1).",
          f"Fabricar a peça reta com {f(L/10,1)} cm de fundo; cabeceiras inclinadas 3 % (topo deslocado {f(DX/10,1)} cm) para ficarem a prumo na montagem.",
          "Cotas ordenadas a partir do ponto 0 = encontro da face da ponta esquerda (a prumo, lado do pilar P1/P2) com o plano do fundo.",
-         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no topo da I130 / pilar central (NEO-3), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
+         "Sem dentes Gerber: a viga apoia direto no assento do pilar lateral (recuo, NEO-4) e no consolo CT-I130 com mísula da I130 (NEO-3C 150×300×10; só no topo do P11 da linha 4, NEO-3 100×300×10), com 2 pinos grauteados nos tubos TB-3, a 7,75 cm das duas pontas (peça simétrica: a mesma TS-01 serve às duas meias águas, sempre com a ponta baixa para o lado A).",
          f"CUNHAS no fundo das duas pontas (NBR 9062:2017 7.2.1.6 — aparelho de apoio horizontal): calço de aço em cunha 3 % fixado no fundo da fôrma, {LC/10:.0f} cm × 40 cm; ponta baixa rebaixo {EC} → 0 mm, ponta alta 0 → {EC} mm (degrau de {EC} mm). Na montagem a face de apoio fica horizontal sobre o neoprene e sobre o assento horizontal.",
          f"Cordoalhas: {T.TXT_LINHAS} (x = 0, ±4, ±15,5 nas duas linhas); as {T.N_ISOL} de {P['y2']/10:g} cm em x = ±4 e ±15,5 isoladas com bainha nos {P['isol']['L']/1000:.2f} m de cada ponta (faixa de armação abaixo).".replace("3.00", "3,00"),
          "Esperas ES-1/ES-2 com gabarito de aço preso na fôrma (tolerância ±3 mm); rosca protegida com fita até a montagem. Ligações da cobertura todas parafusadas, sem solda (ND-LET-COB01/02).",

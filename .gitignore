@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 .DS_Store
 Thumbs.db
+
+# rev11 (26/10/2026): PDFs gerados das folhas e entregas não são versionados (refazer com gerar_tudo / unir_pranchas)
+nd_estruturas/exemplos/letsara/pranchas/*.pdf
+*.tmp.pdf

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR PRÉ-MOLDADO PF-04 (FAMÍLIA 40×60) — P14 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PF04",
-  "rev": "11",
-  "data": "24/10/2026",
+  "rev": "12",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -204,6 +204,51 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PF-04) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "C5 (CP-I130)",
+     "A",
+     "+6,97 (796,6)",
+     "50×40×49/39",
+     "1 PN-2 Ø25",
+     "35",
+     "55",
+     "90"
+    ],
+    [
+     "C1 (CP-VB)",
+     "D",
+     "+8,37 (936,7)",
+     "15×27×29",
+     "1 PN-6 Ø20",
+     "30",
+     "40",
+     "70"
+    ],
+    [
+     "C1 (CP-VB)",
+     "B",
+     "+8,39 (938,8)",
+     "15×27×29",
+     "1 PN-6 Ø20",
+     "30",
+     "40",
+     "70"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PF-04) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -308,14 +353,6 @@
      ""
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

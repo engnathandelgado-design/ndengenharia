@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "FOLHA DE ROSTO, ÍNDICE DAS FOLHAS E NOTAS GERAIS DO PROJETO EXECUTIVO",
   "desenho": "ND-LET-NG01",
-  "rev": "09",
-  "data": "24/10/2026",
+  "rev": "10",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -37,476 +37,476 @@
      "PR01",
      "QUADRO DE PRODUÇÃO E CONCRETAGEM DAS PEÇAS — POR MARCA",
      "A0",
-     "08"
+     "09"
     ],
     [
      "3",
      "LOC01",
      "PLANTA DE LOCAÇÃO DOS PILARES — EIXOS, MARCAS, SEÇÕES E FACES",
      "A0",
-     "10"
+     "11"
     ],
     [
      "4",
      "CG01",
      "PLANTA DE CARGAS NA FUNDAÇÃO — REAÇÕES NA BASE DOS PILARES (tf, tf·m)",
      "A0",
-     "10"
+     "11"
     ],
     [
      "5",
      "CT01",
      "CORTES TRANSVERSAIS DA ESTRUTURA — EIXOS 2 E 3",
      "A0",
-     "10"
+     "11"
     ],
     [
      "6",
      "CT02",
      "CORTES DO MEZANINO — LAJES ALVEOLARES LP20 + CAPA, VIGAS VM RETANGULARES 30 × 75, 2º ESTÁGIO ...",
      "A0",
-     "02"
+     "03"
     ],
     [
      "7",
      "CT03",
      "CORTE LONGITUDINAL DA OBRA (EIXO C), PLANTA-CHAVE DOS CORTES E VISTAS 3D DA ESTRUTURA",
      "A0",
-     "03"
+     "04"
     ],
     [
      "8",
      "CT04",
      "CORTES DE MONTAGEM DAS VIGAS — APOIOS COMO MONTADOS (TS-01, I130, VM, VB, LAJE ALVEOLAR)",
      "A0",
-     "09"
+     "10"
     ],
     [
      "9",
      "MON01",
      "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I130, VB-01 A VB-08 — CORTE, LISTA DE...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "10",
      "MON02",
      "PLANTA DE MONTAGEM DO MEZANINO (+3,90 E +7,30) — VIGAS VM, LAJES ALVEOLARES, CORTE, LISTA DE ...",
      "A1",
-     "06"
+     "07"
     ],
     [
      "11",
      "MON03",
      "PLANO DE MONTAGEM DO FECHAMENTO LATERAL (PLACAS) E SEQUÊNCIA GERAL DA OBRA — IÇAMENTO E EQUIP...",
      "A0",
-     "02"
+     "03"
     ],
     [
      "12",
      "PL01",
      "PILAR PRÉ-MOLDADO PL-01 (FAMÍLIA 40×60) — P1 L5–L8 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "13",
      "PL02",
      "PILAR PRÉ-MOLDADO PL-02 (FAMÍLIA 40×60) — P1 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "14",
      "PL03",
      "PILAR PRÉ-MOLDADO PL-03 (FAMÍLIA 40×60) — P1 L1 canto — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "15",
      "PL04",
      "PILAR PRÉ-MOLDADO PL-04 (FAMÍLIA 40×60) — P1 L9 canto — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "16",
      "PL05",
      "PILAR PRÉ-MOLDADO PL-05 (FAMÍLIA 40×60) — P2 L5–L8 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "17",
      "PL06",
      "PILAR PRÉ-MOLDADO PL-06 (FAMÍLIA 40×60) — P2 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "18",
      "PL07",
      "PILAR PRÉ-MOLDADO PL-07 (FAMÍLIA 40×60) — P2 L1 canto — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "19",
      "PL08",
      "PILAR PRÉ-MOLDADO PL-08 (FAMÍLIA 40×60) — P2 L9 canto — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "20",
      "PL09",
      "PILAR PRÉ-MOLDADO PL-09 (FAMÍLIA 40×60) — P1 L3 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "21",
      "PL10",
      "PILAR PRÉ-MOLDADO PL-10 (FAMÍLIA 40×60) — P1 L4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "22",
      "PL11",
      "PILAR PRÉ-MOLDADO PL-11 (FAMÍLIA 40×60) — P2 L3 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "23",
      "PL12",
      "PILAR PRÉ-MOLDADO PL-12 (FAMÍLIA 40×60) — P2 L4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "24",
      "PF01",
      "PILAR PRÉ-MOLDADO PF-01 (FAMÍLIA 40×60) — P3 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "25",
      "PF02",
      "PILAR PRÉ-MOLDADO PF-02 (FAMÍLIA 40×60) — P4 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "26",
      "PF03",
      "PILAR PRÉ-MOLDADO PF-03 (FAMÍLIA 40×60) — P5 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "27",
      "PF04",
      "PILAR PRÉ-MOLDADO PF-04 (FAMÍLIA 40×60) — P14 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "11"
+     "12"
     ],
     [
      "28",
      "PF05",
      "PILAR PRÉ-MOLDADO PF-05 (FAMÍLIA 40×60) — P3 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "29",
      "PF06",
      "PILAR PRÉ-MOLDADO PF-06 (FAMÍLIA 40×60) — P5 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "30",
      "PC01",
      "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "31",
      "PC02",
      "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "32",
      "PC03",
      "PILARES CENTRAIS PC-03 (P13, P13B, 40×40) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "33",
      "PM01",
      "PILAR DO MEZANINO PM-01 (P8, 40×60) — LINHA 2, EIXO B — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "34",
      "PM02",
      "PILAR DO MEZANINO PM-02 (P8B, 40×60) — LINHA 2, EIXO D — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "00"
+     "01"
     ],
     [
      "35",
      "PG01",
      "PILAR DOS PORTÕES PG-01 (P9, 40×40) — LINHA 4, x = 9,870 m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "09"
+     "10"
     ],
     [
      "36",
      "PG02",
      "PILAR DOS PORTÕES PG-02 (P10a, 25×25) — LINHA 4, x = 15,195 m — FÔRMA, ARMAÇÃO, INSERTOS E LO...",
      "A0",
-     "09"
+     "10"
     ],
     [
      "37",
      "PG03",
      "PILAR DOS PORTÕES PG-03 (P12, 40×40) — LINHA 4, x = 29,630 m — FÔRMA, ARMAÇÃO, INSERTOS E LOC...",
      "A0",
-     "09"
+     "10"
     ],
     [
      "38",
      "PG04",
      "PILAR DOS PORTÕES PG-04 (P10b, 25×25) — LINHA 4, x = 24,305 m — FÔRMA, ARMAÇÃO, INSERTOS E LO...",
      "A0",
-     "09"
+     "10"
     ],
     [
      "39",
      "PE01",
      "PILAR DA ESCADA PE-01 (P6, 25×40) — x 36,175, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "09"
+     "10"
     ],
     [
      "40",
      "PE02",
      "PILAR DA ESCADA PE-02 (P7, 40×60) — EIXO E, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "09"
+     "10"
     ],
     [
      "41",
      "PE03",
      "PILAR DA LINHA 2 PE-03 (P6, 25×40) — x 36,175, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "42",
      "TS01-1",
      "TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO",
      "ESP.",
-     "11"
+     "12"
     ],
     [
      "43",
      "TS01-3",
      "TS-01 — ESPERAS, INSERTOS E PEÇAS DE LIGAÇÃO DA COBERTURA (SEM SOLDA)",
      "A1",
-     "10"
+     "11"
     ],
     [
      "44",
      "I130",
      "VIGAS CENTRAIS I130 V404 / V405 / V406 / V407 — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO",
      "ESP.",
-     "11"
+     "12"
     ],
     [
      "45",
      "VM01",
      "VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ...",
      "ESP.",
-     "11"
+     "12"
     ],
     [
      "46",
      "VB01",
      "VIGAS DE BORDA VB-01 A VB-08 (15×60 COM DENTE, C40) — FÔRMA, INSERTOS E ARMAÇÃO",
      "A0",
-     "10"
+     "11"
     ],
     [
      "47",
      "LA01",
      "LAJES ALVEOLARES DO MEZANINO (h20 + CAPA 5) — FÔRMA (PAGINAÇÃO +3,90 E +7,30, SEÇÃO, RECORTE,...",
      "A0",
-     "09"
+     "10"
     ],
     [
      "48",
      "ES01",
      "ESCADA METÁLICA INTERNA DO MEZANINO (TÉRREO → +3,95) — PLANTAS, CORTE, LIGAÇÕES PARAFUSADAS E...",
      "A1",
-     "02"
+     "03"
     ],
     [
      "49",
      "ES02",
      "ESCADA METÁLICA EXTERNA DA FACHADA A (PÁTIO → +3,95) — PLANTA, CORTES, BASES, PORTA E LISTA D...",
      "A1",
-     "01"
+     "02"
     ],
     [
      "50",
      "ES03",
      "ESCADAS METÁLICAS — GUARDA-CORPOS, CORRIMÃOS (RT CBMRS 11) E LIGAÇÕES PARAFUSADAS",
      "A1",
-     "01"
+     "02"
     ],
     [
      "51",
      "ES04",
      "ESCADA METÁLICA INTERNA — GUARDA-CORPO E CORRIMÃO DUPLO: DETALHES DE CONSTRUÇÃO E MONTAGEM",
      "A1",
-     "00"
+     "01"
     ],
     [
      "52",
      "ES05",
      "ESCADA METÁLICA EXTERNA — GUARDA-CORPO E CORRIMÃO DUPLO: DETALHES DE CONSTRUÇÃO E MONTAGEM",
      "A1",
-     "00"
+     "01"
     ],
     [
      "53",
      "PP00",
      "PLACA DE FECHAMENTO PROTENDIDA 125 × 10 — FÔRMA (INSERTOS, ALÇAS, LIGAÇÕES) E ARMAÇÃO (PROTEN...",
      "A0",
-     "10"
+     "11"
     ],
     [
      "54",
      "PP01",
      "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — ARMADURA DA PONTA, CONJUNTO MONTADO, TOLERÂNCIAS, SEQUÊ...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "55",
      "PP02",
      "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — NICHO NC-1: CONJUNTO SOLDADO, PEÇAS, SOLDAS E LISTA DE ...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "56",
      "PP03",
      "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CONSOLE CS-1: CONJUNTO SOLDADO, PEÇAS, PARAFUSOS, SOLDA...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "57",
      "PP04",
      "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINO PT-1, TRAVA PT-2 E FIXADORES...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "58",
      "PP05",
      "FIXAÇÃO DAS PLACAS — OMBREIRA METÁLICA OM-1 DA PORTA DA VISTA I (FABRICAÇÃO E MONTAGEM)",
      "A1",
-     "08"
+     "09"
     ],
     [
      "59",
      "PP06",
      "PLACAS RECORTADAS NO I130 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C /...",
      "A1",
-     "10"
+     "11"
     ],
     [
      "60",
      "PP-A",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA A: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "61",
      "PP-B",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA B: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "62",
      "PP-C",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA C: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "10"
+     "11"
     ],
     [
      "63",
      "PV01",
      "PLACA PV-1 SOBRE O PORTÃO DA LINHA 4 (ENTRE PG-04 E PG-03) — FÔRMA, ARMAÇÃO, APOIOS E MONTAGEM",
      "A1",
-     "00"
+     "01"
     ],
     [
      "64",
      "PP-D",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA D: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "65",
      "PP-EF",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS E E F: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "66",
      "PP-G",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA G: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "67",
      "PP-HJ",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS H E J: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "68",
      "PP-I",
      "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA I: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
      "A1",
-     "09"
+     "10"
     ],
     [
      "69",
      "CM01",
      "PLACAS DE FECHAMENTO — LOCAÇÃO CONFORME AS VISTAS DO R01 (A A J), ORDEM DE MONTAGEM DAS VISTA...",
      "A1",
-     "09"
+     "10"
     ],
     [
      "70",
@@ -527,35 +527,35 @@
      "COB03",
      "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS",
      "A1",
-     "08"
+     "09"
     ],
     [
      "73",
      "COB04",
      "COBERTURA — ACABAMENTOS KINGSPAN (ZIPADA DUPLA COM LÃ DE ROCHA): BEIRAIS, ENCOSTOS, PLATIBAND...",
      "A1",
-     "08"
+     "09"
     ],
     [
      "74",
      "COB05",
      "COBERTURA METÁLICA DA LINHA 2 — W 200 × 15,0 NOS PILARES E EM MONTANTES SOBRE AS VM DO +7,30:...",
      "A1",
-     "01"
+     "02"
     ],
     [
      "75",
      "MT01-1",
      "PEÇAS DE FIXAÇÃO DAS PLACAS — NICHO NC-1 E CONSOLE CS-1: DESENHOS DE FABRICAÇÃO, LISTAS E QUA...",
      "A0",
-     "08"
+     "09"
     ],
     [
      "76",
      "MT01-2",
      "PEÇAS DE FIXAÇÃO DAS PLACAS — IMAGENS DAS PEÇAS E PLANO DE CORTE",
      "A1",
-     "08"
+     "09"
     ]
    ]
   },

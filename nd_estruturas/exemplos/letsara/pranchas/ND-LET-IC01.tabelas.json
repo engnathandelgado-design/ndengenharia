@@ -1,0 +1,413 @@
+{
+ "folha": "ND-LET-IC01",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "IÇAMENTO E MANUSEIO DAS PEÇAS — PILARES (FÁBRICA E OBRA), VIGAS, PLACAS, LAJES ALVEOLARES E PEÇAS METÁLICAS",
+  "desenho": "ND-LET-IC01",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "PILARES — FÁBRICA (AL-2) E OBRA (FI-1)",
+   "cab": [
+    "MARCA",
+    "PEÇAS",
+    "PESO (t)",
+    "FÁBRICA: ALÇAS AL-2",
+    "Pk/alça (kN)",
+    "OBRA: FURO",
+    "σ no furo (d)"
+   ],
+   "linhas": [
+    [
+     "PC-01",
+     "P18",
+     "6,46",
+     "2 AL-2: 250 e 695 cm da base",
+     "31,7",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PC-02",
+     "P20",
+     "4,03",
+     "2 AL-2: 250 e 628 cm da base",
+     "19,8",
+     "FI-1 a 145 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PC-03",
+     "P22, P23",
+     "4,03",
+     "2 AL-2: 250 e 628 cm da base",
+     "19,8",
+     "FI-1 a 65 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PE-01",
+     "P3",
+     "1,36",
+     "2 AL-2: 240 e 250 cm da base",
+     "6,7",
+     "FI-1 a 58 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PE-02",
+     "P2",
+     "3,11",
+     "2 AL-2: 240 e 250 cm da base",
+     "15,3",
+     "FI-1 a 58 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PE-03",
+     "P5",
+     "2,87",
+     "2 AL-2: 250 e 744 cm da base",
+     "14,1",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-01",
+     "P25",
+     "6,75",
+     "2 AL-2: 330 e 780 cm da base",
+     "33,1",
+     "FI-1 a 238 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-02",
+     "P17",
+     "6,85",
+     "2 AL-2: 330 e 780 cm da base",
+     "33,6",
+     "FI-1 a 208 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-03",
+     "P13",
+     "6,94",
+     "2 AL-2: 330 e 780 cm da base",
+     "34,0",
+     "FI-1 a 188 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-04",
+     "P24",
+     "6,61",
+     "2 AL-2: 345 e 780 cm da base",
+     "32,4",
+     "FI-1 a 208 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-05",
+     "P28",
+     "6,30",
+     "2 AL-2: 345 e 780 cm da base",
+     "30,9",
+     "FI-1 a 238 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PF-06",
+     "P16",
+     "6,48",
+     "2 AL-2: 345 e 780 cm da base",
+     "31,8",
+     "FI-1 a 188 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PG-01",
+     "P27",
+     "3,45",
+     "2 AL-2: 250 e 597 cm da base",
+     "16,9",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PG-02",
+     "P21",
+     "1,37",
+     "2 AL-2: 250 e 613 cm da base",
+     "6,7",
+     "FI-1 a 75 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PG-03",
+     "P15",
+     "3,69",
+     "2 AL-2: 250 e 656 cm da base",
+     "18,1",
+     "FI-1 a 60 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PG-04",
+     "P19",
+     "1,42",
+     "2 AL-2: 250 e 640 cm da base",
+     "7,0",
+     "FI-1 a 42 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-01",
+     "P33, P34, P35, P36",
+     "5,87",
+     "2 AL-2: 345 e 780 cm da base",
+     "28,8",
+     "FI-1 a 325 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-02",
+     "P30",
+     "6,30",
+     "2 AL-2: 330 e 780 cm da base",
+     "30,9",
+     "FI-1 a 254 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-03",
+     "P29",
+     "6,99",
+     "2 AL-2: 330 e 780 cm da base",
+     "34,3",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-04",
+     "P37",
+     "6,76",
+     "2 AL-2: 345 e 780 cm da base",
+     "33,1",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-05",
+     "P8, P9, P10, P11",
+     "6,23",
+     "2 AL-2: 345 e 780 cm da base",
+     "30,6",
+     "FI-1 a 208 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-06",
+     "P4",
+     "6,66",
+     "2 AL-2: 330 e 780 cm da base",
+     "32,7",
+     "FI-1 a 129 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-07",
+     "P1",
+     "6,99",
+     "2 AL-2: 330 e 780 cm da base",
+     "34,3",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-08",
+     "P12",
+     "6,76",
+     "2 AL-2: 345 e 780 cm da base",
+     "33,1",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-09",
+     "P31",
+     "5,87",
+     "2 AL-2: 330 e 780 cm da base",
+     "28,8",
+     "FI-1 a 325 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-10",
+     "P32",
+     "5,87",
+     "2 AL-2: 345 e 780 cm da base",
+     "28,8",
+     "FI-1 a 325 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-11",
+     "P6",
+     "6,23",
+     "2 AL-2: 330 e 780 cm da base",
+     "30,6",
+     "FI-1 a 208 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PL-12",
+     "P7",
+     "6,23",
+     "2 AL-2: 345 e 780 cm da base",
+     "30,6",
+     "FI-1 a 208 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PM-01",
+     "P26",
+     "6,05",
+     "2 AL-2: 250 e 665 cm da base",
+     "29,7",
+     "FI-1 a 68 cm do topo",
+     "0,0 MPa"
+    ],
+    [
+     "PM-02",
+     "P14",
+     "6,42",
+     "2 AL-2: 250 e 724 cm da base",
+     "31,5",
+     "FI-1 a 70 cm do topo",
+     "0,0 MPa"
+    ]
+   ]
+  },
+  {
+   "titulo": "VIGAS — ALÇAS DE CORDOALHA (não engraxada, NBR 9062 5.3.3)",
+   "cab": [
+    "MARCA",
+    "TIPO",
+    "PESO (t)",
+    "PONTOS",
+    "Pk/ponto (kN)",
+    "ALÇA"
+   ],
+   "linhas": [
+    [
+     "\u0001V407",
+     "I130",
+     "16,64",
+     "2 AL-3 a 2,50 m das pontas",
+     "81,6",
+     "2 laços Ø12,7; Fd(βa 3) 244,8 kN"
+    ],
+    [
+     "\u0001V406",
+     "I130",
+     "13,78",
+     "2 AL-3 a 2,50 m das pontas",
+     "67,6",
+     "2 laços Ø12,7; Fd(βa 3) 202,8 kN"
+    ],
+    [
+     "\u0001V405",
+     "I130",
+     "13,78",
+     "2 AL-3 a 2,50 m das pontas",
+     "67,6",
+     "2 laços Ø12,7; Fd(βa 3) 202,7 kN"
+    ],
+    [
+     "\u0001V404",
+     "I130",
+     "13,70",
+     "2 AL-3 a 2,50 m das pontas",
+     "67,2",
+     "2 laços Ø12,7; Fd(βa 3) 201,6 kN"
+    ],
+    [
+     "V408 … V419",
+     "TS-01",
+     "12,0",
+     "4 AL-1 a 2,10, 7,60, 12,10, 17,60 m (2 balancins)",
+     "30,0",
+     "laço Ø12,7, 2 pernas"
+    ],
+    [
+     "VM-01 … VM-04",
+     "VM 30×75",
+     "—",
+     "2 AL-1 a 1,10 m das pontas",
+     "—",
+     "laço Ø12,7, 2 pernas"
+    ],
+    [
+     "VB",
+     "VB 15×60",
+     "—",
+     "2 AL-1 a 1,50 m das pontas",
+     "—",
+     "laço Ø12,7, 2 pernas"
+    ]
+   ]
+  },
+  {
+   "titulo": "PLACAS, LAJES E PEÇAS METÁLICAS",
+   "cab": [
+    "PEÇA",
+    "PESO (t)",
+    "PONTOS",
+    "CARGA POR PONTO (kN)",
+    "ACESSÓRIO"
+   ],
+   "linhas": [
+    [
+     "PLACAS PP",
+     "3,23",
+     "4 IZ-1 na face interna, 0,104 L e 0,396 L de cada ponta, meia altura; balancim duplo (cargas iguais), cabos a prumo",
+     "7,9 (Pd 10,3 ≤ 23,8)",
+     "IZ-1 (inserto de içamento) + balancim duplo"
+    ],
+    [
+     "LAJE ALVEOLAR LA-01",
+     "3,41",
+     "2 garras a 0,30 m das pontas",
+     "Fd 28,3 por garra",
+     "garra mecânica; fcj ≥ 30 MPa"
+    ],
+    [
+     "ESCADAS METÁLICAS",
+     "ver ES01/ES02",
+     "2 cintas nas longarinas, a 1/4 do comprimento",
+     "—",
+     "cintas de poliéster; sem içar pelos guarda-corpos"
+    ],
+    [
+     "W 200 × 15,0 (linha 2)",
+     "≈ 0,18 por módulo de 12 m",
+     "2 cintas a 1/4 do comprimento",
+     "—",
+     "cintas; montar e parafusar antes de soltar"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

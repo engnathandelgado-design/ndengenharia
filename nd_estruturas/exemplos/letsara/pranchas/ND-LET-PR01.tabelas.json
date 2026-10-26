@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "QUADRO DE PRODUÇÃO E CONCRETAGEM DAS PEÇAS — POR MARCA",
   "desenho": "ND-LET-PR01",
-  "rev": "08",
-  "data": "23/10/2026",
+  "rev": "09",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -1194,7 +1194,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "—",
      "—",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PV01"
     ],
@@ -1214,7 +1214,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "712",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1234,7 +1234,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "113",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1254,7 +1254,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "674",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1274,7 +1274,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "225",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1294,7 +1294,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "14",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1314,7 +1314,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "14",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1334,7 +1334,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "14",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1354,7 +1354,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "502",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1374,7 +1374,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "153",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1394,7 +1394,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "14",
      "223",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1414,7 +1414,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "12",
      "12",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1434,7 +1434,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "9",
      "9",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1454,7 +1454,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "9",
      "9",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1474,7 +1474,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "9",
      "93",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1494,7 +1494,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "9",
      "18",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],
@@ -1514,7 +1514,7 @@
      "10 fios Ø6 CP-175 RB (5 por face), 36,6 kN",
      "6",
      "6",
-     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; montagem: 2 AL-P no topo a 0,21 L",
+     "desforma: 4 IZ-1 numa face a 0,104 L e 0,396 L, com balancim; giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo)",
      "EM PÉ em cavalete, 2 calços a 0,21 L da base (deitada empena)",
      "PP00"
     ],

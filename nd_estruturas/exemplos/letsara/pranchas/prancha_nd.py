@@ -26,7 +26,7 @@ ALTURAS = {"min": 2.5, "nota": 2.5, "cota": 2.5, "peca": 3.5, "sub": 3.0, "titul
 ALTURAS_GERAL = dict(ALTURAS)
 ALTURAS_PECA = {"min": 3.0, "nota": 3.0, "cota": 3.5, "peca": 3.5, "sub": 3.5, "titulo": 6.0, "grande": 8.0}
 MIN_TIPO = {"geral": dict(cota=2.5, texto=2.5), "peca": dict(cota=3.5, texto=3.0)}
-_PECA_PREF = ("PL", "PF", "PC", "PM", "PG", "PE", "TS01", "I130", "VM01", "VB01", "LA01", "PP0", "PV01", "ES0", "MT01", "AR-", "PE0", "IC01")
+_PECA_PREF = ("PL", "PF", "PC", "PM", "PG", "PE", "TS01", "I130", "VM01", "VB01", "LA01", "PP0", "PV01", "ES0", "MT01", "COB06", "COB07", "COB08", "COB09", "IC01", "EX01", "AR-", "PE0", "IC01")
 
 
 def tipo_folha(desenho):
@@ -739,8 +739,11 @@ class Prancha:
                             avisos.append(("AVISO", f"imagem com {ppi:.0f} ppi (< {PPI_MIN}) no tamanho impresso: {_os.path.basename(cam)} — re-renderizar"))
                     except Exception:
                         pass
-                pdf.save(base + ".pdf", incremental=True, encryption=0)
+                # rev11 (26/10/2026): reescreve o PDF com as imagens comprimidas sem perda (FlateDecode). O salvamento incremental
+                # deixava o raster do render 3D cru no arquivo (4500 × 7800 px = 100 MB por folha, push recusado no GitHub).
+                pdf.save(base + ".tmp.pdf", garbage=3, deflate=True, deflate_images=True, deflate_fonts=True)
                 pdf.close()
+                os.replace(base + ".tmp.pdf", base + ".pdf")
                 chk = pymupdf.open(base + ".pdf")
                 n_img = len(chk[0].get_images())
                 if n_img < len({c for *_, c in self.imagens if _os.path.exists(c) and not c.lower().endswith(".pdf")}):

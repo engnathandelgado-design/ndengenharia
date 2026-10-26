@@ -1,0 +1,172 @@
+{
+ "criterio": "C1, C2… por tipo (CP-VB, CP-MEZ, CP-I130) e depois altura/largura; iguais = mesma geometria, pino, neoprene e tirante",
+ "por_chave": {
+  "CP-VB|150|270|290|290|0|PN-6|20|700|300|135|(100, 100, 10)|2|12.5": "C1",
+  "CP-MEZ|400|400|279|279|0.03|PN-1|20|630|230|211|(200, 200, 21)|8|16.0": "C2",
+  "CP-MEZ|400|400|279|279|0|PN-1|20|630|230|211|(200, 200, 21)|8|16.0": "C3",
+  "CP-I130|500|400|490|390|0.03|PN-2|25|900|350|200|(300, 200, 31)|6|16.0": "C4",
+  "CP-I130|500|400|490|390|0|PN-2|25|900|350|200|(300, 200, 31)|6|16.0": "C5"
+ },
+ "lista": [
+  {
+   "marca": "C1",
+   "tipo": "CP-VB",
+   "larg": 150,
+   "proj": 270,
+   "h": 290,
+   "hp": 290,
+   "incl": 0,
+   "pino": "PN-6 Ø20 L 700 (emb. 300, livre 400, a 135 da face)",
+   "neo": [
+    100,
+    100,
+    10
+   ],
+   "tirante": "1 alça horizontal Ø12,5 (2 ramos Ø12.5)",
+   "marcas_pilar": [
+    "PL-03",
+    "PL-04",
+    "PL-07",
+    "PL-08",
+    "PF-01",
+    "PF-02",
+    "PF-03",
+    "PF-05",
+    "PF-04",
+    "PF-06"
+   ],
+   "pilares": [
+    "P29",
+    "P37",
+    "P1",
+    "P12",
+    "P25",
+    "P17",
+    "P13",
+    "P28",
+    "P24",
+    "P16"
+   ],
+   "n": 16
+  },
+  {
+   "marca": "C2",
+   "tipo": "CP-MEZ",
+   "larg": 400,
+   "proj": 400,
+   "h": 279,
+   "hp": 279,
+   "incl": 0.03,
+   "pino": "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)",
+   "neo": [
+    200,
+    200,
+    21
+   ],
+   "tirante": "4 alças horizontais Ø16 (8 ramos Ø16)",
+   "marcas_pilar": [
+    "PE-01",
+    "PE-02",
+    "PE-03",
+    "PC-01",
+    "PM-01",
+    "PM-02"
+   ],
+   "pilares": [
+    "P3",
+    "P2",
+    "P5",
+    "P18",
+    "P26",
+    "P14"
+   ],
+   "n": 17
+  },
+  {
+   "marca": "C3",
+   "tipo": "CP-MEZ",
+   "larg": 400,
+   "proj": 400,
+   "h": 279,
+   "hp": 279,
+   "incl": 0,
+   "pino": "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)",
+   "neo": [
+    200,
+    200,
+    21
+   ],
+   "tirante": "4 alças horizontais Ø16 (8 ramos Ø16)",
+   "marcas_pilar": [
+    "PL-02",
+    "PL-03",
+    "PL-06",
+    "PL-07",
+    "PF-01",
+    "PF-02",
+    "PF-03"
+   ],
+   "pilares": [
+    "P30",
+    "P29",
+    "P4",
+    "P1",
+    "P25",
+    "P17",
+    "P13"
+   ],
+   "n": 20
+  },
+  {
+   "marca": "C4",
+   "tipo": "CP-I130",
+   "larg": 500,
+   "proj": 400,
+   "h": 490,
+   "hp": 390,
+   "incl": 0.03,
+   "pino": "PN-2 Ø25 L 900 (emb. 350, livre 550, a 200 da face)",
+   "neo": [
+    300,
+    200,
+    31
+   ],
+   "tirante": "3 alças horizontais Ø16 (6 ramos Ø16)",
+   "marcas_pilar": [
+    "PC-01",
+    "PC-02",
+    "PC-03"
+   ],
+   "pilares": [
+    "P18",
+    "P20",
+    "P22",
+    "P23"
+   ],
+   "n": 5
+  },
+  {
+   "marca": "C5",
+   "tipo": "CP-I130",
+   "larg": 500,
+   "proj": 400,
+   "h": 490,
+   "hp": 390,
+   "incl": 0,
+   "pino": "PN-2 Ø25 L 900 (emb. 350, livre 550, a 200 da face)",
+   "neo": [
+    300,
+    200,
+    31
+   ],
+   "tirante": "3 alças horizontais Ø16 (6 ramos Ø16)",
+   "marcas_pilar": [
+    "PF-04"
+   ],
+   "pilares": [
+    "P24"
+   ],
+   "n": 1
+  }
+ ]
+}

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I130, VB-01 A VB-08 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
   "desenho": "ND-LET-MON01",
-  "rev": "08",
-  "data": "23/10/2026",
+  "rev": "09",
+  "data": "26/10/2026",
   "folha": "01/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -62,7 +62,7 @@
     ],
     [
      "PM-01, PM-02",
-     "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 310",
+     "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 200",
      "2",
      "5,9 a 6,3",
      "ver ND-LET-MON02"

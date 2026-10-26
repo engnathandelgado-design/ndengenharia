@@ -60,6 +60,26 @@ def salvar(p, arq, cam, zoom):
     p.camera_position = cam
     p.reset_camera()
     p.camera.zoom(zoom)
+    # rev11: enquadra a peça para ocupar ~90 % da janela (antes a viga longa ocupava ~1/3 e o recorte saía com 52–100 ppi)
+    a_ = np.asarray(p.screenshot(None, return_img=True))[..., :3]
+    ys_, xs_ = np.nonzero((a_ < 250).any(axis=2))
+    if len(xs_):
+        W_, H_ = a_.shape[1], a_.shape[0]
+        cam_ = p.camera                                                       # 1) centraliza o desenho na janela (pan em projeção paralela)
+        px_ = 2 * cam_.parallel_scale / H_                                    # metros por pixel
+        dx_ = ((xs_.min() + xs_.max()) / 2 - W_ / 2) * px_
+        dy_ = -((ys_.min() + ys_.max()) / 2 - H_ / 2) * px_
+        fp_, pos_, up_ = np.array(cam_.focal_point), np.array(cam_.position), np.array(cam_.up)
+        dir_ = fp_ - pos_; dir_ /= np.linalg.norm(dir_)
+        up_ = up_ - dir_ * (up_ @ dir_); up_ /= np.linalg.norm(up_)
+        rt_ = np.cross(dir_, up_)
+        sh_ = rt_ * dx_ + up_ * dy_
+        cam_.focal_point, cam_.position = tuple(fp_ + sh_), tuple(pos_ + sh_)
+        fx, fy = (xs_.max() - xs_.min() + 1) / W_, (ys_.max() - ys_.min() + 1) / H_   # 2) zoom para ocupar ~92 %
+        k_ = 0.92 / max(fx, fy)
+        if k_ > 1.05:
+            cam_.zoom(k_)
+        p.render()
     p.screenshot(PR + arq)
     im = Image.open(PR + arq).convert("RGB")
     bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()

@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PLANO DE MONTAGEM DO FECHAMENTO LATERAL (PLACAS) E SEQUÊNCIA GERAL DA OBRA — IÇAMENTO E EQUIPAMENTOS",
   "desenho": "ND-LET-MON03",
-  "rev": "02",
-  "data": "23/10/2026",
+  "rev": "03",
+  "data": "26/10/2026",
   "folha": "03/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -150,13 +150,13 @@
     ],
     [
      "8",
-     "Parede G (linha 2) — antes da W 310 da linha 2",
+     "Parede G (linha 2) — antes da W 200 da linha 2",
      "cada placa nos seus 2 consoles",
      "MON03, PP-G"
     ],
     [
      "9",
-     "W 310 da linha 2, VB-01 a VB-04, terças dos vãos 1–2 e 2–3",
+     "W 200 × 15,0 da linha 2 e montantes W 150 × 13,0, VB-01 a VB-04, terças dos vãos 1–2 e 2–3",
      "ST-W e MF-1 em toda terça da linha 2",
      "MON01, COB01, COB05"
     ],
@@ -230,8 +230,8 @@
      "Placas PP",
      "3,2",
      "10,16",
-     "2 alças AL-P no topo (montagem de pé)",
-     "balancim; desforma por 4 IZ-1"
+     "4 IZ-1 na face interna (desforma, giro e montagem de pé)",
+     "balancim duplo; DET. 2a–2c"
     ]
    ]
   }

@@ -297,10 +297,10 @@ seq = [
     f"Face C dos pilares: consoles já concretados (CC-1). Topografia confere o nível real do topo da mesa de cada console e calcula G para cada um (G nominal {T['G']:g}).",
     f"Faces laterais (CE-1 rente): topografia marca o nível; soldar o CS-1 na CE-1 (filete {FX['solda']['filete_mm']:g}, 2 lados verticais, ND-LET-PP03), eixo a {FCH.JUNTA // 2 + FCH.X_CS:g} do eixo do pilar, mesa nivelada ±3; galvanização a frio no cordão.",
     f"Regular em cada console o M16 de nível (topo da cabeça a G da mesa, {T['G'] - T['G_tol']:g} a {T['G'] + T['G_tol']:g}) e o prisioneiro frontal (afastamento {T['a']:g} ± {T['a_tol']:g}); travar contraporca e trava química.",
-    f"Içar a placa pelas alças AL-P, aproximar pela face interna com o teto dos nichos {MOJ[0]:g} a {MOJ[1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
+    f"Içar a placa de pé pelos 4 IZ-1 da face interna com balancim duplo (ND-LET-MON03 det. 2c), aproximar pela face interna com o teto dos nichos {MOJ[0]:g} a {MOJ[1]:g} mm acima da posição final (as abas passam por cima dos dentes) até o fundo encostar no prisioneiro.",
     "Baixar até o teto apoiar nas cabeças dos 2 M16 de nível; conferir nível, prumo e junta de 5 mm com a placa de baixo.",
     "Pinos guia PT-1: antes de montar a placa de cima, parafusar as 2 cartolas no topo da placa de baixo (M16 só nela); a placa de cima desce guiada, sem parafuso — o PT-1 não transmite esforço (DEC-035). Nas placas de pacote suspenso, apertar as 2 travas PT-2 no pé antes de soltar o guindaste. Selar a junta vertical (tarucel + PU).",
-    "Soltar o guindaste, cortar as 2 alças AL-P rente ao topo da placa (disco de corte, sem aquecer o concreto) e proteger as pontas da cordoalha com epóxi; só então montar a placa de cima."]
+    "Soltar o guindaste e retirar os 4 cabeçotes dos IZ-1; tampar os insertos (tampa plástica); só então montar a placa de cima."]
 y = pr.notas(XC, y - 4, seq, 190, titulo="SEQUÊNCIA DE MONTAGEM")
 NM = FX["nicho_NC1"]
 pr.notas(XC, y - 2, [

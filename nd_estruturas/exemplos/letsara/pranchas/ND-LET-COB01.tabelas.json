@@ -7,7 +7,7 @@
   "conteudo": "COBERTURA METÁLICA — PLANTA DE ENTERÇAMENTO E TRAVAMENTO, APOIOS E EMENDAS POR TRANSPASSE",
   "desenho": "ND-LET-COB01",
   "rev": "09",
-  "data": "25/10/2026",
+  "data": "26/10/2026",
   "folha": "01/04",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -558,13 +558,13 @@
     ],
     [
      "ST-W",
-     "clip da terça na mesa da W 310 da linha 2, 2 M16 na mesa + 4 M12 nas almas (ND-LET-COB05)",
+     "clip da terça na mesa da W 200 da linha 2: 2 M12 na mesa + 4 M12 nas almas (ND-LET-COB05, ISO 5 da COB09)",
      "32",
      "linha 2"
     ],
     [
      "MF-1",
-     "mão-francesa L 51×51×4,8 da terça à mesa inferior da W 310 (ND-LET-COB05)",
+     "mão-francesa L 51×51×4,8 do parafuso da ponta do transpasse à mesa inferior da W 200 (ND-LET-COB05)",
      "64",
      "linha 2, 2 por terça"
     ],

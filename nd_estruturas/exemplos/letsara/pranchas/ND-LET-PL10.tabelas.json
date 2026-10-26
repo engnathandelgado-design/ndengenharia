@@ -6,8 +6,8 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR PRÉ-MOLDADO PL-10 (FAMÍLIA 40×60) — P1 L4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PL10",
-  "rev": "10",
-  "data": "23/10/2026",
+  "rev": "11",
+  "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -146,6 +146,31 @@
    ]
   },
   {
+   "titulo": "APOIOS E ESPERAS (PL-10) — níveis em m (base em cm), barras em cm",
+   "cab": [
+    "APOIO",
+    "FACE",
+    "NÍVEL (BASE)",
+    "PEÇA / CHAPA",
+    "BARRA",
+    "EMB.",
+    "LIVRE",
+    "TOTAL"
+   ],
+   "linhas": [
+    [
+     "ESP-1 (PN-3)",
+     "recuo A",
+     "+7,20 (820)",
+     "NEO-4 200×300",
+     "2 PN-3 Ø25",
+     "30",
+     "30",
+     "60"
+    ]
+   ]
+  },
+  {
    "titulo": "INSERTOS POR PILAR (PL-10) — dimensões em mm",
    "cab": [
     "MARCA",
@@ -250,14 +275,6 @@
      ""
     ]
    ]
-  },
-  {
-   "titulo": "MEMÓRIA RESUMIDA (NBR 6118:2023)",
-   "cab": [
-    "VERIFICAÇÃO",
-    "RESULTADO"
-   ],
-   "linhas": []
   }
  ],
  "aco": []

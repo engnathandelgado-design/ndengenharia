@@ -52,7 +52,7 @@ Q = pr.quadro
 def planta(nome, origem, iz):
     nivel, assento = NIVEIS[iz], ASSENTO[iz]
     v = pr.vista(nome, origem, 100, titulo=f"PLANTA DE MONTAGEM — PISO {NIVS[iz]}",
-                 subtitulo=f"linhas 1–2; assento dos consolos CP-MEZ em +{f(assento)}" + ("; abertura da escada metálica (ND-LET-ES01)" if iz == 0 else "; laje sem uso, contínua"), unidade="cm")
+                 subtitulo=f"linhas 1–2; assento dos consolos CP-MEZ em +{f(assento)}" + ("; abertura da escada metálica (ND-LET-ES01)" if iz == 0 else "; laje de cobertura do bloco (acesso só para manutenção), contínua"), unidade="cm")
     Lx = M(LARG)
     for nome_, x in X_FACH:
         v.eixo((M(x), -1800), (M(x), M(Y2) + 1800), 600)
@@ -63,7 +63,7 @@ def planta(nome, origem, iz):
     for i, (x0, b, mk, y0, y1) in enumerate(paineis_nivel(iz)):
         v.ret(x0, y0, b - 10, y1 - y0, "VISTA")
         if mk != "LA-01" or i % 5 == 3:
-            v.texto((x0 + b / 2, (y0 + y1) / 2), mk, "min", "MIDDLE_CENTER", rot=90)
+            v.texto((x0 + b / 2, (y0 + y1) / 2), f"{mk} LP20+5", "min", "MIDDLE_CENTER", rot=90)
     v.poli([(M(1.5), M(3.0)), (M(1.5), M(7.0)), (M(1.35), M(6.7)), (M(1.5), M(7.0)), (M(1.65), M(6.7))], "COTA")
     v.texto((M(1.5) + 200, M(4.0)), f"laje {f(L_P / 1000, 2)} m", "min", "MIDDLE_LEFT", rot=90)
     if iz == 0:
@@ -74,8 +74,10 @@ def planta(nome, origem, iz):
         v.ret(M(xa), M(y) - M(B_VM) / 2, M(xb - xa), M(B_VM), "CORTADO")
         nv = RN.viga_em(NIVS[iz], (xa + xb) / 2, y) or marca
         acima = y == Y2 or (iz == 0 and abs(y - P6_ESC[1]) < 0.01)
-        txt = f"{nv} (L {f(xb - xa, 2)})" if xb - xa > 5 else nv
-        v.texto((M((xa + xb) / 2), M(y) + (500 if acima else -500)), RN.novo(txt), "min", "BOTTOM_CENTER" if acima else "TOP_CENTER")
+        sec_ = RN.secao(nv)                                                  # rev11: nome + seção (pedido do Nathan, 26/10)
+        txt = f"{nv} {sec_} (L {f(xb - xa, 2)})" if xb - xa > 5 else f"{nv} {sec_}"
+        dz_ = 500 if xb - xa > 5 else 1050                                   # vigas curtas: rótulo afastado dos nomes dos pilares
+        v.texto((M((xa + xb) / 2), M(y) + (dz_ if acima else -dz_)), RN.novo(txt.strip()), "min", "BOTTOM_CENTER" if acima else "TOP_CENTER")
         for xd in (M(xa) + M(VMP["x_pad"]) - 30, M(xb) - M(VMP["x_pad"]) + 30):
             v.circulo((xd, M(y)), 50, "VISTA")
     for x, y, bx, by in PIL + (PIL_390 if iz == 0 else []):
@@ -84,7 +86,7 @@ def planta(nome, origem, iz):
         nm = RN.pilar_em(x, y)
         if nm:
             esc_ = abs(y - P6_ESC[1]) < 0.01
-            v.texto((M(x) + (bx / 2 + 150 if x < LARG - 1 else -bx / 2 - 150), M(y) + (700 if esc_ else (-700 if y == Y1 else 700))), RN.novo(nm), "min",
+            v.texto((M(x) + (bx / 2 + 150 if x < LARG - 1 else -bx / 2 - 150), M(y) + (700 if esc_ else (-700 if y == Y1 else 700))), RN.rotulo(nm), "min",
                     "MIDDLE_LEFT" if x < LARG - 1 else "MIDDLE_RIGHT")
     v.cota_h([M(x) for _, x in X_FACH], -2400, -8)
     v.cota_v([M(Y1), M(Y2)], Lx + 2400, 8, total=False)
@@ -100,9 +102,10 @@ c = pr.vista("CORTE M-M", (Q[0] + 90, Q[1] + 48), 75, titulo="CORTE M-M — MEZA
 c.linha((-1500, 0), (M(Y2) + 1500, 0), "TERRENO")
 Z_VISTA = 8300
 for y, marca in ((0, RN.pilar_em(X_EIXO["C"], Y1)), (M(Y2), RN.pilar_em(X_EIXO["C"], Y2))):
-    c.ret(y - 300, -1000, 600, 1000 + Z_VISTA, "VISTA")
-    c.ret(y - 450, -1000, 900, 1000, "OCULTA")
-    c.texto((y, Z_VISTA + 450), RN.novo(f"{marca} ao fundo"), "min", "BOTTOM_CENTER")
+    c.ret(y - 300, 0, 600, Z_VISTA, "VISTA")
+    import pe_pilar as PP                                                   # rev11: pé no cálice (ao fundo: tracejado) + L total
+    PP.pe(c, X_EIXO["C"], y / 1000, y, "y", cotar=False, lado=-1, oculto=True)   # embutimento já na cota de níveis (−1,00 → ±0,00)
+    c.texto((y, Z_VISTA + 450), RN.novo(PP.rotulo(marca)[1:] + " — ao fundo"), "min", "BOTTOM_CENTER")
     c.interrupcao((y - 300, Z_VISTA), (y + 300, Z_VISTA))
 BV, B2E = M(B_VM), M(B_VM) - 120
 
@@ -133,6 +136,7 @@ def niv(x, z, txt, lado=1):
     c.linha((x + lado * 120, z), (x + lado * 700, z), "COTA")
     c.texto((x + lado * 150, z + 40), txt, "min", "BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT", "COTA")
 niv(M(Y2) + 400, 0, "±0,000", 1)
+niv(M(Y2) + 400, -1000, "−1,000 fundo do pilar (cálice −1,050, graute 5 cm)", 1)   # rev11
 for n, a in zip(NIVEIS, ASSENTO):
     niv(M(Y2) + 400, M(n), f"+{f(n, 2)} topo da capa", 1); niv(M(Y2) + 400, M(a), f"+{f(a)} assento", 1)
 
@@ -148,12 +152,12 @@ for mk in sorted(m_ for m_ in PQ if m_.startswith("LA-")):
     pecas.append([mk, PQ[mk][2].replace("laje alveolar ", "LP20 ")[:60], str(PQ[mk][5]), fp(PQ[mk][7]), "topo das VM, apoio 10 cm"])
 n_cmz = 2 * sum(len(vigas_nivel(iz)) for iz in (0, 1))
 pecas += [["CP-MEZ", f"Consolo 40×40×{H_CMEZ/10:.1f} sem chanfro (pilares das linhas 1–2 e escada)".replace(".", ","), str(n_cmz), "—", "nos pilares (ver pranchas)"],
-          ["PM-01", f"Pilar 40×60 do mezanino (B2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00; cabeça até a W 310"],
-          ["PM-02", f"Pilar 40×60 do mezanino (D2), L {PQ['PM-02'][4]*100:.0f}", str(PQ["PM-02"][5]), fp(PQ["PM-02"][7]), "cálice −1,00; cabeça até a W 310"]]
+          ["PM-01", f"Pilar 40×60 do mezanino (B2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00; cabeça até a W 200"],
+          ["PM-02", f"Pilar 40×60 do mezanino (D2), L {PQ['PM-02'][4]*100:.0f}", str(PQ["PM-02"][5]), fp(PQ["PM-02"][7]), "cálice −1,00; cabeça até a W 200"]]
 for mk, ds in (("PE-01", "P6 da escada 25×40"), ("PE-02", "P7 da escada 40×60"), ("PE-03", "P6 da linha 2 25×40")):
     pecas.append([mk, f"Pilar {ds}, L {PQ[mk][4]*100:.0f}", str(PQ[mk][5]), fp(PQ[mk][7]), "cálice −1,00"])
 y = pr.tabela(XC, y, "LISTA DE PEÇAS DE MONTAGEM — MEZANINO", ["MARCA", "DESCRIÇÃO", "QT", "PESO (t)", "APOIO / NÍVEL"], pecas, [18, 92, 10, 18, 62], h_lin=6.0)
-seq = [f"Pré-requisitos (ND-LET-MON01): pilares (incluindo P6 e P7 da escada e P6 da linha 2) grauteados há 24 h (graute ≥ 15 MPa); cobertura das linhas 3 a 9 montada; W 310 da linha 2, VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 AINDA NÃO montadas (sem elas a laje de {f(L_P / 1000, 2)} m não passa entre a VB da linha 1 e a W 310 da linha 2).",
+seq = [f"Pré-requisitos (ND-LET-MON01): pilares (incluindo P6 e P7 da escada e P6 da linha 2) grauteados há 24 h (graute ≥ 15 MPa); cobertura das linhas 3 a 9 montada; W 200 × 15,0 da linha 2 (com os montantes W 150 × 13,0), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 AINDA NÃO montadas (sem elas a laje de {f(L_P / 1000, 2)} m não passa entre a VB da linha 1 e a W 200 da linha 2).",
        f"Guindaste dentro do pavilhão no vão 2–3 (entrada pela abertura lateral das vistas E/F, livre até +7,50), afastado da I130 V407 do eixo C: duas posições (perto dos eixos B e D), raio até ~14 m para a linha 1; peça mais pesada VM-02 {fp(PQ['VM-02'][7])} t.",
        f"Piso {NIVS[0]}: VM das linhas 1 e 2 e a VM-04 P6–P7 (sem escoramento): NEO-5F 200×200 no consolo, pino PN-1 no TB-1 do dente (graute numa ponta, graute flexível na outra); soltar do guindaste com a viga calçada no neoprene e conferida no nível.",
        f"CONCRETAR AS PONTAS das VM dos dois lados (junta 3 cm VM × pilar, do recorte do dente ao topo, graute ou concreto fck ≥ 30 MPa, fôrma lateral; ND-LET-VM01 det. 2) e aguardar fcj ≥ {X_JL} MPa (corpo de prova da obra) ANTES de montar as lajes (DEC-039, NBR 9062:2017 11.1).",
@@ -162,11 +166,11 @@ seq = [f"Pré-requisitos (ND-LET-MON01): pilares (incluindo P6 e P7 da escada e 
        f"Piso {NIVS[1]}: VM (as de cima só depois das lajes de baixo — a laje não passa entre as VM do nível superior; VM-04 P6–E da linha 2 só neste nível), pontas concretadas e fcj ≥ {X_JL} MPa, lajes, 2º estágio e capa, igual ao {NIVS[0]}. Carregar só com fck ≥ 20 MPa na capa.",
        f"Escada metálica (ND-LET-ES01): depois da capa do {NIVS[0]} com fck ≥ 20 MPa — vigas de patamar parafusadas nas faces do P6/P7 e do P6 da linha 2/P2 (barras roscadas M16 embutidas), pilaretes com chumbador químico, longarinas e degraus; tudo parafusado.",
        "Estabilidade provisória: pilares das linhas 1–2 engastados nos cálices, sem escoramento nem contraventamento provisório (sem placas, o vento atua só nos pilares, bem abaixo do caso final com as placas); a laje passa a diafragma com a capa ≥ 15 MPa. Vigas e lajes sem escoramento.",
-       "Depois: parede G da linha 2, W 310 da linha 2 direto na cabeça dos pilares, com presilhas e mãos-francesas (ND-LET-COB05), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
+       "Depois: parede G da linha 2, W 200 × 15,0 da linha 2 nos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, com presilhas e mãos-francesas (ND-LET-COB05), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 (ND-LET-MON01)."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
 c39, c73 = CMZ["piso_390"], CMZ["laje_730"]
 n15 = sum(1 for c_ in LAJ["cordoalhas"] if c_["diam"] == "15.2")
-notas = [f"Laje alveolar LP20 (1245 × 200, 6 alvéolos Ø15,2) + capa 5 C30 em {f(L_P/1000, 2)} m, vão de cálculo {f((L_P - 100)/1000, 2)} m: {n15} Ø15,2 + {LAJ['n_cord'] - n15} Ø12,7 CP-190 RB, uma por nervura, liberação com fckj ≥ {LAJ['fckj']:.0f} MPa; {NIVS[0]}: sobrecarga {f(c39['sobrecarga'], 1)} kN/m² (depósito) + revestimento {f(c39['revestimento'], 1)}; {NIVS[1]}: sem uso, {f(c73['sobrecarga'], 1)} + {f(c73['revestimento'], 1)} kN/m² (ND-LET-LA01).",
+notas = [f"Laje alveolar LP20 (1245 × 200, 6 alvéolos de 15,2 cm) + capa 5 C30 em {f(L_P/1000, 2)} m, vão de cálculo {f((L_P - 100)/1000, 2)} m: {n15} Ø15,2 + {LAJ['n_cord'] - n15} Ø12,7 CP-190 RB, uma por nervura, liberação com fckj ≥ {LAJ['fckj']:.0f} MPa; {NIVS[0]}: sobrecarga {f(c39['sobrecarga'], 1)} kN/m² (depósito) + revestimento {f(c39['revestimento'], 1)}; {NIVS[1]}: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {f(c73['sobrecarga'], 1)} + regularização/impermeabilização {f(c73['revestimento'], 1)} kN/m² (ND-LET-LA01).",
          f"Vigas VM retangulares {B_VM*100:.0f} × {H_VIGA*100:.0f} protendidas (laje apoiada 10 cm no topo, 2º estágio de 18 cm do lado da borda) com dente Gerber {H_DENTE*100:.0f} × {L_DENTE*100:.0f} (NBR 9062:2017 7.4, MEF): assentos +{f(ASSENTO[0])} e +{f(ASSENTO[1])}; fundo da viga e do consolo +{f(ASSENTO[0] - H_CMEZ/1000)} / +{f(ASSENTO[1] - H_CMEZ/1000)}; altura total com laje e capa {H_VIGA*100 + 26:.0f} cm.",
          "Tolerâncias NBR 9062:2017 (5.2.2.6): pilar ±10 mm em planta; nível dos apoios ±10 mm; folga de ponta 30 mm; apoio da laje ≥ 10 cm medido após a montagem.",
          "Níveis em m, cotas em cm. Não medir no desenho."]

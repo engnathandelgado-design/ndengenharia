@@ -17,8 +17,15 @@ PR = "/home/claude/letsara/pranchas/"
 res = []
 
 
+PEND = json.load(open(PR + "decisoes_pendentes.json", encoding="utf-8")) if os.path.exists(PR + "decisoes_pendentes.json") else []
+
+
 def r(ok, item, folha, det):
-    res.append(dict(ok=bool(ok), item=item, folha=folha, detalhe=det))
+    """divergência coberta por decisão pendente do Nathan (decisoes_pendentes.json) vira PENDENTE: não some, mas não é erro de
+    emissão — impede o pacote final (zip) até a decisão."""
+    pend = next((p_ for p_ in PEND if p_["item"] == item and p_["folha"] == folha), None)
+    res.append(dict(ok=bool(ok), item=item, folha=folha, detalhe=det if ok or not pend else f"PENDENTE {pend['dec']}: {pend['motivo']} — {det}",
+                    pendente=bool(not ok and pend)))
 
 
 def textos(dxf):
@@ -93,7 +100,7 @@ for fl in idx:
         su = [t for t in tx if "7,30" in t and "sem uso" in t.lower()]
         r(not su, "C4 laje +7,30 descrita como laje de cobertura", fl, "ok" if not su else su[0][:80])
         if fl.startswith("ND-LET-TS01"):
-            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I130" in t or "topo" in t.lower())]
+            neo = [t for t in tx if re.search(r"NEO-3(?!C)\b", t) and ("I130" in t or "topo" in t.lower()) and "P11" not in t]   # NEO-3 só no topo do P11 (linha 4)
             r(not neo, "C4 NEO-3C no apoio das TS-01 sobre a I130", fl, "ok" if not neo else neo[0][:80])
         # C5 — marcas de consolo
         mcs = {m for t in tx for m in re.findall(r"(?<![A-Z0-9-])C(\d{1,2})(?![0-9×x])", t)}
@@ -111,14 +118,17 @@ if os.path.exists(qj):
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]
-err = [x for x in res if not x["ok"]]
-json.dump(dict(total=len(res), erros=len(err), itens=res, pendentes=PENDENTES), open(PR + "conferencia_cruzada.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+err = [x for x in res if not x["ok"] and not x.get("pendente")]
+pen = [x for x in res if x.get("pendente")]
+json.dump(dict(total=len(res), erros=len(err), pendentes_decisao=len(pen), itens=res, pendentes=PENDENTES), open(PR + "conferencia_cruzada.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 with open(PR + "conferencia_cruzada.md", "w", encoding="utf-8") as fh:
     fh.write(f"# Conferência cruzada — {len(res)} verificações, {len(err)} divergências\n\n| resultado | item | folha | detalhe |\n|---|---|---|---|\n")
     for x in sorted(res, key=lambda x: (x["ok"], x["folha"])):
-        fh.write(f"| {'ok' if x['ok'] else 'ERRO'} | {x['item']} | {x['folha']} | {x['detalhe']} |\n")
+        fh.write(f"| {'ok' if x['ok'] else ('PENDENTE' if x.get('pendente') else 'ERRO')} | {x['item']} | {x['folha']} | {x['detalhe']} |\n")
     fh.write("\n## Ainda não automatizado\n" + "".join(f"- {p}\n" for p in PENDENTES))
-print(f"conferência cruzada: {len(res)} verificações, {len(err)} divergências")
+print(f"conferência cruzada: {len(res)} verificações, {len(err)} divergências, {len(pen)} pendentes de decisão")
+for x in pen:
+    print("  PENDENTE", x["item"], x["folha"], "—", x["detalhe"][:160])
 for x in err[:40]:
     print("  ERRO", x["item"], x["folha"], "—", x["detalhe"])
 sys.exit(1 if err else 0)

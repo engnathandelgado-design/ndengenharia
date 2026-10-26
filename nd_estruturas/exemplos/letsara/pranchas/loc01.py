@@ -167,11 +167,13 @@ for p in RN._D["pecas"]:
     g["nomes"].append(p["nome"]); g["r01"].append(p["ref_R01"])
 lin = []
 for fl, g in sorted(grupos.items(), key=lambda kv: int(kv[1]["nomes"][0][1:])):
-    lin.append([RN.novo(RN.lista(g["nomes"])), g["sec"], str(len(g["nomes"])), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
-lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", RN.novo("inclui P6 e P7 da escada e P6 da linha 2 (DEC-045)")])
+    import pe_pilar as PP                                                     # rev11: comprimento total e embutimento no cálice
+    d_ = PP.peca(g["nomes"][0])
+    lin.append([RN.novo(RN.lista(g["nomes"])), g["sec"], str(len(g["nomes"])), PP.f2(d_["L"]), PP.f2(d_["emb"]), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
+lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", "", "", RN.novo("inclui P6 e P7 da escada e P6 da linha 2 (DEC-045)")])
 x0 = 360
-y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm)", "QT", "FOLHA", "NOME NO R01"], lin,
-              [40, 18, 9, 18, 95], h_lin=5.2, destaque_ultima=True)
+y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm)", "QT", "L TOTAL (m)", "EMB. (m)", "FOLHA", "NOME NO R01"], lin,
+              [40, 18, 9, 18, 15, 18, 76], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
     "Todos os pilares são centrados nos eixos, exceto PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
@@ -179,7 +181,7 @@ pr.notas(560, 318, [
     RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
     "Tolerância de locação (NBR 9062:2017 5.2.2.6): ±1,0 cm entre apoios consecutivos, acumulado ≤ 0,1 % do comprimento; prumo ±H/300 até 2,5 cm.",
     "Cargas na fundação: ND-LET-CG01. Cortes: ND-LET-CT01 a CT04 (planta-chave dos cortes na CT03). Montagem: ND-LET-MON01 a MON03.",
-    "Cotas em cm; níveis em m a partir do piso acabado (±0,00).",
+    "Cotas em cm; níveis em m a partir do piso acabado (±0,00). L TOTAL = comprimento da peça; EMB. = trecho embutido no cálice (fundo do pilar −1,00; topo do cálice ±0,00; fundo do cálice −1,05 com 5 cm de graute — NBR 9062:2017 7.7).",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 240)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-LOC01")
 for a in avisos:

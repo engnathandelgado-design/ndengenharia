@@ -126,7 +126,7 @@ def lajes():
     # ================= FÔRMA — plantas de paginação dos 2 níveis (diferentes: abertura da escada no +3,90)
     PIL_L1 = [(0.0, 600, 400)] + [(xx, 400, 600) for xx in X_FACH[1:4]] + [(LARG, 600, 400)]
     for iz, (yo, sub) in enumerate(((Q[3] - 175, "painéis de A para E; LA-02 (70 cm) nas pontas; R = recorte na ponta junto a pilar; abertura da escada entre P6, P7 e a linha 2 (LA-03 / LA-04 curtas)"),
-                                    (Q[3] - 355, "laje de cobertura do bloco, sem uso; contínua (sem abertura); P6 da linha 2 com recorte"))):
+                                    (Q[3] - 355, "laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²; contínua (sem abertura); P6 da linha 2 com recorte"))):
         v = pr.vista(f"PLANTA {NIVS[iz]}", (Q[0] + 50, yo), 100, titulo=f"PLANTA DE PAGINAÇÃO — PISO {NIVS[iz]}", subtitulo=sub, unidade="cm")
         PN = paineis_nivel(iz)
         for x in X_FACH:
@@ -146,16 +146,17 @@ def lajes():
             xm_, ym_ = (ab[0][0] + ab[2][0]) / 2, (ab[0][1] + ab[2][1]) / 2
             v.texto((xm_ - 300, ym_), "ABERTURA DA ESCADA", "min", "MIDDLE_CENTER", rot=90)
             v.texto((xm_ + 400, ym_), "(ND-LET-ES01)", "min", "MIDDLE_CENTER", rot=90)
-            v.texto((M(P6_ESC[0]) + 250, M(ABERTURA["y0"]) + 150), "P6", "min", "BOTTOM_LEFT")
-            v.texto((M(P7_ESC[0]) - 400, M(ABERTURA["y0"]) + 150), "P7", "min", "BOTTOM_RIGHT")
-            v.texto((M(P6_L2[0]) + 250, M(ABERTURA["y1"]) - 150), "P6", "min", "TOP_LEFT")
+            import renomear as RN                                                        # rev11: nome novo + seção
+            v.texto((M(P6_ESC[0]) + 250, M(ABERTURA["y0"]) + 150), RN.rotulo(RN.pilar_em(*P6_ESC)), "min", "BOTTOM_LEFT")
+            v.texto((M(P7_ESC[0]) + 450, M(P7_ESC[1]) - 350), RN.rotulo(RN.pilar_em(*P7_ESC)), "min", "TOP_LEFT")
+            v.texto((M(P6_L2[0]) + 250, M(ABERTURA["y1"]) - 150), RN.rotulo(RN.pilar_em(*P6_L2)), "min", "TOP_LEFT")
         for i, (x0, b, mk, y0, y1) in enumerate(PN):
             v.ret(x0, y0, b - 10, y1 - y0, "VISTA" if mk == "LA-01" else "CORTADO")
             if mk != "LA-01" or i % 4 == 1:
                 xt = x0 + b / 2
                 if any(abs(xt - M(xx)) < 300 for xx in X_FACH):
                     xt = x0 + b * 0.25
-                v.texto((xt, (y0 + y1) / 2), mk, "min", "MIDDLE_CENTER", rot=90)
+                v.texto((xt, (y0 + y1) / 2), f"{mk} LP20+5", "min", "MIDDLE_CENTER", rot=90)   # rev11: marca + seção
         pls = [(M(x), bx, by, y) for x, bx, by in PIL_L1 for y in (0.0, Y2)]
         pls += [(M(P6_L2[0]), 250, 400, Y2)]
         if iz == 0:
@@ -163,7 +164,8 @@ def lajes():
         for x, bx, by, y in pls:
             v.ret(x - bx / 2, M(y) - by / 2, bx, by, "CORTADO")
         if iz == 1:
-            v.chamada((M(P6_L2[0]), M(Y2)), (-14, 30), "P6")
+            import renomear as RN
+            v.chamada((M(P6_L2[0]), M(Y2)), (-14, 30), RN.rotulo(RN.pilar_em(*P6_L2)))
         v.cota_h([M(x) for x in X_FACH], -2000, -8)
         if iz == 1:
             v.cota_h([300, 300 + B2, 300 + B2 + B_P], M(Y2) + 300, 8, total=False)
@@ -180,7 +182,7 @@ def lajes():
             v.marcador_corte((300 + B2 + 19 * B_P + B_P / 2, -600), (300 + B2 + 19 * B_P + B_P / 2, M(Y2) + 600), "A", lado=1)
     # seção de fôrma do painel (1:10)
     s = pr.vista("CORTE A-A", (Q[0] + 540, Q[3] - 120), 10, titulo="CORTE A-A — SEÇÃO DE FÔRMA DO PAINEL LA-01",
-                 subtitulo=f"alveolar h20 ({N_AL} alvéolos Ø{D_AL / 10:g} no passo {PAS / 10:g}; nervuras {G_['nervuras_mm'][1] / 10:g} e bordas {G_['nervuras_mm'][0] / 10:g}) + capa 5".replace(".", ","), unidade="cm")
+                 subtitulo=f"alveolar h20 ({N_AL} alvéolos de {D_AL / 10:g} cm no passo {PAS / 10:g}; nervuras {G_['nervuras_mm'][1] / 10:g} e bordas {G_['nervuras_mm'][0] / 10:g}) + capa 5".replace(".", ","), unidade="cm")
     s.ret(0, 0, B_N, H_P, "CORTADO")
     for xa in XAL:
         s.circulo((xa, H_P / 2), D_AL / 2, "VISTA")
@@ -190,7 +192,7 @@ def lajes():
     s.cota_h([0, B_P], H_P + 50, 10)
     s.cota_v([0, H_P / 2, H_P, H_P + 50], B_N + 25, 10, total=True)
     s.chamada((B_N + 25, 60), (24, -16), "chaveta grauteada (graute ≥ 30 MPa)")
-    s.chamada((XAL[1], H_P / 2 + D_AL / 2), (6, 22), f"alvéolo Ø{D_AL / 10:g}".replace(".", ","))
+    s.chamada((XAL[1], H_P / 2 + D_AL / 2), (6, 22), f"alvéolo de {D_AL / 10:g} cm".replace(".", ","))
     s.chamada((B_P / 2, H_P + 25), (10, 12), "capa 5 cm C30 de obra")
     # detalhe 2: recorte na ponta junto ao pilar (planta 1:25)
     PROF = round(M(Y2 - _OFF) - (M(Y2) - 300 - 25))                                 # pilar 40 × 60 (60 em y): face a 30 cm do eixo, folga 2,5 cm
@@ -302,15 +304,20 @@ def lajes():
           [f"SOBREC. {NIVS[0]}", f"{f(c39['sobrecarga'])} + revest. {f(c39['revestimento'])} kN/m²", f"SOBREC. {NIVS[1]}", f"{f(c73['sobrecarga'])} + revest. {f(c73['revestimento'])}"],
           ["h TOTAL", "25 cm", "ESCORAMENTO", "nenhum"], ["PAINÉIS", f"{sum(qt.values())} (2 níveis)", "CONTRAFLECHA", f"≈ {f(FL['contraflecha_montagem'], 0)} mm (montagem)"]]
     y = pr.tabela(XC, y - 4, "QUADRO DAS LAJES", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
+    import negativa_vm as NV                                                # rev11: continuidade das VM (mesmo registro da EX01)
+    apn = NV.apoios()
+    y = pr.tabela(XC, y - 4, "ARMADURA DE CONTINUIDADE DAS VM SOBRE OS PILARES (OBRA, NA CAPA E 2º ESTÁGIO)", ["NÍVEL", "PILAR", "VM ESQ.", "VM DIR.", "N11 (bainhas no pilar)", "N12 (capa)"],
+                  [[a["niv"], a["pilar"], a["esq"], a["dir"], NV.txt(a["N11"]), NV.txt(a["N12"])] for a in apn], [16, 16, 18, 18, 58, 56])
     CG = LJ["cargas"]
     VB = LJ["vibracao"]
-    notas_padrao(pr, XC, y - 4, [f"Cargas no {NIVS[0]} (governa a marca LA-01): peso próprio {f(CG['g1'], 2)} kN/m², capa + rejunte {f(CG['capa_rejunte'], 2)}, revestimento {f(CG['revestimento'])}, sobrecarga {f(CG['sobrecarga'])} kN/m² (depósito, NBR 6120:2019 — confirmada pelo Nathan em 23/10/2026); {NIVS[1]}: laje de cobertura do bloco SEM USO, revestimento {f(c73['revestimento'])} e sobrecarga {f(c73['sobrecarga'])} kN/m² (só manutenção). Montagem: capa fresca + {f(CG['montagem'])} kN/m², sem escoramento. Vão de cálculo {f((L_P - 100) / 1000, 2)} m, laje biapoiada nas VM.",
-                                 f"Concreto C50 da laje (fckj ≥ {FCKJ:.0f} MPa na liberação), capa C30, cordoalhas CP-190 RB; CAA I (ambiente interno seco e revestido), cobrimento da cordoalha 3,2 cm (eixo a 4 cm). Seção do painel 1245 × 200 com {N_AL} alvéolos Ø15,2 no passo {f(PAS / 10)} cm: com outra seção de extrusora a protensão tem de ser refeita.",
+    notas_padrao(pr, XC, y - 4, [f"Cargas no {NIVS[0]} (governa a marca LA-01): peso próprio {f(CG['g1'], 2)} kN/m², capa + rejunte {f(CG['capa_rejunte'], 2)}, revestimento {f(CG['revestimento'])}, sobrecarga {f(CG['sobrecarga'])} kN/m² (depósito, NBR 6120:2019 — confirmada pelo Nathan em 23/10/2026); {NIVS[1]}: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {f(c73['sobrecarga'])} + regularização/impermeabilização {f(c73['revestimento'])} kN/m². Montagem: capa fresca + {f(CG['montagem'])} kN/m², sem escoramento. Vão de cálculo {f((L_P - 100) / 1000, 2)} m, laje biapoiada nas VM.",
+                                 f"Concreto C50 da laje (fckj ≥ {FCKJ:.0f} MPa na liberação), capa C30, cordoalhas CP-190 RB; CAA I (ambiente interno seco e revestido), cobrimento da cordoalha 3,2 cm (eixo a 4 cm). Seção do painel 1245 × 200 com {N_AL} alvéolos de 15,2 cm no passo {f(PAS / 10)} cm: com outra seção de extrusora a protensão tem de ser refeita.",
                                  f"LA-01R / LA-03R: o recorte corta nervuras e cordoalhas na ponta; preencher na fábrica os alvéolos {PRE[0]} e {PRE[1]} entre 60 cm e o recorte (concreto da laje, vibrado) — DETALHE 2. Recorte 45 × {PROF/10:g} nos pilares 40 × 60 e 30 × 20 nos P6 (25 × 40).",
                                  f"Painéis apoiados 10 cm sobre o TOPO das VM retangulares 30 × 75, com neoprene em fita de 10 mm e folga de 2 cm até o 2º estágio; chavetas grauteadas; 2º estágio (faixa de 18 cm sobre a VM) e capa de 5 cm (C30, tela Q138) concretados juntos, por quem executa a capa, após a montagem de todo o nível. Lajes e vigas sem escoramento; montar as lajes só depois de concretar as pontas das VM (junta VM × pilar) dos dois lados, com fcj ≥ 20 MPa (DEC-039).",
                                  f"Escada (DEC-045): no {NIVS[0]} não há laje entre o P6, o P7 e a linha 2 (abertura {f(ABERTURA['x1'] - ABERTURA['x0'], 2)} × {f(ABERTURA['y1'] - ABERTURA['y0'], 2)} m); as LA-03 / LA-04 ({L_P3/10:.0f} cm) vão da linha 1 à VM-04 (P6–P7). O {NIVS[1]} é contínuo.",
                                  f"Vibração (NBR 6118:2023 23.3): f1 = {f(VB['f1_Hz'], 2)} Hz para o {NIVS[0]}; abaixo de 4,8 Hz (referência de escritório com folga de 20 %), aceitável para depósito; se o uso virar escritório ou circulação intensa, reavaliar.",
-                                 "Armadura negativa sobre os apoios: N1 2 Ø10 por painel, L = 200 cm, dentro da capa (DETALHE 3); alvéolos fechados na fábrica nos 20 cm das pontas para o graute não entrar.",
+                                 "Armadura negativa da laje sobre os apoios: N1 2 Ø10 por painel, L = 200 cm, dentro da capa (DETALHE 3); alvéolos fechados na fábrica nos 20 cm das pontas para o graute não entrar. Continuidade das VM (N11 em 2 bainhas Ø50 grauteadas no pilar + N12 na capa, faixa ≤ 1,5 × largura do pilar): tabela acima; sequência de execução da capa, chavetas e 2º estágio para a construtora: ND-LET-EX01.",
+                                 "EM DECISÃO (DEC-068): a regra da obra é cordoalha só Ø12,7/Ø9,5; com uma cordoalha por nervura, 7 Ø12,7 dá uso 1,004 no ELU. Até a decisão do Nathan a LA-01 fica com 2 Ø15,2 + 5 Ø12,7 — NÃO PRODUZIR a LA-01/LA-01R antes da revisão.",
                                  f"Içamento só por garra mecânica nas 2 pontas (a {IC['ponto_m'] * 100:.0f} cm) com balancim e cabos verticais; não usar alça de CA-50. Desforma, içamento e transporte com fcj ≥ {FCKJ:.0f} MPa; estocar sobre 2 calços alinhados a {IC['ponto_m'] * 100:.0f} cm das pontas, no máximo 8 painéis por pilha."])
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-LA01")
     print("LA01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1] or "cruza" in a[1]])

@@ -65,7 +65,7 @@ v.cota_v([-130, -110, 0, 50], 40, 10, total=False)
 v.chamada((0, 30), (10, 14), "barra roscada M16 A36 — 50 rosqueados")
 v.chamada((40, -60), (12, -14), "grampo U Ø10 CA-50, pernas 300")
 
-# ------------------------------------------------------------------ TB-3, PN-3, PN-5, NEO-3, NEO-4 (1:10)
+# ------------------------------------------------------------------ TB-3, PN-3, PN-5, NEO-3C/NEO-3, NEO-4 (1:10)
 v = pr.vista("TB-3", (480, 455), 10, titulo="TB-3", subtitulo="tubo dos pinos · 4 por peça")
 v.ret(-25, -450, 50, 900, "METALICA")
 v.cota_v([-450, 450], 25, 8)
@@ -148,7 +148,8 @@ lista = [["ES-1", "barra roscada M16 L=330 c/ gancho + grampo U Ø10", 2 * nt, 2
          ["PN-3", "pino Ø25 CA-50 L=600 (pilar)", "-", 2 * NTS, "2,3"],
          ["PN-5", "pino Ø20 CA-50 L=600 (I130/pilar central)", "-", 2 * NTS, "1,5"],
          ["NEO-4", "neoprene 200×300×10, 2 furos Ø35", "-", NTS, "-"],
-         ["NEO-3", "neoprene 100×300×10, 2 furos Ø30", "-", NTS, "-"]]
+         ["NEO-3C", "neoprene 150×300×10, 2 furos Ø30 (no consolo CT-I130, linhas 3 e 5–8)", "-", NTS - 2, "-"],
+         ["NEO-3", "neoprene 100×300×10, 2 furos Ø30 (só no topo do P11, linha 4)", "-", 2, "-"]]
 y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MARCA", "DESCRIÇÃO", "/VIGA", "OBRA", "kg/un"], lista,
               [16, 92, 18, 22, 32])
 notas = ["ST-1FL (DEC-042): os pilares de canto P1 e P9 têm seção cheia até o topo; a última terça do lado E encosta na face lateral interna e apoia no ST-1FL (chapa dobrada, aba de 100 parafusada na alma com 2 M12), preso por 2 barras roscadas M20 A36 horizontais embutidas na face (ES-1FL, hef 150 + grampo U Ø10, a 7 e 15 cm da face A). Reações reais da terça de ponta (ELU): 15,7 kN ⊥ à face, 4,0 kN horizontal, 8,2 kN vertical. ACI 318-19 cap. 17, C40, borda 70 mm: tração 27,9 kN contra φNcbg 57,6 kN (aço 147), interação tração × corte 0,85 ≤ 1,2; chapa 0,69; M12 0,55.",

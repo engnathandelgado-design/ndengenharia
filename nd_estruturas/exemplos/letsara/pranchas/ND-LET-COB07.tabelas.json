@@ -1,0 +1,170 @@
+{
+ "folha": "ND-LET-COB07",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "COBERTURA METÁLICA — TERÇAS: COMPRIMENTOS, TRANSPASSES E FOLGAS DE MONTAGEM EM CADEIA",
+  "desenho": "ND-LET-COB07",
+  "rev": "00",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — LIBERADO"
+ },
+ "tabelas": [
+  {
+   "titulo": "COMPRIMENTO DAS TERÇAS POR VÃO",
+   "cab": [
+    "VÃO",
+    "ENTRE EIXOS",
+    "ANTES DO EIXO INICIAL",
+    "DEPOIS DO EIXO FINAL",
+    "L DA PEÇA",
+    "PEÇA",
+    "QT",
+    "kg"
+   ],
+   "linhas": [
+    [
+     "1-2",
+     "9.650",
+     "110",
+     "450",
+     "10.210",
+     "T1",
+     "32",
+     "2914"
+    ],
+    [
+     "2-3",
+     "10.075",
+     "450",
+     "450",
+     "10.975",
+     "T2",
+     "32",
+     "3133"
+    ],
+    [
+     "3-4",
+     "10.075",
+     "450",
+     "450",
+     "10.975",
+     "T2",
+     "32",
+     "3133"
+    ],
+    [
+     "4-5",
+     "9.925",
+     "450",
+     "450",
+     "10.825",
+     "T3",
+     "32",
+     "3090"
+    ],
+    [
+     "5-6",
+     "10.000",
+     "450",
+     "450",
+     "10.900",
+     "T4",
+     "32",
+     "3111"
+    ],
+    [
+     "6-7",
+     "10.000",
+     "450",
+     "450",
+     "10.900",
+     "T4",
+     "32",
+     "3111"
+    ],
+    [
+     "7-8",
+     "10.000",
+     "450",
+     "450",
+     "10.900",
+     "T4",
+     "32",
+     "3111"
+    ],
+    [
+     "8-9",
+     "9.625",
+     "450",
+     "110",
+     "10.185",
+     "T5",
+     "32",
+     "2907"
+    ],
+    [
+     "TOTAL",
+     "79.350",
+     "",
+     "",
+     "79.570 *",
+     "",
+     "256",
+     "24511"
+    ]
+   ]
+  },
+  {
+   "titulo": "FOLGAS E TOLERÂNCIAS DE MONTAGEM",
+   "cab": [
+    "ONDE",
+    "FOLGA / TOLERÂNCIA",
+    "OBSERVAÇÃO"
+   ],
+   "linhas": [
+    [
+     "transpasse em cada apoio interno",
+     "900 (450 para cada lado do eixo)",
+     "2 Z encaixados (METLAP); sem folga ponta a ponta"
+    ],
+    [
+     "ponta da terça na fachada",
+     "110 além do eixo da VB = 35 além da face",
+     "folga até a placa de fechamento ≥ 75"
+    ],
+    [
+     "furos da alma (M12)",
+     "Ø14 (+2 mm)",
+     "fábrica; proibido furar na obra"
+    ],
+    [
+     "aba do ST-1P / ST-1V nas esperas",
+     "oblongo 18 × 40 (±11 ao longo da viga)",
+     "absorve a tolerância da viga e do alinhamento"
+    ],
+    [
+     "nivelamento do ST-1P",
+     "porca de nivelamento + 10 sob a terça",
+     "fundo da terça 10 acima do concreto"
+    ],
+    [
+     "tolerância de montagem por vão",
+     "±5 (eixo a eixo); ±10 acumulado na linha",
+     "acima disso: corrigir a viga antes de montar"
+    ],
+    [
+     "linhas de terças (alma)",
+     "±5 em planta; ±3 entre terças vizinhas",
+     "alinhar com linha de nylon antes do aperto final"
+    ]
+   ]
+  }
+ ],
+ "aco": []
+}

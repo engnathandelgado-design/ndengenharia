@@ -299,7 +299,8 @@ def main():
         emendas.append(dict(x=xe, M_d=round(Me, 1), M_proj=round(Me_proj, 1), V_d=round(Ve, 1), uso_TL1=round(uso_tl1, 3), uso_TL2=round(uso_tl2, 3), uso_contato_alma=round(uso_alma_e, 3)))
     Fmesa = M_inf_comp / (W.d / 1000 - W.tf / 1000)
     F_mf = 0.02 * Fmesa
-    L_mf = math.hypot(0.30, W.d / 1000)
+    import lig_cob                                       # rev11: geometria única da MF-1 (do furo da ponta do transpasse à mesa inferior)
+    L_mf = lig_cob.L_MF()
     Ncr_mf = 200e6 * 2.9e-8 * math.pi ** 2 / L_mf ** 2
     kg_w = W.peso / 9.81e-3 * (XB - XA)
     kg_mt = sum(WM_.peso / 9.81e-3 * m_["L_m"] for m_ in mts)
@@ -315,8 +316,8 @@ def main():
                           norma="NBR 8800:2024 5.4.2 / Anexo D e 5.4.3"),
         flecha=flecha, apoios_diretos=pil, montantes=mts, carga_vm=carga_vm, emendas_x=em, modulos_m=mods, emendas=emendas,
         mao_francesa=(dict(perfil="L 51 × 51 × 4,8 (2\" × 3/16\")", em="todas as terças da linha 2 (dos dois lados da W)", F_d=round(F_mf, 1), L_m=round(L_mf, 3),
-                           Ncr_kN=round(Ncr_mf, 1), parafusos="1 M12 8.8 em cada ponta", norma="NBR 8800:2024 4.11 (travamento: 2 % da força na mesa)") if precisa_mf else None),
-        terca_sobre_W="ST-W: chapa dobrada 6,3 (igual ao ST-1P) parafusada na mesa superior da W com 2 M12 e na alma da terça com 2 M12 (furos da terça iguais)",
+                           Ncr_kN=round(Ncr_mf, 1), parafusos="1 M12 8.8 em cada ponta (em cima, no parafuso da ponta do transpasse; embaixo, na mesa inferior da W)", norma="NBR 8800:2024 4.11 (travamento: 2 % da força na mesa)") if precisa_mf else None),
+        terca_sobre_W="ST-W: chapa dobrada 6,3 × 220 (como o ST-1P) parafusada na mesa superior da W com 2 M12 (gabarito 55) e nas 2 almas do transpasse com 4 M12 (furos de apoio da terça a ±60)",
         espera="EM-L2 (por montante): 4 barras roscadas M16 8.8 L 330 com gancho de 180° laçado na alça N9 da VM (2 ramos Ø10; as 2 barras de cada lado na mesma alça, "
                "eixo do montante sobre uma alça e barras a ±150), postas por quem faz a capa com gabarito de chapa 6,3 (furos a 300 × 60), na faixa de 2º estágio (18 cm) "
                "do +7,30 da linha 2, a 0 e 60 mm do eixo da linha 2 (para o lado da borda); saem 60 mm acima da capa",

@@ -7,7 +7,7 @@ from cob_comum import cabecalho, XT, PASSO, H_TERCA, B_TERCA, B_INF, D_SUP, D_IN
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CH = json.load(open(AQ + "calha.json"))
 pr = Prancha("A1", cabecalho("ND-LET-COB03", "03/04", "COBERTURA — CALHA DO EIXO A, DESCIDAS, EXTRAVASORES E RUFOS"))
-pr.revisao("06", "18/10/2026", "CALHA 300×150 NO EIXO A; 9 DESCIDAS Ø200; RUFOS TRANSFERIDOS PARA A ND-LET-COB04 (KINGSPAN)")
+pr.revisao("06", "18/10/2026", "CALHA 300×150 NO EIXO A; 9 DESCIDAS Ø200; RUFOS TRANSFERIDOS PARA A ND-LET-COB04 (FUNILARIA)")
 C45 = math.cos(math.radians(45))
 I3 = 0.03
 ZREF = 8000                                             # níveis desenhados a partir de +8,000
