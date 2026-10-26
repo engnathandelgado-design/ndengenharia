@@ -356,6 +356,7 @@ def prancha_pilar(P):
         _x = _bb.extents(_g, fast=True) if _g else None
         _xmin = min(-EXT[-1], (_x.extmin.x - v.o[0]) * v.esc) if _x and _x.has_data else -EXT[-1]
         _xmax = max(W + EXT[1], (_x.extmax.x - v.o[0]) * v.esc) if _x and _x.has_data else W + EXT[1]
+        v.xl, v.xr = _xmin, _xmax
         v.cota_v(zs, _xmin, -11)
         v.zs_cota = list(zs)
         ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
@@ -407,7 +408,7 @@ def prancha_pilar(P):
         xs_faces[face] = vista_face(face, x_)
     xp = xs0[-1] + (largura(P["vistas"][-1]) + exts[-1][1]) / ESC
     vA = xs_faces[P["vistas"][0]]
-    XN = -vA.ext[-1] - 12.5 * ESC                                                                     # rev06e: níveis por fora das cadeias de cota
+    XN = getattr(vA, "xl", -vA.ext[-1]) - 12.5 * ESC                                                                     # rev06e: níveis por fora das cadeias de cota
     nivel(vA, XN, L_CAL, "±0,00", -1)
     nivel(vA, XN, L_TOT, f"+{f(Z_TOP/1000, 2)}", -1)
     _zn = set()
@@ -415,7 +416,7 @@ def prancha_pilar(P):
         if all(abs(c["z"] - q) > 4.5 * ESC for q in _zn):
             nivel(vA, XN, c["z"], f"+{f((c['z'] - L_CAL)/1000, 2)}", -1)
             _zn.add(c["z"])
-    XM0, XM1 = -vA.ext[-1] - 10.5 * ESC, largura(P["vistas"][0]) + vA.ext[1] + 10.5 * ESC      # rev08: letras por fora das cadeias de cota
+    XM0, XM1 = getattr(vA, "xl", -vA.ext[-1]) - 10.5 * ESC, getattr(vA, "xr", largura(P["vistas"][0]) + vA.ext[1]) + 10.5 * ESC      # rev08: letras por fora das cadeias de cota
     meios = [(a + b) / 2 for zz in (vA.zs_cota, vA.zs_ords) for a, b in zip(zz[:-1], zz[1:])] + \
             [(zz[0] + zz[-1]) / 2 for zz in (vA.zs_cota, vA.zs_ords) if len(zz) > 2]           # textos das cotas totais
     proib = [(c["z"] - c["h"] - 10.5 * ESC, c["z"] + 3 * ESC) for c in cons]

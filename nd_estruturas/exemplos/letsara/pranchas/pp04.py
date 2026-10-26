@@ -53,7 +53,7 @@ v2.cota_h([0, TC + 140, TC + 150], -165, -8, total=False)
 v2.cota_h([0, TC], -165, -16, total=False)                                        # rev08: espessura da CE-1 em linha própria
 v2.cota_v([-165, -140, 140, 165], TC + 150, 10, total=False)
 v2.cota_v([-150, 300], 90, 22, total=False)
-v2.chamada((60, -150), (30, -16), "N18 — 2 U Ø10 C=96 (armadura do pilar)")
+v2.chamada((60, -150), (46, -10), "N18 — 2 U Ø10 C=96 (armadura do pilar)")
 I.solda(v2, (TC, 140 + 8), (16, 16), tipo="ponto", lado="seta", cauda="stud ISO 13918 SD Ø16")
 v2.texto((-4, 0), "FACE DO PILAR", "nota", "MIDDLE_CENTER", rot=90)
 # rev06e (DEC-031): CC-1 — conjunto de fábrica concretado na face C do pilar (corte pelo eixo de um console)

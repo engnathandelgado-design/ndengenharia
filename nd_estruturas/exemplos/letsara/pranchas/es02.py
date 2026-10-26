@@ -76,7 +76,7 @@ for cc, lado, dy, tx in (("VE-2", -1, 4, "VE-2 W 150 × 9,2"), ("VE-5", -1, 8, "
                          ("GE-1 corr", -1, 0, "GE-1 (1,30)"), ("GE-2 corr", 1, 6, "GE-2 corrimão (parede)"), ("PE ", 1, 14, "PE + BE-1 (det. 2)"),
                          ("CX-1", 1, -14, "X CX-1 (det. 3)")):
     lab(E.centro(cc, PXY), lado, dy, tx)
-v.cota_h([XB1, XEX, XI, 0], -(YP1 + 700), -8, total=True)
+v.cota_h([XB1, XEX, XI, 0], -(YP1 + 700), -26, total=True)
 v.cota_v([-PY0, -PY1], 450, 2, total=False)
 
 # ------------------------------------------------------------------ CORTE A-A (1:50) — plano y-z, olhando para a fachada A (+x)

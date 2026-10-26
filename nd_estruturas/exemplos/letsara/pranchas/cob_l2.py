@@ -145,7 +145,7 @@ d2.chamada((-20, 30), (-30, -1), "CB-M1 2 L 102 × 102 × 12,7 × 100")
 d2.chamada((-50, zf - 50), (-14, 6), "CB-M2 2 L 102 × 102 × 12,7 × 130")
 d2.chamada((-27.5, zf + 2), (-18, 14), "4 M16 na mesa da W (gab. 55)")
 d2.chamada((Y_M, 120), (30, -4), f"{NM}")
-d2.texto((0, -620), "VM 30 × 75 (+7,30, linha 2)", "min", "TOP_CENTER")
+d2.texto((-300, -700), "VM 30 × 75 (+7,30, linha 2)", "min", "TOP_CENTER")
 
 # ------------------------------------------------------------------ DETALHE 3 — montante: vista ao longo da W (1:10)
 d3 = pr.vista("DETALHE 3", (Q[0] + 380, Q[1] + 120), 10, titulo="DETALHE 3 — MONTANTE AO LONGO DA W", subtitulo="cantoneiras nas mesas do montante; barras a ±150 nas alças", unidade="mm")

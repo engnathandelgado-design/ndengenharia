@@ -320,7 +320,7 @@ def compor(desenho, conteudo, folha, runner, S, extras_col=(), notas_extra=(), p
     ocup = [e for e in FF.ents() if _ext(e) and _ext(e)[2] > xcol - 25]
     ycol = min([_ext(e)[1] for e in ocup] + [Ht - 10]) - 9
     y_fim = coluna_direita(pr, S, xcol, ycol, extras_col, notas_extra)
-    falta = pr.carimbo_bbox[3] + 4 - y_fim
+    falta = pr.carimbo_bbox[3] + 4 + 22 - y_fim                         # rev11: as revisões da emissão entram depois (carimbo cresce)
     if falta > 0:
         print(f"  ~ coluna da armação desce até o carimbo ({falta:.0f} mm): refazendo com folga")
         return None, falta
