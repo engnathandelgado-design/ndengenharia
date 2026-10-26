@@ -56,3 +56,25 @@ Item marcado [auto] já tem checagem automática; [manual] o revisor confere olh
 - [manual] PDFs para análise primeiro; zip com DXF + IFC só após aprovação.
 - [manual] 3D republicado no mesmo link a cada revisão.
 - [manual] Decisões que mudam o projeto: quadro com imagens (fontes + opções desenhadas), nunca só texto.
+
+## 10. Itens acrescentados pela revisão independente da rev11 (26/10/2026)
+- [auto] Renomeação R01 → projeto aplicada uma única vez; todo pilar citado numa tabela de apoio pertence, pela geometria, à linha/eixo daquele apoio.
+- [auto] Nome do R01 só no quadro de correspondência; nunca usado onde coincide com marca do projeto.
+- [auto] Densidade única do concreto: peso igual (±0,1 t) na IC01, folha da peça, PR01 e montagem; volume do quadro = resumo da folha.
+- [auto] Quantidade de peças igual no título, isométrico, quadro e PR01.
+- [auto] Nome da família coerente com a seção (ex.: I130 × h120) em todo o jogo, consolos e índice.
+- [auto] Toda marca com geometria diferente tem elevação de fôrma própria.
+- [manual] Textos dentro de imagens 3D: altura mínima e nomes atuais.
+- [auto] Carimbo: revisão igual à descrição; nada de "LIBERADO" em folha com pendência que afete a peça; local e ART preenchidos.
+- [auto] Nenhuma nota interna ("DEC-0xx", "decisão do Nathan") em folha do cliente.
+- [auto] Pendência em decisão sinalizada em TODAS as folhas afetadas (PR01, NG01, folha da peça).
+- [auto] Seções de pilar e viga sempre cotadas; concreto em cm com vírgula decimal.
+- [auto] Pilar fora de eixo cotado na LOC01 a partir de dois eixos.
+- [manual] Folga de montagem desenhada e cotada em todo detalhe de apoio.
+- [auto] Vistas de placas com o nome atual de cada pilar.
+- [auto] IC01 com todas as famílias, coluna βa e nenhum cálculo zerado.
+- [manual] EX01 com planta-chave dos apoios de continuidade.
+- [auto] MC, listas e quantitativos emitidos na mesma revisão das pranchas.
+- [auto] Normas na versão vigente; mesma ocupação do mezanino em todas as notas.
+- [auto] Bitola > Ø20 só com exceção registrada em DECISIONS.
+- [manual] Placas: nicho de montagem (console/grapa) na parte superior da placa, não na inferior.
