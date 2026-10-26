@@ -204,7 +204,7 @@ def spec_vb():
         L1 = round((L - 2 * LN - 2 * COB) / 10)
         xs_e = list(range(LN + 150, 1500, 100)) + list(range(1500, L - 1500, 150)) + list(range(L - 1500, L - LN - 140, 100))
         return xs_e, [dict(pos="N1", diam=16.0, qtd=3, comp=L1 + 40, geo=dict(k="C", a=L1, g=20, dir=1)),
-                      dict(pos="N2", diam=10.0, qtd=6, comp=Lb + 40, geo=dict(k="C", a=Lb, g=20, dir=-1)),
+                      dict(pos="N2", diam=12.5, qtd=6, comp=Lb + 40, geo=dict(k="C", a=Lb, g=20, dir=-1)),   # rev11: longitudinal de viga ≥ Ø12,5
                       dict(pos="N3", diam=6.3, qtd=len(xs_e), comp=2 * (he + 9) + 12, geo=dict(k="E", a=9, b=he)),
                       dict(pos="N4", diam=6.3, qtd=4, comp=2 * (hn + 9) + 12, geo=dict(k="E", a=9, b=hn)),
                       dict(pos="N5", diam=10.0, qtd=2, comp=2 * 70 + 8, geo=dict(k="U", a=70, b=8)),
@@ -265,8 +265,8 @@ def armacao_vm(L, P, DA):
     bh, bb = (H - 2 * COB) / 10, (B - 2 * COB) / 10
     barras = [dict(pos="N2", diam=8.0, qtd=len(xs_e), comp=ext(bb, bh), geo=dict(k="E", a=bb, b=bh)),
               dict(pos="N3", diam=12.5, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
-              dict(pos="N4", diam=10.0, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
-              dict(pos="N5", diam=10.0, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
+              dict(pos="N4", diam=12.5, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),               # rev11: longitudinal de viga ≥ Ø12,5 (era Ø10)
+              dict(pos="N5", diam=12.5, qtd=2, comp=Ll, geo=dict(k="R", a=Ll)),
               dict(pos="N6", diam=dt, qtd=nt // 2 * 2 or 2, comp=round(2 * (LN + anc) / 10 + bb), geo=dict(k="U", a=round((LN + anc) / 10), b=bb)),
               dict(pos="N7", diam=ds, qtd=2 * ns, comp=ext(bb, bh), geo=dict(k="E", a=bb, b=bh)),
               dict(pos="N8", diam=dc, qtd=2 * nc, comp=ext(round((LN + 450) / 10), bb), geo=dict(k="E", a=round((LN + 450) / 10), b=bb)),
@@ -274,7 +274,7 @@ def armacao_vm(L, P, DA):
               dict(pos="N9A", diam=10.0, qtd=n9a, comp=round(2 * a9a + b9), geo=dict(k="U", a=a9a, b=b9)),
               dict(pos="N10", diam=10.0, qtd=2 * nv, comp=ext(bb, (HD - 2 * COB) / 10), geo=dict(k="E", a=bb, b=(HD - 2 * COB) / 10)),
               dict(pos="N11", diam=8.0, qtd=len(xs_mac), comp=ext(bb, bh), geo=dict(k="E", a=bb, b=bh)),
-              dict(pos="N12", diam=10.0, qtd=2, comp=L12, geo=dict(k="R", a=L12))]
+              dict(pos="N12", diam=12.5, qtd=2, comp=L12, geo=dict(k="R", a=L12))]   # rev11: ≥ Ø12,5 (era Ø10)
     for ex in P.get("extra_inf", []):                  # DEC-049: 4 Ø16 retas no fundo a partir do canto reentrante (cada ponta), MEF
         Lx = round(ex["L"] / 10)
         barras.append(dict(pos="N13", diam=ex["d"], qtd=2 * ex["n"], comp=Lx, geo=dict(k="R", a=Lx)))

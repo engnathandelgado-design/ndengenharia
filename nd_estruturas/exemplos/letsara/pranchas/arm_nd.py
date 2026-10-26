@@ -32,13 +32,17 @@ class Arm:
         h.paths.add_edge_path().add_arc(c, r, 0, 360)
 
     def bolha(self, x, y, pos, r=2.6, registrar=True):
+        from prancha_nd import ALTURAS as _AL, _wtext as _wt
+        r = max(r, _wt(pos, _AL["min"]) / 2 + 0.8)                                       # rev11: bolha cresce com o texto (≥ 3 mm nas folhas de peça)
         self.circ((x, y), r, "BOLHA")                                                    # rev06e: bolha cinza fina, posição em vermelho (usina)
-        self.tx(x, y, pos, 1.5 if len(pos) > 2 else "min", "MIDDLE_CENTER", lay="POSICAO")
+        self.tx(x, y, pos, "min", "MIDDLE_CENTER", lay="POSICAO")
         if registrar:
             self.pr.posicoes_desenho.add(pos)
 
     def bolha_lider(self, alvo, bx, by, pos, r=2.6, registrar=True):
         """bolha em (bx, by) com linha até o ponto da barra."""
+        from prancha_nd import ALTURAS as _AL, _wtext as _wt
+        r = max(r, _wt(pos, _AL["min"]) / 2 + 0.8)
         d = math.dist(alvo, (bx, by))
         if d > r:
             ux, uy = (alvo[0] - bx) / d, (alvo[1] - by) / d
@@ -56,7 +60,7 @@ class Arm:
         self.tx(x, y, t1, "sub", "BOTTOM_LEFT", lay="TITULO")
         self.ln((x, y - 1.0), (x + w, y - 1.0), "TITULO")
         if t2:
-            self.tx(x, y - 4.6, t2, "min")
+            self.tx(x, y - 2.0 - ALTURAS["min"] - 0.8, t2, "min")          # rev11: abaixo do sublinhado com o texto maior
 
     def escala_grafica(self, x, y, esc, m=2.0):
         """régua 0 – 0,5 – 1,0 – 2,0 m na escala da vista."""
@@ -65,9 +69,9 @@ class Arm:
         for k, v in enumerate((0, 0.5, 1.0, m)):
             xx = x + v * 1000 / esc
             self.ln((xx, y), (xx, y + 1.5), "CARIMBO")
-            self.tx(xx, y - 0.6, fd(v), 1.5, "TOP_CENTER")
+            self.tx(xx, y - 0.6, fd(v), "min", "TOP_CENTER")
         self.pl([(x, y + 0.6), (x + 0.5 * 1000 / esc, y + 0.6)], "CARIMBO")
-        self.tx(x + L + 2, y, f"1:{esc:g}", 1.5, "MIDDLE_LEFT")
+        self.tx(x + L + 2, y, f"1:{esc:g}", "min", "MIDDLE_LEFT")
 
     # ---------------------------------------------------------------- rótulo de barra
     @staticmethod
@@ -94,7 +98,7 @@ class Arm:
         self.tx(x - 1.2 * rot_lado, y0 + a / 2, tl, "min", "BOTTOM_CENTER" if rot_lado > 0 else "TOP_CENTER", rot=90)
         self.tx(x + 1.2 * rot_lado, y0 + a / 2, f"{g['a']:.0f}", "min", "TOP_CENTER" if rot_lado > 0 else "BOTTOM_CENTER", rot=90)
         if g["k"] == "L":
-            self.tx(x + g.get("dir", 1) * g["g"] * 10 / esc / 2, y0 + a + 0.8, f"{g['g']:.0f}", 1.5, "BOTTOM_CENTER")
+            self.tx(x + g.get("dir", 1) * g["g"] * 10 / esc / 2, y0 + a + 0.8, f"{g['g']:.0f}", "min", "BOTTOM_CENTER")
         return pts
 
     def forma(self, x, y, b, esc, rotulo=True, n=None, esp=None, rot_pos="abaixo"):
@@ -118,14 +122,14 @@ class Arm:
             A, gg = g["a"] * s, max(g["g"] * s, 1.5)
             self.pl([(x - gg * 0.7, y + gg * 0.7), (x, y), (x + A, y), (x + A + gg * 0.7, y + gg * 0.7)], "ARM_TRANSV")
             self.tx(x + A / 2, y - 0.7, f"{g['a']:.0f}", "min", "TOP_CENTER")
-            self.tx(x + A / 2, y + 0.7, f"gancho 135° {g['g']:.0f}", 1.5, "BOTTOM_CENTER")
+            self.tx(x + A / 2, y + 0.7, f"gancho 135° {g['g']:.0f}", "min", "BOTTOM_CENTER")
             bb = [x - gg, y - 0.7 - hmin, x + A + gg, y + 0.7 + 1.5]
         elif k == "U":
             A, B, gg = g["a"] * s, g["b"] * s, g.get("g", 0) * s
             self.pl([(x, y), (x + A, y), (x + A, y + B), (x, y + B)], "ARMADURA")
             if gg:
                 self.ln((x, y), (x, y - gg), "ARMADURA"); self.ln((x, y + B), (x, y + B + gg), "ARMADURA")
-                self.tx(x - 0.8, y + B + gg / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_RIGHT")
+                self.tx(x - 0.8, y + B + gg / 2, f"{g['g']:.0f}", "min", "MIDDLE_RIGHT")
             self.tx(x + A / 2, y - 0.7, f"{g['a']:.0f}", "min", "TOP_CENTER")
             self.tx(x + A + 0.8, y + B / 2, f"{g['b']:.0f}", "min", "MIDDLE_LEFT")
             bb = [x - (0.8 + _wtext("15", 1.5) if gg else 0), y - gg - 0.7 - hmin, x + A + 0.8 + _wtext(f"{g['b']:.0f}", hmin), y + B + gg]
@@ -133,8 +137,8 @@ class Arm:
             A, gg, sg = g["a"] * s, g["g"] * s, g.get("dir", 1)
             self.pl([(x, y + sg * gg), (x, y), (x + A, y), (x + A, y + sg * gg)], "ARMADURA")
             self.tx(x + A / 2, y + (0.7 if sg < 0 else -0.7), f"{g['a']:.0f}", "min", "BOTTOM_CENTER" if sg < 0 else "TOP_CENTER")
-            self.tx(x - 0.8, y + sg * gg / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_RIGHT")
-            self.tx(x + A + 0.8, y + sg * gg / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_LEFT")
+            self.tx(x - 0.8, y + sg * gg / 2, f"{g['g']:.0f}", "min", "MIDDLE_RIGHT")
+            self.tx(x + A + 0.8, y + sg * gg / 2, f"{g['g']:.0f}", "min", "MIDDLE_LEFT")
             y_lo, y_hi = min(y, y + sg * gg), max(y, y + sg * gg)
             bb = [x - 3, y_lo - (0.7 + hmin if sg > 0 else 0), x + A + 3, y_hi + (0.7 + hmin if sg < 0 else 0)]
         elif k in ("R", "L"):
@@ -144,7 +148,7 @@ class Arm:
             if k == "L":
                 xg = x if esq else x + A
                 pts = [(xg, y + g["g"] * s)] + pts if esq else pts + [(xg, y + g["g"] * s)]
-                self.tx(xg + (-0.8 if esq else 0.8), y + g["g"] * s / 2, f"{g['g']:.0f}", 1.5, "MIDDLE_RIGHT" if esq else "MIDDLE_LEFT")
+                self.tx(xg + (-0.8 if esq else 0.8), y + g["g"] * s / 2, f"{g['g']:.0f}", "min", "MIDDLE_RIGHT" if esq else "MIDDLE_LEFT")
             self.pl(pts, "ARMADURA")
             self.tx(x + A / 2, y + 0.7, f"{g['a']:.0f}", "min", "BOTTOM_CENTER")
             bb = [x - (3 if esq else 0), y - 0.5, x + A + (3 if k == "L" and not esq else 0), y + 0.7 + hmin + (g["g"] * s if k == "L" else 0)]
@@ -168,6 +172,12 @@ class Arm:
     # ---------------------------------------------------------------- tabelas no padrão
     def tabela_ferros(self, x, y_topo, barras, n=1, titulo=None, aco="CA-50", h_lin=4.4):
         """TABELA DE FERROS — n UNIDADE(S): TIPO, POS., BIT., QUANT., C.UNIT (cm), C.TOT (cm)."""
+        # rev11 (regra do Nathan, 26/10/2026): em VIGAS, armadura longitudinal passiva com Ø ≥ 12,5 (estribos/costuras pelo cálculo)
+        cod_ = str(self.pr.dados.get("desenho", "")).replace("ND-LET-", "")
+        if cod_.startswith(("I130", "I110", "VM", "TS01", "VB", "VT", "PV", "AR-VIG")):
+            for b_ in barras:
+                if (b_.get("geo") or {}).get("k") in ("R", "L", "C") and float(b_["diam"]) < 12.5 - 1e-6:
+                    self.pr.avisos_extra.append(("ERRO", f"viga: longitudinal passiva {b_['pos']} Ø{b_['diam']:g} < Ø12,5 (regra ND)"))
         lin = []
         for b in barras:
             q = b["qtd"] * n

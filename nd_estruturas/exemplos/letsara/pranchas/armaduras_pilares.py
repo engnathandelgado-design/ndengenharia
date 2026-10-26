@@ -77,7 +77,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
             A.tx(xch + 1.0, (ya + yb) / 2, t, "min", "TOP_CENTER", rot=90)
         else:
             A.tx(xch + 3.0, (ya + yb) / 2, t, "min", "MIDDLE_LEFT")
-    A.tx(Pp(-H / 2 - 150, 0)[0] - 1, y0 + LC / ESC_E, "±0,000", 1.5, "MIDDLE_RIGHT")
+    A.tx(Pp(-H / 2 - 150, 0)[0] - 1, y0 + LC / ESC_E, "±0,000", "min", "MIDDLE_RIGHT")
     pr.posicoes_desenho.update({"N2"} | ({"N3"} if "N3" in bar else set()) | ({"N3A"} if "N3A" in bar else set()) | ({"N14"} if P["z_cab"] else set()))
     # seções
     livres = [z for z in range(LC + 800, (zr if REC else L) - 600, 100) if all(not (c["z"] - c["h"] - 300 < z < c["z"] + 300) for c in P["cons"])]
@@ -96,20 +96,21 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
             if g["k"] == "L":
                 g["dir"] = 1
             A.barra_vertical(xb, y0 + zb / ESC_E, b | {"geo": g}, ESC_E)
-            A.bolha(xb, y0 + zb / ESC_E + g["a"] * 10 / ESC_E + 6, pos)
+            A.bolha(xb - (4 if g["k"] == "L" else 0), y0 + zb / ESC_E + g["a"] * 10 / ESC_E + 6 + (6 if g["k"] == "L" else 0), pos)   # rev11: acima do gancho
             xb += 17
     # ------------------------------------------------ título do quadrante
     mk = P["marca"]
     A.titulo(qx + 6, qy + 12, (f"ARMAÇÃO — {mk}" if ref else f"PILAR {mk}") + f" — {P['qtd']} {'UNIDADE' if P['qtd'] == 1 else 'UNIDADES'}",
-             f"{P['posicao'].replace('POSIÇÃO: ', '')} · ESC. 1:{ESC_E:g} (seções 1:25, consolos 1:20) · fôrma e insertos: {ref or FORMA.get(mk, P['desenho'])}")
+             f"{P['posicao'].replace('POSIÇÃO: ', '')} · ESC. 1:{ESC_E:g} (seções e estribos 1:10, consolos 1:20) · fôrma e insertos: {ref or FORMA.get(mk, P['desenho'])}")
     A.escala_grafica(qx + 6, qy + 2.5, ESC_E)
 
     # ------------------------------------------------ coluna do meio: seções e consolos
     xm = qx + 150
     ytop = qy + QH_ - 10
+    ES_ = 10.0                                                             # rev11: seções e estribos em 1:10 (≥ 2× a elevação 1:25)
     # S.1
-    sx, sy = xm + 4, ytop - 8 - B / E25
-    R = lambda w, u, ox=sx, oy=sy: (ox + (w + H / 2) / E25, oy + (u + B / 2) / E25)
+    sx, sy = xm + 4, ytop - 8 - B / ES_
+    R = lambda w, u, ox=sx, oy=sy: (ox + (w + H / 2) / ES_, oy + (u + B / 2) / ES_)
     A.pl([R(-H / 2, -B / 2), R(H / 2, -B / 2), R(H / 2, B / 2), R(-H / 2, B / 2)], "CORTADO", True)
     A.pl([R(-H / 2 + COB, -B / 2 + COB), R(H / 2 - COB, -B / 2 + COB), R(H / 2 - COB, B / 2 - COB), R(-H / 2 + COB, B / 2 - COB)], "ARM_TRANSV", True)
     for wg in P["grampos"]:
@@ -117,7 +118,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     for ug in P.get("grampos_h", []):                                      # DEC-040: grampos N3A na direção A–C
         A.ln(R(-H / 2 + COB, ug), R(H / 2 - COB, ug), "ARM_TRANSV")
     for (u, w) in P["xy"]:
-        A.disco(R(w, u), max(P["D1"] / 2 / E25, 0.55))
+        A.disco(R(w, u), max(P["D1"] / 2 / ES_, 0.55))
     s1t = "SEÇÃO S.1"
     A.titulo(sx, sy - 9, s1t)
     xr = R(-H / 2, 0)[0]
@@ -134,26 +135,26 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
         ug = P["grampos_h"][-1]
         A.bolha_lider(R(H / 2 - COB - 60, ug), R(H / 2, 0)[0] + 5, R(0, ug)[1] - 4, "N3A")
     xs = R(H / 2, 0)[0] + 16
-    bb = A.forma(xs, sy + 2, n2 | {"geo": n2["geo"]}, E25)
+    bb = A.forma(xs, sy + 2, n2 | {"geo": n2["geo"]}, ES_)
     if "N3" in bar:
-        b3 = A.forma(bb[2] + 10, sy + 6, bar["N3"], E25)
+        b3 = A.forma(bb[2] + 10, sy + 6, bar["N3"], ES_)
         bb = (bb[0], min(bb[1], b3[1]), max(bb[2], b3[2]), bb[3])
     if "N3A" in bar:
-        b3 = A.forma(xs + 1.5, bb[1] - 6.5, bar["N3A"], E25)
+        b3 = A.forma(xs + 1.5, bb[1] - 6.5, bar["N3A"], ES_)
         bb = (bb[0], min(bb[1], b3[1]), max(bb[2], b3[2]), bb[3])
     yb_ = min(sy - 14, bb[1] - 4)
     # S.2 (cabeça)
     if REC:
         HB, HH = u1 - u0, w1 - w0
-        sy2 = yb_ - 6 - B / E25
-        R2 = lambda w, u: (sx + (w + H / 2) / E25, sy2 + (u + B / 2) / E25)
+        sy2 = yb_ - 6 - B / ES_
+        R2 = lambda w, u: (sx + (w + H / 2) / ES_, sy2 + (u + B / 2) / ES_)
         A.pl([R2(-H / 2, -B / 2), R2(H / 2, -B / 2), R2(H / 2, B / 2), R2(-H / 2, B / 2)], "OCULTA", True)
         A.pl([R2(w0, u0), R2(w1, u0), R2(w1, u1), R2(w0, u1)], "CORTADO", True)
         A.pl([R2(w0 + COB, u0 + COB), R2(w1 - COB, u0 + COB), R2(w1 - COB, u1 - COB), R2(w0 + COB, u1 - COB)], "ARM_TRANSV", True)
         for (u, w) in P["xy_sobe"]:
-            A.disco(R2(w, u), max(P["D1"] / 2 / E25, 0.55))
+            A.disco(R2(w, u), max(P["D1"] / 2 / ES_, 0.55))
         for (u, w) in P["xy_cab"]:
-            A.disco(R2(w, u), max(16 / 2 / E25, 0.5))
+            A.disco(R2(w, u), max(16 / 2 / ES_, 0.5))
         A.titulo(sx, sy2 - 9, "SEÇÃO S.2 (CABEÇA)")
         if P["xy_sobe"]:
             u, w = min(P["xy_sobe"], key=lambda p: (p[1], p[0]))
@@ -162,7 +163,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
             u, w = max(P["xy_cab"], key=lambda p: (p[1], -p[0]))
             A.bolha_lider(R2(w, u), R2(H / 2, 0)[0] + 5, R2(w, u)[1] + 6, "N13")
         A.bolha_lider(R2(w1 - COB, (u0 + u1) / 2), R2(H / 2, 0)[0] + 5, R2(0, (u0 + u1) / 2)[1] - 4, "N14")
-        bb2 = A.forma(R2(H / 2, 0)[0] + 16, sy2 + 2, bar["N14"], E25)
+        bb2 = A.forma(R2(H / 2, 0)[0] + 16, sy2 + 2, bar["N14"], ES_)
         yb_ = min(sy2 - 14, bb2[1] - 4)
     # consolos (1:20)
     ED = 20.0

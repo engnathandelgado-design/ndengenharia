@@ -57,8 +57,8 @@ def linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H):
             err.append(("ERRO", f"consolo {c['tipo']} sem nível"))
         dim = f"{g(c['larg'] / 10)}×{g(c['proj'] / 10)}×{g(round(c['h'] / 10, 1))}" + (f"/{g(round(c['hp'] / 10, 1))}" if c["hp"] != c["h"] else "")
         rows.append([f"{mk} ({c['tipo']})", f"{c['face']}", f"{niv(c['z'])} ({g(c['z'] / 10)})", dim,
-                     f"1 {c['pino_nome']} Ø{g(c['pino_d'])} {aco_pino(c['pino_nome']).split(',')[0]}", g(emb / 10), g(livre / 10), g(tot / 10),
-                     f"reta; a {g(c['pino_x'] / 10)} da face, no eixo do consolo; neoprene {c['neo'][0]}×{c['neo'][1]}×{c['neo'][2]}"])
+                     f"1 {c['pino_nome']} Ø{g(c['pino_d'])}", g(emb / 10), g(livre / 10), g(tot / 10),
+                     f"{aco_pino(c['pino_nome'])}; reta; a {g(c['pino_x'] / 10)} cm da face, no eixo do consolo; neoprene {c['neo'][0]}×{c['neo'][1]}×{c['neo'][2]}"])
         chk(f"{mk} face {c['face']} {niv(c['z'])}", emb, livre, tot)
     AS = P.get("assento")
     if AS and REC:
@@ -68,9 +68,9 @@ def linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H):
         xs = ", ".join(g(x / 10) for x in AS.get("x_pinos", (AS["x_pino"],)))
         ys = " e ".join(g(abs(y) / 10) for y in AS["y_pinos"][:1]) if len(set(abs(y) for y in AS["y_pinos"])) == 1 else ", ".join(g(y / 10) for y in AS["y_pinos"])
         rows.append([f"ESP-1 ({AS.get('marca_b', AS['pino'])})", "recuo " + "/".join(f_rec), f"{niv(z_rec)} ({g(z_rec / 10)})", f"{AS['neo_nome']}",
-                     f"{nb} {AS.get('marca_b', AS['pino'])} — {AS.get('aco', '')}", g(AS["emb"] / 10), g(livre / 10), g(AS["L"] / 10),
-                     f"{AS.get('anc', '')}; " + (f"rosca {g(AS['rosca'] / 10)} na ponta livre; " if AS.get("rosca") else "") +
-                     f"a {xs} da face da cabeça e ±{ys} do eixo da face; {AS.get('destino', '')}" +
+                     f"{nb} {AS.get('marca_b', AS['pino'])} Ø{g(AS['d'])}", g(AS["emb"] / 10), g(livre / 10), g(AS["L"] / 10),
+                     f"{AS.get('aco', '')}; {AS.get('anc', '')}; " + (f"rosca {g(AS['rosca'] / 10)} cm na ponta livre; " if AS.get("rosca") else "") +
+                     f"a {xs} cm da face da cabeça e ±{ys} do eixo da face; {AS.get('destino', '')}" +
                      (f"; pilha sobre o concreto: " + " + ".join(f"{n} {g(t)}" for n, t in AS["pilha"]) + f" = {g(round(sum(t for _, t in AS['pilha']), 1))} mm ≤ {g(livre)} livres" if AS.get("pilha") else "")])
         chk("ESP-1 (recuo)", AS["emb"], livre, AS["L"], AS.get("pilha"))
     PT = P.get("pinos_topo")
@@ -78,8 +78,8 @@ def linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H):
         livre = PT["L"] - PT["emb"]
         xs = sorted({abs(q[0]) for q in PT["xy"]}); ys = sorted({abs(q[1]) for q in PT["xy"]})
         rows.append([f"ESP-2 ({PT['nome']})", "topo", f"+{f2((L_TOT - L_CAL) / 1000)} ({g(L_TOT / 10)})", "topo do pilar",
-                     f"{len(PT['xy'])} {PT['nome']} Ø{g(PT['d'])} — {PT.get('aco', '')}", g(PT["emb"] / 10), g(livre / 10), g(PT["L"] / 10),
-                     f"{PT.get('anc', '')}; " + (f"rosca {g(PT['rosca'] / 10)} na ponta livre; " if PT.get("rosca") else "") +
+                     f"{len(PT['xy'])} {PT['nome']} Ø{g(PT['d'])}", g(PT["emb"] / 10), g(livre / 10), g(PT["L"] / 10),
+                     f"{PT.get('aco', '')}; {PT.get('anc', '')}; " + (f"rosca {g(PT['rosca'] / 10)} na ponta livre; " if PT.get("rosca") else "") +
                      f"x ±{'/'.join(g(x / 10) for x in xs)} (A–C) e y ±{'/'.join(g(y / 10) for y in ys)} (B–D) do centro; {PT.get('destino', '')}"])
         chk("ESP-2 (topo)", PT["emb"], livre, PT["L"], PT.get("pilha"))
     for k, es in enumerate(P.get("esperas_face", []), 3):
@@ -120,9 +120,9 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
         zt = zm + 5.2
         for x in xs:
             v.ret(x - 15, zt, 30, 3, "METALICA"); v.ret(x - 12, zt + 3, 24, 13, "METALICA"); v.ret(x - 12, zt + 16, 24, 13, "METALICA")
-        v.chamada((AS["x_neo"][1] - 30, g0 + 10), (16, -10), "CA-L2 250×250×19 A36 galv.; graute 20")
-        v.chamada((R + 100, zm + 100), (10, 8), f"{AS.get('viga', 'W')} (mesa com furo Ø18 / oblongo)")
-        v.chamada((xs[-1] + 12, zt + 22), (14, 4), "arruela + porca + contraporca M16")
+        v.chamada((AS["x_neo"][1] - 30, g0 + 10), ((R + 300 - AS["x_neo"][1]) / 10, -12), "CA-L2 250×250×19 A36 galv.; graute 20")
+        v.chamada((R + 100, zm + 100), (20, 10), f"{AS.get('viga', 'W')} (mesa com furo Ø18 / oblongo)")
+        v.chamada((xs[-1] + 12, zt + 22), ((R + 300 - xs[-1]) / 10, 2), "arruela + porca + contraporca M16")
     else:                                                      # neoprene + ponta da TS-01 com furo grauteado
         v.chapa(AS["x_neo"][0], 0, AS["x_neo"][1] - AS["x_neo"][0], 10)
         v.poli([(5, 10), (R + 150, 10), (R + 150, 10 + 400), (5, 10 + 400)], "VISTA")
@@ -138,15 +138,15 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
             v.poli([(x - 60, -emb + 60), (x - 60, -emb + 10), (x + 60, -emb + 10), (x + 60, -emb + 60)], "ARMADURA")
     if BR:
         v.linha((xs[0] - 30, livre - BR), (xs[-1] + 30, livre - BR), "OCULTA")
-    v.cota_v([-emb, 0, livre], R + 230, 10)
-    v.cota_h([0] + list(xs) + [R], zb, -8, total=False)
+    v.cota_v([-emb, 0, livre], -HW, -9)
+    v.cota_h([0] + list(xs) + [R], zb, -13, total=False)
     v.cota_h([-HW, 0], hc, 8)
-    v.chamada((xs[-1], -emb / 2), ((R - xs[-1]) / 10 + 40, -2), f"{AS.get('marca_b', AS['pino'])} Ø{g(AS['d'])}: L {g(AS['L'])} = {g(emb)} emb. + {g(livre)} livre")
-    v.chamada((xs[-1], -emb + 30), ((R - xs[-1]) / 10 + 40, -12), AS.get("anc", ""))
+    v.chamada((xs[-1], -emb + 90), ((R - xs[-1]) / 10 + 30, -4), f"{AS.get('marca_b', AS['pino'])} Ø{g(AS['d'])}: L {g(AS['L'])} = {g(emb)} emb. + {g(livre)} livre")
+    v.chamada((xs[-1], -emb + 30), ((R - xs[-1]) / 10 + 30, -14), AS.get("anc", ""))
     lin = []
     if pilha:
         lin.append(f"pilha {g(round(sum(t for _, t in pilha), 1))} ≤ {g(livre)} mm livres (quadro APOIOS E ESPERAS)")
     lin.append("gabarito na fôrma: barras ±2 mm")
     for k, t in enumerate(lin):
-        v.texto((R + 260, hc - 10 - k * 55), t, "nota", "TOP_LEFT")
+        v.texto((R + 120, hc + 40 - k * 55), t, "nota", "TOP_LEFT")
     return v

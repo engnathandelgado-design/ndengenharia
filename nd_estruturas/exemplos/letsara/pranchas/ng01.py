@@ -48,12 +48,14 @@ def quadro(folha, inicio="QUADRO"):
 
 # ------------------------------------------------------------------ índice (ordem combinada com o coordenador)
 ORDEM = (["ND-LET-NG01", "ND-LET-PR01", "ND-LET-LOC01", "ND-LET-CG01", "ND-LET-CT01", "ND-LET-CT02", "ND-LET-CT03", "ND-LET-CT04",
-          "ND-LET-MON01", "ND-LET-MON02", "ND-LET-MON03"]
+          "ND-LET-MON01", "ND-LET-MON02", "ND-LET-MON03"]                                   # rev11: geral → localização → detalhe
          + [f"ND-LET-PL{k:02d}" for k in range(1, 13)] + [f"ND-LET-PF{k:02d}" for k in range(1, 7)]
-         + [f"ND-LET-PC{k:02d}" for k in range(1, 4)] + ["ND-LET-PM01"] + [f"ND-LET-PG{k:02d}" for k in range(1, 5)]
+         + [f"ND-LET-PC{k:02d}" for k in range(1, 4)] + ["ND-LET-PM01", "ND-LET-PM02"] + [f"ND-LET-PG{k:02d}" for k in range(1, 5)] + [f"ND-LET-PE{k:02d}" for k in range(1, 4)]
+         + ["ND-LET-CS01"]
          + ["ND-LET-TS01-1", "ND-LET-TS01-2", "ND-LET-TS01-3", "ND-LET-I130", "ND-LET-VM01", "ND-LET-VB01", "ND-LET-LA01"]
-         + [f"ND-LET-PP{k:02d}" for k in range(0, 7)] + [f"ND-LET-PP-{v}" for v in ("A", "B", "C", "D", "EF", "G", "HJ", "I")]
-         + ["ND-LET-CM01", "ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-MT01-1", "ND-LET-MT01-2"])
+         + [f"ND-LET-ES{k:02d}" for k in range(1, 6)]
+         + ["ND-LET-CM01"] + [f"ND-LET-PP{k:02d}" for k in range(0, 7)] + [f"ND-LET-PP-{v}" for v in ("A", "B", "C", "D", "EF", "G", "HJ", "I")] + ["ND-LET-PV01"]
+         + ["ND-LET-COB01", "ND-LET-COB02", "ND-LET-COB03", "ND-LET-COB04", "ND-LET-COB05", "ND-LET-MT01-1", "ND-LET-MT01-2"])
 PREVISTAS = {"ND-LET-NG01": "FOLHA DE ROSTO, ÍNDICE DAS FOLHAS E NOTAS GERAIS DO PROJETO EXECUTIVO",
              "ND-LET-PR01": "QUADRO DE PRODUÇÃO E CONCRETAGEM DAS PEÇAS — POR MARCA",
              "ND-LET-CT02": "CORTE DO MEZANINO — LAJES ALVEOLARES, VIGAS VM, CAPA E NÍVEIS",
@@ -142,7 +144,7 @@ NORMAS = ("NBR 9062:2017 (projeto e execução de estruturas de concreto pré-mo
 
 N_GERAIS = [
     "Estrutura pré-moldada do pavilhão Letsara: pilares engastados nos cálices, vigas articuladas (TS-01 de cobertura, I130 centrais, VB de borda, VM do mezanino), "
-    "lajes alveolares com capa nos pisos +3,90 (depósito, 5,0 kN/m²) e +7,30 (laje de cobertura do bloco, sem uso), escada metálica do térreo ao +3,90 (ND-LET-ES01), cobertura da linha 2 em W 310 metálica sobre os pilares (ND-LET-COB05), cobertura metálica Kingspan sobre terças Z escondida na platibanda (+10,00) e fechamento lateral em placas protendidas 125 × 10 por fora dos pilares.",
+    "lajes alveolares com capa nos pisos +3,90 (depósito, 5,0 kN/m²) e +7,30 (laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²), escada metálica do térreo ao +3,90 (ND-LET-ES01), cobertura da linha 2 metálica: W 200 × 15,0 nos pilares e em montantes W 150 × 13,0 sobre as VM do +7,30 (ND-LET-COB05), cobertura metálica Kingspan sobre terças Z escondida na platibanda (+10,00) e fechamento lateral em placas protendidas 125 × 10 por fora dos pilares.",
     f"Classificação: {NBR['classificacao']['tipo']}. Coeficientes adotados: γc {f(NBR['classificacao']['gama_c'])}, γs {f(NBR['classificacao']['gama_s'], 2)}, "
     f"γn {f(NBR['classificacao']['gama_n_permanente'])} (consolos com permanente preponderante) e {f(NBR['classificacao']['gama_n_outros'])} (demais) — NBR 9062:2017 7.3.1 e 8.1.",
     "Estabilidade global: pilares engastados na fundação, cobertura, terças, correntes e contraventamento em X junto aos oitões e o mezanino como diafragma rígido, num modelo global único "
@@ -179,15 +181,15 @@ N_PRODUCAO = [
     "Cobrimentos garantidos com espaçadores (plástico ou argamassa) a cada 1,0 m no máximo; insertos e chapas de espera presos à fôrma com gabarito (CE-1 ±5 mm); conferir cada peça contra a folha antes de concretar (check-list de pré-concretagem).",
     "Superfícies de ligação com o 2º estágio e a capa (topo das VM, chavetas das lajes) rugosas e limpas; saturar antes de concretar na obra. Marcar em cada peça: marca, data da concretagem e peso.",
     f"Içamento e manuseio (NBR 9062:2017 5.3.2): carga equivalente com βa {f(TR['beta_a']['saque_montagem'])} no saque, manuseio e montagem; alças com βa {f(TR['beta_a']['alcas'])}. "
-    "Pilares: tirar da fôrma pelas 2 alças AL-2, verticalizar e montar pelo furo FI-1. Vigas: pelas alças da folha. Lajes: garra mecânica nas 2 pontas. Placas: desforma por 4 insertos IZ-1 numa face com balancim, montagem pelas 2 alças AL-P do topo.",
+    "Pilares: tirar da fôrma pelas 2 alças AL-2, verticalizar e montar pelo furo FI-1. Vigas: pelas alças da folha. Lajes: garra mecânica nas 2 pontas. Placas: desforma, giro e montagem de pé pelos mesmos 4 insertos IZ-1 de uma face, com balancim duplo (ND-LET-MON03 det. 2a–2c e ND-LET-IC01).",
     f"Estocagem e transporte: calços alinhados nos pontos indicados em cada folha ({TR['estoque']}); pilares deitados em 2 apoios a 0,21 L sem apoiar em consolos; placas EM PÉ em cavalete; lajes em pilhas de até 8 painéis.",
 ]
 
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
     "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I130 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
-    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 310 da linha 2 (direto na cabeça dos pilares, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
-    "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 310 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
+    "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I130 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 200 × 15,0 da linha 2 (na cabeça dos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
+    "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
 ]

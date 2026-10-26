@@ -54,14 +54,15 @@ def armacao_i(P, L, cob=30, n_ct=None):
     barras = [dict(pos="N2", diam=d_est, qtd=len(xs_e), comp=round(2 * (a2 + b2) + 16), forma=[(0, 0), (9, 0), (9, 60), (0, 60), (0, 0), (2, 2)], trechos=[f"{a2:g}", f"{b2:g}", "", ""], geo=dict(k="E", a=a2, b=b2)),
               dict(pos="N3", diam=N3d, qtd=N3n, comp=Ll, trechos=[f"{Ll}"], geo=dict(k="R", a=Ll))]
     if P.get("pele"):
-        barras.append(dict(pos="N4", diam=8.0, qtd=2 * len(P["pele"]), comp=Ll, trechos=[f"{Ll}"], geo=dict(k="R", a=Ll)))
+        barras.append(dict(pos="N4", diam=12.5, qtd=2 * len(P["pele"]), comp=Ll,   # rev11: pele ≥ Ø12,5 (era Ø8)
+                           trechos=[f"{Ll}"], geo=dict(k="R", a=Ll)))
     if P.get("seg"):
         n9 = len(range(100, L - 60, 150))
         barras.append(dict(pos="N9", diam=8.0, qtd=n9, comp=round((2 * (600 + 170) + (bw - 2 * cob)) / 10), forma=[(0, 0), (0, 77), (9, 77), (9, 0)], trechos=["77", "9", "77"],
                            geo=dict(k="U", a=77, b=9, g=0)))
-        barras.append(dict(pos="N10", diam=10.0, qtd=2, comp=round((L - 200) / 10), trechos=[f"{round((L-200)/10)}"], geo=dict(k="R", a=round((L - 200) / 10))))
+        barras.append(dict(pos="N10", diam=12.5, qtd=2, comp=round((L - 200) / 10), trechos=[f"{round((L-200)/10)}"], geo=dict(k="R", a=round((L - 200) / 10))))
     barras += [dict(pos="N11", diam=6.3, qtd=n_fl_i, comp=round(2 * (af + bfi) + 14), forma=[(0, 0), (34, 0), (34, 9), (0, 9), (0, 0), (1.5, 1.5)], trechos=[f"{af:g}", f"{bfi:g}", "", ""], geo=dict(k="E", a=af, b=bfi)),
-               dict(pos="N12", diam=10.0, qtd=2, comp=Ll12, trechos=[f"{Ll12}"], geo=dict(k="R", a=Ll12)),
+               dict(pos="N12", diam=12.5, qtd=2, comp=Ll12, trechos=[f"{Ll12}"], geo=dict(k="R", a=Ll12)),   # rev11: ≥ Ø12,5 (era Ø10)
                dict(pos="N13", diam=6.3, qtd=n_fl, comp=round(2 * (af + bfs) + 14), forma=[(0, 0), (34, 0), (34, 6), (0, 6), (0, 0), (1.5, 1.5)], trechos=[f"{af:g}", f"{bfs:g}", "", ""], geo=dict(k="E", a=af, b=bfs))]
     CT = P.get("ct")
     n_ct = (len(P.get("pinos_topo", [])) if n_ct is None else n_ct) if CT else 0
@@ -511,7 +512,7 @@ def dados_i110():
     return dict(
         revs=[("03", "14/10/2026", "I110 → I130 (h 130), DENTE 78 × 35, 26 CORD.; TS-01 NO TOPO (SEM CV-TS); SEM SOLDA"), ("04", "16/10/2026", "NBR 9062: NEO-2 FRETADO; TOPO HORIZONTAL EM 2 NÍVEIS (APOIO DAS TS-01); TOLERÂNCIAS"),
               ("06", "19/10/2026", "DEC-032: 28 + 2 CORDOALHAS, σpi 1453, ISOLAMENTO 2/4 m, fckj 45; DENTE COM A REAÇÃO REAL; N5 EM ALÇAS HORIZONTAIS; AL-3 COM 3 LAÇOS"),
-              ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; 24 Ø15,2 (7+5+5+5 + 2 TOPO); PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120"),
+              ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120"),
               ("09", "25/10/2026", "DEC-061: CONSOLOS LATERAIS CT-I130 COM MÍSULA NAS 2 FACES (APOIO DAS TS-01), NEO-3C 150 × 300, CORTE D-D; COTAS DO DENTE"),
               ("08", "24/10/2026", f"DEC-058: PILAR A MAIS NO EIXO C, 3 VÃOS DE 16,517 m (V406, V405, V404 IGUAIS); CORDOALHA Ø12,7: {ARR['n_cord']} NAS TRÊS, {I1J['V407']['arranjo']['n_cord']} NA V407")],
         marca="V406", qtd=1, familia=f"VIGAS CENTRAIS I{HI // 10} (EIXO C)", desenho="ND-LET-I130", h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,

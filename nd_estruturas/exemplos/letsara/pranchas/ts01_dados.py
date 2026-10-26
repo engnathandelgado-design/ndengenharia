@@ -97,13 +97,13 @@ def armacao_ts01():
               dict(pos="N2", diam=12.5, qtd=4, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"], geo=dict(k="R", a=round((L - 60) / 10))),
               dict(pos="N3", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)], trechos=["34", "7", "34", "7"], geo=dict(k="E", a=34, b=7)),
               dict(pos="N4", diam=6.3, qtd=n3, comp=cN3, forma=[(0, 0), (34, 0), (34, 7), (0, 7), (0, 0), (1.5, 1.5)], trechos=["34", "7", "34", "7"], geo=dict(k="E", a=34, b=7)),
-              dict(pos="N5", diam=10.0, qtd=2, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"], geo=dict(k="R", a=round((L - 60) / 10))),
+              dict(pos="N5", diam=12.5, qtd=2, comp=round((L - 60) / 10), trechos=[f"{(L - 60) / 10:.0f}"], geo=dict(k="R", a=round((L - 60) / 10))),
               dict(pos="N6", diam=8.0, qtd=2 * 8, comp=cN6, forma=[(0, 0), (34, 0), (34, 84), (0, 84), (0, 0), (1.5, 1.5)], trechos=["34", "84", "34", "84"], geo=dict(k="E", a=34, b=84)),
               dict(pos="N7", diam=10.0, qtd=2 * 3, comp=2 * 60 + 34, forma=[(60, 0), (0, 0), (0, 34), (60, 34)], trechos=["60", "34", "60"], geo=dict(k="U", a=60, b=34, g=0)),
               dict(pos="N8", diam=10.0, qtd=2 * 2, comp=round((2 * (750 + 340) + 140) / 10),
                    forma=[(0, 0), (75, 0), (75, 34), (0, 34), (0, 0), (1.5, 1.5)], trechos=["75", "34", "75", "34"], geo=dict(k="E", a=75, b=34)),
               # DEC-032: tração no topo no ato (NBR 6118:2023 17.2.4.3.2 c) — 2 Ø10 complementares ao N2 em cada ponta
-              dict(pos="N9", diam=10.0, qtd=2 * 2, comp=round(L_N9 / 10), trechos=[f"{L_N9 / 10:.0f}"], geo=dict(k="R", a=round(L_N9 / 10)))]
+              dict(pos="N9", diam=12.5, qtd=2 * 2, comp=round(L_N9 / 10), trechos=[f"{L_N9 / 10:.0f}"], geo=dict(k="R", a=round(L_N9 / 10)))]
     return x_est, [], barras
 
 
