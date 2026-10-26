@@ -177,5 +177,6 @@ pr.notas(XC, y - 4, [
     "Tolerâncias NBR ISO 2768-1 classe m; furos Ø18 ± 0,3; oblongo 18 × 40 ± 0,5. Prumo da ombreira 2 mm em 2,5 m.",
     "Chumbador químico M16 5.8 hef 100 (Hilti HIT-RE 500 V4, Fischer FIS EM Plus ou equivalente), borda mínima 75 mm no baldrame; seguir o tempo de cura do fabricante.",
     "Medidas em mm."], 250)
+FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP05")
 print("PP05", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

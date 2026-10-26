@@ -234,5 +234,6 @@ bar = [dict(pos="N3", diam=8, qtd=2, comp=138), dict(pos="N4", diam=8, qtd=1, co
        dict(pos="N7", diam=6.3, qtd=1, comp=46), dict(pos="N8", diam=8, qtd=2, comp=70), dict(pos="N9", diam=8, qtd=2, comp=82), dict(pos="N10", diam=8, qtd=2, comp=37), dict(pos="N11", diam=6.3, qtd=3, comp=40)]
 pr.texto(Q[0] + 40, Q[3] - 282, "AÇO DA PONTA RECORTADA (1 PONTA; N3–N7 da PP01)", "sub", "TITULO")
 pr.tabela_aco(Q[0] + 40, Q[3] - 286, bar)
+FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP06")
 print("PP06", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

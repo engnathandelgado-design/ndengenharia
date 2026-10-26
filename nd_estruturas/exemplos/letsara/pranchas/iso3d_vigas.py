@@ -80,7 +80,7 @@ def salvar(p, arq, cam, zoom):
         if k_ > 1.05:
             cam_.zoom(k_)
         p.render()
-    p.screenshot(PR + arq)
+    p.screenshot(PR + arq, scale=2)                                      # rev11: ≥ 400 ppi no tamanho impresso
     im = Image.open(PR + arq).convert("RGB")
     bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()
     im.crop((max(bb[0] - 20, 0), max(bb[1] - 20, 0), min(bb[2] + 20, im.width), min(bb[3] + 20, im.height))).save(PR + arq)

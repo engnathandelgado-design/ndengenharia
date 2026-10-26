@@ -158,5 +158,6 @@ pr.notas(XC, y - 4, [
     "Roscas métricas grossas ISO 261/965 (6g/6H); peças galvanizadas a fogo com porca sobremedida (6H + 0,4) ou rosca repassada; não lubrificar o prisioneiro antes da trava química.",
     f"DEC-044: na fiada +6,25 dos pilares P8A (PC-01) e P11 (PC-02) a CE-1 é a CE-1L 840 × 330 × {GF.TCE:g} (asas de 220 além das faces, mesmos pinos e N18) — {NN['CE1L']} pç; nos pilares com CS-1C / CS-1D a CE-1 é a comum, com 1 console e a caixa de calço soldada na obra no fundo da caixa (filete 6, 2 × 330) — ND-LET-PP06.".replace(".", ",").replace("ND-LET-PP06,", "ND-LET-PP06."),
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
+FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP04")
 print("PP04", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

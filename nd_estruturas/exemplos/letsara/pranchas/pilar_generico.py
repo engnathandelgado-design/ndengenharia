@@ -444,8 +444,8 @@ def prancha_pilar(P):
             for e_ in v_.ents:
                 e_.translate(d_, 0, 0)
             v_.o = (v_.o[0] + d_, v_.o[1])
-    if _caixa(vs_[-1])[1] > XD - 4:
-        print(f"  ! {P['marca']}: faces avançam na coluna da fôrma ({_caixa(vs_[-1])[1]:.0f} > {XD - 4:.0f})")
+    if _caixa(vs_[-1])[1] > XD - 4:                                      # rev11: a coluna da fôrma anda para a direita (texto maior)
+        XD = _caixa(vs_[-1])[1] + 4
 
     # ------------------------------------------------------------ rev07: coluna de detalhes da fôrma (à direita das faces)
     YT = Q[3] - 38
@@ -484,15 +484,15 @@ def prancha_pilar(P):
 
     # ------------------------------------------------------------ CORTE A-A (1:10)
     YS = YT - 178 - H / 20
-    v = pr.vista("CORTE A-A", (XD + 32, YS), 10, titulo="CORTE A-A", subtitulo="corrente (fôrma)", unidade="cm")
+    v = pr.vista("CORTE A-A", (XD + 44, YS), 10, titulo="CORTE A-A", subtitulo="corrente (fôrma)", unidade="cm")
     pts = [(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2), (-B / 2, H / 2)]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
     v.cota_h([-B / 2, B / 2], -H / 2, -12); v.cota_v([-H / 2, H / 2], B / 2, 14)
     v.texto((0, H / 2 + 30), "FACE A", "min", "BOTTOM_CENTER"); v.texto((0, -H / 2 - 130), "FACE C", "min", "TOP_CENTER")
-    v.texto((B / 2 + 110, 0), "FACE B", "min", "MIDDLE_LEFT", rot=90); v.texto((-B / 2 - 30, 0), "FACE D", "min", "MIDDLE_RIGHT", rot=90)
+    v.texto((B / 2 + 170, 0), "FACE B", "min", "MIDDLE_LEFT", rot=90); v.texto((-B / 2 - 30, 0), "FACE D", "min", "MIDDLE_RIGHT", rot=90)
 
     if REC:
-        vc = pr.vista("CORTE C-C", (XD + 32 + max(B / 10 + 52, 92), YS), 10, titulo="CORTE C-C", subtitulo="cabeça recuada (fôrma)", unidade="cm")
+        vc = pr.vista("CORTE C-C", (XD + 44 + max(B / 10 + 52, 92), YS), 10, titulo="CORTE C-C", subtitulo="cabeça (fôrma)", unidade="cm")
         u0, u1 = -B / 2 + rd("D"), B / 2 - rd("B")
         w0, w1 = -H / 2 + rd("C"), H / 2 - rd("A")
         vc.poli([(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2), (-B / 2, H / 2)], "OCULTA", fechada=True)
@@ -526,7 +526,7 @@ def prancha_pilar(P):
     if cons:
         c0 = max(cons, key=lambda c: c["h"])
         d1 = pr.vista("DETALHE 1", (XD + 92, YM - 150), 10, titulo=f"DETALHE 1 — CONSOLO {c0['tipo']}",
-                      subtitulo="fôrma, pino e neoprene" + (f"; topo com caimento {c0.get('incl', 0.03) * 100:g} %" if c0.get("incl", 0.03) else "") + " (armação: DET. C1)", unidade="cm")
+                      subtitulo="fôrma, pino, neoprene" + (f"; caimento {c0.get('incl', 0.03) * 100:g} %" if c0.get("incl", 0.03) else ""), unidade="cm")
         PW = largura(OPOSTA[c0["face"]]) if c0["face"] in "BD" else H
         PW = H if c0["face"] in "AC" else B
         zc0, Z1, Z2 = 1000, 400, 1450
@@ -537,7 +537,7 @@ def prancha_pilar(P):
         d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
         d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
         d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0])), proj, 10, total=False)          # rev08: caimento no subtítulo (cota de 1,2 cruzava as linhas)
-        d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -8, total=False); d1.cota_h([-PW, 0], Z1, -15)
+        d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -12, total=False); d1.cota_h([-PW, 0], Z1, -15)
         d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L={c0['pino_L']/10:g}")
         d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
 

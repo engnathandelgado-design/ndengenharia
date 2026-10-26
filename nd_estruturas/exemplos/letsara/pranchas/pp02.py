@@ -202,5 +202,6 @@ pr.notas(XC - 60, y - 4, [
     "Na fôrma da placa: boca rente à face interna (lado da fôrma) e ponta rente à cabeceira, preso no gabarito (posição ±5); vedar a cavidade com isopor antes de concretar. NC-1 na ponta inicial e NC-1' (espelhado) na final; pontas do lado da porta (vista I) sem nicho.",
     "Grampos dentro dos estribos N5 (teto) e N6 (base) da armação da ponta (ND-LET-PP01, det. 1 e 2).",
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
+FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP02")
 print("PP02", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

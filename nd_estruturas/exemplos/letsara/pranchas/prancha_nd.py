@@ -615,6 +615,182 @@ class Prancha:
             avisos.append(("AVISO", f"posições na tabela sem chamada no desenho: {sorted(sob)}"))
         return avisos
 
+    def _desembaracar(self, tol=0.25, passo=1.0, dmax=9.0):
+        """rev11 (26/10/2026): com o texto maior (DEC-066), rótulos soltos e textos de chamada que cruzam linhas ou outros textos
+        são deslocados para o lugar livre mais próximo (até dmax mm); a chamada acompanha (a ponta da seta fica no ponto).
+        Não mexe em cotas, tabelas, notas nem no carimbo. Retorna o número de textos movidos."""
+        LIN = {"CORTADO", "VISTA", "ARMADURA", "ARM_SECAO", "METALICA", "TERRENO", "COTA", "CHAMADA", "INDICACAO",
+               "EIXO", "CARIMBO", "CARIMBO_FINO", "TABELA", "TABELA_FINA", "TITULO", "MOLDURA", "0"}
+        G = 10.0
+        segs, grid_s = [], {}
+        textos, grid_t = [], {}
+
+        def cel(r):
+            for i in range(int(r[0] // G), int(r[2] // G) + 1):
+                for j in range(int(r[1] // G), int(r[3] // G) + 1):
+                    yield (i, j)
+
+        def add_seg(a, b, dono):
+            k = len(segs)
+            segs.append([a, b, dono, True])
+            for c in cel((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))):
+                grid_s.setdefault(c, []).append(k)
+            return k
+
+        def add_txt(r, ent, movel):
+            k = len(textos)
+            textos.append([r, ent, movel, True])
+            for c in cel(r):
+                grid_t.setdefault(c, []).append(k)
+            return k
+        polis, dims = {}, {}
+        for n_, e in enumerate(self.msp):
+            t = e.dxftype()
+            if t == "DIMENSION":
+                for v in e.virtual_entities():
+                    tv = v.dxftype()
+                    if tv in ("TEXT", "MTEXT"):
+                        ext = bbox.extents([v], fast=False)
+                        if ext.has_data:
+                            k_ = add_txt((ext.extmin.x + tol, ext.extmin.y + tol, ext.extmax.x - tol, ext.extmax.y - tol), None, False)
+                            dims[k_] = (n_, e)
+                    elif tv == "LINE":
+                        add_seg((v.dxf.start.x, v.dxf.start.y), (v.dxf.end.x, v.dxf.end.y), ("dim", n_))
+            elif t in ("TEXT", "MTEXT"):
+                ext = bbox.extents([e], fast=False)
+                if ext.has_data:
+                    r = (ext.extmin.x + tol, ext.extmin.y + tol, ext.extmax.x - tol, ext.extmax.y - tol)
+                    movel = t == "TEXT" and e.dxf.layer in ("TEXTO", "COTA") and str(e.dxf.text).strip() != ""
+                    add_txt(r, e, movel)
+            elif e.dxf.layer in LIN:
+                if t == "LINE":
+                    add_seg((e.dxf.start.x, e.dxf.start.y), (e.dxf.end.x, e.dxf.end.y), ("e", n_))
+                elif t == "LWPOLYLINE":
+                    pts = [(p[0], p[1]) for p in e.get_points("xy")]
+                    if e.closed:
+                        pts.append(pts[0])
+                    ks = [add_seg(a, b, ("e", n_)) for a, b in zip(pts[:-1], pts[1:])]
+                    if e.dxf.layer == "CHAMADA" and len(pts) == 3 and abs(pts[1][1] - pts[2][1]) < 1e-6:
+                        polis[n_] = (e, ks)
+        cb = self.carimbo_bbox
+        livres = [b_[:4] for b_ in self.blocos_livres]
+        qx0, qy0, qx1, qy1 = self.quadro
+        # texto de chamada: o que começa no fim do rabicho horizontal
+        lider = {}
+        for n_, (e, ks) in polis.items():
+            pts = [(p[0], p[1]) for p in e.get_points("xy")]
+            x1, y1 = pts[1]; x2 = pts[2][0]
+            lado = 1 if x2 >= x1 else -1
+            for c in cel((x1 - 3, y1 - 1, x1 + 3, y1 + 4)):
+                for k in grid_t.get(c, []):
+                    r, ent, movel, _ = textos[k]
+                    if ent is None or not movel:
+                        continue
+                    ix = r[0] if lado > 0 else r[2]
+                    if abs(ix - (x1 + lado * (1 + tol))) < 1.2 and abs(r[1] - (y1 + 0.8)) < 1.6:
+                        lider[k] = (n_, e, ks)
+        def segs_perto(r):
+            vis = set()
+            for c in cel(r):
+                for k in grid_s.get(c, []):
+                    if k not in vis:
+                        vis.add(k)
+                        yield k
+
+        def conflito(k, r, extra_segs=(), donos=()):
+            for ks in segs_perto(r):
+                a, b, dono, ativo = segs[ks]
+                if ativo and dono not in donos and _seg_rect(a, b, r):
+                    return True
+            vis = set()
+            for c in cel(r):
+                for j in grid_t.get(c, []):
+                    if j == k or j in vis:
+                        continue
+                    vis.add(j)
+                    rj, _, _, ativo = textos[j]
+                    if ativo and min(r[2], rj[2]) > max(r[0], rj[0]) and min(r[3], rj[3]) > max(r[1], rj[1]):
+                        return True
+            for (a, b) in extra_segs:                                # a nova perna da chamada não pode cruzar textos
+                bx = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
+                for c in cel(bx):
+                    for j in grid_t.get(c, []):
+                        if j != k and textos[j][3] and _seg_rect(a, b, textos[j][0]):
+                            return True
+            return False
+        cand = sorted({(dx * passo, dy * passo) for dx in range(-int(dmax), int(dmax) + 1) for dy in range(-int(dmax), int(dmax) + 1)
+                       if 0 < math.hypot(dx, dy) * passo <= dmax}, key=lambda d: (math.hypot(d[0] * 0.7, d[1]), d))
+        movidos = 0
+        # cotas: o texto anda ao longo da linha de cota (e um pouco para fora), com a posição do usuário (sem chamada)
+        for k, (n_, e) in dims.items():
+            r = textos[k][0]
+            donos = {("dim", n_)}
+            if not conflito(k, r, (), donos):
+                continue
+            ang = (e.dxf.get("angle", 0) or 0) % 180
+            hz = abs(ang) < 45 or abs(ang - 180) < 45
+            for d in [1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8]:
+                ok_ = False
+                for p_ in (0, 1.0, 2.0):
+                    dx, dy = ((d * 1.0, p_) if hz else (-p_, d * 1.0))
+                    r2 = (r[0] + dx, r[1] + dy, r[2] + dx, r[3] + dy)
+                    if _ovl(r2, cb, 0.5) or conflito(k, r2, (), donos):
+                        continue
+                    try:
+                        cx, cy = (r[0] + r[2]) / 2 + dx, (r[1] + r[3]) / 2 + dy
+                        o_ = e.override()
+                        o_.set_location((cx, cy), leader=False, relative=False)
+                        o_.render()
+                    except Exception:
+                        break
+                    textos[k][3] = False
+                    add_txt(r2, None, False)
+                    movidos += 1
+                    ok_ = True
+                    break
+                if ok_:
+                    break
+        for k in range(len(textos)):
+            r, ent, movel, _ = textos[k]
+            if not movel or _ovl(r, cb, 0.5) or any(_ovl(r, b_, -0.5) and r[0] >= b_[0] - 0.5 and r[2] <= b_[2] + 0.5 for b_ in livres):
+                continue
+            ld = lider.get(k)
+            donos = {("e", ld[0])} if ld else set()
+            if not conflito(k, r, (), donos):
+                continue
+            if ld:
+                pts = [(p[0], p[1]) for p in ld[1].get_points("xy")]
+            for dx, dy in cand:
+                r2 = (r[0] + dx, r[1] + dy, r[2] + dx, r[3] + dy)
+                if r2[0] < qx0 + 1 or r2[2] > qx1 - 1 or r2[1] < qy0 + 1 or r2[3] > qy1 - 1 or _ovl(r2, cb, 0.5):
+                    continue
+                novos = ()
+                if ld:
+                    p1 = (pts[1][0] + dx, pts[1][1] + dy); p2 = (pts[2][0] + dx, pts[2][1] + dy)
+                    novos = ((pts[0], p1), (p1, p2))
+                    for ks in ld[2]:
+                        segs[ks][3] = False
+                ok = not conflito(k, r2, novos, donos)
+                if ld:
+                    for ks in ld[2]:
+                        segs[ks][3] = True
+                if not ok:
+                    continue
+                ent.translate(dx, dy, 0)
+                textos[k][3] = False
+                k2 = add_txt(r2, ent, False)
+                if ld:
+                    e = ld[1]
+                    e.set_points([pts[0], (pts[1][0] + dx, pts[1][1] + dy), (pts[2][0] + dx, pts[2][1] + dy)], format="xy")
+                    for ks in ld[2]:
+                        segs[ks][3] = False
+                    for a_, b_ in novos:
+                        add_seg(a_, b_, ("e", ld[0]))
+                movidos += 1
+                break
+        self.textos_movidos = movidos
+        return movidos
+
     def _checar_textos(self, tol=0.25):
         LIN = {"CORTADO", "VISTA", "ARMADURA", "ARM_SECAO", "METALICA", "TERRENO", "COTA", "CHAMADA", "INDICACAO",
                "EIXO", "CARIMBO", "CARIMBO_FINO", "TABELA", "TABELA_FINA", "TITULO", "MOLDURA", "0"}
@@ -708,6 +884,8 @@ class Prancha:
         for v in self.vistas:
             v._finalizar()
         self._moldura_carimbo()
+        if DESEMBARACAR:
+            self._desembaracar()
         avisos = self.verificar()
         import os, json as _json
         with open(base + ".tabelas.json", "w", encoding="utf-8") as fh:
@@ -765,6 +943,7 @@ class Prancha:
         return avisos
 
 
+DESEMBARACAR = True                             # rev11: desloca rótulos e chamadas em conflito antes de verificar
 PPI_MIN = 400                                   # rev11: resolução mínima das imagens raster no tamanho impresso
 _CAP, _DESC = 0.729, 0.236                      # DejaVu Sans: altura de maiúscula e descendente (fração do corpo)
 

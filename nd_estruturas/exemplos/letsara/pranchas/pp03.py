@@ -203,5 +203,6 @@ pr.notas(XC, y - 4, [
     f"Folgas verificadas no pior caso das tolerâncias (afastamento {T['a']:g} ± {T['a_tol']:g}, G {G0:g} ± {T['G_tol']:g}, posição ± {T['x_tol']:g}): engate aba × dente ≥ {MO['folgas_mm']['engate aba–dente com G máximo (z)']:g}, rosca do nível ≥ 16 fios-mm, janela de montagem ≥ 15 (memória ND-LET-MC07).",
     f"DEC-044: nos pilares cuja face fica atrás do plano dos consoles (cantos das vistas A e I, PL-02/PL-06 da vista G, P10 da vista C) o CS-1 vai com caixa de calço 120 × 330 × 100 (CS-1C, {PP01['n']['CS1C']} pç) ou × 75 (CS-1D, {PP01['n']['CS1D']} pç) soldada nas costas na fábrica — ND-LET-PP06. Nas placas recortadas das paredes G e C o console fica a 330 da ponta, numa CE-1L (PP06).",
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 250)
+FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP03")
 print("PP03", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos", [a for a in av if a[0] == "ERRO" or "sobrep" in a[1]][:14])

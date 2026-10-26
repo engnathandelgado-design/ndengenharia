@@ -352,13 +352,21 @@ def planta_chave(pr, Vs, origem, esc=1000, subtitulo="parede da(s) vista(s) em d
         hachura_cor(k, [(min(a[0], b[0]) - (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)), (max(a[0], b[0]) + (0 if horiz else 600), min(a[1], b[1]) - (600 if horiz else 0)),
                         (max(a[0], b[0]) + (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0)), (min(a[0], b[0]) - (0 if horiz else 600), max(a[1], b[1]) + (600 if horiz else 0))], V, 0.0)
         cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
-        off = (0, 5600) if horiz and a[1] > 40000 else (0, -3500) if horiz and a[1] < 1000 else (M(4.94), 3000) if horiz else (-5600, 0) if a[0] < 0 else (3500, 0)
+        off = (M(4.94), 3000) if horiz and a[1] > 40000 else (0, -3500) if horiz and a[1] < 1000 else (M(4.94), 3000) if horiz else (-5600, 4000) if a[0] < 0 else (3500, 4000)
         k.circulo((cx + off[0], cy + off[1]), 1800, "INDICACAO")
         k.texto((cx + off[0], cy + off[1]), V, "nota", "MIDDLE_CENTER")
     return k
 
 
-def chave_todas(pr, esc=1000):
+def chave_todas(pr, escalas=(600, 750, 1000)):
+    for e_ in escalas:
+        k_ = _chave_todas(pr, e_, ultimo=(e_ == escalas[-1]))
+        if k_:
+            return k_
+    return None
+
+
+def _chave_todas(pr, esc=1000, ultimo=True):
     """rev11 (checklist 6): folhas de detalhe comuns a todas as fachadas (PP00–PP06) levam a planta-chave com todas as paredes
     nas cores da paleta A–J, posta num espaço livre da folha (procura automática fora das vistas, tabelas e carimbo)."""
     from prancha_nd import Prancha as _P
@@ -368,7 +376,7 @@ def chave_todas(pr, esc=1000):
     b = kk.bbox_papel()
     bx0, by0, bx1, by1 = b[0], b[1] - 14, b[2], b[3]
     w_ = max(bx1 - bx0, 150)
-    caixas = [v.bbox_papel() for v in pr.vistas] + [tuple(t_[:4]) for t_ in pr.blocos_livres] + [pr.carimbo_bbox]
+    caixas = [v.bbox_papel() for v in pr.vistas] + [tuple(t_[:4]) for t_ in pr.blocos_livres] + [(pr.carimbo_bbox[0], pr.carimbo_bbox[1], pr.carimbo_bbox[2], pr.carimbo_bbox[3] + 8 + 4.5 * len(pr.revisoes))]
     caixas = [c for c in caixas if c]
     qx0, qy0, qx1, qy1 = pr.quadro
     livre = lambda x0, y0: all(x0 + w_ / 2 + (bx1 - bx0) / 2 + 3 < c[0] or x0 - (w_ - (bx1 - bx0)) / 2 - 3 > c[2] or y0 + (by1 - by0) + 3 < c[1] or y0 - 3 > c[3]
@@ -377,7 +385,8 @@ def chave_todas(pr, esc=1000):
         for xx in [qx0 + 4 + (w_ - (bx1 - bx0)) / 2 + 5 * j for j in range(int((qx1 - qx0 - w_ - 8) / 5))]:
             if livre(xx, yy):
                 return planta_chave(pr, list("ABCDEFGHIJ"), (xx - bx0, yy - by0), esc, sub)
-    pr.avisos_extra.append(("ERRO", "sem espaço livre para a planta-chave das fachadas (dividir a folha)"))
+    if ultimo:
+        pr.avisos_extra.append(("ERRO", "sem espaço livre para a planta-chave das fachadas (dividir a folha)"))
     return None
 
 
@@ -773,6 +782,7 @@ def prancha_tipo():
         "Tipo = comprimento; nas pontas de canto a placa vai até a face externa do pilar de canto. Posição de cada peça: pranchas das vistas (ND-LET-PP-A … PP-I).",
         "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±5 mm (de projeto, para a junta de 20 mm), espessura −5/+10 mm, planicidade ±L/1000, insertos ±15 mm; montagem: prumo H/300 ≤ 25 mm, nível ±10 mm. Içamento na vertical pelas alças do topo: estabilidade lateral verificada (6.1).",
         "Cotas de concreto em cm, metálicas em mm. Não medir no desenho."], 190)
+    chave_todas(pr)                                                   # rev11 (checklist 6)
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP00")
     print("PP00", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1]][:8])
 

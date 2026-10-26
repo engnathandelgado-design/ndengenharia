@@ -36,5 +36,5 @@ for k in range(2):
 p.add_mesh(box(x0, xa + LV, ye, ye + b2, zb + H, zb + H + 0.26), color="#7fb3d5", opacity=0.25)    # 2º estágio (até o topo da capa)
 p.add_mesh(box(xa - FOL, xa, ye, yi, zb + REC, zb + H), color="#5b8fc7", opacity=0.6)        # junta da ponta concretada antes das lajes (DEC-039)
 p.camera_position = [(2.3, -2.6, 0.05), (0.55, 0.1, 0.40), (0, 0, 1)]
-p.screenshot("/home/claude/letsara/pranchas/ISO-VM-ponta.png")
+p.screenshot("/home/claude/letsara/pranchas/ISO-VM-ponta.png", scale=3)          # rev11: ≥ 400 ppi
 print("ok")
