@@ -174,9 +174,9 @@ pl([(COB, REC + COB + 20), (LD, REC + COB + 20)], "ARMADURA")
 pl([(LN + COB, COB + 200), (LN + COB, COB + 10), (LD, COB + 10)], "ARMADURA")
 pl([(COB, H - COB - 200), (COB, H - COB - 10), (LD, H - COB - 10)], "ARMADURA")
 d1.cota_h([FP, 0, XP, LN, LD], ZT(LD) + 150, 12, total=False)
-d1.cota_v([CT - 290, CT, ZNL], FP + 270, -14, total=False)
+d1.cota_v([CT - 290, CT, ZNL], FP, -10, total=False)
 d1.cota_h([FP, FP + 270], CT - 290, -12, total=False)
-d1.chamada((XP, ZT(XP) - 30), (40, 48), "PN-6 Ø20 roscado A36 L=700 (300 no consolo) + porca, contraporca e arruela 60×60×6; nicho grauteado")
+d1.chamada((XP, ZT(XP) - 30), (16, 48), "PN-6 Ø20 L=700 + porca e contraporca")
 d1.chamada((XP, CT + 5), (-62, 30), "NEO-6 100×100×10 (furo Ø30) horizontal")
 d1.chamada((FP + 200, CT - 170), (60, -30), "CP-VB 15 × 27 × 29, topo HORIZONTAL (ver prancha do pilar)")
 d1.chamada(Rp(LN, REC + COB + 20), (14, 10), "N5 alça Ø10 (tirante)")
@@ -184,9 +184,9 @@ d1.chamada(Rp(XS[0], 150), (70, -16), "N6 suspensão 2 Ø10")
 d1.chamada(Rp(LN + COB, COB + 100), (12, 14), "N1 com gancho de 20 cm no recorte")
 
 # isométricos (iso3d_vigas.py) — rev08
-pr.imagem(540, 172, 985, 240, "/home/claude/letsara/pranchas/ISO-VB-geral.png", titulo="ISOMÉTRICO — VB-02",
+pr.imagem(586, 160, 985, 226, "/home/claude/letsara/pranchas/ISO-VB-geral.png", titulo="ISOMÉTRICO — VB-02",
           subtitulo="dentes, esperas ES-1V das terças, alças AL-1, TB-1 + nicho")
-pr.imagem(560, 88, 760, 150, "/home/claude/letsara/pranchas/ISO-VB-ponta.png", titulo="ISOMÉTRICO — PONTA NO CP-VB",
+pr.imagem(600, 76, 800, 138, "/home/claude/letsara/pranchas/ISO-VB-ponta.png", titulo="ISOMÉTRICO — PONTA NO CP-VB",
           subtitulo="consolo escondido no recorte, NEO-6, PN-6 com porca")
 
 # tabelas

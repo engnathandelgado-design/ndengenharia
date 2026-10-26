@@ -86,8 +86,8 @@ ve.chamada((LN, REC / 2), (10, -14), f"recorte {REC/10:g} × {LN/10:g}")
 ve.chamada((X_TB, REC + HD / 2), (10, -(REC + HD / 2) / ESC - 22), "TB-1 (2x)")
 ve.chamada((L - 1100, H + 120), (10, 10), "AL-1 laço Ø12,7 (2x)")
 ve.chamada((L / 2 + 75, H + 200), (8, 12), "N9 alças Ø10 c/15 (20 cm acima da peça)")
-ve.marcador_corte((L / 2 - 600, -18 * ESC), (L / 2 - 600, H + 22 * ESC), "A", lado=1)
-ve.marcador_corte((300, -18 * ESC), (200, H + 22 * ESC), "B", lado=1)
+ve.marcador_corte((L / 2 - 600, -18 * ESC), (L / 2 - 600, H + 30 * ESC), "A", lado=1)
+ve.marcador_corte((300, -18 * ESC), (200, H + 30 * ESC), "B", lado=1)
 ve.marcador_detalhe((LN / 2, H / 2), 650, 1, ang=-150, dist=8)
 
 # ------------------------------------------------------------------ CORTE A-A — seção corrente + 2º estágio + laje + capa
@@ -144,7 +144,7 @@ cb.chamada((B / 2, REC + HD / 2), (40, 12), "TB-1 Ø50 (pino PN-1)")
 
 # ------------------------------------------------------------------ DETALHE 1 — apoio no CP-MEZ
 YD = YR - 10
-d1 = pr.vista("DETALHE 1", (Q[0] + 580, YD), 6, titulo="DETALHE 1 — DENTE GERBER NO CONSOLO CP-MEZ (VISTA LATERAL)",
+d1 = pr.vista("DETALHE 1", (Q[0] + 625, YD), 6, titulo="DETALHE 1 — DENTE GERBER NO CONSOLO CP-MEZ (VISTA LATERAL)",
               subtitulo="fundo do consolo alinhado ao fundo da viga; continuidade N11 pelas bainhas do pilar", unidade="cm")
 LD = 1500
 d1.ret(-FOLGA - 400, -250, 400, H + NEOF + H2 + HCAPA + 350, "OCULTA")
@@ -199,9 +199,9 @@ d2.chamada((-200, 0), (-10, 16), "pilar")
 import subprocess
 subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_vm.py"], check=True, capture_output=True)
 subprocess.run([sys.executable, "/home/claude/letsara/pranchas/iso3d_vigas.py", "vm"], check=True, capture_output=True)
-pr.imagem(Q[0] + 365, Q[1] + 150, Q[0] + 640, Q[1] + 262, "/home/claude/letsara/pranchas/ISO-VM-geral.png",
+pr.imagem(Q[0] + 418, Q[1] + 150, Q[0] + 664, Q[1] + 262, "/home/claude/letsara/pranchas/ISO-VM-geral.png",
           titulo="ISOMÉTRICO — VM-02", subtitulo=f"peça inteira: retangular {B/10:g} × {H/10:g}, dentes, alças N9 e AL-1")
-pr.imagem(Q[0] + 650, Q[1] + 40, Q[0] + 860, Q[1] + 265, "/home/claude/letsara/pranchas/ISO-VM-ponta.png",
+pr.imagem(Q[0] + 676, Q[1] + 40, Q[0] + 886, Q[1] + 265, "/home/claude/letsara/pranchas/ISO-VM-ponta.png",
           titulo="ISOMÉTRICO — PONTA DA VM NO PILAR", subtitulo="dente no CP-MEZ (fundos alinhados), junta concretada, PN-1, alças N9, 2º estágio (azul) e laje no topo")
 
 # ------------------------------------------------------------------ tabelas

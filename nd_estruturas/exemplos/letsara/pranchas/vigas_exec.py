@@ -317,8 +317,8 @@ def compor(desenho, conteudo, folha, runner, S, extras_col=(), notas_extra=(), p
     pr.revisao(*REV7)
     # coluna da armação: x = 989 (sob a coluna da fôrma), do ponto livre mais alto até o carimbo
     xcol = 1179 - 180
-    ocup = [e for e in FF.ents() if _ext(e) and _ext(e)[2] > xcol - 2]
-    ycol = min([_ext(e)[1] for e in ocup] + [Ht - 10]) - 6
+    ocup = [e for e in FF.ents() if _ext(e) and _ext(e)[2] > xcol - 25]
+    ycol = min([_ext(e)[1] for e in ocup] + [Ht - 10]) - 9
     y_fim = coluna_direita(pr, S, xcol, ycol, extras_col, notas_extra)
     falta = pr.carimbo_bbox[3] + 4 - y_fim
     if falta > 0:
@@ -403,8 +403,7 @@ def vm():
     _f = lambda v, n=1: f"{v:.{n}f}".replace(".", ",")
     notas = [("DEC-052 — +7,30 DA LINHA 2: montante W 150 × 13,0 da cobertura metálica no MEIO do vão das VM-01 (A–B), VM-02 (B–C e C–D) e VM-03 (D–P6) "
               f"(P característico G/Q {_f(_p['VM-01']['Pg'])}/{_f(_p['VM-01']['Pq'])}, {_f(_p['VM-02']['Pg'])}/{_f(_p['VM-02']['Pq'])} e {_f(_p['VM-03']['Pg'])}/{_f(_p['VM-03']['Pq'])} kN; "
-              f"sucção de cálculo até {_f(_p['VM-01']['Pup_d'], 0)} kN). A PEÇA NÃO MUDA (mesmas marcas, cordoalhas e dente; uso ELU no +7,30 da linha 2: "
-              f"{_f(_u['VM-01'], 2)} / {_f(_u['VM-02'], 2)} / {_f(_u['VM-03'], 2)}; protensão completa mantida). A espera EM-L2 (4 barras roscadas M16 com gancho laçado nas alças N9) "
+              f"sucção de cálculo até {_f(_p['VM-01']['Pup_d'], 0)} kN). A PEÇA NÃO MUDA (mesmas marcas, cordoalhas e dente; protensão completa mantida). A espera EM-L2 (4 barras roscadas M16 com gancho laçado nas alças N9) "
               "vai na faixa de 2º estágio, posta por quem faz a capa, com gabarito — ND-LET-COB05. Não cortar nem dobrar as N9 nesses trechos.")]
     return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
                   run_script("viga_vm.py"), S, notas_extra=notas)

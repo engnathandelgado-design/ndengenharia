@@ -354,7 +354,7 @@ def spec_vm():
         det += [([(LN + 30 + k * 50, COB), (LN + 30 + k * 50, 250)], "ARM_TRANSV", False) for k in range(10)]
     D1 = dict(nome="DETALHE D1 — DENTE GERBER", sub=f"dente {HD/10:g} × {LN/10:g}, recorte {REC/10:g}; as duas pontas iguais", esc=10, contorno=[], ents=det, discos=[], prot=[],
               cotas=[((0, REC), (LN, 0), 0, -100, f"{fd(LN/10)}"), ((0, REC), (0, H), 90, -120, f"{fd((H-REC)/10)}"), ((LN, 0), (LN, REC), 90, -60, f"{fd(REC/10)} (recorte)"), ((1600, 0), (1600, H), 90, 120, f"{fd(H/10)}")],
-              bolhas=[("N6", (LN + 300, REC + 55), (4, -8)), ("N7", (LN + 40, H / 2), (10, -10)), ("N8", (LN + 300, REC + 120), (8, 8)), ("N10", (60, H - 80), (-14, 10))]
+              bolhas=[("N6", (LN + 300, REC + 55), (4, -8)), ("N7", (LN + 40, H / 2), (10, -10)), ("N8", (LN + 300, REC + 120), (8, 8)), ("N10", (60, H - 80), (-16, 20))]
               + ([("N13", (1300, P["extra_inf"][0]["y"]), (6, -8)), ("N14", (LN + 280, 200), (8, -14))] if P.get("extra_inf") else []),
               formas=["N6", "N7", "N8"] + (["N14"] if P.get("extra_inf") else []), corte_x=1600)
     return dict(fam="VM", titulo=f"VIGAS DO MEZANINO VM-01 A VM-04 (RETANGULAR {B/10:g} × {H/10:g} PROTENDIDA, DENTE GERBER)", forma="ND-LET-VM01", fck=40, L=L, H=H, esc=25, rep="VM-02",
