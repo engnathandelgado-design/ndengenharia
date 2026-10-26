@@ -281,9 +281,22 @@ def main():
     a_, b_ = res[("ELU1 gravidade (1,4 G + 1,5 Q)", False)], res[("ELU1 gravidade (1,4 G + 1,5 Q)", True)]
     xs = a_["xs"]; Mg = a_["M"]
     zeros = [float(xs[i]) for i in range(len(xs) - 1) if Mg[i] * Mg[i + 1] < 0]
+    # rev11: a emenda não pode ficar sob uma terça (tala de mesa 9,5 × 300 + ST-W 220 → folga ≥ 0,32 m do eixo da terça);
+    # se o momento nulo cai sob uma terça, a emenda anda até o primeiro ponto livre mais próximo (M continua ≈ 0)
+    XT = sorted([x - 0.027 for x in LG["x_tercas_esq"]] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] - 0.027 for x in LG["x_tercas_esq"]])
+    FT = 0.32
+
+    def _livre(z):
+        if all(abs(z - t) >= FT for t in XT):
+            return z
+        perto = [t for t in XT if abs(z - t) < FT]
+        op = [t + s * (FT + 0.005) for t in perto for s in (-1, 1)]
+        op = [o for o in op if all(abs(o - t) >= FT for t in XT)]
+        return min(op, key=lambda o: abs(o - z))
     em, x0 = [], XA
     while XB - x0 > 11.9:
-        cand = [z for z in zeros if x0 + 3.0 < z <= x0 + 11.9]
+        cand = [_livre(z) for z in zeros if x0 + 3.0 < z <= x0 + 11.9]
+        cand = [c for c in cand if x0 + 3.0 < c <= x0 + 11.9]
         em.append(round(max(cand), 2)); x0 = em[-1]
     mods = [round(b - a, 2) for a, b in zip([XA] + em, em + [XB])]
     emendas = []

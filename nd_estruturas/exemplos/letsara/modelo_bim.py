@@ -572,7 +572,7 @@ def montar() -> ModeloBIM:
 
     def _lig(partes, ox, oy, oz, grupo):
         for p_ in partes:
-            if p_["ctx"] or p_["marca"] == "T":
+            if p_["ctx"] or p_["marca"] in ("T", "W-L2"):          # terças e W já modeladas (contínuas e inclinadas)
                 continue
             nm_ = f"{p_['marca']} {p_['desc']}".strip() or p_["marca"]
             if p_["g"] == "caixa":
