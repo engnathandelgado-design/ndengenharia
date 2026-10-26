@@ -38,7 +38,7 @@ for xa in (800, L - 800):                                       # alças AL-1 no
     v.circulo((round(0.2 * L) if xa < L / 2 else L - round(0.2 * L), H), 25, "VISTA")
 v.cota_h([0, 75, round(0.2 * L), L - round(0.2 * L), L - 75, L], H, 10)
 v.cota_v([0, H], L, 8)
-v.chamada((round(0.2 * L), H), (-6, 14), "AL-1 alça de cordoalha Ø12,7 (1 laço) a 0,2 L")
+v.chamada((round(0.2 * L), H), (-6, 22), "AL-1 alça de cordoalha Ø12,7 (1 laço) a 0,2 L")
 v.chamada((75, -50), (-8, -10), "CL-V (apoio, ver det. 1)")
 v.chamada((L * 0.62, H * 0.4), (4, -14), "face lisa de fôrma para o pavilhão; chanfro 1 × 1 cm nas arestas")
 c = pr.vista("CORTE A-A", (x0 + L / E + 70, Q[3] - 125), 5, titulo="CORTE A-A", subtitulo="seção 10 × " + f(H / 10) + " (cm)", unidade="cm")

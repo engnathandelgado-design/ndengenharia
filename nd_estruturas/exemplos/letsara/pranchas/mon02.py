@@ -93,7 +93,7 @@ def planta(nome, origem, iz):
     return v
 
 v1 = planta("PLANTA +3,90", (Q[0] + 40, Q[3] - 160), 0)
-v1.marcador_corte((M(12.0), -3000), (M(12.0), M(Y2) + 3000), "M", lado=1)
+v1.marcador_corte((M(12.6), -4400), (M(12.6), M(Y2) + 3000), "M", lado=1)
 v2 = planta("PLANTA +7,30", (Q[0] + 40, Q[3] - 342), 1)
 
 # ------------------------------------------------------------------ CORTE M-M (1:50) — plano entre B e C, olhando para C

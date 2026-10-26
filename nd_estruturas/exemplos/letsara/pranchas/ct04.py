@@ -52,7 +52,7 @@ def pino(v, x, z0, z1, d):
 CELL = [(Q[0] + 5, Q[3] - 10), (Q[0] + 325, Q[3] - 10), (Q[0] + 645, Q[3] - 10),
         (Q[0] + 5, Q[3] - 330), (Q[0] + 325, Q[3] - 330), (Q[0] + 645, Q[3] - 330)]
 IMG = ["a1", "a2", "a3", "a4", "a5", "a6"]
-LEG = ["TS-01 no recuo do pilar lateral", "duas TS-01 no topo da I130", "I130 no consolo CP-I130", "VM no consolo CP-MEZ", "VB no consolo CP-VB", "laje alveolar na VM de borda"]
+LEG = ["TS-01 no recuo", "2 TS-01 na I130", "I130 no CP-I130", "VM no CP-MEZ", "VB no CP-VB", "laje na VM de borda"]
 
 
 def org(i, xr, zr, esc=20, dx=75, dz=210):
@@ -67,7 +67,7 @@ def foto(i):
     bb = ImageOps.invert(im).getbbox()
     im.crop(bb).save(src.replace(".png", "_c.png"))
     cx, cy = CELL[i]
-    pr.imagem(cx + 210, cy - 215, cx + 315, cy - 25, src.replace(".png", "_c.png"), titulo=f"3D — {LEG[i]}", subtitulo="recorte do modelo da obra")
+    pr.imagem(cx + 225, cy - 215, cx + 314, cy - 25, src.replace(".png", "_c.png"), titulo=f"3D — {LEG[i]}", subtitulo="modelo da obra")
 
 
 # ------------------------------------------------------------------ 1. TS-01 no recuo do pilar lateral (eixo A)
@@ -104,7 +104,7 @@ d.chamada((-375, zb + 300), (8, -14), "placa 10 (folga 2,5)")
 
 # ------------------------------------------------------------------ 2. TS-01 no topo da I130 (eixo C)
 ZT = LG["Z_TOPO_I130"] * 1000
-d = pr.vista("DET2", org(1, 0, ZT, esc=10, dx=105, dz=110), 10, titulo="2 — DUAS TS-01 NO TOPO DA I130 / PILAR CENTRAL (EIXO C)",
+d = pr.vista("DET2", org(1, 0, ZT, esc=10, dx=115, dz=110), 10, titulo="2 — DUAS TS-01 NO TOPO DA I130 / PILAR CENTRAL (EIXO C)",
              subtitulo="topo em 2 níveis (lado E 12 mm mais alto); NEO-3 + 2 PN-5 por TS-01", unidade="cm")
 sec = [(-200, 0), (200, 0), (200, 250), (75, 330), (75, 1000), (200, 1080), (200, 1300), (-200, 1300), (-200, 1080), (-75, 1000), (-75, 330), (-200, 250)]
 zbI = ZT - 1300
@@ -180,7 +180,7 @@ d.cota_h([0, u0, xpd, u0 + LNV, pcm], zbv, -8, total=False)
 d.cota_v([zbv, ZAV, ZTV, ZTV + 210, ZN], u0 + 1250, 8, total=False)
 nivel(d, 0, ZAV, f"assento {f(ZAV / 1000)}", -1)
 nivel(d, u0 + 1200, ZN, f"piso {f(ZN / 1000)}", 1)
-d.chamada((xpd, ZAV + 200), (14, 8), "NEO-5F 200×200×21 fretado + PN-1 Ø20 L=630 (230 no consolo)")
+d.chamada((xpd, ZAV + 200), (14, 22), "NEO-5F 200×200×21 fretado + PN-1 Ø20 L=630 (230 no consolo)")
 d.chamada((u0 / 2, ZTV - 200), (-14, 12), "junta 3 concretada")
 d.chamada((u0 + 900, ZTV + 235), (6, 10), "laje h20 + capa 5")
 

@@ -258,13 +258,13 @@ for y in YL:
 CORTES = [("1", YL[2] - 1200, "y", "ND-LET-MON01", "pórtico de montagem, linha 3"), ("2", YL[1], "y", "ND-LET-CT01", "transversal, eixo 2"),
           ("3", YL[2], "y", "ND-LET-CT01", "transversal, eixo 3"), ("4", 4825, "y", "ND-LET-CT02", "mezanino, meio do vão das lajes"),
           ("5", 14810, "x", "ND-LET-CT02", "mezanino, entre os eixos B e C"), ("6", XC, "x", "ND-LET-CT03", "longitudinal, eixo C"),
-          ("M", 12000, "x", "ND-LET-MON02", "montagem do mezanino")]
+          ("M", 12600, "x", "ND-LET-MON02", "montagem do mezanino")]
 for nm, pos, dirc, fl, ds in CORTES:
     if dirc == "y":
         k_.marcador_corte((pos, -1100) if nm != "4" else (pos, -1100), (pos, XA["E"] + 1100), nm, lado=1)
     else:
         L1 = YL[1] + 1600 if nm in ("5", "M") else COMP + 1100
-        k_.marcador_corte((-1100, pos), (L1, pos), nm, lado=-1)
+        k_.marcador_corte((-2600, pos), (L1, pos), nm, lado=-1)
 
 pr.refs[:] = [r_ for r_ in pr.refs if r_[1] == "6-6"]                  # os outros cortes estão nas folhas indicadas (tabela)
 

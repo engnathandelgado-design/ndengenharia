@@ -177,7 +177,7 @@ def balancim(v, xs, z0, z1, z2, z3):
 
 X2 = Q[0] + 250
 # (a) desforma — placa deitada na fôrma, face interna para cima (elevação ao longo da placa)
-qa = pr.vista("DET2A", (X2, 250), E4, titulo="DETALHE 2a — DESFORMA (DEITADA)", subtitulo="4 IZ-1 na face interna (para cima); balancim duplo; cabos a prumo", unidade="cm")
+qa = pr.vista("DET2A", (X2 + 106, 152), E4, titulo="DETALHE 2a — DESFORMA (DEITADA)", subtitulo="4 IZ-1 na face interna (para cima); balancim duplo; cabos a prumo", unidade="cm")
 qa.poli([(0, 0), (Lp, 0), (Lp, E_PL), (0, E_PL)], "CORTADO", True); qa.hachura([(0, 0), (Lp, 0), (Lp, E_PL), (0, E_PL)], "AR-CONC", 0.03)
 for x in xs4:
     qa.circulo((x, E_PL + 40), 40, "METALICA")
@@ -185,7 +185,7 @@ balancim(qa, xs4, E_PL + 80, 1500, 2700, 4000)
 qa.cota_h([0] + xs4 + [Lp], 0, -10, total=False)
 qa.chamada((xs4[0], E_PL + 40), (-10, 16), f"IZ-1 (4x): {fk(IC4['Pk_kN'])} kN por ponto; βa 1,3 → {fk(IC4['Pd_kN'])} kN")
 # (b) giro / verticalização — vista de topo da placa (seção 125 × 10): deitada → 45° → de pé, girando sobre a borda inferior
-qb = pr.vista("DET2B", (X2 + 205, 250), 50, titulo="DETALHE 2b — GIRO (VERTICALIZAÇÃO)", subtitulo="seção da placa; gira sobre a borda inferior apoiada em calço de borracha; os mesmos 4 IZ-1", unidade="cm")
+qb = pr.vista("DET2B", (X2 + 317, 152), 50, titulo="DETALHE 2b — GIRO (VERTICALIZAÇÃO)", subtitulo="seção da placa; gira sobre a borda inferior apoiada em calço de borracha; os mesmos 4 IZ-1", unidade="cm")
 import math as _m
 Hb = FCH.H_PL
 for k_, ang in enumerate((0, 45, 90)):
@@ -202,7 +202,7 @@ qb.ret(-150, -60, 300, 60, "METALICA")
 qb.chamada((-150, -30), (-8, -14), "calço de borracha na borda inferior")
 qb.chamada((2000 + 400, 1700), (10, 10), "cabo sempre a prumo; o guindaste sobe e a placa gira sobre o calço")
 # (c) montagem de pé (elevação, vista pela face interna)
-qc = pr.vista("DET2C", (X2 + 330, 250), E4, titulo="DETALHE 2c — MONTAGEM DE PÉ", subtitulo=f"4 IZ-1 na face interna (meia altura) e balancim duplo; maior placa {fd(Lp / 1000, 2)} m, {fd(PESO_PL, 2)} t", unidade="cm")
+qc = pr.vista("DET2C", (X2 + 482, 152), E4, titulo="DETALHE 2c — MONTAGEM DE PÉ", subtitulo=f"4 IZ-1 na face interna (meia altura) e balancim duplo; maior placa {fd(Lp / 1000, 2)} m, {fd(PESO_PL, 2)} t", unidade="cm")
 qc.poli([(0, 0), (Lp, 0), (Lp, H_PL), (0, H_PL)], "VISTA", True)
 for x in xs4:
     qc.circulo((x, H_PL / 2), 50, "METALICA")
