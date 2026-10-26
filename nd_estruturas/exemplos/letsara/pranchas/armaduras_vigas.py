@@ -55,8 +55,8 @@ def spec_ts01():
     det += [([(30, yy), (780, yy)], "ARM_TRANSV", False) for yy in (35, 125)] + [([(30, 80), (630, 80)], "ARM_TRANSV", False)]
     det += [([(115, 0), (115 + DX, H)], "OCULTA", False), ([(165, 0), (165 + DX, H)], "OCULTA", False)]
     D1 = dict(nome="DETALHE D1 — PONTA (APOIO DIRETO)", sub=f"as duas pontas iguais (TB-3 a 14 e 7,75 cm da ponta); face da ponta a prumo na posição montada: topo {fd(DX/10)} cm à frente do fundo", esc=10, contorno=[], ents=det, discos=[], prot=[],
-              cotas=[((0, 0), (DX, H), 0, 80, f"{fd(DX/10)} (topo × fundo)"), ((0, 0), (DX, H), 90, -150, f"{fd(H/10)}"), ((0, 0), (300, 0), 0, -60, "30 (cunha)")],
-              bolhas=[("N6", (290 + sk(500), 500), (8, 8)), ("N7", (400, 80), (10, -6)), ("N8", (600, 125), (8, 10))],
+              cotas=[((0, 0), (DX, H), 0, 80, f"{fd(DX/10)} (topo × fundo)"), ((0, 0), (DX, H), 90, -150, f"{fd(H/10)}"), ((0, 0), (300, 0), 0, -100, "30 (cunha)")],
+              bolhas=[("N6", (290 + sk(500), 500), (8, 8)), ("N7", (400, 80), (10, -16)), ("N8", (600, 125), (8, 10))],
               formas=["N6", "N7", "N8"])
     V = T.V
     per = sum(math.dist(a, b) for a, b in zip(sec, sec[1:] + sec[:1])) / 1000

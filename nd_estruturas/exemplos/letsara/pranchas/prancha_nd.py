@@ -616,7 +616,7 @@ class Prancha:
             avisos.append(("AVISO", f"posições na tabela sem chamada no desenho: {sorted(sob)}"))
         return avisos
 
-    def _afastar_vistas(self, folga=2.0, dmax=24.0):
+    def _afastar_vistas(self, folga=2.0, dmax=40.0):
         """rev11: vista que encosta noutra (ou numa tabela) anda até dmax mm para o lugar livre mais próximo."""
         qx0, qy0, qx1, qy1 = self.quadro
         cb = self.carimbo_bbox

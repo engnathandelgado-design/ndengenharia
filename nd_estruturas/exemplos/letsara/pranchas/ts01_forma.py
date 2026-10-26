@@ -53,7 +53,7 @@ def esperas_topo(v, s, plano):
 
 
 # ------------------------------------------------------------------ PLANTA SUPERIOR 1:25
-vp = pr.vista("PLANTA SUPERIOR", (80, 752), 25, titulo="PLANTA SUPERIOR — TS-01", subtitulo="face superior; COTAS EM CM", unidade="cm")
+vp = pr.vista("PLANTA SUPERIOR", (80, 752), 25, titulo="PLANTA SUPERIOR — TS-01", subtitulo="face superior", unidade="cm")
 vp.ret(DX, -200, L, 400, "VISTA")
 for s in TER:
     esperas_topo(vp, s, True)
@@ -72,7 +72,7 @@ vp.chamada((S_TB[0] + DX, -100), (-4, -30), "TB-3 (2 por ponta)")
 vp.cota_v([-200, 200], L + DX, 8)
 # ------------------------------------------------------------------ ELEVAÇÃO 1:25
 ve = pr.vista("ELEVAÇÃO", (80, 622), 25, titulo="ELEVAÇÃO — TS-01",
-              subtitulo="peça fabricada reta; pontas a prumo na posição montada (caimento 3 %); COTAS EM CM", unidade="cm")
+              subtitulo="peça fabricada reta; pontas a prumo na posição montada (caimento 3 %)", unidade="cm")
 ve.poli(CONTORNO, "VISTA", fechada=True)
 for y in (yfi, yci, ycs, yfs):
     ve.linha((mac + sk(y), y), (L - mac + sk(y), y), "VISTA")
@@ -106,10 +106,10 @@ ve.marcador_corte((S_TB[0] + 60, -470), (S_TB[0] + 60 + DX, H + 60), "B", lado=1
 ve.marcador_corte((TER[4] + 200, -470), (TER[4] + 200 + DX, H + 60), "C", lado=1)
 ve.marcador_detalhe((300, 400), 650, 1, ang=150, dist=10)
 ve.marcador_detalhe((L - 150, 400), 650, 3, ang=30, dist=10)
-ve.marcador_detalhe((ALC[1], H), 400, 2, ang=60, dist=6)
+ve.marcador_detalhe((ALC[1], H), 400, 2, ang=20, dist=6)
 
 # ------------------------------------------------------------------ VISTA INFERIOR 1:25
-vi = pr.vista("VISTA INFERIOR", (80, 540), 25, titulo="VISTA INFERIOR — TS-01", subtitulo="fundo da fôrma; COTAS EM CM", unidade="cm")
+vi = pr.vista("VISTA INFERIOR", (80, 540), 25, titulo="VISTA INFERIOR — TS-01", subtitulo="fundo da fôrma", unidade="cm")
 vi.ret(0, -200, L, 400, "VISTA")
 for a, b in ((0, LC), (L - LC, L)):
     vi.hachura([(a, -200), (b, -200), (b, 200), (a, 200)], "ANSI31", 0.25)
@@ -129,7 +129,7 @@ vi.cota_v([-200, -100, 100, 200], 0, -8)
 
 # ------------------------------------------------------------------ ESQUEMAS DE IÇAMENTO E ESTOCAGEM 1:100
 vq = pr.vista("ESQUEMA DE IÇAMENTO", (60, 418), 100, titulo="IÇAMENTO — DESFORMA E MONTAGEM",
-              subtitulo="4 alças AL-1, 2 balancins, cabos verticais; COTAS EM CM", unidade="cm")
+              subtitulo="4 alças AL-1, 2 balancins, cabos verticais", unidade="cm")
 vq.poli(CONTORNO, "VISTA", fechada=True)
 za, zb, zg = H + 1600, H + 3000, H + 4600
 for a, b in ((ALC[0], ALC[1]), (ALC[2], ALC[3])):
@@ -143,7 +143,7 @@ vq.chamada(((ALC[0] + ALC[1]) / 2, za + 250), (-8, 6), "balancim")
 vq.cota_h([0] + ALC + [L], 0, -7)
 
 ve2 = pr.vista("ESQUEMA DE ESTOCAGEM", (60, 348), 100, titulo="ESTOQUE E TRANSPORTE",
-               subtitulo="2 calços de 15 cm sob a mesa inferior, sem empilhamento; COTAS EM CM", unidade="cm")
+               subtitulo="2 calços de 15 cm sob a mesa inferior, sem empilhamento", unidade="cm")
 ve2.poli(CONTORNO, "VISTA", fechada=True)
 for x in EST:
     ve2.poli([(x - 250, -400), (x + 250, -400), (x, 0)], "INDICACAO", fechada=True)
@@ -187,14 +187,14 @@ def corte_I(nome, org, sub, no):
     return v
 
 
-va = corte_I("CORTE A-A", (118, 105), "apoio de terça: ES-1; COTAS EM CM", False)
+va = corte_I("CORTE A-A", (78, 105), "apoio de terça: ES-1", False)
 va.chamada((60, H + 60), (16, 20), "ES-1: 2 M16 A36 hef 15 + gancho, sai 12 (ST-1P)")
 va.chamada((40, P["y2"]), (20, 30), f"{P['n_cord']} cord. Ø12,7 ({T.TXT_LINHAS})")
 
-vc = corte_I("CORTE C-C", (292, 105), "nó do X: ES-1 + 4 ES-2; COTAS EM CM", True)
+vc = corte_I("CORTE C-C", (232, 105), "nó do X: ES-1 + 4 ES-2", True)
 vc.chamada((140, H + 40), (14, 20), "ES-2: M16 hef 11 + grampo U Ø10")
 
-vb = pr.vista("CORTE B-B", (468, 105), 10, titulo="CORTE B-B", subtitulo="apoio: tubos TB-3 entre as cordoalhas; COTAS EM CM", unidade="cm")
+vb = pr.vista("CORTE B-B", (403, 105), 10, titulo="CORTE B-B", subtitulo="apoio: tubos TB-3 entre as cordoalhas", unidade="cm")
 rb = [(-200, 0), (200, 0), (200, H), (-200, H)]
 vb.poli(rb, "CORTADO", fechada=True); vb.hachura(rb, "AR-CONC", 0.03)
 for yy in TB["y"]:
@@ -234,8 +234,8 @@ def viga_montada(v, x_ponta, sg, z_ponta_fundo, zface=0.0):
 
 
 # DETALHE 1 — ponta baixa no pilar P1 (eixo A)
-d1 = pr.vista("DETALHE 1", (630, 120), 20, titulo="DETALHE 1 — APOIO NO PILAR P1 (PONTA BAIXA)",
-              subtitulo="posição montada; assento horizontal no recuo; cunha 9 → 0 mm; COTAS EM CM", unidade="cm")
+d1 = pr.vista("DETALHE 1", (610, 120), 20, titulo="DETALHE 1 — APOIO NO PILAR P1 (PONTA BAIXA)",
+              subtitulo="posição montada; assento horizontal no recuo; cunha 9 → 0 mm", unidade="cm")
 zf1, xt1 = viga_montada(d1, 25, 1, -EC)
 d1.chapa(25 + NEOX - 100, -10, 200, 10)                                      # NEO-4 horizontal
 d1.ret(xt1 - 12.5, -300, 25, 600, "METALICA")                               # PN-3
@@ -255,7 +255,7 @@ d1.chamada((150, -600), (26, -8), f"assento HORIZONTAL +{f(LG['REC'][0], 3)}")
 
 # DETALHE 4 — ponta alta no pilar P2 (eixo E)
 d4 = pr.vista("DETALHE 4", (895, 285), 20, titulo="DETALHE 4 — APOIO NO PILAR P2 (PONTA ALTA)",
-              subtitulo="posição montada; assento horizontal; cunha 0 → 9 mm com degrau; COTAS EM CM", unidade="cm")
+              subtitulo="posição montada; assento horizontal; cunha 0 → 9 mm com degrau", unidade="cm")
 zf4, xt4 = viga_montada(d4, -25, -1, 0)
 d4.chapa(-25 - NEOX - 100, -10, 200, 10)
 d4.ret(xt4 - 12.5, -300, 25, 600, "METALICA")
@@ -284,8 +284,8 @@ _NA = RN.viga_em("cobertura", 9.875, _YL[4], marcas=["TS"]); _NE = RN.viga_em("c
 _NI = RN.viga_em("cobertura", 19.75, _YL[4] - 3)
 DG = round(LG["DEGRAU_C"] * 1000)
 FOLGA_C = 37.5                                                # ponta da TS-01 a 3,75 cm do eixo da I130 (folga 7,5 cm entre pontas)
-d3 = pr.vista("DETALHE 3", (850, 120), 20, titulo=f"DETALHE 3 — APOIO NO TOPO DA {_NI}",
-              subtitulo=f"corte na linha 5: {_NA} (lado A) e {_NE} (lado E); CT-I130 nas 2 faces; COTAS EM CM", unidade="cm")
+d3 = pr.vista("DETALHE 3", (862, 120), 20, titulo=f"DETALHE 3 — APOIO NO TOPO DA {_NI}",
+              subtitulo=f"corte na linha 5: {_NA} (lado A) e {_NE} (lado E); CT-I130 nas 2 faces", unidade="cm")
 zl, xl = viga_montada(d3, -FOLGA_C, -1, 0)                       # lado A
 zr, xr = viga_montada(d3, FOLGA_C, 1, DG - EC, DG)               # lado E
 X_CT = _BI / 2 + _CT["proj"]                                   # ponta do consolo a partir do eixo da I130
@@ -312,7 +312,7 @@ d3.chamada((-100, -10), (-40, 34), f"topo +{f(LG['Z_TOPO_I130'], 3)} (lado A, {_
 d3.chamada((0, -600), (14, -4), f"{_NI}: assento {(X_CT - FOLGA_C)/10:g} cm por lado")
 
 # ------------------------------------------------------------------ DETALHE 2 — alça AL-1 (1:10)
-d2 = pr.vista("DETALHE 2", (720, 300), 10, titulo="DETALHE 2 — ALÇA AL-1", subtitulo="laço de cordoalha Ø12,7 CP-190 RB; COTAS EM CM", unidade="cm")
+d2 = pr.vista("DETALHE 2", (720, 300), 10, titulo="DETALHE 2 — ALÇA AL-1", subtitulo="laço de cordoalha Ø12,7 CP-190 RB", unidade="cm")
 d2.poli([(-300, 0), (300, 0), (300, H), (-300, H)], "VISTA")
 for y in (yfi, yci, ycs, yfs):
     d2.linha((-300, y), (300, y), "VISTA")
