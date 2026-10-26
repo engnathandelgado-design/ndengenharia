@@ -16,7 +16,10 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Letsara: zip ND-LET-EXECUTIVO-rev09 com DXF e IFC depois da aprovação do Nathan dos PDF do pacote rev09.
 - [ ] Letsara rev09 (24/10, AGUARDA DECISÃO — quadro decisao_portao_l4.png: PG viram apoio / subir a linha 4 / portão 7,40): portões da linha 4 (500 × 750, vãos B–P21 e P19–D): fundo da TS-01A/V409/V410 em +7,50 no vão de cada portão (nada abaixo de 7,50); placas protendidas novas entre o topo do portão e a viga onde a viga sobe; conferir colisões com P19, P20, P21 e a V401; atualizar TS-01A, pilares da linha 4, placas da linha 4, lista, quantitativos e 3D.
 
-- [ ] Letsara (DEC-027): confirmar com a Kingspan arrancamento dos parafusos em #0,65, distribuição de clipes e junta de dilatação na água de 39,6 m.
+- [ ] Letsara (DEC-070): confirmar com a Isoeste arrancamento dos parafusos em #0,65, distribuição de clipes, curso da junta de dilatação na água de 39,6 m, Rock Felt como alternativa e fixação dos painéis solares.
+- [ ] Letsara (DEC-068): decisão do Nathan sobre a LP20 sem Ø15,2 (quadro decisao_laje_sem_152.png); até lá a LA-01/LA-01R não vai para produção.
+- [ ] Letsara (DEC-071): confirmar com a METSEC o torque dos M12 nas terças Z 2,30.
+- [ ] Letsara: decisão do Nathan sobre as frestas consolo/viga × fechamento (quadro decisao_fresta_fechamento.png).
 
 - [ ] Letsara rev06 (DEC-026): trocar as medidas de pré-dimensionamento do CS-1, NC-1 e cartola PT-1 pelas do catálogo 09 da Trejor (anexar o PDF e o DWG "Consoles 2a ETAPA" do e-mail de 05/02/2021) e recalcular `calc_fixacao_placas.py`; luvas TSA dos PT-1 da 1ª fiada no topo da viga baldrame (projeto de fundações); nas placas ao lado da porta da vista I, alinhar as TSA das peças de baixo com os pinos da peça de cima; CE-1 dos pilares do anexo (H/J/I) contadas em Z_PL[:6] (rever as fiadas reais com esquadria).
 - [ ] Letsara rev06: confirmar a intensidade de chuva da cidade (NBR 10844 tab. 5; adotado 200 mm/h) e a rede de drenagem das 9 descidas Ø200; desenhar os insertos IL-1 nas vistas dos pilares PG e a CL-P em detalhe próprio; conferir com a fábrica os insertos IT-P no fundo da TS-01A entre as cordoalhas; rodar os pilares da família 40×60 com os esforços do modelo integrado (uso 0,66).
