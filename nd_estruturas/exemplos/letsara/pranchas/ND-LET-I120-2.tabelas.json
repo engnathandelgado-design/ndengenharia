@@ -1,0 +1,654 @@
+{
+ "folha": "ND-LET-I120-2",
+ "dados": {
+  "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
+  "obra": "LETSARA — PAVILHÃO COM MEZANINO",
+  "local": "A CONFIRMAR",
+  "conteudo": "VIGA CENTRAL I120 PROTENDIDA — V407 (L = 1950,0 cm) — ELEVAÇÃO DE FÔRMA PRÓPRIA — FÔRMA, ARMAÇÃO E INSERTOS",
+  "desenho": "ND-LET-I120-2",
+  "rev": "12",
+  "data": "26/10/2026",
+  "folha": "01/01",
+  "projeto": "Eng. Civil Nathan Henrique Delgado",
+  "desenhista": "ND Engenharia",
+  "verificado": "",
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
+  "marca": "V407",
+  "qtd": 1,
+  "peso": "163,2",
+  "volume": "6,53"
+ },
+ "tabelas": [
+  {
+   "titulo": "MARCAS — VIGAS CENTRAIS I120 — EIXO C",
+   "cab": [
+    "MARCA",
+    "POSIÇÃO",
+    "QT",
+    "L (cm)",
+    "PESO (t)"
+   ],
+   "linhas": [
+    [
+     "V407",
+     "C: PC-01 → PC-02; TS-01 L3 a 970,0 cm (18 cord.)",
+     "1",
+     "1950,0",
+     "16,32"
+    ],
+    [
+     "V406",
+     "C: PC-02 → PC-03 (P13); TS-01 L5 a 965,0 cm (18 cord.)",
+     "1",
+     "1596,7",
+     "13,52"
+    ],
+    [
+     "V405",
+     "C: PC-03 (P13) → PC-03 (P13B); TS-01 L6 a 313,3 cm e L7 a 1313,3 cm (13 cord.)",
+     "1",
+     "1596,6",
+     "13,52"
+    ],
+    [
+     "V404",
+     "C: PC-03 (P13B) → PF-04; TS-01 L8 a 661,7 cm (13 cord.)",
+     "1",
+     "1586,7",
+     "13,44"
+    ]
+   ]
+  },
+  {
+   "titulo": "RESUMO DO AÇO (+10% perdas)",
+   "cab": [
+    "AÇO",
+    "Ø (mm)",
+    "C. TOTAL (m)",
+    "MASSA (kg)"
+   ],
+   "linhas": [
+    [
+     "CA-50",
+     "6,3",
+     "181,26",
+     "48,8"
+    ],
+    [
+     "CA-50",
+     "8",
+     "367,54",
+     "159,7"
+    ],
+    [
+     "CA-50",
+     "10",
+     "33,48",
+     "22,7"
+    ],
+    [
+     "CA-50",
+     "12,5",
+     "158,00",
+     "167,4"
+    ],
+    [
+     "CA-50",
+     "16",
+     "20,96",
+     "36,4"
+    ],
+    [
+     "CA-50",
+     "20",
+     "209,44",
+     "568,1"
+    ],
+    [
+     "",
+     "",
+     "TOTAL (kg)",
+     "1003,1"
+    ]
+   ]
+  },
+  {
+   "titulo": "CORDOALHAS V406, V405, V404 CP-190 RB — PISTA 60 m",
+   "cab": [
+    "POS",
+    "Ø (mm)",
+    "QUANT",
+    "y (mm)",
+    "F (kN)",
+    "ΔL MEDIR (mm)",
+    "ISOLAM. (mm)"
+   ],
+   "linhas": [
+    [
+     "C1",
+     "12,7",
+     "7",
+     "60",
+     "143,4",
+     "453",
+     "ADERENTE"
+    ],
+    [
+     "C1",
+     "12,7",
+     "5",
+     "100",
+     "143,4",
+     "453",
+     "2350 DA PONTA"
+    ],
+    [
+     "C1",
+     "12,7",
+     "4",
+     "140",
+     "143,4",
+     "453",
+     "2350 DA PONTA"
+    ],
+    [
+     "C1",
+     "12,7",
+     "2",
+     "220",
+     "143,4",
+     "453",
+     "4350 DA PONTA"
+    ]
+   ]
+  },
+  {
+   "titulo": "INSERTOS POR PEÇA — dimensões em mm",
+   "cab": [
+    "MARCA",
+    "DESCRIÇÃO",
+    "QT",
+    "POSIÇÃO"
+   ],
+   "linhas": [
+    [
+     "TB-2",
+     "Tubo Ø60,3×3,6 L=780, passante, sem solda",
+     "2",
+     "pontas, a 175 da face"
+    ],
+    [
+     "AL-3",
+     "2 laços de cordoalha Ø12,7 (4 pernas) por alça",
+     "2",
+     "a 250 cm das pontas"
+    ],
+    [
+     "PN-5",
+     "Pino Ø20 CA-50 L=600 (300 na viga), apoio das TS-01",
+     "4",
+     "topo, ±100 da linha, ±115 do eixo (V405: 8; V404/V407: 4 — posições na tabela de marcas)"
+    ],
+    [
+     "NEO-3C",
+     "Neoprene 150×300×10 c/ 2 furos Ø30 (assento das TS-01, sobre mesa + consolo CT-I120)",
+     "2",
+     "topo, nas linhas (V405: 4)"
+    ],
+    [
+     "NEO-2",
+     "Neoprene 300×200×31 fretado, chapas inox (apoio nos PC)",
+     "2",
+     "sobre os consolos CP-I120"
+    ]
+   ]
+  },
+  {
+   "titulo": "QUADRO DA PEÇA",
+   "cab": [
+    "ITEM",
+    "VALOR",
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "MARCA",
+     "V407",
+     "SEÇÃO",
+     "I120 (h 120, b 40, bw 15)"
+    ],
+    [
+     "COMPRIMENTO",
+     "1950 cm",
+     "CONCRETO",
+     "C50 / fckj 50.0 MPa"
+    ],
+    [
+     "VOLUME",
+     "6,53 m³",
+     "PESO",
+     "16,32 t"
+    ],
+    [
+     "AÇO CA-50",
+     "ver resumo do aço (+10 %) por marca",
+     "PROTENSÃO",
+     "18 cord. Ø12,7 — 143,4 kN/cord."
+    ],
+    [
+     "DENTE",
+     "78 × 35 cm",
+     "COBRIMENTO",
+     "3,0 cm (CAA II)"
+    ]
+   ]
+  }
+ ],
+ "aco": [
+  {
+   "perda": 0.1,
+   "aco": "CA-50",
+   "barras": [
+    {
+     "pos": "N2",
+     "diam": 8.0,
+     "qtd": 137,
+     "comp": 262,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       9,
+       0
+      ],
+      [
+       9,
+       60
+      ],
+      [
+       0,
+       60
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "9",
+      "114",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N3",
+     "diam": 20.0,
+     "qtd": 10,
+     "comp": 1944,
+     "trechos": [
+      "1944"
+     ]
+    },
+    {
+     "pos": "N4",
+     "diam": 12.5,
+     "qtd": 6,
+     "comp": 1944,
+     "trechos": [
+      "1944"
+     ]
+    },
+    {
+     "pos": "N11",
+     "diam": 6.3,
+     "qtd": 76,
+     "comp": 120,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       9
+      ],
+      [
+       0,
+       9
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1.5,
+       1.5
+      ]
+     ],
+     "trechos": [
+      "34",
+      "19",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N12",
+     "diam": 12.5,
+     "qtd": 2,
+     "comp": 1874,
+     "trechos": [
+      "1874"
+     ]
+    },
+    {
+     "pos": "N13",
+     "diam": 6.3,
+     "qtd": 79,
+     "comp": 114,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       6
+      ],
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1.5,
+       1.5
+      ]
+     ],
+     "trechos": [
+      "34",
+      "16",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N14",
+     "diam": 12.5,
+     "qtd": 2,
+     "comp": 194,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       74,
+       0
+      ],
+      [
+       74,
+       15
+      ],
+      [
+       0,
+       15
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "74",
+      "15",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N15",
+     "diam": 8.0,
+     "qtd": 2,
+     "comp": 250,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       74,
+       0
+      ],
+      [
+       74,
+       44
+      ],
+      [
+       0,
+       44
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1.5,
+       1.5
+      ]
+     ],
+     "trechos": [
+      "74",
+      "44",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N16",
+     "diam": 8.0,
+     "qtd": 6,
+     "comp": 60,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       14,
+       0
+      ],
+      [
+       14,
+       9
+      ],
+      [
+       0,
+       9
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       1.5,
+       1.5
+      ]
+     ],
+     "trechos": [
+      "14",
+      "9",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N5",
+     "diam": 20.0,
+     "qtd": 4,
+     "comp": 376,
+     "forma": [
+      [
+       168,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       19
+      ],
+      [
+       168,
+       19
+      ]
+     ],
+     "trechos": [
+      "168",
+      "19",
+      "168"
+     ]
+    },
+    {
+     "pos": "N6",
+     "diam": 16.0,
+     "qtd": 8,
+     "comp": 262,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       9,
+       0
+      ],
+      [
+       9,
+       114
+      ],
+      [
+       0,
+       114
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "9",
+      "114",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N7",
+     "diam": 10.0,
+     "qtd": 6,
+     "comp": 332,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       125,
+       0
+      ],
+      [
+       125,
+       34
+      ],
+      [
+       0,
+       34
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "125",
+      "34",
+      "",
+      ""
+     ]
+    },
+    {
+     "pos": "N8",
+     "diam": 10.0,
+     "qtd": 6,
+     "comp": 226,
+     "forma": [
+      [
+       0,
+       0
+      ],
+      [
+       34,
+       0
+      ],
+      [
+       34,
+       72
+      ],
+      [
+       0,
+       72
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "trechos": [
+      "34",
+      "72",
+      "",
+      ""
+     ]
+    }
+   ]
+  }
+ ]
+}

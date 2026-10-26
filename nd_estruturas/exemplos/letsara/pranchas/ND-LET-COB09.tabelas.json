@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W)",
   "desenho": "ND-LET-COB09",
-  "rev": "00",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -28,8 +28,8 @@
     [
      "1",
      "0",
-     "V4xx",
-     "viga de cobertura das linhas 3 a 8 (topo, referência)",
+     "V408–V419",
+     "I90 das linhas 3 a 8 (topo, referência)",
      "1"
     ],
     [
