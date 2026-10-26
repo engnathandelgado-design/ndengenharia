@@ -1,0 +1,31 @@
+{
+ "norma": "NBR 9062:2017 5.3.2 (βa); NBR 6118:2023 17.2.4 / 8.2.5 (fctk,j)",
+ "peso_kN": 31.7,
+ "peso_t": 3.23,
+ "Pk_kN": 7.9,
+ "Pd_kN": 10.3,
+ "P_disp_kN": 23.8,
+ "pontos": "4 IZ-1 na face interna, 0,104 L e 0,396 L de cada ponta, meia altura; balancim duplo (cargas iguais), cabos a prumo",
+ "verticalizacao": {
+  "sig_MPa": -1.21,
+  "lim_MPa": 1.2,
+  "ok": true,
+  "obs": "pior posição = placa deitada no início do giro (= desforma com 4 pontos, já verificada)"
+ },
+ "de_pe": {
+  "M_kNm": 2.26,
+  "W_m3": 0.026,
+  "sig_MPa": 0.087,
+  "lim_MPa": 1.2,
+  "ok": true,
+  "obs": "de pé a placa trabalha no plano (eixo forte, 1,25 m): tensão desprezível"
+ },
+ "IZ1": {
+  "solicitacao_de_pe": "cisalhamento (carga paralela à face) + pequena tração pela excentricidade de 5 cm do CG à face",
+  "Pk_kN": 7.9,
+  "Pd_kN": 10.3,
+  "trabalho_tracao_kN": 12.7,
+  "exigencia": "cabeçote/olhal universal giratório certificado para carga a 90° com capacidade de trabalho ≥ βa·Pk por ponto (conferir no catálogo do fornecedor do IZ-1)",
+  "ok_tracao": true
+ }
+}
