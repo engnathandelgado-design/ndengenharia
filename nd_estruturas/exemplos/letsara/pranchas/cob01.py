@@ -179,7 +179,7 @@ c.chamada((-ST1["t"] / 2, 180), (-16, 10), "ST-1P chapa dobrada 9,5 (sem solda)"
 c.chamada((B_INF - 10, Z_TERCA + 8), ((250 - B_INF + 10) / E5 + 26, -12), "2 Z 302×2,30 encaixados")
 c.chamada((2 * T_Z + 8, ZB[1]), (20, -8), "M12 8.8 + arruelas Ø24")
 zz = Z_TERCA + H_TERCA + T_Z
-for nome_, hh in (("TP40 0,50", 40), ("lã de rocha 40", 40), ("zipada 0,65 (h 70)", 70), ("painel solar", 110)):
+for nome_, hh in (("TP-40 #0,65", 40), ("lã de rocha FSR-32 40", 40), ("zipada 455 #0,50 (h 70)", 70), ("painel solar", 110)):
     c.ret(-250, zz, 500, hh, "METALICA")
     c.texto((260, zz + hh / 2), nome_, "min", "MIDDLE_LEFT")
     zz += hh

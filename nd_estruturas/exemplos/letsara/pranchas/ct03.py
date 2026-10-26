@@ -216,7 +216,7 @@ def corte(v):
     nivel(v, COMP + 700, -1000, "fundo dos pilares −1,000; cálice −1,050 (graute 5 cm)", 1)
     v.chamada((YL[2], Z_TS_E + 450), (6, 10), "TS-01 (ponta do lado E) no topo da I130: NEO-3 + 2 PN-5")
     v.chamada((YL[1], zw + DW), (-6, 12), "linha 2: W 200 × 15,0 na cabeça do P8A (ND-LET-COB05)")
-    v.chamada((YL[6] + 2500, z_ter + 302), (6, 8), "terças Z 302 + TP40 + lã 40 + zipada + painéis solares (ND-LET-COB01)")
+    v.chamada((YL[6] + 2500, z_ter + 302), (6, 8), "terças Z 302 + TP-40 + lã de rocha 40 + zipada #0,50 + painéis solares (ND-LET-COB01)")
     v.chamada((YL[0] + 75, Z_VB + 300), (8, 9), "VB-03 15×60 (fachada 1)")
     v.chamada((YL[8] - 75, Z_VB + 300), (-8, 9), "VB-07 15×60 (fachada 9)")
     v.chamada((YL[0] - O_PL, 1250 * 6 + 600), (-8, 8), "placas I")

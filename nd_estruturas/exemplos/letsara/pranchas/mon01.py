@@ -143,7 +143,7 @@ c.cota_v([-1000, 0, zA0, M(10.0)], -3800, -10, total=False)
 c.chamada((M(PONTAS[0][0]) + 140, M(zf(PONTAS[0][0]) + 0.45)), (12, 18), "apoio no recuo: NEO-4 + 2 PN-3 Ø25 grauteados")
 c.chamada((M(PONTAS[1][1]) - 140, M(zf(PONTAS[1][1]) + 0.45)), (-14, -26), "apoio no recuo do pilar do eixo E")
 c.chamada((Ly / 4, M(zf(Ly / 4000) + 0.2)), (12, -40), f"TS-01 I90 (h 90, sem dentes — apoio direto): {fp(PQ['TS-01'][7])} t, içar pelas 4 alças AL-1")
-c.chamada((M(25), M(zf(25)) + 900 * PT.c + 160), (6, 20), "terças Z 302×90/82×19×2,30 nos ST-1P (4 M12) + TP40 + lã 40 + zipada + painéis (ND-LET-COB01)")
+c.chamada((M(25), M(zf(25)) + 900 * PT.c + 160), (6, 20), "terças Z 302×90/82×19×2,30 nos ST-1P (4 M12) + TP-40 + lã de rocha 40 + zipada #0,50 + painéis (ND-LET-COB01)")
 
 # ------------------------------------------------------------------ coluna direita: lista de peças, sequência, notas
 XC = Q[2] - 200

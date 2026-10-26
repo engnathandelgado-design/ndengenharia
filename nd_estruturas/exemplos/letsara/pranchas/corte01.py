@@ -20,7 +20,7 @@ pr.revisao("10", "24/10/2026", "DEC-052/054: EIXO 2 COM W 200 × 15,0 E MONTANTE
 pr.revisao("09", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; VM 30 × 75; LINHA 2 COM COBERTURA METÁLICA (SEM TS-01); P6 DA LINHA 2")
 z_tel = lambda x: zf(x) + (H + 10 + 300 + sum(PAC.values()) * 1000) * c       # topo dos painéis solares
 for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 170), "CORTE 3-3"))):
-    v = pr.vista(nome, org, 50, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
+    v = pr.vista(nome, org, 60, titulo=f"{nome} — EIXO {eixo} (y = {[9.65, 19.725][k]:.3f} m)".replace(".", ","),
                  subtitulo="olhando para o eixo 9; níveis em metros" + ("; mezanino entre os eixos 1 e 2" if eixo == 2 else ""), unidade="cm")
     R = Recorte(v)
     v.linha((-1500, 0), (41000, 0), "TERRENO")
@@ -30,7 +30,7 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
         v.circulo((x, -2250), 400, "BOLHA"); v.texto((x, -2250), nomex, "sub", alinh="MIDDLE_CENTER")
     v.cota_h([0, 9870, 19750, 29630, 39500], 0, -40, total=False)
     from prancha_nd import DIM_K, DIM_DLI
-    _yt = -40 * DIM_K * 50 - DIM_DLI * 50
+    _yt = -40 * DIM_K * v.esc - DIM_DLI * v.esc
     _d = pr.msp.add_linear_dim(base=v.P((0, _yt)), p1=v.P((0, 0)), p2=v.P((39500, 0)), angle=0, location=v.P((14800, _yt)), dimstyle="ND",
                                override={"dimlfac": v.esc * v.fator, "dimdec": 1, "dimzin": 8, "dimtmove": 2}, dxfattribs={"layer": "COTA"})
     _d.render(); v._add(_d.dimension)                                                 # total com o texto fora do eixo C
@@ -40,7 +40,9 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
     for x_, mk_ in MKS:
         nm_ = PP.pe(v, x_ / 1000, y_l, x_, "x", cotar=(x_ == 0), lado=-1)
         if x_ == 39500:
-            v.texto((x_ - 350, 250), PP.rotulo(nm_), "nota", "BOTTOM_RIGHT")         # pilar do eixo E: rótulo para dentro
+            _r1, _r2 = (PP.rotulo(nm_).split(" — ", 1) + [""])[:2]                  # pilar do eixo E: rótulo em 2 linhas (cabe entre P5 e P4)
+            v.texto((x_ - 350, 250 + 300), _r1, "nota", "BOTTOM_RIGHT")
+            v.texto((x_ - 350, 250), _r2, "nota", "BOTTOM_RIGHT")
         else:
             v.texto((x_ + 350 if x_ != 36300 else x_ - 300, 250 if x_ != 36300 else 950), PP.rotulo(nm_), "nota", "BOTTOM_LEFT" if x_ != 36300 else "BOTTOM_RIGHT")
     nivel(v, 40100, -1000, "fundo dos pilares −1,000; fundo do cálice −1,050 (graute 5 cm)")
@@ -59,7 +61,7 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
     else:
         for zm in Z_MEZ:
             nivel(v, 4500, zm, f"piso mezanino {f(zm / 1000)}")
-    v.chamada((30000, z_tel(30000)), (6, 14), f"TP40 + lã 40 + zipada 0,65 (480 × 70) + painéis solares sobre terças Z 302×2,30 contínuas c/{LG['passo_tercas']*100:.1f} cm nos ST-1P — ND-LET-COB01".replace(".", ","))
+    v.chamada((20300, z_tel(20300)), (2, 14), "cobertura Isoeste: TP-40 + lã de rocha 40 + zipada #0,50 + painéis (COB01)")
     if eixo == 3:
         v.chamada((10000, zf(10000) + 450), (8, -16), "TS-01 — viga I90 protendida, caimento 3 %, sem dentes (apoio direto)")
     else:
@@ -70,7 +72,7 @@ for k, (eixo, org, nome) in enumerate(((2, (100, 560), "CORTE 2-2"), (3, (100, 1
         v.chamada((XC, Z_TOP_C - 650), (10, -30), f"I130 (h {H_I130 / 10:g}): TS-01 apoiadas no topo (NEO-3 + 2 PN-5 por viga)")
     else:
         v.chamada((XC + 200, 800), (10, 8), "P8A 40×60 (40 em x): cabeça até a W 200")
-        v.chamada((15000, Z_MEZ[1] - 600), (8, 16), "VM retangulares 30 × 75 com dente + laje h20 + capa 5")
+        v.chamada((12000, Z_MEZ[1] - 600), (8, 17), "VM 30 × 75 + laje h20 + capa 5")
         v.chamada((P6_L2[0] * 1000, 2000), (-10, 8), "P6 da linha 2 (25 × 40)")
 
 # coluna direita: tabela de níveis e notas
@@ -81,7 +83,7 @@ niv = [["Assento da TS-01 no P1 (recuo)", f(REC[0] / 1000)], ["Assento da TS-01 
        ["Pisos do mezanino", f"{f(Z_MEZ[0] / 1000)} / {f(Z_MEZ[1] / 1000)}"]]
 y = pr.tabela(x0, y, "NÍVEIS (m)", ["ELEMENTO", "NÍVEL"], niv, [110, 70])
 notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações.",
-         f"Cobertura rebaixada (rev03) para o pacote TP40 + lã 40 + zipada 70 + painéis solares: topo dos painéis junto ao P2 em {f(z_tel(39475) / 1000)}, {(Z_TOP_PIL - z_tel(39475)):.0f} mm abaixo da platibanda +10,000 (pedido: ≥ 150 mm).",
+         f"Cobertura rebaixada (rev03) para o pacote Isoeste (TP-40 + lã de rocha 40 + zipada 455 #0,50) + painéis solares: topo dos painéis junto ao P2 em {f(z_tel(39475) / 1000)}, {(Z_TOP_PIL - z_tel(39475)):.0f} mm abaixo da platibanda +10,000 (pedido: ≥ 150 mm).",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), sem dentes: apoio de 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e de 16,25 cm no topo da I130 / pilar central (NEO-3 + 2 PN-5 Ø20); terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
          "Cabeça dos pilares laterais recuada acima do assento da TS-01: só os 30 cm externos sobem até +10,00 (consolos externos pela cabeça).",
          "Vigas centrais I130 (h 120, DEC-054) com dentes 78 × 35 nos consolos CP-I130 com mísula; vigas do mezanino VM retangulares 30 × 75 protendidas com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev09, ND-LET-VM01). Eixo 2: sem TS-01 — W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes W 150 no meio dos vãos sobre as VM do +7,30 (DEC-052).",
