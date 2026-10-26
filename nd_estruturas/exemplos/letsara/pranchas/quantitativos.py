@@ -83,11 +83,11 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:
             vc += n * VOLC[m.group(2)]
     vol = 0.24 * (1.0 + zr) + cab * (10.0 - zr) + vc
     folha_mk = mk.replace("-", "")
-    pecas.append(("Pilares", mk, f"{pos}; {cons}", "40×60 (cabeça recuada)", 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
+    pecas.append(("Pilares", mk, f"{pos}; {cons}", ("40 × 60 (x × y), cabeça recuada" if mk.startswith("PF") else "60 × 40 (x × y), cabeça recuada"), 11.00, qt, round(vol, 3), round(vol * 2.5, 2), "C40", f"ND-LET-{folha_mk}"))
 PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PM02", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
 for f_ in PIL_OUTROS:
     q = quadro(f_)
-    pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", ""), num(q["COMPRIMENTO"].split()[0]) / 100,
+    pecas.append(("Pilares", q["MARCA"], tab(f_, "MARCAS")["linhas"][0][1], q["SEÇÃO"].replace(" cm (x × y)", " (x × y)"), num(q["COMPRIMENTO"].split()[0]) / 100,
                   int(q["QUANTIDADE"].split()[0]), num(q["VOLUME"].split()[0]), num(q["PESO"].split()[0]), q["CONCRETO"], f"ND-LET-{f_}"))
 q = quadro("TS01-1")
 pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 3–8 (2 por linha; linha 2 metálica, DEC-048)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
@@ -107,7 +107,7 @@ for mk, desc, qt, p, obs in tab("LA01", "MARCAS")["linhas"]:
 for tp, L, qt, p, vis, *_ in tab("PP00", "TIPOS")["linhas"]:          # rev11: + coluna COR DAS VISTAS
     if not tp:
         continue
-    pecas.append(("Placas de fechamento", tp, f"placa protendida, vistas {vis}", "125×10", num(L) / 100, int(qt), round(1.25 * 0.10 * num(L) / 100, 3), num(p), "C40", "ND-LET-PP00"))
+    pecas.append(("Placas de fechamento", tp, f"placa protendida, vistas {vis}", "125×10", num(L) / 100, int(qt), round(num(p) / 2.5, 3), num(p), "C40", "ND-LET-PP00"))
 
 # ------------------------------------------------------------------ aço CA-50 (relações das pranchas)
 aco = []     # (peça, prancha, qtd, {diam: kg/peça}, obs)

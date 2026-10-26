@@ -235,7 +235,7 @@ d.chamada((ba + 100, 5), (14, -16), "fita de neoprene 1 cm; apoio 10")
 d.chamada((50, 100), (-12, 16), "2º estágio C30 (com a capa)")
 d.chamada((bt - 135, -40), (24, -20), "alças N9 Ø10 c/15 da VM")
 d.chamada((ba + 400, 235), (8, 12), "capa 5 C30 + tela Q138")
-d.chamada((ba + 50 + _x1 + _p, 100 + _r), (10, 22), "LP20 1245 × 200, 6 alvéolos de 15,2 cm, 2 Ø15,2 + 5 Ø12,7")
+d.chamada((ba + 50 + _x1 + _p, 100 + _r), (10, 22), "LP20 1245 × 200, 6 alvéolos de 15,2 cm, 9 Ø12,7")
 
 for i_ in range(6):
     foto(i_)

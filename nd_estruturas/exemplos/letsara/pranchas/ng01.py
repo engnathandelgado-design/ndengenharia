@@ -152,7 +152,7 @@ MATERIAIS = [
 ]
 
 NORMAS = ("NBR 9062:2017 (projeto e execução de estruturas de concreto pré-moldado) — base do projeto; NBR 6118:2023 (concreto); NBR 14861:2022 (lajes alveolares); "
-          "NBR 6123:1988 (vento); NBR 6120:2019 (ações); NBR 8681:2003 (ações e segurança); NBR 8800:2008 e NBR 14762:2010 (aço e perfis formados a frio); "
+          "NBR 6123:2023 (vento); NBR 6120:2019 (ações); NBR 8681:2003 (ações e segurança); NBR 8800:2024 e NBR 14762:2010 (aço e perfis formados a frio); "
           "NBR 7480 (barras CA-50/CA-60); NBR 7482 (fios de protensão); NBR 7483 (cordoalhas); NBR 12655 (controle do concreto); NBR 6323 (galvanização a fogo).")
 
 N_GERAIS = [
@@ -169,7 +169,7 @@ N_GERAIS = [
 N_CARGAS = [
     f"Cobertura (kN/m²): telha zipada {f(CC['zipada_050'], 3)}, lã de rocha {f(CC['la_rocha_fsr32_40'], 3)}, telha TP-40 {f(CC['tp40_065'], 3)}, cartolas e fixações {f(CC['cartola_clipes_fixacoes'], 3)}, "
     f"painéis solares {f(CC['paineis_solares'], 2)}, instalações {f(CC['instalacoes'], 2)}; sobrecarga {f(CC['sobrecarga'], 2)} (NBR 6120). Calha cheia na linha A.",
-    f"Mezanino (kN/m²): laje alveolar {f(CL['g1'])}, capa e rejunte {f(CL['capa_rejunte'], 2)}, revestimento {f(CL['revestimento'])}, sobrecarga {f(CL['sobrecarga'])} (escritório); "
+    f"Mezanino (kN/m²): laje alveolar {f(CL['g1'])}, capa e rejunte {f(CL['capa_rejunte'], 2)}, revestimento {f(CL['revestimento'])}, sobrecarga {f(CL['sobrecarga'])} (depósito); "
     f"montagem sem escoramento com {f(CL['montagem'])} kN/m² sobre a capa fresca.",
     "Vento (NBR 6123): V0 = 45 m/s, S1 = 1,00, S2 categoria III classe C, S3 = 0,95; q(10 m) = 0,874 kN/m²; 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6).",
     "Placas de fechamento: dimensionadas só pelo peso próprio, cada placa independente nos seus 2 consoles (decisão do responsável técnico, DEC-035); as fixações (consoles, nichos, chapas de espera, travas) "
@@ -213,6 +213,10 @@ PEND = [
     "Inserto IZ-1 das placas, pino do furo FI-1 e alças: modelo e capacidade pelo catálogo do fornecedor da fábrica.",
     "Cobrimento 2,0 cm dos fios das placas exige controle de pré-fabricado (NBR 9062:2017 12.1.2) — confirmar com a fábrica.",
     "Lajes alveolares: protensão válida para a seção desenhada; se o fabricante extrudar outra seção, refazer a verificação.",
+    "LA-01 / LA-01R (9 Ø12,7): CONFIRMAR COM A FÁBRICA que a extrusora aceita 2 cordoalhas na nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo) — não produzir antes da resposta.",
+    "Vigas de borda dos vãos de canto (VB-01, VB-04, VB-05, VB-08) e VM de borda da linha 1: alinhamento com a fachada em decisão (fresta até as placas).",
+    "Chapas CE-1 dos pilares PG-02 e PG-04 (face de 25 cm): solução em decisão — não produzir essas 12 chapas antes da resposta.",
+    "Vento: V0, S2 e S3 dependem do local da obra — confirmar junto com o local.",
 ]
 
 

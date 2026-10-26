@@ -393,6 +393,13 @@ def i130():
                   lambda fab: (setattr(VI, "Prancha", fab), VI.prancha_viga(VI.dados_i110())), S)
 
 
+def i130_marcas():
+    """rev12 (checklist 10): elevação de fôrma própria da V400 (V407 do R01, 19,50 m) e da V402 (V405, 2 vigas de cobertura no topo)."""
+    import viga_i as VI
+    for mk in ("V407", "V405"):
+        VI.prancha_viga(VI.dados_i110(mk))
+
+
 def vm():
     S = AV.spec_vm()
     import json as _js
@@ -425,6 +432,6 @@ def _init(self, *a, **k):
 Prancha.__init__ = _init
 
 if __name__ == "__main__":
-    alvo = sys.argv[1:] or ["ts01", "i130", "vm", "vb"]
+    alvo = sys.argv[1:] or ["ts01", "i130", "i130_marcas", "vm", "vb"]
     for a in alvo:
         globals()[a]()

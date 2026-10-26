@@ -68,7 +68,8 @@ for k, (px, titulo, sub) in enumerate(((Q[0] + 20, "PLANTA NO PATAMAR +1,975", "
     v.eixo((xe, 3000), (xe, 9700), 400); v.circulo((xe, 10600), 300, "VISTA"); v.texto((xe, 10600), "E", "nota", "MIDDLE_CENTER")
     pilar(v, M(P6_ESC[0]), M(P6_ESC[1]), 250, 400); pilar(v, M(P7_ESC[0]), M(P7_ESC[1]), 600, 400)
     pilar(v, M(P6_L2[0]), M(P6_L2[1]), 250, 400); pilar(v, xe, yl2, 600, 400)
-    v.texto((M(P6_ESC[0]), M(P6_ESC[1]) - 300), "P6", "min", "TOP_CENTER"); v.texto((M(P7_ESC[0]) - 350, M(P7_ESC[1]) - 250), "P7", "min", "TOP_RIGHT")
+    import renomear as RN_
+    v.texto((M(P6_ESC[0]), M(P6_ESC[1]) - 300), RN_.N(RN_.pilar_em(*P6_ESC)), "min", "TOP_CENTER"); v.texto((M(P7_ESC[0]) - 350, M(P7_ESC[1]) - 250), RN_.N(RN_.pilar_em(*P7_ESC)), "min", "TOP_RIGHT")   # rev12: nome do projeto
     v.ret(M(ABERTURA["x0"]), M(ABERTURA["y0"]), M(ABERTURA["x1"] - ABERTURA["x0"]), M(ABERTURA["y1"] - ABERTURA["y0"]), "OCULTA")
     if k == 0:
         filt = lambda pc: E.interna(pc) and not de(pc, L2) and (E.zmin(pc) < 2.05 or de(pc, L1 + PAT))
@@ -179,9 +180,9 @@ lin.append(["", "parafusos M8/M10/M12 8.8 galv., chumbadores químicos M12, BR-M
 lin.append(["", "TOTAL", "", f(massa * 1.03, 0)])
 y = pr.tabela(XC, y, "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)", ["ITEM", "DESCRIÇÃO", "QT", "kg"], lin, [16, 124, 10, 20], h_lin=4.4, destaque_ultima=True)
 notas = [f"Cargas (NBR 6120:2019): sobrecarga {f(EJ['cargas']['q_kN_m2'])} kN/m²; guarda-corpo {f(EJ['cargas']['guarda_corpo_kN_m'], 2)} kN/m no topo e {f(EJ['cargas']['fechamento_kPa'], 2)} kPa no fechamento; corrimão {f(EJ['cargas']['corrimao_kN'], 2)} kN (RT CBMRS 11). ELU 1,4 G + 1,5 Q; flecha L/350.",
-         f"Geometria: 22 espelhos de {f(ESCADA['espelho'] * 100, 2)} cm e piso de 28 cm; patamar +1,975 e chegada no piso pronto +3,95 do mezanino (abertura da laje entre o P6, o P7 e a linha 2 — ND-LET-LA01).",
+         f"Geometria: 22 espelhos de {f(ESCADA['espelho'] * 100, 2)} cm e piso de 28 cm; patamar +1,975 e chegada no piso pronto +3,95 do mezanino (= topo da capa +3,90 + 5 cm de revestimento; a escada é medida do piso pronto) (abertura da laje entre o P6, o P7 e a linha 2 — ND-LET-LA01).",
          f"Perfis no limite (o mais leve que passa): longarinas {I['longarina']['perfil']} (uso {f(I['longarina']['uso'], 2)}; o U 102 não comporta a cantoneira do degrau); VP-1 {I['viga_patamar_frente']['perfil']} (uso {f(I['viga_patamar_frente']['uso'], 2)}); demais vigas W 150 × 9,2; barrotes {I['barrote']['perfil']}; pilaretes {I['pilarete_chegada']['perfil']} (uso {f(I['pilarete_chegada']['uso'], 2)}).",
-         "Vigas de fundo VP-2 e VP-4 apoiadas em assentos SA-1/SA-2 (cantoneiras nas faces do P6, do P7, do P6 da linha 2 e do P2, com 2 BR-M16 embutidas na fábrica do pilar); VP-3 em balanço até a borda da laje; vigas de borda VP-5/VP-6 recebem os montantes do guarda-corpo.",
+         "Vigas de fundo VP-2 e VP-4 apoiadas em assentos SA-1/SA-2 (cantoneiras nas faces dos pilares P6 e P7 da escada, do P6 da linha 2 e do pilar da linha 2 no eixo E, com 2 BR-M16 embutidas na fábrica do pilar); VP-3 em balanço até a borda da laje; vigas de borda VP-5/VP-6 recebem os montantes do guarda-corpo.",
          f"Ligações todas parafusadas, SEM SOLDA, conferidas uma a uma em escadas_detalhe.py (furos nas duas peças, bordas, espaçamentos, folga de chave, faixa comum de altura, corte e contato — NBR 8800:2024 6.3): {len(EJ['ligacoes'])} ligações, {EJ['n_conflitos']} conflitos; 3D sem colisões.",
          "Guarda-corpos e corrimãos (RT CBMRS nº 11 Parte 01/2016): corrimão DUPLO nos dois lados de cada lance a 0,92 e 0,70 m (NBR 9050), guarda-corpo 0,92 m nos lances e 1,05 m nos patamares e na abertura da laje — elevações, fixações e tabela na ND-LET-ES03.",
          "Aço: W em ASTM A572 Gr. 50; U, cantoneiras, chapas e tubos em ASTM A36; galvanização a fogo após a fabricação. Montagem depois da capa do +3,90: assentos e VP-2/VP-4 → pilaretes, VP-1 e VP-3 → longarinas e degraus → pisos → guarda-corpos.",

@@ -627,7 +627,7 @@
   "espacos_terca": 8,
   "subpaineis": 1,
   "L_diag_m": 13.818,
-  "ang_graus": 46.5,
+  "ang_graus": 46.6,
   "vaos": [
    "4-5",
    "5-6",
@@ -642,8 +642,8 @@
   "NtRd_16": 44.7,
   "uso_diag": 0.711,
   "no": {
-   "Fx_kN": 43.74,
-   "Fy_kN": 46.11
+   "Fx_kN": 43.66,
+   "Fy_kN": 46.19
   },
   "barra": "Ø16 A36 em 2 trechos unidos por esticador M16 (rosca direita/esquerda), L ≈ 13.8 m de orelha a orelha",
   "furos_tercas": "oblongos 18 × 28 (eixo maior ao longo da terça) a 35 ('/') e 75 ('\\') do fundo da terça",

@@ -71,7 +71,7 @@ def linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H):
                      f"{nb} {AS.get('marca_b', AS['pino'])} Ø{g(AS['d'])}", g(AS["emb"] / 10), g(livre / 10), g(AS["L"] / 10),
                      f"{AS.get('aco', '')}; {AS.get('anc', '')}; " + (f"rosca {g(AS['rosca'] / 10)} cm na ponta livre; " if AS.get("rosca") else "") +
                      f"a {xs} cm da face da cabeça e ±{ys} do eixo da face; {AS.get('destino', '')}" +
-                     (f"; pilha sobre o concreto: " + " + ".join(f"{n} {g(t)}" for n, t in AS["pilha"]) + f" = {g(round(sum(t for _, t in AS['pilha']), 1))} mm ≤ {g(livre)} livres" if AS.get("pilha") else "")])
+                     (f"; pilha sobre o concreto: " + " + ".join(f"{n} ({g(t)} mm)" for n, t in AS["pilha"]) + f" = {g(round(sum(t for _, t in AS['pilha']), 1))} mm, menor que os {g(livre)} mm livres" if AS.get("pilha") else "")])
         chk("ESP-1 (recuo)", AS["emb"], livre, AS["L"], AS.get("pilha"))
     PT = P.get("pinos_topo")
     if PT:
@@ -102,7 +102,7 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
     emb, livre = AS["emb"], AS["L"] - AS["emb"]
     zb = -emb - 150
     v = pr.vista("DETALHE 3", org, 10, titulo=f"DETALHE 3 — APOIO NO RECUO ({AS.get('marca_b', AS['pino'])})",
-                 subtitulo=f"corte pela cabeça (face {f_rec}); barras e chapa em mm", unidade="mm")
+                 subtitulo=f"corte pela cabeça (face {f_rec}); concreto e barras em cm, chapas em mm nos textos", unidade="cm")
     pts = [(-HW, zb), (R, zb), (R, 0), (0, 0), (0, hc), (-HW, hc)]
     v.poli(pts, "CORTADO", True); v.hachura(pts, "AR-CONC", 0.03)
     v.interrupcao((-HW, zb), (R, zb)); v.interrupcao((-HW, hc), (0, hc))
@@ -125,8 +125,11 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
         v.chamada((xs[-1] + 12, zt + 22), ((R + 300 - xs[-1]) / 10, 2), "arruela + porca + contraporca M16")
     else:                                                      # neoprene + ponta da TS-01 com furo grauteado
         v.chapa(AS["x_neo"][0], 0, AS["x_neo"][1] - AS["x_neo"][0], 10)
-        v.poli([(5, 10), (R + 150, 10), (R + 150, 10 + 400), (5, 10 + 400)], "VISTA")
-        v.interrupcao((R + 150, 10), (R + 150, 410)); v.interrupcao((5, 410), (R + 150, 410))
+        FOLGA = 25                                             # rev12: folga de montagem cabeça × ponta da viga (NG01, montagem)
+        v.poli([(FOLGA, 10), (R + 150, 10), (R + 150, 10 + 400), (FOLGA, 10 + 400)], "VISTA")
+        v.interrupcao((R + 150, 10), (R + 150, 410)); v.interrupcao((FOLGA, 410), (R + 150, 410))
+        v.cota_h([0, FOLGA], 410, 8, total=False)
+        v.chamada((FOLGA / 2, 300), (-14, 8), f"folga de montagem {FOLGA} mm")
         for x in xs:
             v.ret(x - 25, 10, 50, livre + 20, "OCULTA")
         v.chamada((AS["x_neo"][1] - 20, 5), (12, -8), f"{AS['neo_nome']}")
@@ -145,8 +148,8 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
     v.chamada((xs[-1], -emb + 30), ((R - xs[-1]) / 10 + 30, -14), AS.get("anc", ""))
     lin = []
     if pilha:
-        lin.append(f"pilha {g(round(sum(t for _, t in pilha), 1))} ≤ {g(livre)} mm livres (quadro APOIOS E ESPERAS)")
+        lin.append(f"pilha sobre o concreto {g(round(sum(t for _, t in pilha), 1))} mm, menor que os {g(livre)} mm livres (quadro APOIOS E ESPERAS)")
     lin.append("gabarito na fôrma: barras ±2 mm")
     for k, t in enumerate(lin):
-        v.texto((R + 120, hc + 40 - k * 55), t, "nota", "TOP_LEFT")
+        v.texto((R + 120, hc + 40 - k * 9 * v.esc), t, "nota", "TOP_LEFT")
     return v

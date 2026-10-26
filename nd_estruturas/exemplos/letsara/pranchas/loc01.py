@@ -138,6 +138,11 @@ v.cota_h([YL[3], round(Y_PC_C[0] * 1000), round(Y_PC_C[1] * 1000), YL[8]], XA["C
 v.chamada((y4, 15195), (14, -10), "PG-02 e PG-04 fora do eixo (portões)")
 v.chamada((round(Y_PC_C[0] * 1000), XA["C"]), (-12, -14), "PC-03 fora das linhas (cotados)")
 v.chamada((round(Y_PC_C[1] * 1000), XA["C"]), (12, -14), "3 vãos de 1651,7 da linha 4 à 9")
+# rev12: pilares da escada e da linha 2 fora dos eixos (P3, P2, P5) cotados a partir de dois eixos (1/2 e D/E)
+v.cota_h([YL[0], 3790, YL[1]], XA["D"] + 2600, 0, total=False)
+v.cota_v([XA["D"], 36175, XA["E"]], 3790 + 2200, 0, total=False)
+v.cota_v([XA["D"], 36175], YL[1] - 1600, 0, total=False)
+v.chamada((3790, 36175), (14, 12), RN.novo(f"{RN.pilar_em(36.175, 3.79)}, {RN.pilar_em(39.5, 3.79)} (escada) e {RN.pilar_em(36.175, 9.65)} (linha 2): cotados dos eixos 1, 2, D e E"))
 
 # ------------------------------------------------------------------ DETALHES TÍPICOS DE LOCAÇÃO 1:25 (cm)
 def det(nome, org, titulo, bx, by, chamadas, sub):
@@ -152,9 +157,9 @@ def det(nome, org, titulo, bx, by, chamadas, sub):
     return d
 X0d, Y0d = 95, 250
 det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
-    [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 40×60, 60 na direção A–E")
+    [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 60 × 40 (x × y), 60 na direção A–E")
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
-    [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40×60, 60 na direção 1–9")
+    [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40 × 60 (x × y), 60 na direção 1–9")
 det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 400, 400, [((-200, -150), (-12, -8), "PC-02 / PC-03 40×40")], "PC-02/PC-03 40×40 (PC-01/PM-01/PM-02 40×60)")
 det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×25")
 
@@ -176,7 +181,7 @@ y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENT
               [40, 18, 9, 18, 15, 18, 76], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
-    "Todos os pilares são centrados nos eixos, exceto PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
+    "Todos os pilares são centrados nos eixos, exceto os pilares da escada e o PE-03 da linha 2 (cotados dos eixos 1, 2, D e E), PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
     RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
     "Tolerância de locação (NBR 9062:2017 5.2.2.6): ±1,0 cm entre apoios consecutivos, acumulado ≤ 0,1 % do comprimento; prumo ±H/300 até 2,5 cm.",

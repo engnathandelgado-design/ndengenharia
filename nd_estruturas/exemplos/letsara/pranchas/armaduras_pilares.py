@@ -120,7 +120,17 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     for (u, w) in P["xy"]:
         A.disco(R(w, u), max(P["D1"] / 2 / ES_, 0.55))
     s1t = "SEÇÃO S.1"
-    A.titulo(sx, sy - 9, s1t)
+    # rev12 (checklist 10): seção sempre cotada — dimensões, cobrimento e posição das barras (cm)
+    _cm = lambda v: f"{v / 10:.1f}".replace(".", ",").replace(",0", "")
+    ws = sorted({round(w) for (u, w) in P["xy"]}); us = sorted({round(u) for (u, w) in P["xy"]})
+    xs_c = [-H / 2] + ws + [H / 2]; ys_c = [-B / 2] + us + [B / 2]
+    yc_ = R(0, -B / 2)[1] - 3.0
+    A.cadeia_h(yc_, [R(w, 0)[0] for w in xs_c], [_cm(b - a) for a, b in zip(xs_c[:-1], xs_c[1:])], acima=False)
+    A.cadeia_h(yc_ - 5.0, [R(-H / 2, 0)[0], R(H / 2, 0)[0]], [_cm(H)], acima=False)
+    xc_ = R(-H / 2, 0)[0] - 2.5
+    A.cadeia_v(xc_, [R(0, u)[1] for u in ys_c], [_cm(b - a) for a, b in zip(ys_c[:-1], ys_c[1:])], lado=-1)
+    A.cadeia_v(xc_ - 4.5, [R(0, -B / 2)[1], R(0, B / 2)[1]], [_cm(B)], lado=-1)
+    A.titulo(sx, sy - 16, s1t, f"{_cm(H)} × {_cm(B)} cm · cobrimento {_cm(COB)} cm · {len(P['xy'])} Ø{fd(P['D1'])}")
     xr = R(-H / 2, 0)[0]
     if P["xy_sobe"]:
         u, w = min(P["xy_sobe"], key=lambda p: (p[1], p[0]))
@@ -142,7 +152,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     if "N3A" in bar:
         b3 = A.forma(xs + 1.5, bb[1] - 6.5, bar["N3A"], ES_)
         bb = (bb[0], min(bb[1], b3[1]), max(bb[2], b3[2]), bb[3])
-    yb_ = min(sy - 14, bb[1] - 4)
+    yb_ = min(sy - 22, bb[1] - 4)
     # S.2 (cabeça)
     if REC:
         HB, HH = u1 - u0, w1 - w0
@@ -155,7 +165,11 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
             A.disco(R2(w, u), max(P["D1"] / 2 / ES_, 0.55))
         for (u, w) in P["xy_cab"]:
             A.disco(R2(w, u), max(16 / 2 / ES_, 0.5))
-        A.titulo(sx, sy2 - 9, "SEÇÃO S.2 (CABEÇA)")
+        xs2 = [w0, w1]; ys2 = [u0, u1]
+        y2c = R2(0, -B / 2)[1] - 3.0
+        A.cadeia_h(y2c, [R2(-H / 2, 0)[0], R2(w0, 0)[0], R2(w1, 0)[0], R2(H / 2, 0)[0]], [_cm(w0 + H / 2), _cm(w1 - w0), _cm(H / 2 - w1)], acima=False)
+        A.cadeia_v(R2(-H / 2, 0)[0] - 2.5, [R2(0, -B / 2)[1], R2(0, u0)[1], R2(0, u1)[1], R2(0, B / 2)[1]], [_cm(u0 + B / 2), _cm(u1 - u0), _cm(B / 2 - u1)], lado=-1)
+        A.titulo(sx, sy2 - 12, "SEÇÃO S.2 (CABEÇA)", f"{_cm(w1 - w0)} × {_cm(u1 - u0)} cm · cobrimento {_cm(COB)} cm")
         if P["xy_sobe"]:
             u, w = min(P["xy_sobe"], key=lambda p: (p[1], p[0]))
             A.bolha_lider(R2(w, u), R2(-H / 2, 0)[0] - 6, R2(w, u)[1] + 4, "N1")
@@ -196,7 +210,7 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
         b6 = A.forma(max(bU[2], bE[2]) + 10, yb_ - 6 - bar[pc]["geo"]["b"] * 10 / ED, bar[pc], ED)
         ybot = min(D(0, zb)[1] - 2, bE[1], b6[1])
         faces = "; ".join(sorted({f"face {fc}" for fc, _, _ in g["faces"]}))
-        A.titulo(xm + 4, ybot - 5, f"DETALHE C{k} — {g['tipos']}", f"{g['n']} consolo{'s' if g['n'] > 1 else ''} ({faces}) · tirante {g['nt']} Ø{fd(g['dt'])} · esc. 1:20")
+        A.titulo(xm + 4, ybot - 5, f"DETALHE {g.get('marcas') or ('C' + str(k))} — {g['tipos']}", f"{g['n']} consolo{'s' if g['n'] > 1 else ''} ({faces}) · tirante {g['nt']} Ø{fd(g['dt'])} · esc. 1:20")
         yb_ = ybot - 16
 
     # ------------------------------------------------ tabelas (direita)

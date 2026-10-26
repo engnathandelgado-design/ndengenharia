@@ -601,7 +601,9 @@ def prancha_pilar(P):
                         geo=dict(k="E", a=lgu, b=wu)),
                    dict(pos=pc, diam=8.0, qtd=len(range(60, proj - 40, 80)) * n_cons, comp=2 * (wu + hu) + 16, forma=[(0, 0), (34, 0), (34, 40), (0, 40), (0, 0), (2, 2)], trechos=[f"{wu}", f"{hu}", "", ""],
                         geo=dict(k="E", a=wu, b=hu))]
-        arm_cons.append(dict(pos=(pa, pb, pc), tipos=tipos, n=n_cons, nt=nt, dt=dt, proj=proj, PW=PWc, larg=lg, h=hc, n6=len(range(60, proj - 40, 80)),
+        import apoios_pilar as _AP
+        marcas_c = "/".join(sorted({_AP.marca_consolo(c) for c in cs}, key=lambda m_: int(m_[1:]) if m_[1:].isdigit() else 99))   # rev12: marca do registro (C1…)
+        arm_cons.append(dict(pos=(pa, pb, pc), tipos=tipos, marcas=marcas_c, n=n_cons, nt=nt, dt=dt, proj=proj, PW=PWc, larg=lg, h=hc, n6=len(range(60, proj - 40, 80)),
                              faces=[(c["face"], c["z"], c["tipo"]) for c in cs], incl=cs[0].get("incl", 0.03)))
         pr.posicoes_desenho.update({pa, pb, pc})
     area_f = (2 * (B + H) * z_rec + 2 * (HB + HH) * (L_TOT - z_rec) + B * H + (B * H - HB * HH) +

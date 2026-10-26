@@ -28,7 +28,7 @@ VB_FACE["e_m"] = _VBF["e_m"]
 def cons_marca(txt, lado="P1"):
     out = []
     for parte in [t.strip() for t in txt.split(";")]:
-        m = re.match(r"(?:(\d+) )?(CP-[A-Z0-9]+)(?: \+(\d+,\d+))? \(([^)]*)\)", parte)
+        m = re.match(r"(?:(\d+) )?(CP-[A-Z0-9]+)(?: só \+\d+,\d+)?(?: \+(\d+,\d+))? \(([^)]*)\)", parte)
         if not m:
             continue
         tipo, z, faces = m.group(2), m.group(3), [x.strip() for x in m.group(4).split(",")]
@@ -38,7 +38,8 @@ def cons_marca(txt, lado="P1"):
             elif tipo == "CP-VT":
                 c = G.consolo(fc, Z_ASS_VT[lado], "CP-VT", 250, 200, H_C["CP-VT"], H_C["CP-VT"], ("PN-1", 20, 700, 300, 100), (200, 150, 10), ("2 Ø12,5", 2, 12.5)); c["incl"] = 0; out.append(c)
             elif tipo == "CP-MEZ":
-                for za in G.Z_MEZ_ASS:
+                so = re.search(r"só \+(\d+,\d+)", parte)                     # rev12: nível único (PL-06: a +3,90 não tem VM entre o P5 e o eixo E)
+                for za in ([G.Z_MEZ_ASS[1 if so.group(1).startswith("7") else 0]] if so else G.Z_MEZ_ASS):
                     c = G.MEZ(fc, za); c["incl"] = 0; out.append(c)
             elif tipo == "CP-VB":
                 c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0; out.append(c)   # rev04: topo horizontal (NBR 9062 7.2.1.6)
@@ -211,7 +212,7 @@ def dados(mk):
                if canto else
                f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda.")
     P = G.base(mk, qt, 400, 600, 10000, cons, XY, f"ND-LET-{mk.replace('-', '')}",
-               f"PILAR PRÉ-MOLDADO {mk} (FAMÍLIA 40×60) — {pos} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+               f"PILAR PRÉ-MOLDADO {mk} ({"40 × 60" if mk.startswith("PF") else "60 × 40"}, x × y) — {pos} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                pos_txt, "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
@@ -225,7 +226,7 @@ def dados(mk):
                ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"], aresta_C=ip["aresta_C"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
     if not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06"):
         P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25",
-                            x_pinos=(102.5,), marca_b="PN-3", aco="CA-50 (NBR 7480), barra lisa de aço nervurado", anc="reta, por aderência (300 = 12 Ø)", rosca=0, viga="TS-01",
+                            x_pinos=(102.5,), marca_b="PN-3", aco="barra nervurada CA-50 (NBR 7480)", anc="reta, por aderência (300 = 12 Ø)", rosca=0, viga="TS-01",
                             pilha=[("NEO-4", 10)], destino="furo Ø50 da ponta da TS-01, grauteado (≥ 290 dentro da viga)")   # rev11: item 13
     elif mk in ("PL-02", "PL-06"):                                             # rev09: base do montante da W 310 (chapa 250 × 250 e 4 BR-M20)
         P["assento"] = dict(neo=(250, 250, 19), neo_nome="CA-L2 chapa de apoio 250×250×19", x_neo=(25, 275), x_pino=75, y_pinos=(-27.5, 27.5), d=16, L=450, emb=350, pino="BR-M16",

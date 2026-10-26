@@ -1,4 +1,4 @@
-"""ND-LET-EX01 — EXECUÇÃO EM OBRA: CAPEAMENTO, CHAVETEAMENTO E 2º ESTÁGIO DAS VIGAS (rev11, pedido do Nathan 26/10/2026).
+"""ND-LET-EX01 — EXECUÇÃO EM OBRA: CAPEAMENTO, CHAVETEAMENTO E 2º ESTÁGIO DAS VIGAS (rev11/rev12).
 Folha para a fábrica enviar ao cliente/construtora que executa essa parte. Linguagem para quem executa; sem notas internas da ND.
 Dados lidos do mesmo registro do cálculo: vm_retangular.json (negativa N11/N12 por apoio), nomes.json (VM e pilares por apoio),
 laje_alveolar.json (painéis, capa, tela), cargas_mezanino.json. Também sai em PDF avulso (ND-LET-EX01-rev11.pdf)."""
@@ -24,6 +24,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="EXECUÇÃO EM OBRA — CAPEAMENTO, CHAVETEAMENTO E 2º ESTÁGIO DAS VIGAS DO MEZANINO (+3,90 E +7,30)",
                         desenho="ND-LET-EX01", folha="01/01", fase="PARA EXECUÇÃO EM OBRA"))
 pr.revisao("00", "26/10/2026", "EMISSÃO INICIAL — FOLHA PARA A CONSTRUTORA (EXECUÇÃO DA CAPA E DO 2º ESTÁGIO)")
+pr.revisao("R12", "26/10/2026", "PLANTA-CHAVE DOS APOIOS; PILARES CORRIGIDOS; ETAPAS EM 1:20; CHAVETA EM CM")
 Q = pr.quadro
 pr.texto(Q[0] + 8, Q[3] - 16, "EXECUÇÃO EM OBRA — CAPA, CHAVETAS E 2º ESTÁGIO DAS VIGAS", "grande", "TITULO")
 pr.texto(Q[0] + 8, Q[3] - 26, "Para quem executa na obra. A fábrica entrega as peças montadas; a construtora executa os itens abaixo, nesta ordem.", "nota", "TEXTO")
@@ -51,12 +52,12 @@ def base(v, etapa):
     v.texto((0, -60), ["", "1 conferir montagem", "2 limpar e umedecer", "3 grautear chavetas", "4 bainhas e negativas", "5 tela Q138", "6 concretar capa + 2º est."][etapa], "nota", "TOP_CENTER")
 
 
-for k in range(1, 7):
-    v = pr.vista(f"E{k}", (Q[0] + 70 + (k - 1) * 100, Q[3] - 120), 30, titulo=f"ETAPA {k}", subtitulo="corte sobre a VM", unidade="cm")
+for k in range(1, 7):                                                    # rev12: etapas em 1:20 (antes miniaturas 1:30)
+    v = pr.vista(f"E{k}", (Q[0] + 66 + (k - 1) * 112, Q[3] - 125), 20, titulo=f"ETAPA {k}", subtitulo="corte sobre a VM", unidade="cm")
     base(v, k)
 
 # ------------------------------------------------------------------ detalhes ampliados
-d1 = pr.vista("D1", (Q[0] + 110, Q[3] - 330), 5, titulo="DETALHE 1 — CHAVETA ENTRE PAINÉIS", subtitulo="graute ≥ 30 MPa não retrátil, antes da capa", unidade="mm")
+d1 = pr.vista("D1", (Q[0] + 110, Q[3] - 330), 5, titulo="DETALHE 1 — CHAVETA ENTRE PAINÉIS", subtitulo="graute ≥ 30 MPa não retrátil, antes da capa", unidade="cm")
 for sg in (-1, 1):
     d1.poli([(sg * 10, 0), (sg * 10, 60), (sg * 30, 90), (sg * 30, 140), (sg * 10, 170), (sg * 10, 200), (sg * 300, 200), (sg * 300, 0)], "VISTA", True)
 d1.hachura([(-10, 0), (10, 0), (10, 60), (30, 90), (30, 140), (10, 170), (10, 200), (-10, 200), (-10, 170), (-30, 140), (-30, 90), (-10, 60)], "AR-CONC", 0.02)
@@ -89,6 +90,30 @@ d4.ret(0, 0, 900, 200, "VISTA"); d4.ret(0, 200, 900, 50, "CORTADO"); d4.ret(900,
 d4.chamada((910, 150), (12, 10), "fôrma de borda (madeira ou metálica), travada")
 d4.chamada((450, 0), (-10, -14), "alvéolos fechados na ponta (tampa de fábrica)")
 
+# ------------------------------------------------------------------ rev12: PLANTA-CHAVE dos apoios de continuidade (VM sobre pilar)
+import renomear as RN
+from geometria import X_EIXO, Y_LIN
+kp = pr.vista("KP", (Q[0] + 700, Q[1] + 150), 200, titulo="PLANTA-CHAVE — APOIOS DE CONTINUIDADE DAS VM (+3,90 E +7,30)",
+              subtitulo="círculo = apoio com N11 nas bainhas do pilar e N12 na capa (tabela ao lado); linha 1 embaixo", unidade="cm")
+for vg in [q for q in NM if q.get("tipo") == "viga" and str(q.get("marca", "")).startswith("VM") and q.get("nivel") == "+3,90"]:
+    x0, x1, y0_ = vg["x0"] * 1000, vg["x1"] * 1000, vg["y0"] * 1000
+    kp.ret(min(x0, x1) + 200, y0_ - 150, abs(x1 - x0) - 400, 300, "VISTA")
+    kp.texto(((x0 + x1) / 2, y0_ + (450 if y0_ < 5000 else -450)), RN.N(vg["nome"]) + " / " + RN.N(next((q["nome"] for q in NM if q.get("tipo") == "viga" and q.get("nivel") == "+7,30"
+             and abs(q["x0"] - vg["x0"]) < 0.01 and abs(q["y0"] - vg["y0"]) < 0.01), "")), "min", "BOTTOM_CENTER" if y0_ < 5000 else "TOP_CENTER")
+for x in (0.0, X_EIXO["B"], X_EIXO["C"], X_EIXO["D"], X_EIXO["E"]):
+    for y in (Y_LIN[0], Y_LIN[1]):
+        kp.ret(x * 1000 - 200, y * 1000 - 200, 400, 400, "CORTADO")
+_vis = {}
+for a in ap:
+    _vis.setdefault((a["nome_pilar"], round(a["x"], 3), round(a["y"], 3)), []).append(a["niv"])
+for (nm_, x_, y_), nivs in _vis.items():
+    kp.circulo((x_ * 1000, y_ * 1000), 700, "INDICACAO")
+    kp.texto((x_ * 1000, y_ * 1000 + (-900 if y_ < 5 else 900)), RN.N(nm_ + ("" if len(nivs) > 1 else f" ({nivs[0]})")), "nota", "TOP_CENTER" if y_ < 5 else "BOTTOM_CENTER")
+for lb, x in (("A", 0.0), ("B", X_EIXO["B"]), ("C", X_EIXO["C"]), ("D", X_EIXO["D"]), ("E", X_EIXO["E"])):
+    kp.eixo((x * 1000, -1800), (x * 1000, Y_LIN[1] * 1000 + 1800), 0); kp.texto((x * 1000, -2300), lb, "nota", "TOP_CENTER")
+for lb, y in (("1", Y_LIN[0]), ("2", Y_LIN[1])):
+    kp.eixo((-1800, y * 1000), (X_EIXO["E"] * 1000 + 1800, y * 1000), 0); kp.texto((-2300, y * 1000), lb, "nota", "MIDDLE_RIGHT")
+
 # ------------------------------------------------------------------ tabelas
 lin = [[a["niv"], a["pilar"], a["esq"], a["dir"], NV.txt(a["N11"]), NV.txt(a["N12"]), "2 bainhas Ø50"] for a in ap]
 y = pr.tabela(Q[0] + 690, Q[3] - 40, "ARMADURA DE CONTINUIDADE POR APOIO (VM sobre pilar)", ["NÍVEL", "PILAR", "VM ESQ.", "VM DIR.", "N11 (bainhas)", "N12 (capa)", "GRAUTE"], lin, [18, 18, 20, 20, 36, 36, 30], h_lin=6.4)
@@ -108,6 +133,7 @@ y = pr.tabela(Q[0] + 690, y - 8, "ESPECIFICAÇÕES", ["ITEM", "VALOR"], esp, [60
 pr.notas(Q[0] + 690, y - 8, [
     "Escopo da fábrica: pilares, vigas VM, lajes alveolares montadas, com as pontas das VM concretadas antes das lajes. Escopo da obra: graute das chavetas e das bainhas, armadura de obra (N11, N12, negativa da laje e tela), 2º estágio, capa, fôrma de borda e cura.",
     "Sequência: (1) conferir a montagem (apoio de 10 cm das lajes, neoprene em fita, folgas); (2) limpar e umedecer as superfícies (face rugosa da VM e da laje, NBR 9062 6.3); (3) grautear as chavetas entre painéis; (4) passar as N11 nas bainhas dos pilares e grautear; posicionar as N12 e a negativa da laje; (5) tela Q138 com espaçadores; fechar alvéolos e bordas; (6) concretar o 2º estágio e a capa juntos; (7) curar 7 dias; (8) liberar a carga com fck ≥ 20 MPa.",
+    f"Bainhas Ø50 com 3 Ø{N11['d']:g} cada: barras ocupam {f1(3 * math.pi * N11['d'] ** 2 / 4 / (math.pi * 50 ** 2 / 4) * 100, 0)} % da seção da bainha (≤ 40 %); grautear por baixo com graute fluido até sair pelo respiro de cima.",
     "Antes de concretar, conferir: chavetas cheias; bainhas grauteadas com as barras centradas; N12 e tela no lugar com cobrimento; fôrma de borda travada; superfície limpa e úmida (sem água empoçada).",
     "NÃO FAZER: furar a laje sem consultar a engenharia; cortar cordoalha; apoiar carga concentrada (paletes, máquinas) antes da cura; concretar a capa sem grautear chavetas e bainhas."], 178)
 av = pr.salvar(PR + "ND-LET-EX01")

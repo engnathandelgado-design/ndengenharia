@@ -63,7 +63,7 @@ def cena(p, x_ini=0, x_fim=L):
 
 
 def rot(p, pts, labs):
-    p.add_point_labels(np.array(pts), labs, font_size=15, point_size=8, point_color="#c0392b", text_color="#111111",
+    p.add_point_labels(np.array(pts), labs, font_size=26, point_size=8, point_color="#c0392b", text_color="#111111",
                        shape_color="white", shape_opacity=0.85, margin=3, always_visible=True)
 
 
@@ -77,7 +77,7 @@ rot(p, [(ALCAS[0], 0, H + 0.14), (TERCAS[3] - 0.075, 0.06, H + 0.12), (NOS[2] + 
 p.enable_parallel_projection()
 p.camera_position = [(L * 0.5 - 8, -14, 9), (L * 0.5, 0, 0.45), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(2.3)
-p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · {TD.peso/10:.2f} t · {TD.P['qtd']} peças".replace(".", ","), font_size=16, position="upper_left", color="#111111")
+p.add_text(f"TS-01 — viga I90 de cobertura sem dentes · {L*100:.1f} cm · {TD.peso/10:.2f} t · {TD.P['qtd']} peças".replace(".", ","), font_size=28, position="upper_left", color="#111111")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-geral.png")
 from PIL import Image, ImageChops
 im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-geral.png").convert("RGB")
@@ -135,7 +135,7 @@ rot(p, [(TERCAS[1] - 0.04, 1.0, H + 0.32), (TERCAS[1] - 0.08, 0.0, H + 0.30), (T
 p.enable_parallel_projection()
 p.camera_position = [(-3.2, -5.4, 2.4), (1.3, 0, 0.55), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.15)
-p.add_text("Ponta da TS-01: apoio, terças Z contínuas por transpasse, ST-1P e X — sem solda, sem mão-francesa", font_size=15, position="upper_left", color="#111111")
+p.add_text("Ponta da TS-01: apoio, terças Z contínuas por transpasse, ST-1P e X — sem solda, sem mão-francesa", font_size=26, position="upper_left", color="#111111")
 p.screenshot("/home/claude/letsara/pranchas/ISO-TS01-ponta.png")
 im = Image.open("/home/claude/letsara/pranchas/ISO-TS01-ponta.png").convert("RGB")
 bb = ImageChops.difference(im, Image.new("RGB", im.size, "white")).getbbox()

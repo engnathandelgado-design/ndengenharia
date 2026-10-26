@@ -123,7 +123,8 @@ ca.chamada((LAJ - 120, H + NEOF + H2 / 2), (34, -30), "laje alveolar h20")
 ca.chamada((B2 - 15, H + 160), (10, 24), "N9 Ø10 c/15 (alça)")
 _lin = sorted({c[1] for c in CORD})
 _xd = {yy: max(c[0] for c in CORD if c[1] == yy) for yy in _lin}
-_rt = {_lin[0]: "C1 (2, isoladas 150) + C2 (2) Ø12,7"}
+_n0, _ni = sum(1 for c in CORD if c[1] == _lin[0]), R["isoladas_pontas"]
+_rt = {_lin[0]: f"C1 ({_ni}, isoladas 150) + C2 ({_n0 - _ni}) Ø12,7"}          # rev12: quantidades do registro (antes C2 fixo em 2)
 for k_, yy in enumerate(_lin[1:]):
     _rt[yy] = f"C{k_ + 3} ({sum(1 for c in CORD if c[1] == yy)}) Ø12,7"
 for k_, yy in enumerate(_lin):

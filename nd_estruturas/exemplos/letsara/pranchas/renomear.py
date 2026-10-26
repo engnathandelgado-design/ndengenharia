@@ -185,8 +185,22 @@ def limpar_interno(s):
     return s.strip() if s.strip() else s
 
 
+_RX_DEC = re.compile(r"(?<![\d.:/])(\d+)\.(\d+)(?=\s?(?:cm|mm|m³|m²|MPa|kN|kg|t\b|m\b|%))")
+_RX_DEC2 = re.compile(r"(\d)\s?×\s?(\d+)\.(\d+)\b")
+
+
+def decimal_virgula(s):
+    """rev12 (checklist 10): vírgula decimal em medidas com unidade e em dimensões 'a × b.c'."""
+    if not isinstance(s, str) or "." not in s:
+        return s
+    s = _RX_DEC.sub(r"\1,\2", s)
+    s = re.sub(r"(?<=[+=] )(\d+)\.(\d+)(?=[)\s,;]|$)", r"\1,\2", s)
+    s = re.sub(r"Ø(\d+)\.(\d)", r"Ø\1,\2", s)
+    return _RX_DEC2.sub(lambda m: m.group(0).replace(".", ","), s)
+
+
 def renomear(s):
-    return limpar_interno(_renomear(s))
+    return decimal_virgula(limpar_interno(_renomear(s)))
 
 
 def novo(s):

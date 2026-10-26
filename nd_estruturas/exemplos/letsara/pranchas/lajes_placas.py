@@ -234,13 +234,17 @@ def lajes():
     d.chamada((600, 235), (10, 14), "capa 5 cm C30")
     d.chamada((BT / 2, -400), (-20, -10), "VM 30 × 75 (ND-LET-VM01)")
     # ================= ARMAÇÃO E PROTENSÃO
-    N15 = sum(1 for c in LJ["cordoalhas"] if c["diam"] == "15.2")
-    N12 = N_C - N15
-    F15 = next(c["F_macaco_kN"] for c in LJ["cordoalhas"] if c["diam"] == "15.2")
+    _xs = [c["x_mm"] for c in LJ["cordoalhas"]]
+    _borda = [c for c in LJ["cordoalhas"] if c["x_mm"] in (min(_xs), max(_xs))]        # rev12: 2 Ø12,7 em cada nervura de borda
+    N15 = len(_borda)                                                                    # C1 (nervuras de borda)
+    N12 = N_C - N15                                                                      # C2 (nervuras internas)
+    D1 = _borda[0]["diam"].replace(".", ",")
+    Y_C2 = max(c["y_mm"] for c in _borda)
+    F15 = _borda[0]["F_macaco_kN"]
     F12 = next(c["F_macaco_kN"] for c in LJ["cordoalhas"] if c["diam"] == "12.7")
     F95 = L3["cordoalhas"][0]["F_macaco_kN"]
     a = pr.vista("SEÇÃO DE ARMAÇÃO", (Q[0] + 90, Q[1] + 205), 5, titulo="SEÇÃO DE ARMAÇÃO — LA-01",
-                 subtitulo=f"{N15} Ø15,2 nas nervuras de borda + {N12} Ø12,7 nas internas, CP-190 RB aderentes, eixo a {Y_C / 10:g} cm do fundo; capa com tela Q138".replace(".", ","), unidade="cm")
+                 subtitulo=f"{N15} Ø{D1} nas nervuras de borda (2 por nervura, a {Y_C / 10:g} e {Y_C2 / 10:g} cm do fundo) + {N12} Ø12,7 nas internas, CP-190 RB aderentes; capa com tela Q138".replace(".", ","), unidade="cm")
     a.ret(0, 0, B_N, H_P, "CORTADO")
     for xa in XAL:
         a.circulo((xa, H_P / 2), D_AL / 2, "VISTA")
@@ -248,12 +252,12 @@ def lajes():
         a.ponto_barra((xc, yc_), float(dm), "ARM_PROT")
     a.hachura([(0, H_P), (B_P, H_P), (B_P, H_P + 50), (0, H_P + 50)], "AR-CONC", 0.02); a.linha((0, H_P + 50), (B_P, H_P + 50), "VISTA")
     a.linha((25, H_P + 25), (B_P - 25, H_P + 25), "ARMADURA")
-    a.cota_v([0, Y_C, H_P, H_P + 25, H_P + 50], B_N + 10, 12, total=False)
-    a.cota_h([0] + [round(x, 3) for x, _, _ in CRD] + [B_N], 0, -10, total=True)
-    a.chamada((CRD[0][0], Y_C), (6, -34), f"C1 — {N15} Ø15,2 (nervuras de borda)")
+    a.cota_v(sorted({0, Y_C, Y_C2, H_P, H_P + 25, H_P + 50}), B_N + 10, 12, total=False)
+    a.cota_h(sorted({0, B_N} | {round(x, 3) for x, _, _ in CRD}), 0, -10, total=True)
+    a.chamada((CRD[0][0], Y_C), (6, -34), f"C1 — {N15} Ø{D1} (2 por nervura de borda, uma sobre a outra)")
     a.chamada((CRD[4][0], Y_C), (20, -26), f"C2 — {N12} Ø12,7 (nervuras internas), a {Y_C / 10:g} cm do fundo".replace(".", ","))
     a.chamada((B_P * 0.7, H_P + 25), (14, 12), "tela Q138 a meia altura da capa (2,5 cm)")
-    a.texto((0, -250), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F15)} kN (Ø15,2) e {f(F12)} kN (Ø12,7) por cordoalha no macaco, todas aderentes;", "nota")
+    a.texto((0, -250), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F12)} kN por cordoalha Ø12,7 no macaco, todas aderentes;", "nota")
     a.texto((0, -300), f"LA-03/LA-04: 7 Ø9,5 a {f(F95)} kN; liberação gradual com fckj ≥ {FCKJ:.0f} MPa; lbpt = {LBPT * 100:.0f} cm.", "nota")
     n3 = pr.vista("DETALHE 3", (Q[0] + 85, Q[1] + 80), 10, titulo="DETALHE 3 — NEGATIVA N1 E ALVÉOLOS NA PONTA (CORTE LONGITUDINAL)",
                   subtitulo="2 Ø10 por painel em cada apoio, dentro da capa (construtiva — laje biapoiada); alvéolos tampados 20 cm na ponta", unidade="cm")
@@ -277,7 +281,7 @@ def lajes():
     tq = pr.tabela_croqui(XT, Y_SPLIT - 18, br, h_lin=10.0)
     yy = pr.tabela(XT, tq["y_base"] - 4, "PROTENSÃO POR PAINEL",
                    ["POS", "Ø (mm)", "QUANT", "y (mm)", "σpi (MPa)", "F MACACO (kN)", "PAINEL"],
-                   [["C1", "15,2", N15, Y_C, f"{SIG_PI:.0f}", f(F15), "LA-01 / LA-01R"], ["C2", "12,7", N12, Y_C, f"{SIG_PI:.0f}", f(F12), "LA-01 / LA-01R"],
+                   [["C1", D1, N15, f"{Y_C} e {Y_C2}", f"{SIG_PI:.0f}", f(F15), "LA-01 / LA-01R"], ["C2", "12,7", N12, Y_C, f"{SIG_PI:.0f}", f(F12), "LA-01 / LA-01R"],
                     ["C3", "9,5", len(L3["cordoalhas"]), Y_C, f"{SIG_PI:.0f}", f(F95), "LA-03 / LA-03R / LA-04"]], [14, 18, 18, 18, 24, 28, 40])
     yy = pr.tabela(XT, yy - 4, "PRODUÇÃO E MANUSEIO", ["ITEM", "VALOR"],
                    [["concreto / liberação", f"C50 · fckj ≥ {FCKJ:.0f} MPa (LA-03: {L3['fckj']:.0f}), liberação gradual (macaco)"], ["transferência", f"lbpt = {LBPT * 100:.0f} cm"],
@@ -290,7 +294,7 @@ def lajes():
     pr.imagem(Q[0] + 770, Q[3] - 160, Q[0] + 955, Q[3] - 55, "/home/claude/letsara/pranchas/img/iso_la01.png",
               titulo="ISOMÉTRICO — LA-01R", subtitulo="trecho de 3,0 m: 6 alvéolos, ponta fechada 20 cm, recorte e alvéolos 2 e 5 cheios")
     y = Q[3] - 6
-    desc = {"LA-01": f"125 × {L_P/10:.0f} × 20, {N15} Ø15,2 + {N12} Ø12,7", "LA-02": f"70 × {L_P/10:.0f} × 20, 4 Ø12,7",
+    desc = {"LA-01": f"125 × {L_P/10:.0f} × 20, {N_C} Ø12,7 ({N15} nas nervuras de borda)", "LA-02": f"70 × {L_P/10:.0f} × 20, 4 Ø12,7",
             "LA-03": f"125 × {L_P3/10:.0f} × 20, 7 Ø9,5", "LA-04": f"70 × {L_P3/10:.0f} × 20, 4 Ø9,5"}
     obs = {"LA-01R": f"recorte 45×{PROF/10:g} ou 30×20 (P6); alv. {PRE[0]} e {PRE[1]} cheios", "LA-03R": f"recorte 30×20 (P6); alv. {PRE[0]} e {PRE[1]} cheios",
            "LA-02": "corte longit. do LA-01", "LA-03": f"só {NIVS[0]}, vão da escada", "LA-04": f"só {NIVS[0]}, vão da escada"}
@@ -318,7 +322,7 @@ def lajes():
                                  f"Escada (DEC-045): no {NIVS[0]} não há laje entre o P6, o P7 e a linha 2 (abertura {f(ABERTURA['x1'] - ABERTURA['x0'], 2)} × {f(ABERTURA['y1'] - ABERTURA['y0'], 2)} m); as LA-03 / LA-04 ({L_P3/10:.0f} cm) vão da linha 1 à VM-04 (P6–P7). O {NIVS[1]} é contínuo.",
                                  f"Vibração (NBR 6118:2023 23.3): f1 = {f(VB['f1_Hz'], 2)} Hz para o {NIVS[0]}; abaixo de 4,8 Hz (referência de escritório com folga de 20 %), aceitável para depósito; se o uso virar escritório ou circulação intensa, reavaliar.",
                                  "Armadura negativa da laje sobre os apoios: N1 2 Ø10 por painel, L = 200 cm, dentro da capa (DETALHE 3); alvéolos fechados na fábrica nos 20 cm das pontas para o graute não entrar. Continuidade das VM (N11 em 2 bainhas Ø50 grauteadas no pilar + N12 na capa, faixa ≤ 1,5 × largura do pilar): tabela acima; sequência de execução da capa, chavetas e 2º estágio para a construtora: ND-LET-EX01.",
-                                 "EM DECISÃO (DEC-068): a regra da obra é cordoalha só Ø12,7/Ø9,5; com uma cordoalha por nervura, 7 Ø12,7 dá uso 1,004 no ELU. Até a decisão do Nathan a LA-01 fica com 2 Ø15,2 + 5 Ø12,7 — NÃO PRODUZIR a LA-01/LA-01R antes da revisão.",
+                                 "A CONFIRMAR COM A FÁBRICA ANTES DA PRODUÇÃO DA LA-01 / LA-01R: a extrusora tem de aceitar 2 cordoalhas Ø12,7 na nervura de borda, uma sobre a outra (eixos a 4,0 e 7,5 cm do fundo, livre 2,2 cm). Se não aceitar, voltar ao projeto antes de fabricar.",
                                  f"Içamento só por garra mecânica nas 2 pontas (a {IC['ponto_m'] * 100:.0f} cm) com balancim e cabos verticais; não usar alça de CA-50. Desforma, içamento e transporte com fcj ≥ {FCKJ:.0f} MPa; estocar sobre 2 calços alinhados a {IC['ponto_m'] * 100:.0f} cm das pontas, no máximo 8 painéis por pilha."])
     avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-LA01")
     print("LA01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos", [a for a in avisos if a[0] == "ERRO" or "sobrep" in a[1] or "cruza" in a[1]])

@@ -51,13 +51,13 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         for dy in AS["y_pinos"]:
             p.add_mesh(pv.Cylinder(center=(xa_ + AS["x_pino"] / 1000, dy / 1000, zr_ + 0.01 + sai / 2), direction=(0, 0, 1), radius=AS["d"] / 2000, height=sai), color="#b03a2e")
         p.add_mesh(box(xa_ + AS["x_neo"][0] / 1000, -AS["neo"][1] / 2000, zr_, (AS["x_neo"][1] - AS["x_neo"][0]) / 1000, AS["neo"][1] / 1000, 0.01), color="#202020")
-        labs.append(((xa_ + AS["x_pino"] / 1000, AS["y_pinos"][-1] / 1000, zr_ + 0.01 + sai), f"assento TS-01: {len(AS['y_pinos'])} {AS['pino']}"))
+        labs.append(((xa_ + AS["x_pino"] / 1000, AS["y_pinos"][-1] / 1000, zr_ + 0.01 + sai), f"assento da viga de cobertura: {len(AS['y_pinos'])} {AS['pino']}"))
     PT = G.get("pinos_topo")
     if PT and z1 >= L - 0.01:                                        # DEC-040: pinos PN-5 no topo (TS-01 apoiada no topo)
         sai = (PT["L"] - PT["emb"]) / 1000
         for x_, y_ in PT["xy"]:
             p.add_mesh(pv.Cylinder(center=(x_ / 1000, y_ / 1000, L + sai / 2), direction=(0, 0, 1), radius=PT["d"] / 2000, height=sai), color="#b03a2e")
-        labs.append(((PT["xy"][-1][0] / 1000, PT["xy"][-1][1] / 1000, L + sai), f"{len(PT['xy'])} pinos {PT['nome']} Ø{PT['d']:g} (TS-01)"))
+        labs.append(((PT["xy"][-1][0] / 1000, PT["xy"][-1][1] / 1000, L + sai), f"{len(PT['xy'])} pinos {PT['nome']} Ø{PT['d']:g} (viga de cobertura)"))
     for c in G["consolos"]:
         nx, ny = FACE_N[c["face"]]
         zc = c["z"] / 1000
@@ -137,7 +137,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
     return labs
 
 
-def rot(p, pts, labs, fs=13):
+def rot(p, pts, labs, fs=23):
     if pts:
         p.add_point_labels(np.array(pts), labs, font_size=fs, point_size=8, point_color="#c0392b", text_color="#111111",
                            shape_color="white", shape_opacity=0.85, margin=3, always_visible=True)
@@ -151,7 +151,9 @@ rot(p, pts, txt)
 p.enable_parallel_projection()
 p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2))
-p.add_text(f"{G['marca']} em pé", font_size=13, position="upper_left", color="#111111")
+import renomear as _RN
+_NM = _RN.lista(_RN.nomes_de(G["marca"]))
+p.add_text(f"{G['marca']} ({_NM}) em pé", font_size=23, position="upper_left", color="#111111")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-geral.png")
 
 # rev07: duas vistas (frente C/B e costas A/D), para a produção
@@ -159,11 +161,11 @@ p = pv.Plotter(off_screen=True, shape=(1, 2), window_size=(1500, 2600), border=F
 for k_, (cam, nome_v) in enumerate((((-9.0, 7.5, L / 2 + 2.5), "faces C e B"), ((9.0, -7.5, L / 2 + 2.5), "faces A e D"))):
     p.subplot(0, k_)
     labs = cena(p)
-    rot(p, [l[0] for l in labs], [l[1] for l in labs], fs=17)
+    rot(p, [l[0] for l in labs], [l[1] for l in labs], fs=30)
     p.enable_parallel_projection()
     p.camera_position = [cam, (0.0, 0, L / 2), (0, 0, 1)]
     p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2) * 1.0)
-    p.add_text(f"{G['marca']} — {nome_v}", font_size=17, position="upper_left", color="#111111")
+    p.add_text(f"{G['marca']} ({_NM}) — {nome_v}", font_size=30, position="upper_left", color="#111111")
 pass
 p.screenshot(SAIDA + f"ISO-{G['marca']}-2v.png")
 
@@ -175,6 +177,6 @@ rot(p, [l[0] for l in labs], [l[1] for l in labs])
 p.enable_parallel_projection()
 p.camera_position = [(H / 2 + 4.0, -3.4, zc + 2.3), (0, 0, zc - 0.1), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.3)
-p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} do {G['marca']}", font_size=15, position="upper_left", color="#111111")
+p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} do {G['marca']}", font_size=26, position="upper_left", color="#111111")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-consolo.png")
 print("ok")

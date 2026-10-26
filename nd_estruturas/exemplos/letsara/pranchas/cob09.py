@@ -85,6 +85,9 @@ def L_paraf(partes, it):
     return int(math.ceil(L / 5.0) * 5)
 
 
+import os, json as _json, re as _re
+SKIP = _json.loads(os.environ.get("COB09_SKIP", "[]"))
+_x2 = lambda a, b: a[0] * b[1] - a[1] * b[0]
 CELAS = {"ISO 2": (Q[0] + 8, Q[3] - 14, 200, 250), "ISO 3": (Q[0] + 214, Q[3] - 14, 200, 250), "ISO 4": (Q[0] + 420, Q[3] - 14, 200, 250),
          "ISO 1": (Q[0] + 8, Q[3] - 300, 300, 200), "ISO 5": (Q[0] + 316, Q[3] - 300, 304, 200)}
 TAB = []
@@ -97,6 +100,40 @@ for nome, (tit, fn) in LC.ITENS.items():
     org = (cx + 20 + (cw - 40 - (x1 - x0) / esc) / 2 - x0 / esc, cy - 8 - (ch - 46) + (ch - 46 - (y1 - y0) / esc) / 2 - y0 / esc)
     v = pr.vista(nome, org, esc, titulo=f"{nome} — {tit}", subtitulo="explodido ao longo dos parafusos; balões = itens da tabela", unidade="mm")
     pj = I.desenhar_iso(v, sol, cam)
+    # rev12 (COB09): cotas em mm nas chapas (2 maiores arestas, alinhadas no isométrico) e hachura na face maior de cada chapa
+    feitos = set()
+    for p in partes:
+        if p["g"] != "caixa" or p.get("concreto") or p["marca"] == "T" or p["item"] in feitos:
+            continue
+        feitos.add(p["item"])
+        bx0, bx1, by0, by1, bz0, bz1 = p["b"]
+        e_ = np.array(p["exp"], float)
+        dims = sorted([(bx1 - bx0, 0), (by1 - by0, 1), (bz1 - bz0, 2)], reverse=True)
+        lo = np.array((bx0, by0, bz0), float) + e_
+        for comp, ax in dims[:2]:
+            if comp < 15 or [nome, f"{comp:g}"] in SKIP:
+                continue
+            fim = lo.copy(); fim[ax] += comp
+            pa, pb = cam.proj(lo), cam.proj(fim)
+            dx, dy = pb[0] - pa[0], pb[1] - pa[1]
+            nrm = math.hypot(dx, dy) or 1.0
+            ox, oy = -dy / nrm * 6 * esc, dx / nrm * 6 * esc                 # 6 mm no papel, para fora do conjunto
+            cxa, cya = np.mean([cam.proj(np.array(c_, float)) for s_ in sol for f_ in s_.faces for c_ in f_], axis=0)
+            if ox * ((pa[0] + pb[0]) / 2 - cxa) + oy * ((pa[1] + pb[1]) / 2 - cya) < 0:
+                ox, oy = -ox, -oy
+            qa, qb = (pa[0] + ox, pa[1] + oy), (pb[0] + ox, pb[1] + oy)
+            v.linha(pa, qa, "COTA"); v.linha(pb, qb, "COTA"); v.linha(qa, qb, "COTA")
+            ang = math.degrees(math.atan2(dy, dx))
+            ang = ang + 180 if ang > 90 else (ang - 180 if ang < -90 else ang)
+            v.texto(((qa[0] + qb[0]) / 2 + ox * 0.15, (qa[1] + qb[1]) / 2 + oy * 0.15), f"{comp:g}".replace(".", ","), "nota", "BOTTOM_CENTER", rot=ang)
+        # hachura da face de maior área (projetada)
+        cantos = lambda fixo, val: [np.array(c_, float) + e_ for c_ in (
+            [(val, by0, bz0), (val, by1, bz0), (val, by1, bz1), (val, by0, bz1)] if fixo == 0 else
+            [(bx0, val, bz0), (bx1, val, bz0), (bx1, val, bz1), (bx0, val, bz1)] if fixo == 1 else
+            [(bx0, by0, val), (bx1, by0, val), (bx1, by1, val), (bx0, by1, val)])]
+        melhor = max(((fx, vv) for fx, vv in ((0, bx0), (0, bx1), (1, by0), (1, by1), (2, bz0), (2, bz1))),
+                     key=lambda t: abs(_x2(np.subtract(cam.proj(cantos(*t)[2]), cam.proj(cantos(*t)[0])), np.subtract(cam.proj(cantos(*t)[3]), cam.proj(cantos(*t)[1])))))
+        v.hachura([tuple(cam.proj(c_)) for c_ in cantos(*melhor)], "ANSI31", 0.4 * esc / 5, "METALICA")
     # balões fora do desenho, na direção do centro do item (ordenados para não cruzar)
     xc_, yc_ = (x0 + x1) / 2, (y0 + y1) / 2
     itens = sorted({p["item"] for p in partes})
@@ -139,5 +176,12 @@ notas = [
     "Sequência de montagem de cada isométrico: peças na ordem dos itens (1, 2, 3...), parafusos postos com aperto manual; aperto final com toda a linha montada e alinhada."]
 pr.notas(x0t, y - 4, notas, 180)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-COB09")
+_cruz = [a for a in avisos if "cruza o texto" in a[1]]
+if _cruz and not os.environ.get("COB09_SKIP"):                         # rev12: cota que cruza o desenho sai (fica a da tabela de itens)
+    import subprocess as _sp
+    _vals = {_re.search(r"texto '([^']+)'", a[1]).group(1) for a in _cruz}
+    _sk = [[n_, v_] for n_ in CELAS for v_ in _vals]
+    _sp.run([sys.executable, __file__], env=dict(os.environ, COB09_SKIP=_json.dumps(_sk)))
+    sys.exit(0)
 for a in avisos:
     print(a)

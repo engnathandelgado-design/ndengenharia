@@ -178,7 +178,8 @@ def prancha_viga(P):
     if P.get("pinos_topo"):
         ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 26), "apoio das TS-01: 2 NEO-3C + 4 PN-5 Ø20 por linha" if CTp else "apoio das TS-01: 2 NEO-3 + 4 PN-5 Ø20 por linha")
     if CTp and P.get("pinos_topo"):
-        ve.chamada((P["pinos_topo"][0] - CTp["b"] / 2, H - CTp["h"] / 2), (-14, -18), f"consolo CT-I120 {CTp['b']/10:g} × {CTp['proj']/10:g} × {CTp['h']/10:g}/{CTp['h_ext']/10:g} (mísula) nas 2 faces — CORTE D-D")
+        _pc = max(P["pinos_topo"])                                      # rev12: chamada no consolo mais afastado da ponta (não sai da folha)
+        ve.chamada((_pc - CTp["b"] / 2, H - CTp["h"] / 2), (-14, -18), f"consolo CT-I120 {CTp['b']/10:g} × {CTp['proj']/10:g} × {CTp['h']/10:g}/{CTp['h_ext']/10:g} (mísula) nas 2 faces — CORTE D-D")
         ve.marcador_corte((P["pinos_topo"][0] + CTp["b"] / 2 + 150, -22 * ESC), (P["pinos_topo"][0] + CTp["b"] / 2 + 150, H + 30 * ESC), "D", lado=1)
     if P.get("consolos"):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
@@ -456,7 +457,7 @@ def prancha_viga(P):
         y = pr.tabela(XC, y - 4, P["tab_isol"]["titulo"], P["tab_isol"]["cab"], P["tab_isol"]["linhas"], P["tab_isol"]["larg"], h_lin=5.0)
     y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], P["insertos"], [16, 104, 10, 52])
     qd = [["MARCA", P["marca"], "SEÇÃO", P.get("secao_nome", f"I{H/10:g}") + f" (h {H/10:g}, b {B/10:g}, bw {P['bw']/10:g})"],
-          ["COMPRIMENTO", f"{L/10:g} cm", "CONCRETO", f"C{P['fck']} / fckj {P['fckj']} MPa"],
+          ["COMPRIMENTO", f"{f(L/10, 1)} cm", "CONCRETO", f"C{P['fck']:g} / fckj {f(P['fckj'], 0)} MPa"],
           ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(peso/10, 2)} t"],
           ["AÇO CA-50", "ver resumo do aço (+10 %) por marca", "PROTENSÃO", f"{n_cord} cord. {CT} — {f(F_cord, 1)} kN/cord."],
           ["DENTE", f"{HD/10:g} × {LN/10:g} cm" if HD else "sem dente (apoio direto)", "COBRIMENTO", "3,0 cm (CAA II)"]]
@@ -474,15 +475,26 @@ def prancha_viga(P):
 
 
 # ================================================================== I120 — V404 / V405 / V406 / V407 (DEC-058)
-def dados_i110():
-    L = round(I1J["V406"]["L_peca"] * 1000)
+def dados_i110(mk="V406"):
+    P = _dados_i110(mk)
+    if mk != "V406":                                             # folha só de fôrma da marca: notas e armação na ND-LET-I120
+        P["notas"] = [f"Fôrma, insertos e protensão desta marca. Armação (tabela de ferros e resumo do aço por marca), notas de produção, dente e consolos CT-I120: ND-LET-I120. Posições dos consolos CT-I120 e dos PN-5 medidas da ponta do lado A."]
+        P["tab_isol"] = None
+    return P
+
+
+def _dados_i110(mk="V406"):
+    """rev12: uma elevação de fôrma por marca com geometria diferente (V406 = folha principal com a armação; V407 e V405 em folhas
+    próprias ND-LET-I120-2 / -3; V404 = V406 com os insertos do topo em outra posição, tabela de marcas)."""
+    L = round(I1J[mk]["L_peca"] * 1000)
     y0 = Y_LIN[3] + 0.20 + 0.075                                    # ponta da V406 (face do P11 + 75)
-    pinos = [round((Y_LIN[k] - y0) * 1000) for k in (4,)]            # DEC-058: TS-01 da linha 5 apoiada no topo da V406
+    pinos = None
     Lm = {k: I1J[k]["L_peca"] for k in ("V404", "V405", "V406", "V407")}
     # posição das TS-01 no topo de cada marca (mm da ponta do lado A): mesma fôrma e cordoalha, só os PN-5/NEO-3 mudam de lugar
     _ya = {"V407": Y_LIN[1] + 0.30 + 0.075, "V406": Y_LIN[3] + 0.20 + 0.075, "V405": Y_PC_C[0] + 0.20 + 0.075, "V404": Y_PC_C[1] + 0.20 + 0.075}
     _ts = {"V407": (2,), "V406": (4,), "V405": (5, 6), "V404": (7,)}
     PTS = {k: [round((Y_LIN[i] - _ya[k]) * 1000) for i in v] for k, v in _ts.items()}
+    pinos = PTS[mk]
     _pt = lambda k: " e ".join(f"L{i + 1} a {f(x / 10, 1)} cm" for i, x in zip(_ts[k], PTS[k]))
     DTI = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/dentes.json"))["I120"]["calculo"]["adotado"]
     anc = DTI["ancoragem_tirante_mm"]
@@ -491,7 +503,7 @@ def dados_i110():
     Fz = lambda z: f"{z:.3f}".replace(".", ",")
     HI = round(LGJ["H_I120"] * 1000)                                  # DEC-054: h 120 (antes 130)
     A = area_I(400, HI, 220, 250, 80, 150)
-    ARR = I1J["V406"]["arranjo"]                                     # DEC-032: cordoalhas, σpi e fckj saem do cálculo (uma fonte só)
+    ARR = I1J[mk]["arranjo"]                                         # DEC-032: cordoalhas, σpi e fckj saem do cálculo (uma fonte só)
     cord = [(l["y"], l["xs"], l["isol"]) for l in ARR["linhas"]]
     n_inf, n_sup = ARR["n_inf"], ARR["n_cord"] - ARR["n_inf"]
     n_isol = sum(len(l["xs"]) for l in ARR["linhas"] if l["isol"])
@@ -503,8 +515,8 @@ def dados_i110():
     # lbpt e o ato na seção em que o isolamento termina (calc_i110_r01: busca entre 4 padrões, linha de baixo aderente)
     LN_ = 350
     tab = []
-    for mk, rot in (("V406", "V406, V405, V404"), ("V407", "V407")):
-        A_ = I1J[mk]["arranjo"]; AT = I1J[mk]["ato"]
+    for mk_t, rot in (("V406", "V406, V405, V404"), ("V407", "V407")):
+        A_ = I1J[mk_t]["arranjo"]; AT = I1J[mk_t]["ato"]
         for l in A_["linhas"]:
             n_l = len(l["xs"])
             ini = LN_ if l["y"] < HI - 780 else 0
@@ -519,7 +531,7 @@ def dados_i110():
     TAB_ISOL = dict(titulo=f"ISOLAMENTO DAS CORDOALHAS POR LINHA (ato: limites {f(lim_t, 2)} / {f(lim_c, 1)} MPa)",
                     cab=["MARCAS", "y (cm)", "CORD.", "ISOL.", "ISOLADO (cm da ponta)", "BAINHA", "lbpt (cm)", "ATO topo / base (MPa)"],
                     linhas=tab, larg=[30, 13, 13, 13, 30, 22, 17, 44])
-    ICJ = I1J["V406"]["icamento"]
+    ICJ = I1J[mk]["icamento"]
     _CT = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))["CT-I120"]
     _CTl = LGJ["CT_I120"]; _NC = LGJ["NEO_CI"]
     CT_ = dict(b=round(_CTl["b"] * 1000), proj=round(_CTl["proj"] * 1000), h=round(_CTl["h"] * 1000), h_ext=round(_CTl["h_ext"] * 1000),
@@ -531,18 +543,18 @@ def dados_i110():
               ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120"),
               ("09", "25/10/2026", "DEC-061: CONSOLOS LATERAIS CT-I120 COM MÍSULA NAS 2 FACES (APOIO DAS TS-01), NEO-3C 150 × 300, CORTE D-D; COTAS DO DENTE"),
               ("08", "24/10/2026", f"DEC-058: PILAR A MAIS NO EIXO C, 3 VÃOS DE 16,517 m (V406, V405, V404 IGUAIS); CORDOALHA Ø12,7: {ARR['n_cord']} NAS TRÊS, {I1J['V407']['arranjo']['n_cord']} NA V407")],
-        marca="V406", secao_nome="I120", qtd=1, familia="VIGAS CENTRAIS I120 — EIXO C", desenho="ND-LET-I120", h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
+        marca=mk, secao_nome="I120", qtd=1, familia="VIGAS CENTRAIS I120 — EIXO C", desenho={"V406": "ND-LET-I120", "V407": "ND-LET-I120-2", "V405": "ND-LET-I120-3"}[mk], h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
         n3=(10, 20.0, "CA-50 em 2 camadas de 5 na mesa superior (compressão no ELU e tração no ato junto às pontas)"), n3_camadas=2,
         cord=cord, n_isol=n_isol, isol_mm=max(l["isol"] for l in ARR["linhas"]), sig_pi=ARR["sig_pi"], L_pista=60, fck=ARR["fck"], fckj=ARR["fckj"],
         lbpt=ARR["lbpt_m"], tab_isol=TAB_ISOL, ini_isol=350, nome_cord="V406, V405, V404",
-        cord2=("V407", [(l["y"], l["xs"], l["isol"]) for l in I1J["V407"]["arranjo"]["linhas"]]), pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
+        cord2=("V407", [(l["y"], l["xs"], l["isol"]) for l in I1J["V407"]["arranjo"]["linhas"]]) if mk == "V406" else None, pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,
         est=(8.0, 150, 100, 2000), Vd=round(max(I1J[k]["linhas"]["Vd_kN"] for k in ("V404", "V405", "V406"))), alcas=[2500, L - 2500], tercas=[],
         consolos=[], pinos_topo=pinos, ct=CT_, ct_n={k: len(v) for k, v in PTS.items()}, anc=anc, tir=DTI["tirante"].split(" (")[0], n_sus=DTI["n_sus"], sus=DTI["suspensao"].split(" (")[0],
         n_cost=DTI["n_cost"], cost=DTI["costura"].split(" (")[0], n_v=DTI["n_v"],
-        titulo=f"VIGA CENTRAL I120 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V404 · V407".replace(".", ","),
+        titulo=(f"VIGA CENTRAL I120 PROTENDIDA — V406 (L = {L/10:.1f} cm) · V405 · V404 · V407" if mk == "V406" else f"VIGA CENTRAL I120 PROTENDIDA — {mk} (L = {L/10:.1f} cm) — ELEVAÇÃO DE FÔRMA PRÓPRIA").replace(".", ","),
         subtitulo=f"eixo C; dentes Gerber 78 × 35 nos consolos CP-I120 (assento +{Fz(za)}); TS-01 apoiadas no topo horizontal em 2 níveis (+{Fz(zt)} lado A / +{Fz(ztd)} lado E) nas linhas 3, 5, 6, 7 e 8",
-        kp_sub="vigas centrais no eixo C", kp_pecas=[(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_PC_C[0], "V406"), (XC, Y_PC_C[0], XC, Y_PC_C[1], "V405"), (XC, Y_PC_C[1], XC, Y_LIN[8], "V404")],
+        kp_sub="vigas centrais no eixo C", kp_pecas=[t_ for t_ in [(XC, Y_LIN[1], XC, Y_LIN[3], "V407"), (XC, Y_LIN[3], XC, Y_PC_C[0], "V406"), (XC, Y_PC_C[0], XC, Y_PC_C[1], "V405"), (XC, Y_PC_C[1], XC, Y_LIN[8], "V404")] if mk == "V406" or t_[4] == mk],
         marcas=[["V407", f"C: PC-01 → PC-02; TS-01 {_pt('V407')} ({I1J['V407']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V407']*100:.1f}".replace(".", ","), f(vol_viga(400, HI, 220, 250, 80, 150, Lm['V407'] * 1000, 1400, 780, 350) * 2.5, 2)],
                 ["V406", f"C: PC-02 → PC-03 (P13); TS-01 {_pt('V406')} ({ARR['n_cord']} cord.)", 1, f"{Lm['V406']*100:.1f}".replace(".", ","), f(vol_viga(400, HI, 220, 250, 80, 150, Lm['V406'] * 1000, 1400, 780, 350) * 2.5, 2)],
                 ["V405", f"C: PC-03 (P13) → PC-03 (P13B); TS-01 {_pt('V405')} ({I1J['V405']['arranjo']['n_cord']} cord.)", 1, f"{Lm['V405']*100:.1f}".replace(".", ","), f(vol_viga(400, HI, 220, 250, 80, 150, Lm['V405'] * 1000, 1400, 780, 350) * 2.5, 2)],

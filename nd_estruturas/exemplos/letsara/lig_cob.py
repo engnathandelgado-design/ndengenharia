@@ -114,7 +114,7 @@ def apoio_terca_ts01(L_vis=900):
     xe = -t - 75 + 9.5                                     # esperas ES-1 no meio da aba horizontal
     zb = [Z_TERCA + z for z in Z_FURO]
     P = []
-    P.append(_p(0, "V4xx", "viga de cobertura das linhas 3 a 8 (topo, referência)", "caixa", (0, 0, 0), True, b=(-230, 120, -150, 150, -120, 0), concreto=True))
+    P.append(_p(0, "V408–V419", "I90 das linhas 3 a 8 (topo, referência)", "caixa", (0, 0, 0), True, b=(-230, 120, -150, 150, -120, 0), concreto=True))
     for yy in (-Y_COL, Y_COL):
         P.append(_p(1, "ES-1", "espera M16 (hef 150 + gancho + grampo U Ø10), na viga", "cil", (0, 0, 0), c=(xe, yy, -150), eixo="z", r=8, h=150 + 120))
         P.append(_p(7, "M16", "porca + contraporca + arruela na ES-1", "hex", (0, 0, 320), c=(xe, yy, t), eixo="z", r=15, h=13))

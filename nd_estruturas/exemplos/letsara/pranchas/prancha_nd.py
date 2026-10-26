@@ -1201,13 +1201,25 @@ class Vista:
                 nivel.append(nv)
         return nivel
 
+    def _txt_cadeia(self, xs):
+        """rev12 (checklist 5): textos da cadeia arredondados ao mm de forma que a SOMA feche no total (maior resto)."""
+        d = [b - a for a, b in zip(xs[:-1], xs[1:])]
+        r = [round(v) for v in d]
+        alvo = round(xs[-1] - xs[0])
+        dif = alvo - sum(r)
+        ordem = sorted(range(len(d)), key=lambda i: (d[i] - r[i]) * (1 if dif > 0 else -1), reverse=True)
+        for i in ordem[:abs(dif)]:
+            r[i] += 1 if dif > 0 else -1
+        return [self.fmt(v) for v in r]
+
     def cota_h(self, xs, y_ref, dist_papel=-10.0, total=True):
         dist_papel = dist_papel * DIM_K
         sg = math.copysign(1, dist_papel)
         niv = self._linhas_cadeia(xs)
-        for (a, b), nv in zip(zip(xs[:-1], xs[1:]), niv):
+        txs = self._txt_cadeia(xs)
+        for (a, b), nv, tx_ in zip(zip(xs[:-1], xs[1:]), niv, txs):
             yb = y_ref + (dist_papel + sg * DIM_DLI * nv) * self.esc
-            self._dim((a, yb), (a, y_ref), (b, y_ref), 0)
+            self._dim((a, yb), (a, y_ref), (b, y_ref), 0, tx_)
         if total and len(xs) > 2:
             yt = y_ref + (dist_papel + sg * DIM_DLI * (max(niv) + 1)) * self.esc
             self._dim((xs[0], yt), (xs[0], y_ref), (xs[-1], y_ref), 0)
@@ -1216,9 +1228,10 @@ class Vista:
         dist_papel = dist_papel * DIM_K
         sg = math.copysign(1, dist_papel)
         niv = self._linhas_cadeia(ys)
-        for (a, b), nv in zip(zip(ys[:-1], ys[1:]), niv):
+        tys = self._txt_cadeia(ys)
+        for (a, b), nv, ty_ in zip(zip(ys[:-1], ys[1:]), niv, tys):
             xb = x_ref + (dist_papel + sg * DIM_DLI * nv) * self.esc
-            self._dim((xb, a), (x_ref, a), (x_ref, b), 90)
+            self._dim((xb, a), (x_ref, a), (x_ref, b), 90, ty_)
         if total and len(ys) > 2:
             xt = x_ref + (dist_papel + sg * DIM_DLI * (max(niv) + 1)) * self.esc
             self._dim((xt, ys[0]), (x_ref, ys[0]), (x_ref, ys[-1]), 90)
