@@ -82,18 +82,18 @@ v.chamada((0, 150), (-8, 10), "PN-3 Ø25 L=600 (laterais)")
 v.chamada((0, -150), (-8, -10), "PN-5 Ø20 L=600 (I130/centro)")
 v.chamada((-60, 0), (-6, 4), "topo do apoio")
 
-v = pr.vista("NEO-4", (110, 290), 5, titulo="NEO-4 / NEO-3", subtitulo="neoprene 10 mm, 60 Shore A")
+v = pr.vista("NEO-4", (110, 290), 5, titulo="NEO-4 / NEO-3C", subtitulo="neoprene 10 mm, 60 Shore A (rev11: NEO-3C na I130 com CT-I130)")
 v.ret(-100, -150, 200, 300, "VISTA")
 for yy in (-100, 100):
     furo(v, (0, yy), 35)
-v.ret(160, -150, 100, 300, "VISTA")
+v.ret(160, -150, 150, 300, "VISTA")                          # rev11 (DEC-061): NEO-3C 150 × 300 × 10 sobre a mesa + consolo CT-I130
 for yy in (-100, 100):
-    furo(v, (210, yy), 30)
+    furo(v, (235, yy), 30)
 v.cota_h([-100, 0, 100], -150, -8, total=False)
-v.cota_h([160, 260], -150, -8)
-v.cota_v([-150, -100, 100, 150], 260, 8, total=False)
+v.cota_h([160, 235, 310], -150, -8, total=False)
+v.cota_v([-150, -100, 100, 150], 310, 8, total=False)
 v.chamada((0, 0), (4, 40), "NEO-4 200×300 (pilar lateral)")
-v.chamada((210, 0), (10, 50), "NEO-3 100×300 (I130 / centro)")
+v.chamada((235, 0), (10, 50), "NEO-3C 150×300 (I130, linhas 3 e 5–8); NEO-3 100×300 só no P11 (linha 4)")
 
 # ------------------------------------------------------------------ ST-1P (1:5)
 st = CB["ST1P"]
@@ -153,7 +153,7 @@ y = pr.tabela(x0, y, "LISTA DE PEÇAS — TS-01 E LIGAÇÕES DA COBERTURA", ["MA
               [16, 92, 18, 22, 32])
 notas = ["ST-1FL (DEC-042): os pilares de canto P1 e P9 têm seção cheia até o topo; a última terça do lado E encosta na face lateral interna e apoia no ST-1FL (chapa dobrada, aba de 100 parafusada na alma com 2 M12), preso por 2 barras roscadas M20 A36 horizontais embutidas na face (ES-1FL, hef 150 + grampo U Ø10, a 7 e 15 cm da face A). Reações reais da terça de ponta (ELU): 15,7 kN ⊥ à face, 4,0 kN horizontal, 8,2 kN vertical. ACI 318-19 cap. 17, C40, borda 70 mm: tração 27,9 kN contra φNcbg 57,6 kN (aço 147), interação tração × corte 0,85 ≤ 1,2; chapa 0,69; M12 0,55.",
          "Nenhuma solda na fábrica ou na obra: esperas de barra roscada M16 A36 (rosca laminada) concretadas com gabarito; peças da montagem cortadas, dobradas e furadas; ligações com parafusos M12 8.8 e porcas M16.",
-         "rev09 (DEC-048): a linha 2 não tem TS-01 (cobertura metálica W 310 × 32,7, ND-LET-COB05): sem TS-01B e sem ST-1P4; as terças do beiral da linha 2 apoiam no clip ST-W da W 310.",
+         "rev09 (DEC-048): a linha 2 não tem TS-01 (cobertura metálica: W 200 × 15,0 nos pilares e em montantes W 150 × 13,0 sobre as VM do +7,30, ND-LET-COB05): sem TS-01B e sem ST-1P4; as terças do beiral da linha 2 apoiam no clip ST-W da W 200.",
          "ST-1P: assentar sobre porca de nivelamento + arruela, apertar com porca e contraporca; furos oblongos 18 × 40 para ajuste ±11 mm ao longo da viga.",
          "Sem mão-francesa (rev05): as terças Z são contínuas por transpasse e cada ST-1P recebe as 2 terças do transpasse com 4 M12 8.8 pelas almas (ND-LET-COB01).",
          "OR-X só nos nós dos vãos com X (4-5 a 8-9; 72 nas TS-01 das linhas 4 a 8 + 8 na VB do eixo 9); as esperas ES-2 existem nos 3 nós de todas as TS-01 (marca única). Diagonais Ø16 A36 com esticador (ND-LET-COB02).",

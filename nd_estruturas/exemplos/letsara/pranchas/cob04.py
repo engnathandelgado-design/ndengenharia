@@ -12,8 +12,9 @@ from cob_comum import cabecalho, XT, H_TERCA, B_TERCA, B_INF, D_SUP, D_INF, f
 
 R = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/acabamentos_cobertura.json"))
 S = AC.secoes()
-pr = Prancha("A1", cabecalho("ND-LET-COB04", "04/04", "COBERTURA — ACABAMENTOS KINGSPAN (ZIPADA DUPLA COM LÃ DE ROCHA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS"))
-pr.revisao("06", "18/10/2026", "EMISSÃO: ACABAMENTOS DA COBERTURA CONFORME MANUAL KINGSPAN (P. 28 A 46)")
+pr = Prancha("A1", cabecalho("ND-LET-COB04", "04/04", "COBERTURA — ACABAMENTOS DE FUNILARIA (FEITOS NA OBRA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS"))
+pr.revisao("06", "18/10/2026", "EMISSÃO: ACABAMENTOS DA COBERTURA CONFORME O MANUAL DA TELHA (P. 28 A 46)")
+pr.revisao("11", "26/10/2026", "ACABAMENTOS (RUFOS, CONTRA-RUFOS, PINGADEIRAS, CAPAS) FEITOS POR FUNILEIRO NA OBRA — NÃO SÃO DE CATÁLOGO (NATHAN)")
 Q = pr.quadro
 XC = Q[2] - 250
 C45 = math.cos(math.radians(45))
@@ -225,7 +226,7 @@ pl.texto((xm, -900), "sobe 3 % →", "nota", "TOP_CENTER")
 
 # ================================================================== tabelas
 rows = [[r["marca"], r["descricao"][:58] + ("…" if len(r["descricao"]) > 58 else ""), r["chapa"], r["desenv_mm"], f(r["comprimento_m"], 1), r["pecas"]] for r in R["rufos"]]
-y = pr.tabela(XC, Q[3] - 6, "LISTA DE RUFOS (KINGSPAN OU EQUIVALENTE)", ["MARCA", "DESCRIÇÃO", "CHAPA", "DESENV.", "m", "PÇ"], rows, [16, 132, 30, 18, 18, 16], h_lin=5.2)
+y = pr.tabela(XC, Q[3] - 6, "LISTA DE RUFOS — FUNILARIA DA OBRA (chapa dobrada)", ["MARCA", "DESCRIÇÃO", "CHAPA", "DESENV.", "m", "PÇ"], rows, [16, 132, 30, 18, 18, 16], h_lin=5.2)
 ac = [[a["item"], a["uso"], a["qtd"]] for a in R["acessorios"]]
 y = pr.tabela(XC, y - 4, "ACESSÓRIOS E FIXAÇÕES DOS ACABAMENTOS — OBRA", ["ITEM", "USO", "QTD"], ac, [68, 148, 14], h_lin=5.2)
 TL = R["telhas"]

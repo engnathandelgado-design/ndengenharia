@@ -138,7 +138,7 @@ notas = [f"Dimensionamento (NBR 10844:1989): intensidade I = {CH['chuva']['I_mm_
          "Extravasores Ø100 nas duas pontas da calha (fachadas 1 e 9), 50 mm abaixo da borda, para a água sair pela fachada se uma saída entupir.",
          "DEC-042: os pilares de canto (linhas 1 e 9) têm seção cheia 40 × 60 até +10,00: a calha começa e termina a 22 cm do eixo das linhas 1 e 9, com a cabeceira a 2 cm da face lateral do pilar; saída do extravasor por dentro da obra; furo na placa executado na obra.",
          "Juntas de dilatação da calha a cada ≈ 20 m (sobre as linhas 3, 5 e 7), com tampa e selante; emendas rebitadas e vedadas com PU (sem solda).",
-         "Rufos, pingadeira, encostos e capa da platibanda no sistema Kingspan (zipada dupla com lã de rocha): ND-LET-COB04 (RF-2/RF-2C da calha no det. 1 e 2 de lá).",
+         "Rufos, pingadeira, encostos e capa da platibanda feitos por funileiro na obra (chapa dobrada, não de catálogo): ND-LET-COB04 (RF-2/RF-2C da calha no det. 1 e 2 de lá).",
          "Carga da calha cheia na 1ª terça (0,12 kN/m de chapa + 0,45 kN/m de água) considerada no modelo integrado r05.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 190)

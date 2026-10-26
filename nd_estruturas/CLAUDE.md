@@ -23,6 +23,8 @@ Rode `pytest` antes de dar uma mudança por concluída. Se não houver teste cob
 
 ## Verificação de cálculo
 
+- Toda mudança de seção ou armadura só é dada como pronta depois da conferência cruzada zerada (letsara/pranchas/conferencia_cruzada.py, chamada no fim do gerar_tudo).
+
 - Toda função de dimensionamento nova precisa de pelo menos um teste conferido à mão (exemplo de livro, apostila ou memória já entregue), com a fonte citada no teste.
 - Resultado de MEF (OpenSeesPy) é conferido contra solução analítica simples ou contra o mef.py próprio antes de ser usado em memória de cálculo.
 - Se um resultado parecer fora da ordem de grandeza (taxa de aço, flecha, reação), pare e aponte antes de seguir.

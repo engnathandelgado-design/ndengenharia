@@ -116,8 +116,8 @@ for x in EST:
     vi.poli([(x - 120, -260), (x + 120, -260), (x, -205)], "INDICACAO", fechada=True)
 vi.chamada((LC / 2, 150), (10, 18), f"cunha: fundo rebaixado {EC} → 0 mm (ponta baixa)")
 vi.chamada((L - LC / 2, 150), (-10, 18), f"cunha: fundo rebaixado 0 → {EC} mm (ponta alta)")
-vi.chamada((S_TB[0], 100), (14, 30), "NEO-4 (pilar) ou NEO-3 (I130)")
-vi.chamada((S_TB[1], 100), (-14, 30), "NEO-3 (I130) ou NEO-4 (pilar)")
+vi.chamada((S_TB[0], 100), (14, 30), "NEO-4 (pilar) ou NEO-3C (I130 + CT-I130)")
+vi.chamada((S_TB[1], 100), (-14, 30), "NEO-3C (I130 + CT-I130) ou NEO-4 (pilar)")
 vi.chamada((EST[0], -260), (30, -22), "calço de estoque/transporte (2x)")
 vi.cota_ord([0, S_TB[0], LC, L - LC, S_TB[1], L], -200, -6, x0=0, rotulos=["0", vi.fmt(S_TB[0]), vi.fmt(LC), vi.fmt(L - LC), vi.fmt(S_TB[1]), vi.fmt(L)])
 vi.cota_v([-200, -100, 100, 200], 0, -8)
@@ -265,23 +265,46 @@ d4.chamada((-25 - NEOX - 60, -5), (-24, -24), "NEO-4 200×300×10 horizontal")
 d4.chamada((-150, -500), (-34, -38), f"assento HORIZONTAL +{f(LG['REC'][1], 3)}")
 d4.chamada((xt4, 450), (-16, 26), "TB-3 a prumo / 2 PN-3 Ø25")
 
-# DETALHE 3 — topo da I130 / pilar central: ponta alta da TS-01 do lado A e ponta baixa da TS-01 do lado E
+# DETALHE 3 — rev11 (Nathan 26/10/2026): gerado dos MESMOS dados do modelo/cálculo (viga_i.dados_i110, ligacoes.json, DEC-061):
+# corte transversal da I130 na linha 5 com o consolo CT-I130 (mísula) nas duas faces da mesa, as duas TS-01 com marca real,
+# NEO-3C sobre a mesa + consolo (12 a 27 cm da ponta), PN-5 (embutido / livre / total), níveis dos dois lados e cotas do assento.
+import sys as _s
+_s.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+import viga_i as _VI
+from geometria import Y_LIN as _YL
+_PI = _VI.dados_i110()
+_CT = _PI["ct"]
+_BI, _TS, _M, _BW = _PI["b"], _PI["ts"], _PI["m"], _PI["bw"]
+_NA = RN.viga_em("cobertura", 9.875, _YL[4], marcas=["TS"]); _NE = RN.viga_em("cobertura", 29.625, _YL[4], marcas=["TS"])
+_NI = RN.viga_em("cobertura", 19.75, _YL[4] - 3)
 DG = round(LG["DEGRAU_C"] * 1000)
-d3 = pr.vista("DETALHE 3", (850, 120), 20, titulo="DETALHE 3 — APOIO NO TOPO DA I130 / PILAR CENTRAL",
-              subtitulo=f"posição montada; topo horizontal em 2 níveis (degrau {DG} mm no eixo C); COTAS EM CM", unidade="cm")
-zl, xl = viga_montada(d3, -37.5, -1, 0)                       # lado A: ponta alta
-zr, xr = viga_montada(d3, 37.5, 1, DG - EC, DG)               # lado E: ponta baixa (face de apoio em z = DG)
-d3.chapa(-37.5 - PIN - 50, -10, 100, 10); d3.chapa(37.5 + PIN - 50, DG - 10, 100, 10)
+FOLGA_C = 37.5                                                # ponta da TS-01 a 3,75 cm do eixo da I130 (folga 7,5 cm entre pontas)
+d3 = pr.vista("DETALHE 3", (850, 120), 20, titulo=f"DETALHE 3 — APOIO NO TOPO DA {_NI}",
+              subtitulo=f"corte na linha 5: {_NA} (lado A) e {_NE} (lado E); CT-I130 nas 2 faces; COTAS EM CM", unidade="cm")
+zl, xl = viga_montada(d3, -FOLGA_C, -1, 0)                       # lado A
+zr, xr = viga_montada(d3, FOLGA_C, 1, DG - EC, DG)               # lado E
+X_CT = _BI / 2 + _CT["proj"]                                   # ponta do consolo a partir do eixo da I130
+sec = [(-_BW / 2, -900), (-_BW / 2, -_CT["h"]), (-_BI / 2, -_CT["h"]), (-X_CT, -_CT["h_ext"]), (-X_CT, 0), (0, 0), (0, DG), (X_CT, DG),
+       (X_CT, DG - _CT["h_ext"]), (_BI / 2, DG - _CT["h"]), (_BW / 2, DG - _CT["h"]), (_BW / 2, -900)]      # corte pela linha 5: alma + consolos
+d3.poli(sec, "CORTADO", fechada=True); d3.hachura(sec, "AR-CONC", 0.03)
+d3.interrupcao((-_BW / 2, -900), (_BW / 2, -900))
+for sg in (-1, 1):                                             # mesa da I130 fora do consolo (oculta)
+    d3.poli([(sg * _BW / 2, -_TS - _M), (sg * _BI / 2, -_TS), (sg * _BI / 2, 0 if sg < 0 else DG)], "OCULTA")
+a_neo = _CT["a_neo"]
+for sg, xp, zt in ((-1, -FOLGA_C, 0), (1, FOLGA_C, DG)):
+    d3.chapa(xp + sg * 120 if sg > 0 else xp - 120 - a_neo, zt - 10, a_neo, 10)       # NEO-3C 150 a 12–27 cm da ponta
 d3.ret(xl - 10, -300, 20, 600, "METALICA"); d3.ret(xr - 10, DG - 300, 20, 600, "METALICA")
-i130 = [(-200, -900), (200, -900), (200, DG - 10), (0, DG - 10), (0, -10), (-200, -10)]
-d3.poli(i130, "CORTADO", fechada=True); d3.hachura(i130, "AR-CONC", 0.03)
 d3.linha((0, -1000), (0, H + 150), "EIXO")
-d3.cota_h([-115, 0, 115], -10, -24, total=False)
-d3.chamada((115, DG - 5), (18, -10), "NEO-3 100×300×10 c/ 2 furos Ø30 (horizontais)")
-d3.chamada((-115, -200), (-34, -38), "2 PN-5 Ø20 por TS-01, y = ±10")
-d3.chamada((100, DG - 10), (16, -24), f"topo +{f(LG['Z_TOPO_I130_DIR'], 3)} (lado E)")
-d3.chamada((-100, -10), (-40, -10), f"topo +{f(LG['Z_TOPO_I130'], 3)} (lado A)")
-d3.chamada((0, -500), (14, -6), "mesa superior da I130 (b 40)")
+d3.cota_h([-X_CT, -_BI / 2, _BI / 2, X_CT], -_CT["h"] - 60, -12, total=True)
+d3.cota_h([-FOLGA_C, FOLGA_C], DG + H + 300, 14, total=False)
+d3.cota_h([-FOLGA_C - 120 - a_neo, -FOLGA_C - 120, -FOLGA_C], DG + H + 300, 6, total=False)
+d3.cota_v([-_CT["h"], -_CT["h_ext"], 0], -X_CT, -12, total=False)
+d3.chamada((FOLGA_C + 120 + a_neo / 2, DG - 5), (22, -8), f"NEO-3C {a_neo}×300×10 (12 a 27 cm da ponta)")
+d3.chamada((X_CT - 40, DG - _CT["h_ext"] / 2), (20, -20), f"CT-I130 {_CT['b']/10:g}×{_CT['proj']/10:g}×{_CT['h']/10:g}/{_CT['h_ext']/10:g} (mísula), 2 faces")
+d3.chamada((xr, DG - 250), (24, -32), "PN-5 Ø20: L 600 = 300 emb. + 300 livre")
+d3.chamada((100, DG - 10), (16, 30), f"topo +{f(LG['Z_TOPO_I130_DIR'], 3)} (lado E, {_NE})")
+d3.chamada((-100, -10), (-40, 34), f"topo +{f(LG['Z_TOPO_I130'], 3)} (lado A, {_NA})")
+d3.chamada((0, -600), (14, -4), f"{_NI}: assento {(X_CT - FOLGA_C)/10:g} cm por lado")
 
 # ------------------------------------------------------------------ DETALHE 2 — alça AL-1 (1:10)
 d2 = pr.vista("DETALHE 2", (720, 300), 10, titulo="DETALHE 2 — ALÇA AL-1", subtitulo="laço de cordoalha Ø12,7 CP-190 RB; COTAS EM CM", unidade="cm")
@@ -313,7 +336,7 @@ qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
       ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/9.81,2)} t)"],
       ["CONCRETO", f"C{P['fck']} / fckj {P['fckj']}", "PROTENSÃO", f"{P['n_cord']} cord. Ø12,7"],
-      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", "topo I130, 16,25 cm"],
+      ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", f"I130 + CT-I130, {(X_CT - FOLGA_C)/10:g} cm"],
       ["CUNHAS", f"{LC/10:.0f} cm, 0 → {EC} mm", "TUBOS TB-3", f"a {f(PIN/10, 2)} cm das 2 pontas"]]
 y = pr.tabela(x0, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 60])
 mn = [["Desforma / içamento", "4 alças AL-1 + 2 balancins", f"{f(ALCA_Fd,1)} kN por alça"],
@@ -331,7 +354,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
          "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (s = 452,0 / 984,8 / 1517,7 cm, y = ±9,75 cm, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04). DEC-059: a TS-01A APOIA nos PG-01 a PG-04 (neoprene NEO-7 + graute depois da montagem: contínua sobre os PG para g2 + q, Md− 86,5 ≤ 165,2 kN·m, topo comprimido sobre o PG); fundo no vão dos portões em +7,50; placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01).",
-         "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 310, ND-LET-COB05) — 12 peças: TS-01 nas linhas 3 e 5 a 8, TS-01A na linha 4.",
+         "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 200 × 15,0 com montantes W 150 × 13,0, ND-LET-COB05) — 12 peças: TS-01 nas linhas 3 e 5 a 8, TS-01A na linha 4.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()

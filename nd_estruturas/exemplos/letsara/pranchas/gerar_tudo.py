@@ -29,4 +29,6 @@ if __name__ == "__main__":
     for f, a in ruins.items():
         for x in (a or [])[:8]:
             print("  ", f, x)
-    sys.exit(1 if ruins else 0)
+    cc = subprocess.run([sys.executable, "conferencia_cruzada.py"], cwd=PR, capture_output=True, text=True)   # rev11: conferência cruzada
+    print(cc.stdout[-4000:])
+    sys.exit(1 if (ruins or cc.returncode) else 0)
