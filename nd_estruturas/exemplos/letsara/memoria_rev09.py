@@ -51,7 +51,7 @@ doc = SimpleDocTemplate(str(SAI), pagesize=A4, leftMargin=16 * mm, rightMargin=1
 c39, c73, ce = CM["piso_390"], CM["laje_730"], CM["escada"]
 E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV09 (23 e 24/10/2026)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Decisões do Nathan: DEC-045 (pisos +3,90 / +7,30, abertura e escada metálica, "
-       "P6/P7 da escada e P6 da linha 2), DEC-046 (laje de cima sem uso), DEC-047 (vigas do mezanino retangulares protendidas com 2º estágio, sem meio vaso), "
+       "P6/P7 da escada e P6 da linha 2), DEC-046 (laje de cima: laje de cobertura do bloco, acesso apenas para manutenção), DEC-047 (vigas do mezanino retangulares protendidas com 2º estágio, sem meio vaso), "
        "DEC-048 (linha 2 sem TS-01, cobertura metálica), DEC-049 (VM 30 × 75 com dente Gerber 45 em todas as marcas) e, em 24/10, DEC-050/052 (linha 2: W 200 × 15,0 contínua nos pilares e em montantes no meio dos vãos), "
        "DEC-051 (escada interna sem solda, base BM-1), DEC-053 (escada metálica externa em L na fachada A), DEC-054 (I130 com h 120, dente Gerber e consolo com mísula), "
        "DEC-055 (2º pavimento = topo da capa +3,90, piso pronto ~+3,95: as duas escadas chegam no piso pronto com 22 espelhos de 17,95), DEC-056 (doca com piso nivelado) e DEC-057 (sem ponte rolante). "
@@ -59,7 +59,7 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC09 — ALTERAÇÕES DO PACOTE REV0
      Paragraph("1. Níveis e cargas do mezanino", T2),
      tab([["NÍVEL / USO", "SOBRECARGA (kN/m²)", "REVESTIMENTO (kN/m²)", "OBS."],
           ["+3,90 — 2º pavimento (depósito)", f(c39["sobrecarga"]), f(c39["revestimento"]), "5,0 confirmada pelo Nathan em 23/10/2026 (NBR 6120:2019)"],
-          ["+7,30 — laje de cobertura do bloco, sem uso", f(c73["sobrecarga"]), f(c73["revestimento"]), c73["uso"]],
+          ["+7,30 — laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10)", f(c73["sobrecarga"]), f(c73["revestimento"]), c73["uso"]],
           ["Escada metálica", f(ce["sobrecarga"]), "—", ce["uso"]]], [52, 26, 28, 72]),
      P("Pisos = topo da capa. Laje alveolar h20 + capa 5 apoiada 10 cm no topo da VM sobre fita de neoprene 10 mm: topo da VM = piso − 0,26; fundo da VM = topo − 0,75 "
        f"(+{f(3.90 - 0.26 - P_['h_pm'], 2)} e +{f(7.30 - 0.26 - P_['h_pm'], 2)}). Única fonte: geometria.Z_PISOS e cargas_mezanino.json."),
