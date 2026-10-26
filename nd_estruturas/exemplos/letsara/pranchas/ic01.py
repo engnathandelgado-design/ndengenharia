@@ -95,7 +95,7 @@ for fj in sorted(glob.glob(PR + "arm/*.json")):
     nm = ", ".join(nomes(mk)) or mk
     Pk = peso / 2
     sig = GF * BA * peso / (60 * min(J["B"], J["H"])) * 1000 / 1000      # MPa: furo Ø60 × largura da peça
-    lin_p.append([mk, nm[:40], f1(peso / 9.81, 2), "2 AL-2: " + " e ".join(f"{z / 10:.0f}" for z in al) + " cm da base" if al else "—", f1(Pk),
+    lin_p.append([mk, nm[:40], f1(peso / 10.0, 2), "2 AL-2: " + " e ".join(f"{z / 10:.0f}" for z in al) + " cm da base" if al else "—", f1(Pk),
                   (f"FI-1 a {(J['L_TOT'] - fi) / 10:.0f} cm do topo" if fi else "FI-1"), f"{f1(sig)} MPa"])
 pr.tabela(Q[0] + 420, Q[3] - 40, "PILARES — FÁBRICA (AL-2) E OBRA (FI-1)", ["MARCA", "PEÇAS", "PESO (t)", "FÁBRICA: ALÇAS AL-2", "Pk/alça (kN)", "OBRA: FURO", "σ no furo (d)"],
           lin_p, [20, 70, 18, 60, 22, 48, 24], h_lin=5.6)
@@ -106,7 +106,7 @@ for k, v_ in I1.items():
     ic = v_.get("icamento") if isinstance(v_, dict) else None
     if ic:
         nv = RN.novo(k) if hasattr(RN, "novo") else k
-        lin_v.append([nv, "I130", f1(ic["peso_kN"] / 9.81, 2), f"2 AL-3 a {f1(ic['a_alca_m'], 2)} m das pontas", f1(ic["peso_kN"] / 2), f"{ic['n_lacos']} laços Ø12,7; Fd(βa 3) {f1(ic['F_alca_beta3_kN'])} kN"])
+        lin_v.append([nv, "I130", f1(ic["peso_kN"] / 10.0, 2), f"2 AL-3 a {f1(ic['a_alca_m'], 2)} m das pontas", f1(ic["peso_kN"] / 2), f"{ic['n_lacos']} laços Ø12,7; Fd(βa 3) {f1(ic['F_alca_beta3_kN'])} kN"])
 al_ts = LG["alcas"]
 lin_v.append(["V408 … V419", "TS-01", "12,0", "4 AL-1 a " + ", ".join(f1(a, 2) for a in al_ts) + " m (2 balancins)", f1(120 / 4), "laço Ø12,7, 2 pernas"])
 lin_v.append(["VM-01 … VM-04", "VM 30×75", "—", "2 AL-1 a 1,10 m das pontas", "—", "laço Ø12,7, 2 pernas"])

@@ -37,8 +37,8 @@ PSI1, PSI2 = 0.6, 0.4
 NIVEL = "limitada"                                      # DEC-054: protensão LIMITADA (CAA II, pré-tração: NBR 6118:2023 Tab. 13.4 nível 2); antes completa (DEC-043)
 PSI_D, PSI_F = (PSI1, 1.0) if NIVEL == "completa" else (PSI2, PSI1)   # ELS-D na frequente (ψ1) e ELS-F na rara (ψ = 1)
 X_MAC, LN, HD = 1.40, 0.35, 0.78                        # maciço das pontas, dente 78 × 35
-N3 = (6, 25.0)                                          # DEC-054: 6 Ø25 CA-50 na mesa superior (antes 4 Ø20)
-Y_N3 = H_I - 0.030 - 0.0063 - 0.0125                    # eixo do N3 (cobrimento 3,0 + estribo N13 Ø6,3)
+N3 = (10, 20.0)                                         # rev12: 10 Ø20 em 2 camadas de 5 (regra: barras ≤ Ø20; antes 6 Ø25, DEC-054)
+Y_N3 = H_I - 0.030 - 0.0063 - 0.010 - 0.0225           # centroide das 2 camadas (cobrimento 3,0 + N13 Ø6,3 + Ø/2; camadas a Ø + 25 mm)
 VD_DENTE_MIN = 0.0                                      # ajustado por viga abaixo (V405/V406: 555 kN, decisão do engenheiro)
 ALCA_A = 2.50                                           # alças AL-3 a 2,50 m das pontas
 LACO_CAP = 2 * 98.7 * 1900 / 1000 / 4 * 0.7             # 1 laço (2 pernas) Ø12,7: 2 × Fptk/4 × 0,7 (critério ND, ts01_dados)

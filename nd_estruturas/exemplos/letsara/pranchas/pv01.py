@@ -23,7 +23,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
 pr.revisao("00", "24/10/2026", "EMISSÃO (DEC-059): PORTÃO 500 × 750 LIVRE ATÉ +7,50; PLACA ENTRE +7,50 E A TS-01A")
 Q = pr.quadro
 XC = Q[2] - 190
-pr.cabecalho_peca("\x01PV-1", f"PLACA SOBRE O PORTÃO — 10 × {f(H / 10)} × {f(L / 10)} cm · 1 PEÇA · {f(PV['peso_kN'] / 9.81, 2)} t",
+pr.cabecalho_peca("\x01PV-1", f"PLACA SOBRE O PORTÃO — 10 × {f(H / 10)} × {f(L / 10)} cm · 1 PEÇA · {f(PV['peso_kN'] / 10.0, 2)} t",
                   "\x01" + f"linha 4, entre os pilares {pg4} e {pg3} (portão do lado do eixo D), face do pavilhão, +{f(PV['z0'], 3)} a +{f(PV['z1'], 3)} · C40 armada · 2 apoios CL-V",
                   largura=XC - Q[0] - 10)
 
@@ -91,7 +91,7 @@ ta = pr.tabela_croqui(XC, y, bar, h_lin=9.0)
 y = ta["y_base"]
 V = T * H * L / 1e9
 qd = [["MARCA", "PV-1", "SEÇÃO", f"10 × {f(H / 10)} cm"], ["COMPRIMENTO", f"{f(L / 10)} cm", "CONCRETO", "C40 / desforma fcj 15 MPa"],
-      ["VOLUME", f"{f(V, 3)} m³", "PESO", f"{f(PV['peso_kN'] / 9.81, 2)} t"], ["AÇO CA-50/60", f"{f(ta['total_kg'], 1)} kg", "COBRIMENTO", "2,5 cm"]]
+      ["VOLUME", f"{f(V, 3)} m³", "PESO", f"{f(PV['peso_kN'] / 10.0, 2)} t"], ["AÇO CA-50/60", f"{f(ta['total_kg'], 1)} kg", "COBRIMENTO", "2,5 cm"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 58, 30, 58])
 ins = [["CL-V", "L 152 × 102 × 9,5 L=150 (PG-04) e L 102 × 102 × 9,5 L=150 (PG-03), galvanizadas", 2, "face B dos PG, topo +7,50"],
        ["IL-2", "barras roscadas M16 8.8 L=200 (150 embutidas + grampo U Ø10) — na fábrica dos PG", 6, "2 por CL-V + 1 por CT-V"],

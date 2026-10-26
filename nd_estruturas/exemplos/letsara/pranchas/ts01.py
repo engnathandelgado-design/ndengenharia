@@ -157,7 +157,7 @@ y = pr.tabela(x0, tc["y_base"] - 4, "INSERTOS", ["SIGLA", "DESCRIÇÃO", "QT", "
 kg_cord = Ap * 1e4 * P["L"] / 1000 * 0.785
 quadro = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
           ["COMPRIMENTO", f"{f(L/1000,2)} m", "VOLUME", f"{f(V,3)} m³"],
-          ["PESO", f"{f(peso,1)} kN ({f(peso/9.81,2)} t)", "CG", f"L/2; y = {f(sec.yc*1000,0)} mm"],
+          ["PESO", f"{f(peso,1)} kN ({f(peso/10.0,2)} t)", "CG", f"L/2; y = {f(sec.yc*1000,0)} mm"],
           ["CONCRETO", f"C{P['fck']} · fckj {P['fckj']} MPa", "AÇO PASSIVO", f"{f(ta['total_kg'],0)} kg"],
           ["CORDOALHAS", f"{P['n_cord']} Ø12,7 · {f(kg_cord,0)} kg", "CAA / COBR.", "II / 30 mm"]]
 y = pr.tabela(x0, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], quadro, [30, 60, 30, 60])

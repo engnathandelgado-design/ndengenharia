@@ -17,7 +17,7 @@ pr.revisao("06", "17/10/2026", "X NOS VÃOS 4-5 A 8-9: ES-2 NOS 3 NÓS; GRAMPO N
 pr.revisao("08", "22/10/2026", "DEC-042: ST-1F → ST-1FL NA FACE LATERAL DO PILAR DE CANTO (SEÇÃO CHEIA)")
 NTS = len(RN.nomes_de("TS-01")) + len(RN.nomes_de("TS-01A"))         # rev09 (DEC-048): 12 peças (linha 2 metálica, sem TS-01B)
 pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — L = {f(L/10,1)} cm · {NTS} PEÇAS — esperas e peças de ligação (medidas em mm)",
-                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
+                  f"PESO {f(peso/10.0,1)} t   ·   VOLUME {f(V,2)} m³   ·   todas as ligações da cobertura parafusadas, sem solda em fábrica ou obra", 560)
 nt, nn = len(P["tercas"]), len(P["nos"])
 
 

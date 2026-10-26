@@ -77,7 +77,7 @@ rot(ax, (xt[4], 0, H), f"CH-T1 chapa com furos p/ terça ({len(xt)}x, c/1,60 m)"
 rot(ax, (xt[8], 0.075, H - 0.30), "TB-2 furo passante p/ mão-francesa", (0.6, 0, -0.75))
 rot(ax, (L - 0.15, 0, -0.02), "CH-A1 + neoprene + TB-1 (pino Ø25)", (-3.2, 0, -0.55))
 rot(ax, (0.25, 0.2, 0.5), "maciço 500", (0.6, 0, 0.8))
-ax.set_title(f"{P['marca']} — viga I90 de cobertura · {P['L']/1000:.2f} m · {D['peso']/9.81:.1f} t · {P['qtd']} peças".replace(".", ","), fontsize=11, pad=-10)
+ax.set_title(f"{P['marca']} — viga I90 de cobertura · {P['L']/1000:.2f} m · {D['peso']/10.0:.1f} t · {P['qtd']} peças".replace(".", ","), fontsize=11, pad=-10)
 
 # --- 2) detalhe da ponta com terça, cantoneira e mão-francesa
 ax2 = fig.add_subplot(2, 2, 3, projection="3d")

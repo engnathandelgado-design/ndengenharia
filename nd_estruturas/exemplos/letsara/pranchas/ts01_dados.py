@@ -112,7 +112,7 @@ def tipo_terca(s):
 
 
 if __name__ == "__main__":
-    print("L", L, "peso kN", round(peso, 1), "t", round(peso / 9.81, 2), "V", round(V, 3))
+    print("L", L, "peso kN", round(peso, 1), "t", round(peso / 10.0, 2), "V", round(V, 3))
     print("TR", json.dumps(TR, indent=0))
     print("alça Fd", round(ALCA_Fd, 1), "cap", round(ALCA_cap, 1), "P0", R.linhas["P0_kN"])
     print("ATO", {k: v for k, v in ATO.items() if k != "pontos"}, "lbpt", round(LBPT, 3), round(LBPT_BRUSCA, 3), "L_N9", L_N9)

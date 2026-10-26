@@ -20,7 +20,7 @@ pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA (1ª A 40 cm DA CALHA); ES
 pr.revisao("07", "24/10/2026", "DEC-059: TS-01A APOIADA NOS PG-01 A PG-04 (NEOPRENE + GRAUTE), PORTÕES LIVRES ATÉ +7,50")
 pr.revisao("08", "25/10/2026", "DEC-062: COTA DA DIFERENÇA TOPO × FUNDO NA PONTA (DETALHE D1)")
 pr.cabecalho_peca("\x01" + RN.lista(RN.nomes_de("TS-01") + RN.nomes_de("TS-01A") + RN.nomes_de("TS-01B")), f"VIGA DE COBERTURA I90 PROTENDIDA — SEÇÃO I90 (b 40, bw 15, h 90) · L = {L/10:.1f} cm (entre pontas, a prumo) · 14 PEÇAS".replace(".", ","),
-                  f"PESO {f(peso/9.81,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
+                  f"PESO {f(peso/10.0,1)} t   ·   VOLUME {f(V,2)} m³   ·   C50 / fckj 35   ·   {P['n_cord']} cord. Ø12,7 CP-190 RB   ·   sem dentes: apoio direto em neoprene   ·   caimento 3 %", 560)
 mac, yfi, yci, ycs, yfs = P["x_mac"], 150, 230, 700, 780
 TER, NOS, ALC, EST = P["tercas"], P["nos"], P["alcas"], P["estoque"]
 t3 = DX / H
@@ -138,7 +138,7 @@ for a, b in ((ALC[0], ALC[1]), (ALC[2], ALC[3])):
     vq.linha(((a + b) / 2, za + 250), ((a + b) / 2, zb), "INDICACAO")
 vq.ret(ALC[0] + 1500, zb, ALC[3] - ALC[0] - 3000, 300, "METALICA")
 vq.linha((L / 2, zb + 300), (L / 2, zg), "INDICACAO")
-vq.chamada((L / 2, zg), (8, 3), f"gancho: {f(peso,0)} kN ({f(peso/9.81,1)} t)")
+vq.chamada((L / 2, zg), (8, 3), f"gancho: {f(peso,0)} kN ({f(peso/10.0,1)} t)")
 vq.chamada(((ALC[0] + ALC[1]) / 2, za + 250), (-8, 6), "balancim")
 vq.cota_h([0] + ALC + [L], 0, -7)
 
@@ -339,7 +339,7 @@ ins = [["AL-1", "Alça laço cordoalha Ø12,7, 2 pernas 700", 4, "ver planta"],
 y = pr.tabela(x0, y, "INSERTOS (DETALHES NA ND-LET-TS01-3) — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 108, 10, 46])
 qd = [["MARCA", P["marca"], "QUANTIDADE", f"{P['qtd']}"],
       ["COMPRIMENTO", f"{L/10:.1f} cm (fundo)".replace(".", ","), "PONTAS", f"a prumo (desl. {DX/10:.1f} cm)".replace(".", ",")],
-      ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/9.81,2)} t)"],
+      ["VOLUME", f"{f(V,3)} m³", "PESO", f"{f(peso,1)} kN ({f(peso/10.0,2)} t)"],
       ["CONCRETO", f"C{P['fck']} / fckj {P['fckj']}", "PROTENSÃO", f"{P['n_cord']} cord. Ø12,7"],
       ["APOIO EXTERNO", "assento do pilar, 27,5 cm", "APOIO CENTRAL", f"I130 + CT-I130, {(X_CT - FOLGA_C)/10:g} cm"],
       ["CUNHAS", f"{LC/10:.0f} cm, 0 → {EC} mm", "TUBOS TB-3", f"a {f(PIN/10, 2)} cm das 2 pontas"]]

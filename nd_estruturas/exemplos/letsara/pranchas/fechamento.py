@@ -184,8 +184,8 @@ for V, (pecas, _, _) in DADOS.items():
             if c_:
                 CALCOS.setdefault(CALCO_MARCA[c_], []).append((V, p["bay"] + j, p["k"]))
 N_TOT = sum(len(v) for v in TIPOS.values())
-REC_T = PP_KNM * REC_B / 1000 * (H_PL - REC_Z0) / H_PL / 9.81          # DEC-044: peso do recorte (t)
-peso_t = lambda L: PP_KNM * int(L) / 1000 / 9.81 - (REC_T if round((L - int(L)) * 10) in (2, 3) else 0)
+REC_T = PP_KNM * REC_B / 1000 * (H_PL - REC_Z0) / H_PL / 10.0          # DEC-044: peso do recorte (t)
+peso_t = lambda L: PP_KNM * int(L) / 1000 / 10.0 - (REC_T if round((L - int(L)) * 10) in (2, 3) else 0)
 PESO_TOT = sum(len(v) * peso_t(L) for L, v in TIPOS.items())
 
 
@@ -980,7 +980,7 @@ def prancha_vt():
     a.chamada((100, 450), (14, 10), "PN-1 Ø20 no TB-1 Ø50 da viga"); a.chamada((-300, 1000), (-10, 8), "pilar")
     a.chamada((500, 340), (4, -30), "N5 tirante 2 Ø12,5 (NBR 9062:2017 7.4)"); a.chamada((300, 500), (12, 14), "N6 suspensão 2 estribos Ø8")
     y = Q[3] - 40
-    linhas = [[MK[L], ", ".join(pos), 2 * len(pos), f"{L*100:.1f}".replace(".", ","), f(peso(L) / 9.81, 2)] for L, pos in lista]
+    linhas = [[MK[L], ", ".join(pos), 2 * len(pos), f"{L*100:.1f}".replace(".", ","), f(peso(L) / 10.0, 2)] for L, pos in lista]
     y = pr.tabela(XC, y, "MARCAS — VT 25×60 (eixos A e E)", ["MARCA", "TRECHO (linhas)", "QT", "L (cm)", "PESO (t)"], linhas, [18, 90, 12, 24, 26], h_lin=5.5)
     ins = [["TB-1", "Tubo Ø50×3,0 L=280, passante, sem solda", 2, "a 10 cm das pontas"], ["AL-1", "Laço de cordoalha Ø12,7", 2, "a L/5 das pontas"]]
     y = pr.tabela(XC, y - 4, "INSERTOS POR VIGA — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 100, 10, 64])
