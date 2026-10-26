@@ -71,7 +71,7 @@ def kg_barra(d, L, n=1):
     return n * math.pi * d ** 2 / 4 * L * RHO
 
 
-pr = Prancha("A1", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
+pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — ARMADURA DA PONTA, CONJUNTO MONTADO, TOLERÂNCIAS, SEQUÊNCIA DE MONTAGEM E LISTAS",
                         desenho="ND-LET-PP01", folha="01/01", fase="PARA APROVAÇÃO", rev="06"))
 pr.revisao("06", "18/10/2026", "EXECUTIVO DA FIXAÇÃO TREJOR (DEC-026): ARMADURA DA PONTA, CONJUNTO MONTADO; FABRICAÇÃO NAS PP02 A PP04")
@@ -82,7 +82,7 @@ pr.cabecalho_peca("FX", f"FIXAÇÃO DAS PLACAS — {N_CS} CONSOLES CS-1 ({N_CS_F
                   largura=XC - Q[0] - 10)
 
 # ================================================================== D1 — armação da ponta (vista pela face interna, 1:10)
-d1 = pr.vista("DETALHE 1", (Q[0] + 40, Q[1] + 300), 10, titulo="DETALHE 1 — ARMAÇÃO DA PONTA DA PLACA",
+d1 = pr.vista("DETALHE 1", (Q[0] + 40, Q[1] + 420), 10, titulo="DETALHE 1 — ARMAÇÃO DA PONTA DA PLACA",
               subtitulo=f"vista pela face interna; as 2 pontas iguais (espelhadas); {FCH.PRT_} e tela N1 da ND-LET-PP00", unidade="cm")
 d1.poli([(500, 0), (0, 0), (0, H), (500, H)], "VISTA"); d1.interrupcao((500, 0), (500, H))
 for z in Z_CORD:
@@ -106,7 +106,7 @@ d1.chamada((GF.N["x_gr"][1][1], ZN1 + 30), (60, 1), "grampos do NC-1 dentro do N
 d1.chamada((300, 781), (40, -12), f"C1 {FCH.PRT_} (ND-LET-PP00)")
 
 # ================================================================== D2 — corte B-B pela ponta (1:5)
-d2 = pr.vista("DETALHE 2", (Q[0] + 265, Q[1] + 290), 5, titulo="DETALHE 2 — CORTE B-B NA PONTA",
+d2 = pr.vista("DETALHE 2", (Q[0] + 300, Q[1] + 420), 5, titulo="DETALHE 2 — CORTE B-B NA PONTA",
               subtitulo=f"espessura da placa (face interna à esquerda): barras no plano médio, entre os {FCH.PRT_}", unidade="cm")
 pts = [(0, 700), (E, 700), (E, H), (0, H)]
 d2.poli(pts, "CORTADO", fechada=True); d2.hachura(pts, "AR-CONC", 0.03)
@@ -176,12 +176,12 @@ d3.chamada((a0 + 70, -200), (14, -12), "placa 10 cm (ND-LET-PP00)")
 d3.chamada((-8, -55.5 - 120), (-30, -26), "CE-1 (PP04)")
 d3.chamada((8, -120), (-24, -32), "CS-1 (PP03)")
 d3.chamada((a0 + 30, zn1 - 6), (70, 26), "NC-1 (PP02)")
-d3.chamada((a0 + 6, zn1 - 30), (-18, 40), "abas laterais (tracejadas)")
+d3.chamada((a0 + 6, zn1 - 30), (-18, 50), "abas laterais (tracejadas)")
 d3.chamada((yt, zf), (56, -16), "prisioneiro no fundo")
 d3.chamada((yn, G0), (-10, 40), "M16 de nível sob o teto")
 
 # ================================================================== D4 — planta do conjunto (1:2), logo abaixo do teto
-d4 = pr.vista("DETALHE 4", (Q[0] + 380, Q[1] + 145), 2.0, titulo="DETALHE 4 — PLANTA DO CONJUNTO", subtitulo="corte logo abaixo do teto do nicho; posição nominal", unidade="mm")
+d4 = pr.vista("DETALHE 4", (Q[0] + 420, Q[1] + 145), 2.0, titulo="DETALHE 4 — PLANTA DO CONJUNTO", subtitulo="corte logo abaixo do teto do nicho; posição nominal", unidade="mm")
 xp = -N["B"] / 2                                          # ponta da placa (x do console)
 pl = [(xp, a0), (xp + 320, a0), (xp + 320, a0 + 100), (xp, a0 + 100)]
 d4.poli([(xp, a0 + N["P"]), (xp, a0 + 100), (xp + 320, a0 + 100), (xp + 320, a0), (xp + N["B"], a0), (xp + N["B"], a0 + N["P"])], "CORTADO", fechada=True)
@@ -243,7 +243,7 @@ def esquema(v, dy, dz, seta=None):
 
 
 ESQ = [("1 — APROXIMAR", 150, R_m, ((260, 90), (150, 90))), ("2 — ENCOSTAR", 0, R_m, ((70, 160 + R_m + 30), (70, 160 + R_m + 2))), ("3 — BAIXAR", 0, 0, ((70, 230), (70, 175)))]
-d5 = pr.vista("DETALHE 5", (Q[0] + 448, Q[1] + 360), 5.0, titulo="DETALHE 5 — SEQUÊNCIA DE MONTAGEM",
+d5 = pr.vista("DETALHE 5", (Q[0] + 560, Q[1] + 440), 5.0, titulo="DETALHE 5 — SEQUÊNCIA DE MONTAGEM",
               subtitulo=f"esquema; janela R = {MOJ[0]:g} a {MOJ[1]:g} com G = {T['G']:g}".replace(".", ","), unidade="mm")
 O5 = d5.o
 for k, (tit, dy_, dz_, st) in enumerate(ESQ):
@@ -261,7 +261,7 @@ barras = [dict(pos="N3", diam=8.0, qtd=4, comp=138, trechos=["138"]),
 ta = pr.tabela_croqui(XC, y, barras, h_lin=8.0)
 KG_PONTA = ta["total_kg"]
 y = ta["y_base"]
-pr.texto(XC, y - 3, f"Por placa (2 pontas). Obra: {N_PL} placas → {f(KG_PONTA * N_PL, 0)} kg (soma ao aço da ND-LET-PP00).", "min", "TEXTO")
+pr.texto(XC, y - 2, f"Por placa (2 pontas). Obra: {N_PL} placas → {f(KG_PONTA * N_PL, 0)} kg (soma ao aço da ND-LET-PP00).", "min", "TEXTO", "TOP_LEFT")
 kg = lambda its: sum(k * q for *_, q, k in its)
 kg_nc, kg_cs, kg_ce = kg(GF.nc1_itens()), kg(GF.cs1_itens()), kg(GF.ce1_itens())
 pti = {n: (q, k) for n, _, _, _, q, k in GF.pt_itens()}

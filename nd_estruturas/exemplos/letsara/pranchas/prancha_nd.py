@@ -361,7 +361,7 @@ class Prancha:
         self.__dict__.setdefault("_aco", []).append(dict(perda=perda, aco=aco, barras=[{k: b[k] for k in ("pos", "diam", "qtd", "comp", "forma", "trechos", "esp", "obs") if k in b} for b in barras]))
         """Relação do aço com croqui de dobramento (padrão de mercado BIM). barras: dict(pos, diam, qtd, comp (cm),
         forma=[(x,y) cm ...] polilinha da barra, trechos=['84','14',...] rótulos na ordem dos segmentos)."""
-        h_lin = max(h_lin, 4 * ALTURAS["min"] + 2.0)                 # rev11: rótulos dos trechos (3,0 mm) cabem acima e abaixo do croqui
+        h_lin = max(h_lin, 4 * ALTURAS["min"] + 4.0)                 # rev11: rótulos dos trechos (3,0 mm) cabem acima e abaixo do croqui
         larg = [13, 13, 14, 20, 66, 20, 20]
         W = sum(larg)
         cab = ["POS", "Ø", "QUANT", "C. UNIT (cm)", "CROQUI (cm)", "C. TOTAL (m)", "MASSA (kg)"]
@@ -395,7 +395,7 @@ class Prancha:
                     pts = b.get("forma") or [(0, 0), (b["comp"], 0)]
                     xs_, ys_ = [p[0] for p in pts], [p[1] for p in pts]
                     bw_, bh_ = max(xs_) - min(xs_), max(ys_) - min(ys_)
-                    esc = min((w - 16) / max(bw_, 1e-6), (h_lin - 2 * (ALTURAS["min"] + 1.2)) / max(bh_, 1e-6))
+                    esc = min((w - 16) / max(bw_, 1e-6), (h_lin - 2 * (ALTURAS["min"] + 2.2)) / max(bh_, 1e-6))
                     cx0 = xx + w / 2 - bw_ * esc / 2 - min(xs_) * esc
                     cy0 = y - h_lin / 2 - bh_ * esc / 2 - min(ys_) * esc
                     pp = [(cx0 + px * esc, cy0 + py * esc) for px, py in pts]

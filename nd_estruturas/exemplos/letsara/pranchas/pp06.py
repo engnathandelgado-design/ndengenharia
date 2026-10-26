@@ -40,7 +40,7 @@ pr.cabecalho_peca(", ".join(tipos), f"PLACAS RECORTADAS ({len(recs)} PÇ: {', '.
                   largura=XC - Q[0] - 10)
 
 # ================================================================== 1. ponta recortada — elevação pela face interna (1:10)
-e = pr.vista("PONTA RECORTADA", (Q[0] + 75, Q[3] - 60 - (H_PL + 150) / 10), 10, titulo="DETALHE 1 — PONTA RECORTADA (face interna; RE — RD espelhada)",
+e = pr.vista("PONTA RECORTADA", (Q[0] + 112, Q[3] - 60 - (H_PL + 150) / 10), 10, titulo="DETALHE 1 — PONTA RECORTADA (face interna; RE — RD espelhada)",
              subtitulo="x a partir da ponta do eixo C; o consolo CP-I130 e o nariz do I130 (tracejados) passam pelo recorte; toco 26 × 12 embaixo", unidade="cm")
 LV = 1100
 cont = [(0, 0), (LV, 0), (LV, H_PL), (RB, H_PL), (RB, RZ), (0, RZ)]
@@ -74,7 +74,7 @@ e.barra([(20, RZ - 25), (RB + 25, RZ - 25), (RB + 25, 700)], "N9", 2, 8, comp_cm
 e.barra([(300, 40), (560, 300)], "N10", 2, 8, comp_cm=37, ponto_rotulo=(560, 300), desloc=(16, -12))                               # diagonal no canto reentrante
 for xe in (60, 140, 220):
     e.poli([(xe, 20), (xe, RZ - 20), (xe + 6, RZ - 20)], "ARM_TRANSV")
-e.chamada((220, RZ - 20), (30, 28), "N11 - 3 Ø6,3 c/8 C=40 (estribo do toco)")
+e.chamada((220, RZ - 20), (112, -12), "N11 - 3 Ø6,3 c/8 C=40 (estribo do toco)")
 pr.posicoes_desenho.add("N11")
 e.cota_h([0, RB, RB + NC_B, RB + 20, LV], 0, -10, total=False)
 e.cota_h([X_AX - 250, X_AX, X_AX + 250], H_PL + 150, 8, total=False)
@@ -86,7 +86,7 @@ e.chamada((X_AX - 100, 1000), (-16, 30), "nariz do I130 (folga 7)")
 e.chamada((130, RZ - 40), (16, -22), f"toco {gg(RB / 10)} × {gg(RZ / 10)} sem fios")
 e.marcador_corte((60, -250), (60, RZ + 150), "A", lado=1)
 # ---- corte A-A pelo toco (1:5)
-a = pr.vista("CORTE A-A", (Q[0] + 232, Q[3] - 190), 5, titulo="CORTE A-A — TOCO", subtitulo="12 × 10 cm, sem protensão", unidade="cm")
+a = pr.vista("CORTE A-A", (Q[0] + 352, Q[3] - 190), 5, titulo="CORTE A-A — TOCO", subtitulo="12 × 10 cm, sem protensão", unidade="cm")
 pts = [(0, 0), (100, 0), (100, RZ), (0, RZ)]
 a.poli(pts, "CORTADO", fechada=True); a.hachura(pts, "AR-CONC", 0.03)
 a.poli([(23, 20), (77, 20), (77, RZ - 20), (23, RZ - 20), (23, 20), (31, 20)], "ARM_TRANSV")
@@ -99,7 +99,7 @@ a.chamada((23, RZ - 25), (-8, 10), "N9")
 a.chamada((50, RZ - 20), (12, 12), "N11")
 
 # ================================================================== 2. CE-1L — vista frontal (1:4) e planta (1:4)
-v1 = pr.vista("CE-1L", (Q[0] + 140, Q[1] + 112), 4.0, titulo="DETALHE 2 — CE-1L: VISTA FRONTAL (face B dos pilares P8A e P11, fiada +6,25)",
+v1 = pr.vista("CE-1L", (Q[0] + 160, Q[1] + 130), 4.0, titulo="DETALHE 2 — CE-1L: VISTA FRONTAL (face B dos pilares P8A e P11, fiada +6,25)",
               subtitulo="chapa 840 × 330 × 12,5 com asas de 220 além das faces do pilar (400); 4 pinos iguais à CE-1; CS-1 a ±340 do eixo", unidade="mm")
 v1.chapa(-420, -165, 840, 330, 1.2)
 v1.ret(-200, -165 - 60, 400, 330 + 120, "OCULTA")
@@ -117,7 +117,7 @@ v1.chamada((-340, ZT - 30), (16, -22), "CS-1 (PP03) soldado na obra na asa")
 v1.chamada((120, -140), (30, -24), "pino Ø16 × 150 c/ cabeça (PP04 item 21)")
 v1.chamada((200, 100), (14, 40), "face do pilar (400)")
 # planta (corte horizontal pelo console)
-v2 = pr.vista("CE-1L PLANTA", (Q[0] + 445, Q[1] + 150), 5.0, titulo="DETALHE 3 — CE-1L: PLANTA NO NÍVEL DO CONSOLE", subtitulo="pilar 400 (direção da parede); asas no plano da face; CS-1 e nicho da placa a 330 da ponta recortada", unidade="mm")
+v2 = pr.vista("CE-1L PLANTA", (Q[0] + 480, Q[1] + 170), 5.0, titulo="DETALHE 3 — CE-1L: PLANTA NO NÍVEL DO CONSOLE", subtitulo="pilar 400 (direção da parede); asas no plano da face; CS-1 e nicho da placa a 330 da ponta recortada", unidade="mm")
 pil = [(-200, 0), (200, 0), (200, 300), (-200, 300)]
 v2.poli(pil, "CORTADO", fechada=True); v2.hachura(pil, "AR-CONC", 0.03)
 v2.chapa(-420, 0, 840, TCE, 0.4)
@@ -145,7 +145,7 @@ v2.chamada((FCH.JUNTA / 2 + RB / 2, -FOL - E_PL), (26, -14), f"toco 26 × 12 (ab
 v2.chamada((-340, -C["alma"]["y1"]), (10, -40), "CS-1 no nicho NC-1 da placa recortada")
 
 # ================================================================== 3. CS-1C / CS-1D — corte vertical pelo console (1:4) e vista frontal (1:4)
-cx0 = Q[0] + 338
+cx0 = Q[0] + 520
 E_ = 100.0
 H_CX, B_CX, T_CX = 330.0, 120.0, 9.5
 ZC_ = FCH.Z_CE
@@ -177,8 +177,8 @@ c3.cota_v([ZC_ - 165, ZC_ - 140, ZC_, ZC_ + 140, ZC_ + 165], E_ + TCE + 150, 8, 
 c3.cota_v([ZC_ - H_CX / 2, ZT_, ZC_ + H_CX / 2], E_ + TCE + 150, 18, total=False)
 c3.chamada((E_ / 2, ZC_ + H_CX / 2 - 5), (-20, 36), "caixa do calço 120 × 330 × e, chapa 9,5 (fábrica)")
 c3.texto((-me["y1"] - FOL - E_PL / 2, ZC_ + 150), "PLACA (plano dos consoles)", "nota", "MIDDLE_CENTER", rot=90)
-c3.chamada((E_ + 180, ZC_ - 250), (-60, -14), "pilar (face real, e atrás do plano dos consoles)")
-c3.chamada((X(me["y1"] / 2), ZT_ - 16), (-20, -70), "CS-1 (PP03), inalterado")
+c3.chamada((E_ + 180, ZC_ - 250), (-60, -6), "pilar (face real, e atrás do plano dos consoles)")
+c3.chamada((X(me["y1"] / 2), ZT_ - 16), (-34, -48), "CS-1 (PP03), inalterado")
 c3.chamada((E_ + TCE / 2, ZC_ + 165), (10, 30), "CE-1 (PP04)")
 # vista frontal da caixa (pela placa)
 c4 = pr.vista("CALCO FRENTE", (cx0 + 180, Q[3] - 60 - (ZC_ + 300) / 4), 4.0, titulo="DETALHE 5 — CALÇO: FRENTE", subtitulo="caixa 120 × 330 centrada no eixo do console; CE-1 atrás", unidade="mm")
@@ -204,7 +204,7 @@ ce = [[20, "CHAPA DE ESPERA CE-1L", f"CH {gg(TCE)} × 330 × 840", "ASTM A36", 1
       [21, "PINO COM CABEÇA (stud)", "Ø16 × 150, cabeça Ø32 × 10 — ISO 13918 SD", "S235J2 + C450", 4, f(GF.kg_red(16, 140) + GF.kg_red(32, 10), 3)]]
 kg_cel = GF.kg_ch(840, 330, TCE) + 4 * (GF.kg_red(16, 140) + GF.kg_red(32, 10))
 y = pr.tabela(XC, y - 6, f"LISTA DE MATERIAIS — CE-1L (1 CJ) — {PP01['CE1L']} PÇ: P8A E P11, FIADA +6,25", ["Nº", "DESCRIÇÃO", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg/un"], ce, [9, 48, 76, 36, 12, 24], h_lin=5.2)
-pr.texto(XC, y - 3.5, f"CE-1L: {f(kg_cel, 2)} kg/cj; pinos, N18 e furação iguais à CE-1 (PP04). Asa: M {gg(CEL['asa']['M_kNm'])} kN·m + T {gg(CEL['asa']['T_kNm'])} kN·m → von Mises {gg(CEL['asa']['von_mises_MPa'])} ≤ {gg(CEL['asa']['lim_MPa'])} MPa (uso {gg(CEL['asa']['uso'])}); pinos como na CE-1 (2 consoles).", "nota", "TEXTO")
+pr.texto(XC, y - 3.5, f"CE-1L: {f(kg_cel, 2)} kg/cj; pinos, N18 e furação iguais à CE-1 (PP04).", "nota", "TEXTO", "TOP_LEFT")   # rev11: verificação da asa fica na memória
 cal = []
 for mk_, ee in (("CS-1C", 100.0), ("CS-1D", 75.0)):
     cal += [[mk_, "chapa lateral", f"CH 9,5 × 330 × {gg(ee)}", "ASTM A36", 2, f(GF.kg_ch(330, ee, 9.5), 3)],
