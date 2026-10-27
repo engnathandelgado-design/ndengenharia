@@ -56,7 +56,7 @@ for mk, faces, e_, exc_face in ITENS:
     pr_ = json.loads((AQ / "dimensionamento_pilares_r05.json").read_text(encoding="utf-8"))[mk]["proposto"]
     brs, _ = DP.barras(bx, by, pr_["nx"], pr_["ny"], pr_["d"])
     dM = len(faces) * VD * e_                            # kN·m, Mx (plano ⊥ à fachada)
-    assert abs(DP.DM_CONS[pils[0]] - dM) < 0.01, (mk, dM)          # o mesmo ΔM entra no dimensionamento (dimensionar_pilares_r05)
+    assert abs(DP.DM_CONS[pils[0]] - DP.DM_MEZ.get(pils[0], 0.0) - dM) < 0.01, (mk, dM)          # o mesmo ΔM entra no dimensionamento (dimensionar_pilares_r05)
     u0, _ = DP.secao_ok(dict(brs=brs), pils, com_dm=False)
     u1, onde = DP.secao_ok(dict(brs=brs), pils)
     Td = len(faces) * HD * e_
@@ -67,6 +67,11 @@ for mk, faces, e_, exc_face in ITENS:
 out["consolo"] = dict(geometria=f"{CONS['b_m']*100:g} × {CONS['proj_m']*100:g} × {CONS['h_total_m']*100:g} (igual ao C1)", tirante=CONS["tirante"],
                       cobrimento_lateral_cm=3.0, ok=CONS["ok"],
                       obs="rente à face C do pilar (face lateral do consolo no plano da face C); mesma Fd e mesma armadura do C1 (a carga continua centrada no consolo)")
+# rev12 (27/10, decisão do Nathan): VM da linha 1 alinhada à face externa — CP-MEZ (largura 30 = VM) rente à face externa:
+# PF da linha 1 nas faces B e D (e = 0,15, rente à face C) e cantos da linha 1 na face A (e = 0,05, para a fachada); ΔM no dimensionamento
+from geometria import E_VM_PF, E_VM_CANTO
+out["mez"] = {**{mk: dict(faces=["B", "D"], e_m=E_VM_PF, exc_face="C", dM_kNm=round(DP.DM_MEZ[DP.GRUPOS[mk][0]], 1)) for mk in ("PF-01", "PF-02", "PF-03")},
+              **{mk: dict(faces=["A"], e_m=E_VM_CANTO, exc_face=fe, dM_kNm=round(DP.DM_MEZ[DP.GRUPOS[mk][0]], 1)) for mk, fe in (("PL-03", "D"), ("PL-07", "B"))}}
 out["ok"] = all(v["ok"] for v in out["pilares"].values()) and CONS["ok"]
 (AQ / "consolos_face.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print("ok", out["ok"])

@@ -20,7 +20,7 @@ Saída: nomes.json (pecas, marca_para_nomes, nome_para_marca). Rodar: python nom
 import json, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_PC_C, PG_L4, y_canto
+from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_PC_C, PG_L4, y_canto, Y_VM1
 from familia_pl import marca_de
 
 PR = "/home/claude/letsara/pranchas/"
@@ -78,7 +78,7 @@ def vigas_obra():
     from geometria import P6_L2, P6_ESC, P7_ESC
     for iz, niv in enumerate(("+3,90", "+7,30")):
         for k, (xa, xb) in enumerate(zip(X_FACH[:-1], X_FACH[1:])):
-            v.append((niv, "VM-01" if k in (0, 3) else "VM-02", "V", xa, Y_LIN[0], xb, Y_LIN[0], f"linha 1, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
+            v.append((niv, "VM-01" if k in (0, 3) else "VM-02", "V", xa, Y_VM1, xb, Y_VM1, f"linha 1, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
         for k, (xa, xb) in enumerate(zip(X_FACH[:-2], X_FACH[1:-1])):
             v.append((niv, "VM-01" if k == 0 else "VM-02", "V", xa, Y_LIN[1], xb, Y_LIN[1], f"linha 2, {'ABCDE'[k]}–{'ABCDE'[k + 1]}"))
         v.append((niv, "VM-03", "V", X_FACH[3], Y_LIN[1], P6_L2[0], Y_LIN[1], "linha 2, D–P6"))

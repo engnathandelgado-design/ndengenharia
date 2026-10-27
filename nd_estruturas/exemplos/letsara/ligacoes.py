@@ -32,7 +32,7 @@ NEO_CEN = dict(x=0.100, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.0775)       # neopr
 # rev10 (DEC-061, Nathan 25/10/2026): consolo lateral CT-I120 (b 50, projeção 20, h 30/15 com mísula) nas duas faces da mesa superior
 # da I120 onde chega cada TS-01 → assento de 36,25 cm (ponta da TS-01 até a ponta do consolo) e neoprene maior NEO-3C 150 × 300,
 # de 12 a 27 cm da ponta (dentro da cunha de 30 cm; pinos PN-5 a 7,75 cm fora do neoprene).
-CT_I120 = dict(b=0.50, proj=0.20, h=0.30, h_ext=0.15)
+CT_I120 = dict(b=0.40, proj=0.20, h=0.30, h_ext=0.15)        # rev12 (27/10): largura = mesa inferior da TS-01 (40)
 NEO_CI = dict(x=0.150, y=0.300, e=0.010, xc=X_PONTA_CEN - 0.195)
 H_PAC = H_TS + Z_TERCA + H_TERCA + sum(PACOTE.values())
 # cargas da cobertura (kN/m²) — rev03; pesos de catálogo usuais (conferir com os fornecedores da telha e dos painéis)

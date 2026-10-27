@@ -216,13 +216,12 @@ for fl in ("ND-LET-LA01", "ND-LET-PR01", "ND-LET-NG01", "ND-LET-MON02"):
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
     r("CONFIRMAR COM A FÁBRICA" in tx.upper() or "CONFIRMAR COM A FÁBRICA" in tx, "C18 pendência (extrusora LP20) sinalizada", fl, "ok" if "FÁBRICA" in tx.upper() else "sem a ressalva")
 # C21 (rev12, 27/10) pendências das decisões em aberto sinalizadas em todas as folhas afetadas
-for fl, chaves in (("ND-LET-VM01", ("PENDÊNCIA",)), ("ND-LET-LA01", ("PENDÊNCIA",)), ("ND-LET-PL03", ("PENDÊNCIA",)), ("ND-LET-PL07", ("PENDÊNCIA",)),
-                   ("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)), ("ND-LET-MON02", ("PENDÊNCIA", "VM de borda da linha 1")),
-                   ("ND-LET-NG01", ("VM de borda da linha 1", "5,00 m livres")), ("ND-LET-PR01", ("VM da linha 1", "5,00 m livres"))):
+for fl, chaves in (("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)),   # rev12 (27/10): VM de canto decidida — só a dos PG
+                   ("ND-LET-NG01", ("5,00 m livres",)), ("ND-LET-PR01", ("5,00 m livres",))):
     dx = PR + fl + ".dxf"
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
     falta = [c for c in chaves if c.upper() not in tx.upper().replace("\n", " ")]
-    r(not falta, "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada", fl, "ok" if not falta else f"sem: {falta}")
+    r(not falta, "C21 pendência (locação dos PG-02/PG-04) sinalizada", fl, "ok" if not falta else f"sem: {falta}")
 # C19 MC, listas e quantitativos da mesma revisão das pranchas
 ENT = "/home/claude/letsara/entregas/"
 for arq in ("ND-LET-MC12-REV12-rev12.pdf", "ND-LET-LISTAS-rev12.pdf", "ND-LET-QUANTITATIVOS-rev12.xlsx"):
@@ -393,6 +392,26 @@ try:
     r(not difs, "C32 face do consolo excêntrico igual no 2D e no 3D (IFC)", "JOGO", "ok" if not difs else "; ".join(difs[:5]))
 except Exception as e:
     r(False, "C32 face do consolo excêntrico igual no 2D e no 3D (IFC)", "JOGO", f"não conferido: {e}")
+# C33 (rev12, 27/10, regra do Nathan) largura do consolo = largura da viga apoiada; neoprene com borda lateral ≥ 1,5c (≥ 3 cm)
+try:
+    CJ_ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json", encoding="utf-8"))
+    LV_ = REG.larguras_viga_apoiada()
+    difs = [f"{k}: consolo {CJ_[k]['b_m']} × viga {v}" for k, v in LV_.items() if abs(CJ_[k]["b_m"] - v) > 1e-6]
+    difs += [f"{k}: neoprene {CJ_[k]['neoprene_mm'][0]} mm deixa {(CJ_[k]['b_m'] * 1000 - CJ_[k]['neoprene_mm'][0]) / 2:g} mm até a face" for k in LV_
+             if (CJ_[k]["b_m"] * 1000 - CJ_[k]["neoprene_mm"][0]) / 2 < REG.borda_neoprene_min() * 1000 - 1e-6]
+    for mk, R_ in REGP.items():                                           # o que está DESENHADO em cada pilar (geometria da folha)
+        for c_ in R_["consolos"]:
+            if c_["tipo"] in LV_ and abs(c_["larg"] / 1000 - LV_[c_["tipo"]]) > 1e-6:
+                difs.append(f"{mk}: {c_['tipo']} desenhado com {c_['larg']} mm × viga {LV_[c_['tipo']] * 1000:g}")
+            if c_["tipo"] in REG.APARELHOS and list(c_["neo"]) != list(REG.APARELHOS[c_["tipo"]]["dims"]):
+                difs.append(f"{mk}: neoprene {c_['neo']} ≠ registro {REG.APARELHOS[c_['tipo']]['dims']}")
+    r(not difs, "C33 largura do consolo = largura da viga apoiada (e neoprene com borda)", "JOGO", "ok" if not difs else "; ".join(sorted(set(difs))[:6]))
+except Exception as e:
+    r(False, "C33 largura do consolo = largura da viga apoiada (e neoprene com borda)", "JOGO", f"não conferido: {e}")
+# C34 nenhuma decisão encerrada citada como pendente (VM de canto decidida em 27/10)
+for fl, tx_ in TXT.items():
+    m34 = [t for t in tx_ if re.search(r"VM[^.]{0,60}(em decisão|não produzir as VM)|decisao_vm_canto", t)]
+    r(not m34, "C34 sem pendência já decidida (VM da linha 1 no canto)", fl, "ok" if not m34 else m34[0][:80])
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]

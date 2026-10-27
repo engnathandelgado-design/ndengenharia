@@ -101,10 +101,25 @@ def somar_exc_consolos(out):
     return out
 
 
+def somar_exc_mez(out):
+    """rev12 (27/10): VM da linha 1 alinhada à face externa — CP-MEZ rentes à face nos PF (4 consolos, e = 0,15) e nos cantos da
+    linha 1 (2 consolos, e = 0,05): ΔMxd = Σ Vd·e somado ao Mxd máx. Idempotente (marca 'exc_mez')."""
+    if out.get("exc_mez"):
+        return out
+    import dimensionar_pilares_r05 as _DP
+    for p, v in _DP.DM_MEZ.items():
+        d = out["pilares"][p]["ELU"]
+        d["Mxd_max"] = round(d["Mxd_max"] + v, 1)
+        d["Md_res_max"] = round(d["Md_res_max"] + v, 1)
+    out["exc_mez"] = {p: round(v, 1) for p, v in _DP.DM_MEZ.items()}
+    return out
+
+
 if POS:
     out = json.loads((AQ / "cargas_fundacao.json").read_text(encoding="utf-8"))
     pil = out["pilares"]
 out = somar_portoes(out)
 out = somar_exc_consolos(out)
+out = somar_exc_mez(out)
 (AQ / "cargas_fundacao.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(len(pil), "pilares")

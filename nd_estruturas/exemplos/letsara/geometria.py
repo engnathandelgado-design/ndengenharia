@@ -21,6 +21,13 @@ DY_CANTO = 0.10
 Y_FACE_EXT = (round(Y_LIN[0] - 0.30, 3), round(Y_LIN[-1] + 0.30, 3))        # faces externas das linhas 1 e 9 (PF e cantos alinhados)
 
 
+# rev12 (27/10/2026, decisão do Nathan — encerra a pendência da VM de canto): a VM de borda da linha 1 (30 de largura) fica alinhada à
+# face externa dos pilares da linha 1 (PF e cantos, face −0,30) nos dois níveis — vai de −0,30 a 0,00, eixo −0,15 — sem fresta até as placas.
+B_VM = 0.30
+Y_VM1 = round(Y_FACE_EXT[0] + B_VM / 2, 3)                                    # −0,15
+Y_VM = {1: Y_VM1, 2: Y_LIN[1]}                                               # eixo das VM do mezanino por linha
+
+
 def y_canto(y_linha):
     """eixo (y) do pilar de canto da linha de fachada y_linha (0 ou COMP); seção 40 em y."""
     return round(y_linha - DY_CANTO if y_linha < COMP / 2 else y_linha + DY_CANTO, 3)
@@ -89,6 +96,11 @@ ESCADA_EXT = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28,   # DEC-055: 
 # rev12 (27/10, opção D): com os cantos deslocados DY_CANTO, os vãos de canto (A–B, D–E) também ficam com a VB e o CP-VB rentes
 # à face externa (fresta de 2,5 cm até a placa em toda a fachada).
 E_VB_FACE = 0.225
+
+
+# rev12 (27/10, VM da linha 1 alinhada à face externa): excentricidade do apoio da VM (eixo −0,15) em relação ao eixo de cada pilar
+E_VM_PF = round(0.30 - B_VM / 2, 3)                      # PF 40×60 (eixo em y = 0): 0,15 para fora
+E_VM_CANTO = round(abs(Y_VM1 - (Y_LIN[0] - DY_CANTO)), 3)                    # canto (eixo −0,10): 0,05 para fora
 
 
 def y_vb(x_meio, y_linha):

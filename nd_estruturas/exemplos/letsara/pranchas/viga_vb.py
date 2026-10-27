@@ -55,6 +55,7 @@ pr.revisao("04", "16/10/2026", "VB 15×60 COM DENTE GERBER, CONSOLO CP-VB ESCOND
 pr.revisao("05", "17/10/2026", "TERÇAS Z CONTÍNUAS SEM MÃO-FRANCESA: RETIRADAS AS ESPERAS ES-3")
 pr.revisao("06", "17/10/2026", "15 ESPAÇOS DE TERÇA; VB-05 A 08 COM ES-1R M20 + GRAMPO E ES-2V DO X; TABELA DE ESPERAS POR MARCA")
 pr.revisao("07", "25/10/2026", "DEC-062: COTAS DO DENTE NO DETALHE D1 (COMPRIMENTO, ALTURA E RECORTE)")
+pr.revisao("R12", "27/10/2026", "NEO-6 100 × 60 (BORDA LATERAL DO CONSOLO DE 15); AÇO DO QUADRO = RELAÇÃO DE ARMAÇÃO; NOMES POR EXTENSO")
 Q = pr.quadro
 XC = Q[2] - 190
 import renomear as RN
@@ -177,7 +178,7 @@ d1.cota_h([FP, 0, XP, LN, LD], ZT(LD) + 150, 12, total=False)
 d1.cota_v([CT - 290, CT, ZNL], FP, -10, total=False)
 d1.cota_h([FP, FP + 270], CT - 290, -12, total=False)
 d1.chamada((XP, ZT(XP) - 30), (16, 48), "PN-6 Ø20 L=700 + porca e contraporca")
-d1.chamada((XP, CT + 5), (-62, 30), "NEO-6 100×100×10 (furo Ø30) horizontal")
+d1.chamada((XP, CT + 5), (-62, 30), "NEO-6 100×60×10 (furo Ø30) horizontal")
 d1.chamada((FP + 200, CT - 170), (60, -30), "CP-VB 15 × 27 × 29, topo HORIZONTAL (ver prancha do pilar)")
 d1.chamada(Rp(LN, REC + COB + 20), (14, 10), "N5 alça Ø10 (tirante)")
 d1.chamada(Rp(XS[0], 150), (70, -16), "N6 suspensão 2 Ø10")
@@ -216,7 +217,7 @@ ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 
        ["ES-1R", "VB-05 a 08: 2 M20 L=520 gancho + grampo U Ø10", 2 * len(TERCAS), "topo, a 45/105 da terça"],
        ["ES-2V", "VB-05 a 08: M16 L=220 gancho + grampo (OR-X)", "tab.", "eixo, ±200 da terça do nó"],
        ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
-       ["NEO-6", "Neoprene 100×100×10 (furo Ø30)", 2, "sobre os consolos CP-VB"],
+       ["NEO-6", "Neoprene 100×60×10 (furo Ø30; 60 na largura do consolo) — no pilar", 2, "sobre os consolos CP-VB"],
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 import armaduras_vigas as _AVb                                     # rev12 (item 17): aço da peça = relação de armação da folha (+10 %)

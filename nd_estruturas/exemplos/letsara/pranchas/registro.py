@@ -15,7 +15,7 @@ NOMES = json.load(open(PR + "nomes.json", encoding="utf-8"))
 # chave = tipo do consolo do pilar (o neoprene é do apoio, fica no pilar; a folha da viga só cita)
 APARELHOS = {
     "CP-MEZ": dict(marca="NEO-5F", dims=(200, 200, 21), desc="Neoprene fretado 200×200×21 c/ furo Ø30 — apoio do dente da VM"),
-    "CP-VB": dict(marca="NEO-6", dims=(100, 100, 10), desc="Neoprene 100×100×10 c/ furo Ø30 — apoio do dente da VB"),
+    "CP-VB": dict(marca="NEO-6", dims=(60, 100, 10), desc="Neoprene 100×60×10 (60 na largura do consolo de 15) c/ furo Ø30 — apoio do dente da VB"),
     "CP-I120": dict(marca="NEO-2", dims=(300, 200, 31), desc="Neoprene fretado 300×200×31 (2 × 10 + 2 × 2,5, chapas inox 2 mm) — apoio da I120"),
 }
 PINOS = {
@@ -113,3 +113,19 @@ def folgas_txt():
 
 def portao_txt():
     return f"portões {PORTAO['larg_m'] * 100:.0f} × {PORTAO['livre_ate'] * 100:.0f} livres até +{f1(PORTAO['livre_ate'])}"
+
+
+# ------------------------------------------------------------------ rev12 (27/10, regra do Nathan): consolo com a largura da viga apoiada
+def larguras_viga_apoiada():
+    """largura (m) da viga que cada tipo de consolo apoia, lida do registro de cada viga."""
+    vmb = _VMJ["b"]
+    vbb = json.load(open(_AQ + "vb_dente.json", encoding="utf-8"))["adotado"]["b"]
+    tsb = json.load(open(PR + "ts01.json", encoding="utf-8"))["P"]["b"] / 1000           # mesa inferior da TS-01 (apoiada no CT-I120)
+    import viga_i as _VI
+    i1b = _VI.dados_i110()["b"] / 1000                                                    # ponta da I120 (maciço) no CP-I120
+    return {"CP-MEZ": vmb, "CP-VB": vbb, "CT-I120": tsb, "CP-I120": i1b}
+
+
+def borda_neoprene_min(c_m=0.03):
+    """NBR 9062:2017 6.2.3 / 7.3.3: aparelho afastado da face lateral do consolo a0 ≥ 1,5c e ≥ 3 cm."""
+    return max(1.5 * c_m, 0.03)

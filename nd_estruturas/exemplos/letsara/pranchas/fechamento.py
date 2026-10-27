@@ -71,14 +71,29 @@ def _faixas_canto(V, lado):
     return out
 
 
+def _faixas_vm_linha1():
+    """rev12 (27/10): VM da linha 1 alinhada à face externa (25 mm atrás da placa, como a VB) — faixa z (mm) ocupada por consolo CP-MEZ
+    (com mísula), VM, 2º estágio e capa em cada nível, ao longo de toda a vista I."""
+    _vm = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json"))["premissas"]
+    _cs = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json"))["CP-MEZ"]
+    from geometria import Z_PISOS as _ZP
+    out = []
+    for zp_ in _ZP:
+        za_ = zp_ - 0.20 - 0.01                                          # topo da VM (apoio da laje, fita 1 cm)
+        zb_ = za_ - _vm["h_pm"]
+        out.append((round((zb_ - (_cs["h_total_m"] - _cs["h_consolo_m"])) * 1000), round(zp_ * 1000)))
+    return out
+
+
 def z_pt2(V, canto, z0):
     """rev12: cota da trava de pé PT-2 (L 150 de altura): 150 acima da base; no pilar de canto das vistas A e I, a primeira cota
     livre das faixas dos consolos / VB (folga 20 mm)."""
     z = z0 + 150
-    if canto is None or V not in ("A", "I"):
+    if V not in ("A", "I") or (canto is None and V != "I"):
         return z
+    fx_ = (_faixas_canto(V, canto) if canto is not None else []) + (_faixas_vm_linha1() if V == "I" else [])
     for _ in range(20):
-        hit = [(a, b) for a, b in _faixas_canto(V, canto) if z - 75 < b + 20 and z + 75 > a - 20]
+        hit = [(a, b) for a, b in fx_ if z - 75 < b + 20 and z + 75 > a - 20]
         if not hit:
             return z
         z = max(b for _, b in hit) + 20 + 75
@@ -89,6 +104,8 @@ def pt1_r(V, xp, z0):
     if V not in ("A", "I"):
         return False
     za, zb = Z_VB(xp)
+    if V == "I" and any(a_ - 110 < z0 < b_ + 110 for a_, b_ in _faixas_vm_linha1()):   # rev12: VM da linha 1 a 25 mm da placa
+        return True
     return za - 110 < z0 < zb + 110
 Z_TOPO = 10000
 Z_VT0, Z_VT1, Z_ASS_VT = 7500, 8100, 7790              # VT 25×60 do eixo E atrás da fiada +7,50/+8,75; dente 30×20 → assento do CP-VT

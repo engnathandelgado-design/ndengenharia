@@ -120,6 +120,7 @@ def prancha_viga(P):
     pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL")
     for rv in P.get("revs", []):
         pr.revisao(*rv)
+    pr.revisao("R12", "27/10/2026", "CONSOLOS COM A LARGURA DA VIGA APOIADA: CT-I120 40 (MESA DA TS-01) E CP-I120 40; N12 Ø12,5")
     Q = pr.quadro
     XC = Q[2] - 190
     # cabeçalho (rev08: motor padrão; nomes de cada peça por extenso)

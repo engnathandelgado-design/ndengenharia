@@ -111,6 +111,14 @@ from geometria import E_VB_FACE as _EVB, DY_CANTO as _DYC
 _VD_VB = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))["CP-VB"]["Vd_kN"]
 DM_CONS = {p: 2 * _VD_VB * _EVB for p in ("P3-L1", "P4-L1", "P5-L1", "P3-L9", "P14-L9", "P5-L9")}
 DM_CONS.update({p: _VD_VB * (_EVB - _DYC) for p in ("P1C-L1", "P2C-L1", "P1C-L9", "P2C-L9")})
+# rev12 (27/10, decisão do Nathan): VM da linha 1 alinhada à face externa (eixo −0,15) → CP-MEZ rentes à face externa nos PF da linha 1
+# (2 faces × 2 níveis, e = 0,15) e nos cantos da linha 1 (face A, 2 níveis, e = 0,05); mesmo sentido (para fora) do ΔM da VB
+from geometria import E_VM_PF as _EMP, E_VM_CANTO as _EMC
+_VD_MEZ = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))["CP-MEZ"]["Vd_kN"]
+DM_MEZ = {p: 4 * _VD_MEZ * _EMP for p in ("P3-L1", "P4-L1", "P5-L1")}
+DM_MEZ.update({p: 2 * _VD_MEZ * _EMC for p in ("P1C-L1", "P2C-L1")})
+for _p, _v in DM_MEZ.items():
+    DM_CONS[_p] = DM_CONS.get(_p, 0.0) + _v
 
 
 def secao_ok(cand, pils, com_dm=True):

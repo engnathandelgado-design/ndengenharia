@@ -179,6 +179,12 @@ def prancha_pilar(P):
         pr.revisao("", "24/10/2026", "DEC-050/052: SEM MONTANTE NO PILAR; CABEÇA DE CONCRETO ATÉ O FUNDO DA W 200 × 15,0 (MONTANTES NO MEIO DOS VÃOS); 4 BR-M16 L 450 + CA-L2" + ("; P14 PASSA A SER O PM-02" if P["marca"] == "PM-01" else ""))
     if any(c["tipo"] == "CP-I120" for c in P.get("consolos", [])):
         pr.revisao("", "24/10/2026", "DEC-054: I120 COM h 120; CONSOLO CP-I120 COM MÍSULA (49 NO PILAR, 39 NA PONTA, FUNDO ALINHADO À VIGA)")
+    _r12 = [t for t, ok in (("CONSOLOS COM A LARGURA DA VIGA APOIADA: CP-MEZ 30 COM MÍSULA (40/27,9)", any(c["tipo"] == "CP-MEZ" for c in P.get("consolos", []))),
+                             ("CP-I120 40", any(c["tipo"] == "CP-I120" for c in P.get("consolos", []))),
+                             ("NEO-6 100 × 60", any(c["tipo"] == "CP-VB" for c in P.get("consolos", []))),
+                             ("CP-MEZ RENTE À FACE EXTERNA (VM DA LINHA 1 NA FACE DOS PILARES)", any(c["tipo"] == "CP-MEZ" and c.get("exc") for c in P.get("consolos", [])))) if ok]
+    if _r12:
+        pr.revisao("R12", "27/10/2026", "; ".join(_r12))
     Q = pr.quadro
     XC = Q[2] - 190
     Y0 = 92
@@ -709,9 +715,9 @@ KP_CEN = [("P6E", 36.175, 3.79, 250, 400, "PE-01"), ("P7E", 39.50, 3.79, 600, 40
          [(_G.PG_L4[k][0], _G.PG_L4[k][1], Y_LIN[3], round(_G.PG_L4[k][2] * 1000), round(_G.PG_L4[k][3] * 1000), k) for k in ("PG-02", "PG-04")]   # rev12: 25×40
 F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
-I120 = lambda face: consolo(face, Z_I120, "CP-I120", 500, 400, H_C["CP-I120"], HP_C["CP-I120"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I120"]["tirante"].split(" (")[0], CONS_J["CP-I120"]["n_ramos"], CONS_J["CP-I120"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
+I120 = lambda face: consolo(face, Z_I120, "CP-I120", round(CONS_J["CP-I120"]["b_m"] * 1000), 400, H_C["CP-I120"], HP_C["CP-I120"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I120"]["tirante"].split(" (")[0], CONS_J["CP-I120"]["n_ramos"], CONS_J["CP-I120"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
 TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
-MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(_VMP.get("b_consolo", _VMP["b"]) * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], H_C["CP-MEZ"], ("PN-1", 20, 630, 230, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75; pino 230 no consolo de 27,9 (não sai pelo fundo) + 400 no dente
+MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(CONS_J["CP-MEZ"]["b_m"] * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], HP_C["CP-MEZ"], ("PN-1", 20, 630, 230, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75; pino 230 no consolo de 27,9 (não sai pelo fundo) + 400 no dente
 EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
 NOTA_CONS = f"Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ {str(H_C['CP-MEZ'] / 10).replace('.', ',')} cm; CP-I120 com MÍSULA de concreto: {H_C['CP-I120'] / 10:g} cm junto ao pilar e {HP_C['CP-I120'] / 10:g} cm na ponta, fundo inclinado; verificação na memória de cálculo, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
 NOTA_MEZ = " Acima dos CP-MEZ, na largura da VM (25) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."

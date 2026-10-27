@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO
+from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO, Y_VM1
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -232,8 +232,8 @@ def montar() -> ModeloBIM:
             if sg < 0:
                 _pts = _pts[::-1]
             from nd_estruturas.bim import Peca as _Peca, PerfilPoligono as _PP
-            m.add(_Peca("consolo", "Consolos", f"CP-I120 {marca}", _PP(tuple(_pts), "CP-I120 com mísula"), (X_C - 0.25, _yf, z_ass_i110), (X_C + 0.25, _yf, z_ass_i110), (0.0, 0.0, 1.0), "concreto",
-                        "49 junto ao pilar / 39 na ponta (mísula, DEC-054)"))
+            m.add(_Peca("consolo", "Consolos", f"CP-I120 {marca}", _PP(tuple(_pts), "CP-I120 com mísula"), (X_C - CONS["CP-I120"]["b_m"] / 2, _yf, z_ass_i110), (X_C + CONS["CP-I120"]["b_m"] / 2, _yf, z_ass_i110), (0.0, 0.0, 1.0), "concreto",
+                        f"b {CONS['CP-I120']['b_m']*100:.0f} (largura da I120); 49 junto ao pilar / 39 na ponta (mísula, DEC-054)"))
             m.bloco("inserto", "NEO-2 300×200×31 fretado", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.031), 0.30, 0.20, 0.031, "Pinos, tubos e neoprenes")
             m.bloco("inserto", "PN-2 pino Ø25 L=900 (350 no consolo; grauteado numa ponta só)", (X_C, yy + sg * (meia[yy] + 0.20), z_ass_i110 + 0.55), 0.025, 0.025, 0.90,
                     "Pinos, tubos e neoprenes")
@@ -275,7 +275,7 @@ def montar() -> ModeloBIM:
                 xb_ = xf + sg * 0.135                                                   # centro do apoio
                 zt = z_vb(xb_) + 0.29                                                   # topo HORIZONTAL do CP-VB = face do dente − neoprene
                 m.bloco("consolo", "CP-VB 15×27×29" + (" rente à face externa (fachada)" if yv != y else ""), (xf + sg * 0.135, yv, zt), 0.27, 0.15, 0.29, "Consolos")
-                m.bloco("inserto", "NEO-6 100×100×10", (xb_, yv, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
+                m.bloco("inserto", "NEO-6 100×60×10", (xb_, yv, zt + 0.01), 0.10, CONS["CP-VB"]["neoprene_mm"][0] / 1000, 0.01, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-6 Ø20 roscado + porca e contraporca (nicho grauteado só numa ponta; a outra livre)",
                         (xb_, yv, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")
 
@@ -513,7 +513,7 @@ def montar() -> ModeloBIM:
         zb = za - hv
         vigas = []                                          # (y, so, fa, fb): so = lado da laje (+1 para +y)
         for (pa, xa), (pb, xb) in zip(fila1[:-1], fila1[1:]):
-            vigas.append((Y_LIN[0], 1, xa + meia_x(pa), xb - meia_x(pb)))
+            vigas.append((Y_VM1, 1, xa + meia_x(pa), xb - meia_x(pb)))          # rev12 (27/10): VM da linha 1 alinhada à face externa (eixo −0,15)
         for (pa, xa), (pb, xb) in zip(fila2[:-1], fila2[1:]):
             if iz == 0 and pa == "P6":
                 continue                                    # +3,90: abertura da escada (sem viga P6 → E)
@@ -538,11 +538,16 @@ def montar() -> ModeloBIM:
                 m.bloco("inserto", "alça N9 Ø10", (xx, y2, za + 0.20), 0.012, max(b2 - 0.05, 0.05), 0.20, "Alças N9 (2º estágio)")
                 xx += 0.30
             for xf, sg in ((fa, 1), (fb, -1)):
-                bc_ = VMP.get("b_consolo", bt)
-                # rev12 (opção D): no pilar de canto da linha 1 (eixo 10 cm para fora) o CP-MEZ fica na largura da face do pilar
-                # (y −0,30 a +0,10) e a VM continua no eixo — PENDÊNCIA (quadro decisao_vm_canto): nariz 5 cm fora do consolo
-                yc_ = y_canto(y) if (abs(y - Y_LIN[0]) < 1e-6 and (xf < 0.5 or xf > LARG - 0.5)) else y
-                m.bloco("consolo", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}×{hcm*100:.1f}" + (" (canto, em decisão)" if yc_ != y else ""), (xf + sg * prj / 2, yc_, zb + hcm), prj, bc_, hcm, "Consolos")
+                bc_ = CONS["CP-MEZ"]["b_m"]                                   # rev12: consolo com a largura da VM (30), sob a VM, com mísula
+                hf_ = CONS["CP-MEZ"]["h_total_m"]
+                _pts = [(0.0, 0.0), (sg * prj, 0.0), (sg * prj, -hcm), (0.0, -hf_)]
+                if sg < 0:
+                    _pts = _pts[::-1]
+                from nd_estruturas.bim import Peca as _PecaM, PerfilPoligono as _PPM
+                m.add(_PecaM("consolo", "Consolos", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}", _PPM(tuple(_pts), "CP-MEZ com mísula"),
+                             (xf, y + bc_ / 2, zb + hcm), (xf, y - bc_ / 2, zb + hcm),   # eixo −y: u local = +x (como o CP-I120)
+                             (0.0, 0.0, 1.0), "concreto",
+                             f"b {bc_*100:.0f} (largura da VM), projeção {prj*100:.0f}, h {hf_*100:.0f} na face / {hcm*100:.1f} na ponta"))
                 m.bloco("inserto", "NEO-5F 200×200 fretado", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.021), 0.20, 0.20, 0.021, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.63, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)

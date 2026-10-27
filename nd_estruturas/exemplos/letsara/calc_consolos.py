@@ -10,7 +10,7 @@ from pathlib import Path
 
 AQ = Path(__file__).parent
 N9 = json.loads((AQ / "nbr9062.json").read_text(encoding="utf-8"))
-NEO = {"CP-I120": (300, 200, 30), "CP-MEZ": (300, 150, 10), "CP-VB": (100, 100, 10), "CT-I120": (300, 150, 10)}     # (b, a, h) mm — NEO-2 / NEO-5 / NEO-6
+NEO = {"CP-I120": (300, 200, 31), "CP-MEZ": (200, 200, 21), "CP-VB": (60, 100, 10), "CT-I120": (300, 150, 10)}     # (b na largura, a na projeção, h) mm — NEO-2 / NEO-5F / NEO-6 / NEO-3C (rev12)
 res = {}
 for c in N9["consolos"]:
     nome = c["consolo"]

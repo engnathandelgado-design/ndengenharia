@@ -95,3 +95,5 @@ Travas automáticas no `conferencia_cruzada.py` (rodado no fim do `gerar_tudo`),
 - [manual + auto] Pendência também nas folhas de montagem (MON02 na trava C21) e quadro de decisão com imagens anexado ao pacote quando citado (ND-LET-DECISAO-VM-CANTO).
 - [auto] Carimbo datado pela última alteração (rev 12 de 27/10/2026) e histórico sem lacuna (…09, 10, 11, 12) (C30).
 - [auto] Folhas de detalhe de uma família logo após a folha-mãe (I120 → I120-2 → I120-3), cobertura em sequência e EX01 por último (C31).
+- [auto] Largura de todo consolo igual à largura da viga que ele apoia (CP-MEZ = VM, CP-VB = VB, CP-I120 = ponta da I120, CT-I120 = mesa da TS-01), na memória e no que está desenhado em cada pilar; neoprene com borda lateral ≥ 1,5c e ≥ 3 cm (C33).
+- [auto] Pendência já decidida não aparece mais em nenhuma folha (C34).

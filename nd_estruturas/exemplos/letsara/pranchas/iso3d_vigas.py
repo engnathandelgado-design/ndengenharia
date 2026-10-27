@@ -201,7 +201,7 @@ def vb():
     p.add_mesh(cil((XP, 0, zc + 0.05), 0.020, 0.70), **ACO)
     peca(p, 0, 2.2)
     rot(p, [(XP, 0.05, zc + 0.005), (XP, 0, H + 0.02), (0.13, B / 2, zc - 0.15), (-0.2, 0.25, H)],
-        ["NEO-6 100×100×10", "PN-6 Ø20 roscado + porca (nicho grauteado)", "consolo CP-VB escondido no recorte", "pilar de fachada"])
+        ["NEO-6 100×60×10", "PN-6 Ø20 roscado + porca (nicho grauteado)", "consolo CP-VB escondido no recorte", "pilar de fachada"])
     salvar(p, "ISO-VB-ponta.png", [(3.2, -3.4, 1.8), (0.4, 0, H * 0.4), (0, 0, 1)], 1.1)
 
 

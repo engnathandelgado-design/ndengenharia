@@ -14,8 +14,8 @@
    "exc_face": "C",
    "x": 9.87,
    "dM_kNm": 17.32,
-   "uso_antes": 0.557,
-   "uso_com_excentricidade": 0.608,
+   "uso_antes": 0.396,
+   "uso_com_excentricidade": 0.983,
    "comb": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P3-L1"
@@ -34,8 +34,8 @@
    "exc_face": "C",
    "x": 19.75,
    "dM_kNm": 17.32,
-   "uso_antes": 0.452,
-   "uso_com_excentricidade": 0.502,
+   "uso_antes": 0.349,
+   "uso_com_excentricidade": 0.973,
    "comb": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P4-L1"
@@ -54,8 +54,8 @@
    "exc_face": "C",
    "x": 29.63,
    "dM_kNm": 17.32,
-   "uso_antes": 0.399,
-   "uso_com_excentricidade": 0.444,
+   "uso_antes": 0.352,
+   "uso_com_excentricidade": 0.997,
    "comb": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
     "P5-L1"
@@ -134,7 +134,7 @@
    "x": 0.0,
    "dM_kNm": 4.81,
    "uso_antes": 0.462,
-   "uso_com_excentricidade": 0.484,
+   "uso_com_excentricidade": 0.674,
    "comb": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e-1 G1,0",
     "P1C-L1"
@@ -172,7 +172,7 @@
    "x": 39.5,
    "dM_kNm": 4.81,
    "uso_antes": 0.313,
-   "uso_com_excentricidade": 0.334,
+   "uso_com_excentricidade": 0.52,
    "comb": [
     "ELU V0 Cpi máx (sucção máx na cobertura) e+1 G1,0",
     "P2C-L1"
@@ -208,6 +208,51 @@
   "cobrimento_lateral_cm": 3.0,
   "ok": true,
   "obs": "rente à face C do pilar (face lateral do consolo no plano da face C); mesma Fd e mesma armadura do C1 (a carga continua centrada no consolo)"
+ },
+ "mez": {
+  "PF-01": {
+   "faces": [
+    "B",
+    "D"
+   ],
+   "e_m": 0.15,
+   "exc_face": "C",
+   "dM_kNm": 241.1
+  },
+  "PF-02": {
+   "faces": [
+    "B",
+    "D"
+   ],
+   "e_m": 0.15,
+   "exc_face": "C",
+   "dM_kNm": 241.1
+  },
+  "PF-03": {
+   "faces": [
+    "B",
+    "D"
+   ],
+   "e_m": 0.15,
+   "exc_face": "C",
+   "dM_kNm": 241.1
+  },
+  "PL-03": {
+   "faces": [
+    "A"
+   ],
+   "e_m": 0.05,
+   "exc_face": "D",
+   "dM_kNm": 40.2
+  },
+  "PL-07": {
+   "faces": [
+    "A"
+   ],
+   "e_m": 0.05,
+   "exc_face": "B",
+   "dM_kNm": 40.2
+  }
  },
  "ok": true
 }

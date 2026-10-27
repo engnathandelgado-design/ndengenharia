@@ -343,7 +343,9 @@ if __name__ == "__main__":
                           falhas=[k for k, v in R730["verif"].items() if not v["ok"]], obs="mesma marca LA-01 (o +3,90 governa)")
     G_REV, Q = _CM["piso_390"]["revestimento"], _CM["piso_390"]["sobrecarga"]
     L_LONGA = L_PECA
-    L_PECA = round(3.79 - 0.25 / 2 + A_APOIO - (0.25 / 2 - A_APOIO), 3)       # linha 1 (eixo + 2,5) à viga P6–P7 (eixo − 2,5)
+    from geometria import Y_VM1 as _YV1, P6_ESC as _P6E
+    _bv = _VR["b"]
+    L_PECA = round((_P6E[1] - (_bv / 2 - A_APOIO)) - (_YV1 + _bv / 2 - A_APOIO), 3)   # rev12: VM da linha 1 (eixo −0,15) à viga P6–P7, apoio 10 cm em cada
     L = L_PECA - A_APOIO
     curta = None
     for a_ in sorted(OPCOES[geo], key=lambda a: sum(CORD[d[2:]] * 2 if d.startswith("2x") else CORD[d] for d in a)):

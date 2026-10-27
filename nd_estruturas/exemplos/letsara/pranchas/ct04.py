@@ -27,6 +27,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         desenho="ND-LET-CT04", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
 pr.revisao("07", "21/10/2026", "EMISSÃO: CORTES DE MONTAGEM DE CADA APOIO (ANTES NOS DETALHES DA LOC01/CT01)")
 pr.revisao("09", "23/10/2026", "DEC-045/047/048/049: VM RETANGULAR 30 × 75 NO CP-MEZ (NEO-5F); PISOS +3,90/+7,30")
+pr.revisao("R12", "27/10/2026", "FOLGAS DA GEOMETRIA DO MODELO; CONSOLOS COM A LARGURA DA VIGA (CP-MEZ 30 COM MÍSULA, CP-I120 E CT-I120 40); NEO-6 100 × 60")
 Q = pr.quadro
 
 
@@ -167,7 +168,8 @@ d = pr.vista("DET4", org(3, 0, ZAV, esc=10, dx=50, dz=125), 10, titulo="4 — VM
              subtitulo="vista na direção A–E; piso +3,90 (o +7,30 é igual); junta de 3 cm concretada", unidade="cm")
 conc(d, [(-400, zbv - 300), (0, zbv - 300), (0, ZN + 300), (-400, ZN + 300)])
 d.interrupcao((-400, zbv - 300), (-400, ZN + 300))
-conc(d, [(0, ZAV - hcm), (pcm, ZAV - hcm), (pcm, ZAV), (0, ZAV)])
+hcf = CO["CP-MEZ"]["h_total_m"] * 1000                                       # rev12: mísula (largura da VM)
+conc(d, [(0, ZAV - hcf), (pcm, ZAV - hcm), (pcm, ZAV), (0, ZAV)])
 u0 = 30.0
 d.poli([(u0, ZAV + 21), (u0 + LNV, ZAV + 21), (u0 + LNV, zbv), (u0 + 1200, zbv), (u0 + 1200, ZTV), (u0, ZTV)], "VISTA", True)
 d.interrupcao((u0 + 1200, zbv), (u0 + 1200, ZTV))
@@ -206,7 +208,7 @@ neo(d, xb_ - 50, zcv, 100, 10)
 pino(d, xb_, zcv - 300, zcv + 400, 20)
 d.ret(xb_ - 60, VG.H / VG.C - 60 + I3 * xb_, 120, 60, "OCULTA")
 d.cota_h(sorted(set([0, xb_, cv["proj_m"] * 1000, 25 + VG.LN])), -400, -8, total=False)   # rev12 (item 31): cadeia crescente, sem cota negativa
-d.chamada((xb_, zcv + 5), (16, -14), "NEO-6 100×100×10")
+d.chamada((xb_, zcv + 5), (16, -14), "NEO-6 100×60×10")
 d.chamada((xb_, zcv + 350), (16, 14), "PN-6 Ø20 roscado L=700 + porca e contraporca")
 d.chamada((xb_, VG.H / VG.C - 30), (14, 10), "nicho 12×12×6 grauteado só numa ponta")
 d.chamada((12, zr + 100), (-14, 10), f"folga {REGc.f1(REGc.FOLGAS_MM['VB no pilar'] / 10, 1)}")
@@ -242,7 +244,7 @@ d.chamada((ba + 50 + _x1 + _p, 100 + _r), (10, 22), "LP20 1245 × 200, 6 alvéol
 for i_ in range(6):
     foto(i_)
 notas = [f"Apoios desenhados na posição montada, com as folgas reais do modelo (NBR 9062:2017 3.1): {REGc.folgas_txt()}.",
-         "Neoprenes: NEO-2 fretado 300×200×31 (I120); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5F 200×200×21 fretado (VM); NEO-6 100×100×10 (VB); fita 1 cm sob a laje alveolar.",
+         "Neoprenes: NEO-2 fretado 300×200×31 (I120); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5F 200×200×21 fretado (VM); NEO-6 100×60×10 (VB). Consolos com a largura da viga apoiada: CP-VB 15, CP-MEZ 30 (com mísula), CP-I120 40, CT-I120 40; fita 1 cm sob a laje alveolar.",
          "Pinos: grautear o tubo/nicho só depois do alinhamento e do nível conferidos; nas I120 e VB, graute numa ponta só (a outra livre para dilatar).",
          "VM (DEC-039): sem cantoneira antigiro — montar a VM, concretar as pontas dos dois lados (junta 3 cm VM × pilar, graute ou concreto fck ≥ 30 MPa, do recorte do dente ao topo; ND-LET-VM01 det. 2), aguardar fcj ≥ 20 MPa e só então montar as lajes.",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): nível dos apoios ±1,0 cm; apoio da laje ≥ 10 cm medido depois de montada.",

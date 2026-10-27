@@ -23,6 +23,7 @@ Z_ASS_VT = {"P1": 6540, "P2": 7790}
 _VBF = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos_face.json", encoding="utf-8"))
 VB_FACE = {mk: dict(faces=v["faces"], e=v.get("e_m", _VBF["e_m"]), exc_face=v.get("exc_face", "C")) for mk, v in _VBF["pilares"].items()}   # rev12: cantos (opção D)
 VB_FACE["e_m"] = _VBF["e_m"]
+MEZ_FACE = _VBF.get("mez", {})
 
 
 def cons_marca(txt, lado="P1"):
@@ -42,7 +43,7 @@ def cons_marca(txt, lado="P1"):
                 for za in ([G.Z_MEZ_ASS[1 if so.group(1).startswith("7") else 0]] if so else G.Z_MEZ_ASS):
                     c = G.MEZ(fc, za); c["incl"] = 0; out.append(c)
             elif tipo == "CP-VB":
-                c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), (100, 100, 10), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0; out.append(c)   # rev04: topo horizontal (NBR 9062 7.2.1.6)
+                c = G.consolo(fc, num(z), "CP-VB", 150, 270, H_C["CP-VB"], H_C["CP-VB"], ("PN-6", 20, 700, 300, 135), tuple(G.CONS_J["CP-VB"]["neoprene_mm"]), (G.CONS_J["CP-VB"]["tirante"].split(" (")[0], G.CONS_J["CP-VB"]["n_ramos"], G.CONS_J["CP-VB"]["d_tir"])); c["incl"] = 0; out.append(c)   # rev04: topo horizontal (NBR 9062 7.2.1.6)
             elif tipo == "CP-I120":
                 c = G.I120(fc); c["incl"] = 0; out.append(c)
     return out
@@ -156,6 +157,8 @@ def dados(mk):
     for c in cons:                                                         # rev12 (fresta, opção B): CP-VB rente à face externa C
         if c["tipo"] == "CP-VB" and c["face"] in VB_FACE.get(mk, {}).get("faces", ()):
             c["exc"], c["exc_face"] = round(VB_FACE[mk]["e"] * 1000), VB_FACE[mk]["exc_face"]
+        if c["tipo"] == "CP-MEZ" and c["face"] in MEZ_FACE.get(mk, {}).get("faces", ()):     # rev12 (27/10): VM da linha 1 rente à face externa
+            c["exc"], c["exc_face"] = round(MEZ_FACE[mk]["e_m"] * 1000), MEZ_FACE[mk]["exc_face"]
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
@@ -241,9 +244,8 @@ def dados(mk):
     if canto:
         P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
                  faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
-        if mk in ("PL-03", "PL-07"):                                        # rev12 (opção D): VM da linha 1 no pilar de canto deslocado
-            P["notas"] = list(P["notas"]) + ["PENDÊNCIA (decisão em aberto): apoio da VM de borda da linha 1 nos 2 CP-MEZ da face A — com o pilar 10 cm para fora "
-                                             "a VM no eixo da linha fica com 5 cm do dente fora do consolo; não produzir este pilar antes da resposta (ND-LET-NG01)."]
+        if mk in ("PL-03", "PL-07"):                                        # rev12 (27/10): VM da linha 1 alinhada à face externa
+            P["notas"] = list(P["notas"]) + [f"VM de borda da linha 1 (+3,90 e +7,30) alinhada à face externa do pilar (VM de −0,30 a 0,00 em relação ao eixo da linha): os 2 CP-MEZ da face A ficam rentes à face externa, eixo do consolo {MEZ_FACE[mk]['e_m'] * 100:g} cm do eixo da face, para o lado da fachada."]
         if mk in ("PL-07", "PL-08"):
             f_int = "D" if mk == "PL-07" else "B"
             P["esperas_face"] = [dict(face=f_int, da=[70, 150], z=ZB_ULT + 135, d=20, emb=320, sai=80, rot="ES-1FL 2 M20")]

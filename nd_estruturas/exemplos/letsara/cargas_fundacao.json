@@ -85,9 +85,9 @@
     "Nd_max": 738.7,
     "Nd_min": 357.0,
     "Hd_max": 28.9,
-    "Mxd_max": 130.3,
+    "Mxd_max": 170.5,
     "Myd_max": 139.6,
-    "Md_res_max": 144.6
+    "Md_res_max": 184.8
    }
   },
   "P2C-L1": {
@@ -120,9 +120,9 @@
     "Nd_max": 626.9,
     "Nd_min": 323.7,
     "Hd_max": 20.4,
-    "Mxd_max": 94.5,
+    "Mxd_max": 134.7,
     "Myd_max": 127.1,
-    "Md_res_max": 131.9
+    "Md_res_max": 172.1
    }
   },
   "P1-L2": {
@@ -715,9 +715,9 @@
     "Nd_max": 1396.3,
     "Nd_min": 680.1,
     "Hd_max": 45.4,
-    "Mxd_max": 258.2,
+    "Mxd_max": 499.3,
     "Myd_max": 54.0,
-    "Md_res_max": 258.2
+    "Md_res_max": 499.3
    }
   },
   "P3-L9": {
@@ -785,9 +785,9 @@
     "Nd_max": 1397.5,
     "Nd_min": 680.0,
     "Hd_max": 38.0,
-    "Mxd_max": 219.4,
+    "Mxd_max": 460.5,
     "Myd_max": 54.4,
-    "Md_res_max": 219.5
+    "Md_res_max": 460.6
    }
   },
   "P14-L9": {
@@ -855,9 +855,9 @@
     "Nd_max": 1373.5,
     "Nd_min": 672.0,
     "Hd_max": 35.7,
-    "Mxd_max": 215.3,
+    "Mxd_max": 456.4,
     "Myd_max": 55.1,
-    "Md_res_max": 215.3
+    "Md_res_max": 456.4
    }
   },
   "P5-L9": {
@@ -1352,5 +1352,12 @@
   }
  },
  "portao_l4": "reação vertical da TS-01A somada aos PG (DEC-059)",
- "exc_consolos": "ΔMxd = Σ Vd·e dos CP-VB rentes à face somado ao Mxd máx (rev12)"
+ "exc_consolos": "ΔMxd = Σ Vd·e dos CP-VB rentes à face somado ao Mxd máx (rev12)",
+ "exc_mez": {
+  "P3-L1": 241.1,
+  "P4-L1": 241.1,
+  "P5-L1": 241.1,
+  "P1C-L1": 40.2,
+  "P2C-L1": 40.2
+ }
 }

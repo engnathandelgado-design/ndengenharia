@@ -46,6 +46,7 @@ pr.revisao("06", "19/10/2026", "DEC-032: PERDAS 9.6.3 E γp 1,1 NO ATO; DENTE VE
 pr.revisao("09", "23/10/2026", f"DEC-045/047/048/049: PISOS +3,90 / +7,30; VIGA RETANGULAR {B/10:g} × {H/10:g} (SEM MEIO VASO); VM-03 E VM-04 (ESCADA)")
 pr.revisao("", "24/10/2026", "DEC-052: +7,30 DA LINHA 2 COM O MONTANTE DA COBERTURA NO MEIO DO VÃO (VM-01, VM-02, VM-03); ESPERA EM-L2 NO 2º ESTÁGIO; PEÇA SEM MUDANÇA")
 pr.revisao("", "25/10/2026", "DEC-062: COTAS DO DENTE NO DETALHE D1 (COMPRIMENTO, ALTURA E RECORTE)")
+pr.revisao("R12", "27/10/2026", "VM DA LINHA 1 ALINHADA À FACE EXTERNA DOS PILARES (EIXO −0,15); CP-MEZ COM A LARGURA DA VM (30) E MÍSULA; NEO-5F ÚNICO POR APOIO")
 Q = pr.quadro
 XC = Q[2] - 200
 todos = [n for mk in MKS for n in RN.nomes_de(mk)]
@@ -243,8 +244,7 @@ notas = [
     "Içar pelas 2 alças AL-1 (cabos ≥ 45°); estocar sobre 2 calços sob as alças, pressão ≤ 0,3 fcj; transportar apoiada nos mesmos pontos, travada contra tombamento.",
     "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±15 mm, seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm, cordoalhas ±10 mm (resultante ±5); montagem: nível do apoio ±10 mm, planta ±10 mm. Folga de 3 cm na ponta.",
     "Cotas de concreto em cm, chaparia em mm. Armação e protensão na faixa de baixo desta folha."]
-notas.append("PENDÊNCIA (decisão em aberto): VM da linha 1 nos vãos A–B e D–E — o pilar de canto passou a ficar 10 cm para fora da linha "
-             "e o dente da VM no eixo fica 5 cm fora do CP-MEZ; não produzir as VM da linha 1 antes da resposta (ND-LET-NG01).")   # rev12
+notas.append("VM da linha 1 (+3,90 e +7,30): alinhada à face externa dos pilares da linha 1 (de −0,30 a 0,00 do eixo da linha), nos CP-MEZ de 30 rentes à face; peça igual às demais (mesma marca, fôrma e armação).")
 y = pr.notas(XC, y - 4, notas, 190)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VM01")
 print("VM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")

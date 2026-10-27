@@ -34,7 +34,7 @@ sys.path.insert(0, str(AQ.parents[1]))
 sys.path.insert(0, str(AQ))
 import calc_vm_meio_vaso as M
 import calc_vm_dente as D
-from geometria import Z_PISOS
+from geometria import Z_PISOS, Y_LIN, Y_VM1
 
 PRECO = D.PRECO
 # rev09: apoio com neoprene fretado NEO-5F 200 × 200 (σ ≤ 11 MPa p/ a ≤ 200, NBR 9062:2017 7.2.1.6) — a2 ≥ c + 3,5Ø dos dois lados
@@ -98,7 +98,7 @@ def preparar(b, caso, marca=None):
     M.B_ALMA, M.B_ABA, M.H_ABA = b, 0.0, 0.0
     M.B_TOT = b
     M.X_PONTA_LAJE = b - M.APOIO_LAJE
-    M.VAO_LAJE = 9.65 - 2 * (b / 2 - M.APOIO_LAJE)
+    M.VAO_LAJE = (Y_LIN[1] - Y_VM1) - 2 * (b / 2 - M.APOIO_LAJE)      # rev12: VM da linha 1 alinhada à face externa (eixo −0,15)
     M.TRIB = CASOS[caso].get("trib", M.VAO_LAJE / 2)
     c = CASOS[caso]
     larg = M.TRIB + b
@@ -159,7 +159,7 @@ def analisar(b, h, n, marca, caso, n_top=2):
 def dente(b, h, hd, Vd):
     Fd = GN * Vd
     den = D.consolo(b, D.LN, hd, D.A_DENTE, Fd)
-    con = D.consolo(B_CONSOLO, D.PROJ, h - hd - 0.021, D.A_CONS, Fd)      # DEC-049: consolo com a largura da face do pilar (40); NEO-5F 200 × 200 × 21
+    con = D.consolo(B_CONSOLO, D.PROJ, max(H_CONS_FACE, h - hd - 0.021), D.A_CONS, Fd)   # rev12: consolo 30 com mísula (40 na face); NEO-5F 200 × 200 × 21
     from nd_estruturas.dente_consolo import Dente as _Dente                 # NBR 9062:2017 7.4 (biela τwd) + PCI (Vmax), como no estudo_vm_largura
     nbr = _Dente("VM", Fd, 0.16 * Fd, b * 1000, hd * 1000, D.LN * 1000, (D.X_PAD - 0.03) * 1000, h * 1000, fck=40.0).dimensionar(16.0, 20.0)
     As_sus = Fd / 43.5
@@ -203,7 +203,9 @@ def faixa_2e(b):
 
 
 B_ADOT, H_ADOT, HD_ADOT = 0.30, 0.75, 0.45                 # DEC-049 (Nathan, 23/10, estudo_vm_largura): fôrma única 30 × 75, dente Gerber 45
-B_CONSOLO = 0.40                                           # consolo CP-MEZ com a largura da face do pilar
+B_CONSOLO = B_ADOT                                         # rev12 (regra do Nathan, 27/10): consolo com a largura da viga apoiada (30)
+H_CONS_FACE = 0.40                                         # rev12: com 30 de largura o consolo reto (27,9) não passa (biela 7,02 > 6,48 MPa, tirante não cabe) →
+                                                           # mísula de fundo inclinado como o CP-I120: 40 junto ao pilar, 27,9 na ponta (fundo alinhado à VM)
 
 
 def adotada():
@@ -232,9 +234,9 @@ if __name__ == "__main__" and "--adotada" in sys.argv:
                 folga_m=FOLGA, neoprene=(D.A_PAD, D.B_PAD, 0.021),   # rev12: NEO-5F 200 × 200 × 21 (era o PAD do meio vaso)
                 sem_escoramento=True, Eci_MPa=round(M.ECI(M.FCK) / 1e3), Ecs_MPa=round(M.ECS(M.FCK) / 1e3),
                 h_pm=H_ADOT, b=B_ADOT, b_alma=B_ADOT, b_aba=0.0, h_aba=0.0, apoio_laje=M.APOIO_LAJE, faixa_2e=faixa_2e(B_ADOT),
-                dente=dict(hd=HD_ADOT, ln=D.LN, recorte=round(H_ADOT - HD_ADOT, 2), consolo_h=round(H_ADOT - HD_ADOT - 0.021, 3), consolo_proj=D.PROJ, macico=1.00),
-                x_pad=D.X_PAD, pad=(200, 200, 21), vao_laje=round(9.65 - 2 * (B_ADOT / 2 - M.APOIO_LAJE), 3), q_piso_390=Q_PISO_390,
-                decisao="DEC-049: retangular protendida 30 × 75 em todas (fôrma única), dente Gerber 45 × 40, consolo 40 × 40 × 27,9; suspensão 3 Ø20 + 4 Ø16 retas no fundo", b_consolo=B_CONSOLO, extra_inf=[dict(n=4, d=16.0, y=110, L=2500)])
+                dente=dict(hd=HD_ADOT, ln=D.LN, recorte=round(H_ADOT - HD_ADOT, 2), consolo_h=round(H_ADOT - HD_ADOT - 0.021, 3), consolo_h_face=H_CONS_FACE, consolo_proj=D.PROJ, macico=1.00),
+                x_pad=D.X_PAD, pad=(200, 200, 21), vao_laje=round((Y_LIN[1] - Y_VM1) - 2 * (B_ADOT / 2 - M.APOIO_LAJE), 3), y_vm=dict(linha1=Y_VM1, linha2=Y_LIN[1]), q_piso_390=Q_PISO_390,
+                decisao="DEC-049: retangular protendida 30 × 75 em todas (fôrma única), dente Gerber 45 × 40, consolo 30 × 40 com mísula (40 na face, 27,9 na ponta — rev12: largura da viga); suspensão 3 Ø20 + 4 Ø16 retas no fundo", b_consolo=B_CONSOLO, extra_inf=[dict(n=4, d=16.0, y=110, L=2500)])
     (AQ / "vm_retangular.json").write_text(json.dumps(dict(sol, premissas=prem), indent=1, ensure_ascii=False, default=str), encoding="utf-8")
     sys.exit()
 
