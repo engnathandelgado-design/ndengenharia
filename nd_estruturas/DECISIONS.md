@@ -557,3 +557,12 @@ Seção 25 × 40 com 40 ao longo da parede da linha 4 (geometria.PG_L4); para ma
 ## DEC-086 — Pinos PN-2 Ø25 da I120 mantidos (27/10/2026, decisão do Nathan)
 Confirma a DEC-083: PN-2 Ø25 CA-50 L = 900 nos CP-I120 continuam Ø25 (inserto de ligação, exceção registrada).
 
+
+## DEC-087 — Saídas secundárias pelo registro único por marca (27/10/2026, devolução da revisão independente da rev12)
+Problema: PR01, IC01, CS01, CG01, listas e xlsx recalculavam volume, peso, seção, consolos e neoprene por conta própria (fórmula de "cabeça recuada" nos cantos, NEO-5 300 × 150 digitado, contagem de consolos por marca e não por peça, renomeação aplicada sobre nomes novos). Escolha: `pranchas/registro.py` lê o QUADRO DA PEÇA e as tabelas que o gerador de cada folha grava da geometria (`<MARCA>_geom.json`, `*.tabelas.json`) e é a única fonte das saídas secundárias; aparelhos de apoio e pinos têm uma marca e uma descrição por tipo de consolo; itens do apoio contam pelo pilar (uma vez por apoio) e as chapas das placas embutidas no pilar contam pelas vistas, agrupadas pelo pilar físico e pela parede (166 CC-1 = folhas). Alternativa descartada: corrigir os números nas saídas (voltaria a divergir na próxima mudança). Travas C22–C32.
+
+## DEC-088 — PT-1 em toda junta com placa embaixo; PT-1R nas juntas em frente à VB (27/10/2026)
+Antes o pino guia PT-1 só ia em pano contínuo até o baldrame e, nos pacotes acima de esquadria (vistas I, H, J), todas as placas levavam trava de pé PT-2. Como cada placa fica nos seus consoles e o PT-1 só guia a de cima na de baixo (DEC-035), o PT-1 passa a ir em toda junta horizontal com placa logo abaixo; a PT-2 fica só na placa mais baixa de cada pacote suspenso. Nas vistas A e I, onde a faixa de 220 mm do pino cruza a VB (rente à face, 25 mm atrás da placa), vai a PT-1R: chapa plana 6,3 × 80 × 220 + 1 M16 (≈ 19 mm, folga 6 mm até a VB) — desenho na PP04, linha nas listas, retângulo marcado nas vistas. Contagem: 366 PT-1, 10 PT-1R, 32 PT-2.
+
+## DEC-089 — Folgas de montagem da geometria do modelo e exceção do PN-3 Ø25 (27/10/2026)
+As folgas de montagem das notas passam a vir da geometria do modelo (TS-01 2,5 cm no pilar lateral e 7,5 cm entre as pontas no eixo C; I120 7,5 cm; VB 2,5 cm; VM 3 cm) — a NG01 e a MON01 traziam os valores antigos do nbr9062.json (19/25 mm). Os pinos PN-3 Ø25 do assento da TS-01 no recuo dos pilares laterais ficam registrados como exceção de bitola, igual ao PN-2 (insertos de ligação, mantidos pelo Nathan).

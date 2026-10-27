@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR DO MEZANINO PM-01 (P8, 40×60) — LINHA 2, EIXO B — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR DO MEZANINO \u000eP26\u000f — MARCA PM-01 (40×60) — LINHA 2, EIXO B — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PM01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -218,13 +218,13 @@
    "linhas": [
     [
      "PN-1",
-     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "Pino Ø20 CA-50 L=630 (230 no consolo, 400 livre) — CP-MEZ",
      "4",
      "consolos CP-MEZ"
     ],
     [
      "NEO-5F",
-     "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)",
+     "Neoprene fretado 200×200×21 c/ furo Ø30 — apoio do dente da VM",
      "4",
      "CP-MEZ"
     ],

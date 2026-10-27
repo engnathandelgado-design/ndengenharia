@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR PRÉ-MOLDADO PF-05 (40 × 60, x × y) — P3 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR PRÉ-MOLDADO \u000eP28\u000f — MARCA PF-05 (x × y) — P3 L9 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PF05",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -217,13 +217,13 @@
    "linhas": [
     [
      "PN-6",
-     "Barra roscada Ø20 A36 L=700 (300 no consolo)",
+     "Barra roscada Ø20 A36 L=700 (300 no consolo, 400 livre, 100 roscados) + porca, contraporca e arruela 60×60×6 — CP-VB",
      "2",
      "CP-VB"
     ],
     [
      "NEO-6",
-     "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)",
+     "Neoprene 100×100×10 c/ furo Ø30 — apoio do dente da VB",
      "2",
      "CP-VB"
     ],
@@ -266,7 +266,7 @@
      "MARCA",
      "PF-05",
      "SEÇÃO",
-     "60 × 40 cm (x × y)"
+     "40 × 60 cm (x × y)"
     ],
     [
      "COMPRIMENTO",

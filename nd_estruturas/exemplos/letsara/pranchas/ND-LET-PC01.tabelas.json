@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR CENTRAL \u000eP18\u000f — MARCA PC-01 (40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PC01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -252,13 +252,13 @@
    "linhas": [
     [
      "PN-2",
-     "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I120",
+     "Pino Ø25 CA-50 L=900 (350 no consolo, 550 livre) — CP-I120",
      "1",
      "face B"
     ],
     [
      "PN-1",
-     "Pino Ø20 CA-50 L=630 (230 no consolo) — CP-MEZ",
+     "Pino Ø20 CA-50 L=630 (230 no consolo, 400 livre) — CP-MEZ",
      "4",
      "faces A e C"
     ],
@@ -270,13 +270,13 @@
     ],
     [
      "NEO-2",
-     "Neoprene 300×200×31 fretado (rev04)",
+     "Neoprene fretado 300×200×31 (2 × 10 + 2 × 2,5, chapas inox 2 mm) — apoio da I120",
      "1",
      "CP-I120"
     ],
     [
      "NEO-5F",
-     "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)",
+     "Neoprene fretado 200×200×21 c/ furo Ø30 — apoio do dente da VM",
      "4",
      "CP-MEZ"
     ],

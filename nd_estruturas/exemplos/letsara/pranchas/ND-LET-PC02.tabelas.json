@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR CENTRAL \u000eP20\u000f — MARCA PC-02 (40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PC02",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -190,7 +190,7 @@
    "linhas": [
     [
      "PN-2",
-     "Pino Ø25 CA-50 L=900 — CP-I120",
+     "Pino Ø25 CA-50 L=900 (350 no consolo, 550 livre) — CP-I120",
      "2",
      "faces B e D"
     ],
@@ -202,7 +202,7 @@
     ],
     [
      "NEO-2",
-     "Neoprene 300×200×31 fretado (rev04)",
+     "Neoprene fretado 300×200×31 (2 × 10 + 2 × 2,5, chapas inox 2 mm) — apoio da I120",
      "2",
      "CP-I120"
     ],

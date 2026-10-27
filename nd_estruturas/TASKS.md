@@ -69,6 +69,8 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 
 ## Feito
 
+- [x] Letsara rev12 (27/10, devolução da revisão independente da rev12): 32 itens corrigidos pela causa (registro único por marca, DEC-087 a DEC-089), travas C22–C32, checklist seção 11.
+
 - [x] Letsara rev12 (27/10): cantos opção D, PG-02/PG-04 25 × 40, pinos Ø25 confirmados; jogo regenerado em etapas, conferência zerada, colisões zero.
 - Letsara rev10: revisão do Nathan sobre a rev09 (consolo CT-I130, escadas ES04/ES05 com corrimão duplo, içamento das placas, cotas D1, cores por fachada) — DEC-061/062.
 - Letsara rev09d (24/10): DEC-058 (eixo C, P23, I130 Ø12,7 com isolamento escalonado, dente FS 1,53), DEC-059 (portão L4, PV-1), DEC-060 (escadas RT CBMRS 11, ligações 0 conflitos, ES03); gerar_tudo 0/0, 0 colisões, rev09 unida, 3D republicado. Pendentes: σ do solo dos BE-1/BE-2; catálogo do chumbador M10 hef 70 (GI-10/11); NEO-4 levantamento (já existente); zip DXF+IFC após aprovação.
