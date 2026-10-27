@@ -219,13 +219,12 @@ d.cota_h([-EXT_F, -Y_COL, 0, Y_COL, ST1["larg"] - EXT_F], Z_TERCA + H_TERCA + 30
 d.cota_h([-75, 75], -600, -8, total=False)
 d.cota_v([0, ZB[0], ZB[1], Z_TERCA + H_TERCA], 700, 10, total=False)
 d.chamada((Y_COL, ZB[1]), (20, 14), "4 M12 8.8 (2 colunas a ±60)")
-d.chamada((ST1["larg"] - EXT_F - 10, 230), (16, 27), f"ST-1V 9,5×220×290: borda rente à ponta da terça, ES-1V no eixo da VB")
-d.chamada((-EXT_F, Z_TERCA + H_TERCA - 20), (-16, 10), "placa de fechamento a 15 da ponta (face do pilar + 25)")
+d.chamada((ST1["larg"] - EXT_F - 10, 230), (16, 27), f"ST-1V 9,5×220×290 rente à ponta da terça (placa a 15); ES-1V no eixo da VB")
 d.chamada((0, -300), (16, -6), "VB 15×60 (fachadas 1 e 9)")
 d.chamada((-45, -450), (16, -10), "eixo 9 (ST-1V-R): 2 ES-1R M20 hef 400 + grampo U Ø10 em cada")
 d.marcador_corte((-EXT_F - 60, 120), (-EXT_F - 60, 260), "B", lado=-1)
 
-bb = pr.vista("CORTE B-B", (415, 160), E5, titulo="CORTE B-B", subtitulo="apoio na VB: ST-1V + 1 Z")
+bb = pr.vista("CORTE B-B", (428, 160), E5, titulo="CORTE B-B", subtitulo="apoio na VB: ST-1V + 1 Z")
 bb.ret(-200, -150, 400, 150, "CORTADO"); bb.hachura([(-200, -150), (200, -150), (200, 0), (-200, 0)], "AR-CONC", 0.03)
 bb.chapa(-ST1["aba"], 0, ST1["aba"] - ST1["t"], ST1["t"], 0.25)
 bb.chapa(-ST1["t"], 0, ST1["t"], ST1["h"], 0.25)
@@ -280,7 +279,7 @@ t20.chamada((A_TR + Y_COL, Z_FURO[0]), (14, -22), f"apoio: a {A_TR - Y_COL} e {A
 # ------------------------------------------------------------------ tabelas
 x0, y = pr.quadro[2] - 196, pr.quadro[3] - 6
 # furos do X por marca: y (mm) a partir do eixo do apoio do início do vão; '/' a 35 e '\\' a 75 do fundo da terça
-_bk = {BASE_K[k]: k for k in VAOS_X}
+_bk = {BASE_K[CC.kv(k, 0)]: k for k in VAOS_X}          # rev12: vão 8-9 com a VB rente à face (peça da faixa)
 tabX = []
 for j in sorted(i_ for i_ in IDX_X if i_ < NT):
     lin_ = [sufixo_x(j)]

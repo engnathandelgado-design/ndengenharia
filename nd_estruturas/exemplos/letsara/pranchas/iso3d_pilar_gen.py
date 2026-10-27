@@ -165,7 +165,7 @@ for k_, (cam, nome_v) in enumerate((((-9.0, 7.5, L / 2 + 2.5), "faces C e B"), (
     p.enable_parallel_projection()
     p.camera_position = [cam, (0.0, 0, L / 2), (0, 0, 1)]
     p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2) * 1.0)
-    p.add_text(f"{G['marca']} ({_NM}) — {nome_v}", font_size=30, position="upper_left", color="#111111")
+    p.add_text(f"{G['marca']} ({_NM})\n{nome_v}", font_size=30, position="upper_left", color="#111111")   # rev12: 2 linhas (não sai da meia imagem)
 pass
 p.screenshot(SAIDA + f"ISO-{G['marca']}-2v.png")
 
