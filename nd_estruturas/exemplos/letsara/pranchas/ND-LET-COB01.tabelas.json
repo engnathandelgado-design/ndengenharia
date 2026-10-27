@@ -19,12 +19,12 @@
    "titulo": "FUROS DO X (OBLONGOS 18×28) — y DO EIXO INICIAL DO VÃO, mm",
    "cab": [
     "FURO",
-    "T3 /35",
-    "T3 \\75",
     "T4 /35",
     "T4 \\75",
     "T5 /35",
-    "T5 \\75"
+    "T5 \\75",
+    "T6 /35",
+    "T6 \\75"
    ],
    "linhas": [
     [
@@ -34,7 +34,7 @@
      "1251",
      "8749",
      "1257",
-     "8593"
+     "8793"
     ],
     [
      "X2",
@@ -43,7 +43,7 @@
      "2501",
      "7499",
      "2513",
-     "7365"
+     "7536"
     ],
     [
      "X3",
@@ -52,7 +52,7 @@
      "3751",
      "6249",
      "3769",
-     "6138"
+     "6281"
     ],
     [
      "X4",
@@ -61,7 +61,7 @@
      "5000",
      "5000",
      "5025",
-     "4912"
+     "5025"
     ],
     [
      "X5",
@@ -70,7 +70,7 @@
      "6249",
      "3751",
      "6281",
-     "3685"
+     "3769"
     ],
     [
      "X6",
@@ -79,7 +79,7 @@
      "7500",
      "2500",
      "7537",
-     "2457"
+     "2512"
     ],
     [
      "X7",
@@ -88,7 +88,7 @@
      "8749",
      "1251",
      "8793",
-     "1231"
+     "1257"
     ],
     [
      "Y1",
@@ -159,22 +159,30 @@
    "linhas": [
     [
      "T1",
-     "10185",
+     "10410",
      "1-2",
      "pontas (apoio + emenda), correntes",
-     "14",
-     "1.272"
+     "27",
+     "2.507"
     ],
     [
      "T1D",
-     "10185",
+     "10410",
      "1-2",
      "pontas (apoio + emenda), correntes + diag. Ø18",
-     "2",
-     "182"
+     "4",
+     "371"
     ],
     [
      "T2",
+     "9990",
+     "1-2 (canto E)",
+     "pontas (apoio + emenda), correntes",
+     "1",
+     "89"
+    ],
+    [
+     "T3",
      "10975",
      "2-3, 3-4",
      "pontas (apoio + emenda), correntes",
@@ -182,7 +190,7 @@
      "5.482"
     ],
     [
-     "T2D",
+     "T3D",
      "10975",
      "2-3, 3-4",
      "pontas (apoio + emenda), correntes + diag. Ø18",
@@ -190,7 +198,7 @@
      "783"
     ],
     [
-     "T3",
+     "T4",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes",
@@ -198,7 +206,7 @@
      "579"
     ],
     [
-     "T3DX1",
+     "T4DX1",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
@@ -206,7 +214,7 @@
      "193"
     ],
     [
-     "T3DY6",
+     "T4DY6",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
@@ -214,7 +222,7 @@
      "193"
     ],
     [
-     "T3X2",
+     "T4X2",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X2",
@@ -222,7 +230,7 @@
      "193"
     ],
     [
-     "T3X3",
+     "T4X3",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X3",
@@ -230,7 +238,7 @@
      "193"
     ],
     [
-     "T3X4",
+     "T4X4",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X4",
@@ -238,7 +246,7 @@
      "193"
     ],
     [
-     "T3X5",
+     "T4X5",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X5",
@@ -246,7 +254,7 @@
      "193"
     ],
     [
-     "T3X6",
+     "T4X6",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X6",
@@ -254,7 +262,7 @@
      "193"
     ],
     [
-     "T3X7",
+     "T4X7",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X X7",
@@ -262,7 +270,7 @@
      "193"
     ],
     [
-     "T3Y1",
+     "T4Y1",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X Y1",
@@ -270,7 +278,7 @@
      "193"
     ],
     [
-     "T3Y2",
+     "T4Y2",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X Y2",
@@ -278,7 +286,7 @@
      "193"
     ],
     [
-     "T3Y3",
+     "T4Y3",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X Y3",
@@ -286,7 +294,7 @@
      "193"
     ],
     [
-     "T3Y4",
+     "T4Y4",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X Y4",
@@ -294,7 +302,7 @@
      "193"
     ],
     [
-     "T3Y5",
+     "T4Y5",
      "10825",
      "4-5",
      "pontas (apoio + emenda), correntes + X Y5",
@@ -302,7 +310,7 @@
      "193"
     ],
     [
-     "T4",
+     "T5",
      "10900",
      "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes",
@@ -310,348 +318,228 @@
      "1.750"
     ],
     [
-     "T4DX1",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
-     "6",
-     "583"
-    ],
-    [
-     "T4DY6",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
-     "6",
-     "583"
-    ],
-    [
-     "T4X2",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X2",
-     "6",
-     "583"
-    ],
-    [
-     "T4X3",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X3",
-     "6",
-     "583"
-    ],
-    [
-     "T4X4",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X4",
-     "6",
-     "583"
-    ],
-    [
-     "T4X5",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X5",
-     "6",
-     "583"
-    ],
-    [
-     "T4X6",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X6",
-     "6",
-     "583"
-    ],
-    [
-     "T4X7",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X X7",
-     "6",
-     "583"
-    ],
-    [
-     "T4Y1",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X Y1",
-     "6",
-     "583"
-    ],
-    [
-     "T4Y2",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X Y2",
-     "6",
-     "583"
-    ],
-    [
-     "T4Y3",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X Y3",
-     "6",
-     "583"
-    ],
-    [
-     "T4Y4",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X Y4",
-     "6",
-     "583"
-    ],
-    [
-     "T4Y5",
-     "10900",
-     "5-6, 6-7, 7-8",
-     "pontas (apoio + emenda), correntes + X Y5",
-     "6",
-     "583"
-    ],
-    [
-     "T5",
-     "10160",
-     "8-9",
-     "pontas (apoio + emenda), correntes",
-     "3",
-     "272"
-    ],
-    [
      "T5DX1",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5DY6",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X2",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X2",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X3",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X3",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X4",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X4",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X5",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X5",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X6",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X6",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5X7",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X X7",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5Y1",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X Y1",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5Y2",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X Y2",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5Y3",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X Y3",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5Y4",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X Y4",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T5Y5",
-     "10160",
-     "8-9",
+     "10900",
+     "5-6, 6-7, 7-8",
      "pontas (apoio + emenda), correntes + X Y5",
-     "1",
-     "91"
+     "6",
+     "583"
     ],
     [
      "T6",
-     "10410",
-     "1-2 (B–D)",
+     "10385",
+     "8-9",
      "pontas (apoio + emenda), correntes",
-     "14",
-     "1.300"
+     "5",
+     "463"
     ],
     [
-     "T6D",
-     "10410",
-     "1-2 (B–D)",
-     "pontas (apoio + emenda), correntes + diag. Ø18",
+     "T6DX1",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
      "2",
-     "186"
+     "185"
+    ],
+    [
+     "T6DY6",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
+     "2",
+     "185"
+    ],
+    [
+     "T6X2",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X2",
+     "2",
+     "185"
+    ],
+    [
+     "T6X3",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X3",
+     "2",
+     "185"
+    ],
+    [
+     "T6X4",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X4",
+     "2",
+     "185"
+    ],
+    [
+     "T6X5",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X5",
+     "2",
+     "185"
+    ],
+    [
+     "T6X6",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X6",
+     "2",
+     "185"
+    ],
+    [
+     "T6X7",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X X7",
+     "2",
+     "185"
+    ],
+    [
+     "T6Y1",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y1",
+     "2",
+     "185"
+    ],
+    [
+     "T6Y2",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y2",
+     "2",
+     "185"
+    ],
+    [
+     "T6Y3",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y3",
+     "2",
+     "185"
+    ],
+    [
+     "T6Y4",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y4",
+     "2",
+     "185"
+    ],
+    [
+     "T6Y5",
+     "10385",
+     "8-9",
+     "pontas (apoio + emenda), correntes + X Y5",
+     "2",
+     "185"
     ],
     [
      "T7",
-     "10385",
-     "8-9 (B–D)",
+     "9965",
+     "8-9 (canto E)",
      "pontas (apoio + emenda), correntes",
-     "3",
-     "278"
-    ],
-    [
-     "T7DX1",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + diag. Ø18 + X X1",
      "1",
-     "93"
-    ],
-    [
-     "T7DY6",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + diag. Ø18 + X Y6",
-     "1",
-     "93"
-    ],
-    [
-     "T7X2",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X2",
-     "1",
-     "93"
-    ],
-    [
-     "T7X3",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X3",
-     "1",
-     "93"
-    ],
-    [
-     "T7X4",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X4",
-     "1",
-     "93"
-    ],
-    [
-     "T7X5",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X5",
-     "1",
-     "93"
-    ],
-    [
-     "T7X6",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X6",
-     "1",
-     "93"
-    ],
-    [
-     "T7X7",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X X7",
-     "1",
-     "93"
-    ],
-    [
-     "T7Y1",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X Y1",
-     "1",
-     "93"
-    ],
-    [
-     "T7Y2",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X Y2",
-     "1",
-     "93"
-    ],
-    [
-     "T7Y3",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X Y3",
-     "1",
-     "93"
-    ],
-    [
-     "T7Y4",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X Y4",
-     "1",
-     "93"
-    ],
-    [
-     "T7Y5",
-     "10385",
-     "8-9 (B–D)",
-     "pontas (apoio + emenda), correntes + X Y5",
-     "1",
-     "93"
+     "89"
     ],
     [
      "",
@@ -659,7 +547,7 @@
      "",
      "total",
      "256",
-     "24.561"
+     "24.617"
     ]
    ]
   },

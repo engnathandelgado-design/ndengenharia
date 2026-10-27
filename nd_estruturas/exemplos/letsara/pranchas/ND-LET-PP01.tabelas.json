@@ -67,25 +67,25 @@
      "CC-1",
      "CE-1 + 2 CS-1 soldados na fábrica (face C, concretado)",
      "PP03/PP04",
-     "110",
+     "118",
      "18,77",
-     "2064"
+     "2215"
     ],
     [
      "CC-1E",
      "CE-1 + 1 CS-1 à esquerda (face C, concretado)",
      "PP03/PP04",
-     "28",
+     "20",
      "16,10",
-     "451"
+     "322"
     ],
     [
      "CC-1D",
      "CE-1 + 1 CS-1 à direita (face C, concretado)",
      "PP03/PP04",
-     "36",
+     "28",
      "16,10",
-     "580"
+     "451"
     ],
     [
      "CE-1",
@@ -107,17 +107,17 @@
      "CS-1",
      "console soldado na obra na CE-1 lateral",
      "ND-LET-PP03",
-     "69",
+     "97",
      "2,66",
-     "184"
+     "258"
     ],
     [
      "CS-1C",
      "CS-1 + caixa de calço 100 (cantos, PL-02/PL-06; DEC-044)",
      "ND-LET-PP06",
-     "39",
+     "11",
      "14,96",
-     "584"
+     "165"
     ],
     [
      "CS-1D",
@@ -131,17 +131,25 @@
      "PT-1",
      "cartola + 2 M16 + 2 arruelas",
      "ND-LET-PP04",
-     "330",
+     "366",
      "1,38",
-     "456"
+     "506"
+    ],
+    [
+     "PT-1R",
+     "chapa plana 6,3 × 80 × 220 + 1 M16 + 1 arruela (junta em frente à VB)",
+     "ND-LET-PP04",
+     "10",
+     "1,01",
+     "10"
     ],
     [
      "PT-2",
      "cantoneira + 2 M16 + 2 arruelas",
      "ND-LET-PP04",
-     "78",
+     "32",
      "2,46",
-     "192"
+     "79"
     ],
     [
      "OM-1",
@@ -157,7 +165,7 @@
      "",
      "",
      "",
-     "7495"
+     "6990"
     ]
    ]
   },

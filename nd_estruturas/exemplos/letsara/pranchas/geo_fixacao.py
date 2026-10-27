@@ -176,5 +176,6 @@ def pt_itens():
             (31, "PARAFUSO PT-1/PT-2", "M16 × 40 ISO 4017 cl. 8.8", "aço cl. 8.8 galv.", 2, 0.097),
             (32, "ARRUELA LARGA", "M16 ISO 7093 (17 × 50 × 3)", "aço galv.", 2, 0.040),
             (33, "LUVA TSA M16 (Trejor)", "hef 70, embutida nas placas", "aço zincado", 2, 0.09),
+            (34, "CHAPA PT-1R", "CH 6,3 × 80 × 220, plana (junta em frente à VB)", "ASTM A36", 1, kg_ch(80, 220, 6.3)),
             (40, "CANTONEIRA PT-2", "L 102 × 102 × 9,5 L = 150", "ASTM A36", 1, 14.6 * 0.150),
             (43, "BUCHA BR-1 / BR-2", "M16 hef 70 (placa) / hef 100 (pilar)", "aço zincado", 2, 0.10)]

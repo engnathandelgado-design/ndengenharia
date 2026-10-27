@@ -229,7 +229,8 @@ if __name__ == "__main__" and "--adotada" in sys.argv:
     for mk, s_ in sol.items():
         print(mk, s_["ok"], s_["n_cord"], s_["dente"]["Fd"], s_["dente"]["dente"]["tirante"], s_["dente"]["consolo"]["tirante"], [ (r["caso"], round(r["ELU"]["M2d"]/r["ELU"]["MRd2"],2), r["ELS"]["sig_D"]) for r in s_["casos"]])
     prem = dict(fck=M.FCK, fckj=M.FCKJ, fcj_icamento=M.FCKJ, fck_2estagio=M.FCK2, tipo="pré-moldado (NBR 9062:2017 12.1.1)", gama_c=M.GC_PF, gama_s=M.GS_PF,
-                folga_m=FOLGA, neoprene=M.PAD, sem_escoramento=True, Eci_MPa=round(M.ECI(M.FCK) / 1e3), Ecs_MPa=round(M.ECS(M.FCK) / 1e3),
+                folga_m=FOLGA, neoprene=(D.A_PAD, D.B_PAD, 0.021),   # rev12: NEO-5F 200 × 200 × 21 (era o PAD do meio vaso)
+                sem_escoramento=True, Eci_MPa=round(M.ECI(M.FCK) / 1e3), Ecs_MPa=round(M.ECS(M.FCK) / 1e3),
                 h_pm=H_ADOT, b=B_ADOT, b_alma=B_ADOT, b_aba=0.0, h_aba=0.0, apoio_laje=M.APOIO_LAJE, faixa_2e=faixa_2e(B_ADOT),
                 dente=dict(hd=HD_ADOT, ln=D.LN, recorte=round(H_ADOT - HD_ADOT, 2), consolo_h=round(H_ADOT - HD_ADOT - 0.021, 3), consolo_proj=D.PROJ, macico=1.00),
                 x_pad=D.X_PAD, pad=(200, 200, 21), vao_laje=round(9.65 - 2 * (B_ADOT / 2 - M.APOIO_LAJE), 3), q_piso_390=Q_PISO_390,

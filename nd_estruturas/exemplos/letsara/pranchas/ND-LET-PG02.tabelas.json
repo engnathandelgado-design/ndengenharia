@@ -4,7 +4,7 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR DOS PORTÕES PG-02 (P10a, 25×25) — LINHA 4, x = 15,195 m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR DOS PORTÕES PG-02 (P10a, 25×40) — LINHA 4, x = 15,270 m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PG02",
   "rev": "12",
   "data": "26/10/2026",
@@ -15,8 +15,8 @@
   "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "PG-02",
   "qtd": 1,
-  "peso": "13,5",
-  "volume": "0,54"
+  "peso": "21,6",
+  "volume": "0,86"
  },
  "tabelas": [
   {
@@ -33,28 +33,28 @@
      "PG-01",
      "P9",
      "1",
-     "sem consolo; topo +7,47",
+     "40×40; sem consolo; topo +7,47",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-02",
-     "P10 (x 15,195)",
+     "P10 (x 15,270)",
      "1",
-     "sem consolo; topo +7,63",
+     "25×40; sem consolo; topo +7,63",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-04",
-     "P10 (x 24,305)",
+     "P10 (x 24,230)",
      "1",
-     "sem consolo; topo +7,90",
+     "25×40; sem consolo; topo +7,90",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-03",
      "P12",
      "1",
-     "sem consolo; topo +8,06",
+     "40×40; sem consolo; topo +8,06",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ]
    ]
@@ -74,17 +74,25 @@
      "CA-50",
      "N1",
      "16",
-     "4",
+     "6",
      "855",
-     "3420"
+     "5130"
     ],
     [
      "CA-50",
      "N2",
      "6,3",
      "71",
-     "92",
-     "6532"
+     "122",
+     "8662"
+    ],
+    [
+     "CA-50",
+     "N3",
+     "6,3",
+     "71",
+     "35",
+     "2485"
     ],
     [
      "CA-50",
@@ -106,8 +114,8 @@
    "linhas": [
     [
      "PESO CA-50 Ø 6,3",
-     "71,85 m",
-     "17,60 kg"
+     "122,62 m",
+     "30,04 kg"
     ],
     [
      "PESO CA-50 Ø 10",
@@ -116,13 +124,13 @@
     ],
     [
      "PESO CA-50 Ø 16",
-     "37,62 m",
-     "59,36 kg"
+     "56,43 m",
+     "89,05 kg"
     ],
     [
      "PESO TOTAL CA-50",
      "",
-     "84,79 kg"
+     "126,91 kg"
     ]
    ]
   },
@@ -137,7 +145,7 @@
    "linhas": [
     [
      "CE-1",
-     "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1D na obra: CS-1 com calço de 75 mm, a face fica 75 atrás do plano dos consoles — PP06, DEC-044)",
+     "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1D na obra: CS-1 com calço de 75 mm, a face B (25 ⊥ à parede) fica 75 atrás do plano dos consoles — PP06)",
      "6",
      "face B, centrada"
     ],
@@ -149,7 +157,7 @@
     ],
     [
      "NEO-7",
-     "Neoprene 200×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A, DEC-059)",
+     "Neoprene 350×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A)",
      "1",
      "cabeça"
     ],
@@ -180,7 +188,7 @@
      "MARCA",
      "PG-02",
      "SEÇÃO",
-     "25 × 25 cm (x × y)"
+     "40 × 25 cm (x × y)"
     ],
     [
      "COMPRIMENTO",
@@ -190,15 +198,15 @@
     ],
     [
      "VOLUME",
-     "0,54 m³",
+     "0,86 m³",
      "PESO",
-     "1,35 t"
+     "2,16 t"
     ],
     [
      "AÇO CA-50",
-     "85 kg",
+     "127 kg",
      "TAXA",
-     "1,29 %"
+     "1,21 %"
     ],
     [
      "QUANTIDADE",

@@ -15,12 +15,12 @@ FXJ = GF.FX
 HT = 0.45
 
 pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINO PT-1, TRAVA PT-2 E FIXADORES DO SISTEMA",
+                        conteudo="FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINOS PT-1 E PT-1R, TRAVA PT-2 E FIXADORES DO SISTEMA",
                         desenho="ND-LET-PP04", folha="01/01", fase="PARA APROVAÇÃO", rev="06"))
 pr.revisao("06", "18/10/2026", "EMISSÃO: FABRICAÇÃO DA CE-1, PT-1 E PT-2; TABELA DE FIXADORES E TORQUES")
 Q = pr.quadro
 XC = Q[2] - 250
-pr.cabecalho_peca("FX", f"CE-1 ({NN['CE1']} PÇ) · PT-1 ({NN['PT1']} PÇ) · PT-2 ({NN['PT2']} PÇ) · FIXADORES DO SISTEMA",
+pr.cabecalho_peca("FX", f"CE-1 ({NN['CE1']} PÇ) · PT-1 ({NN['PT1']} PÇ) · PT-1R ({NN.get('PT1R', 0)} PÇ) · PT-2 ({NN['PT2']} PÇ) · FIXADORES DO SISTEMA",
                   f"CE-1 embutida no pilar (fábrica dos pilares): {NN['CC1']} CC-1 + {NN['CC1E']} CC-1E + {NN['CC1D']} CC-1D concretados na face C com os CS-1 já soldados; {NN['CE1_obra']} CE-1 rentes nas faces laterais (CS-1 soldado na obra) · cotas em mm",
                   largura=XC - Q[0] - 10)
 
@@ -112,6 +112,34 @@ p3.chamada((-35, 70), (-40, 22), "luva TSA M16 hef 70 (33)")
 p3.chamada((40, -70), (16, -18), "M16 × 40 (31) + arruela larga (32)")
 p3.chamada((-50, 0), (-30, -44), "junta 5 (macho-fêmea)")
 
+# ================================================================== rev12 (revisão rev12, item 3): PT-1R — chapa plana nas juntas em frente à VB
+NR = NN.get("PT1R", 0)
+r1 = pr.vista("PT-1R", (XC + 40, Q[1] + 420), 1.5, titulo=f"PT-1R — CHAPA PLANA ({NR} PÇ)", subtitulo="ch. 6,3 × 80 × 220 A36 galvanizada; corte a laser", unidade="mm")
+r1.chapa(0, -110, 80, 220, HT)
+r1.circulo((40, -70), 9, "METALICA")
+r1.poli([(31, 50), (31, 90), (49, 90), (49, 50)], "METALICA", fechada=True)
+r1.cota_v([-110, -70, 0, 70, 110], 80, 10, total=True)
+r1.cota_h([0, 40, 80], -110, -8, total=False)
+r1.chamada((40, -70), (-22, -10), "Ø18 (M16 na placa de baixo)")
+r1.chamada((40, 80), (-22, 12), "oblongo 18 × 40 (placa de cima, sem parafuso)")
+r2 = pr.vista("PT-1R MONT", (XC + 175, Q[1] + 420), 2.5, titulo="PT-1R — NA JUNTA EM FRENTE À VB", subtitulo="corte vertical; VB rente à face do pilar, 25 atrás da placa", unidade="mm")
+for z0_, z1_ in ((-150, -2.5), (2.5, 150)):
+    pts = [(-100, z0_), (0, z0_), (0, z1_), (-100, z1_)]
+    r2.poli(pts, "CORTADO", fechada=True); r2.hachura(pts, "AR-CONC", 0.03)
+for zl in (-70, 70):
+    r2.chapa(-70, zl - 8, 70, 16, 0.3)
+r2.chapa(0, -110, 6.3, 220, 0.3)
+I.parafuso_lateral(r2, 6.3, -70, 40, 16, cabeca=(10, 24), sentido=-1)
+vb_ = [(25, -150), (60, -150), (60, 150), (25, 150)]
+r2.poli(vb_, "CORTADO", fechada=True); r2.hachura(vb_, "AR-CONC", 0.03)
+r2.texto((42, 0), "VB", "nota", "MIDDLE_CENTER", rot=90)
+r2.cota_h([0, 6.3, 19.3, 25], 150, 10, total=False)
+r2.cota_v([-110, -70, 70, 110], -100, -10, total=False)
+r2.chamada((3, 100), (-30, 20), "PT-1R 6,3 × 80 × 220 (34)")
+r2.chamada((16, -70), (24, -26), "M16 × 40 (31) + arruela larga (32) na luva TSA (33)")
+pr.notas(XC + 10, Q[1] + 300, [f"PT-1R ({NR} pç): no lugar da cartola PT-1 (36 mm, não cabe nos 25 mm até a VB), nas juntas horizontais das vistas A e I cuja faixa de 220 mm cruza a altura da VB. "
+                               "Folga mínima de 5 mm entre a cabeça do M16 e a VB (6 mm no projeto). Mesma função da PT-1: só guia (M16 só na placa de baixo). Locação nas vistas ND-LET-PP-A e ND-LET-PP-I (retângulo PT-1R)."], 230)
+
 # ================================================================== PT-2 — cantoneira (1:1,5)
 ang = [(0, 0), (102, 0), (102, 9.5), (9.5, 9.5), (9.5, 102), (0, 102)]
 q1 = pr.vista("PT-2", (Q[0] + 590, Q[1] + 185), 1.5, titulo="PT-2 — CANTONEIRA (SEÇÃO)", subtitulo="L 102 × 102 × 9,5 A36, L = 150", unidade="mm")
@@ -140,14 +168,14 @@ for n, nome, dim, mat, q, kg in it_ce + it_pt:
     rows.append([n, nome, dim, mat, q, f(kg, 3), f(kg * q, 3)])
 y = pr.tabela(XC, Q[3] - 6, "LISTA DE MATERIAIS — CE-1 (1 CJ), PT-1 (1 CJ), PT-2 (1 CJ)", ["Nº", "DESCRIÇÃO", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg/un", "kg"],
               rows, [9, 48, 72, 38, 10, 22, 31], h_lin=5.4)
-pr.texto(XC, y - 3.5, f"CE-1: {f(kg_ce, 2)} kg/cj × {NN['CE1']} = {f(kg_ce * NN['CE1'], 0)} kg. PT-1 com itens 30–33; PT-2 com itens 40, 31, 32 e 43.", "nota", "TEXTO")
+pr.texto(XC, y - 3.5, f"CE-1: {f(kg_ce, 2)} kg/cj × {NN['CE1']} = {f(kg_ce * NN['CE1'], 0)} kg. PT-1 com itens 30–33; PT-1R com itens 34, 31, 32 e 33 (1 M16); PT-2 com itens 40, 31, 32 e 43.", "nota", "TEXTO")
 fix = [["16", "M16 × 45 ISO 4017", "8.8 galv. fogo", "rosca total", "nível do CS-1", "contraporca 120", NN["CS1"]],
        ["15", "porca M16 ISO 4032", "8, sobremedida", "6H + 0,4", "soldada (CS-1)", "—", 2 * NN["CS1"]],
        ["17", "contraporca M16 ISO 4035", "05 galv.", "6H + 0,4", "trava do nível", "120", NN["CS1"]],
        ["18", "prisioneiro M16 × 45 ISO 4026", "45H zincado", "sext. int. 8", "frontal do CS-1", "trava química", NN["CS1"]],
-       ["31", "M16 × 40 ISO 4017", "8.8 galv. fogo", "b = 38", "PT-1 e PT-2", "80 (oblongo livre)", 2 * NN["PT1"] + 2 * NN["PT2"]],
-       ["32", "arruela larga M16 ISO 7093", "200 HV galv.", "17 × 50 × 3", "PT-1 e PT-2", "—", 2 * NN["PT1"] + 2 * NN["PT2"]],
-       ["33", "luva TSA M16 (Trejor)", "zincada", "hef 70", "placas (PT-1)", "—", 2 * NN["PT1"]],
+       ["31", "M16 × 40 ISO 4017", "8.8 galv. fogo", "b = 38", "PT-1 e PT-2", "80 (oblongo livre)", 2 * NN["PT1"] + NN.get("PT1R", 0) + 2 * NN["PT2"]],
+       ["32", "arruela larga M16 ISO 7093", "200 HV galv.", "17 × 50 × 3", "PT-1 e PT-2", "—", 2 * NN["PT1"] + NN.get("PT1R", 0) + 2 * NN["PT2"]],
+       ["33", "luva TSA M16 (Trejor)", "zincada", "hef 70", "placas (PT-1/PT-1R)", "—", 2 * NN["PT1"] + 2 * NN.get("PT1R", 0)],
        ["43", "bucha BR-1 / BR-2 M16", "zincada", "hef 70 / 100", "placa / pilar (PT-2)", "—", 2 * NN["PT2"]]]
 y = pr.tabela(XC, y - 8, "FIXADORES DO SISTEMA — OBRA (torque em N·m)", ["Nº", "PEÇA", "CLASSE", "ROSCA", "USO", "APERTO", "QTD"], fix, [9, 54, 30, 26, 38, 30, 23], h_lin=5.4)
 pr.notas(XC, y - 4, [

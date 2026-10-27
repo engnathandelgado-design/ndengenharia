@@ -160,20 +160,21 @@ def dados(mk):
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
     n_pn2 = sum(1 for c in cons if c["pino_nome"] == "PN-2")
+    import registro as _REG0
     ins = []
     if n_pn1:
         _pl = sorted({(c["pino_L"], c["pino_emb"]) for c in cons if c["pino_nome"] == "PN-1"})
         ins.append(["PN-1", "Pino Ø20 CA-50 " + " / ".join(f"L={L_} ({e_} no consolo)" for L_, e_ in _pl), n_pn1, ", ".join(sorted(set(c["tipo"] for c in cons if c["pino_nome"] == "PN-1")))])
     n_pn6 = sum(1 for c in cons if c["pino_nome"] == "PN-6")
     if n_pn6:
-        ins.append(["PN-6", "Barra roscada Ø20 A36 L=700 (300 no consolo)", n_pn6, "CP-VB"])
+        ins.append(["PN-6", _REG0.PINOS["PN-6"], n_pn6, "CP-VB"])
     if n_pn2:
-        ins.append(["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo)", n_pn2, "CP-I120"])
-    for tipo, nm, desc in (("CP-MEZ", "NEO-5", "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)"), ("CP-VB", "NEO-6", "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)"),
-                           ("CP-I120", "NEO-2", "Neoprene 300×200×31 fretado (2 × 10 + 2 × 2,5, chapas inox 2 mm)")):
+        ins.append(["PN-2", _REG0.PINOS["PN-2"], n_pn2, "CP-I120"])
+    import registro as _REG                                                    # rev12 (item 6): um neoprene por apoio, do registro
+    for tipo, ap_ in _REG.APARELHOS.items():
         n = sum(1 for c in cons if c["tipo"] == tipo)
         if n:
-            ins.append([nm, desc, n, tipo])
+            ins.append([ap_["marca"], ap_["desc"], n, tipo])
     n_mez = sum(1 for c in cons if c["tipo"] == "CP-MEZ")
     if n_mez and len({c["face"] for c in cons if c["tipo"] == "CP-MEZ"}) == 2:      # apoio interno: continuidade da VM atravessa o pilar
         ins.append(["BA-1", "Bainha corrugada Ø50 horizontal (N11)", n_mez, "12 cm acima da VM"])
@@ -235,6 +236,8 @@ def dados(mk):
                             x_pinos=(75, 225), marca_b="BR-M16", aco="barra roscada M16 classe 8.8 (ISO 898-1), zincada a fogo", anc="grampo U Ø10 CA-50 na ponta embutida", rosca=150, viga=G.W_L2,
                             pilha=[("graute", 20), ("CA-L2", 19), ("mesa da W", 5.2), ("arruela", 3), ("porca", 13), ("contraporca", 13), ("2 fios de rosca", 4)],
                             destino="atravessa a CA-L2 e a mesa inferior da W (furo Ø18; oblongo nos apoios deslizantes)")   # rev11: item 13
+    if mk.startswith("PF"):                                                    # rev12 (item 16): fachada — 60 na direção 1–9 (y)
+        P["secao_xy"] = "40 × 60 cm (x × y)"
     if canto:
         P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
                  faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")

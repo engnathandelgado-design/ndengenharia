@@ -1,4 +1,4 @@
-# Conferência cruzada — 931 verificações, 0 divergências
+# Conferência cruzada — 940 verificações, 0 divergências
 
 | resultado | item | folha | detalhe |
 |---|---|---|---|
@@ -276,6 +276,7 @@
 | ok | C13 vírgula decimal | ND-LET-LA01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-LA01 | rev 12 |
 | ok | C18 pendência (extrusora LP20) sinalizada | ND-LET-LA01 | ok |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-LA01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-LOC01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-LOC01 | ok |
 | ok | C8 nota interna (DEC-0xx / Nathan) em folha do cliente | ND-LET-LOC01 | ok |
@@ -285,6 +286,7 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-LOC01 | ok |
 | ok | C13 vírgula decimal | ND-LET-LOC01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-LOC01 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-LOC01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-MON01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-MON01 | ok |
 | ok | C8 nota interna (DEC-0xx / Nathan) em folha do cliente | ND-LET-MON01 | ok |
@@ -341,6 +343,7 @@
 | ok | C13 vírgula decimal | ND-LET-NG01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-NG01 | rev 12 |
 | ok | C18 pendência (extrusora LP20) sinalizada | ND-LET-NG01 | ok |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-NG01 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PC01 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-PC01 | TABELA DE FERROS — 1 UNIDADE: tabela 391.5 kg × resumo 391.6 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PC01 | nenhuma |
@@ -463,7 +466,7 @@
 | ok | C13 vírgula decimal | ND-LET-PF04 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PF04 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PF05 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PF05 | TABELA DE FERROS — 1 UNIDADE: tabela 344.7 kg × resumo 344.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PF05 | TABELA DE FERROS — 1 UNIDADE: tabela 343.3 kg × resumo 343.4 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PF05 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PF05 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PF05 | ok |
@@ -499,7 +502,7 @@
 | ok | C13 vírgula decimal | ND-LET-PG01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PG01 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PG02 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PG02 | TABELA DE FERROS — 1 UNIDADE: tabela 84.8 kg × resumo 84.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PG02 | TABELA DE FERROS — 1 UNIDADE: tabela 126.9 kg × resumo 126.9 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PG02 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PG02 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PG02 | ok |
@@ -510,6 +513,7 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-PG02 | ok |
 | ok | C13 vírgula decimal | ND-LET-PG02 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PG02 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-PG02 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PG03 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-PG03 | TABELA DE FERROS — 1 UNIDADE: tabela 162.8 kg × resumo 162.8 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PG03 | nenhuma |
@@ -523,7 +527,7 @@
 | ok | C13 vírgula decimal | ND-LET-PG03 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PG03 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PG04 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PG04 | TABELA DE FERROS — 1 UNIDADE: tabela 117.8 kg × resumo 117.8 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PG04 | TABELA DE FERROS — 1 UNIDADE: tabela 154.3 kg × resumo 154.3 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PG04 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PG04 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PG04 | ok |
@@ -534,9 +538,10 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-PG04 | ok |
 | ok | C13 vírgula decimal | ND-LET-PG04 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PG04 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-PG04 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL01 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL01 | TABELA DE FERROS — 1 UNIDADE: tabela 377.6 kg × resumo 377.6 kg |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL01 | TABELA DE FERROS — 4 UNIDADES: tabela 1510.5 kg × resumo 1510.6 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL01 | TABELA DE FERROS — 1 UNIDADE: tabela 376.6 kg × resumo 376.6 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL01 | TABELA DE FERROS — 4 UNIDADES: tabela 1506.3 kg × resumo 1506.4 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PL01 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PL01 | ok |
@@ -548,7 +553,7 @@
 | ok | C13 vírgula decimal | ND-LET-PL01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PL01 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL02 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL02 | TABELA DE FERROS — 1 UNIDADE: tabela 340.2 kg × resumo 340.2 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL02 | TABELA DE FERROS — 1 UNIDADE: tabela 313.0 kg × resumo 313.1 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL02 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PL02 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PL02 | ok |
@@ -571,6 +576,7 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-PL03 | ok |
 | ok | C13 vírgula decimal | ND-LET-PL03 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PL03 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-PL03 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL04 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-PL04 | TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL04 | nenhuma |
@@ -597,7 +603,7 @@
 | ok | C13 vírgula decimal | ND-LET-PL05 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PL05 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL06 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL06 | TABELA DE FERROS — 1 UNIDADE: tabela 297.0 kg × resumo 297.1 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL06 | TABELA DE FERROS — 1 UNIDADE: tabela 293.5 kg × resumo 293.5 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL06 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PL06 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PL06 | ok |
@@ -620,6 +626,7 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-PL07 | ok |
 | ok | C13 vírgula decimal | ND-LET-PL07 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PL07 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-PL07 | ok |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL08 | todas as posições da tabela aparecem no desenho |
 | ok | C2 resumo do aço × tabela de ferros | ND-LET-PL08 | TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL08 | nenhuma |
@@ -645,7 +652,7 @@
 | ok | C13 vírgula decimal | ND-LET-PL09 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PL09 | rev 12 |
 | ok | C1 tabela × desenho (posições) | ND-LET-PL10 | todas as posições da tabela aparecem no desenho |
-| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL10 | TABELA DE FERROS — 1 UNIDADE: tabela 384.1 kg × resumo 384.2 kg |
+| ok | C2 resumo do aço × tabela de ferros | ND-LET-PL10 | TABELA DE FERROS — 1 UNIDADE: tabela 383.1 kg × resumo 383.1 kg |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PL10 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PL10 | ok |
 | ok | C5 marcas de consolo existem no registro | ND-LET-PL10 | ok |
@@ -850,6 +857,7 @@
 | ok | C13 vírgula decimal | ND-LET-PR01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-PR01 | rev 12 |
 | ok | C18 pendência (extrusora LP20) sinalizada | ND-LET-PR01 | ok |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-PR01 | ok |
 | ok | C4 menção a W 310 (hoje W 200 × 15,0) | ND-LET-PV01 | nenhuma |
 | ok | C4 laje +7,30 descrita como laje de cobertura | ND-LET-PV01 | ok |
 | ok | C8 nota interna (DEC-0xx / Nathan) em folha do cliente | ND-LET-PV01 | ok |
@@ -933,6 +941,7 @@
 | ok | C12 norma vigente (NBR 6123:2023) | ND-LET-VM01 | ok |
 | ok | C13 vírgula decimal | ND-LET-VM01 | ok |
 | ok | C17 carimbo REV 12 (pacote rev12) | ND-LET-VM01 | rev 12 |
+| ok | C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada | ND-LET-VM01 | ok |
 
 ## Ainda não automatizado
 - comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento

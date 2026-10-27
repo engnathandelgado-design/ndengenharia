@@ -3369,9 +3369,9 @@
   "gama_s": 1.15,
   "folga_m": 0.03,
   "neoprene": [
-   0.15,
-   0.3,
-   0.01
+   0.2,
+   0.2,
+   0.021
   ],
   "sem_escoramento": true,
   "Eci_MPa": 35418,

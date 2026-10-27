@@ -51,7 +51,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         for dy in AS["y_pinos"]:
             p.add_mesh(pv.Cylinder(center=(xa_ + AS["x_pino"] / 1000, dy / 1000, zr_ + 0.01 + sai / 2), direction=(0, 0, 1), radius=AS["d"] / 2000, height=sai), color="#b03a2e")
         p.add_mesh(box(xa_ + AS["x_neo"][0] / 1000, -AS["neo"][1] / 2000, zr_, (AS["x_neo"][1] - AS["x_neo"][0]) / 1000, AS["neo"][1] / 1000, 0.01), color="#202020")
-        labs.append(((xa_ + AS["x_pino"] / 1000, AS["y_pinos"][-1] / 1000, zr_ + 0.01 + sai), f"assento da viga de cobertura: {len(AS['y_pinos'])} {AS['pino']}"))
+        labs.append(((xa_ + AS["x_pino"] / 1000, AS["y_pinos"][-1] / 1000, zr_ + 0.01 + sai), f"assento: {len(AS['y_pinos'])} {AS['pino']}"))
     PT = G.get("pinos_topo")
     if PT and z1 >= L - 0.01:                                        # DEC-040: pinos PN-5 no topo (TS-01 apoiada no topo)
         sai = (PT["L"] - PT["emb"]) / 1000
@@ -68,17 +68,20 @@ def cena(p, z0=0.0, z1=L, chaves=True):
             continue
         poly = [(face_d, zc - h), (face_d + proj, zc - hp), (face_d + proj, zc + proj * incl), (face_d, zc)]
         eu, ev = (nx, ny), (-ny, nx)
-        p.add_mesh(prisma(poly, eu, ev, -larg / 2, larg / 2, (0, 0)), **conc)
+        # rev12 (revisão rev12, item 9): consolo rente à face (excentricidade da geometria) — o mesmo deslocamento do 2D
+        ef_ = FACE_N.get(c.get("exc_face") or "", (0, 0))
+        w_ = c.get("exc", 0) / 1000 * (ef_[0] * ev[0] + ef_[1] * ev[1])
+        p.add_mesh(prisma(poly, eu, ev, -larg / 2 + w_, larg / 2 + w_, (0, 0)), **conc)
         px = c["pino_x"] / 1000
-        cx, cy = nx * (face_d + px), ny * (face_d + px)
+        cx, cy = nx * (face_d + px) + ev[0] * w_, ny * (face_d + px) + ev[1] * w_
         sai = (c["pino_L"] - c["pino_emb"]) / 1000                 # DEC-040: só o trecho saliente aparece, em vermelho, com rótulo
         p.add_mesh(pv.Cylinder(center=(cx, cy, zc + 0.01 + sai / 2), direction=(0, 0, 1), radius=c["pino_d"] / 2000, height=sai), color="#b03a2e")
         if c["pino_nome"] not in VISTOS:
             VISTOS.add(c["pino_nome"]); labs.append(((cx, cy, zc + 0.01 + sai), f"pino {c['pino_nome']} Ø{c['pino_d']:g}"))
         nw, nl = c["neo"][0] / 1000, c["neo"][1] / 1000
-        p.add_mesh(box(nx * face_d + (0.025 if nx > 0 else -nl - 0.025 if nx < 0 else -nw / 2), ny * face_d + (0.025 if ny > 0 else -nl - 0.025 if ny < 0 else -nw / 2), zc,
+        p.add_mesh(box(nx * face_d + ev[0] * w_ + (0.025 if nx > 0 else -nl - 0.025 if nx < 0 else -nw / 2), ny * face_d + ev[1] * w_ + (0.025 if ny > 0 else -nl - 0.025 if ny < 0 else -nw / 2), zc,
                        nl if nx else nw, nw if nx else nl, 0.01), color="#202020")
-        labs.append(((nx * (face_d + proj), ny * (face_d + proj), zc + 0.02), f"{c['tipo']} (face {c['face']})"))
+        labs.append(((nx * (face_d + proj) + ev[0] * w_, ny * (face_d + proj) + ev[1] * w_, zc + 0.02), f"{c['tipo']} face {c['face']}"))
     if chaves:
         for k in range(3):
             zz = 0.15 + k * 0.30
@@ -117,7 +120,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
             Lt = (B if FI["eixo"] == "BD" else H) + 0.012
             p.add_mesh(pv.Cylinder(center=(0, 0, zf_), direction=ax_, radius=FI["d"] / 2000 + 0.004, height=Lt, resolution=40), color="#d9822b")
             p.add_mesh(pv.Cylinder(center=(0, 0, zf_), direction=ax_, radius=FI["d"] / 2000 - 0.002, height=Lt + 0.004, resolution=40), color="#111111")
-            labs.append((((0, B / 2 + 0.01, zf_) if FI["eixo"] == "BD" else (-H / 2 - 0.01, 0, zf_)), "FI-1 furo de içamento"))
+            labs.append((((0, B / 2 + 0.01, zf_) if FI["eixo"] == "BD" else (-H / 2 - 0.01, 0, zf_)), "FI-1"))
     for z in G.get("al", []):
         z = z / 1000
         if z0 <= z <= z1:
@@ -125,19 +128,32 @@ def cena(p, z0=0.0, z1=L, chaves=True):
             sx = -1 if G.get("al_face", "A") == "C" else 1                                # rev06e: AL-2 na face C (de cima na fôrma)
             pts = np.c_[sx * (H / 2 + 0.14 * np.sin(t)), 0.05 * np.cos(t), z + 0 * t]
             p.add_mesh(pv.Spline(pts, 60).tube(radius=0.009), color="#3a6ea5")
-            labs.append(((sx * (H / 2 + 0.14), 0, z), "AL-2 alça"))
+            labs.append(((sx * (H / 2 + 0.14), 0, z), "AL-2"))
     for ip in G.get("ip01", []):
         nx, ny = FACE_N[ip["face"]]
         fd = H / 2 if nx else B / 2
         zs_ = [z / 1000 for z in ip["z"] if z0 <= z / 1000 <= z1]
         if zs_:
-            labs.append(((nx * (fd + 0.07), ny * (fd + 0.07), zs_[-1]), ("CC-1 (CS-1 de fábrica)" if ip["face"] == "C" and ip.get("lados") else "CE-1") + f" face {ip['face']} ×{len(ip['z'])}"))
+            labs.append(((nx * (fd + 0.07), ny * (fd + 0.07), zs_[-1]), ("CC-1" if ip["face"] == "C" and ip.get("lados") else "CE-1") + f" ×{len(ip['z'])} face {ip['face']}"))
     if R and z1 > zr:
         labs.append(((-H / 2 + d.get("C", 0), 0, (zr + L) / 2), "cabeça recuada"))
     return labs
 
 
-def rot(p, pts, labs, fs=23):
+def face_de(pt):
+    """face do pilar em que o rótulo está (None = topo / genérico)."""
+    x, y = pt[0], pt[1]
+    if abs(x) >= H / 2 - 1e-3 and abs(x) / H >= abs(y) / B:
+        return "A" if x > 0 else "C"
+    if abs(y) >= B / 2 - 1e-3:
+        return "B" if y > 0 else "D"
+    return None
+
+
+def rot(p, pts, labs, fs=23, faces=None):
+    if faces:                                                        # rev12 (item 9): só os rótulos das faces visíveis na vista
+        sel = [k for k, q in enumerate(pts) if face_de(q) in (None,) + tuple(faces)]
+        pts, labs = [pts[k] for k in sel], [labs[k] for k in sel]
     if pts:
         p.add_point_labels(np.array(pts), labs, font_size=fs, point_size=8, point_color="#c0392b", text_color="#111111",
                            shape_color="white", shape_opacity=0.85, margin=3, always_visible=True)
@@ -147,13 +163,13 @@ p = pv.Plotter(off_screen=True, window_size=(760, 2600)); p.set_background("whit
 labs = cena(p)
 pts = [l[0] for l in labs] + [(0, B / 2, L), (0, B / 2, 1.0), (-H / 2, 0, L * 0.45), (0, B / 2, L * 0.3)]
 txt = [l[1] for l in labs] + [f"topo +{G['z_topo']:.3f}", "piso ±0,000", "FACE C", "FACE B"]
-rot(p, pts, txt)
+rot(p, pts, txt, faces=("C", "B"))
 p.enable_parallel_projection()
 p.camera_position = [(-9.0, 7.5, L / 2 + 2.5), (0.0, 0, L / 2), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2))
 import renomear as _RN
 _NM = _RN.lista(_RN.nomes_de(G["marca"]))
-p.add_text(f"{G['marca']} ({_NM}) em pé", font_size=23, position="upper_left", color="#111111")
+p.add_text(f"{_NM} (marca {G['marca']}) em pé", font_size=23, position="upper_left", color="#111111")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-geral.png")
 
 # rev07: duas vistas (frente C/B e costas A/D), para a produção
@@ -161,11 +177,11 @@ p = pv.Plotter(off_screen=True, shape=(1, 2), window_size=(1500, 2600), border=F
 for k_, (cam, nome_v) in enumerate((((-9.0, 7.5, L / 2 + 2.5), "faces C e B"), ((9.0, -7.5, L / 2 + 2.5), "faces A e D"))):
     p.subplot(0, k_)
     labs = cena(p)
-    rot(p, [l[0] for l in labs], [l[1] for l in labs], fs=30)
+    rot(p, [l[0] for l in labs], [l[1] for l in labs], fs=30, faces=("C", "B") if k_ == 0 else ("A", "D"))
     p.enable_parallel_projection()
     p.camera_position = [cam, (0.0, 0, L / 2), (0, 0, 1)]
     p.reset_camera(); p.camera.zoom(G.get("zoom", 3.2) * 1.0)
-    p.add_text(f"{G['marca']} ({_NM})\n{nome_v}", font_size=30, position="upper_left", color="#111111")   # rev12: 2 linhas (não sai da meia imagem)
+    p.add_text(f"{_NM} (marca {G['marca']})\n{nome_v}", font_size=30, position="upper_left", color="#111111")   # rev12: 2 linhas (não sai da meia imagem)
 pass
 p.screenshot(SAIDA + f"ISO-{G['marca']}-2v.png")
 
@@ -177,6 +193,6 @@ rot(p, [l[0] for l in labs], [l[1] for l in labs])
 p.enable_parallel_projection()
 p.camera_position = [(H / 2 + 4.0, -3.4, zc + 2.3), (0, 0, zc - 0.1), (0, 0, 1)]
 p.reset_camera(); p.camera.zoom(1.3)
-p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} do {G['marca']}", font_size=26, position="upper_left", color="#111111")
+p.add_text(f"Detalhe — {'consolos' if c0 else 'topo e insertos'} — {_NM}", font_size=26, position="upper_left", color="#111111")
 p.screenshot(SAIDA + f"ISO-{G['marca']}-consolo.png")
 print("ok")

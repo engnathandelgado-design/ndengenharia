@@ -235,25 +235,25 @@
    "linhas": [
     [
      "PN-1",
-     "Pino Ø20 CA-50 L=630 (230 no consolo)",
+     "Pino Ø20 CA-50 L=630 (230 no consolo, 400 livre) — CP-MEZ",
      "2",
      "CP-MEZ"
     ],
     [
      "PN-6",
-     "Barra roscada Ø20 A36 L=700 (300 no consolo)",
+     "Barra roscada Ø20 A36 L=700 (300 no consolo, 400 livre, 100 roscados) + porca, contraporca e arruela 60×60×6 — CP-VB",
      "1",
      "CP-VB"
     ],
     [
-     "NEO-5",
-     "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)",
+     "NEO-5F",
+     "Neoprene fretado 200×200×21 c/ furo Ø30 — apoio do dente da VM",
      "2",
      "CP-MEZ"
     ],
     [
      "NEO-6",
-     "Neoprene 100×100×10 c/ furo Ø30 (dente da VB)",
+     "Neoprene 100×100×10 c/ furo Ø30 — apoio do dente da VB",
      "1",
      "CP-VB"
     ],
@@ -271,7 +271,7 @@
     ],
     [
      "CE-1",
-     "CE-1 380×330×12,5 + 4 pinos + 2 N18 (CS-1C na obra: CS-1 com calço de 100 mm, a face fica 100 atrás do plano dos consoles — PP06)",
+     "CE-1 380×330×12,5 + 4 pinos + 2 N18 (CS-1 na obra)",
      "6",
      "face D, centro 92 acima da fiada"
     ],

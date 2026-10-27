@@ -274,7 +274,7 @@ def montar() -> ModeloBIM:
             for xf, sg in ((fa, 1), (fb, -1)):
                 xb_ = xf + sg * 0.135                                                   # centro do apoio
                 zt = z_vb(xb_) + 0.29                                                   # topo HORIZONTAL do CP-VB = face do dente − neoprene
-                m.bloco("consolo", "CP-VB 15×27×29" + (" rente à face C" if yv != y else ""), (xf + sg * 0.135, yv, zt), 0.27, 0.15, 0.29, "Consolos")
+                m.bloco("consolo", "CP-VB 15×27×29" + (" rente à face externa (fachada)" if yv != y else ""), (xf + sg * 0.135, yv, zt), 0.27, 0.15, 0.29, "Consolos")
                 m.bloco("inserto", "NEO-6 100×100×10", (xb_, yv, zt + 0.01), 0.10, 0.10, 0.01, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-6 Ø20 roscado + porca e contraporca (nicho grauteado só numa ponta; a outra livre)",
                         (xb_, yv, zt + 0.01 + 0.30 - 0.03), 0.02, 0.02, 0.58, "Pinos, tubos e neoprenes")

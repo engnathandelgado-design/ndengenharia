@@ -317,7 +317,7 @@
     [
      "37",
      "PG02",
-     "PILAR DOS PORTÕES PG-02 (P10a, 25×25) — LINHA 4, x = 15,195 m — FÔRMA, ARMAÇÃO, INSER...",
+     "PILAR DOS PORTÕES PG-02 (P10a, 25×40) — LINHA 4, x = 15,270 m — FÔRMA, ARMAÇÃO, INSER...",
      "A0",
      "12",
      "01 p.25"
@@ -333,7 +333,7 @@
     [
      "39",
      "PG04",
-     "PILAR DOS PORTÕES PG-04 (P10b, 25×25) — LINHA 4, x = 24,305 m — FÔRMA, ARMAÇÃO, INSER...",
+     "PILAR DOS PORTÕES PG-04 (P10b, 25×40) — LINHA 4, x = 24,230 m — FÔRMA, ARMAÇÃO, INSER...",
      "A0",
      "12",
      "01 p.27"
@@ -383,7 +383,7 @@
      "TS01-2",
      "TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO E PROTENSÃO",
      "A1",
-     "06",
+     "12",
      "02 p.2"
     ],
     [
@@ -704,7 +704,7 @@
      "VIGA CENTRAL I120 V407 — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO DA MARCA",
      "A0",
      "12",
-     ""
+     "02 p.7"
     ],
     [
      "86",
@@ -712,7 +712,7 @@
      "VIGA CENTRAL I120 V405 — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO DA MARCA",
      "A0",
      "12",
-     ""
+     "02 p.8"
     ]
    ]
   },
@@ -941,9 +941,9 @@
     [
      "Pilares",
      "37",
-     "78,2",
-     "195,4",
-     "11.191"
+     "78,8",
+     "197,1",
+     "11.232"
     ],
     [
      "Vigas de cobertura",
@@ -969,16 +969,16 @@
     [
      "Placas de fechamento",
      "205",
-     "243,0",
-     "607,6",
-     "2.793"
+     "243,3",
+     "608,2",
+     "2.794"
     ],
     [
      "TOTAL",
      "348",
-     "520,4",
-     "1.301,0",
-     "27.581"
+     "521,3",
+     "1.303,3",
+     "27.624"
     ]
    ]
   },
@@ -991,7 +991,7 @@
    "linhas": [
     [
      "C40",
-     "360,0"
+     "360,9"
     ],
     [
      "C50",
@@ -1003,7 +1003,7 @@
     ],
     [
      "fio CP-175 RB Ø6",
-     "4.335 kg (19.525 m)"
+     "4.339 kg (19.543 m)"
     ],
     [
      "cordoalha CP-190 RB Ø9,5",

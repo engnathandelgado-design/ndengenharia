@@ -8,12 +8,13 @@
    "folha": "ND-LET-PL07",
    "nivel": "fundação",
    "x": 39.5,
-   "y": 0.0,
+   "y": -0.1,
    "secao": "40×60",
    "ref_R01": "P2 L1",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 1
+   "linha": 1,
+   "fora_da_linha": true
   },
   {
    "nome": "P2",
@@ -27,7 +28,8 @@
    "ref_R01": "P7 (escada)",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": null
+   "linha": null,
+   "fora_da_linha": false
   },
   {
    "nome": "P3",
@@ -41,7 +43,8 @@
    "ref_R01": "P6 (escada)",
    "fila": "E",
    "fora_do_eixo": true,
-   "linha": null
+   "linha": null,
+   "fora_da_linha": false
   },
   {
    "nome": "P4",
@@ -55,7 +58,8 @@
    "ref_R01": "P2 L2",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P5",
@@ -69,7 +73,8 @@
    "ref_R01": "P6 (linha 2)",
    "fila": "E",
    "fora_do_eixo": true,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P6",
@@ -83,7 +88,8 @@
    "ref_R01": "P2 L3",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 3
+   "linha": 3,
+   "fora_da_linha": false
   },
   {
    "nome": "P7",
@@ -97,7 +103,8 @@
    "ref_R01": "P2 L4",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P8",
@@ -111,7 +118,8 @@
    "ref_R01": "P2 L5",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 5
+   "linha": 5,
+   "fora_da_linha": false
   },
   {
    "nome": "P9",
@@ -125,7 +133,8 @@
    "ref_R01": "P2 L6",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 6
+   "linha": 6,
+   "fora_da_linha": false
   },
   {
    "nome": "P10",
@@ -139,7 +148,8 @@
    "ref_R01": "P2 L7",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 7
+   "linha": 7,
+   "fora_da_linha": false
   },
   {
    "nome": "P11",
@@ -153,7 +163,8 @@
    "ref_R01": "P2 L8",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 8
+   "linha": 8,
+   "fora_da_linha": false
   },
   {
    "nome": "P12",
@@ -162,12 +173,13 @@
    "folha": "ND-LET-PL08",
    "nivel": "fundação",
    "x": 39.5,
-   "y": 79.35,
+   "y": 79.45,
    "secao": "40×60",
    "ref_R01": "P2 L9",
    "fila": "E",
    "fora_do_eixo": false,
-   "linha": 9
+   "linha": 9,
+   "fora_da_linha": true
   },
   {
    "nome": "P13",
@@ -181,7 +193,8 @@
    "ref_R01": "P5 L1",
    "fila": "D",
    "fora_do_eixo": false,
-   "linha": 1
+   "linha": 1,
+   "fora_da_linha": false
   },
   {
    "nome": "P14",
@@ -195,7 +208,8 @@
    "ref_R01": "P8B",
    "fila": "D",
    "fora_do_eixo": false,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P15",
@@ -209,7 +223,8 @@
    "ref_R01": "P12",
    "fila": "D",
    "fora_do_eixo": false,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P16",
@@ -223,7 +238,8 @@
    "ref_R01": "P5 L9",
    "fila": "D",
    "fora_do_eixo": false,
-   "linha": 9
+   "linha": 9,
+   "fora_da_linha": false
   },
   {
    "nome": "P17",
@@ -237,7 +253,8 @@
    "ref_R01": "P4 L1",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": 1
+   "linha": 1,
+   "fora_da_linha": false
   },
   {
    "nome": "P18",
@@ -251,7 +268,8 @@
    "ref_R01": "P8A",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P19",
@@ -259,13 +277,14 @@
    "marca": "PG-04",
    "folha": "ND-LET-PG04",
    "nivel": "fundação",
-   "x": 24.305,
+   "x": 24.23,
    "y": 29.8,
-   "secao": "25×25",
+   "secao": "25×40",
    "ref_R01": "P10",
    "fila": "C",
    "fora_do_eixo": true,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P20",
@@ -279,7 +298,8 @@
    "ref_R01": "P11",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P21",
@@ -287,13 +307,14 @@
    "marca": "PG-02",
    "folha": "ND-LET-PG02",
    "nivel": "fundação",
-   "x": 15.195,
+   "x": 15.27,
    "y": 29.8,
-   "secao": "25×25",
+   "secao": "25×40",
    "ref_R01": "P10",
    "fila": "C",
    "fora_do_eixo": true,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P22",
@@ -307,7 +328,8 @@
    "ref_R01": "P13",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": null
+   "linha": null,
+   "fora_da_linha": false
   },
   {
    "nome": "P23",
@@ -321,7 +343,8 @@
    "ref_R01": "P13B",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": null
+   "linha": null,
+   "fora_da_linha": false
   },
   {
    "nome": "P24",
@@ -335,7 +358,8 @@
    "ref_R01": "P14 L9",
    "fila": "C",
    "fora_do_eixo": false,
-   "linha": 9
+   "linha": 9,
+   "fora_da_linha": false
   },
   {
    "nome": "P25",
@@ -349,7 +373,8 @@
    "ref_R01": "P3 L1",
    "fila": "B",
    "fora_do_eixo": false,
-   "linha": 1
+   "linha": 1,
+   "fora_da_linha": false
   },
   {
    "nome": "P26",
@@ -363,7 +388,8 @@
    "ref_R01": "P8",
    "fila": "B",
    "fora_do_eixo": false,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P27",
@@ -377,7 +403,8 @@
    "ref_R01": "P9",
    "fila": "B",
    "fora_do_eixo": false,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P28",
@@ -391,7 +418,8 @@
    "ref_R01": "P3 L9",
    "fila": "B",
    "fora_do_eixo": false,
-   "linha": 9
+   "linha": 9,
+   "fora_da_linha": false
   },
   {
    "nome": "P29",
@@ -400,12 +428,13 @@
    "folha": "ND-LET-PL03",
    "nivel": "fundação",
    "x": 0.0,
-   "y": 0.0,
+   "y": -0.1,
    "secao": "40×60",
    "ref_R01": "P1 L1",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 1
+   "linha": 1,
+   "fora_da_linha": true
   },
   {
    "nome": "P30",
@@ -419,7 +448,8 @@
    "ref_R01": "P1 L2",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 2
+   "linha": 2,
+   "fora_da_linha": false
   },
   {
    "nome": "P31",
@@ -433,7 +463,8 @@
    "ref_R01": "P1 L3",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 3
+   "linha": 3,
+   "fora_da_linha": false
   },
   {
    "nome": "P32",
@@ -447,7 +478,8 @@
    "ref_R01": "P1 L4",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 4
+   "linha": 4,
+   "fora_da_linha": false
   },
   {
    "nome": "P33",
@@ -461,7 +493,8 @@
    "ref_R01": "P1 L5",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 5
+   "linha": 5,
+   "fora_da_linha": false
   },
   {
    "nome": "P34",
@@ -475,7 +508,8 @@
    "ref_R01": "P1 L6",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 6
+   "linha": 6,
+   "fora_da_linha": false
   },
   {
    "nome": "P35",
@@ -489,7 +523,8 @@
    "ref_R01": "P1 L7",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 7
+   "linha": 7,
+   "fora_da_linha": false
   },
   {
    "nome": "P36",
@@ -503,7 +538,8 @@
    "ref_R01": "P1 L8",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 8
+   "linha": 8,
+   "fora_da_linha": false
   },
   {
    "nome": "P37",
@@ -512,12 +548,13 @@
    "folha": "ND-LET-PL04",
    "nivel": "fundação",
    "x": 0.0,
-   "y": 79.35,
+   "y": 79.45,
    "secao": "40×60",
    "ref_R01": "P1 L9",
    "fila": "A",
    "fora_do_eixo": false,
-   "linha": 9
+   "linha": 9,
+   "fora_da_linha": true
   },
   {
    "nome": "V200",

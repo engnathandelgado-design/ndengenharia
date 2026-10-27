@@ -252,7 +252,7 @@ def prancha_pilar(P):
                 v.chapa(W / 2 + u_ - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
                 v.chapa(W / 2 + u_ - c["neo"][0] / 2, zc, c["neo"][0], 10)
                 if u_:
-                    v.cota_h([0, (W - larg) / 2 + u_, (W + larg) / 2 + u_, W], zc - h, -8, total=False)
+                    v.cota_h(sorted(set([0, (W - larg) / 2 + u_, (W + larg) / 2 + u_, W])), zc - h, -8, total=False)   # rev12 (item 22): sem cota 0 no consolo rente
                 # rev11: só a MARCA do consolo (C1, C2…) dentro da face; geometria, pino e neoprene no quadro APOIOS E ESPERAS e no DET. 1
                 import apoios_pilar as AP_
                 zl_ = zc - h
@@ -362,7 +362,7 @@ def prancha_pilar(P):
         v.xl, v.xr = _xmin, _xmax
         v.cota_v(zs, _xmin, -11)
         v.zs_cota = list(zs)
-        ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z + (ZT_CS if (ip["face"] == "C" and ip.get("lados")) else 0) for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))
+        ords = sorted(set([0, L_CAL] + [es["z"] for es in P.get("esperas_face", []) if face == "A" and es["face"] not in P["vistas"]] + [c["z"] for c in cons if c["face"] == face] + [z for ip in P.get("ip01", []) if ip["face"] == face for z in ip["z"]] + [L_TOT]))   # rev12 (item 22): todas as faces cotadas ao CENTRO da chapa CE-1/CC-1
         v.zs_ords = list(ords) if len(ords) > 3 else []
         if len(ords) > 3:
             v.cota_v(ords, _xmax, 11)                                                    # rev06e: cadeia + total (usina), sem acumuladas
@@ -549,6 +549,14 @@ def prancha_pilar(P):
         d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -12, total=False); d1.cota_h([-PW, 0], Z1, -15)
         d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L={c0['pino_L']/10:g}")
         d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
+        # rev12 (revisão rev12, item 22): embutido, livre e trecho roscado do pino cotados no próprio detalhe
+        lv_ = c0["pino_L"] - c0["pino_emb"]
+        d1.cota_v([zc0 - c0["pino_emb"] + 5, zc0 + 5, zc0 + 5 + lv_], 0, -14, total=True)   # emb. + livre = total, dentro do contorno do pilar
+        if c0["pino_nome"] == "PN-6":
+            import apoios_pilar as _APr
+            d1.linha((c0["pino_x"] - 18, zc0 + 5 + lv_ - _APr.PN6_ROSCA), (c0["pino_x"] + 18, zc0 + 5 + lv_ - _APr.PN6_ROSCA), "COTA")
+            d1.chamada((c0["pino_x"], zc0 + 5 + lv_ - _APr.PN6_ROSCA / 2), (-14, 6), f"rosca M20 {_APr.PN6_ROSCA / 10:g} cm")
+
 
     YD2 = (YM - 150 + 400 / 10 - 34) if cons else YM
     d2 = pr.vista("DETALHE 2", (XD + 60, YD2 - 82), 20, titulo="DETALHE 2 — BASE NO CÁLICE", subtitulo="embutimento 100 cm; chaves", unidade="cm")
@@ -633,8 +641,23 @@ def prancha_pilar(P):
         y = tabela_q(pr, XC, y - 4, f"APOIOS E ESPERAS — níveis em m (base em cm), barras em cm",
                      ["APOIO", "FACE", "NÍVEL (BASE)", "PEÇA / CHAPA", "BARRA", "EMB.", "LIVRE", "TOTAL"], [r_[:8] for r_ in rows_ap], [24, 15, 25, 30, 46, 13, 14, 15], h_lin=6.0)
         y = pr.notas(XC, y - 2, [f"{r_[0]}: {r_[8]}." for r_ in rows_ap], 182)
+    import registro as _REGI                                                               # rev12 (itens 6/7): descrição única e 1 neoprene por apoio
+    ins_ = [[r_[0], _REGI.DESC_CANON.get(r_[0], r_[1])] + list(r_[2:]) for r_ in ins_]
+    for tp_, ap_ in _REGI.APARELHOS.items():
+        n_c = sum(1 for c in cons if c["tipo"] == tp_)
+        n_t = sum(int(r_[2]) for r_ in ins_ if r_[0] == ap_["marca"] and str(r_[2]).isdigit())
+        outros = [r_[0] for r_ in ins_ if r_[0].startswith("NEO") and tp_ in str(r_[3]) and r_[0] != ap_["marca"]]
+        if n_c != n_t or outros:
+            pr.avisos_extra.append(("ERRO", f"{ap_['marca']}: {n_t} na tabela de insertos × {n_c} consolos {tp_}" + (f"; outro neoprene no mesmo apoio: {outros}" if outros else "")))
+        if n_c and any(list(c["neo"]) != list(ap_["dims"]) for c in cons if c["tipo"] == tp_):
+            pr.avisos_extra.append(("ERRO", f"{tp_}: neoprene da geometria ≠ {ap_['marca']} {ap_['dims']}"))
+    for pn_ in ("PN-1", "PN-2", "PN-6"):
+        n_c = sum(1 for c in cons if c["pino_nome"] == pn_)
+        n_t = sum(int(r_[2]) for r_ in ins_ if r_[0] == pn_ and str(r_[2]).isdigit())
+        if n_c != n_t:
+            pr.avisos_extra.append(("ERRO", f"{pn_}: {n_t} na tabela de insertos × {n_c} consolos"))
     y = tabela_q(pr, XC, y - 4, f"INSERTOS POR PILAR ({P['marca']}) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins_, [19, 80, 8, 75])
-    qd = [["MARCA", P["marca"], "SEÇÃO", f"{H/10:g} × {B/10:g} cm (x × y)"], ["COMPRIMENTO", f"{L_TOT/10:g} cm", "CONCRETO", "C40"],
+    qd = [["MARCA", P["marca"], "SEÇÃO", P.get("secao_xy", f"{H/10:g} × {B/10:g} cm (x × y)")], ["COMPRIMENTO", f"{L_TOT/10:g} cm", "CONCRETO", "C40"],
           ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"], ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(len(xy) * 3.1416 * (D1 / 10) ** 2 / 4 / (B * H / 100) * 100, 2)} %"],
           ["QUANTIDADE", f"{P['qtd']}", "COBRIMENTO", "3,0 cm (CAA II)"]] + ([["CABEÇA", f"{HB/10:g} × {HH/10:g} cm acima de +{f((z_rec - L_CAL)/1000, 2)}", "", ""]] if REC else [])
     y = tabela_q(pr, XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 60, 30, 62])

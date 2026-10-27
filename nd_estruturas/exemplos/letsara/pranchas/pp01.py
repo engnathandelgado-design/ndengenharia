@@ -25,24 +25,35 @@ Z_CORD = FCH.ZC_                                         # DEC-035: 10 fios Ø6 
 # quantidades na obra (peça a peça nas vistas)
 PEC = [p for V in FCH.DADOS for p in FCH.DADOS[V][0]]
 N_CS = sum(len(FCH.DADOS[V][1]) for V in FCH.DADOS)
-N_PT1 = sum(2 for p in PEC if p["trava"] == "PT-1")
+N_PT1R = sum(sum(bool(r_) for r_ in p.get("pt1r", [])) for p in PEC if p["trava"] == "PT-1")   # rev12 (item 3): chapa plana em frente à VB
+N_PT1 = sum(2 for p in PEC if p["trava"] == "PT-1") - N_PT1R
 N_PT2 = sum(len(p["pt2"]) for p in PEC)
+# rev12 (revisão rev12, item 7): a chapa CE-1 é do PILAR — agrupada pelo pilar físico (nome pela geometria) e pela fiada, nunca
+# pela vista: no encontro de duas paredes laterais (linhas 2 e 4) as placas das duas vistas usam a MESMA CC-1 (2 consoles)
+import renomear as _RNp
+def pil_fis(V, x):
+    i_ = min(range(len(FCH.VISTAS[V]["pil"])), key=lambda k: abs(FCH.VISTAS[V]["pil"][k][0] - x))
+    return FCH.VISTAS[V]["nomes_pil"][i_].replace(_RNp.NV0, "").replace(_RNp.NV1, ""), FCH.VISTAS[V]["pil"][i_]
+PLANO = {"B": "eixoA", "E": "eixoA", "H": "eixoA", "D": "eixoE", "F": "eixoE", "J": "eixoE"}   # mesma parede = mesma face do pilar
 CE = set()
 for V in FCH.DADOS:
-    pil = [s for s, _, _ in FCH.VISTAS[V]["pil"]]
     for (x, z) in FCH.DADOS[V][1]:
-        CE.add((V, min(pil, key=lambda s: abs(s - x)), z))
+        CE.add((pil_fis(V, x)[0], PLANO.get(V, V), z))
 N_CE, N_PL = len(CE), len(PEC)
 # rev06e (DEC-031): CE-1 da face C sai da fábrica com os consoles soldados e concretada com o pilar (CC-1 / CC-1E / CC-1D)
 from collections import defaultdict as _dd
 _grp = _dd(list)
+_vw = {}
 for V in FCH.DADOS:
     for (x, z) in FCH.DADOS[V][1]:
-        s_, w_, _ = min(FCH.VISTAS[V]["pil"], key=lambda p: abs(p[0] - x))
-        _grp[(V, s_, w_, z)].append(x - s_)
+        nm_, (s_, w_, _) = pil_fis(V, x)
+        _grp[(nm_, PLANO.get(V, V), z)].append(x - s_)
+        _vw.setdefault((nm_, PLANO.get(V, V), z), (V, w_))
 N_CC = dict(CC2=0, CC1E=0, CC1D=0)
 N_CE_OBRA = N_CS_OBRA = 0
-for (V, s_, w_, z), xs in _grp.items():
+for (nm_, pl_, z), xs in _grp.items():
+    V, w_ = _vw[(nm_, pl_, z)]
+    assert len(xs) <= 2, (nm_, z, xs)
     if GF.concretado(V, w_):
         N_CC["CC2" if len(xs) == 2 else ("CC1E" if xs[0] < 0 else "CC1D")] += 1
     else:
@@ -266,6 +277,7 @@ kg = lambda its: sum(k * q for *_, q, k in its)
 kg_nc, kg_cs, kg_ce = kg(GF.nc1_itens()), kg(GF.cs1_itens()), kg(GF.ce1_itens())
 pti = {n: (q, k) for n, _, _, _, q, k in GF.pt_itens()}
 kg_pt1 = sum(pti[n][0] * pti[n][1] for n in (30, 31, 32))
+kg_pt1r = pti[34][0] * pti[34][1] + pti[31][0] / 2 * pti[31][1] + pti[32][0] / 2 * pti[32][1]   # chapa + 1 M16 + 1 arruela
 kg_pt2 = pti[40][1] + pti[31][0] * pti[31][1] + pti[32][0] * pti[32][1]
 rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET-PP02", N_NC, f(kg_nc, 2), f(kg_nc * N_NC, 0)],
         ["CC-1", "CE-1 + 2 CS-1 soldados na fábrica (face C, concretado)", "PP03/PP04", N_CC["CC2"], f(kg_ce + 2 * kg_cs, 2), f((kg_ce + 2 * kg_cs) * N_CC["CC2"], 0)],
@@ -277,11 +289,12 @@ rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET
         ["CS-1C", "CS-1 + caixa de calço 100 (cantos, PL-02/PL-06; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1C", 0), f(kg_cs + KG_CAL.get("CS-1C", 0), 2), f((kg_cs + KG_CAL.get("CS-1C", 0)) * N_CAL.get("CS-1C", 0), 0)],
         ["CS-1D", "CS-1 + caixa de calço 75 (PG-02/PG-04; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1D", 0), f(kg_cs + KG_CAL.get("CS-1D", 0), 2), f((kg_cs + KG_CAL.get("CS-1D", 0)) * N_CAL.get("CS-1D", 0), 0)],
         ["PT-1", "cartola + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT1, f(kg_pt1, 2), f(kg_pt1 * N_PT1, 0)],
+        ["PT-1R", "chapa plana 6,3 × 80 × 220 + 1 M16 + 1 arruela (junta em frente à VB)", "ND-LET-PP04", N_PT1R, f(kg_pt1r, 2), f(kg_pt1r * N_PT1R, 0)],
         ["PT-2", "cantoneira + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT2, f(kg_pt2, 2), f(kg_pt2 * N_PT2, 0)]]
 OMJ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
 kg_om = OMJ["kg_un"] + 0.94 + 0.32 * 2 + 0.25 * 2 + 0.10 * 2
 rows.append(["OM-1", "ombreira em U + base + CL-1 (porta da vista I)", "ND-LET-PP05", 2, f(kg_om, 2), f(kg_om * 2, 0)])
-tot = kg_nc * N_NC + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt2 * N_PT2 + kg_om * 2 + sum(KG_CAL[m_] * N_CAL[m_] for m_ in N_CAL) + kg_ch(840 - 380, 330, GF.TCE) * N_CE1L
+tot = kg_nc * N_NC + kg_cs * N_CS + kg_ce * N_CE + kg_pt1 * N_PT1 + kg_pt1r * N_PT1R + kg_pt2 * N_PT2 + kg_om * 2 + sum(KG_CAL[m_] * N_CAL[m_] for m_ in N_CAL) + kg_ch(840 - 380, 330, GF.TCE) * N_CE1L
 rows.append(["", "total da fixação (sem luvas e buchas)", "", "", "", f(tot, 0)])
 y = pr.tabela(XC, y - 8, "RESUMO DAS PEÇAS METÁLICAS — OBRA", ["MARCA", "COMPOSIÇÃO", "FOLHA", "QT", "kg/un", "kg"], rows, [24, 76, 26, 14, 20, 30], h_lin=5.2, destaque_ultima=True)
 MO = FX["montagem_CS1_NC1"]
@@ -308,7 +321,7 @@ pr.notas(XC, y - 2, [
     f"Barras da ponta no plano médio, entre os {FCH.PRT_} (eixo a {f(FCH.EX_ / 10, 2)} cm das faces); estribos horizontais com cobrimento 2,0. Tela N1 da PP00 recortada no nicho.",
     "Medidas das peças Trejor (CS-1, NC-1, cartola) de pré-dimensionamento: confirmar com o catálogo 09 da Trejor antes da compra.",
     "Cotas metálicas em mm; concreto em cm."], 190)
-json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CS1C=N_CAL.get("CS-1C", 0), CS1D=N_CAL.get("CS-1D", 0), CE1=N_CE, CE1_obra=N_CE_OBRA, CE1L=N_CE1L, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT2=N_PT2)),
+json.dump(dict(kg_ponta_por_placa=KG_PONTA, kg_NC1=kg_nc, kg_CS1=kg_cs, kg_CE1=kg_ce, kg_PT1=kg_pt1, kg_PT1R=kg_pt1r, kg_PT2=kg_pt2, kg_OM1=kg_om, n=dict(OM1=2, NC1=N_NC, NC1_E=N_NC_E, NC1_D=N_NC_D, CS1=N_CS, CS1_obra=N_CS_OBRA, CS1_fabrica=N_CS_FAB, CS1C=N_CAL.get("CS-1C", 0), CS1D=N_CAL.get("CS-1D", 0), CE1=N_CE, CE1_obra=N_CE_OBRA, CE1L=N_CE1L, CC1=N_CC["CC2"], CC1E=N_CC["CC1E"], CC1D=N_CC["CC1D"], PT1=N_PT1, PT1R=N_PT1R, PT2=N_PT2)),
           open("/home/claude/letsara/pranchas/pp01.json", "w"), indent=1)
 FCH.chave_todas(pr)                                     # rev11 (checklist 6): planta-chave com as paredes nas cores A–J
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-PP01")

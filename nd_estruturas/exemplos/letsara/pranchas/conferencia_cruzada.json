@@ -1,5 +1,5 @@
 {
- "total": 931,
+ "total": 940,
  "erros": 0,
  "pendentes_decisao": 0,
  "itens": [
@@ -182,14 +182,14 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL01",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 377.6 kg × resumo 377.6 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 376.6 kg × resumo 376.6 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL01",
-   "detalhe": "TABELA DE FERROS — 4 UNIDADES: tabela 1510.5 kg × resumo 1510.6 kg",
+   "detalhe": "TABELA DE FERROS — 4 UNIDADES: tabela 1506.3 kg × resumo 1506.4 kg",
    "pendente": false
   },
   {
@@ -224,7 +224,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL02",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 340.2 kg × resumo 340.2 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 313.0 kg × resumo 313.1 kg",
    "pendente": false
   },
   {
@@ -371,7 +371,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL06",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 297.0 kg × resumo 297.1 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 293.5 kg × resumo 293.5 kg",
    "pendente": false
   },
   {
@@ -511,7 +511,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL10",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 384.1 kg × resumo 384.2 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 383.1 kg × resumo 383.1 kg",
    "pendente": false
   },
   {
@@ -756,7 +756,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PF05",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 344.7 kg × resumo 344.8 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 343.3 kg × resumo 343.4 kg",
    "pendente": false
   },
   {
@@ -1043,7 +1043,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PG02",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 84.8 kg × resumo 84.8 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 126.9 kg × resumo 126.9 kg",
    "pendente": false
   },
   {
@@ -1113,7 +1113,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PG04",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 117.8 kg × resumo 117.8 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 154.3 kg × resumo 154.3 kg",
    "pendente": false
   },
   {
@@ -6489,6 +6489,69 @@
    "ok": true,
    "item": "C18 pendência (extrusora LP20) sinalizada",
    "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-PR01",
    "detalhe": "ok",
    "pendente": false
   },

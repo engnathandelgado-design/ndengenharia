@@ -33,28 +33,28 @@
      "PG-01",
      "P9",
      "1",
-     "sem consolo; topo +7,47",
+     "40×40; sem consolo; topo +7,47",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-02",
-     "P10 (x 15,195)",
+     "P10 (x 15,270)",
      "1",
-     "sem consolo; topo +7,63",
+     "25×40; sem consolo; topo +7,63",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-04",
-     "P10 (x 24,305)",
+     "P10 (x 24,230)",
      "1",
-     "sem consolo; topo +7,90",
+     "25×40; sem consolo; topo +7,90",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ],
     [
      "PG-03",
      "P12",
      "1",
-     "sem consolo; topo +8,06",
+     "40×40; sem consolo; topo +8,06",
      "CE-1 (B); 2 IL-1; 2 AL-2"
     ]
    ]
@@ -149,7 +149,7 @@
     ],
     [
      "NEO-7",
-     "Neoprene 350×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A, DEC-059)",
+     "Neoprene 350×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A)",
      "1",
      "cabeça"
     ],
