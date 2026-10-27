@@ -164,7 +164,7 @@ def quantitativos_telhas(L_MAX_TP=12.0, TRANSP=0.200, L_CART=3.0, PERDA=0.05):
           dict(item="Clipe deslizante #0,65 + base deslizante", un="cj", liq=n_clip - n_fixo, compra=math.ceil((n_clip - n_fixo) * (1 + PERDA)), obs="1 por zipada nas demais terças; a zipada dilata a partir do ponto fixo (≈ 12 mm em cada ponta para ΔT 50 °C — conferir curso do clipe com a Isoeste)"),
           dict(item='PB 12-14 × 3/4" P03 (TP-40 × terça)', un="pç", liq=n_tp * nT * 4, compra=math.ceil(n_tp * nT * 4 * (1 + PERDA)), obs="4 por telha em cada terça"),
           dict(item='PB 12-14 × 3/4" P03 (clipe × cartola)', un="pç", liq=2 * n_clip, compra=math.ceil(2 * n_clip * (1 + PERDA)), obs="2 por clipe"),
-          dict(item='PB 1/4"-14 × 7/8" P01 (cartola × TP-40)', un="pç", liq=ondas * nT, compra=math.ceil(ondas * nT * (1 + PERDA)), obs="costura em TODAS as ondas (sucção de borda — calc_fixacao_telhas)")]
+          dict(item='PB 1/4"-14 × 7/8" P01 (cartola × TP-40)', un="pç", liq=ondas * nT, compra=math.ceil(ondas * nT * (1 + PERDA)), obs="costura em TODAS as ondas (sucção de borda)")]
     return dict(itens=it, n_zipadas=n_zip, n_colunas_tp40=n_tp, pecas_tp40_m=pecas_tp, emendas_tp40_x_m=[round(c, 3) for c in cortes],
                 n_linhas_terca=nT, x_tercas_m=[round(x, 3) for x in XT], area_m2=round(area, 1), comprimento_agua_m=round(comp, 3),
                 largura_m=round(larg, 3), perda=PERDA)

@@ -207,7 +207,7 @@ def montar() -> ModeloBIM:
         # injetado entre o neoprene e o fundo da viga depois da montagem (a viga não desce no vão dos portões: fundo ≥ +7,50)
         _zt = zf(x - b_ / 2)
         _nx, _ny = _PJn[mk_pg]["nx_mm"] / 1000, _PJn[mk_pg]["ny_mm"] / 1000      # rev12: a0 ≥ 4,5 cm das bordas (NBR 9062:2017 7.2)
-        m.bloco("inserto", f"NEO-7 neoprene {_PJn[mk_pg]['dim_mm'].replace(' ', '')} + graute 10 mm (apoio da TS-01A, DEC-059), centrado no pilar", (x, ypg, _zt - 0.001), _nx, _ny, 0.019, "Pinos, tubos e neoprenes")
+        m.bloco("inserto", f"{'NEO-7' if b_ == by_ else 'NEO-7A'} neoprene {_PJn[mk_pg]['dim_mm'].replace(' ', '')} + graute 10 mm (apoio da TS-01A, DEC-059), centrado no pilar", (x, ypg, _zt - 0.001), _nx, _ny, 0.019, "Pinos, tubos e neoprenes")
 
     # 2. vigas centrais I120 (comprimentos do R01) e consolos CP-I120 / CV-TS
     zc = Z_I120_TOPO - H_I120 / 2
