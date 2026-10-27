@@ -18,7 +18,7 @@ from pathlib import Path
 AQ = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ / "pranchas")); sys.path.insert(0, str(AQ.parents[1]))
 import ts01_dados as T
-from geometria import X_L4, X_EIXO
+from geometria import X_L4, X_EIXO, PG_L4
 
 LG = T.LG
 XC = X_EIXO["C"]
@@ -102,38 +102,39 @@ for nome, xs in METADES.items():
                      ok=(-Md_neg <= MRd_neg) and max(els) <= lim_F)
 
 # pilares PG à compressão (pilar-padrão com curvatura aproximada, NBR 6118:2023 15.8.3.3.2; topo travado: le = 0,7 H)
-PG = {"PG-01": (0.40, 9.87), "PG-02": (0.25, 15.195), "PG-04": (0.25, 24.305), "PG-03": (0.40, 29.63)}
+# rev12 (27/10): PG-02 e PG-04 25×40 (40 em x, ao longo da parede) — b = lado menor (flambagem), bx × by na área
+PG = {mk: (min(bx, by), x, bx, by) for mk, (_, x, bx, by) in PG_L4.items()}
 ARRJ = json.loads((AQ / "arranjo_pilares.json").read_text(encoding="utf-8"))
 pg_out = {}
-for mk, (b, x) in PG.items():
+for mk, (b, x, bx, by) in PG.items():
     Nd = max(r["Rd"] for m in out.values() for r in m["reacoes"] if r["pg"] == mk)
     H = (T.LG["Z0_TS"] + 0.03 * x - 0.02) + 1.0          # topo (fundo da TS − 20 mm) + 1,00 de cálice
     le = 0.7 * H
     lam = le / (b / math.sqrt(12))
     fcd = 40e3 / 1.4
-    nu = Nd / (b * b * fcd)
+    nu = Nd / (bx * by * fcd)
     r1 = 0.005 / (b * (nu + 0.5))
     e2 = le ** 2 / 10 * min(r1, 0.005 / b)
     M1min = Nd * (0.015 + 0.03 * b)
     Mtot = M1min + Nd * e2
     a = ARRJ.get(mk, {})
     As = a.get("n", 4) * math.pi * (a.get("d", 16) / 1000) ** 2 / 4
-    NRd = 0.85 * fcd * b * b + As * 400e3 / 1.0
-    pg_out[mk] = dict(Nd_kN=round(Nd, 1), Nd_tf=round(Nd / 10, 1), H_m=round(H, 2), le_m=round(le, 2), lambda_=round(lam, 1), Md_tot_kNm=round(Mtot, 2),
+    NRd = 0.85 * fcd * bx * by + As * 400e3 / 1.0
+    pg_out[mk] = dict(secao_cm=f"{round(by * 100)}×{round(bx * 100)}", x_m=x, Nd_kN=round(Nd, 1), Nd_tf=round(Nd / 10, 1), H_m=round(H, 2), le_m=round(le, 2), lambda_=round(lam, 1), Md_tot_kNm=round(Mtot, 2),
                       NRd_kN=round(NRd, 0), uso_N=round(Nd / NRd, 3), ok=lam <= 90 and Nd <= NRd,
                       norma="NBR 6118:2023 15.8.3.3.2 (λ ≤ 90) e 11.3.3.4.3 (M1d,mín); flexão do vento nas placas já está no dimensionamento DEC-040")
 # neoprene NEO-7 b × 200 × 10 (cabeça do PG): σ ≤ 7 MPa (NBR 9062:2017 7.2.1.6, elastômero simples)
 neo = {}
-for mk, (b, x) in PG.items():
+for mk, (b, x, bx, by) in PG.items():
     Nk = max(r["Rg"] + r["Rq"] for m in out.values() for r in m["reacoes"] if r["pg"] == mk)
-    A = (b - 0.05) * 0.20
-    neo[mk] = dict(dim_mm=f"{round((b - 0.05) * 1000)} × 200 × 10", sigma_MPa=round(Nk / A / 1000, 2), ok=Nk / A / 1000 <= 7.0)
+    A = (bx - 0.05) * 0.20
+    neo[mk] = dict(dim_mm=f"{round((bx - 0.05) * 1000)} × 200 × 10", sigma_MPa=round(Nk / A / 1000, 2), ok=Nk / A / 1000 <= 7.0)
 # placa PV-1 sobre o portão P19–D (P10–P12): 10 × 37 cm, C40 armada, apoiada nas 2 cantoneiras CL-V (vão entre apoios); só peso
 # próprio (regra do Nathan para placas: cada placa nos seus apoios, sem carga de outra placa); manuseio por 2 alças a 0,2 L
 fck_pv, b_pv, t_pv = 40.0, 0.10, 0.10
 x0v, x1v = X_L4[4] + 0.010, X_L4[5] - 0.010
 z0v = 7.505
-z1v = round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + 0.125) - 0.05, 3)
+z1v = round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + PG_L4["PG-04"][2] / 2) - 0.05, 3)
 h_pv = round(z1v - z0v, 3)
 L_pv = round(x1v - x0v, 3)
 Lv = L_pv - 2 * 0.075                                             # vão entre os centros das cantoneiras (150 mm de apoio)
@@ -152,7 +153,9 @@ pv = dict(dim=f"10 × {h_pv * 100:.1f} × {L_pv * 100:.1f} cm".replace(".", ",")
                                                                     trava="CT-V L 76 × 76 × 6,3 L=80 com 1 BR-M16 no PG e 1 M12 em bucha na placa (furo oblongo horizontal)"))
 pv["ok"] = pv["ok_flexao"] and pv["ok_ELS"]
 res = dict(ts01a=out, pilares=pg_out, neoprene=neo, placa_PV1=pv, ok=all(v["ok"] for v in out.values()) and all(v["ok"] for v in pg_out.values()) and all(v["ok"] for v in neo.values()) and pv["ok"],
-           fundo_portao_m={"B–P21": round(T.LG["Z0_TS"] + 0.03 * (X_L4[1] + 0.20), 3), "P19–D": round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + 0.125), 3)},
-           placa_P19_D=dict(z0=7.50, z1=round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + 0.125) - 0.05, 3)))
+           fundo_portao_m={"B–P21": round(T.LG["Z0_TS"] + 0.03 * (X_L4[1] + 0.20), 3), "P19–D": round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + PG_L4["PG-04"][2] / 2), 3)},
+           vao_livre_portoes_m={"PG-01–PG-02": round(X_L4[2] - PG_L4["PG-02"][2] / 2 - X_L4[1] - PG_L4["PG-01"][2] / 2, 3),
+                                "PG-04–PG-03": round(X_L4[5] - PG_L4["PG-03"][2] / 2 - X_L4[4] - PG_L4["PG-04"][2] / 2, 3)},
+           placa_P19_D=dict(z0=7.50, z1=round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + PG_L4["PG-04"][2] / 2) - 0.05, 3)))
 (AQ / "portao_l4.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps(res, ensure_ascii=False, indent=1))

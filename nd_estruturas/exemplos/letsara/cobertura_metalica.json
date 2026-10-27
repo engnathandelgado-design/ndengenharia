@@ -603,9 +603,9 @@
    "onde": "1º espaço de terças junto a cada ancoragem (beiral e eixo C de cada meia água)"
   },
   "modelo_integrado": {
-   "corrente_T_max": 6.09,
-   "uso_corrente": 0.349,
-   "diagonal_T_max": 13.75,
+   "corrente_T_max": 6.08,
+   "uso_corrente": 0.348,
+   "diagonal_T_max": 13.74,
    "uso_diagonal": 0.308,
    "tirante_C_max": 0.34,
    "uso_tirante": 0.011
@@ -638,18 +638,36 @@
   "n_diagonais": 20,
   "fonte": "modelo_integrado_r05.json (máx. ELU)",
   "V_painel_d": 23.1,
-  "T_diag_d": 31.78,
+  "T_diag_d": 31.77,
   "NtRd_16": 44.7,
   "uso_diag": 0.711,
   "no": {
-   "Fx_kN": 43.66,
-   "Fy_kN": 46.19
+   "Fx_kN": 43.65,
+   "Fy_kN": 46.17
   },
   "barra": "Ø16 A36 em 2 trechos unidos por esticador M16 (rosca direita/esquerda), L ≈ 13.8 m de orelha a orelha",
   "furos_tercas": "oblongos 18 × 28 (eixo maior ao longo da terça) a 35 ('/') e 75 ('\\') do fundo da terça",
   "nota": "X de nó a nó das vigas a cada 8 espaços de terças (≈ 9,6 × 10 m), nos vãos 4-5 a 8-9; terças dos nós = escoras"
  },
  "pecas": {
+  "por_vao_canto_fl": [
+   {
+    "vao": "1-2",
+    "L_vao_mm": 9650,
+    "ext_ini_mm": -110,
+    "ext_fim_mm": 450,
+    "L_mm": 9990,
+    "furo_fl_da_ponta_mm": 50
+   },
+   {
+    "vao": "8-9",
+    "L_vao_mm": 9625,
+    "ext_ini_mm": 450,
+    "ext_fim_mm": -110,
+    "L_mm": 9965,
+    "furo_fl_da_ponta_mm": 50
+   }
+  ],
   "por_vao_faixa_pf": [
    {
     "vao": "1-2",
@@ -669,8 +687,8 @@
    }
   ],
   "faixa_pf_x": [
-   9.87,
-   29.63
+   0.0,
+   39.135
   ],
   "transpasse_cada_lado_mm": 450,
   "transpasse_total_mm": 900,
@@ -774,14 +792,14 @@
   },
   "modelo_integrado": {
    "ST-1V eixo 1": {
-    "it": 0.123,
-    "Fy_max": 16.35,
+    "it": 0.122,
+    "Fy_max": 16.31,
     "Fx_max": 1.93,
     "Rz_up": 7.91,
     "Rz_down": 7.39,
     "esperas": 2,
     "parafusos": 0.066,
-    "esperas_it": 0.123,
+    "esperas_it": 0.122,
     "linha": 8,
     "x": 10.62,
     "Rz": -5.0,
@@ -789,14 +807,14 @@
     "Fx": 0.0
    },
    "ST-1P": {
-    "it": 0.593,
-    "Fy_max": 35.68,
-    "Fx_max": 15.9,
+    "it": 0.594,
+    "Fy_max": 35.71,
+    "Fx_max": 15.89,
     "Rz_up": 24.67,
     "Rz_down": 22.06,
     "esperas": 2,
-    "parafusos": 0.326,
-    "esperas_it": 0.593,
+    "parafusos": 0.327,
+    "esperas_it": 0.594,
     "linha": 8,
     "x": 10.62,
     "Rz": -12.6,
@@ -804,13 +822,13 @@
     "Fx": 0.1
    },
    "ST-1V-R eixo 9": {
-    "it": 0.545,
-    "Fy_max": 48.79,
-    "Fx_max": 6.57,
+    "it": 0.546,
+    "Fy_max": 48.83,
+    "Fx_max": 6.56,
     "Rz_up": 8.36,
     "Rz_down": 7.35,
     "esperas": 4,
-    "parafusos": 0.545,
+    "parafusos": 0.546,
     "esperas_it": 0.265,
     "linha": 8,
     "x": 10.62,
@@ -834,12 +852,12 @@
   "onde": "VB do eixo 9 (34 apoios)",
   "peca": "ST-1V (chapa dobrada 9,5 × 220 × 290) com oblongos 22 × 44 na aba horizontal",
   "esperas": "2 barras roscadas M20 A36 L = 520 + gancho (hef 400), no eixo da VB a 45 e 105 da alma, amarradas aos estribos + grampo U Ø10 em cada espera",
-  "Fy_d": 48.79,
-  "Fx_d": 6.57,
+  "Fy_d": 48.83,
+  "Fx_d": 6.56,
   "Rz_up_d": 8.36,
   "aco": {
    "Td": 5.22,
-   "Vd": 24.62,
+   "Vd": 24.63,
    "Ft_Rd": 69.8,
    "Fv_Rd": 37.2,
    "interacao": 0.443
@@ -852,12 +870,12 @@
    "grampos_kN": 99.0,
    "phiVn": 68.6,
    "modoV": "pryout",
-   "interacao": 0.852
+   "interacao": 0.853
   }
  },
  "ST1V_eixo1": {
   "esperas": "2 M16 L=330 c/ gancho + grampo U Ø10 em cada espera (rev09d)",
-  "Fy_d": 16.35,
+  "Fy_d": 16.31,
   "Rz_up_d": 7.91,
   "phiNn": 24.6,
   "phiVn": 49.2,
@@ -884,47 +902,47 @@
    "Vu": 31.8,
    "phiVn": 35.3,
    "modoV": "aco",
-   "uso": 0.901
+   "uso": 0.9
   },
   "OR-X VB": {
    "esperas": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10 (VB 15×60, eixo 9)",
    "Vu": 31.8,
    "phiVn": 35.3,
    "modoV": "aco",
-   "uso": 0.901
+   "uso": 0.9
   }
  },
  "ligacao_portoes": {
   "forcas_kN": {
-   "P9": 23.29,
-   "P10a": 12.75,
-   "P10b": 12.53,
-   "P12": 21.89
+   "P9": 23.36,
+   "P10a": 13.19,
+   "P10b": 12.92,
+   "P12": 21.96
   },
-  "Fd_max": 23.29,
+  "Fd_max": 23.36,
   "peca": "2 cantoneiras L 102×102×9,5 L = 250 por pilar (faces x), A36 galvanizadas",
   "parafusos": {
-   "Fd_TS": 5.82,
-   "Fd_pilar": 11.64,
+   "Fd_TS": 5.84,
+   "Fd_pilar": 11.68,
    "Rd_M16_88": 47.7,
-   "uso": 0.244
+   "uso": 0.245
   },
   "insertos_TS": {
    "phiVn": 16.7,
    "modo": "borda",
-   "Vu": 11.64,
-   "uso": 0.697
+   "Vu": 11.68,
+   "uso": 0.699
   },
   "inserto_pilar": {
    "phiVn": 12.3,
    "modo": "borda",
-   "Vu": 11.64,
-   "uso": 0.947
+   "Vu": 11.68,
+   "uso": 0.95
   },
   "cantoneira": {
-   "Md": 0.699,
+   "Md": 0.701,
    "MRd": 1.282,
-   "uso": 0.545
+   "uso": 0.547
   },
   "cabeca_pilares_m": {
    "P9": 7.47,

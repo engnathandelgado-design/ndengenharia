@@ -678,10 +678,12 @@ def consolo(face, z_assento, tipo, larg, proj, h, hp, pino=("PN-1", 20, 700, 300
                 pino_emb=pino[3], pino_x=pino[4], neo=list(neo), tir=tir[0], n_tir=tir[1], d_tir=tir[2])
 
 
+import geometria as _G
 KP_CEN = [("P6E", 36.175, 3.79, 250, 400, "PE-01"), ("P7E", 39.50, 3.79, 600, 400, "PE-02"), ("P6", 36.175, Y_LIN[1], 250, 400, "PE-03"),
           ("P8A", X_EIXO["C"], Y_LIN[1], 400, 600, "PC-01"), ("P11", X_EIXO["C"], Y_LIN[3], 400, 400, "PC-02"), ("P13", X_EIXO["C"], Y_PC_C[0], 400, 400, "PC-03"), ("P13B", X_EIXO["C"], Y_PC_C[1], 400, 400, "PC-03"),
           ("P8", X_EIXO["B"], Y_LIN[1], 400, 600, "PM-01"), ("P8B", X_EIXO["D"], Y_LIN[1], 400, 600, "PM-02"),
-          ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-03"), ("P10", 15.195, Y_LIN[3], 250, 250, "PG-02"), ("P10", 24.305, Y_LIN[3], 250, 250, "PG-04")]
+          ("P9", 9.87, Y_LIN[3], 400, 400, "PG-01"), ("P12", 29.63, Y_LIN[3], 400, 400, "PG-03")] + \
+         [(_G.PG_L4[k][0], _G.PG_L4[k][1], Y_LIN[3], round(_G.PG_L4[k][2] * 1000), round(_G.PG_L4[k][3] * 1000), k) for k in ("PG-02", "PG-04")]   # rev12: 25×40
 F = lambda v: f"{v/1000:.3f}".replace(".", ",")
 TS_E, TS_A = ASS_TS(20.175), ASS_TS(19.325)
 I120 = lambda face: consolo(face, Z_I120, "CP-I120", 500, 400, H_C["CP-I120"], HP_C["CP-I120"], ("PN-2", 25, 900, 350, 200), (300, 200, 31), (CONS_J["CP-I120"]["tirante"].split(" (")[0], CONS_J["CP-I120"]["n_ramos"], CONS_J["CP-I120"]["d_tir"]))   # rev04: NEO-2 200 × 300 fretado; a2 = 10 cm
@@ -841,39 +843,47 @@ _RD_PG = {k: f"{v['Nd_kN']:.0f} kN ({v['Nd_tf']:.1f} tf)".replace(".", ",") for 
 
 
 def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
-    secao = f"{b//10}×{b//10}"
+    # rev12 (27/10): geometria de geometria.PG_L4 — PG-02/PG-04 25×40 (40 em x, ao longo da parede), eixo deslocado 7,5 cm
+    _, x, bxm, bym = _G.PG_L4[marca]
+    bx_, by_ = round(bxm * 1000), round(bym * 1000)
+    b = by_                                                            # lado ⊥ à parede (calço do CS-1, flambagem)
+    ztop = round((ZF(x) - 0.02) * 100) * 10
+    secao = f"{by_//10}×{bx_//10}"
     zce = _fiadas_c(x)
-    P = base(marca, 1, b, b, ztop, [], bars_ret(b, b, 2, 2), desenho,
+    P = base(marca, 1, by_, bx_, ztop, [], bars_ret(by_, bx_, 2, 2), desenho,
              f"PILAR DOS PORTÕES {marca} ({nome}, {secao}) — LINHA 4, x = {x:.3f} m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO".replace(".", ","),
              f"POSIÇÃO: linha 4, x = {x:.3f} m ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01A: neoprene + graute — APOIA a viga, DEC-059)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
-             [["PG-01", "P9", 1, "sem consolo; topo +7,47", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-02", "P10 (x 15,195)", 1, "sem consolo; topo +7,63", "CE-1 (B); 2 IL-1; 2 AL-2"],
-              ["PG-04", "P10 (x 24,305)", 1, "sem consolo; topo +7,90", "CE-1 (B); 2 IL-1; 2 AL-2"], ["PG-03", "P12", 1, "sem consolo; topo +8,06", "CE-1 (B); 2 IL-1; 2 AL-2"]],
-             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (" + ("CS-1D na obra: CS-1 com calço de 75 mm, a face fica 75 atrás do plano dos consoles — PP06, DEC-044" if b == 250 else "CS-1") + ")", len(zce), "face B, centrada"], IL1,
-              ["NEO-7", f"Neoprene {b - 50}×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A, DEC-059)", 1, "cabeça"],
+             [[mk_, nm_ + (f" (x {f(_G.PG_L4[mk_][1], 3)})" if mk_ in ("PG-02", "PG-04") else ""), 1, f"{round(_G.PG_L4[mk_][3] * 100)}×{round(_G.PG_L4[mk_][2] * 100)}; sem consolo; topo +{f(ZF(_G.PG_L4[mk_][1]) - 0.02, 2)}", "CE-1 (B); 2 IL-1; 2 AL-2"]
+              for mk_, nm_ in (("PG-01", "P9"), ("PG-02", "P10"), ("PG-04", "P10"), ("PG-03", "P12"))],
+             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (" + ("CS-1D na obra: CS-1 com calço de 75 mm, a face B (25 ⊥ à parede) fica 75 atrás do plano dos consoles — PP06" if b == 250 else "CS-1") + ")", len(zce), "face B, centrada"], IL1,
+              ["NEO-7", f"Neoprene {bx_ - 50}×200×10 + graute fluido ~10 mm na obra (apoio da TS-01A)", 1, "cabeça"],
               ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]] + ([IL2] if marca in ("PG-03", "PG-04") else []),
-             [("Concreto C40; 4 Ø20 retos (cantos); " if b == 400 else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
+             [("Concreto C40; 4 Ø20 retos (cantos); " if bx_ == by_ else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
               NOTA_LIG.format(rd=_RD_PG.get(marca, "-")) + (" Na face B, as barras IL-2 das cantoneiras CL-V/CT-V da placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01)." if marca in ("PG-03", "PG-04") else ""),
               "Pilar de fechamento da parede dos portões (vista C): recebe as placas, a folha do portão e o vento; apoiado em y na TS-01A pela cabeça (modelo integrado r05) e, depois do graute, apoio vertical da TS-01A (calc_portao_l4.py: compressão e esbeltez verificadas)."],
-             ip01=[dict(face="B", z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.4)
+             ip01=[dict(face="B", z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.6)
+    if marca in ("PG-02", "PG-04"):        # rev12: pendência visível (locação para manter os 5,00 m livres do portão)
+        P["notas"] = list(P["notas"]) + [f"PENDÊNCIA (confirmar com o arquitetônico/cliente): seção 25 × 40 com o lado de 40 ao longo da parede; eixo em x = {f(x, 3)} m, "
+                                         f"deslocado 7,5 cm para longe do portão para manter os 5,00 m livres face a face (antes x = {'15,195' if marca == 'PG-02' else '24,305'})."]
     if est:
         P |= dict(d_est=est)
     return P
 
 
 def dados_pg1():
-    return _pg("PG-01", "P9", 9.87, 400, 7470, "ND-LET-PG01", 20.0)
+    return _pg("PG-01", "P9", None, None, None, "ND-LET-PG01", 20.0)
 
 
 def dados_pg2():
-    return _pg("PG-02", "P10a", 15.195, 250, 7630, "ND-LET-PG02", 16.0, 6.3)
+    return _pg("PG-02", "P10a", None, None, None, "ND-LET-PG02", 16.0, 6.3)
 
 
 def dados_pg3():
-    return _pg("PG-03", "P12", 29.63, 400, 8060, "ND-LET-PG03", 20.0)
+    return _pg("PG-03", "P12", None, None, None, "ND-LET-PG03", 20.0)
 
 
 def dados_pg4():
-    return _pg("PG-04", "P10b", 24.305, 250, 7900, "ND-LET-PG04", 16.0, 6.3)
+    return _pg("PG-04", "P10b", None, None, None, "ND-LET-PG04", 16.0, 6.3)
 
 
 # rev09 (DEC-045): pilares da escada (R01). Faces como nos PM/PC: A = −x (lado do eixo A), B = +y (lado do pavilhão), C = +x, D = −y.

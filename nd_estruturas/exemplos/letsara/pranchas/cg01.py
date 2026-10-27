@@ -105,9 +105,18 @@ pr.notas(470, 318, [
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
     "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
     "De cálculo (ELU, NBR 8681 / 6118): 1,3 G + 1,4 V + 0,7·1,4 Q (sobrecarga secundária) e 1,0 G + 1,4 V (sucção, G favorável), com desaprumo H/400 (NBR 9062:2017 5.2.3); e 1,3 G + 1,4 Q. Nd mín negativo = tração de cálculo na fundação.",
-    "Pilares PG-01, PG-02, PG-03 e PG-04 não recebem cobertura (V só horizontal pelas placas/portões).",
+    "Pilares PG-01 a PG-04 (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. PG-02 e PG-04: 25 × 40, eixo 7,5 cm para longe do portão (PENDÊNCIA: confirmar a locação com o arquitetônico/cliente).",
+    "Pilares de canto (linhas 1 e 9, eixos A e E): eixo do pilar 10 cm para fora da linha (face externa alinhada à dos pilares de fachada). Cálice e bloco centrados no EIXO DO PILAR (ND-LET-LOC01), deslocados 10 cm em relação à linha; os valores da tabela são no eixo do pilar. Se o bloco ficar centrado na linha, somar o momento da excentricidade do quadro ao lado.",
     "Dimensionar blocos, cálices e estacas em projeto próprio com estes valores; o cálice segue as cargas e o embutimento das pranchas dos pilares.",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 300)
+# rev12 (opção D): quadro da excentricidade dos cantos em relação à linha (tf, tf·m)
+from geometria import DY_CANTO
+lin_c = []
+for nm in sorted([n for n in P if "C-L" in n]):
+    d = P[nm]; nk = d["G"]["N"] + d["Q"]["N"]
+    lin_c.append([nm, marca(nm), f"{DY_CANTO * 100:g} cm para fora", t(nk), t(nk * DY_CANTO), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * DY_CANTO)])
+pr.tabela(35, y - 8, "PILARES DE CANTO — CÁLICE/BLOCO NO EIXO DO PILAR, 10 cm FORA DA LINHA (momento adicional se o bloco ficar na linha)",
+          ["PILAR", "MARCA", "e (y)", "Nk (tf)", "Nk·e (tf·m)", "Nd máx (tf)", "Nd·e (tf·m)"], lin_c, [22, 18, 30, 18, 22, 22, 22], h_lin=4.6)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CG01")
 for a in avisos:
     if a[0] == "ERRO" or "sobrep" in a[1] or "sai" in a[1]:

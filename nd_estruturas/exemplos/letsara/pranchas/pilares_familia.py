@@ -21,7 +21,7 @@ H_C = G.H_C
 Z_ASS_VT = {"P1": 6540, "P2": 7790}
 # rev12: consolos CP-VB alinhados à face externa (VB nos vãos entre PF) — calc_consolo_vb_face.py
 _VBF = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos_face.json", encoding="utf-8"))
-VB_FACE = {mk: dict(faces=v["faces"]) for mk, v in _VBF["pilares"].items()}
+VB_FACE = {mk: dict(faces=v["faces"], e=v.get("e_m", _VBF["e_m"]), exc_face=v.get("exc_face", "C")) for mk, v in _VBF["pilares"].items()}   # rev12: cantos (opção D)
 VB_FACE["e_m"] = _VBF["e_m"]
 
 
@@ -106,7 +106,8 @@ def kp_familia():
         for lado, x in (("P1", 0.0), ("P2", X_EIXO["E"])):
             nome = f"{lado}-L{i}"
             from familia_pl import marca_de
-            kp.append((nome, x, y, 600, 400, marca_de(nome)))
+            from geometria import y_canto as _yc
+            kp.append((nome, x, _yc(y) if i in (1, len(Y_LIN)) else y, 600, 400, marca_de(nome)))   # rev12 (opção D): canto 10 cm para fora
     for j, x in enumerate(X_FACH[1:-1]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", Y_LIN[-1])):
             mk = {"P3-L1": "PF-01", "P4-L1": "PF-02", "P5-L1": "PF-03", "P3-L9": "PF-05", "P14-L9": "PF-04", "P5-L9": "PF-06"}[nome]
@@ -154,7 +155,7 @@ def dados(mk):
     cons = cons_marca(cons_t, "P2" if lado_e else "P1")
     for c in cons:                                                         # rev12 (fresta, opção B): CP-VB rente à face externa C
         if c["tipo"] == "CP-VB" and c["face"] in VB_FACE.get(mk, {}).get("faces", ()):
-            c["exc"], c["exc_face"] = round(VB_FACE["e_m"] * 1000), "C"
+            c["exc"], c["exc_face"] = round(VB_FACE[mk]["e"] * 1000), VB_FACE[mk]["exc_face"]
     nome_p = next(n for n, *_, m_ in KP if m_ == mk)
     ips = ip_marca(ins_t, nome_p)
     n_pn1 = sum(1 for c in cons if c["pino_nome"] == "PN-1")
@@ -204,10 +205,11 @@ def dados(mk):
     tipos = sorted(set(c["tipo"] for c in cons))
     lin = "fachada " + ("1" if "L1" in pos else "9") if mk.startswith("PF") else ("eixo E" if lado_e else "eixo A")
     cab = f"{(400 - d.get('B', 0) - d.get('D', 0))/10:g} × {(600 - d.get('A', 0))/10:g}"
-    pos_txt = (f"POSIÇÃO: {pos} ({lin}); seção cheia 40 × 60 até +10,00 (sem platibanda recuada)" if canto else
+    pos_txt = (f"POSIÇÃO: {pos} ({lin}), eixo 10 cm para fora da linha {'1' if 'L1' in pos else '9'} (face externa alinhada à dos PF); seção cheia 40 × 60 até +10,00" if canto else
                f"POSIÇÃO: {pos} ({lin}); cabeça {cab} acima de +{zr/1000:.2f}".replace(".", ","))
     cab_txt = ("SEM PLATIBANDA RECUADA (DEC-042, decisão do Nathan): pilar de canto com a seção cheia 40 × 60 até +10,00 — as chapas CE-1/CC-1 das duas faces externas ficam na face inteira; "
-               "a VB apoia no CP-VB da face A (abaixo do topo) e as barras do corpo vão inteiras até o topo." +
+               "a VB apoia no CP-VB da face A (abaixo do topo) e as barras do corpo vão inteiras até o topo. "
+               f"LOCAÇÃO: eixo do pilar 10 cm para fora da linha {'1' if 'L1' in pos else '9'} (face externa no mesmo plano da face dos PF); o CP-VB da face A fica {VB_FACE.get(mk, {}).get('e', 0.125) * 100:g} cm deslocado para a face da fachada, rente à face externa (VB a 2,5 cm da placa)." +
                (" A última terça do lado E encosta na face lateral interna e apoia no ST-1FL, parafusado em 2 barras roscadas M20 embutidas na face (ES-1FL, padrão Mitsubishi)." if mk in ("PL-07", "PL-08") else "")
                if canto else
                f"CABEÇA RECUADA: acima de +{zr/1000:.2f}".replace(".", ",") + f" só a parte externa do pilar sobe até +10,00 ({cab} cm), para a cobertura ficar escondida na platibanda.")
@@ -236,6 +238,9 @@ def dados(mk):
     if canto:
         P.update(rec=None, kp=KP, al=AL2, al_face="C", secao_txt="60 × 40 cm (A–C × B–D), seção cheia até o topo",
                  faces_txt="FACES: A = interna, C = externa (placas), B e D anti-horário")
+        if mk in ("PL-03", "PL-07"):                                        # rev12 (opção D): VM da linha 1 no pilar de canto deslocado
+            P["notas"] = list(P["notas"]) + ["PENDÊNCIA (decisão em aberto): apoio da VM de borda da linha 1 nos 2 CP-MEZ da face A — com o pilar 10 cm para fora "
+                                             "a VM no eixo da linha fica com 5 cm do dente fora do consolo; não produzir este pilar antes da resposta (ND-LET-NG01)."]
         if mk in ("PL-07", "PL-08"):
             f_int = "D" if mk == "PL-07" else "B"
             P["esperas_face"] = [dict(face=f_int, da=[70, 150], z=ZB_ULT + 135, d=20, emb=320, sai=80, rot="ES-1FL 2 M20")]

@@ -44,7 +44,7 @@ for k in CC.K_TODOS:
 y_top = Q[3] - 30
 for j, (bm, k) in enumerate(bases):
     L = L_TERCA[k]
-    vaos = ", ".join(f"{CC.K_REAL[i] + 1}-{CC.K_REAL[i] + 2}" + (" B–D" if i >= 8 else "") for i in CC.K_TODOS if BASE_K[i] == bm)
+    vaos = ", ".join(f"{CC.K_REAL[i] + 1}-{CC.K_REAL[i] + 2}" + (" canto E" if i >= 10 else "") for i in CC.K_TODOS if BASE_K[i] == bm)
     org = (Q[0] + 22, y_top - j * 98 - 46)
     v = pr.vista(f"PEÇA {bm}", org, E, titulo=f"PEÇA {bm} — L = {fm(L)} (VÃOS {vaos})",
                  subtitulo=f"alma planificada vista do lado da aba inferior; ponta inicial à esquerda (eixo {CC.K_REAL[k] + 1})")

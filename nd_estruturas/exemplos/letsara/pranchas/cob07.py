@@ -16,8 +16,9 @@ fm = lambda v: f"{v:,.0f}".replace(",", ".")
 # ------------------------------------------------------------------ 1. ELEVAÇÃO DE UMA LINHA DE TERÇAS (1:125)
 E1 = 125
 Z_TOP = 2600                                       # peças dos vãos ímpares (1-2, 3-4...) desenhadas acima, pares abaixo
-y_ini = YLmm[0] - EXT[0][0]
-y_fim = YLmm[8] + EXT[7][1]
+import cob_comum as CC
+# rev12 (opção D): linha típica = qualquer terça menos a última do lado E (VB rente à face nas duas fachadas)
+y_ini, y_fim = CC.y_peca(0, 0)[0], CC.y_peca(7, 0)[1]
 v = pr.vista("ELEVAÇÃO", (Q[0] + 70 - y_ini / E1, Q[3] - 70), E1, titulo="ELEVAÇÃO DE UMA LINHA DE TERÇAS — AS 8 PEÇAS EM CADEIA",
              subtitulo=f"{PERFIL_TXT}; peças de vãos alternados desenhadas em 2 alturas para mostrar o transpasse; mesma cadeia nas 32 linhas")
 for i, yl in enumerate(YLmm):
@@ -26,22 +27,22 @@ for i, yl in enumerate(YLmm):
     v.circulo((yl, -2300 - 4.2 * E1), 4.2 * E1, "INDICACAO")
     v.texto((yl, -2300 - 4.2 * E1), str(i + 1), "nota", "MIDDLE_CENTER")
 for k in range(8):
-    a, b = YLmm[k] - EXT[k][0], YLmm[k + 1] + EXT[k][1]
+    a, b = CC.y_peca(k, 0)
     z0 = Z_TOP if k % 2 == 0 else 0
     v.ret(a, z0, b - a, H_TERCA, "METALICA")
     if k % 2 == 0:
         v.cota_h([a, b], z0 + H_TERCA, 8, total=False)
     else:
         v.cota_h([a, b], z0, -13, total=False)
-    v.texto((a - 200, z0 + H_TERCA / 2), f"peça {BASE_K[k]}", "nota", "MIDDLE_RIGHT")
+    v.texto((a - 200, z0 + H_TERCA / 2), f"peça {BASE_K[CC.kv(k, 0)]}", "nota", "MIDDLE_RIGHT")
 # transpasses entre as 2 alturas, a cada eixo interno
 for i in range(1, 8):
     v.cota_h([YLmm[i] - A_TR, YLmm[i] + A_TR], H_TERCA, 9, total=False)
 # eixos e total
 v.cota_h(YLmm, -1500, -6, total=False)
 v.cota_h([y_ini, y_fim], Z_TOP + H_TERCA, 20, total=False)
-v.chamada((y_ini, Z_TOP + 150), (-6, 12), f"ponta a {EXT_F} do eixo 1")
-v.chamada((y_fim, 150), (6, 12), f"ponta a {EXT[7][1]} do eixo 9")
+v.chamada((y_ini, Z_TOP + 150), (-6, 12), f"ponta a {YLmm[0] - y_ini} do eixo 1 (VB rente à face)")
+v.chamada((y_fim, 150), (6, 12), f"ponta a {y_fim - YLmm[8]} do eixo 9 (VB rente à face)")
 
 # ------------------------------------------------------------------ 2. POSIÇÃO DAS TERÇAS AO LONGO DA ÁGUA (1:70)
 E2 = 70
@@ -69,18 +70,17 @@ w.chamada((0, -250), (14, -36), f"eixo A: {XT[0]} até a 1ª terça (calha)")
 # ------------------------------------------------------------------ 3. tabelas
 import cob_comum as CC
 lin = []
-n_pf = len(CC.IDX_PF)
 for k in CC.K_TODOS:
     kr = CC.K_REAL[k]
-    n_k = n_pf if k >= 8 else (2 * NT - n_pf if kr in (0, 7) and n_pf else 2 * NT)
-    lin.append([f"{kr + 1}-{kr + 2}" + (" (B–D)" if k >= 8 else (" (A–B, D–E)" if kr in (0, 7) and n_pf else "")), fm(VAOS[k]), f"{EXT[k][0]}", f"{EXT[k][1]}", fm(L_TERCA[k]), BASE_K[k], f"{n_k}",
+    n_k = sum(1 for i in range(2 * NT) if CC.kv(kr, i) == k)
+    lin.append([f"{kr + 1}-{kr + 2}" + (" (canto E, ST-1FL)" if k >= 10 else ""), fm(VAOS[k]), f"{EXT[k][0] + (CC.DESL_VB if k == 8 else 0)}", f"{EXT[k][1] + (CC.DESL_VB if k == 9 else 0)}", fm(L_TERCA[k]), BASE_K[k], f"{n_k}",
                 f(n_k * L_TERCA[k] / 1000 * PESO_UE, 0)])
 tot = sum(float(l[-1].replace(".", "").replace(",", ".")) for l in lin)
-lin.append(["TOTAL", fm(YLmm[-1] - YLmm[0]), "", "", fm(sum(L_TERCA) - 7 * 2 * A_TR) + " *", "", f"{16 * NT}", f(tot, 0)])
+lin.append(["TOTAL", fm(YLmm[-1] - YLmm[0]), "", "", fm(y_fim - y_ini) + " *", "", f"{16 * NT}", f(tot, 0)])
 x0t = Q[0] + 8
 y = pr.tabela(x0t, Q[3] - 360, "COMPRIMENTO DAS TERÇAS POR VÃO", ["VÃO", "ENTRE EIXOS", "ANTES DO EIXO INICIAL", "DEPOIS DO EIXO FINAL", "L DA PEÇA",
                                                                     "PEÇA", "QT", "kg"], lin, [18, 26, 38, 38, 26, 16, 14, 22], destaque_ultima=True)
-pr.notas(x0t, y - 2, [f"* comprimento da linha montada de ponta a ponta = soma das peças − 7 transpasses de {2 * A_TR} = {fm(y_fim - y_ini)} (terças dos vãos de canto; entre os eixos B e D a linha tem {fm(y_fim - y_ini + 2 * CC.DESL_VB)}: a VB das fachadas fica {CC.DESL_VB} além do eixo da linha, rente à face dos pilares, e as peças T6/T7 são {CC.DESL_VB} mais longas)."], 200, titulo="")
+pr.notas(x0t, y - 2, [f"* comprimento da linha montada de ponta a ponta = soma das peças − 7 transpasses de {2 * A_TR} = {fm(y_fim - y_ini)}: a VB das fachadas 1 e 9 fica {CC.DESL_VB} além do eixo da linha (rente à face externa dos pilares) em todos os vãos. A última terça do lado E encosta na face lateral do pilar de canto e apoia no ST-1FL: peça própria ({BASE_K[10]} / {BASE_K[11]}), ponta {-CC.EXT_FL} depois do eixo da linha, 1 coluna de furos a {CC.FURO_FL} da ponta."], 200, titulo="")
 FOL = [["transpasse em cada apoio interno", f"{2 * A_TR} ({A_TR} para cada lado do eixo)", "2 Z encaixados (METLAP); sem folga ponta a ponta"],
        ["ponta da terça na fachada", f"{EXT_F} além do eixo da VB = {EXT_F - 75} além da face", "folga até a placa de fechamento ≥ 75"],
        ["furos da alma (M12)", "Ø14 (+2 mm)", "fábrica; proibido furar na obra"],

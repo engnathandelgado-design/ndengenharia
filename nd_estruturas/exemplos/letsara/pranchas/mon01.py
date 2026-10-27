@@ -11,7 +11,7 @@ LG = json.load(open(AQ + "ligacoes.json"))
 fp = lambda t_: f"{t_:.1f}".replace(".", ",")
 f = lambda v, d=3: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_EIXO as X_FACH, Y_P13, Y_PC_C, y_vb
+from geometria import Y_LIN, X_EIXO as X_FACH, Y_P13, Y_PC_C, y_vb, y_canto, PG_L4
 INCL, Z0 = 0.03, LG["Z0_TS"]
 zf = lambda x: Z0 + INCL * x
 C3 = math.cos(math.atan(INCL))
@@ -59,8 +59,9 @@ def pilar(x, y, bx, by, marca, lado=1, dy=0):
 PL = {1: ("PL-03", "PL-07"), 2: ("PL-02", "PL-06"), 3: ("PL-09", "PL-11"), 4: ("PL-10", "PL-12"), 9: ("PL-04", "PL-08")}
 for i, yl in enumerate(Y_LIN, 1):
     a, b = PL.get(i, ("PL-01", "PL-05"))
-    pilar(M(yl), 0, 400, 600, a, 1, -900)
-    pilar(M(yl), Ly, 400, 600, b, 1, 900)
+    yk_ = y_canto(yl) if i in (1, len(Y_LIN)) else yl                    # rev12 (opção D): canto 10 cm para fora
+    pilar(M(yk_), 0, 400, 600, a, 1, -900)
+    pilar(M(yk_), Ly, 400, 600, b, 1, 900)
 for j, (nome, x) in enumerate((("B", X_FACH["B"]), ("C", X_FACH["C"]), ("D", X_FACH["D"]))):
     pilar(0, M(x), 600, 400, ["PF-01", "PF-02", "PF-03"][j], 1, 700)
     pilar(Lx, M(x), 600, 400, ["PF-05", "PF-04 (P14)", "PF-06"][j], -1, 700)
@@ -68,8 +69,8 @@ for marca, y, bx, by in (("PC-01 (P8A)", Y_LIN[1], 600, 400), ("PC-02 (P11)", Y_
     pilar(M(y), M(X_FACH["C"]), bx, by, marca, -1 if y == Y_PC_C[0] else 1, 700)
 for marca, x in (("PM-01", X_FACH["B"]), ("PM-02", X_FACH["D"])):
     pilar(M(Y_LIN[1]), M(x), 600, 400, marca, 1, 700)
-for marca, x, b_ in (("PG-01 (P9)", 9.87, 400), ("PG-02 (P10)", 15.195, 250), ("PG-04 (P10)", 24.305, 250), ("PG-03 (P12)", 29.63, 400)):
-    pilar(M(Y_LIN[3]), M(x), b_, b_, marca, 1, -700)
+for marca, (r01_, x, bxm_, bym_) in PG_L4.items():                      # rev12: PG-02/PG-04 25×40 (geometria.PG_L4)
+    pilar(M(Y_LIN[3]), M(x), M(bym_), M(bxm_), f"{marca} ({r01_})", 1, -700)
 # I120 central (eixo C)
 for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_PC_C[0]), ("V405", Y_PC_C[0], Y_PC_C[1]), ("V404", Y_PC_C[1], Y_LIN[8])):   # DEC-058
     Lm_ = PQ[marca][4]                                                   # comprimento da peça (folha ND-LET-I120)
@@ -167,7 +168,7 @@ pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40
          grupo(["PC-01", "PC-02", "PC-03"], "P8A 40×60, P11 40×40, P13 e P13B 40×40 (eixo C)", f"cálice −1,00; topo +{f(Z_TC)}"),
          grupo(["PM-01", "PM-02"], "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 200", "ver ND-LET-MON02"),
          grupo(["PG-01", "PG-03"], "Pilares dos portões 40×40 (P9 / P12, linha 4)", "cálice −1,00; topo +7,47 / +8,06"),
-         grupo(["PG-02", "PG-04"], "Pilares dos portões 25×25 (P10)", "cálice −1,00; topo +7,63 / +7,90"),
+         grupo(["PG-02", "PG-04"], "Pilares dos portões 25×40 (P10)", "cálice −1,00; topo +7,63 / +7,90"),
          grupo(["TS-01"], f"Viga I90 de cobertura, L {LG['L_TS']*100:.0f}, sem dentes", f"recuo +{f(Z_AS['P1'])} / topo I120 +{f(Z_TC)} / recuo +{f(Z_AS['P2'])}")]
 for mk in ("V407", "V406", "V405", "V404"):
     pecas.append(grupo([mk], f"Viga I120 central, L {f(PQ[mk][4], 2)} m", f"consolos CP-I120 (+{f(LG['Z_ASS_I120'])})"))

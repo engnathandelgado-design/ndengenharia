@@ -86,6 +86,15 @@ for kv, pp in zip((8, 9), PC.get("por_vao_faixa_pf", [])):
     tk = (pp["L_mm"], EXT[kv])
     j_ = next((BASE_K[q] for q in (8,) if q in BASE_K and (L_TERCA[q], EXT[q][::-1]) == tk), None)
     BASE_K[kv] = j_ or f"T{len(set(BASE_K.values())) + 1}"
+# rev12 (opção D): última terça do lado E nos vãos 1-2 / 8-9 encosta no canto deslocado (ST-1FL) → vãos virtuais 10 / 11
+IDX_FL = {i for i, x in enumerate(XT) if x > round(PC.get("faixa_pf_x", (0, 1e9))[1] * 1000)} if PC.get("por_vao_canto_fl") else set()
+EXT_FL = None
+for kv_, pp in zip((10, 11), PC.get("por_vao_canto_fl", [])):
+    K_REAL[kv_] = 0 if kv_ == 10 else 7
+    VAOS.append(pp["L_vao_mm"]); L_TERCA.append(pp["L_mm"]); EXT.append((pp["ext_ini_mm"], pp["ext_fim_mm"]))
+    EXT_FL = pp["ext_ini_mm"] if kv_ == 10 else EXT_FL
+    BASE_K[kv_] = f"T{len(set(BASE_K.values())) + 1}"
+FURO_FL = PC.get("por_vao_canto_fl", [{}])[0].get("furo_fl_da_ponta_mm", 50) if PC.get("por_vao_canto_fl") else 50
 K_TODOS = sorted(K_REAL)
 
 
@@ -93,7 +102,22 @@ def kv(k, i):
     """vão virtual da terça i no vão k (0..7): 8/9 nas terças da faixa PF dos vãos de fachada."""
     if i in IDX_PF and k in (0, 7) and (8 if k == 0 else 9) in K_REAL:
         return 8 if k == 0 else 9
+    if i in IDX_FL and k in (0, 7) and (10 if k == 0 else 11) in K_REAL:
+        return 10 if k == 0 else 11
     return k
+
+
+# rev12 (opção D): só as peças usadas recebem marca, numeradas em ordem (T1, T2…) — com a VB rente à face em toda a fachada
+# as peças "de fachada" no eixo da linha deixam de existir
+_usadas = []
+for _k in range(8):
+    for _i in range(2 * NT):
+        _q = kv(_k, _i)
+        if BASE_K[_q] not in _usadas:
+            _usadas.append(BASE_K[_q])
+_REN = {b_: f"T{j + 1}" for j, b_ in enumerate(_usadas)}
+K_TODOS = [q for q in K_TODOS if BASE_K[q] in _REN]
+BASE_K = {q: _REN[b_] for q, b_ in BASE_K.items() if b_ in _REN}
 
 
 def y_peca(k, i):
@@ -106,6 +130,8 @@ def y_peca(k, i):
 
 def furos_ponta(ext):
     """Furos (distância da ponta, mm) de uma ponta de terça: fachada (2 colunas do ST-1V) ou transpasse (ST-1P + emenda)."""
+    if EXT_FL is not None and ext == EXT_FL:                    # rev12: ponta no ST-1FL do canto (1 coluna)
+        return [FURO_FL]
     if ext == EXT_F:
         return [EXT_F - Y_COL, EXT_F + Y_COL]
     return [B_TR, A_TR - Y_COL, A_TR + Y_COL, 2 * A_TR - B_TR]
@@ -149,7 +175,7 @@ def lista_marcas():
             m = marca(k, i)
             q.setdefault(m, dict(L=L_TERCA[kv(k, i)], qt=0, vaos=set(), k=kv(k, i)))
             q[m]["qt"] += 1
-            q[m]["vaos"].add(f"{k+1}-{k+2}" + (" (B–D)" if kv(k, i) >= 8 else ""))
+            q[m]["vaos"].add(f"{k+1}-{k+2}" + (" (canto E)" if kv(k, i) >= 10 else ""))
     return dict(sorted(q.items()))
 
 

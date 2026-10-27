@@ -2,8 +2,10 @@
 VB 15×60 e consolo CP-VB alinhados à face externa do pilar de fachada (40×60, 60 ⊥ fachada), 2,5 cm até a placa.
 
 Aplicado nos vãos entre pilares de fachada PF (B–C e C–D das linhas 1 e 9: VB-02, VB-03, VB-06, VB-07): o eixo da VB sai
-e = 30,0 − 7,5 = 22,5 cm do eixo do pilar. Nos vãos de canto (A–B e D–E) a face do pilar de canto (40 em y) fica 10 cm
-atrás da dos PF: a VB reta não alinha com as duas faces — quadro decisao_fresta_canto (pendente).
+e = 30,0 − 7,5 = 22,5 cm do eixo do pilar. rev12 (27/10, decisão do Nathan, opção D do quadro decisao_fresta_canto): os 4
+pilares de canto saem 10 cm para fora (face externa = face dos PF) e os vãos de canto (A–B e D–E: VB-01, VB-04, VB-05, VB-08)
+também ficam com a VB rente à face — nos PF o CP-VB fica rente à face nas duas faces laterais; no canto, o CP-VB da face A
+fica e = 22,5 − 10,0 = 12,5 cm para o lado da fachada (rente à face externa).
 
 Verificações (NBR 9062:2017 7.3; NBR 6118:2023 17.2.5 e 17.5):
  1. consolo C1 rente à face C (marca nova): mesma geometria, armadura e carga do C1 (consolos.json CP-VB); tirante em alça
@@ -27,8 +29,12 @@ B_PIL_Y, B_VB = 0.60, 0.15
 E_VB = round(B_PIL_Y / 2 - B_VB / 2, 3)                 # 0,225 m
 VD, FD, HD = CONS["Vd_kN"], CONS["Fd_kN"], CONS["Hd_kN"]
 # faces dos PF com VB alinhada (linha 1: B do lado de x menor, D de x maior) — vãos B–C e C–D (entre PF)
-FACES = {"PF-01": ("D",), "PF-02": ("B", "D"), "PF-03": ("B",), "PF-05": ("B",), "PF-04": ("B", "D"), "PF-06": ("D",)}   # linha 9: pilar girado 180° (B do lado de x maior)
+from geometria import DY_CANTO
+E_CANTO = round(E_VB - DY_CANTO, 3)                      # 0,125 m
+FACES = {mk: ("B", "D") for mk in ("PF-01", "PF-02", "PF-03", "PF-05", "PF-04", "PF-06")}   # rev12 (opção D): todos os vãos
 X_PF = {"PF-01": 9.87, "PF-02": 19.75, "PF-03": 29.63, "PF-05": 9.87, "PF-04": 19.75, "PF-06": 29.63}
+# cantos: CP-VB na face A; excentricidade para a face da fachada (P1: A = +x → B = +y, D = −y; P2: A = −x → B = −y, D = +y)
+CANTOS = {"PL-03": ("D", 0.0), "PL-04": ("B", 0.0), "PL-07": ("B", 39.50), "PL-08": ("D", 39.50)}
 
 
 def torcao_resistente(bx, by, fck=40.0):
@@ -41,26 +47,21 @@ def torcao_resistente(bx, by, fck=40.0):
 
 
 out = dict(e_m=E_VB, Vd_kN=VD, Fd_kN=FD, Hd_kN=HD, norma="NBR 9062:2017 7.3; NBR 6118:2023 17.2.5.2 e 17.5.1.5", pilares={})
-for mk, faces in FACES.items():
+ITENS = [(mk, faces, E_VB, "C") for mk, faces in FACES.items()] + [(mk, ("A",), E_CANTO, fe) for mk, (fe, _) in CANTOS.items()]
+for mk, faces, e_, exc_face in ITENS:
     pils = DP.GRUPOS[mk]
     b0 = DP.EST[next(iter(DP.EST))]["2a"][pils[0]]
     bx, by = b0["bx"], b0["by"]
-    a = DP.ATUAL[mk[:2]]
-    brs, _ = DP.barras(bx, by, a[0] if bx <= by else a[1], a[1] if bx <= by else a[0], a[2])
-    dM = len(faces) * VD * E_VB                          # kN·m, Mx (plano ⊥ à fachada)
-    u0, _ = DP.secao_ok(dict(brs=brs), pils)
-    orig = {}
-    for it in DP.EST.values():
-        for p in pils:
-            orig[(id(it), p)] = it["2a"][p]["Mx"]
-            it["2a"][p]["Mx"] = abs(it["2a"][p]["Mx"]) + dM
+    # rev12 (27/10): verificação com a armadura ADOTADA (dimensionamento_pilares_r05.json → arranjo das folhas), não a antiga
+    pr_ = json.loads((AQ / "dimensionamento_pilares_r05.json").read_text(encoding="utf-8"))[mk]["proposto"]
+    brs, _ = DP.barras(bx, by, pr_["nx"], pr_["ny"], pr_["d"])
+    dM = len(faces) * VD * e_                            # kN·m, Mx (plano ⊥ à fachada)
+    assert abs(DP.DM_CONS[pils[0]] - dM) < 0.01, (mk, dM)          # o mesmo ΔM entra no dimensionamento (dimensionar_pilares_r05)
+    u0, _ = DP.secao_ok(dict(brs=brs), pils, com_dm=False)
     u1, onde = DP.secao_ok(dict(brs=brs), pils)
-    for it in DP.EST.values():
-        for p in pils:
-            it["2a"][p]["Mx"] = orig[(id(it), p)]
-    Td = len(faces) * HD * E_VB
+    Td = len(faces) * HD * e_
     TRd2 = torcao_resistente(bx, by)
-    out["pilares"][mk] = dict(faces=list(faces), x=X_PF[mk], dM_kNm=round(dM, 2), uso_antes=round(u0, 3), uso_com_excentricidade=round(u1, 3), comb=onde,
+    out["pilares"][mk] = dict(faces=list(faces), e_m=e_, exc_face=exc_face, x=X_PF.get(mk, CANTOS.get(mk, (0, 0))[1]), dM_kNm=round(dM, 2), uso_antes=round(u0, 3), uso_com_excentricidade=round(u1, 3), comb=onde,
                               Td_kNm=round(Td, 2), TRd2_kNm=round(TRd2, 1), uso_torcao=round(Td / TRd2, 3), ok=u1 <= 1.0 and Td <= TRd2)
     print(mk, faces, f"ΔM {dM:.1f} kN·m  uso {u0:.3f} → {u1:.3f}  Td {Td:.2f} / TRd2 {TRd2:.0f}")
 out["consolo"] = dict(geometria=f"{CONS['b_m']*100:g} × {CONS['proj_m']*100:g} × {CONS['h_total_m']*100:g} (igual ao C1)", tirante=CONS["tirante"],

@@ -26,7 +26,7 @@ AQUI = Path(__file__).parent
 R = {}
 
 # ------------------------------------------------------------------ dados
-from geometria import VAOS_Y as _VAOS_LIN, E_VB_FACE
+from geometria import VAOS_Y as _VAOS_LIN, E_VB_FACE, X_EIXO
 # rev12 (fresta, opção B): nos vãos entre PF a VB das fachadas 1 e 9 sai E_VB_FACE para fora → o 1º e o último vão das terças
 # dessa faixa crescem E_VB_FACE; o cálculo da terça usa esses vãos (a favor da segurança para as terças dos vãos de canto)
 VAOS_Y = [round(_VAOS_LIN[0] + E_VB_FACE, 3)] + list(_VAOS_LIN[1:-1]) + [round(_VAOS_LIN[-1] + E_VB_FACE, 3)]
@@ -265,7 +265,19 @@ for i, Lv in enumerate(_VAOS_LIN):
         Lp = VAOS_Y[i]
         pecas_pf.append(dict(vao=f"{i+1}-{i+2}", L_vao_mm=round(Lp * 1000), ext_ini_mm=round(e0 * 1000), ext_fim_mm=round(e1 * 1000),
                              L_mm=round((Lp + e0 + e1) * 1000), desloc_vb_mm=round(E_VB_FACE * 1000)))
-R["pecas"] = dict(por_vao_faixa_pf=pecas_pf, faixa_pf_x=[9.87, 29.63], transpasse_cada_lado_mm=round(A_TR * 1000), transpasse_total_mm=round(2 * A_TR * 1000), extensao_fachada_mm=round(EXT_FACH * 1000),
+# rev12 (27/10, opção D): VB rente à face em TODOS os vãos das fachadas 1 e 9 → a "faixa PF" (terças de fachada mais longas) vai
+# do eixo A até antes da última terça do lado E (que encosta na face lateral do canto e apoia no ST-1FL)
+# rev12 (opção D): última terça do lado E nos vãos 1-2 e 8-9 — começa 1 cm depois da face interna do canto (deslocado 10 cm
+# para fora) e apoia no ST-1FL (1 coluna de 2 M12 a 50 mm da ponta)
+from geometria import y_canto_int as _yci
+EXT_FL = -round(_yci(0.0) + 0.01, 3)                      # −0,11 m (a ponta fica 11 cm para dentro do eixo da linha)
+pecas_fl = []
+for i in (0, n_v - 1):
+    Lv = _VAOS_LIN[i]
+    e0, e1 = (EXT_FL, A_TR) if i == 0 else (A_TR, EXT_FL)
+    pecas_fl.append(dict(vao=f"{i+1}-{i+2}", L_vao_mm=round(Lv * 1000), ext_ini_mm=round(e0 * 1000), ext_fim_mm=round(e1 * 1000),
+                         L_mm=round((Lv + e0 + e1) * 1000), furo_fl_da_ponta_mm=50))
+R["pecas"] = dict(por_vao_canto_fl=pecas_fl, por_vao_faixa_pf=pecas_pf, faixa_pf_x=[0.0, round(X_EIXO["E"] - 0.325 - 0.04, 3)], transpasse_cada_lado_mm=round(A_TR * 1000), transpasse_total_mm=round(2 * A_TR * 1000), extensao_fachada_mm=round(EXT_FACH * 1000),
                   furos_transpasse_da_ponta_mm=round(BORDA_TR * 1000), colunas_apoio_mm=[-60, 60], furos_z_mm=[Z["F"], Z["bw"] - Z["E"]],
                   furo_corrente_z_mm=round(Z["bw"] / 2), por_vao=pecas, L_max_mm=max(p_["L_mm"] for p_ in pecas))
 assert R["pecas"]["L_max_mm"] <= 12000

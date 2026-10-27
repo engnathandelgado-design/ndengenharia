@@ -70,6 +70,29 @@ def momentos(L, w, apoios, n=2001):
     return mx
 
 
+def avaliar(B, H, L, g, nb, nh):
+    pts = xy(B, H, nb, nh)
+    A1 = math.pi * DL ** 2 / 4
+    bars = [(x, y, A1) for x, y in pts]
+    w = B * H / 1e6 * 25 * 1.10                             # +10 % consolos e insertos
+    casos = []
+    al = [z / 1000 for z in g["al"]]
+    casos.append(("desforma / estocagem / transporte (2 AL-2, face C para cima)", momentos(L, w, al), "H"))
+    fi = g["fi"]
+    casos.append((f"verticalização (base + FI-1 {fi['eixo']})", momentos(L, w, [0.0, fi["z"] / 1000]), "H" if fi["eixo"] == "BD" else "B"))
+    res = []
+    for nome, Mk, dirc in casos:
+        h, b, eixo = (H, B, "y") if dirc == "H" else (B, H, "x")
+        MRd = MRd0(b, h, bars, eixo)
+        k = 1 if eixo == "y" else 0
+        ymax = max(p[k] for p in pts)
+        At = sum(A1 for p in pts if abs(p[k] - ymax) < 1)
+        d = h / 2 + ymax
+        sig = Mk * 1.3 * 1e6 / (At * 0.9 * d)
+        res.append(dict(caso=nome, Mk=round(Mk, 1), Md=round(1.69 * Mk, 1), MRd0=round(MRd, 1), uso=round(1.69 * Mk / MRd, 2), sigma_s=round(sig), ok=1.69 * Mk <= MRd and sig <= 250))
+    return pts, res
+
+
 if __name__ == "__main__":
   D = json.loads((AQ / "dimensionamento_pilares_r05.json").read_text(encoding="utf-8"))
   out = {}
@@ -78,28 +101,21 @@ if __name__ == "__main__":
       g = json.loads((PR / f"{mk}_geom.json").read_text(encoding="utf-8"))
       B, H, L = g["B"], g["H"], g["L_TOT"] / 1000
       nb, nh = arranjo(mk, e)
-      pts = xy(B, H, nb, nh)
-      A1 = math.pi * DL ** 2 / 4
-      bars = [(x, y, A1) for x, y in pts]
-      w = B * H / 1e6 * 25 * 1.10                             # +10 % consolos e insertos
-      casos = []
-      al = [z / 1000 for z in g["al"]]
-      casos.append(("desforma / estocagem / transporte (2 AL-2, face C para cima)", momentos(L, w, al), "H"))
-      fi = g["fi"]
-      casos.append((f"verticalização (base + FI-1 {fi['eixo']})", momentos(L, w, [0.0, fi["z"] / 1000]), "H" if fi["eixo"] == "BD" else "B"))
-      res = []
-      for nome, Mk, dirc in casos:
-          h, b, eixo = (H, B, "y") if dirc == "H" else (B, H, "x")
-          MRd = MRd0(b, h, bars, eixo)
-          k = 1 if eixo == "y" else 0
-          ymax = max(p[k] for p in pts)
-          At = sum(A1 for p in pts if abs(p[k] - ymax) < 1)
-          d = h / 2 + ymax
-          sig = Mk * 1.3 * 1e6 / (At * 0.9 * d)
-          res.append(dict(caso=nome, Mk=round(Mk, 1), Md=round(1.69 * Mk, 1), MRd0=round(MRd, 1), uso=round(1.69 * Mk / MRd, 2), sigma_s=round(sig), ok=1.69 * Mk <= MRd and sig <= 250))
+      pts, res = avaliar(B, H, L, g, nb, nh)
+      aumento = ""
+      # rev12 (27/10): se o manuseio não passa com o arranjo do ELU, acrescenta barras (Ø16, simétrico) na direção que falha
+      # até passar — menor armadura que atende às duas verificações (regra do Nathan)
+      while not all(x["ok"] for x in res) and nb + nh < 16:
+          falha = next(x for x in res if not x["ok"])
+          if "verticaliza" in falha["caso"] and g["fi"]["eixo"] != "BD":
+              nh += 1
+          else:
+              nb += 1
+          pts, res = avaliar(B, H, L, g, nb, nh)
+          aumento = "barras acrescentadas para o manuseio (verticalização/transporte)"
       gr = grampos(B, H, nb, nh)
       out[mk] = dict(B=B, H=H, nb=nb, nh=nh, n=len(pts), d=DL, xy=pts, c=round(C, 1), grampos=gr, manuseio=res,
-                     tipo=e.get("tipo"), As_cm2=e["As_cm2"], uso_secao=e["uso_secao"], lambda_u=e["lambda_u"])
+                     tipo=e.get("tipo"), As_cm2=round(len(pts) * math.pi * DL ** 2 / 400, 2) if aumento else e["As_cm2"], uso_secao=e["uso_secao"], lambda_u=e["lambda_u"],
+                     **({"obs": aumento} if aumento else {}))
       print(f"{mk:6s} {B}×{H} nb {nb} nh {nh} n {len(pts)} grampos {gr} | " + " | ".join(f"{x['uso']} σs {x['sigma_s']}{'' if x['ok'] else ' FALHA'}" for x in res))
   (AQ / "arranjo_pilares.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
-  

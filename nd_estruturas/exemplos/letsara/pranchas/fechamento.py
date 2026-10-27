@@ -15,7 +15,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
 import geo_fixacao as GF
-from geometria import X_FACH, Y_LIN, X_L4, LARG, COMP, X_EIXO
+from geometria import X_FACH, Y_LIN, X_L4, LARG, COMP, X_EIXO, Y_FACE_EXT, PG_L4, y_canto
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 PL = json.load(open(AQ + "placas.json"))
@@ -47,7 +47,9 @@ CE1L_B = 840
 REC_VISTAS = ("G", "C")
 # DEC-044: calço entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles — 100 mm nos cantos (vistas A e I) e nos
 # P1B/P2B da vista G (40 ⊥ à parede, contra 60 dos PF) e 75 mm nos P10 da vista C (25 ⊥ à parede). Marcas CS-1C (100) e CS-1D (75).
-CALCO = {("I", 0): 100, ("I", 4): 100, ("A", 0): 100, ("A", 4): 100, ("G", 0): 100, ("G", 4): 100, ("C", 2): 75, ("C", 4): 75}
+# rev12 (27/10, opção D): os cantos das linhas 1 e 9 saem 10 cm para fora (face externa = face dos PF) → sem calço nos cantos das vistas A e I.
+# rev12 (27/10): PG-02/PG-04 25×40 com o lado de 25 ⊥ à parede C → calço de 75 mantido.
+CALCO = {("G", 0): 100, ("G", 4): 100, ("C", 2): 75, ("C", 4): 75}
 CALCO_MARCA = {100: "CS-1C", 75: "CS-1D"}
 X_PT = lambda L: round(0.21 * L + 150)                  # pinos PT-1: 15 cm para dentro de cada alça AL-P
 Z_TOPO = 10000
@@ -66,7 +68,7 @@ PORTA_H = (890, 1790)
 J_OM = 20                                               # rev06d (DEC-028): ponta da placa a 20 mm do vão da porta (alma da ombreira OM-1 em U + junta)
 OMB = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ombreira.json"))
 FACE_X = (-300, M(LARG) + 300)                          # faces externas dos pilares de canto (direção x)
-FACE_Y = (-200, M(COMP) + 200)
+FACE_Y = (M(Y_FACE_EXT[0]), M(Y_FACE_EXT[1]))           # rev12 (opção D): faces externas dos cantos = dos PF (−300 / COMP + 300)
 CLIENTE = "MARQUES ENGENHARIA E CONSTRUÇÕES"
 
 
@@ -85,7 +87,7 @@ VISTAS = {
     "B": dict(titulo="VISTA B — LATERAL DO EIXO A, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
               fiadas=lambda k, b: True),
     "C": dict(titulo="VISTA C — PAREDE INTERNA DA LINHA 4 (PORTÕES)",
-              pil=eixos_transv(X_L4, ["A", "", "", "C", "", "", "E"], [600, 400, 250, 400, 250, 400, 600]), ini=FACE_X[0], fim=FACE_X[1],
+              pil=eixos_transv(X_L4, ["A", "", "", "C", "", "", "E"], [600, 400, round(PG_L4["PG-02"][2] * 1000), 400, round(PG_L4["PG-04"][2] * 1000), 400, 600]), ini=FACE_X[0], fim=FACE_X[1],
               fiadas=lambda k, b: k <= (4 if b == 0 else 5), portoes=[1, 4]),
     "D": dict(titulo="VISTA D — LATERAL DO EIXO E, LINHAS 4 A 9 (vista de fora)", pil=eixos_lat(3, 8), ini=M(Y_LIN[3]) + JUNTA // 2, fim=FACE_Y[1],
               fiadas=lambda k, b: True),
@@ -827,12 +829,13 @@ def prancha_cm():
     for j, x in enumerate(X_FACH):
         kp.linha((M(x), -3000), (M(x), M(COMP) + 3000), "EIXO"); kp.texto((M(x), M(COMP) + 3300), "ABCDE"[j], "nota", "BOTTOM_CENTER")
     for y in Y_LIN:
-        kp.ret(-300, M(y) - 200, 600, 400, "CORTADO"); kp.ret(M(LARG) - 300, M(y) - 200, 600, 400, "CORTADO")
+        yk_ = y_canto(y) if y in (Y_LIN[0], Y_LIN[-1]) else y                # rev12 (opção D): cantos deslocados 10 cm para fora
+        kp.ret(-300, M(yk_) - 200, 600, 400, "CORTADO"); kp.ret(M(LARG) - 300, M(yk_) - 200, 600, 400, "CORTADO")
     for x in X_FACH[1:-1]:
         for y in (Y_LIN[0], Y_LIN[1], Y_LIN[8]):
             kp.ret(M(x) - 200, M(y) - 300, 400, 600, "CORTADO")
-    for x, b in zip(X_L4[1:-1], (400, 250, 400, 250, 400)):
-        kp.ret(M(x) - b / 2, M(Y_LIN[3]) - b / 2, b, b, "CORTADO")
+    for x, bx_, by_ in zip(X_L4[1:-1], (400, M(PG_L4["PG-02"][2]), 400, M(PG_L4["PG-04"][2]), 400), (400, M(PG_L4["PG-02"][3]), 400, M(PG_L4["PG-04"][3]), 400)):
+        kp.ret(M(x) - bx_ / 2, M(Y_LIN[3]) - by_ / 2, bx_, by_, "CORTADO")
     for _yc in (46.317, 62.833):                                           # DEC-058: dois PC-03 40×40
         kp.ret(M(19.75) - 200, M(_yc) - 200, 400, 400, "CORTADO")
     o = FOLGA

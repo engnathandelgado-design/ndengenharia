@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb
+from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -160,7 +160,9 @@ def montar() -> ModeloBIM:
             zr = rec_vb(x0) if canto else (Z_L2["A" if sg > 0 else "E"] if i == 2 else REC[0 if sg > 0 else 1])   # rev09b: linha 2 = fundo da W
             nome = f"{lado}{'C' if canto else ''}-L{i}"
             if canto:      # DEC-042 (decisão do Nathan, 22/10): canto SEM platibanda recuada — seção cheia 40×60 até o topo
-                m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, TOPO_PLAT, obs="40×60, seção cheia até o topo (sem platibanda recuada; DEC-042)")
+                # rev12 (27/10, opção D): eixo 10 cm para fora da linha → face externa = face dos PF
+                m.pilar(nome, x0, y_canto(y), 0.60, 0.40, Z_CALICE, TOPO_PLAT,
+                        obs=f"40×60, seção cheia até o topo (sem platibanda recuada; DEC-042); eixo {DY_CANTO*100:.0f} cm para fora da linha {i} (face externa = face dos PF)")
                 continue
             m.pilar(nome, x0, y, 0.60, 0.40, Z_CALICE, zr, obs=f"40×60; cabeça recuada acima de +{zr:.2f}".replace(".", ","))
             m.pilar(nome + " cabeça", x0 - sg * 0.15, y, 0.30, 0.40, zr, TOPO_PLAT, obs="cabeça recuada 40×30")
@@ -184,9 +186,10 @@ def montar() -> ModeloBIM:
     m.pilar("P7", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_CALICE, NIVEIS_MEZ[0], obs="40×60 no eixo E, escada: viga P6–P7 no +3,90 e patamar +1,95")
     m.pilar("P6 (linha 2)", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_CALICE, Z_L2["P6"], obs=f"25×40, linha 2: vigas D–P6 e P6–E; cabeça até +{Z_L2['P6']:.3f} = fundo da W da linha 2 − 40 mm (DEC-050)".replace(".", ","))
     # pilares dos portões (linha 4), rev06 (DEC-024): cabeça a 2 cm do fundo da TS-01, ligada em y por 2 cantoneiras CL-P
-    for nome, x, b_ in (("P9 (PG-01)", 9.87, 0.40), ("P10 (PG-02)", 15.195, 0.25), ("P10 (PG-04)", 24.305, 0.25), ("P12 (PG-03)", 29.63, 0.40)):
+    # rev12 (27/10): PG-02/PG-04 25×40 (40 em x, ao longo da parede), eixo 7,5 cm para longe do portão (5,00 m livres)
+    for nome, x, b_, by_ in [(f"{r01} ({mk})", x_, bx_, by_) for mk, (r01, x_, bx_, by_) in PG_L4.items()]:
         zt_ = round(zf(x) - 0.02, 2)
-        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, b_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), topo +{zt_:.2f}; portão livre até +7,40")
+        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, by_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), {by_*100:.0f}×{b_*100:.0f}, topo +{zt_:.2f}; portão livre até +7,50")
         yl4 = Y_LIN[LINHA_PORTOES]
         for sx in (-1, 1):
             xf_ = x + sx * b_ / 2
@@ -305,10 +308,10 @@ def montar() -> ModeloBIM:
                 if k == n_v - 1:
                     yb = y_vb(xw, Y_LIN[-1]) + e1
                 if ult_E and k == 0:
-                    ya = Y_LIN[0] + 0.21
+                    ya = y_canto_int(Y_LIN[0]) + 0.01                    # rev12 (opção D): face interna do canto deslocado
                 if ult_E and k == n_v - 1:
-                    yb = Y_LIN[-1] - 0.21
-                pk = next(p_ for p_ in (PC_.get("por_vao_faixa_pf", []) if k in (0, n_v - 1) and y_vb(xw, Y_LIN[0 if k == 0 else -1]) != Y_LIN[0 if k == 0 else -1] else [])
+                    yb = y_canto_int(Y_LIN[-1]) - 0.01
+                pk = next(p_ for p_ in ((PC_.get("por_vao_faixa_pf", []) if not ult_E else PC_.get("por_vao_canto_fl", [])) if k in (0, n_v - 1) else [])
                            + PC_["por_vao"] if p_["vao"] == f"{k+1}-{k+2}")
                 m.extrusao_y("terca", f"Z302 vão {k+1}-{k+2} L={pk['L_mm']}", z_contorno(xw + dk, zb + dk), (ya + yb) / 2, yb - ya,
                              "Terças metálicas", material="aco", obs="Z 302×90/82×2,30 METSEC, contínua por transpasse")
@@ -317,7 +320,7 @@ def montar() -> ModeloBIM:
                     yl = y_vb(xw, yl)                                    # rev12: apoio no eixo da VB deslocada
                 ys = (-0.06, 0.06) if j in (0, n_v) else (-0.06, 0.06, -(A_TR - B_TR), A_TR - B_TR)
                 if ult_E and j in (0, n_v):
-                    ys = ((0.26 if j == 0 else -0.26),)                  # M12 da aba do ST-1FL, fora do pilar
+                    ys = ((y_canto_int(Y_LIN[0]) + 0.06 if j == 0 else y_canto_int(Y_LIN[-1]) - 0.06) - yl,)   # M12 da aba do ST-1FL, fora do pilar
                 for dy in ys:
                     for zz in (ZF1, ZF2):
                         m.linear("inserto", "M12 8.8 (apoio/emenda da terça)", PARAF, (xw - 0.012, yl + dy, zb + zz), (xw + 0.016, yl + dy, zb + zz),
@@ -325,7 +328,7 @@ def montar() -> ModeloBIM:
                 if j in (0, n_v):
                     zc = zb - 0.010
                     if ult_E:                                        # DEC-042: ST-1FL na face lateral do canto, 2 ES-1FL M20 horizontais (padrão Mitsubishi)
-                        suporte_fl(m, f"ST-1FL (pilar de canto, eixo {j+1})", xw, yl + (0.20 if j == 0 else -0.20), 1 if j == 0 else -1, zc)
+                        suporte_fl(m, f"ST-1FL (pilar de canto, eixo {j+1})", xw, y_canto_int(Y_LIN[j]), 1 if j == 0 else -1, zc)
                     elif j == n_v:                                   # eixo 9: ST-1V-R, 2 M20 hef 400 + grampo
                         suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
                     else:
@@ -334,15 +337,16 @@ def montar() -> ModeloBIM:
     # cantos de seção cheia (|y − linha| ≤ 0,20, x < 0,31 / x > LARG − 0,31) e cabeças 40 × 30 dos pilares de fachada
     # (x = eixo ± 0,21; y entre a face externa e a face da cabeça, que fica no eixo da linha: ≤ 0,01 do eixo)
     _XPF = [x for x in X_FACH[1:-1]]
+    _YCI = (y_canto_int(Y_LIN[0]), y_canto_int(Y_LIN[-1]))            # rev12 (opção D): faces internas dos cantos deslocados
 
     def _bandas_fachada(t0, t1):
-        cortes = sorted({t0, t1} | {c for c in (Y_LIN[0] + 0.01, Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21, Y_LIN[-1] - 0.01) if t0 < c < t1})
+        cortes = sorted({t0, t1} | {c for c in (Y_LIN[0] + 0.01, _YCI[0] + 0.01, _YCI[1] - 0.01, Y_LIN[-1] - 0.01) if t0 < c < t1})
         return list(zip(cortes[:-1], cortes[1:]))
 
     def _livres(t0, t1, xa_k, xb_k):
         ym = (t0 + t1) / 2
         ocup = []
-        if ym < Y_LIN[0] + 0.21 or ym > Y_LIN[-1] - 0.21:
+        if ym < _YCI[0] + 0.01 or ym > _YCI[1] - 0.01:
             ocup += [(-9.0, 0.31), (LARG - 0.31, LARG + 9.0)]
         if ym < Y_LIN[0] + 0.01 or ym > Y_LIN[-1] - 0.01:
             ocup += [(x - 0.21, x + 0.21) for x in _XPF]
@@ -384,7 +388,7 @@ def montar() -> ModeloBIM:
                 m.linear("placa", nome_, PerfilRetangular(t1 - t0 - 0.002, dz1 - dz0, nome_), (xa_k, yk, AC.z_terca_topo(xa_k) + pz), (xb_k, yk, AC.z_terca_topo(xb_k) + pz), grp_, material="aco")
     for xt_ in LG["x_tercas_esq"] + [x + (2 * X_EIXO["C"] - LG["X_PONTA_CEN"]) - LG["X_PONTA_ESQ"] for x in LG["x_tercas_esq"]]:
         xc_ = xt_ - 0.027 - 0.045                         # cartola centrada na aba superior (90) da terça
-        yc0, yc1 = (Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21) if xc_ + 0.06 > LARG - 0.30 else (y0_, y1_)   # DEC-042: última cartola do lado E entre os cantos
+        yc0, yc1 = (_YCI[0] + 0.01, _YCI[1] - 0.01) if xc_ + 0.06 > LARG - 0.30 else (y0_, y1_)   # DEC-042: última cartola do lado E entre os cantos
         m.linear("placa", "perfil cartola #0,65", PerfilRetangular(0.12, 0.04, "cartola"), (xc_, yc0, AC.z_terca_topo(xc_) + 0.06), (xc_, yc1, AC.z_terca_topo(xc_) + 0.06), "Telhas", material="aco")
     SEC = AC.secoes()
 
@@ -409,19 +413,20 @@ def montar() -> ModeloBIM:
         m.add(Peca("placa", "Rufos e acabamentos", f"{mk} rufo #0,65", perf, (xa, u0, za + v0), (xb, u0, zb + v0), (0.0, 0.0, 1.0), "aco", SEC[mk][2]))
 
     PIL_Y = list(Y_LIN)
-    tre = [(PIL_Y[i] + 0.20, PIL_Y[i + 1] - 0.20) for i in range(len(PIL_Y) - 1)]
+    _fi = lambda i, sg: (_YCI[0] if i == 0 else _YCI[1] if i == len(PIL_Y) - 1 else PIL_Y[i] + sg * 0.20)   # rev12: face interna (canto deslocado)
+    tre = [(_fi(i, 1), _fi(i + 1, -1)) for i in range(len(PIL_Y) - 1)]
     for ya, yb in tre:
         rufo_y("RF-2", ya, yb); rufo_y("RF-3", ya, yb); rufo_y("CR-1", ya, yb)
     for yp in PIL_Y:
         dc = 0.30 if yp in (PIL_Y[0], PIL_Y[-1]) else 0.0                 # DEC-042: canto de seção cheia — face A 30 cm para dentro
         # 22/10 (colisão): no canto de seção cheia o RF-2C / RF-3P vai só até a face lateral do pilar (y = linha ± 0,20); dali segue o RF-2 / RF-3
-        ya_c, yb_c = (yp - 0.30, yp + 0.20) if yp == PIL_Y[0] else (yp - 0.20, yp + 0.30) if yp == PIL_Y[-1] else (yp - 0.30, yp + 0.30)
+        ya_c, yb_c = (yp - 0.30, _YCI[0]) if yp == PIL_Y[0] else (_YCI[1], yp + 0.30) if yp == PIL_Y[-1] else (yp - 0.30, yp + 0.30)   # rev12: canto deslocado
         rufo_y("RF-2C", ya_c, yb_c, lambda u, v, d_=dc: (min(u + d_, AC.X_CAB_A + d_ + 0.005) if d_ else u, v));   # canto: pé do RF-2C rente à face (a telha começa em 0,31)
         rufo_y("RF-3P", ya_c, yb_c, lambda u, v, d_=dc: (u - d_, v))
         # 22/10 (colisão): nos cantos de seção cheia o chapéu RF-1C cobre os 60 cm do topo (aba interna na face A, a 0,30 do eixo)
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (AC.X_PLACA_A - 0.100 + (u + d_ if u > 0.44 else u), v))
         rufo_y("RF-1C", yp - 0.30, yp + 0.30, lambda u, v, d_=dc: (AC.X_PLACA_E + 0.100 - (u + d_ if u > 0.44 else u), v))
-    rufo_y("PG-1", Y_LIN[0] + 0.21, Y_LIN[-1] - 0.21)                    # 22/10: entre as faces laterais dos cantos de seção cheia
+    rufo_y("PG-1", _YCI[0] + 0.01, _YCI[1] - 0.01)                    # 22/10: entre as faces laterais dos cantos de seção cheia
     rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_A - 0.100 + u, v))
     rufo_y("RF-1", AC.Y_PLACA_1 - 0.10, AC.Y_PLACA_9 + 0.10, lambda u, v: (AC.X_PLACA_E + 0.100 - u, v))
     zl_ = AC.z_zip(LARG / 2) + AC.PAC["zipada"]
@@ -478,8 +483,8 @@ def montar() -> ModeloBIM:
     t_c = 0.003
     cal = [(0.02, zt_c + 0.12), (0.02, zt_c - 0.15), (0.32, zt_c - 0.15), (0.32, zt_c), (0.32 - t_c, zt_c), (0.32 - t_c, zt_c - 0.15 + t_c),
            (0.02 + t_c, zt_c - 0.15 + t_c), (0.02 + t_c, zt_c + 0.12)]
-    m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP - 2 * 0.22, "Calha e descidas", material="aco",
-                 obs="NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a 22 cm do eixo das linhas 1 e 9 (canto de seção cheia)")
+    m.extrusao_y("placa", "CA-1 calha 300×150 chapa galv. 1,25", cal, COMP / 2, COMP - 2 * (_YCI[0] + 0.02), "Calha e descidas", material="aco",
+                 obs=f"NBR 10844; i = 0,5 % para as saídas; DEC-042: começa/termina a {(_YCI[0] + 0.02)*100:.0f} cm do eixo das linhas 1 e 9 (face interna do canto de seção cheia, rev12)")
     for yl in Y_LIN:
         yd = yl + (0.35 if yl < COMP else -0.35)
         if yl == Y_LIN[1]:
@@ -532,7 +537,10 @@ def montar() -> ModeloBIM:
                 xx += 0.30
             for xf, sg in ((fa, 1), (fb, -1)):
                 bc_ = VMP.get("b_consolo", bt)
-                m.bloco("consolo", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}×{hcm*100:.1f}", (xf + sg * prj / 2, y, zb + hcm), prj, bc_, hcm, "Consolos")
+                # rev12 (opção D): no pilar de canto da linha 1 (eixo 10 cm para fora) o CP-MEZ fica na largura da face do pilar
+                # (y −0,30 a +0,10) e a VM continua no eixo — PENDÊNCIA (quadro decisao_vm_canto): nariz 5 cm fora do consolo
+                yc_ = y_canto(y) if (abs(y - Y_LIN[0]) < 1e-6 and (xf < 0.5 or xf > LARG - 0.5)) else y
+                m.bloco("consolo", f"CP-MEZ {bc_*100:.0f}×{prj*100:.0f}×{hcm*100:.1f}" + (" (canto, em decisão)" if yc_ != y else ""), (xf + sg * prj / 2, yc_, zb + hcm), prj, bc_, hcm, "Consolos")
                 m.bloco("inserto", "NEO-5F 200×200 fretado", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.021), 0.20, 0.20, 0.021, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "PN-1 pino Ø20 (VM)", (xf + sg * VMP["x_pad"], y, zb + hcm + 0.40), 0.02, 0.02, 0.63, "Pinos, tubos e neoprenes")
                 m.bloco("inserto", "junta da ponta concretada 3 cm (fck ≥ 30, antes das lajes)", (xf + sg * FOL / 2, y, za), FOL, bt, hd, E2)
@@ -654,7 +662,7 @@ def montar() -> ModeloBIM:
     z0v, z1v = PJ["placa_P19_D"]["z0"] + 0.005, PJ["placa_P19_D"]["z1"]
     m.linear("placa", "PV-1 placa sobre o portão P19–D (10 × 37, DEC-059)", PerfilRetangular(0.10, z1v - z0v, "PV-1 10×37"),
              (x0v, yc_pl, (z0v + z1v) / 2), (x1v, yc_pl, (z0v + z1v) / 2), "Placas de fechamento", obs="armada, C40; peso próprio nos 2 apoios CL-V; ND-LET-PV01")
-    for xpg, bpg, lh in ((X_L4[4], 0.25, 0.152), (X_L4[5], 0.40, 0.102)):
+    for xpg, bpg, lh in ((X_L4[4], PG_L4["PG-04"][3], 0.152), (X_L4[5], PG_L4["PG-03"][3], 0.102)):
         yface = yl4 - bpg / 2
         caixa(m, f"CL-V cantoneira L {lh * 1000:.0f} × 102 × 9,5 L=150 — apoio da PV-1 (2 BR-M16 na face do PG)", xpg - 0.075, xpg + 0.075, yface - lh, yface, z0v - 0.005 - 0.0095, z0v - 0.005, GM)
         caixa(m, f"CL-V cantoneira — aba na face do PG", xpg - 0.075, xpg + 0.075, yface - 0.0095, yface, z0v - 0.005 - 0.102, z0v - 0.005, GM)

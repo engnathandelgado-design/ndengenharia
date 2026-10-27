@@ -15,7 +15,20 @@ LARG = X_EIXO["E"]                     # eixo A ao eixo E
 
 # linhas longitudinais (m, a partir do eixo da linha 1)
 Y_LIN = [0.0, 9.65, 19.725, 29.80, 39.725, 49.725, 59.725, 69.725, 79.35]
-Y_FACE_EXT = (-0.20, 79.55)            # faces externas das linhas 1 e 9 (pilares com lado de 40 em y)
+# rev12 (27/10/2026, decisão do Nathan, opção D do quadro decisao_fresta_canto): os 4 pilares de canto 40×60 (linhas 1 e 9,
+# eixos A e E) saem DY_CANTO para fora em y → a face externa coincide com a dos PF (60 ⊥ fachada): −0,30 / COMP + 0,30.
+DY_CANTO = 0.10
+Y_FACE_EXT = (round(Y_LIN[0] - 0.30, 3), round(Y_LIN[-1] + 0.30, 3))        # faces externas das linhas 1 e 9 (PF e cantos alinhados)
+
+
+def y_canto(y_linha):
+    """eixo (y) do pilar de canto da linha de fachada y_linha (0 ou COMP); seção 40 em y."""
+    return round(y_linha - DY_CANTO if y_linha < COMP / 2 else y_linha + DY_CANTO, 3)
+
+
+def y_canto_int(y_linha):
+    """face interna (y) do pilar de canto (lado do pavilhão)."""
+    return round(y_canto(y_linha) + (0.20 if y_linha < COMP / 2 else -0.20), 3)
 COMP = Y_LIN[-1]
 VAOS_Y = [round(b - a, 3) for a, b in zip(Y_LIN[:-1], Y_LIN[1:])]   # 9,65 / 10,075 / 10,075 / 9,925 / 10 / 10 / 10 / 9,625
 
@@ -25,8 +38,8 @@ PILARES_ESPECIAIS = [
     ("P7", 39.50, 3.79, 0.60, 0.40), ("P6", 36.175, 3.79, 0.25, 0.40),                                                  # anexo, eixo E
     ("P8", 9.87, Y_LIN[1], 0.40, 0.60), ("P8A", 19.75, Y_LIN[1], 0.40, 0.60), ("P8B", 29.63, Y_LIN[1], 0.40, 0.60),
     ("P6", 36.175, Y_LIN[1], 0.25, 0.40),                                                                                # linha 2
-    ("P9", 9.87, Y_LIN[3], 0.40, 0.40), ("P10", 15.195, Y_LIN[3], 0.25, 0.25), ("P11", 19.75, Y_LIN[3], 0.40, 0.40),
-    ("P10", 24.305, Y_LIN[3], 0.25, 0.25), ("P12", 29.63, Y_LIN[3], 0.40, 0.40),                                       # linha 4 (portões)
+    ("P9", 9.87, Y_LIN[3], 0.40, 0.40), ("P10", 15.27, Y_LIN[3], 0.40, 0.25), ("P11", 19.75, Y_LIN[3], 0.40, 0.40),
+    ("P10", 24.23, Y_LIN[3], 0.40, 0.25), ("P12", 29.63, Y_LIN[3], 0.40, 0.40),                                        # linha 4 (portões)
     ("P13", 19.75, 46.317, 0.40, 0.40), ("P13B", 19.75, 62.833, 0.40, 0.40),                                           # centrais (DEC-058)
     ("P3", 9.87, Y_LIN[8], 0.40, 0.60), ("P14", 19.75, Y_LIN[8], 0.40, 0.60), ("P5", 29.63, Y_LIN[8], 0.40, 0.60),   # linha 9
 ]
@@ -36,7 +49,12 @@ PILARES_ESPECIAIS = [
 Y_PC_C = (46.317, 62.833)
 Y_P13 = Y_PC_C[0]
 LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
-X_L4 = [0.0, 9.87, 15.195, 19.75, 24.305, 29.63, 39.50]      # P1, P9, P10, P11, P10, P12, P2
+# rev12 (27/10, decisão do Nathan): PG-02 e PG-04 passam de 25×25 a 25×40 (40 ao longo da parede da linha 4, em x). Para manter
+# os 5,00 m livres de cada portão (face a face), o eixo sai 7,5 cm para longe do portão: PG-02 15,195 → 15,270; PG-04 24,305 → 24,230.
+# PENDÊNCIA visível: confirmar com o arquitetônico/cliente os 5,00 m livres e a nova locação dos PG-02/PG-04.
+PG_L4 = {"PG-01": ("P9", 9.87, 0.40, 0.40), "PG-02": ("P10", 15.27, 0.40, 0.25), "PG-04": ("P10", 24.23, 0.40, 0.25), "PG-03": ("P12", 29.63, 0.40, 0.40)}
+VAO_PORTAO = 5.00
+X_L4 = [0.0, 9.87, PG_L4["PG-02"][1], 19.75, PG_L4["PG-04"][1], 29.63, 39.50]      # P1, P9, P10, P11, P10, P12, P2
 X_L2 = [0.0, 9.87, 19.75, 29.63, 36.175, 39.50]              # P1B, P8, P8A, P8B, P6, P2B
 
 # ------------------------------------------------------------------ rev09 (23/10/2026) — decisões do Nathan
@@ -68,13 +86,11 @@ ESCADA_EXT = dict(n_esp=22, espelho=Z_PISO_PRONTO / 22, piso=0.28,   # DEC-055: 
 
 # rev12 (fresta das vigas de borda, opção B): nos vãos entre pilares de fachada PF (B–C e C–D das linhas 1 e 9) a VB 15×60 e o
 # consolo CP-VB ficam rentes à face externa do pilar (60 ⊥ fachada): eixo da VB a E_VB_FACE para fora do eixo da linha.
-# Vãos de canto (A–B, D–E): VB no eixo da linha até a decisão do quadro decisao_fresta_canto.
+# rev12 (27/10, opção D): com os cantos deslocados DY_CANTO, os vãos de canto (A–B, D–E) também ficam com a VB e o CP-VB rentes
+# à face externa (fresta de 2,5 cm até a placa em toda a fachada).
 E_VB_FACE = 0.225
 
 
 def y_vb(x_meio, y_linha):
-    """eixo (y) da VB do vão que contém x_meio, na linha de fachada y_linha (0 ou COMP)."""
-    entre_pf = X_FACH[1] < x_meio < X_FACH[-2]
-    if not entre_pf:
-        return y_linha
+    """eixo (y) da VB na linha de fachada y_linha (0 ou COMP): rente à face externa dos pilares em todos os vãos (rev12, opção D)."""
     return y_linha - E_VB_FACE if y_linha < COMP / 2 else y_linha + E_VB_FACE

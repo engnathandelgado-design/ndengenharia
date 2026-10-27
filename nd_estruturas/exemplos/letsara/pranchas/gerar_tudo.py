@@ -1,5 +1,9 @@
 """Regera o jogo executivo completo da Letsara na ordem certa e resume erros/avisos por folha (AVISOS_LOG).
-Uso: python gerar_tudo.py  → log em gerar_tudo.jsonl; falha se alguma folha do índice tiver erro ou aviso."""
+Uso: python gerar_tudo.py  → log em gerar_tudo.jsonl; falha se alguma folha do índice tiver erro ou aviso.
+Em etapas (rev12, proteção contra reinício do container): python gerar_tudo.py --reset (limpa logs e travas);
+python gerar_tudo.py --etapa 1 … --etapa N (ORDEM dividida em ETAPAS, acumula o log; --sem-cc pula a conferência);
+python gerar_tudo.py --fim (só o resumo + conferência cruzada).
+"""
 import json, os, subprocess, sys, time
 PR = "/home/claude/letsara/pranchas/"
 LOG = PR + "gerar_tudo.jsonl"
@@ -7,20 +11,32 @@ ORDEM = ["consolos_marcas.py", "pilares_familia.py", "pilar_generico.py", "cs01.
          "lajes_placas.py", "es01.py", "es02.py", "es03.py", "es04.py", "fechamento.py", "pp01.py", "pp02.py", "pp03.py", "pp04.py", "pp05.py", "pp06.py", "pv01.py",
          "loc01.py", "cg01.py", "corte01.py", "ct02.py", "ct03.py", "ct04.py", "mon01.py", "mon02.py", "mon03.py",
          "quantitativos.py", "ic01.py", "pr01.py", "ng01.py"]
+ETAPAS = [ORDEM[0:3], ORDEM[3:7], ORDEM[7:18], ORDEM[18:24], ORDEM[24:31], ORDEM[31:40], ORDEM[40:]]
 if __name__ == "__main__":
-    if os.path.exists(LOG):
-        os.remove(LOG)
-    if not sys.argv[1:] and os.path.exists(PR + "travas_geometria.jsonl"):     # rev12: travas de geometria do jogo inteiro
-        os.remove(PR + "travas_geometria.jsonl")
+    args = sys.argv[1:]
+    sem_cc = "--sem-cc" in args
+    args = [a for a in args if a != "--sem-cc"]
+    if not args or args[0] == "--reset":
+        for f in (LOG, PR + "travas_geometria.jsonl"):     # rev12: travas de geometria do jogo inteiro
+            if os.path.exists(f):
+                os.remove(f)
+        if args:
+            sys.exit(0)
+    if args and args[0] == "--etapa":
+        lista = ETAPAS[int(args[1]) - 1]
+    elif args and args[0] == "--fim":
+        lista = []
+    else:
+        lista = args or ORDEM
     env = dict(os.environ, AVISOS_LOG=LOG)
-    for s in sys.argv[1:] or ORDEM:
+    for s in lista:
         t = time.time()
         r = subprocess.run([sys.executable, s], cwd=PR, env=env, capture_output=True, text=True, timeout=3000)
         print(f"{s:22s} {'ok' if r.returncode == 0 else 'FALHOU'} {time.time() - t:5.0f} s", flush=True)
         if r.returncode:
             print(r.stderr[-1500:])
     final = {}
-    for l in open(LOG, encoding="utf-8"):
+    for l in (open(LOG, encoding="utf-8") if os.path.exists(LOG) else []):
         d = json.loads(l)
         final[d["folha"]] = d["avisos"]                       # a última geração de cada folha vale
     idx = json.load(open(PR + "indice.json", encoding="utf-8"))["ordem"]
@@ -31,6 +47,8 @@ if __name__ == "__main__":
     for f, a in ruins.items():
         for x in (a or [])[:8]:
             print("  ", f, x)
+    if sem_cc:
+        sys.exit(0)
     cc = subprocess.run([sys.executable, "conferencia_cruzada.py"], cwd=PR, capture_output=True, text=True)   # rev11: conferência cruzada
     print(cc.stdout[-4000:])
     sys.exit(1 if (ruins or cc.returncode) else 0)

@@ -523,9 +523,9 @@
   "peca_b": "almas das 2 terças",
   "inserto_b": "M12 8.8",
   "verificacao": "transferência do momento de apoio",
-  "valor": "uso 0.79",
+  "valor": "uso 0.81",
   "ok": true,
-  "obs": "Fd 13.15 kN ≤ 16.7 kN"
+  "obs": "Fd 13.55 kN ≤ 16.7 kN"
  },
  {
   "grupo": "terça × TS-01",
@@ -534,7 +534,7 @@
   "peca_b": "ES-1 (2 M16 a y = ±60)",
   "inserto_b": "porca + contraporca",
   "verificacao": "flexão da aba / esperas (tração + corte)",
-  "valor": "aba 0.79; esperas 0.18",
+  "valor": "aba 0.80; esperas 0.18",
   "ok": true,
   "obs": "sem solda"
  },
@@ -545,7 +545,7 @@
   "peca_b": "terça / X",
   "inserto_b": "2 M16 com gancho, hef 150 (s 120) + 1 grampo U Ø10 em cada espera",
   "verificacao": "uso / interação tração × corte",
-  "valor": "0.92 ≤ 1",
+  "valor": "0.79 ≤ 1",
   "ok": true,
   "obs": ""
  },
@@ -556,7 +556,7 @@
   "peca_b": "terça / X",
   "inserto_b": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10",
   "verificacao": "uso / interação tração × corte",
-  "valor": "0.89 ≤ 1",
+  "valor": "0.90 ≤ 1",
   "ok": true,
   "obs": ""
  },
@@ -567,7 +567,7 @@
   "peca_b": "terça / X",
   "inserto_b": "1 M16 com gancho por orelha, hef 110 + grampo U Ø10 (VB 15×60, eixo 9)",
   "verificacao": "uso / interação tração × corte",
-  "valor": "0.89 ≤ 1",
+  "valor": "0.90 ≤ 1",
   "ok": true,
   "obs": ""
  },
@@ -578,9 +578,9 @@
   "peca_b": "OR-X (viga da linha i) / OR-X (linha i+1)",
   "inserto_b": "L 102×76×6,3 com furo Ø18, na espera ES-2",
   "verificacao": "tração na diagonal (NBR 8800:2008 6.3.3)",
-  "valor": "31.37 ≤ 44.7 kN",
+  "valor": "31.78 ≤ 44.7 kN",
   "ok": true,
-  "obs": "Vd 22.8 kN por painel; 40 diagonais (20 por meia água × 2)"
+  "obs": "Vd 23.1 kN por painel; 40 diagonais (20 por meia água × 2)"
  },
  {
   "grupo": "contraventamento",
@@ -611,9 +611,9 @@
   "peca_b": "ST-1P",
   "inserto_b": "4 M12 por apoio",
   "verificacao": "N + M (NBR 14762:2010 9.9), vento 0°",
-  "valor": "0.95 ≤ 1",
+  "valor": "0.96 ≤ 1",
   "ok": true,
-  "obs": "modelo integrado r05: governa vão 7-8, x = 39.221 m: Nd 11.3 kN, Md 18.5 kN·m"
+  "obs": "modelo integrado r05: governa vão 7-8, x = 39.221 m: Nd 11.5 kN, Md 18.5 kN·m"
  },
  {
   "grupo": "cobertura × VB eixo 9",
@@ -622,9 +622,9 @@
   "peca_b": "VB-05 a 08",
   "inserto_b": "escora da terça (vento do oitão)",
   "verificacao": "aço / concreto (ACI 318-19 17)",
-  "valor": "0.45 / 0.86",
+  "valor": "0.44 / 0.85",
   "ok": true,
-  "obs": "Fy 49.1 kN"
+  "obs": "Fy 48.79 kN"
  },
  {
   "grupo": "cobertura × TS-01",
@@ -633,9 +633,9 @@
   "peca_b": "TS-01",
   "inserto_b": "escora + arrancamento",
   "verificacao": "ACI 318-19 17.8",
-  "valor": "0.92",
+  "valor": "0.79",
   "ok": true,
-  "obs": "Vu 47.0 kN ao longo da terça"
+  "obs": "Vu 35.7 kN ao longo da terça"
  },
  {
   "grupo": "contraventamento",
@@ -644,7 +644,7 @@
   "peca_b": "VB-05 a 08",
   "inserto_b": "a ±200 da terça do nó",
   "verificacao": "corte com armadura de ancoragem",
-  "valor": "0.89",
+  "valor": "0.90",
   "ok": true,
   "obs": ""
  },
@@ -655,9 +655,9 @@
   "peca_b": "TS-01A (linha 4)",
   "inserto_b": "insertos IL-1 / IT-P",
   "verificacao": "corte (y)",
-  "valor": "0.93",
+  "valor": "0.95",
   "ok": true,
-  "obs": "Fd 22.92 kN; furo oblongo vertical"
+  "obs": "Fd 23.29 kN; furo oblongo vertical"
  },
  {
   "grupo": "calha",

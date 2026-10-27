@@ -25,7 +25,7 @@ sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ.parents[1]))
 from nd_estruturas.prefabricados import Concreto
 from nd_estruturas import vento_nbr6123 as VNT
 from nd_estruturas.metalica_fria import PerfilZ, barra_redonda_tracao_Rd, compressao_laminado_Rd
-from geometria import Y_LIN, X_EIXO, Y_PC_C, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2
+from geometria import Y_LIN, X_EIXO, Y_PC_C, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, PG_L4, y_canto
 
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 CB = json.loads((AQ / "cobertura_metalica.json").read_text(encoding="utf-8"))
@@ -45,7 +45,7 @@ A_VM, G_2E = 0.30 * 0.75, (0.30 - 0.12) * 0.26 * 25   # rev09 (DEC-049): VM reta
 CM = json.loads((AQ / "cargas_mezanino.json").read_text(encoding="utf-8"))
 CB2 = json.loads((AQ / "cob_linha2.json").read_text(encoding="utf-8"))   # rev09 (DEC-048): W 310 da linha 2; rev09b (DEC-050): direto na cabeça dos pilares
 Z_L2 = {a["nome"]: a["z_concreto"] for a in CB2["apoios_diretos"]}
-X_PORTOES = [9.87, 15.195, 24.305, 29.63]      # pilares P9, P10a, P10b, P12 da linha 4 (portões)
+X_PORTOES = [PG_L4[k][1] for k in ("PG-01", "PG-02", "PG-04", "PG-03")]      # pilares P9, P10a, P10b, P12 da linha 4 (portões); rev12: PG-02/04 deslocados
 TRIB_X = [(XF[min(i + 1, 4)] - XF[max(i - 1, 0)]) / 2 for i in range(5)]
 # terças: posições x (linha da alma) — mesmas do modelo r04 / pranchas
 # rev06 (DEC-025): 15 espaços por meia água, 1ª terça a 40 cm livres da cabeça do P1 (calha)
@@ -158,7 +158,7 @@ def montar(cfg):
             rk = Z_L2["A" if k == 0 else "E"] if i == 1 else REC[k]          # rev09b: linha 2 — recuo no fundo da W 310
             zs = [rk] + (list(Z_MEZ) if i <= 1 else []) + [7.50, 8.75]
             zr = rk if not canto else math.ceil((zf(x0) + 0.90) / 0.05) * 0.05
-            pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))
+            pilar(f"{nome}{'C' if canto else ''}-L{i+1}", x0, y_canto(y) if canto else y, 0.60, 0.40, 10.0, zs, rec=zr, cab=(0.30, 0.30 if canto else 0.40))   # rev12: canto 10 cm para fora
     for j, x in enumerate(XF[1:4]):
         for nome, y in ((["P3", "P4", "P5"][j] + "-L1", 0.0), (["P3", "P14", "P5"][j] + "-L9", COMP)):
             zs = [zf(x) + 0.30] + (list(Z_MEZ) if y == 0 else []) + ([Z_I120] if "P14" in nome else []) + [7.50, 8.75]
@@ -173,9 +173,9 @@ def montar(cfg):
     pilar("P6E", P6_ESC[0], P6_ESC[1], 0.25, 0.40, Z_MEZ[0], [Z_MEZ[0]])
     pilar("P7E", P7_ESC[0], P7_ESC[1], 0.60, 0.40, Z_MEZ[0], [Z_MEZ[0]])
     pilar("P6-L2", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_L2["P6"], list(Z_MEZ))
-    for nome, x, b in (("P9", 9.87, 0.40), ("P10a", 15.195, 0.25), ("P10b", 24.305, 0.25), ("P12", 29.63, 0.40)):
+    for nome, x, b, by_ in [(n_, PG_L4[k][1], PG_L4[k][2], PG_L4[k][3]) for n_, k in (("P9", "PG-01"), ("P10a", "PG-02"), ("P10b", "PG-04"), ("P12", "PG-03"))]:   # rev12: PG-02/04 25×40
         # rev05 (DEC-024): cabeça dos pilares dos portões a 2 cm do fundo da TS-01 (ligação em y por 2 chapas parafusadas)
-        pilar(nome, x, Y[LINHA_PORTOES], b, b, round(zf(x) - 0.02, 3) if cfg.get("ligar_portoes", True) else 7.50, [6.25, 7.40])
+        pilar(nome, x, Y[LINHA_PORTOES], b, by_, round(zf(x) - 0.02, 3) if cfg.get("ligar_portoes", True) else 7.50, [6.25, 7.40])
 
     # ---------------- TS-01 (linhas 2 a 8): vigas 3D no CG (fundo + 0,45), nós em todas as terças
     A_TS, Iy_TS, Iz_TS, J_TS = 0.2225, 0.0198, 0.00177, 0.0016
@@ -414,7 +414,7 @@ H_ED = 10.0
 CPE_P = VNT.cpe_paredes(H_ED, COMP, LARG)
 CPE_C = VNT.cpe_cobertura(H_ED, LARG)
 Y_AB = (Y[1], Y[3]); Z_ABERTO = 7.50
-PORTOES_L4 = [(9.87, 15.195), (24.305, 29.63)]
+PORTOES_L4 = [(X_PORTOES[0], X_PORTOES[1]), (X_PORTOES[2], X_PORTOES[3])]
 
 
 def compartimento(y):
@@ -451,7 +451,7 @@ def vento_paredes(d, ecc, interno):
             add(n, 0.0, f * (1 + c * (x - xm)))
         ca, cab, cpv = interno
         for iy, nomes, xs, dp, port in ((1, ["P1-L2", "P8", "P8A", "P8B", "P2-L2"], XF, ca - cab, []),
-                                        (3, ["P1-L4", "P9", "P10a", "P11", "P10b", "P12", "P2-L4"], [0.0, 9.87, 15.195, XC, 24.305, 29.63, LARG], cab - cpv, PORTOES_L4)):
+                                        (3, ["P1-L4", "P9", "P10a", "P11", "P10b", "P12", "P2-L4"], [0.0, X_PORTOES[0], X_PORTOES[1], XC, X_PORTOES[2], X_PORTOES[3], LARG], cab - cpv, PORTOES_L4)):
             for i, nm in enumerate(nomes):
                 p = next(pp for pp in pil if pp["nome"] == nm)
                 xa = xs[i - 1] if i > 0 else xs[i]; xb = xs[i + 1] if i + 1 < len(xs) else xs[i]

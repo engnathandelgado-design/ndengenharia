@@ -61,9 +61,11 @@ PXY = lambda x, y, z: (x * 1000, -y * 1000)
 for yy, nm in ((0, "1"), (M(Y_LIN[1]), "2")):
     v.eixo(P_(-3700, yy), P_(1500, yy), 400); v.circulo(P_(-4300, yy), 300, "VISTA"); v.texto(P_(-4300, yy), nm, "nota", "MIDDLE_CENTER")
 v.eixo(P_(0, -900), P_(0, 10300), 400); v.circulo(P_(0, -1500), 300, "VISTA"); v.texto(P_(0, -1500), "A", "nota", "MIDDLE_CENTER")
-pilar(v, *P_(0, 0), 600, 400); pilar(v, *P_(0, M(Y_LIN[1])), 600, 400)
+from geometria import DY_CANTO as _DYC
+YK_ = -round(_DYC * 1000)                                     # rev12 (opção D): pilar de canto 10 cm para fora da linha 1
+pilar(v, *P_(0, YK_), 600, 400); pilar(v, *P_(0, M(Y_LIN[1])), 600, 400)
 v.texto(P_(400, -250), "P28", "min", "BOTTOM_LEFT"); v.texto(P_(400, M(Y_LIN[1]) + 250), "P29", "min", "TOP_LEFT")
-for y0_, y1_ in ((-200, PY0 - 20), (PY1 + 20, M(Y_LIN[1]) - 10)):
+for y0_, y1_ in ((YK_ - 200, PY0 - 20), (PY1 + 20, M(Y_LIN[1]) - 10)):
     v.poli([P_(-425, y0_), P_(-325, y0_), P_(-325, y1_), P_(-425, y1_)], "VISTA", fechada=True)
 v.chamada(P_(-60, (PY0 + PY1) / 2), (-26, 6), "porta 90 × 214")
 E.projetar(v, PXY, lambda pc: E.externa(pc) or (pc["grupo"] == "Piso e fundações" and E.bbox(pc)[1][0] < 0),
@@ -86,7 +88,7 @@ YZ = lambda x, y, z: (y * 1000, z * 1000)
 c.linha((-600, 0), (YP1 + 1000, 0), "TERRENO")
 E.projetar(c, YZ, lambda pc: E.externa(pc) or (pc["grupo"] == "Piso e fundações" and E.bbox(pc)[1][0] < 0), tf=camada)
 c.ret(PY0, ZC, PY1 - PY0, 2140, "OCULTA")
-c.ret(-200, -300, 400, ZC + 1800, "VISTA"); c.texto((0, ZC + 1900), "P28", "min", "BOTTOM_CENTER")
+c.ret(YK_ - 200, -300, 400, ZC + 1800, "VISTA"); c.texto((YK_, ZC + 1900), "P28", "min", "BOTTOM_CENTER")
 c.cota_v([0, ZP, ZC], YP1 + 600, 10, total=False)
 c.cota_h([YC0, YL0, YL1, YP1], -900, -10, total=True)
 c.texto(((YC0 + YL0) / 2, ZC + 1500), "chegada +3,95", "min", "BOTTOM_CENTER")

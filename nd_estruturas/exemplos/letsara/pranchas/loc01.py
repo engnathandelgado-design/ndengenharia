@@ -6,15 +6,17 @@ import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, PG_L4, y_canto, DY_CANTO
 from familia_pl import marca_de
 
 f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
 YL = [round(y * 1000) for y in Y_LIN]
 XA = {k: round(v * 1000) for k, v in X_EIXO.items()}
 Lx, Ly = YL[-1], XA["E"]
-MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
-             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
+MARCA_ESP = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P11", 19750): "PC-02", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
+MARCA_ESP.update({(r01, round(x * 1000)): mk for mk, (r01, x, _, _) in PG_L4.items()})      # rev12: PG-02/PG-04 25×40 deslocados
+X_PG2, X_PG4 = round(PG_L4["PG-02"][1] * 1000), round(PG_L4["PG-04"][1] * 1000)
+DYC = round(DY_CANTO * 1000)
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="PLANTA DE LOCAÇÃO DOS PILARES — EIXOS, MARCAS, SEÇÕES E FACES",
@@ -32,7 +34,8 @@ pil = []
 for i, y in enumerate(YL, start=1):
     for lado, xo in (("P1", 0), ("P2", Ly)):
         pos = f"{lado}{'C' if i in (1, 9) else ''}-L{i}"
-        pil.append((marca_de(f"{lado}-L{i}"), pos, y, xo, 400, 600, "lat", lado))
+        yc = (y - DYC if i == 1 else y + DYC) if i in (1, 9) else y         # rev12 (opção D): canto 10 cm para fora da linha
+        pil.append((marca_de(f"{lado}-L{i}"), pos, yc, xo, 400, 600, "lat", lado))
 for nome, x, y, bx, by in PILARES_ESPECIAIS:
     xm, ym = round(x * 1000), round(y * 1000)
     if nome in ("P6", "P7"):                                   # rev09 (DEC-045): P6/P7 da escada e P6 da linha 2 entram no projeto (PE)
@@ -133,9 +136,15 @@ for xr, dp in ((-1150, -3), (Lx + 1650, 3)):
 # pilares fora dos eixos: PG-02 / PG-04 (linha 4) e os dois PC-03 (DEC-058)
 y4 = YL[3]
 v.cota_h([XA["B"], 15195, XA["C"], 24305, XA["D"]], y4 - 1500, 0, total=False) if False else None
-v.cota_v([XA["B"], 15195, XA["C"], 24305, XA["D"]], y4 - 2200, -4, total=False)
+v.cota_v([XA["B"], X_PG2, XA["C"], X_PG4, XA["D"]], y4 - 2200, -4, total=False)
 v.cota_h([YL[3], round(Y_PC_C[0] * 1000), round(Y_PC_C[1] * 1000), YL[8]], XA["C"] - 1700, -4, total=False)
-v.chamada((y4, 15195), (14, -10), "PG-02 e PG-04 fora do eixo (portões)")
+v.chamada((y4, X_PG2), (14, -10), "PG-02 e PG-04 25×40 fora do eixo: 5,00 m livres em cada portão (PENDÊNCIA: confirmar)")
+# rev12 (opção D): pilares de canto 10 cm para fora das linhas 1 e 9 — cotados a partir dos dois eixos (linha e eixo A/E)
+for xc_, yc_ in ((0, 0), (0, Ly), (Lx, 0), (Lx, Ly)):
+    sx_ = -1 if xc_ == 0 else 1
+    sy_ = 1 if yc_ == 0 else -1
+    v.cota_h([xc_ + sx_ * DYC, xc_] if sx_ < 0 else [xc_, xc_ + sx_ * DYC], yc_ + sy_ * 900, 0, total=False)
+v.chamada((-DYC, 0), (-16, 16), f"cantos: eixo {DYC / 10:g} cm para fora das linhas 1 e 9 (face externa = face dos PF); no eixo A / E")
 v.chamada((round(Y_PC_C[0] * 1000), XA["C"]), (-12, -14), "PC-03 fora das linhas (cotados)")
 v.chamada((round(Y_PC_C[1] * 1000), XA["C"]), (12, -14), "3 vãos de 1651,7 da linha 4 à 9")
 # rev12: pilares da escada e da linha 2 fora dos eixos (P3, P2, P5) cotados a partir de dois eixos (1/2 e D/E)
@@ -161,7 +170,7 @@ det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
     [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40 × 60 (x × y), 60 na direção 1–9")
 det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 400, 400, [((-200, -150), (-12, -8), "PC-02 / PC-03 40×40")], "PC-02/PC-03 40×40 (PC-01/PM-01/PM-02 40×60)")
-det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×25")
+det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×40 (40 ao longo da parede)")
 
 # ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01
 grupos = {}
@@ -181,6 +190,8 @@ y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENT
               [40, 18, 9, 18, 15, 18, 76], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
+    "Pilares de canto (linhas 1 e 9, eixos A e E): eixo 10 cm para fora da linha, no eixo A / E — a face externa fica no plano da face dos pilares de fachada (cotados a partir dos dois eixos).",
+    "PENDÊNCIA (confirmar com o arquitetônico/cliente): PG-02 e PG-04 passam a 25 × 40 (40 ao longo da parede da linha 4) com o eixo 7,5 cm para longe do portão, para manter os 5,00 m livres face a face de cada portão.",
     "Todos os pilares são centrados nos eixos, exceto os pilares da escada e o PE-03 da linha 2 (cotados dos eixos 1, 2, D e E), PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
     RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),

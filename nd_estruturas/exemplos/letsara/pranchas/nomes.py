@@ -20,14 +20,14 @@ Saída: nomes.json (pecas, marca_para_nomes, nome_para_marca). Rodar: python nom
 import json, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_PC_C
+from geometria import Y_LIN, X_EIXO, X_FACH, PILARES_ESPECIAIS, Y_PC_C, PG_L4, y_canto
 from familia_pl import marca_de
 
 PR = "/home/claude/letsara/pranchas/"
 EIXOS = sorted(X_EIXO.items(), key=lambda kv: kv[1])
 # marcas dos pilares internos (mesma tabela da LOC01; chave = nome R01 + x em mm)
-MARCA_INT = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P9", 9870): "PG-01", ("P10", 15195): "PG-02",
-             ("P11", 19750): "PC-02", ("P10", 24305): "PG-04", ("P12", 29630): "PG-03", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
+MARCA_INT = {("P8", 9870): "PM-01", ("P8B", 29630): "PM-02", ("P8A", 19750): "PC-01", ("P11", 19750): "PC-02", ("P13", 19750): "PC-03", ("P13B", 19750): "PC-03"}
+MARCA_INT.update({(r01, round(x * 1000)): mk for mk, (r01, x, _, _) in PG_L4.items()})      # rev12: PG-02/PG-04 deslocados (geometria.PG_L4)
 FOLHA = lambda mk: "ND-LET-" + mk.replace("-", "")
 
 
@@ -36,7 +36,8 @@ def pilares_obra():
     out = []
     for i, y in enumerate(Y_LIN, start=1):
         for lado, x in (("P1", 0.0), ("P2", X_EIXO["E"])):
-            out.append((marca_de(f"{lado}-L{i}"), f"{lado} L{i}", x, y, "40×60"))
+            yp = y_canto(y) if i in (1, len(Y_LIN)) else y              # rev12 (opção D): cantos 10 cm para fora da linha
+            out.append((marca_de(f"{lado}-L{i}"), f"{lado} L{i}", x, yp, "40×60"))
     for nome, x, y, bx, by in PILARES_ESPECIAIS:
         if nome in ("P6", "P7"):                                # rev09 (DEC-045): pilares da escada
             mk = "PE-02" if nome == "P7" else ("PE-03" if abs(y - Y_LIN[1]) < 1e-6 else "PE-01")
@@ -63,7 +64,8 @@ def numerar_pilares():
     for k, (mk, r01, x, y, sec) in enumerate(ordem, 1):
         fila = eixo_proximo(x)
         res.append(dict(nome=f"P{k}", tipo="pilar", marca=mk, folha=FOLHA(mk), nivel="fundação", x=x, y=y, secao=sec, ref_R01=r01,
-                        fila=fila[0], fora_do_eixo=abs(fila[1] - x) > 1e-6, linha=(Y_LIN.index(y) + 1) if y in Y_LIN else None))
+                        fila=fila[0], fora_do_eixo=abs(fila[1] - x) > 1e-6, linha=next((k + 1 for k, yl in enumerate(Y_LIN) if abs(yl - y) <= 0.101), None),
+                        fora_da_linha=(y not in Y_LIN) and any(abs(yl - y) <= 0.101 for yl in Y_LIN)))
     return res
 
 

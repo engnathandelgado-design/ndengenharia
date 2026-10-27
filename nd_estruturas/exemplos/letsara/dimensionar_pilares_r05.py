@@ -104,7 +104,16 @@ def e_cc(p):
     return out
 
 
-def secao_ok(cand, pils):
+# rev12 (27/10, opção D): VB e CP-VB rentes à face externa em todos os vãos das fachadas 1 e 9 → momento adicional no plano ⊥ à
+# fachada (Mx) = Σ Vd·e nos pilares de fachada (2 consolos, e = 22,5 cm) e de canto (1 consolo, e = 12,5 cm); somado em valor
+# absoluto ao Mx de todas as combinações (a favor da segurança) — calc_consolo_vb_face.py confere a torção
+from geometria import E_VB_FACE as _EVB, DY_CANTO as _DYC
+_VD_VB = json.loads((AQ / "consolos.json").read_text(encoding="utf-8"))["CP-VB"]["Vd_kN"]
+DM_CONS = {p: 2 * _VD_VB * _EVB for p in ("P3-L1", "P4-L1", "P5-L1", "P3-L9", "P14-L9", "P5-L9")}
+DM_CONS.update({p: _VD_VB * (_EVB - _DYC) for p in ("P1C-L1", "P2C-L1", "P1C-L9", "P2C-L9")})
+
+
+def secao_ok(cand, pils, com_dm=True):
     pior = 0.0
     ecc = {p: e_cc(p) for p in pils}
     for nome_c, it in EST.items():
@@ -113,7 +122,7 @@ def secao_ok(cand, pils):
             Nd = max(b["N"], 0.0)
             MRx = MRd(b["bx"], b["by"], cand["brs"], Nd, "y")
             MRy = MRd(b["by"], b["bx"], cand["brs"], Nd, "x")
-            Mx = abs(b["Mx"]) + Nd * ecc[p]["y"]
+            Mx = abs(b["Mx"]) + Nd * ecc[p]["y"] + (DM_CONS.get(p, 0.0) if com_dm else 0.0)
             My = abs(b["My"]) + Nd * ecc[p]["x"]
             u = (Mx / MRx) ** 1.2 + (My / MRy) ** 1.2
             if u > pior:
