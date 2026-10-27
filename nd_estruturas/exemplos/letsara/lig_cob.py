@@ -259,10 +259,56 @@ def L_MF():
     return math.hypot((Y_MF - GAB / 2) / 1000, (zb0 + W["d"] - W["tf"]) / 1000)
 
 
+# ====================================================================== 6. terça na VB (ST-1V) — rev12 (revisão rev12, rev11 #27)
+def apoio_terca_vb(L_vis=700):
+    """origem: alma da terça (x = 0), eixo da VB (y = 0; −y = para fora, fachada), topo do concreto da VB (z = 0).
+    Mesma geometria do modelo 3D (modelo_bim.suporte_st): chapa com a borda rente à ponta da terça (ext. de fachada)."""
+    t, larg, h, aba = ST["t"], ST["larg"], ST["h"], ST["aba"]
+    ext = PC["extensao_fachada_mm"]
+    yc = 110 - ext                                          # centro da chapa (borda rente à ponta da terça, em y = −ext)
+    P = [_p(0, "VB", "viga de borda 15 × 60 (topo, referência)", "caixa", (0, 0, 0), True, b=(-260, 140, -75, 75, -160, 0), concreto=True)]
+    for xe in (-45, -105):
+        P.append(_p(1, "ES-1V", "espera M16 (hef 150 + gancho + grampo U Ø10), na VB", "cil", (0, 0, 0), c=(xe, 0, -150), eixo="z", r=8, h=150 + 120))
+        P.append(_p(7, "M16", "porca + contraporca + arruela na ES-1V", "hex", (0, 0, 320), c=(xe, 0, t), eixo="z", r=15, h=13))
+        P.append(_p(7, "M16", "", "hex", (0, 0, 320), c=(xe, 0, t + 13), eixo="z", r=15, h=13))
+    ex = (0, 0, 170)
+    P.append(_p(2, "ST-1V", "chapa dobrada 9,5 × 220 A36 galv. (aba 290 + aba 150), borda rente à ponta da terça", "caixa", ex, b=(-t, 0, yc - larg / 2, yc + larg / 2, 0, h)))
+    P.append(_p(2, "ST-1V", "", "caixa", ex, b=(-aba, -t, yc - larg / 2, yc + larg / 2, 0, t)))
+    P += _z(3, "T", f"terça Z 302 de ponta (passa {ext} do eixo da VB)", 0.0, -ext, L_vis, Z_TERCA, exp=(160, 0, 0), ctx=False)
+    for yy in (yc - Y_COL, yc + Y_COL):
+        for z in (Z_TERCA + zz for zz in Z_FURO):
+            P += _parafuso(5, "M12 8.8", "apoio: ST-1V + alma da terça", (-t, yy, z), "x", 12, t + T_Z + 18, exp=(-170, 0, 0),
+                           porca_em=t + T_Z + 1, exp_porca=(380, 0, 0), item_porca=5)
+    return P
+
+
+# ====================================================================== 7. última terça no pilar de canto (ST-1FL + ES-1FL) — rev12
+def apoio_terca_canto():
+    """origem: alma da terça (x = 0), face lateral interna do pilar de canto (plano y = 0; pilar em y > 0), fundo da chapa (z = 0).
+    Mesma geometria do modelo 3D (modelo_bim.suporte_fl): aba 190 na face, aba 100 na alma, 2 ES-1FL M20 horizontais."""
+    t = 9.5
+    xA = 6.5                                                # face A do pilar de canto
+    P = [_p(0, "PILAR", "pilar de canto (face lateral interna, referência)", "caixa", (0, 0, 0), True, b=(xA, xA + 400, 0, 260, -180, 470), concreto=True)]
+    P.append(_p(2, "ST-1FL", "chapa dobrada 9,5 × 290 A36 galv.: aba 190 na face do pilar (2 furos Ø22) + aba 100 na alma (2 Ø14)", "caixa", (0, -120, 0),
+                b=(-t, xA + 175, -t, 0, 0, 290)))
+    P.append(_p(2, "ST-1FL", "", "caixa", (0, -120, 0), b=(-t, 0, -100, -t, 0, 290)))
+    for xe in (xA + 70, xA + 150):
+        P.append(_p(1, "ES-1FL", "barra roscada M20 A36 L=400 horizontal (hef 150 + grampo U Ø10), embutida na face", "cil", (0, 0, 0), c=(xe, 320, 145), eixo="y", r=10, h=-400))
+        P.append(_p(8, "M20", "arruela + porca + contraporca na ES-1FL", "hex", (0, -260, 0), c=(xe, -t, 145), eixo="y", r=19, h=-16))
+        P.append(_p(8, "M20", "", "hex", (0, -260, 0), c=(xe, -t - 16, 145), eixo="y", r=19, h=-16))
+    P += _z(3, "T", "última terça do lado E (termina 10 mm antes da face do pilar)", 0.0, -900, -10, Z_TERCA - 10, exp=(-200, -120, 0), ctx=False)
+    for z in (Z_TERCA - 10 + zz for zz in Z_FURO):
+        P += _parafuso(5, "M12 8.8", "aba 100 do ST-1FL + alma da terça", (-t, -60, z), "x", 12, t + T_Z + 18, exp=(-170, -120, 0),
+                       porca_em=t + T_Z + 1, exp_porca=(380, -120, 0), item_porca=5)
+    return P
+
+
 ITENS = {
     "ISO 1": ("TERÇAS NA VIGA DE COBERTURA: ST-1P E TRANSPASSE", apoio_terca_ts01),
     "ISO 2": ("W DA LINHA 2 NA CABEÇA DO PILAR", apoio_w_pilar),
     "ISO 3": ("MONTANTE W 150 SOBRE A VM DO +7,30", lambda: montante(CB2["montantes"][1]["L_m"] * 1000)),
     "ISO 4": ("EMENDA DA W DA LINHA 2", emenda_w),
     "ISO 5": ("TERÇA NA W DA LINHA 2: ST-W E MF-1", terca_w),
+    "ISO 6": ("TERÇA NA VIGA DE BORDA: ST-1V", apoio_terca_vb),
+    "ISO 7": ("ÚLTIMA TERÇA NO PILAR DE CANTO: ST-1FL E ES-1FL", apoio_terca_canto),
 }

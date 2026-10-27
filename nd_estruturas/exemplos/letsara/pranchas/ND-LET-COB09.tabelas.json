@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W)",
+  "conteudo": "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W, ST-1V E ST-1FL)",
   "desenho": "ND-LET-COB09",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -289,6 +289,90 @@
      "8",
      "M12 × 30 8.8",
      "MF-1 × mesa inferior da W (ponta dobrada, furo Ø14 na mesa) — torque 85 N·m",
+     "2"
+    ],
+    [
+     "6",
+     "0",
+     "VB",
+     "viga de borda 15 × 60 (topo, referência)",
+     "1"
+    ],
+    [
+     "6",
+     "1",
+     "ES-1V",
+     "espera M16 (hef 150 + gancho + grampo U Ø10), na VB",
+     "2"
+    ],
+    [
+     "6",
+     "2",
+     "ST-1V",
+     "chapa dobrada 9,5 × 220 A36 galv. (aba 290 + aba 150), borda rente à ponta da terça",
+     "1"
+    ],
+    [
+     "6",
+     "3",
+     "T",
+     "terça Z 302 de ponta (passa 85 do eixo da VB)",
+     "1"
+    ],
+    [
+     "6",
+     "5",
+     "M12 × 30 8.8",
+     "apoio: ST-1V + alma da terça — torque 85 N·m",
+     "4"
+    ],
+    [
+     "6",
+     "7",
+     "M16",
+     "porca + contraporca + arruela na ES-1V",
+     "2"
+    ],
+    [
+     "7",
+     "0",
+     "PILAR",
+     "pilar de canto (face lateral interna, referência)",
+     "1"
+    ],
+    [
+     "7",
+     "1",
+     "ES-1FL",
+     "barra roscada M20 A36 L=400 horizontal (hef 150 + grampo U Ø10), embutida na face",
+     "2"
+    ],
+    [
+     "7",
+     "2",
+     "ST-1FL",
+     "chapa dobrada 9,5 × 290 A36 galv.: aba 190 na face do pilar (2 furos Ø22) + aba 100 na alma (2 Ø14)",
+     "1"
+    ],
+    [
+     "7",
+     "3",
+     "T",
+     "última terça do lado E (termina 10 mm antes da face do pilar)",
+     "1"
+    ],
+    [
+     "7",
+     "5",
+     "M12 × 30 8.8",
+     "aba 100 do ST-1FL + alma da terça — torque 85 N·m",
+     "2"
+    ],
+    [
+     "7",
+     "8",
+     "M20",
+     "arruela + porca + contraporca na ES-1FL",
      "2"
     ]
    ]

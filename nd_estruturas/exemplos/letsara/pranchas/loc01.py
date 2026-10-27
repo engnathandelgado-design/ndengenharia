@@ -169,8 +169,13 @@ det("D1", (X0d, Y0d), "DETALHE 1 — PILAR LATERAL", 400, 600,
     [((0, -300), (-14, -8), "face C (placas) — lado do eixo A"), ((-100, 300), (-14, 8), "face A (interna)")], "PL: 60 × 40 (x × y), 60 na direção A–E")
 det("D2", (X0d + 150, Y0d), "DETALHE 2 — PILAR DE FACHADA", 600, 400,
     [((-300, -100), (-12, -10), "face C (placas) — L1: lado do eixo 1"), ((300, -100), (12, -10), "face A (interna)")], "PF: 40 × 60 (x × y), 60 na direção 1–9")
-det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS", 400, 400, [((-200, -150), (-12, -8), "PC-02 / PC-03 40×40")], "PC-02/PC-03 40×40 (PC-01/PM-01/PM-02 40×60)")
-det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES", 400, 400, [((-200, -150), (-12, -8), "PG-01 / PG-03 40×40")], "PG-01/03 40×40; PG-02/04 25×40 (40 ao longo da parede)")
+import registro as REGl                                                  # rev12 (item 16): seções x × y e nomes do registro
+_nm = lambda *mks: RN.N(", ".join(n for m in mks for n in RN.nomes_de(m)))
+_sx = lambda mk: REGl.pilar(mk)["secao"]
+det("D3", (X0d, Y0d - 110), "DETALHE 3 — CENTRAIS 40 × 40", 400, 400, [((-200, -150), (-12, -8), _nm("PC-02", "PC-03"))],
+    f"{_nm('PC-02', 'PC-03')} {_sx('PC-02')}")
+det("D4", (X0d + 150, Y0d - 110), "DETALHE 4 — PORTÕES 40 × 25", 250, 400, [((-125, -150), (-12, -8), _nm("PG-02", "PG-04"))],
+    f"{_nm('PG-02', 'PG-04')} {_sx('PG-02')}, 40 ao longo da parede")
 
 # ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01
 grupos = {}
@@ -183,16 +188,16 @@ lin = []
 for fl, g in sorted(grupos.items(), key=lambda kv: int(kv[1]["nomes"][0][1:])):
     import pe_pilar as PP                                                     # rev11: comprimento total e embutimento no cálice
     d_ = PP.peca(g["nomes"][0])
-    lin.append([RN.novo(RN.lista(g["nomes"])), g["sec"], str(len(g["nomes"])), PP.f2(d_["L"]), PP.f2(d_["emb"]), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
-lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", "", "", RN.novo("inclui P6 e P7 da escada e P6 da linha 2 (DEC-045)")])
+    lin.append([RN.novo(RN.lista(g["nomes"])), REGl.pilar(RN._D["nome_para_marca"].get(g["nomes"][0]) or next(q["marca"] for q in RN._D["pecas"] if q["nome"] == g["nomes"][0]))["secao"], str(len(g["nomes"])), PP.f2(d_["L"]), PP.f2(d_["emb"]), fl.replace("ND-LET-", ""), RN.novo(", ".join(g["r01"]))])
+lin.append(["TOTAL", "", str(sum(len(g["nomes"]) for g in grupos.values())), "", "", "", RN.novo(f"inclui os pilares da escada ({RN.lista(RN.nomes_de('PE-01') + RN.nomes_de('PE-02'))}) e o da linha 2 ({RN.lista(RN.nomes_de('PE-03'))})")])
 x0 = 360
-y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm)", "QT", "L TOTAL (m)", "EMB. (m)", "FOLHA", "NOME NO R01"], lin,
+y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENTE (R01)", ["PILARES", "SEÇÃO (cm, x × y)", "QT", "L TOTAL (m)", "EMB. (m)", "FOLHA", "NOME NO R01"], lin,
               [40, 18, 9, 18, 15, 18, 76], h_lin=5.2, destaque_ultima=True)
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
     "Pilares de canto (linhas 1 e 9, eixos A e E): eixo 10 cm para fora da linha, no eixo A / E — a face externa fica no plano da face dos pilares de fachada (cotados a partir dos dois eixos).",
     "PENDÊNCIA (confirmar com o arquitetônico/cliente): PG-02 e PG-04 passam a 25 × 40 (40 ao longo da parede da linha 4) com o eixo 7,5 cm para longe do portão, para manter os 5,00 m livres face a face de cada portão.",
-    "Todos os pilares são centrados nos eixos, exceto os pilares da escada e o PE-03 da linha 2 (cotados dos eixos 1, 2, D e E), PG-02 e PG-04 (linha 4, portões) e os dois PC-03 (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9, DEC-058): posições cotadas na planta.",
+    RN.novo(f"Todos os pilares são centrados nos eixos, exceto: os 4 pilares de canto ({RN.lista(RN.nomes_de('PL-03') + RN.nomes_de('PL-04') + RN.nomes_de('PL-07') + RN.nomes_de('PL-08'))}, 10 cm para fora das linhas 1 e 9); os pilares da escada e o da linha 2 ({RN.lista(RN.nomes_de('PE-01') + RN.nomes_de('PE-02') + RN.nomes_de('PE-03'))}, cotados dos eixos 1, 2, D e E); {RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04'))} (linha 4, portões) e {RN.lista(RN.nomes_de('PC-03'))} (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9): posições cotadas na planta."),
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
     RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),
     "Tolerância de locação (NBR 9062:2017 5.2.2.6): ±1,0 cm entre apoios consecutivos, acumulado ≤ 0,1 % do comprimento; prumo ±H/300 até 2,5 cm.",

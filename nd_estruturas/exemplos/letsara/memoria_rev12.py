@@ -7,6 +7,7 @@ pilares da escada e P6 da linha 2 (dimensionamento_pilares_r05.json / arranjo_pi
 Substitui, para as VM, os itens de meio vaso das memórias MC05 e MC08 (rev06)."""
 import json, sys
 from pathlib import Path
+sys.path.insert(0, "/home/claude/letsara/pranchas")
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import mm
@@ -23,6 +24,8 @@ MV = J("mef_vm_ret_dente_750_450.json")
 EX, I1 = J("escada_externa.json"), J("i110_r01.json")
 ESD, PJ, DP = J("escadas.json"), J("portao_l4.json"), J("arranjo_pilares.json")
 NOME_I = {"V407": "V400", "V406": "V401", "V405": "V402", "V404": "V403"}
+import renomear as _RNm                                                       # rev12: nomes do projeto pela posição (não os do modelo)
+NOME_P = lambda k: _RNm.pilar_em(CF["pilares"][k]["x"], CF["pilares"][k]["y"])
 DI = J("dentes.json")["I120"]
 N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I120"][0]
 P_ = VM["premissas"]
@@ -66,7 +69,7 @@ CFU = J("cargas_fundacao.json")["pilares"]
 DPR = J("dimensionamento_pilares_r05.json")
 E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV12 (26 E 27/10/2026)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Correções da revisão independente da rev11 e decisões de 26/10: laje LP20 com 9 Ø12,7, família I120 (antes chamada I130, seção h 120) com N3 ≤ Ø20, "
-       "vigas de borda rentes à face externa dos pilares de fachada, densidade única 2,50 t/m³; 27/10: pilares de canto 10 cm para fora (face alinhada à dos PF, VB rente à face em todos os vãos) e PG-02/PG-04 25 × 40. Complementa a MC09 e a MC10. Documento para análise antes do zip com DXF e IFC."),
+       "vigas de borda rentes à face externa dos pilares de fachada, densidade única 2,50 t/m³; 27/10: pilares de canto 10 cm para fora (face alinhada à dos PF, VB rente à face em todos os vãos) e PG-02/PG-04 25 × 40. Este PDF reúne a memória vigente: MC12 (alterações rev12) seguida da MC10 e da MC09, que continuam valendo no que não foi alterado — índice abaixo. Documento para análise antes do zip com DXF e IFC."),
      Paragraph("1. Laje alveolar LP20 — 9 Ø12,7 CP-190 RB, capa 5 cm (NBR 14861:2022; NBR 6118:2023; NBR 9062:2017)", T2),
      P(f"Arranjo: 2 cordoalhas em cada nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo, espaço livre 2,2 cm ≥ 2 cm e ≥ Ø) + 5 nas nervuras internas a 4,0 cm; Ap = {f(LA['Ap_mm2'], 1)} mm²; "
        f"σpi = {f(LA['sig_pi'], 0)} MPa; liberação com fckj ≥ {f(LA['fckj'], 0)} MPa; lbpt = {f(LA['lbpt_m'] * 100, 0)} cm; perdas totais {f(LA['perdas']['perda_total_pct'], 1)} %. Vão de cálculo {f(LA.get('L_calc_m', 9.45), 2)} m (peça 9,55 m). "
@@ -75,9 +78,9 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
      P(f"Flechas: contraflecha na liberação {f(LA['flechas_mm']['contraflecha_fabricacao'])} mm, na montagem {f(LA['flechas_mm']['contraflecha_montagem'])} mm, final {f(LA['flechas_mm']['final'])} mm ≤ L/250 = {f(LA['flechas_mm']['lim_final_L250'])} mm. "
        f"+7,30 (laje de cobertura): {ok(LA['nivel_730']['ok'])}. LA-03/LA-04 (escada): {LA['LA03'].get('arranjo')} — {ok(LA['LA03']['ok'])}."),
      Paragraph("2. Viga central I120 — N3 10 Ø20 em 2 camadas (antes 6 Ø25)", T2),
-     P(f"As do N3 = 31,4 cm² (antes 29,5), centroide 2,25 cm mais baixo. Resultados (calc_i110_r01, V406 governante dos 3 vãos de 16,52 m): ELU Md {f(I6['ELU']['Md'])} ≤ MRd {f(I6['ELU']['MRd'])} kN·m, x/d {f(I6['ELU']['x_d'], 3)} ≤ 0,45; "
+     P(f"As do N3 = 31,4 cm² (antes 29,5), centroide 2,25 cm mais baixo. Resultados ({NOME_I["V406"]} governante dos 3 vãos de 16,52 m: {NOME_I["V406"]}, {NOME_I["V405"]} e {NOME_I["V404"]}): ELU Md {f(I6['ELU']['Md'])} ≤ MRd {f(I6['ELU']['MRd'])} kN·m, x/d {f(I6['ELU']['x_d'], 3)} ≤ 0,45; "
        f"ato As,topo {f(I6['ato']['As_topo_cm2'], 2)} ≤ {f(I6['ato']['As_N3_cm2'], 2)} cm²; ELS {ok(I6['ELS']['ok'])}; cortante {ok(I6['cortante']['ok'])}; flecha final {f(I6['flecha']['final_mm'])} mm. "
-       f"V400 (19,50 m): ELU {f(I1['V407']['ELU']['Md'])} ≤ {f(I1['V407']['ELU']['MRd'])} kN·m. Volume e peso de cada marca por um só cálculo (viga_i.vol_viga, maciços de 1,40 m e dentes): "
+       f"V400 (19,50 m): ELU {f(I1['V407']['ELU']['Md'])} ≤ {f(I1['V407']['ELU']['MRd'])} kN·m. Volume e peso de cada marca por um só cálculo da geometria (maciços de 1,40 m e dentes): "
        + ", ".join(f"{NOME_I[k]} {f(I1[k]['icamento']['peso_kN'] / 10, 2)} t" for k in ("V407", "V406", "V405", "V404")) + "."),
      Paragraph("3. Vigas de borda rentes à face externa dos pilares de fachada (NBR 9062:2017 7.3; NBR 6118:2023 17.2.5 e 17.5)", T2),
      P(f"Em todos os vãos das linhas 1 e 9 (VB-01 a VB-08; nos vãos de canto desde 27/10, com o pilar de canto 10 cm para fora) a VB 15×60 e o consolo CP-VB ficam rentes à face externa do pilar 40×60: eixo da VB a e = {f(CF2['e_m'] * 100, 1)} cm do eixo do pilar, 2,5 cm até a placa. "
@@ -87,17 +90,17 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
          [20, 16, 24, 22, 22, 34, 12]),
      P(f"Terças: o 1º e o último vão de todas as terças crescem {f(CF2['e_m'] * 1000, 0)} mm (a última do lado E, que encosta no pilar de canto, termina 1 cm depois da face interna dele e apoia no ST-1FL); ST-1V com a borda rente à ponta da terça; ponta a 85 mm do eixo da VB (borda dos furos 25 mm ≥ 22 mm, NBR 8800:2024 Tab. 14), 15 mm antes da placa. "
        f"Terça Z 302 × 2,30 com os vãos novos: uso {f(CBM['terca']['governante']['uso'], 3)} (antes 0,851); parafusos do transpasse {f(CBM['terca']['parafusos_transpasse']['uso'], 3)}. "
-       "O ΔMd dos consolos entra no dimensionamento dos pilares (dimensionar_pilares_r05) e no Mxd das cargas na fundação."),
+       "O ΔMd dos consolos entra no dimensionamento dos pilares e no Mxd das cargas na fundação."),
      Paragraph("3a. Pilares de canto 10 cm para fora (decisão de 27/10, opção D)", T2),
      P("Os 4 pilares de canto 40 × 60 (linhas 1 e 9, eixos A e E) mantêm a seção e ficam com o eixo 10 cm para fora da linha: face externa no plano da face dos pilares de fachada (−0,30 / +0,30). "
-       "Cálice e bloco seguem o eixo do pilar (CG01, com o momento N·e = N·0,10 caso o bloco fique na linha). Modelo global r05 refeito com a posição nova: envoltória sem mudança relevante. "
+       "Cálice e bloco seguem o eixo do pilar (CG01, com o momento N·e = N·0,10 caso o bloco fique na linha). Modelo global refeito com a posição nova: envoltória sem mudança relevante. "
        "CP-VB do canto rente à face externa (e = 12,5 cm do eixo do pilar). Cargas na fundação (tf): "
-       + "; ".join(f"{k} Nk {f((CFU[k]['G']['N'] + CFU[k]['Q']['N']) / 10)}, Nd {f(CFU[k]['ELU']['Nd_max'] / 10)}, Mxd {f(CFU[k]['ELU']['Mxd_max'] / 10)}" for k in ("P1C-L1", "P2C-L1", "P1C-L9", "P2C-L9")) + ". "
-       "VM de borda da linha 1 nos vãos de canto: no eixo, o dente fica 5 cm fora do CP-MEZ — PENDÊNCIA, quadro decisao_vm_canto (recomendada a opção A: VM da linha 1 5 cm para fora, lajes 9,60 m)."),
+       + "; ".join(f"{NOME_P(k)} Nk {f((CFU[k]['G']['N'] + CFU[k]['Q']['N']) / 10)}, Nd {f(CFU[k]['ELU']['Nd_max'] / 10)}, Mxd {f(CFU[k]['ELU']['Mxd_max'] / 10)}" for k in sorted(("P1C-L1", "P2C-L1", "P1C-L9", "P2C-L9"), key=lambda k_: int(NOME_P(k_)[1:])) if True) + ". "
+       "VM de borda da linha 1 nos vãos de canto: no eixo, o dente fica 5 cm fora do CP-MEZ — PENDÊNCIA, quadro de decisão anexo a este pacote (ND-LET-DECISAO-VM-CANTO; recomendada a opção A: VM da linha 1 5 cm para fora, lajes 9,60 m)."),
      Paragraph("3b. PG-02 e PG-04 25 × 40 (decisão de 27/10)", T2),
      P(f"Seção 25 × 40 com 40 ao longo da parede da linha 4; eixo 7,5 cm para longe do portão (x = {f(PJ['pilares']['PG-02']['x_m'], 3)} e {f(PJ['pilares']['PG-04']['x_m'], 3)} m) para manter 5,00 m livres face a face "
        f"({f(PJ['vao_livre_portoes_m']['PG-01–PG-02'], 2)} e {f(PJ['vao_livre_portoes_m']['PG-04–PG-03'], 2)} m) — PENDÊNCIA visível: confirmar com o arquitetônico/cliente. "
-       f"Apoio da TS-01A (calc_portao_l4): Nd = {f(PJ['pilares']['PG-02']['Nd_tf'])} tf, λ = {f(PJ['pilares']['PG-02']['lambda_'])} / {f(PJ['pilares']['PG-04']['lambda_'])} ≤ 90; neoprene NEO-7 {PJ['neoprene']['PG-02']['dim_mm']} (σ {f(PJ['neoprene']['PG-02']['sigma_MPa'], 2)} MPa). "
+       f"Apoio da TS-01A: Nd = {f(PJ['pilares']['PG-02']['Nd_tf'])} tf, λ = {f(PJ['pilares']['PG-02']['lambda_'])} / {f(PJ['pilares']['PG-04']['lambda_'])} ≤ 90; neoprene NEO-7 {PJ['neoprene']['PG-02']['dim_mm']} (σ {f(PJ['neoprene']['PG-02']['sigma_MPa'], 2)} MPa). "
        f"Armadura (2ª ordem global + método geral + manuseio): PG-02 {DPR['PG-02']['proposto']['n']} Ø16, PG-04 {DPR['PG-04']['proposto']['n']} Ø16. "
        "CE-1 380 × 330 cabe na face de 40 (fim da pendência das CE-1 de 25 cm); calço CS-1D de 75 mantido (lado de 25 ⊥ à parede). "
        f"Cargas na fundação (tf): PG-02 Nk {f((CFU['P10a']['G']['N'] + CFU['P10a']['Q']['N']) / 10)}, Nd {f(CFU['P10a']['ELU']['Nd_max'] / 10)}; PG-04 Nk {f((CFU['P10b']['G']['N'] + CFU['P10b']['Q']['N']) / 10)}, Nd {f(CFU['P10b']['ELU']['Nd_max'] / 10)}."),
@@ -105,9 +108,22 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
      P("Peso = volume × 25 kN/m³; t = kN / 10 (2,50 t/m³) em todo o jogo: IC01, folhas das peças, PR01, quantitativos e montagem (antes a IC01 e a TS-01 usavam 9,81). A IC01 lê os pesos da mesma lista de peças do PR01; σ no furo FI-1 em MPa; coluna βa = 1,3 em todas as tabelas."),
      Paragraph("5. Barras das peças e pinos de ligação", T2),
      P("Armadura passiva longitudinal das vigas com Ø ≥ 12,5 (TS-01: N5 e N9 passam de Ø10 para Ø12,5; As do topo 7,36 cm²) e nenhuma barra de armadura acima de Ø20. "
-       "Única exceção registrada (DEC-083): pino de ligação PN-2 Ø25 CA-50 (L = 900, 350 no consolo) da I120 nos consolos CP-I120 (PF04, PC01, PC02, PC03) — inserto de ligação, não armadura; a confirmar."),
+       "Exceções registradas (pinos de ligação, não armadura da peça; mantidos pelo responsável técnico em 27/10): PN-2 Ø25 CA-50 (L = 900, 350 no consolo) da I120 nos consolos CP-I120 (P24, P18, P20, P22, P23 — folhas PF04, PC01, PC02, PC03) e PN-3 Ø25 CA-50 (L = 600, 300 no pilar) do assento das TS-01 no recuo dos pilares laterais (2 por pilar, 24 un. — folhas PL01, PL05, PL09 a PL12 e corte CT01)."),
      Paragraph("6. Pendências", T2),
-     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: VM de borda da linha 1 nos vãos de canto (quadro decisao_vm_canto). (c) Confirmar a locação dos PG-02/PG-04 (5,00 m livres). Pino PN-2 Ø25 da I120 mantido (decisão de 27/10). "
+     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: VM de borda da linha 1 nos vãos de canto (quadro de decisão anexo, com as opções A a D desenhadas). (c) Confirmar a locação dos PG-02/PG-04 (5,00 m livres). Pinos PN-2 e PN-3 Ø25 mantidos (27/10). "
        "(d) Local da obra (V0, S2, S3 da NBR 6123:2023), ART e TRRF. (e) Zip com DXF e IFC só depois da aprovação deste pacote.")]
+E.insert(2, tab([["PARTE", "CONTEÚDO", "SITUAÇÃO"],
+                 ["MC12 (esta parte)", "laje LP20 9 Ø12,7; I120 N3 Ø20; VB rente; cantos 10 cm para fora; PG-02/PG-04 25 × 40; pesos; bitolas e pinos", "vigente; prevalece sobre as anteriores"],
+                 ["MC10 (anexada)", "revisão do Nathan sobre a rev09: consolo CT-I120, escadas, içamento das placas, cotas", "vigente no que a MC12 não alterou"],
+                 ["MC09 (anexada)", "pisos +3,90/+7,30, VM retangulares 30 × 75, laje alveolar, cobertura da linha 2, escada metálica, pilares da escada, fundação", "vigente no que a MC10/MC12 não alteraram"]], [32, 100, 44]))
 doc.build(E)
+# rev12 (revisão rev12, item 11): memória vigente num documento só — MC12 + MC10 + MC09
+import pymupdf as _fz
+_ENT = Path("/home/claude/letsara/entregas")
+_out = _fz.open(str(SAI))
+for _a in ("ND-LET-MC10-REV10-rev10.pdf", "ND-LET-MC09-REV09-rev09.pdf"):
+    if (_ENT / _a).exists():
+        _out.insert_pdf(_fz.open(str(_ENT / _a)))
+_tmp = SAI.with_suffix(".tmp.pdf")
+_out.save(str(_tmp), garbage=3, deflate=True); _out.close(); _tmp.replace(SAI)
 print("ok", SAI)

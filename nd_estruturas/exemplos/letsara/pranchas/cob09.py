@@ -12,8 +12,9 @@ import lig_cob as LC
 from prancha_nd import Prancha
 from cob_comum import cabecalho
 
-pr = Prancha("A1", cabecalho("ND-LET-COB09", "01/01", "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W)"))
-pr.revisao("11", "26/10/2026", "EMISSÃO: ISOMÉTRICOS EXPLODIDOS GERADOS DA GEOMETRIA DO 3D (lig_cob.py); TORQUES DE APERTO")
+pr = Prancha("A0", cabecalho("ND-LET-COB09", "01/01", "COBERTURA METÁLICA — ISOMÉTRICOS EXPLODIDOS DE MONTAGEM DAS LIGAÇÕES (TERÇAS, W DA LINHA 2, MONTANTES, EMENDAS, ST-W, ST-1V E ST-1FL)"))
+pr.revisao("11", "26/10/2026", "EMISSÃO: ISOMÉTRICOS EXPLODIDOS GERADOS DA GEOMETRIA DO 3D; TORQUES DE APERTO")
+pr.revisao("R12", "27/10/2026", "FOLHA A0; ISO 6 (TERÇA NA VB, ST-1V) E ISO 7 (TERÇA NO PILAR DE CANTO, ST-1FL)")
 Q = pr.quadro
 cam = I.Camera((-1.0, -1.25, 0.95))
 COR = {"concreto": I.CONCRETO, "par": I.CINZA_PAR, "aco": I.AZUL_ACO, "terca": (186, 196, 176)}
@@ -89,7 +90,8 @@ import os, json as _json, re as _re
 SKIP = _json.loads(os.environ.get("COB09_SKIP", "[]"))
 _x2 = lambda a, b: a[0] * b[1] - a[1] * b[0]
 CELAS = {"ISO 2": (Q[0] + 8, Q[3] - 14, 200, 250), "ISO 3": (Q[0] + 214, Q[3] - 14, 200, 250), "ISO 4": (Q[0] + 420, Q[3] - 14, 200, 250),
-         "ISO 1": (Q[0] + 8, Q[3] - 300, 300, 200), "ISO 5": (Q[0] + 316, Q[3] - 300, 304, 200)}
+         "ISO 1": (Q[0] + 8, Q[3] - 300, 300, 200), "ISO 5": (Q[0] + 316, Q[3] - 300, 304, 200),
+         "ISO 6": (Q[0] + 8, Q[3] - 520, 300, 200), "ISO 7": (Q[0] + 316, Q[3] - 520, 304, 200)}   # rev12: ST-1V na VB e ST-1FL no canto
 TAB = []
 for nome, (tit, fn) in LC.ITENS.items():
     partes = fn()

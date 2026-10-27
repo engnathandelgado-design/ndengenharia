@@ -74,4 +74,5 @@ q.opcao("C", "VM no eixo, consolo e neoprene excêntricos", gC, "conflito", [
     "o CP-MEZ não pode passar da face interna do pilar (+0,10): dente com 25 de 30 cm apoiados",
     "neoprene 200 × 200 no eixo da VM encosta na borda do consolo (NBR 9062:2017 7.2: distância à borda insuficiente)"])
 q.salvar(str(AQ / "decisao_vm_canto.png"))
+q.salvar("/home/claude/letsara/entregas/ND-LET-DECISAO-VM-CANTO-rev12.pdf")   # rev12 (item 21): quadro anexo ao pacote, em vetor
 print("ok", AQ / "decisao_vm_canto.png")

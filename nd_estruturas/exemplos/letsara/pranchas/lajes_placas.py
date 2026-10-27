@@ -17,7 +17,9 @@ def notas_padrao(pr, XC, y, extra):
 
 
 # ================================================================== LA-01
+import json
 import json as _json
+import renomear as _RNl
 _AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 _VMP = _json.load(open(_AQ + "vm_retangular.json", encoding="utf-8"))["premissas"]
 from geometria import Z_PISOS, ABERTURA, P6_ESC, P7_ESC, P6_L2
@@ -258,8 +260,8 @@ def lajes():
     a.chamada((CRD[0][0], Y_C), (6, -34), f"C1 — {N15} Ø{D1} (2 por nervura de borda, uma sobre a outra)")
     a.chamada((CRD[4][0], Y_C), (20, -26), f"C2 — {N12} Ø12,7 (nervuras internas), a {Y_C / 10:g} cm do fundo".replace(".", ","))
     a.chamada((B_P * 0.7, H_P + 25), (14, 12), "tela Q138 a meia altura da capa (2,5 cm)")
-    a.texto((0, -250), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F12)} kN por cordoalha Ø12,7 no macaco, todas aderentes;", "nota")
-    a.texto((0, -300), f"LA-03/LA-04: 7 Ø9,5 a {f(F95)} kN; liberação gradual com fckj ≥ {FCKJ:.0f} MPa; lbpt = {LBPT * 100:.0f} cm.", "nota")
+    a.texto((0, H_P + 50 + 190), f"Protensão: σpi = {SIG_PI:.0f} MPa → {f(F12)} kN por cordoalha Ø12,7 no macaco, todas aderentes;", "nota")
+    a.texto((0, H_P + 50 + 140), f"LA-03/LA-04: 7 Ø9,5 a {f(F95)} kN; liberação gradual com fckj ≥ {FCKJ:.0f} MPa; lbpt = {LBPT * 100:.0f} cm.", "nota")
     n3 = pr.vista("DETALHE 3", (Q[0] + 85, Q[1] + 80), 10, titulo="DETALHE 3 — NEGATIVA N1 E ALVÉOLOS NA PONTA (CORTE LONGITUDINAL)",
                   subtitulo="2 Ø10 por painel em cada apoio, dentro da capa (construtiva — laje biapoiada); alvéolos tampados 20 cm na ponta", unidade="cm")
     lam = [(0, 0), (2300, 0), (2300, H_P), (0, H_P)]
@@ -297,7 +299,7 @@ def lajes():
     y = Q[3] - 6
     desc = {"LA-01": f"125 × {L_P/10:.0f} × 20, {N_C} Ø12,7 ({N15} nas nervuras de borda)", "LA-02": f"70 × {L_P/10:.0f} × 20, 4 Ø12,7",
             "LA-03": f"125 × {L_P3/10:.0f} × 20, 7 Ø9,5", "LA-04": f"70 × {L_P3/10:.0f} × 20, 4 Ø9,5"}
-    obs = {"LA-01R": f"recorte 45×{PROF/10:g} ou 30×20 (P6); alv. {PRE[0]} e {PRE[1]} cheios", "LA-03R": f"recorte 30×20 (P6); alv. {PRE[0]} e {PRE[1]} cheios",
+    obs = {"LA-01R": f"recorte 45×{PROF/10:g} ou 30×20 ({_RNl.N(_RNl.lista(_RNl.nomes_de('PE-01') + _RNl.nomes_de('PE-03')))}); alv. {PRE[0]} e {PRE[1]} cheios", "LA-03R": f"recorte 30×20 ({_RNl.N(_RNl.lista(_RNl.nomes_de('PE-01') + _RNl.nomes_de('PE-03')))}); alv. {PRE[0]} e {PRE[1]} cheios",
            "LA-02": "corte longit. do LA-01", "LA-03": f"só {NIVS[0]}, vão da escada", "LA-04": f"só {NIVS[0]}, vão da escada"}
     def _peso(mk):
         b_ = (B_N if mk[:5] in ("LA-01", "LA-03") else B2) / 1000
@@ -318,7 +320,7 @@ def lajes():
     VB = LJ["vibracao"]
     notas_padrao(pr, XC, y - 4, [f"Cargas no {NIVS[0]} (governa a marca LA-01): peso próprio {f(CG['g1'], 2)} kN/m², capa + rejunte {f(CG['capa_rejunte'], 2)}, revestimento {f(CG['revestimento'])}, sobrecarga {f(CG['sobrecarga'])} kN/m² (depósito, NBR 6120:2019 — confirmada pelo Nathan em 23/10/2026); {NIVS[1]}: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {f(c73['sobrecarga'])} + regularização/impermeabilização {f(c73['revestimento'])} kN/m². Montagem: capa fresca + {f(CG['montagem'])} kN/m², sem escoramento. Vão de cálculo {f((L_P - 100) / 1000, 2)} m, laje biapoiada nas VM.",
                                  f"Concreto C50 da laje (fckj ≥ {FCKJ:.0f} MPa na liberação), capa C30, cordoalhas CP-190 RB; CAA I (ambiente interno seco e revestido), cobrimento da cordoalha 3,2 cm (eixo a 4 cm). Seção do painel 1245 × 200 com {N_AL} alvéolos de 15,2 cm no passo {f(PAS / 10)} cm: com outra seção de extrusora a protensão tem de ser refeita.",
-                                 f"LA-01R / LA-03R: o recorte corta nervuras e cordoalhas na ponta; preencher na fábrica os alvéolos {PRE[0]} e {PRE[1]} entre 60 cm e o recorte (concreto da laje, vibrado) — DETALHE 2. Recorte 45 × {PROF/10:g} nos pilares 40 × 60 e 30 × 20 nos P6 (25 × 40).",
+                                 f"LA-01R / LA-03R: o recorte corta nervuras e cordoalhas na ponta; preencher na fábrica os alvéolos {PRE[0]} e {PRE[1]} entre 60 cm e o recorte (concreto da laje, vibrado) — DETALHE 2. Recorte 45 × {PROF/10:g} nos pilares 40 × 60 e 30 × 20 nos pilares 25 × 40 ({_RNl.N(_RNl.lista(_RNl.nomes_de('PE-01') + _RNl.nomes_de('PE-03')))}).",
                                  f"Painéis apoiados 10 cm sobre o TOPO das VM retangulares 30 × 75, com neoprene em fita de 10 mm e folga de 2 cm até o 2º estágio; chavetas grauteadas; 2º estágio (faixa de 18 cm sobre a VM) e capa de 5 cm (C30, tela Q138) concretados juntos, por quem executa a capa, após a montagem de todo o nível. Lajes e vigas sem escoramento; montar as lajes só depois de concretar as pontas das VM (junta VM × pilar) dos dois lados, com fcj ≥ 20 MPa (DEC-039).",
                                  f"Escada (DEC-045): no {NIVS[0]} não há laje entre o P6, o P7 e a linha 2 (abertura {f(ABERTURA['x1'] - ABERTURA['x0'], 2)} × {f(ABERTURA['y1'] - ABERTURA['y0'], 2)} m); as LA-03 / LA-04 ({L_P3/10:.0f} cm) vão da linha 1 à VM-04 (P6–P7). O {NIVS[1]} é contínuo.",
                                  f"Vibração (NBR 6118:2023 23.3): f1 = {f(VB['f1_Hz'], 2)} Hz para o {NIVS[0]}; abaixo de 4,8 Hz (referência de escritório com folga de 20 %), aceitável para depósito; se o uso virar escritório ou circulação intensa, reavaliar.",

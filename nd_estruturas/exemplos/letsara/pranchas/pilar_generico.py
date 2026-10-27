@@ -547,7 +547,7 @@ def prancha_pilar(P):
         d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
         d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0])), proj, 15, total=False)          # rev08: caimento no subtítulo (cota de 1,2 cruzava as linhas)
         d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -12, total=False); d1.cota_h([-PW, 0], Z1, -15)
-        d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L={c0['pino_L']/10:g}")
+        d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L = {c0['pino_L']/10:g} cm")
         d1.chamada((150, zc0 + 6), (16, 20), f"neoprene {c0['neo'][0]}×{c0['neo'][1]}×{c0['neo'][2]} mm")
         # rev12 (revisão rev12, item 22): embutido, livre e trecho roscado do pino cotados no próprio detalhe
         lv_ = c0["pino_L"] - c0["pino_emb"]
@@ -757,6 +757,11 @@ def nota_arm(marca):
 
 
 def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, marcas, insertos, notas, ip01=(), d1=20.0, grampos=(), vistas=("A", "B", "C"), zoom=3.2):
+    # rev12 (revisão rev12, item 10): no título, o nome do PROJETO de cada peça da marca (registro de nomes), nunca o do R01
+    import re as _re, renomear as _RNb
+    _nm = _RNb.lista(_RNb.nomes_de(marca))
+    if _nm:
+        conteudo = _re.sub(rf"{_re.escape(marca)} \([^,()]+(?:, ([^()]*))?\)", lambda m_: _RNb.N(_nm) + f" — MARCA {marca}" + (f" ({m_.group(1)})" if m_.group(1) else ""), conteudo, count=1)
     grampos_h = []
     if marca in ARR:                                                     # DEC-040: arranjo do dimensionamento
         a = ARR[marca]

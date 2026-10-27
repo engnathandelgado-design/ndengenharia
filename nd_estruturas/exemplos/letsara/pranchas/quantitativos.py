@@ -73,7 +73,8 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:      # família 40×
 PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PM02", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
 for f_ in PIL_OUTROS:
     R_ = REGP[quadro(f_)["MARCA"]]
-    pecas.append(("Pilares", R_["marca"], tab(f_, "MARCAS")["linhas"][0][1], _REG.secao_txt(R_), R_["L"], R_["qt"], R_["vol"], R_["peso"], R_["concreto"], R_["folha"]))
+    _pos = " / ".join(l[1] for l in tab(f_, "MARCAS")["linhas"] if l[0] == R_["marca"])        # rev12 (item 7): linha da PRÓPRIA marca
+    pecas.append(("Pilares", R_["marca"], _pos, _REG.secao_txt(R_), R_["L"], R_["qt"], R_["vol"], R_["peso"], R_["concreto"], R_["folha"]))
 q = quadro("TS01-1")
 pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 3–8 (2 por linha; linha 2 metálica, DEC-048)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
               num(q["VOLUME"].split()[0]), round(num(q["VOLUME"].split()[0]) * 2.5, 2), "C50", "ND-LET-TS01"))

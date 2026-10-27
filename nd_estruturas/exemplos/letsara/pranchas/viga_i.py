@@ -50,7 +50,7 @@ def area_I(b, h, ts, ti, m, bw):
 
 def armacao_i(P, L, cob=30, n_ct=None):
     """Armação passiva da viga I (por marca, comprimento L em mm): estribos N2 da alma, N3 mesa superior, N4 pele,
-    N9/N10 salientes (2º estágio), N11 estribo da mesa inferior (envolve as cordoalhas), N12 2 Ø10 nos cantos da mesa inferior,
+    N9/N10 salientes (2º estágio), N11 estribo da mesa inferior (envolve as cordoalhas), N12 2 Ø12,5 nos cantos da mesa inferior,
     N13 estribo da mesa superior (envolve o N3), N5–N8 dos dentes. geo = forma em escala (cm) para a prancha de armaduras."""
     H, B, bw, ts, ti = P["h"], P["b"], P["bw"], P["ts"], P["ti"]
     d_est, s1, s2, zona = P["est"]
@@ -256,7 +256,7 @@ def prancha_viga(P):
     va.poli([(-B / 2 + cob, H - P["ts"] + cob), (B / 2 - cob, H - P["ts"] + cob), (B / 2 - cob, H - cob), (-B / 2 + cob, H - cob)], "ARM_TRANSV", fechada=True)  # N13
     va.chamada((B / 2 - cob, P["ti"] - cob), (16, 7), "N11 Ø6,3 c/25 (mesa inf.)")
     va.chamada((B / 2 - cob, H - P["ts"] + cob), (24, 4), "N13 Ø6,3 c/25 (mesa sup.)")
-    va.chamada((-B / 2 + cob, cob + 5), (-28, -14), "N12 — 2 Ø10")
+    va.chamada((-B / 2 + cob, cob + 5), (-28, -14), "N12 — 2 Ø12,5")
     N3n, N3d, N3t = P.get("n3", (2, 10.0, "porta-estribos (mesa superior)"))
     _p3 = pos_n3(P, B, H, cob)
     xs3 = [x for x, _ in _p3]

@@ -64,7 +64,7 @@ pr.cabecalho_peca("\x01" + _mk, f"VIGA DE BORDA 15 × 60 cm COM DENTE — L = {L
 
 # planta-chave (rev08): círculo + chamada em cada VB, com o nome de cada peça
 import chave as CH
-CH.planta(pr, (Q[0] + 556, Q[3] - 96), 1300, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="fachadas 1 e 9", numeros=(1, 9))
+CH.planta(pr, (Q[0] + 556, Q[3] - 96), 1300, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="fachada 1 embaixo, fachada 9 em cima", numeros=None)   # rev12 (item 17): sem o número da linha encostado no nome
 M = lambda v: v * 1000
 Y_LIN = Y_LIN_R01
 
@@ -219,8 +219,12 @@ ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 
        ["NEO-6", "Neoprene 100×100×10 (furo Ø30)", 2, "sobre os consolos CP-VB"],
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
+import armaduras_vigas as _AVb                                     # rev12 (item 17): aço da peça = relação de armação da folha (+10 %)
+_KGM = {6.3: 0.245, 8.0: 0.395, 10.0: 0.617, 12.5: 0.963, 16.0: 1.578, 20.0: 2.466}
+_m2 = _AVb.spec_vb()["marcas"][1]
+KG_VB = sum(b_["qtd"] * b_["comp"] / 100 * _KGM[float(b_["diam"])] for b_ in _m2["barras"]) * 1.10
 qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 60 cm, dente 30"], ["COMPRIMENTO", f"{L/10:.0f} cm", "CONCRETO", "C40"], ["VOLUME", f"{f(V, 2)} m³", "PESO", f"{f(PESO/10, 2)} t"],
-      ["AÇO CA-50", f"{f(ta['total_kg'], 0)} kg", "TAXA", f"{f(ta['total_kg'] / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
+      ["AÇO CA-50", f"{f(KG_VB, 1)} kg (+10 %)", "TAXA", f"{f(KG_VB / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 pr.tabela(Q[0] + 330, Q[3] - 308, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimento 3,0 cm (CAA II). N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas.",
          "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V (M16 com grampo U Ø10 cada, rev09d: escora das terças até 16 kN no eixo 1), com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",

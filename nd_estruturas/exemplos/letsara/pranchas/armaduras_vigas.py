@@ -181,7 +181,7 @@ def spec_i(qual):
     longas = [("N3", cob)] + ([("N4", cob)] if P.get("pele") else []) + [("N12", LN + cob)] + ([("N10", 100)] if SEG else [])
     return dict(fam=fam, titulo=tit, forma=forma, fck=P["fck"], L=L, H=H, esc=40 if L > 13000 else 20, rep=P["marca"],
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2, "S.1")], dets=[(LN, "D1")], longas=longas, blocos=[S1, D1] + blocos_extra, marcas=marcas,
-                notas=[n for n in P["notas"][:3]] + [t for t in (nota_traspasse(*[m.get("traspasse") for m in marcas]),) if t] + ["N11/N13: estribos das mesas c/25 (N11 envolve as cordoalhas; N13 o N3). N12: 2 Ø10 nos cantos da mesa inferior (porta-estribos).",
+                notas=[n for n in P["notas"][:3]] + [t for t in (nota_traspasse(*[m.get("traspasse") for m in marcas]),) if t] + ["N11/N13: estribos das mesas c/25 (N11 envolve as cordoalhas; N13 o N3). N12: 2 Ø12,5 nos cantos da mesa inferior (porta-estribos; Ø ≥ 12,5 nas longitudinais de viga).",
                                                      "No trecho dos dentes os estribos N2 são substituídos pelos N8 (dente) e N6 (suspensão)."])
 
 
@@ -217,7 +217,8 @@ def spec_vb():
         Lm = round((xb - MEIA[nb] - 0.025) * 1000) - x0
         _, bm = barras_vb(Lm)
         V = (B * H * Lm - 2 * B * REC * LN) / 1e9
-        marcas.append(dict(marca=f"VB-0{k}/0{k + 4}", qtd=2, L=Lm, barras=bm, V=V, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
+        import renomear as _RNv                                         # rev12 (item 17): nome de cada peça por extenso (sem "V406/06")
+        marcas.append(dict(marca=_RNv.N(", ".join(_RNv.nomes_de(f"VB-0{k}") + _RNv.nomes_de(f"VB-0{k + 4}"))), qtd=2, L=Lm, barras=bm, V=V, area=(2 * H + B) * Lm / 1e6 + 2 * B * H / 1e6, cord=None))
     L = marcas[1]["L"]
     xs_e, _ = barras_vb(L)
     import vb_geom as VG
@@ -237,7 +238,7 @@ def spec_vb():
                      [(x, y, 10) for x in (-B / 2 + COB + 11.3, 0, B / 2 - COB - 11.3) for y in (H - COB - 11.3, H - COB - 41.3)],
               prot=[], bolhas=[("N1", (-xi, COB + 14.3), (10, -6)), ("N2", (B / 2 - COB - 11.3, H - COB - 11.3), (8, 4)), ("N3", (B / 2 - COB, 300), (8, 0))],
               formas=["N3", "N4", "N6", "N5", "N7"])
-    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-08 (15 × 60 COM DENTE, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep="VB-02/06",
+    return dict(fam="VB", titulo="VIGAS DE BORDA VB-01 A VB-08 (15 × 60 COM DENTE, CONCRETO ARMADO)", forma="ND-LET-VB01", fck=40, L=L, H=H, esc=20, rep=marcas[1]["marca"],
                 contorno=[cont], ents=ents, zonas=zonas_txt(xs_e, "N3", 6.3), cortes=[(L / 2, "S.1")], dets=[],
                 longas=[("N2", COB), ("N1", COB)], blocos=[S1], marcas=marcas,
                 notas=["Concreto C40, aço CA-50. N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas; sucção do vento: N2 6 Ø10.",

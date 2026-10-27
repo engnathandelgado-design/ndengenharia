@@ -18,7 +18,7 @@ pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="IÇAMENTO E MANUSEIO DAS PEÇAS — PILARES (FÁBRICA E OBRA), VIGAS, PLACAS, LAJES ALVEOLARES E PEÇAS METÁLICAS",
                         desenho="ND-LET-IC01", folha="01/01", fase="PARA APROVAÇÃO"))
 pr.revisao("00", "26/10/2026", "EMISSÃO INICIAL: IÇAMENTO POR TIPO DE PEÇA")
-pr.revisao("R12", "26/10/2026", "NOMES DOS PILARES E VIGAS CORRIGIDOS; PESOS DA LISTA DE PEÇAS (2,50 t/m³); σ NO FURO EM MPa; TODAS AS MARCAS; COLUNA βa")
+pr.revisao("R12", "27/10/2026", "PESOS DOS CANTOS (SEÇÃO CHEIA), PLACAS E LAJES DA LISTA DE PEÇAS; NOMES DOS PILARES E VIGAS CORRIGIDOS; PESOS DA LISTA DE PEÇAS (2,50 t/m³); σ NO FURO EM MPa; TODAS AS MARCAS; COLUNA βa")
 Q = pr.quadro
 pr.texto(Q[0] + 8, Q[3] - 16, "IÇAMENTO E MANUSEIO DAS PEÇAS", "grande", "TITULO")
 pr.texto(Q[0] + 8, Q[3] - 26, "Pontos, cargas e acessórios por tipo de peça. Dados das folhas de cada peça (mesmo registro). NBR 9062:2017 5.3.2 e 5.3.3.", "nota", "TEXTO")
@@ -135,8 +135,13 @@ y = pr.tabela(Q[0] + 420, Q[3] - 330, "VIGAS — ALÇAS DE CORDOALHA (não engra
               lin_v, [92, 26, 18, 66, 22, 76, 12], h_lin=5.6)
 PL = json.load(open(AQ + "placas_icamento_4p.json", encoding="utf-8"))
 LA = json.load(open(AQ + "laje_alveolar.json", encoding="utf-8"))["icamento"]
-lin_o = [["PLACAS PP (maior)", f1(PL["peso_t"], 2), PL["pontos"], f"{f1(PL['Pk_kN'])} (Pd {f1(PL['Pd_kN'])} ≤ {f1(PL['P_disp_kN'])})", "IZ-1 (inserto de içamento) + balancim duplo", f1(BA)],
-         ["LAJE ALVEOLAR (maior)", f1(LA["peso_t"], 2), f"2 garras a {f1(LA['ponto_m'], 2)} m das pontas", f"Fd {f1(LA['F_por_garra_d_kN'])} por garra", "garra mecânica; fcj ≥ " + f1(LA["fcj_icamento"], 0) + " MPa", f1(BA)],
+# rev12 (revisão rev12, item 19): pesos da MESMA lista de peças (2,50 t/m³); cargas por ponto recalculadas aqui com a fórmula escrita
+_pp = max((p_ for p_ in QT.pecas if p_[0] == "Placas de fechamento" and p_[1].startswith("PP")), key=lambda p_: p_[7])
+_la = max((p_ for p_ in QT.pecas if p_[1].startswith("LA")), key=lambda p_: p_[7])
+_pk_pp = _pp[7] * 10 / 4
+_fd_la = GF * BA * _la[7] * 10 / 2
+lin_o = [[RN.N(f"PLACAS — maior: {_pp[1]}"), f1(_pp[7], 2), PL["pontos"], f"Pk {f1(_pk_pp)}; Pd = βa·Pk = {f1(BA * _pk_pp)} ≤ {f1(PL['P_disp_kN'])}", "IZ-1 (inserto de içamento) + balancim duplo", f1(BA)],
+         [RN.N(f"LAJE ALVEOLAR — maior: {_la[1]}"), f1(_la[7], 2), f"2 garras a {f1(LA['ponto_m'], 2)} m das pontas", f"Fd = γf·βa·P/2 = {f1(_fd_la)} por garra", "garra mecânica; fcj ≥ " + f1(LA["fcj_icamento"], 0) + " MPa", f1(BA)],
          ["ESCADAS METÁLICAS", "ver ES01/ES02", "2 cintas nas longarinas, a 1/4 do comprimento", "peso/2", "cintas de poliéster; sem içar pelos guarda-corpos", f1(BA)],
          ["W 200 × 15,0 (linha 2)", f1(0.015 * 12, 2) + " por módulo de 12 m", "2 cintas a 1/4 do comprimento", f1(0.015 * 12 * 10 / 2), "cintas; montar e parafusar antes de soltar", f1(BA)]]
 y2 = pr.tabela(Q[0] + 420, y - 8, "PLACAS, LAJES E PEÇAS METÁLICAS", ["PEÇA", "PESO (t)", "PONTOS", "CARGA POR PONTO (kN)", "ACESSÓRIO", "βa"], lin_o, [44, 30, 110, 50, 100, 12], h_lin=5.6)
@@ -144,6 +149,7 @@ pr.notas(Q[0] + 420, y2 - 8, [
     "Pilares: AL-2 (alças de cordoalha Ø12,7 CP-190 RB não engraxada) só na FÁBRICA — tirar da fôrma, estocar e carregar no caminhão. FI-1 (furo de içamento, tubo Ø60,3 perdido) só na OBRA — verticalizar e colocar no cálice, com pino de aço passante e 2 manilhas, o pé apoiado no chão sobre madeira. Pontos fora da platibanda.",
     "Cargas: Pk = peso/nº de pontos (cabos verticais). Alças dimensionadas com βa 3,0 e γf 1,3 (NBR 9062:2017 5.3.2); saque, manuseio e montagem com βa 1,3. σ no furo = γf·βa·peso/(Ø60 × menor lado) em MPa, muito abaixo de fcd.",
     "Placas: desforma deitada pelos 4 IZ-1 da face interna com balancim duplo (cargas iguais), giro e montagem de pé pelos mesmos 4 pontos (ND-LET-PP00 e MON03, det. 2). Lajes: garra mecânica, sem alça embutida. Içar só com fcj indicado na folha da peça.",
+    "Lajes alveolares: garras a 0,30 m das pontas (e não a ~0,2 L como as alças das vigas): com garra nas pontas o balanço é de só 0,30 m e o vão entre garras fica com as mesmas tensões da laje apoiada, já verificadas no ato e na liberação (cálculo da laje; NBR 9062:2017 5.3.2); estoque com calços alinhados nas mesmas posições.",
     "Estoque: calços alinhados na vertical, nas posições das alças (pilares e vigas) ou a 0,30 m das pontas (lajes); nunca sobre consolos ou insertos."], 400)
 av = pr.salvar(PR + "ND-LET-IC01")
 print("ND-LET-IC01", len([a for a in av if a[0] == "ERRO"]), "erros,", len(av), "avisos")

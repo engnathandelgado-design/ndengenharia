@@ -68,7 +68,8 @@ REEMISSAO3 = dict(data="25/10/2026")
 REEMISSAO4 = dict(data="26/10/2026", padrao="TEXTOS E COTAS ≥ 2,5 MM NO PAPEL; IMAGENS EM ALTA RESOLUÇÃO; PÉ DOS PILARES NO CÁLICE NOS CORTES")
 # rev12 (26/10/2026, revisão independente): última linha de TODA folha = REV 12 (número = pacote); revisões manuais da rev12
 # entram com pr.revisao("R12", data, descrição) e viram a descrição desta linha.
-REEMISSAO5 = dict(rev="12", padrao="REV12: NOMES CONFERIDOS PELA GEOMETRIA; PESOS COM 2,50 t/m³; SEM NOTAS INTERNAS")
+REEMISSAO5 = dict(rev="12", data="27/10/2026",
+                  padrao="REV12: CANTOS COM SEÇÃO CHEIA 10 cm PARA FORA; PG-02/PG-04 25 × 40; SAÍDAS DO REGISTRO ÚNICO POR MARCA; NOMES PELA GEOMETRIA; 2,50 t/m³")
 _NOTAS_ANTIGAS = ("EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM.", "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM.",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
@@ -892,13 +893,13 @@ class Prancha:
             self.revisoes = [t for t in self.revisoes if t[0] != "R12"]
             self._emitir0()
             if REEMISSAO5:                                           # rev12: última linha = 12 em toda folha
-                hist = list(self.revisoes)
-                if any(str(r).isdigit() and int(r) >= int(REEMISSAO5["rev"]) for r, _, _ in hist):
-                    hist = hist[-int(REEMISSAO5["rev"]):]
-                    n0 = int(REEMISSAO5["rev"]) - len(hist)
-                    hist = [(f"{n0 + k:02d}", dt, ds) for k, (_, dt, ds) in enumerate(hist)]
-                self.revisoes = hist[-3:] + [(REEMISSAO5["rev"], "26/10/2026", "; ".join([REEMISSAO5["padrao"]] + r12))]   # carimbo: últimas 4 revisões (histórico completo no CHANGELOG)
-                self.dados["rev"], self.dados["data"] = REEMISSAO5["rev"], "26/10/2026"
+                # rev12 (revisão rev12, item 29): histórico SEM lacuna — as 3 revisões anteriores mostradas são numeradas em sequência até a 12
+                # (…09, 10, 11, 12); folha nova do pacote rev11 sai com 11 e 12. Data da 12 = data da última alteração (27/10).
+                hist = list(self.revisoes)[-3:]
+                n0 = int(REEMISSAO5["rev"]) - len(hist)
+                hist = [(f"{n0 + k:02d}", dt, ds) for k, (_, dt, ds) in enumerate(hist)]
+                self.revisoes = hist + [(REEMISSAO5["rev"], REEMISSAO5["data"], "; ".join([REEMISSAO5["padrao"]] + r12))]   # carimbo: últimas 4 revisões (histórico completo no CHANGELOG)
+                self.dados["rev"], self.dados["data"] = REEMISSAO5["rev"], REEMISSAO5["data"]
             self._emitida = True
 
     def _emitir0(self):

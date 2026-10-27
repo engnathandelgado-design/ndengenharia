@@ -122,8 +122,8 @@ class Arm:
             A, gg = g["a"] * s, max(g["g"] * s, 1.5)
             self.pl([(x - gg * 0.7, y + gg * 0.7), (x, y), (x + A, y), (x + A + gg * 0.7, y + gg * 0.7)], "ARM_TRANSV")
             self.tx(x + A / 2, y - 0.7, f"{g['a']:.0f}", "min", "TOP_CENTER")
-            self.tx(x + A / 2, y + 0.7, f"gancho 135° {g['g']:.0f}", "min", "BOTTOM_CENTER")
-            bb = [x - gg, y - 0.7 - hmin, x + A + gg, y + 0.7 + 1.5]
+            self.tx(x + A / 2, y + gg * 0.7 + 1.0, f"gancho 135° {g['g']:.0f}", "min", "BOTTOM_CENTER")   # rev12 (item 26): acima das pontas do grampo
+            bb = [x - gg, y - 0.7 - hmin, x + A + gg, y + gg * 0.7 + 1.0 + hmin]
         elif k == "U":
             A, B, gg = g["a"] * s, g["b"] * s, g.get("g", 0) * s
             self.pl([(x, y), (x + A, y), (x + A, y + B), (x, y + B)], "ARMADURA")
