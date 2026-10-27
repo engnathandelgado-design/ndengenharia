@@ -62,9 +62,11 @@ LV = LA["verif"]
 CF2 = J("consolos_face.json")
 CBM = J("cobertura_metalica.json")
 I6 = I1["V406"]
-E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV12 (26/10/2026)", T1),
+CFU = J("cargas_fundacao.json")["pilares"]
+DPR = J("dimensionamento_pilares_r05.json")
+E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV12 (26 E 27/10/2026)", T1),
      P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Correções da revisão independente da rev11 e decisões de 26/10: laje LP20 com 9 Ø12,7, família I120 (antes chamada I130, seção h 120) com N3 ≤ Ø20, "
-       "vigas de borda rentes à face externa dos pilares de fachada nos vãos entre PF, densidade única 2,50 t/m³. Complementa a MC09 e a MC10. Documento para análise antes do zip com DXF e IFC."),
+       "vigas de borda rentes à face externa dos pilares de fachada, densidade única 2,50 t/m³; 27/10: pilares de canto 10 cm para fora (face alinhada à dos PF, VB rente à face em todos os vãos) e PG-02/PG-04 25 × 40. Complementa a MC09 e a MC10. Documento para análise antes do zip com DXF e IFC."),
      Paragraph("1. Laje alveolar LP20 — 9 Ø12,7 CP-190 RB, capa 5 cm (NBR 14861:2022; NBR 6118:2023; NBR 9062:2017)", T2),
      P(f"Arranjo: 2 cordoalhas em cada nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo, espaço livre 2,2 cm ≥ 2 cm e ≥ Ø) + 5 nas nervuras internas a 4,0 cm; Ap = {f(LA['Ap_mm2'], 1)} mm²; "
        f"σpi = {f(LA['sig_pi'], 0)} MPa; liberação com fckj ≥ {f(LA['fckj'], 0)} MPa; lbpt = {f(LA['lbpt_m'] * 100, 0)} cm; perdas totais {f(LA['perdas']['perda_total_pct'], 1)} %. Vão de cálculo {f(LA.get('L_calc_m', 9.45), 2)} m (peça 9,55 m). "
@@ -78,21 +80,34 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
        f"V400 (19,50 m): ELU {f(I1['V407']['ELU']['Md'])} ≤ {f(I1['V407']['ELU']['MRd'])} kN·m. Volume e peso de cada marca por um só cálculo (viga_i.vol_viga, maciços de 1,40 m e dentes): "
        + ", ".join(f"{NOME_I[k]} {f(I1[k]['icamento']['peso_kN'] / 10, 2)} t" for k in ("V407", "V406", "V405", "V404")) + "."),
      Paragraph("3. Vigas de borda rentes à face externa dos pilares de fachada (NBR 9062:2017 7.3; NBR 6118:2023 17.2.5 e 17.5)", T2),
-     P(f"Nos vãos B–C e C–D das linhas 1 e 9 (VB-02, VB-03, VB-06, VB-07) a VB 15×60 e o consolo CP-VB ficam rentes à face externa do pilar 40×60: eixo da VB a e = {f(CF2['e_m'] * 100, 1)} cm do eixo do pilar, 2,5 cm até a placa. "
+     P(f"Em todos os vãos das linhas 1 e 9 (VB-01 a VB-08; nos vãos de canto desde 27/10, com o pilar de canto 10 cm para fora) a VB 15×60 e o consolo CP-VB ficam rentes à face externa do pilar 40×60: eixo da VB a e = {f(CF2['e_m'] * 100, 1)} cm do eixo do pilar, 2,5 cm até a placa. "
        f"O consolo continua com a carga centrada (mesma geometria, armadura e Fd = {f(CF2['Fd_kN'])} kN do C1; tirante com cobrimento lateral 3 cm na face C) e ganha marca própria. No pilar: momento adicional Mx = Σ Vd·e somado em valor absoluto a todas as combinações e torção Td = Hd·e."),
      tab([["PILAR", "FACES", "ΔMd (kN·m)", "USO ANTES", "USO COM e", "Td / TRd2 (kN·m)", ""]] +
          [[k, ", ".join(v["faces"]), f(v["dM_kNm"]), f(v["uso_antes"], 3), f(v["uso_com_excentricidade"], 3), f"{f(v['Td_kNm'], 2)} / {f(v['TRd2_kNm'], 0)}", ok(v["ok"])] for k, v in CF2["pilares"].items()],
          [20, 16, 24, 22, 22, 34, 12]),
-     P(f"Terças: o 1º e o último vão das terças da faixa B–D crescem {f(CF2['e_m'] * 1000, 0)} mm (peças T6/T7); ponta a 85 mm do eixo da VB (borda dos furos 25 mm ≥ 22 mm, NBR 8800:2024 Tab. 14), 15 mm antes da placa. "
+     P(f"Terças: o 1º e o último vão de todas as terças crescem {f(CF2['e_m'] * 1000, 0)} mm (a última do lado E, que encosta no pilar de canto, termina 1 cm depois da face interna dele e apoia no ST-1FL); ST-1V com a borda rente à ponta da terça; ponta a 85 mm do eixo da VB (borda dos furos 25 mm ≥ 22 mm, NBR 8800:2024 Tab. 14), 15 mm antes da placa. "
        f"Terça Z 302 × 2,30 com os vãos novos: uso {f(CBM['terca']['governante']['uso'], 3)} (antes 0,851); parafusos do transpasse {f(CBM['terca']['parafusos_transpasse']['uso'], 3)}. "
-       "Vãos de canto e VM de borda da linha 1: em decisão (quadro decisao_fresta_canto) — o pilar de canto tem 40 em y e a face fica 10 cm atrás da dos PF."),
+       "O ΔMd dos consolos entra no dimensionamento dos pilares (dimensionar_pilares_r05) e no Mxd das cargas na fundação."),
+     Paragraph("3a. Pilares de canto 10 cm para fora (decisão de 27/10, opção D)", T2),
+     P("Os 4 pilares de canto 40 × 60 (linhas 1 e 9, eixos A e E) mantêm a seção e ficam com o eixo 10 cm para fora da linha: face externa no plano da face dos pilares de fachada (−0,30 / +0,30). "
+       "Cálice e bloco seguem o eixo do pilar (CG01, com o momento N·e = N·0,10 caso o bloco fique na linha). Modelo global r05 refeito com a posição nova: envoltória sem mudança relevante. "
+       "CP-VB do canto rente à face externa (e = 12,5 cm do eixo do pilar). Cargas na fundação (tf): "
+       + "; ".join(f"{k} Nk {f((CFU[k]['G']['N'] + CFU[k]['Q']['N']) / 10)}, Nd {f(CFU[k]['ELU']['Nd_max'] / 10)}, Mxd {f(CFU[k]['ELU']['Mxd_max'] / 10)}" for k in ("P1C-L1", "P2C-L1", "P1C-L9", "P2C-L9")) + ". "
+       "VM de borda da linha 1 nos vãos de canto: no eixo, o dente fica 5 cm fora do CP-MEZ — PENDÊNCIA, quadro decisao_vm_canto (recomendada a opção A: VM da linha 1 5 cm para fora, lajes 9,60 m)."),
+     Paragraph("3b. PG-02 e PG-04 25 × 40 (decisão de 27/10)", T2),
+     P(f"Seção 25 × 40 com 40 ao longo da parede da linha 4; eixo 7,5 cm para longe do portão (x = {f(PJ['pilares']['PG-02']['x_m'], 3)} e {f(PJ['pilares']['PG-04']['x_m'], 3)} m) para manter 5,00 m livres face a face "
+       f"({f(PJ['vao_livre_portoes_m']['PG-01–PG-02'], 2)} e {f(PJ['vao_livre_portoes_m']['PG-04–PG-03'], 2)} m) — PENDÊNCIA visível: confirmar com o arquitetônico/cliente. "
+       f"Apoio da TS-01A (calc_portao_l4): Nd = {f(PJ['pilares']['PG-02']['Nd_tf'])} tf, λ = {f(PJ['pilares']['PG-02']['lambda_'])} / {f(PJ['pilares']['PG-04']['lambda_'])} ≤ 90; neoprene NEO-7 {PJ['neoprene']['PG-02']['dim_mm']} (σ {f(PJ['neoprene']['PG-02']['sigma_MPa'], 2)} MPa). "
+       f"Armadura (2ª ordem global + método geral + manuseio): PG-02 {DPR['PG-02']['proposto']['n']} Ø16, PG-04 {DPR['PG-04']['proposto']['n']} Ø16. "
+       "CE-1 380 × 330 cabe na face de 40 (fim da pendência das CE-1 de 25 cm); calço CS-1D de 75 mantido (lado de 25 ⊥ à parede). "
+       f"Cargas na fundação (tf): PG-02 Nk {f((CFU['P10a']['G']['N'] + CFU['P10a']['Q']['N']) / 10)}, Nd {f(CFU['P10a']['ELU']['Nd_max'] / 10)}; PG-04 Nk {f((CFU['P10b']['G']['N'] + CFU['P10b']['Q']['N']) / 10)}, Nd {f(CFU['P10b']['ELU']['Nd_max'] / 10)}."),
      Paragraph("4. Densidade e pesos", T2),
      P("Peso = volume × 25 kN/m³; t = kN / 10 (2,50 t/m³) em todo o jogo: IC01, folhas das peças, PR01, quantitativos e montagem (antes a IC01 e a TS-01 usavam 9,81). A IC01 lê os pesos da mesma lista de peças do PR01; σ no furo FI-1 em MPa; coluna βa = 1,3 em todas as tabelas."),
      Paragraph("5. Barras das peças e pinos de ligação", T2),
      P("Armadura passiva longitudinal das vigas com Ø ≥ 12,5 (TS-01: N5 e N9 passam de Ø10 para Ø12,5; As do topo 7,36 cm²) e nenhuma barra de armadura acima de Ø20. "
        "Única exceção registrada (DEC-083): pino de ligação PN-2 Ø25 CA-50 (L = 900, 350 no consolo) da I120 nos consolos CP-I120 (PF04, PC01, PC02, PC03) — inserto de ligação, não armadura; a confirmar."),
      Paragraph("6. Pendências", T2),
-     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: fresta nos vãos de canto das VB e na VM de borda da linha 1. (c) Decisão: CE-1 dos PG-02/PG-04 (face de 25 cm). (c2) Confirmar o pino PN-2 Ø25 da I120 (ou trocar por Ø20). "
+     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: VM de borda da linha 1 nos vãos de canto (quadro decisao_vm_canto). (c) Confirmar a locação dos PG-02/PG-04 (5,00 m livres). Pino PN-2 Ø25 da I120 mantido (decisão de 27/10). "
        "(d) Local da obra (V0, S2, S3 da NBR 6123:2023), ART e TRRF. (e) Zip com DXF e IFC só depois da aprovação deste pacote.")]
 doc.build(E)
 print("ok", SAI)

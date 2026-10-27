@@ -468,12 +468,12 @@ def listas_pdf(caminho):
 
     def rodape(c, d):
         c.saveState(); c.setFont("DV", 7)
-        c.drawString(12 * mm, 7 * mm, "LETSARA — LISTAS DE MATERIAIS rev12 — 26/10/2026 (PARA ANÁLISE)")
+        c.drawString(12 * mm, 7 * mm, "LETSARA — LISTAS DE MATERIAIS rev12 — 27/10/2026 (PARA ANÁLISE)")
         c.drawRightString(285 * mm, 7 * mm, f"página {d.page}"); c.restoreState()
 
     doc = SimpleDocTemplate(str(caminho), pagesize=landscape(A4), leftMargin=12 * mm, rightMargin=12 * mm, topMargin=12 * mm, bottomMargin=13 * mm,
                             title="Letsara — listas de materiais rev07", author="ND Engenharia")
-    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev12, 26/10/2026, PARA ANÁLISE)", T1),
+    E = [Paragraph("LETSARA — LISTAS DE MATERIAIS (rev12, 27/10/2026, PARA ANÁLISE)", T1),
          Pp("Extraídas das tabelas das próprias pranchas (mesmos números). Aço CA-50 com +10 % de perdas; cordoalhas sem perdas; tubos em barras de 6 m (soma dos cortes ÷ 6 m). "
             "Rev07: placas 10 fios Ø6 CP-175 RB (só peso próprio, DEC-035); lajes alveolares LP20 com 7 Ø12,7 por painel e capa C30; ST-1P4 nos beirais do eixo 2 (DEC-033); fôrma e armação na mesma folha por marca.")]
     # 1 peças
