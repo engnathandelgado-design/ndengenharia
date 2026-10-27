@@ -4,7 +4,7 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "CONSOLOS DOS PILARES — MARCAS C1 A C6: FÔRMA, PINO, NEOPRENE, ARMADURA E PILARES QUE USAM",
+  "conteudo": "CONSOLOS DOS PILARES — MARCAS C1 A C8: FÔRMA, PINO, NEOPRENE, ARMADURA E PILARES QUE USAM",
   "desenho": "ND-LET-CS01",
   "rev": "12",
   "data": "27/10/2026",
@@ -44,7 +44,7 @@
     ],
     [
      "NEOPRENE",
-     "100×100×10 mm"
+     "60×100×10 mm"
     ],
     [
      "TIRANTE",
@@ -93,7 +93,7 @@
     ],
     [
      "NEOPRENE",
-     "100×100×10 mm"
+     "60×100×10 mm"
     ],
     [
      "TIRANTE",
@@ -122,11 +122,11 @@
    "linhas": [
     [
      "LARGURA × PROJEÇÃO",
-     "40 × 40 cm"
+     "30 × 40 cm"
     ],
     [
      "ALTURA FACE / PONTA",
-     "27,9 / 27,9 cm"
+     "40 / 27,9 cm"
     ],
     [
      "POSIÇÃO NA FACE",
@@ -146,11 +146,11 @@
     ],
     [
      "TIRANTE",
-     "4 alças horizontais Ø16 (8 ramos Ø16)"
+     "4 alças horizontais Ø12,5 (8 ramos Ø12.5)"
     ],
     [
      "ARMADURA",
-     "N4 8 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+     "N4 8 Ø12,5 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
     ],
     [
      "QUANTIDADE",
@@ -171,11 +171,11 @@
    "linhas": [
     [
      "LARGURA × PROJEÇÃO",
-     "40 × 40 cm"
+     "30 × 40 cm"
     ],
     [
      "ALTURA FACE / PONTA",
-     "27,9 / 27,9 cm"
+     "40 / 27,9 cm"
     ],
     [
      "POSIÇÃO NA FACE",
@@ -195,19 +195,19 @@
     ],
     [
      "TIRANTE",
-     "4 alças horizontais Ø16 (8 ramos Ø16)"
+     "4 alças horizontais Ø12,5 (8 ramos Ø12.5)"
     ],
     [
      "ARMADURA",
-     "N4 8 Ø16 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+     "N4 8 Ø12,5 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
     ],
     [
      "QUANTIDADE",
-     "19 consolos"
+     "3 consolos"
     ],
     [
      "PILARES (consolos)",
-     "\u000eP30 (2), P29 (2), P4 (1), P1 (2), P25 (4), P17 (4), P13 (4)\u000f"
+     "\u000eP30 (2), P4 (1)\u000f"
     ]
    ]
   },
@@ -220,7 +220,105 @@
    "linhas": [
     [
      "LARGURA × PROJEÇÃO",
-     "50 × 40 cm"
+     "30 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "40 / 27,9 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "rente à face externa (fachada): eixo do consolo a 5 cm do eixo da face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
+    ],
+    [
+     "PINO",
+     "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "200×200×21 mm"
+    ],
+    [
+     "TIRANTE",
+     "4 alças horizontais Ø12,5 (8 ramos Ø12.5)"
+    ],
+    [
+     "ARMADURA",
+     "N4 8 Ø12,5 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "4 consolos"
+    ],
+    [
+     "PILARES (consolos)",
+     "\u000eP29 (2), P1 (2)\u000f"
+    ]
+   ]
+  },
+  {
+   "titulo": "C6 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "30 × 40 cm"
+    ],
+    [
+     "ALTURA FACE / PONTA",
+     "40 / 27,9 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "rente à face C (externa, placas): eixo do consolo a 15 cm do eixo da face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
+    ],
+    [
+     "PINO",
+     "PN-1 Ø20 L 630 (emb. 230, livre 400, a 211 da face)"
+    ],
+    [
+     "NEOPRENE",
+     "200×200×21 mm"
+    ],
+    [
+     "TIRANTE",
+     "4 alças horizontais Ø12,5 (8 ramos Ø12.5)"
+    ],
+    [
+     "ARMADURA",
+     "N4 8 Ø12,5 (U) · N5 2 Ø10 (costura) · N6 4 Ø8 (estribos) — DET. C da folha do pilar"
+    ],
+    [
+     "QUANTIDADE",
+     "12 consolos"
+    ],
+    [
+     "PILARES (consolos)",
+     "\u000eP25 (4), P17 (4), P13 (4)\u000f"
+    ]
+   ]
+  },
+  {
+   "titulo": "C7 — DADOS",
+   "cab": [
+    "ITEM",
+    "VALOR"
+   ],
+   "linhas": [
+    [
+     "LARGURA × PROJEÇÃO",
+     "40 × 40 cm"
     ],
     [
      "ALTURA FACE / PONTA",
@@ -261,7 +359,7 @@
    ]
   },
   {
-   "titulo": "C6 — DADOS",
+   "titulo": "C8 — DADOS",
    "cab": [
     "ITEM",
     "VALOR"
@@ -269,7 +367,7 @@
    "linhas": [
     [
      "LARGURA × PROJEÇÃO",
-     "50 × 40 cm"
+     "40 × 40 cm"
     ],
     [
      "ALTURA FACE / PONTA",

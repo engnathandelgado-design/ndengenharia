@@ -215,13 +215,25 @@ for fl in ("ND-LET-LA01", "ND-LET-PR01", "ND-LET-NG01", "ND-LET-MON02"):
     dx = PR + fl + ".dxf"
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
     r("CONFIRMAR COM A FÁBRICA" in tx.upper() or "CONFIRMAR COM A FÁBRICA" in tx, "C18 pendência (extrusora LP20) sinalizada", fl, "ok" if "FÁBRICA" in tx.upper() else "sem a ressalva")
-# C21 (rev12, 27/10) pendências das decisões em aberto sinalizadas em todas as folhas afetadas
-for fl, chaves in (("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)),   # rev12 (27/10): VM de canto decidida — só a dos PG
-                   ("ND-LET-NG01", ("5,00 m livres",)), ("ND-LET-PR01", ("5,00 m livres",))):
+# C21 (rev12, 27/10, DEC-092) locação dos PG-02/PG-04 decidida: nenhuma folha cita a pendência; face no plano dos vizinhos 40 × 40;
+# 5,00 m livres face a face em cada portão; NEO-7 com a distância à borda (NBR 9062:2017 7.2)
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+import geometria as _G21
+for fl in ("ND-LET-PG02", "ND-LET-PG04", "ND-LET-LOC01", "ND-LET-NG01", "ND-LET-PR01", "ND-LET-CG01"):
     dx = PR + fl + ".dxf"
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
-    falta = [c for c in chaves if c.upper() not in tx.upper().replace("\n", " ")]
-    r(not falta, "C21 pendência (locação dos PG-02/PG-04) sinalizada", fl, "ok" if not falta else f"sem: {falta}")
+    m21 = re.search(r"PEND[ÊE]NCIA[^.]{0,120}(PG-0[24]|5,00 m livres|locação)", tx, re.I) or re.search(r"(PG-0[24]|locação)[^.]{0,80}confirmar com o arquitet", tx, re.I)
+    r(os.path.exists(dx) and not m21, "C21 locação dos PG-02/PG-04 decidida (sem pendência citada)", fl, "ok" if not m21 else m21.group(0)[:80])
+for mk in ("PG-02", "PG-04"):
+    face = round(_G21.Y_PG[mk] - _G21.PG_L4[mk][3] / 2, 4)
+    viz = [round(_G21.Y_PG[k] - _G21.PG_L4[k][3] / 2, 4) for k in ("PG-01", "PG-03")] + [round(_G21.Y_LIN[_G21.LINHA_PORTOES] - 0.20, 4)]
+    r(all(abs(face - v) < 1e-4 for v in viz), "C21 face do PG no plano dos vizinhos (placas sem fresta)", mk, f"face y {face} × vizinhos {viz}")
+_PJ21 = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/portao_l4.json", encoding="utf-8"))
+for k, v in _PJ21["vao_livre_portoes_m"].items():
+    r(abs(v - _G21.VAO_PORTAO) < 1e-3, "C21 portão com 5,00 m livres face a face (arquitetônico)", k, f"{v} m")
+for k, v in _PJ21["neoprene"].items():
+    r(v["ok"] and v["borda_pilar_cm"] >= v["a0_min_cm"] - 1e-6 and v["borda_mesa_TS_cm"] >= v["a0_min_cm"] - 1e-6, "C21 NEO-7 com a distância à borda (NBR 9062 7.2)", k,
+      f"{v['dim_mm']}: borda {v['borda_pilar_cm']} / mesa {v['borda_mesa_TS_cm']} ≥ {v['a0_min_cm']} cm")
 # C19 MC, listas e quantitativos da mesma revisão das pranchas
 ENT = "/home/claude/letsara/entregas/"
 for arq in ("ND-LET-MC12-REV12-rev12.pdf", "ND-LET-LISTAS-rev12.pdf", "ND-LET-QUANTITATIVOS-rev12.xlsx"):

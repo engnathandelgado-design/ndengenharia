@@ -1341,7 +1341,7 @@
    "d": 16.0,
    "As": 8.0
   },
-  "uso_atual": 0.499,
+  "uso_atual": 0.573,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1366,7 +1366,7 @@
    "d": 16.0,
    "n": 6,
    "As_cm2": 12.06,
-   "uso_secao": 0.338,
+   "uso_secao": 0.388,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e-1 G1,3",
     "P10a"
@@ -1451,7 +1451,7 @@
    "d": 16.0,
    "As": 8.0
   },
-  "uso_atual": 0.521,
+  "uso_atual": 0.594,
   "proposto": {
    "manuseio": {
     "ok": true,
@@ -1476,7 +1476,7 @@
    "d": 16.0,
    "n": 8,
    "As_cm2": 16.08,
-   "uso_secao": 0.265,
+   "uso_secao": 0.302,
    "comb_secao": [
     "ELU V180 Cpi máx (sucção máx na cobertura) e+1 G1,3",
     "P10b"

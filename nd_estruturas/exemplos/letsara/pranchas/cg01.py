@@ -115,7 +115,7 @@ y_n = pr.notas(470, 318, [
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
     "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123:2023 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
     "De cálculo (ELU, NBR 8681 / 6118): 1,3 G + 1,4 V + 0,7·1,4 Q (sobrecarga secundária) e 1,0 G + 1,4 V (sucção, G favorável), com desaprumo H/400 (NBR 9062:2017 5.2.3); e 1,3 G + 1,4 Q. Nd mín negativo = tração de cálculo na fundação.",
-    "Pilares PG-01 a PG-04 (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. PG-02 e PG-04: 25 × 40, eixo 7,5 cm para longe do portão (PENDÊNCIA: confirmar a locação com o arquitetônico/cliente).",
+    "Pilares PG-01 a PG-04 (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. " + RN.novo(f"{RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04'))} (PG-02 e PG-04, 25 × 40): eixo 7,5 cm fora da linha 4, face no plano dos vizinhos; base e cálice centrados no eixo do pilar (coordenadas da tabela); reação da TS-01A tomada no eixo da linha 4 a favor da segurança: ΔMx = Rd · 0,075 = " + ", ".join(f"{v / 10:.2f} tf·m".replace(".", ",") for v in CG.get('exc_pg', {}).values()) + " incluído no Mxd."),
     "Pilares de canto (linhas 1 e 9, eixos A e E): eixo do pilar 10 cm para fora da linha (face externa alinhada à dos pilares de fachada). Cálice e bloco centrados no EIXO DO PILAR (ND-LET-LOC01), deslocados 10 cm em relação à linha; os valores da tabela são no eixo do pilar. Se o bloco ficar centrado na linha, somar o momento da excentricidade do quadro ao lado.",
     "Dimensionar blocos, cálices e estacas em projeto próprio com estes valores; o cálice segue as cargas e o embutimento das pranchas dos pilares.",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 300)
@@ -125,8 +125,13 @@ lin_c = []
 for nm in sorted([n for n in P if "C-L" in n], key=lambda n: int(nome_proj(n)[1:])):
     d = P[nm]; nk = d["G"]["N"] + d["Q"]["N"]
     lin_c.append([RN.N(nome_proj(nm)), marca(nm), f"{DY_CANTO * 100:g} cm para fora", t(nk), t(nk * DY_CANTO), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * DY_CANTO)])
-pr.tabela(470, y_n - 6, "PILARES DE CANTO — CÁLICE NO EIXO DO PILAR (10 cm FORA DA LINHA)",
-          ["PILAR", "MARCA", "e (y)", "Nk (tf)", "Nk·e (tf·m)", "Nd máx (tf)", "Nd·e (tf·m)"], lin_c, [22, 18, 30, 18, 22, 22, 22], h_lin=4.6)
+# rev12 (DEC-092): PG-02/PG-04 com o eixo 7,5 cm fora da linha 4 (para o lado das placas)
+from geometria import DY_PG
+for nm, mk in (("P10a", "PG-02"), ("P10b", "PG-04")):
+    d = P[nm]; nk = d["G"]["N"] + d["Q"]["N"]; e_ = DY_PG[mk]
+    lin_c.append([RN.N(nome_proj(nm)), marca(nm), f"{e_ * 100:g} cm (lado das placas)".replace(".", ","), t(nk), t(nk * e_), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * e_)])
+pr.tabela(470, y_n - 6, "PILARES FORA DA LINHA — CÁLICE NO EIXO DO PILAR",
+          ["PILAR", "MARCA", "e (y)", "Nk (tf)", "Nk·e (tf·m)", "Nd máx (tf)", "Nd·e (tf·m)"], lin_c, [22, 18, 34, 18, 22, 22, 22], h_lin=4.6)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CG01")
 for a in avisos:
     if a[0] == "ERRO" or "sobrep" in a[1] or "sai" in a[1]:

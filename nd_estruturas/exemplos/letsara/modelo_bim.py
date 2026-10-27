@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO, Y_VM1
+from geometria import Y_PG, Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO, Y_VM1
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -188,22 +188,26 @@ def montar() -> ModeloBIM:
     m.pilar("P6 (linha 2)", P6_L2[0], P6_L2[1], 0.25, 0.40, Z_CALICE, Z_L2["P6"], obs=f"25×40, linha 2: vigas D–P6 e P6–E; cabeça até +{Z_L2['P6']:.3f} = fundo da W da linha 2 − 40 mm (DEC-050)".replace(".", ","))
     # pilares dos portões (linha 4), rev06 (DEC-024): cabeça a 2 cm do fundo da TS-01, ligada em y por 2 cantoneiras CL-P
     # rev12 (27/10): PG-02/PG-04 25×40 (40 em x, ao longo da parede), eixo 7,5 cm para longe do portão (5,00 m livres)
-    for nome, x, b_, by_ in [(f"{r01} ({mk})", x_, bx_, by_) for mk, (r01, x_, bx_, by_) in PG_L4.items()]:
+    # rev12 (DEC-092): PG-02/PG-04 com o eixo 7,5 cm fora da linha 4 (face −y no plano dos vizinhos 40×40, sem fresta até as placas)
+    _PJn = json.loads((AQ / "portao_l4.json").read_text(encoding="utf-8"))["neoprene"]
+    for mk_pg, nome, x, b_, by_ in [(mk, f"{r01} ({mk})", x_, bx_, by_) for mk, (r01, x_, bx_, by_) in PG_L4.items()]:
         zt_ = round(zf(x) - 0.02, 2)
-        m.pilar(nome, x, Y_LIN[LINHA_PORTOES], b_, by_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), {by_*100:.0f}×{b_*100:.0f}, topo +{zt_:.2f}; portão livre até +7,50")
-        yl4 = Y_LIN[LINHA_PORTOES]
+        ypg = Y_PG[mk_pg]
+        m.pilar(nome, x, ypg, b_, by_, Z_CALICE, zt_, obs=f"parede dos portões (vista C), {by_*100:.0f}×{b_*100:.0f}, topo +{zt_:.2f}; portão livre até +7,50" + (f"; eixo y {ypg:.3f} (face no plano dos vizinhos 40×40)" if ypg != Y_LIN[LINHA_PORTOES] else ""))
+        yl4 = Y_LIN[LINHA_PORTOES]                                           # eixo da TS-01A (CL-P e IT-P centrados na viga)
         for sx in (-1, 1):
             xf_ = x + sx * b_ / 2
             zcl = zf(min(xf_, xf_ + sx * 0.102))              # 22/10: aba encostada no fundo da TS-01A no ponto mais baixo (3 %)
             caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.0095, yl4 - 0.125, yl4 + 0.125, zcl - 0.102, zcl, GM, obs="aba no pilar, 1 M16 em oblongo vertical")
             caixa(m, "CL-P L 102×102×9,5 L=250", xf_, xf_ + sx * 0.102, yl4 - 0.125, yl4 + 0.125, zcl - 0.0095, zcl, GM, obs="aba sob a TS-01A, 2 M16 nos IT-P")
-            m.linear("inserto", "M16 8.8 (IL-1)", PerfilRetangular(0.016, 0.016), (xf_ - sx * 0.10, yl4, zf(x) - 0.06), (xf_ + sx * 0.03, yl4, zf(x) - 0.06), GM, material="aco")
+            m.linear("inserto", "M16 8.8 (IL-1)", PerfilRetangular(0.016, 0.016), (xf_ - sx * 0.10, ypg, zf(x) - 0.06), (xf_ + sx * 0.03, ypg, zf(x) - 0.06), GM, material="aco")   # IL-1 no eixo do pilar
             for dy in (-0.0975, 0.0975):
                 barra_v(m, "M16 8.8 + IT-P (fundo da TS-01A)", xf_ + sx * 0.06, yl4 + dy, zf(x) - 0.03, zf(x) + 0.08, 0.016, GM)
         # DEC-059 (24/10, opção A do Nathan): a cabeça do PG passa a APOIAR a TS-01A — neoprene NEO-7 colado na cabeça + graute
         # injetado entre o neoprene e o fundo da viga depois da montagem (a viga não desce no vão dos portões: fundo ≥ +7,50)
         _zt = zf(x - b_ / 2)
-        m.bloco("inserto", f"NEO-7 neoprene {round((b_ - 0.05) * 1000)}×200×10 + graute 10 mm (apoio da TS-01A, DEC-059)", (x, yl4, _zt - 0.001), b_ - 0.05, 0.20, 0.019, "Pinos, tubos e neoprenes")
+        _nx, _ny = _PJn[mk_pg]["nx_mm"] / 1000, _PJn[mk_pg]["ny_mm"] / 1000      # rev12: a0 ≥ 4,5 cm das bordas (NBR 9062:2017 7.2)
+        m.bloco("inserto", f"NEO-7 neoprene {_PJn[mk_pg]['dim_mm'].replace(' ', '')} + graute 10 mm (apoio da TS-01A, DEC-059), centrado no pilar", (x, ypg, _zt - 0.001), _nx, _ny, 0.019, "Pinos, tubos e neoprenes")
 
     # 2. vigas centrais I120 (comprimentos do R01) e consolos CP-I120 / CV-TS
     zc = Z_I120_TOPO - H_I120 / 2
@@ -672,11 +676,12 @@ def montar() -> ModeloBIM:
     z0v, z1v = PJ["placa_P19_D"]["z0"] + 0.005, PJ["placa_P19_D"]["z1"]
     m.linear("placa", "PV-1 placa sobre o portão P19–D (10 × 37, DEC-059)", PerfilRetangular(0.10, z1v - z0v, "PV-1 10×37"),
              (x0v, yc_pl, (z0v + z1v) / 2), (x1v, yc_pl, (z0v + z1v) / 2), "Placas de fechamento", obs="armada, C40; peso próprio nos 2 apoios CL-V; ND-LET-PV01")
-    for xpg, bpg, lh in ((X_L4[4], PG_L4["PG-04"][3], 0.152), (X_L4[5], PG_L4["PG-03"][3], 0.102)):
-        yface = yl4 - bpg / 2
+    for mk_pg, xpg, bpg, lh in (("PG-04", X_L4[4], PG_L4["PG-04"][3], 0.102), ("PG-03", X_L4[5], PG_L4["PG-03"][3], 0.102)):   # DEC-092: faces no mesmo plano
+        yface = Y_PG[mk_pg] - bpg / 2
         caixa(m, f"CL-V cantoneira L {lh * 1000:.0f} × 102 × 9,5 L=150 — apoio da PV-1 (2 BR-M16 na face do PG)", xpg - 0.075, xpg + 0.075, yface - lh, yface, z0v - 0.005 - 0.0095, z0v - 0.005, GM)
         caixa(m, f"CL-V cantoneira — aba na face do PG", xpg - 0.075, xpg + 0.075, yface - 0.0095, yface, z0v - 0.005 - 0.102, z0v - 0.005, GM)
-        caixa(m, "CT-V cantoneira L 76 × 76 × 6,3 L=80 — trava do topo da PV-1 (1 BR-M16 no PG + 1 M12 na placa)", xpg - 0.04, xpg + 0.04, yface - 0.0063, yface, z1v - 0.10, z1v - 0.024, GM)
+        caixa(m, "CT-V cantoneira L 76 × 76 × 6,3 L=80 — aba na face do PG (1 BR-M16)", xpg - 0.04, xpg + 0.04, yface - 0.0063, yface, z1v - 0.07, z1v + 0.0063, GM)
+        caixa(m, "CT-V cantoneira — aba sobre o topo da PV-1 (1 M12 vertical na bucha BR-2)", xpg - 0.04, xpg + 0.04, yface - 0.076, yface - 0.0063, z1v + 0.0005, z1v + 0.0063, GM)
 
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")

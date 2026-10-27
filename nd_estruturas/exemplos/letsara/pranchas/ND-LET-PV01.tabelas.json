@@ -90,7 +90,7 @@
    "linhas": [
     [
      "CL-V",
-     "L 152 × 102 × 9,5 L=150 (PG-04) e L 102 × 102 × 9,5 L=150 (PG-03), galvanizadas",
+     "L 102 × 102 × 9,5 L=150, galvanizadas (PG-03 e PG-04, faces no mesmo plano)",
      "2",
      "face B dos PG, topo +7,50"
     ],
@@ -108,9 +108,9 @@
     ],
     [
      "BR-2",
-     "bucha rosqueada M12 hef 60 (na placa, 75 da ponta, 60 abaixo do topo)",
+     "bucha rosqueada M12 hef 60 (no topo da placa, 75 da ponta, 35 da face B)",
      "2",
-     "face B da placa"
+     "topo da placa"
     ],
     [
      "AL-1",

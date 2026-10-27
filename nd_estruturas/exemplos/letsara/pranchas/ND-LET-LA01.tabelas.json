@@ -15,8 +15,8 @@
   "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "LA-01",
   "qtd": 45,
-  "peso": "33,4",
-  "volume": "1,34"
+  "peso": "33,9",
+  "volume": "1,36"
  },
  "tabelas": [
   {
@@ -100,7 +100,7 @@
     ],
     [
      "içamento",
-     "garra nas 2 pontas a 30 cm · 28,3 kN de cálculo por garra · 3,41 t"
+     "garra nas 2 pontas a 30 cm · 28,7 kN de cálculo por garra · 3,46 t"
     ],
     [
      "estocagem / transporte",
@@ -108,7 +108,7 @@
     ],
     [
      "contraflecha estimada",
-     "14,8 mm na liberação · 25,9 mm na montagem"
+     "14,8 mm na liberação · 25,7 mm na montagem"
     ]
    ]
   },
@@ -123,7 +123,7 @@
     [
      "Q138",
      "Ø4,2 c/10 × c/10, CA-60, a 2,5 cm do topo da capa",
-     "11,94"
+     "12,12"
     ]
    ]
   },
@@ -139,44 +139,44 @@
    "linhas": [
     [
      "LA-01",
-     "125 × 955 × 20, 9 Ø12,7 (4 nas nervuras de borda)",
+     "125 × 970 × 20, 9 Ø12,7 (4 nas nervuras de borda)",
      "45",
-     "3,34",
+     "3,39",
      "-"
     ],
     [
      "LA-01R",
-     "125 × 955 × 20, 9 Ø12,7 (4 nas nervuras de borda)",
+     "125 × 970 × 20, 9 Ø12,7 (4 nas nervuras de borda)",
      "13",
-     "3,34",
-     "recorte 45×27.5 ou 30×20 (\u000eP3, P5\u000f); alv. 2 e 5 cheios"
+     "3,39",
+     "recorte 45×42.5 (linha 1) / 45×27.5 (linha 2) ou 30×20 (\u000eP3, P5\u000f); alv. 2 e 5 cheios"
     ],
     [
      "LA-02",
-     "70 × 955 × 20, 4 Ø12,7",
+     "70 × 970 × 20, 4 Ø12,7",
      "3",
-     "1,88",
+     "1,91",
      "corte longit. do LA-01"
     ],
     [
      "LA-03",
-     "125 × 374 × 20, 7 Ø9,5",
+     "125 × 384 × 20, 7 Ø9,5",
      "1",
-     "1,31",
+     "1,34",
      "só +3,90, vão da escada"
     ],
     [
      "LA-03R",
-     "125 × 374 × 20, 7 Ø9,5",
+     "125 × 384 × 20, 7 Ø9,5",
      "1",
-     "1,31",
+     "1,34",
      "recorte 30×20 (\u000eP3, P5\u000f); alv. 2 e 5 cheios"
     ],
     [
      "LA-04",
-     "70 × 374 × 20, 4 Ø9,5",
+     "70 × 384 × 20, 4 Ø9,5",
      "1",
-     "0,74",
+     "0,76",
      "só +3,90, vão da escada"
     ]
    ]
@@ -192,7 +192,7 @@
    "linhas": [
     [
      "VÃO",
-     "945 cm (entre centros de apoio)",
+     "960 cm (entre centros de apoio)",
      "APOIO",
      "10 cm + neoprene"
     ],

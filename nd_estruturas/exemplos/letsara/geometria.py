@@ -58,8 +58,17 @@ Y_P13 = Y_PC_C[0]
 LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
 # rev12 (27/10, decisão do Nathan): PG-02 e PG-04 passam de 25×25 a 25×40 (40 ao longo da parede da linha 4, em x). Para manter
 # os 5,00 m livres de cada portão (face a face), o eixo sai 7,5 cm para longe do portão: PG-02 15,195 → 15,270; PG-04 24,305 → 24,230.
-# PENDÊNCIA visível: confirmar com o arquitetônico/cliente os 5,00 m livres e a nova locação dos PG-02/PG-04.
+# Conferido no arquitetônico R01 (PROJETO_LETSARA_-_PAVILHÃO_R01_-_ARQ.dwg, plantas do pavilhão, de locação e de vergas): portões
+# P9–P10 e P10–P12 com 5,000 m face a face → x mantidos (DEC-092).
+# rev12 (27/10, DEC-092, decisão do Nathan — encerra a pendência dos PG-02/PG-04): a face dos PG-02/PG-04 do lado das placas da parede C
+# (−y, área aberta) fica no plano da face dos vizinhos 40×40 (PG-01, P11, PG-03), sem fresta até as placas: eixo deslocado em y de
+# (0,40 − 0,25)/2 = 0,075 para o lado das placas (y = 29,725). Mesmo princípio dos cantos (opção D).
 PG_L4 = {"PG-01": ("P9", 9.87, 0.40, 0.40), "PG-02": ("P10", 15.27, 0.40, 0.25), "PG-04": ("P10", 24.23, 0.40, 0.25), "PG-03": ("P12", 29.63, 0.40, 0.40)}
+Y_FACE_L4 = round(Y_LIN[LINHA_PORTOES] - 0.40 / 2, 3)                       # face −y dos vizinhos 40×40 da linha 4 (plano interno das placas − folga)
+Y_PG = {mk: round(Y_FACE_L4 + v[3] / 2, 3) for mk, v in PG_L4.items()}      # eixo y de cada PG: 29,800 (40×40) / 29,725 (25×40)
+DY_PG = {mk: round(Y_LIN[LINHA_PORTOES] - y, 3) for mk, y in Y_PG.items()}   # deslocamento do eixo em relação à linha 4 (0 / 0,075)
+_PG_X = {round(v[1], 3): mk for mk, v in PG_L4.items()}
+PILARES_ESPECIAIS = [(n, x, Y_PG[_PG_X[round(x, 3)]] if (y == Y_LIN[LINHA_PORTOES] and round(x, 3) in _PG_X) else y, bx, by) for n, x, y, bx, by in PILARES_ESPECIAIS]
 VAO_PORTAO = 5.00
 X_L4 = [0.0, 9.87, PG_L4["PG-02"][1], 19.75, PG_L4["PG-04"][1], 29.63, 39.50]      # P1, P9, P10, P11, P10, P12, P2
 X_L2 = [0.0, 9.87, 19.75, 29.63, 36.175, 39.50]              # P1B, P8, P8A, P8B, P6, P2B

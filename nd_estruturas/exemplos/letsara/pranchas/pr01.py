@@ -213,7 +213,7 @@ def gerar():
     c_ = ["FAMÍLIA", "PEÇAS", "m³", "t", "AÇO kg", "kg/m³"]; w_ = W(c_, lf, 18)
     pr.tabela(xx, yt, "RESUMO POR FAMÍLIA", c_, lf, w_, h_lin=6.5); xx += sum(w_) + 12
     pr.notas(xx, yt + 2, [
-        "Valores das tabelas das próprias folhas de cada marca (quadro da peça, marcas, cordoalhas, insertos e relação do aço); o mesmo dado das listas de materiais e dos quantitativos da mesma revisão (rev12). Pendências que impedem produzir: ND-LET-NG01 (A CONFIRMAR ANTES DA PRODUÇÃO) — LA-01/LA-01R: CONFIRMAR COM A FÁBRICA a extrusora (2 cordoalhas na nervura de borda); PENDÊNCIA: locação dos PG-02/PG-04 25 × 40 (5,00 m livres nos portões, confirmar).",
+        "Valores das tabelas das próprias folhas de cada marca (quadro da peça, marcas, cordoalhas, insertos e relação do aço); o mesmo dado das listas de materiais e dos quantitativos da mesma revisão (rev12). Pendências que impedem produzir: ND-LET-NG01 (A CONFIRMAR ANTES DA PRODUÇÃO) — LA-01/LA-01R: CONFIRMAR COM A FÁBRICA a extrusora (2 cordoalhas na nervura de borda).",
         "fcj em MPa, de corpos de prova curados junto com a peça: LIB. = liberação da protensão (sempre gradual e simétrica); DESF. = desforma, içamento e transporte. Peças armadas: só desforma.",
         "Aço CA-50 com +10 % de perdas, sem as telas (Q92 das pontas das placas e Q138 da capa) e sem as alças. Protensão: comprimento dentro da peça, sem as sobras de pista e de ancoragem.",
         f"Peças por pista: pista de {PISTA:g} m com {VAO_PISTA * 100:g} cm entre peças para o corte — confirmar o arranjo, as cabeceiras e o número de pistas com a fábrica.",

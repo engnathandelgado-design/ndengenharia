@@ -286,8 +286,8 @@ rows = [["NC-1 / NC-1'", "caixa soldada + grampos (pontas com console)", "ND-LET
         ["CE-1", "chapa de espera + 4 pinos (faces laterais, rente)", "ND-LET-PP04", N_CE_OBRA - N_CE1L, f(kg_ce, 2), f(kg_ce * (N_CE_OBRA - N_CE1L), 0)],
         ["CE-1L", "CE-1 840 × 330 com asas (P8A e P11, fiada +6,25; DEC-044)", "ND-LET-PP06", N_CE1L, f(kg_ce + kg_ch(840 - 380, 330, GF.TCE), 2), f((kg_ce + kg_ch(840 - 380, 330, GF.TCE)) * N_CE1L, 0)],
         ["CS-1", "console soldado na obra na CE-1 lateral", "ND-LET-PP03", N_CS_OBRA - sum(N_CAL.values()), f(kg_cs, 2), f(kg_cs * (N_CS_OBRA - sum(N_CAL.values())), 0)],
-        ["CS-1C", "CS-1 + caixa de calço 100 (cantos, PL-02/PL-06; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1C", 0), f(kg_cs + KG_CAL.get("CS-1C", 0), 2), f((kg_cs + KG_CAL.get("CS-1C", 0)) * N_CAL.get("CS-1C", 0), 0)],
-        ["CS-1D", "CS-1 + caixa de calço 75 (PG-02/PG-04; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1D", 0), f(kg_cs + KG_CAL.get("CS-1D", 0), 2), f((kg_cs + KG_CAL.get("CS-1D", 0)) * N_CAL.get("CS-1D", 0), 0)],
+        ["CS-1C", "CS-1 + caixa de calço 100 (PL-02/PL-06 da vista G; DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1C", 0), f(kg_cs + KG_CAL.get("CS-1C", 0), 2), f((kg_cs + KG_CAL.get("CS-1C", 0)) * N_CAL.get("CS-1C", 0), 0)],
+    ] + ([["CS-1D", "CS-1 + caixa de calço 75 (DEC-044)", "ND-LET-PP06", N_CAL.get("CS-1D", 0), f(kg_cs + KG_CAL.get("CS-1D", 0), 2), f((kg_cs + KG_CAL.get("CS-1D", 0)) * N_CAL.get("CS-1D", 0), 0)]] if N_CAL.get("CS-1D") else []) + [
         ["PT-1", "cartola + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT1, f(kg_pt1, 2), f(kg_pt1 * N_PT1, 0)],
         ["PT-1R", "chapa plana 6,3 × 80 × 220 + 1 M16 + 1 arruela (junta em frente à VB)", "ND-LET-PP04", N_PT1R, f(kg_pt1r, 2), f(kg_pt1r * N_PT1R, 0)],
         ["PT-2", "cantoneira + 2 M16 + 2 arruelas", "ND-LET-PP04", N_PT2, f(kg_pt2, 2), f(kg_pt2 * N_PT2, 0)]]

@@ -77,6 +77,8 @@ _n01 = json.load(open("/home/claude/letsara/pranchas/pp01.json"))["n"]
 _cal = GF.FX["calcos"]
 for _mk, _e in (("CS-1C", 100), ("CS-1D", 75)):                            # DEC-044: caixa de calço soldada nas costas de parte dos CS-1 (ND-LET-PP06)
     _q = _n01[_mk.replace("-", "")]
+    if not _q:                                                              # rev12 (DEC-092): sem CS-1D
+        continue
     qt.append([_mk, f"CS-1 (dos acima) + caixa de calço 120 × 330 × {_e} ch. 9,5 soldada nas costas (PP06)", _q, math.ceil(_q * RES), _q + math.ceil(_q * RES), f(_cal[_mk]["kg_caixa"] * _q, 0)])
 qt.append(["CE-1L", "chapa de espera 840 × 330 × 12,5 com asas (PP06; pinos como a CE-1)", _n01["CE1L"], 0, _n01["CE1L"], f(GF.kg_ch(840, 330, GF.TCE) * _n01["CE1L"], 0)])
 y2 = pr.tabela(Q[0] + 440, Q[1] + 292, "QUANTIDADES DE PRODUÇÃO", ["PEÇA", "USO", "OBRA", "RESERVA 5 %", "PRODUZIR", "kg (obra)"], qt, [16, 72, 14, 20, 24, 20], h_lin=5.2)
@@ -88,7 +90,7 @@ pr.notas(Q[0] + 440, y2 - 4, [
     "Galvanização a fogo após a solda (NBR 6323, ≥ 85 µm); repassar as roscas das porcas soldadas depois da galvanização.",
     "Identificar cada peça com a marca (NC-1, NC-1', CS-1) em punção ou etiqueta metálica; embalar em lotes de 20 por marca.",
     "Parafusos de nível (16), contraporcas (17) e prisioneiros (18): fornecimento em kit por console, galvanizados (prisioneiro zincado).",
-    f"DEC-044 (ND-LET-PP06): {_n01['CS1C']} CS-1C e {_n01['CS1D']} CS-1D = CS-1 comum com caixa de calço 120 × 330 (e = 100 / 75, chapa 9,5 A36) soldada nas costas na oficina (filete 5, 2 × 130), galvanizada junto; marcar CS-1C / CS-1D. {_n01['CE1L']} CE-1L (840 × 330 × 12,5, mesmos 4 pinos) para a fábrica dos pilares.",
+    f"DEC-044 (ND-LET-PP06): " + " e ".join(f"{_n01[m_.replace('-', '')]} {m_}" for m_ in ("CS-1C", "CS-1D") if _n01[m_.replace('-', '')]) + f" = CS-1 comum com caixa de calço 120 × 330 (e = " + " / ".join(e_ for m_, e_ in (("CS-1C", "100"), ("CS-1D", "75")) if _n01[m_.replace('-', '')]) + f", chapa 9,5 A36) soldada nas costas na oficina (filete 5, 2 × 130), galvanizada junto; marcar a caixa com a marca. {_n01['CE1L']} CE-1L (840 × 330 × 12,5, mesmos 4 pinos) para a fábrica dos pilares.",
     "PROJETO DA ND ENGENHARIA."], 300)
 av1 = pr.salvar("/home/claude/letsara/pranchas/ND-LET-MT01-1")
 print("MT01-1", len([a for a in av1 if a[0] == "ERRO"]), "erros,", len(av1), "avisos", av1)

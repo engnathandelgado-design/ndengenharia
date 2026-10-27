@@ -11,7 +11,7 @@ LG = json.load(open(AQ + "ligacoes.json"))
 fp = lambda t_: f"{t_:.1f}".replace(".", ",")
 f = lambda v, d=3: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
-from geometria import Y_LIN, X_EIXO as X_FACH, Y_P13, Y_PC_C, y_vb, y_canto, PG_L4
+from geometria import Y_LIN, X_EIXO as X_FACH, Y_P13, Y_PC_C, y_vb, y_canto, PG_L4, Y_PG
 INCL, Z0 = 0.03, LG["Z0_TS"]
 zf = lambda x: Z0 + INCL * x
 C3 = math.cos(math.atan(INCL))
@@ -70,7 +70,7 @@ for marca, y, bx, by in (("PC-01 (P8A)", Y_LIN[1], 600, 400), ("PC-02 (P11)", Y_
 for marca, x in (("PM-01", X_FACH["B"]), ("PM-02", X_FACH["D"])):
     pilar(M(Y_LIN[1]), M(x), 600, 400, marca, 1, 700)
 for marca, (r01_, x, bxm_, bym_) in PG_L4.items():                      # rev12: PG-02/PG-04 25×40 (geometria.PG_L4)
-    pilar(M(Y_LIN[3]), M(x), M(bym_), M(bxm_), f"{marca} ({r01_})", 1, -700)
+    pilar(M(Y_PG[marca]), M(x), M(bym_), M(bxm_), f"{marca} ({r01_})", 1, -700)          # rev12 (DEC-092): eixo y do registro
 # I120 central (eixo C)
 for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_PC_C[0]), ("V405", Y_PC_C[0], Y_PC_C[1]), ("V404", Y_PC_C[1], Y_LIN[8])):   # DEC-058
     Lm_ = PQ[marca][4]                                                   # comprimento da peça (folha ND-LET-I120)

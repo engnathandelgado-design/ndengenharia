@@ -278,13 +278,13 @@
    "folha": "ND-LET-PG04",
    "nivel": "fundação",
    "x": 24.23,
-   "y": 29.8,
+   "y": 29.725,
    "secao": "25×40",
    "ref_R01": "P10",
    "fila": "C",
    "fora_do_eixo": true,
    "linha": 4,
-   "fora_da_linha": false
+   "fora_da_linha": true
   },
   {
    "nome": "P20",
@@ -308,13 +308,13 @@
    "folha": "ND-LET-PG02",
    "nivel": "fundação",
    "x": 15.27,
-   "y": 29.8,
+   "y": 29.725,
    "secao": "25×40",
    "ref_R01": "P10",
    "fila": "C",
    "fora_do_eixo": true,
    "linha": 4,
-   "fora_da_linha": false
+   "fora_da_linha": true
   },
   {
    "nome": "P22",

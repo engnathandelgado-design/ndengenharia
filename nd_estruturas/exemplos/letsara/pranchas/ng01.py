@@ -216,7 +216,6 @@ PEND = [
     "Cobrimento 2,0 cm dos fios das placas exige controle de pré-fabricado (NBR 9062:2017 12.1.2) — confirmar com a fábrica.",
     "Lajes alveolares: protensão válida para a seção desenhada; se o fabricante extrudar outra seção, refazer a verificação.",
     "LA-01 / LA-01R (9 Ø12,7): CONFIRMAR COM A FÁBRICA que a extrusora aceita 2 cordoalhas na nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo) — não produzir antes da resposta.",
-    "PG-02 e PG-04 25 × 40 com o eixo 7,5 cm para longe do portão (5,00 m livres face a face em cada portão): confirmar a locação com o arquitetônico/cliente.",
     "Vento: V0, S2 e S3 dependem do local da obra — confirmar junto com o local.",
 ]
 

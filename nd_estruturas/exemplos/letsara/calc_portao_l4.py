@@ -18,7 +18,7 @@ from pathlib import Path
 AQ = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQ)); sys.path.insert(0, str(AQ / "pranchas")); sys.path.insert(0, str(AQ.parents[1]))
 import ts01_dados as T
-from geometria import X_L4, X_EIXO, PG_L4
+from geometria import X_L4, X_EIXO, PG_L4, Y_PG, DY_PG, Y_FACE_L4
 
 LG = T.LG
 XC = X_EIXO["C"]
@@ -120,15 +120,27 @@ for mk, (b, x, bx, by) in PG.items():
     a = ARRJ.get(mk, {})
     As = a.get("n", 4) * math.pi * (a.get("d", 16) / 1000) ** 2 / 4
     NRd = 0.85 * fcd * bx * by + As * 400e3 / 1.0
-    pg_out[mk] = dict(secao_cm=f"{round(by * 100)}×{round(bx * 100)}", x_m=x, Nd_kN=round(Nd, 1), Nd_tf=round(Nd / 10, 1), H_m=round(H, 2), le_m=round(le, 2), lambda_=round(lam, 1), Md_tot_kNm=round(Mtot, 2),
+    pg_out[mk] = dict(secao_cm=f"{round(by * 100)}×{round(bx * 100)}", x_m=x, y_m=Y_PG[mk], dy_linha4_m=DY_PG[mk], Nd_kN=round(Nd, 1), Nd_tf=round(Nd / 10, 1), H_m=round(H, 2), le_m=round(le, 2), lambda_=round(lam, 1), Md_tot_kNm=round(Mtot, 2),
                       NRd_kN=round(NRd, 0), uso_N=round(Nd / NRd, 3), ok=lam <= 90 and Nd <= NRd,
                       norma="NBR 6118:2023 15.8.3.3.2 (λ ≤ 90) e 11.3.3.4.3 (M1d,mín); flexão do vento nas placas já está no dimensionamento DEC-040")
-# neoprene NEO-7 b × 200 × 10 (cabeça do PG): σ ≤ 7 MPa (NBR 9062:2017 7.2.1.6, elastômero simples)
+# neoprene NEO-7 na cabeça do PG: σ ≤ 7 MPa (NBR 9062:2017 7.2.1.6, elastômero simples). rev12 (DEC-092): distância à borda do
+# apoio a0 ≥ 1,5 c e ≥ 3 cm (NBR 9062:2017 7.2, c = 3 cm) nas 4 faces da cabeça e na borda da mesa inferior da TS-01A (40, centrada
+# na linha 4); neoprene centrado no eixo do pilar → a reação da TS-01A passa no eixo do PG (e = 0 no pilar e na fundação).
+A0 = max(1.5 * 0.03, 0.03)
+B_TS = 0.40
 neo = {}
 for mk, (b, x, bx, by) in PG.items():
     Nk = max(r["Rg"] + r["Rq"] for m in out.values() for r in m["reacoes"] if r["pg"] == mk)
-    A = (bx - 0.05) * 0.20
-    neo[mk] = dict(dim_mm=f"{round((bx - 0.05) * 1000)} × 200 × 10", sigma_MPa=round(Nk / A / 1000, 2), ok=Nk / A / 1000 <= 7.0)
+    nx = math.floor((bx - 2 * A0) * 100 + 1e-9) / 100                      # ao longo da viga (x)
+    ny = min(0.20, math.floor((by - 2 * A0) * 100 + 1e-9) / 100)          # ⊥ à viga (y)
+    yc = Y_PG[mk]
+    a_ts = round(min(yc - ny / 2 - Y_FACE_L4, (Y_FACE_L4 + B_TS) - (yc + ny / 2)), 3)   # borda da mesa da TS-01A
+    a_pg = round(min((bx - nx) / 2, (by - ny) / 2), 3)
+    A = nx * ny
+    neo[mk] = dict(dim_mm=f"{round(nx * 1000)} × {round(ny * 1000)} × 10", nx_mm=round(nx * 1000), ny_mm=round(ny * 1000), sigma_MPa=round(Nk / A / 1000, 2),
+                   a0_min_cm=round(A0 * 100, 1), borda_pilar_cm=round(a_pg * 100, 1), borda_mesa_TS_cm=round(a_ts * 100, 1),
+                   y_neo_m=yc, e_pilar_m=0.0, e_na_TS_m=DY_PG[mk],
+                   ok=Nk / A / 1000 <= 7.0 and a_pg >= A0 - 1e-9 and a_ts >= A0 - 1e-9)
 # placa PV-1 sobre o portão P19–D (P10–P12): 10 × 37 cm, C40 armada, apoiada nas 2 cantoneiras CL-V (vão entre apoios); só peso
 # próprio (regra do Nathan para placas: cada placa nos seus apoios, sem carga de outra placa); manuseio por 2 alças a 0,2 L
 fck_pv, b_pv, t_pv = 40.0, 0.10, 0.10
@@ -148,9 +160,9 @@ M_ic = 1.3 * 1.3 * g_pv * (0.2 * L_pv) ** 2 / 2                  # içamento βa
 pv = dict(dim=f"10 × {h_pv * 100:.1f} × {L_pv * 100:.1f} cm".replace(".", ","), L_m=L_pv, h_m=h_pv, z0=z0v, z1=z1v, peso_kN=round(g_pv * L_pv, 2), Md_kNm=round(Md_pv, 2),
           As_nec_cm2=round(As_pv, 2), As_adot="N1 2 Ø10 embaixo + N2 2 Ø10 em cima (1,57 cm² cada)", ok_flexao=As_pv <= 1.57, sigma_ELS_MPa=round(sig_pv, 2),
           fctk_inf_MPa=round(fctk, 2), ok_ELS=sig_pv <= fctk, M_icamento_kNm=round(M_ic, 3), alcas="2 alças de cordoalha Ø12,7 no topo a 0,2 L (1 laço cada)",
-          estribos="N3 Ø5 c/20 (fechados, 2 ramos)", apoio=dict(CL_V="L 102 × 102 × 9,5 L=150 (PG-03) e L 152 × 102 × 9,5 L=150 (PG-04, face 75 mm mais atrás) com 2 BR-M16 cada",
-                                                                    R_d_kN=round(1.4 * g_pv * L_pv / 2, 2), neoprene="tira 100 × 150 × 5",
-                                                                    trava="CT-V L 76 × 76 × 6,3 L=80 com 1 BR-M16 no PG e 1 M12 em bucha na placa (furo oblongo horizontal)"))
+          estribos="N3 Ø5 c/20 (fechados, 2 ramos)", apoio=dict(CL_V="L 102 × 102 × 9,5 L=150 (PG-03 e PG-04, faces no mesmo plano — DEC-092) com 2 BR-M16 cada",
+                                                                    R_d_kN=round(1.4 * g_pv * L_pv / 2, 2), neoprene="tira 75 × 150 × 5 (aba de 102 − folga de 25 até a placa)",
+                                                                    trava="CT-V L 76 × 76 × 6,3 L=80 com 1 BR-M16 no PG e 1 M12 vertical em bucha no topo da placa (furo oblongo horizontal)"))
 pv["ok"] = pv["ok_flexao"] and pv["ok_ELS"]
 res = dict(ts01a=out, pilares=pg_out, neoprene=neo, placa_PV1=pv, ok=all(v["ok"] for v in out.values()) and all(v["ok"] for v in pg_out.values()) and all(v["ok"] for v in neo.values()) and pv["ok"],
            fundo_portao_m={"B–P21": round(T.LG["Z0_TS"] + 0.03 * (X_L4[1] + 0.20), 3), "P19–D": round(T.LG["Z0_TS"] + 0.03 * (X_L4[4] + PG_L4["PG-04"][2] / 2), 3)},

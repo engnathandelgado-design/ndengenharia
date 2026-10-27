@@ -217,7 +217,7 @@ ins = [["TB-1", "Tubo Ø50×3,0 L=240 no nariz + nicho 120×120×60", 2, "a 110 
        ["ES-1R", "VB-05 a 08: 2 M20 L=520 gancho + grampo U Ø10", 2 * len(TERCAS), "topo, a 45/105 da terça"],
        ["ES-2V", "VB-05 a 08: M16 L=220 gancho + grampo (OR-X)", "tab.", "eixo, ±200 da terça do nó"],
        ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas)", 2, "a 150 cm das pontas"],
-       ["NEO-6", "Neoprene 100×60×10 (furo Ø30; 60 na largura do consolo) — no pilar", 2, "sobre os consolos CP-VB"],
+       ["NEO-6", "Neoprene 100×60×10 c/ furo Ø30 (no pilar)", 2, "sobre os consolos CP-VB"],
        ["PN-6", "Porca, contraporca e arruela 60×60×6 do PN-6", 2, "no nicho do TB-1"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA (VB-02) — dimensões em mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 104, 10, 52])
 import armaduras_vigas as _AVb                                     # rev12 (item 17): aço da peça = relação de armação da folha (+10 %)
@@ -228,7 +228,7 @@ qd = [["MARCA", "VB-02", "SEÇÃO", "15 × 60 cm, dente 30"], ["COMPRIMENTO", f"
       ["AÇO CA-50", f"{f(KG_VB, 1)} kg (+10 %)", "TAXA", f"{f(KG_VB / V, 0)} kg/m³"], ["QUANTIDADE", "1 (família: 8)", "COBRIMENTO", "3,0 cm (CAA II)"]]
 pr.tabela(Q[0] + 330, Q[3] - 308, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 62, 30, 60])
 notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimento 3,0 cm (CAA II). N1 com gancho de 20 cm junto ao recorte; N2 com dobra de 20 cm nas pontas.",
-         "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V (M16 com grampo U Ø10 cada, rev09d: escora das terças até 16 kN no eixo 1), com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",
+         "Topo da VB alinhado com o topo das TS-01: as terças do vão de oitão apoiam na VB pelo ST-1V (= ST-1P com os 2 furos oblongos no eixo, VB de 15 cm) parafusado nas esperas ES-1V (M16 com grampo U Ø10 cada; escora das terças até 16 kN no eixo 1), com 4 M12 8.8 na alma da terça Z (sem mão-francesa) — ND-LET-COB01. Nenhuma solda.",
          "Dente Gerber 30 × 27 nas duas pontas (NBR 9062:2017 7.4): o consolo CP-VB (15 × 27 × 29) fica escondido no recorte. A VB sobe 3 % (de A para E): na montagem as pontas, as faces dos recortes e os tubos TB-1 ficam a prumo e a face de apoio de cada dente fica horizontal, sobre o neoprene e o topo horizontal do consolo (NBR 9062:2017 7.2.1.6); na fôrma reta essas linhas são inclinadas 3 % (cotas na elevação). Ponta baixa sempre no lado A; folga de 2,5 cm nas pontas.",
          "Sucção do vento na cobertura levanta a VB no apoio (28 kN de cálculo): pino PN-6 Ø20 roscado com porca, contraporca e arruela no nicho do topo do dente, apertado depois do neoprene assentado; graute do nicho só numa ponta (a outra livre para dilatar).",
          "VB-05 a 08 (fachada 9): mesma fôrma e armação; ES-1R M20 hef 400 + grampo U Ø10 no lugar das ES-1V (escora das terças, até 49 kN) e ES-2V das orelhas do X (tabela). Última terça do lado E apoiada na face lateral do pilar de canto, de seção cheia (ST-1FL em 2 ES-1FL M20 embutidas na face, PL-07/PL-08).",

@@ -59,7 +59,9 @@ def eixo_proximo(x):
 def numerar_pilares():
     pil = pilares_obra()
     # fila = eixo mais próximo; filas de cima (E) para baixo (A); na fila, esquerda→direita (y), empate: de cima para baixo (x desc)
-    ordem = sorted(pil, key=lambda p: (-eixo_proximo(p[2])[1], p[3], -p[2]))
+    # rev12 (DEC-092): ordem pela linha de referência (pilares deslocados até 10,1 cm da linha contam na linha) — nomes não mudam
+    _yref = lambda y: next((yl for yl in Y_LIN if abs(yl - y) <= 0.101), y)
+    ordem = sorted(pil, key=lambda p: (-eixo_proximo(p[2])[1], _yref(p[3]), -p[2]))
     res = []
     for k, (mk, r01, x, y, sec) in enumerate(ordem, 1):
         fila = eixo_proximo(x)

@@ -27,16 +27,21 @@ TCE = GF.TCE
 recs = FCH.RECORTADAS
 tipos = sorted(set(FCH.TIPO[p["Lk"]] for _, p in recs))
 n_c, n_d = PP01["CS1C"], PP01["CS1D"]
+# rev12 (DEC-092): PG-02/PG-04 com a face no plano dos vizinhos → sem CS-1D; só as marcas de calço com peças entram na folha
+_CALS = [(m_, e_, n_) for m_, e_, n_ in (("CS-1C", 100.0, n_c), ("CS-1D", 75.0, n_d)) if n_]
+_CMK = " / ".join(m_ for m_, _, _ in _CALS)
+_CE = " / ".join(f"{e_:g}" for _, e_, _ in _CALS)
 
 pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="PLACAS RECORTADAS NO I120 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO CS-1C / CS-1D (DEC-044)",
+                        conteudo=f"PLACAS RECORTADAS NO I120 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO {_CMK} (DEC-044)",
                         desenho="ND-LET-PP06", folha="01/01", fase="PARA APROVAÇÃO", rev="08"))
 pr.revisao("08", "22/10/2026", "EMISSÃO: RECORTE DAS PLACAS NO I120 DO EIXO C; CE-1L; CS-1 COM CALÇO (DEC-044)")
+pr.revisao("R12", "27/10/2026", "SEM CS-1D: PILARES DOS PORTÕES COM A FACE NO PLANO DOS VIZINHOS")
 Q = pr.quadro
 XC = Q[2] - 235
-pr.cabecalho_peca(", ".join(tipos), f"PLACAS RECORTADAS ({len(recs)} PÇ: {', '.join(p['id'] for _, p in recs)}) · CE-1L ({PP01['CE1L']} PÇ) · CS-1C ({n_c} PÇ) · CS-1D ({n_d} PÇ)",
+pr.cabecalho_peca(", ".join(tipos), f"PLACAS RECORTADAS ({len(recs)} PÇ: {', '.join(p['id'] for _, p in recs)}) · CE-1L ({PP01['CE1L']} PÇ) · " + " · ".join(f"{m_} ({n_} PÇ)" for m_, _, n_ in _CALS),
                   f"recorte {gg(RB / 10)} × {gg((H_PL - RZ) / 10)} cm na ponta do eixo C (consolo CP-I120 + nariz do I120) · console dessa ponta a {gg(XCS / 10)} cm da ponta, na CE-1L · "
-                  f"calço de 100 / 75 mm entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles · placa típica: PP00; CS-1: PP03; CE-1: PP04",
+                  f"calço de {_CE} mm entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles · placa típica: PP00; CS-1: PP03; CE-1: PP04",
                   largura=XC - Q[0] - 10)
 
 # ================================================================== 1. ponta recortada — elevação pela face interna (1:10)
@@ -150,7 +155,7 @@ E_ = 100.0
 H_CX, B_CX, T_CX = 330.0, 120.0, 9.5
 ZC_ = FCH.Z_CE
 ZT_ = Z_NC + NC_H / 2 - N["t_teto"] - T["G"]
-c3 = pr.vista("CALCO CORTE", (cx0, Q[3] - 60 - (ZC_ + 300) / 4), 4.0, titulo="DETALHE 4 — CALÇO CS-1C / CS-1D: CORTE", subtitulo="caixa 120 × 330 × e (e = 100 CS-1C; 75 CS-1D) entre a CE-1 e as costas do CS-1; CE-1 na face real do pilar", unidade="mm")
+c3 = pr.vista("CALCO CORTE", (cx0, Q[3] - 60 - (ZC_ + 300) / 4), 4.0, titulo=f"DETALHE 4 — CALÇO {_CMK}: CORTE", subtitulo="caixa 120 × 330 × e (" + "; ".join(f"e = {e_:g} {m_}" for m_, e_, _ in _CALS) + ") entre a CE-1 e as costas do CS-1; CE-1 na face real do pilar", unidade="mm")
 pilp = [(E_, ZC_ - 300), (E_ + 240, ZC_ - 300), (E_ + 240, ZC_ + 300), (E_, ZC_ + 300)]
 c3.poli(pilp, "CORTADO", fechada=True); c3.hachura(pilp, "AR-CONC", 0.03)
 c3.chapa(E_, ZC_ - 165, TCE, 330, 1.0)                                                  # CE-1 na face real do pilar
@@ -206,14 +211,14 @@ kg_cel = GF.kg_ch(840, 330, TCE) + 4 * (GF.kg_red(16, 140) + GF.kg_red(32, 10))
 y = pr.tabela(XC, y - 6, f"LISTA DE MATERIAIS — CE-1L (1 CJ) — {PP01['CE1L']} PÇ: P8A E P11, FIADA +6,25", ["Nº", "DESCRIÇÃO", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg/un"], ce, [9, 48, 76, 36, 12, 24], h_lin=5.2)
 pr.texto(XC, y - 3.5, f"CE-1L: {f(kg_cel, 2)} kg/cj; pinos, N18 e furação iguais à CE-1 (PP04).", "nota", "TEXTO", "TOP_LEFT")   # rev11: verificação da asa fica na memória
 cal = []
-for mk_, ee in (("CS-1C", 100.0), ("CS-1D", 75.0)):
+for mk_, ee, _n in _CALS:
     cal += [[mk_, "chapa lateral", f"CH 9,5 × 330 × {gg(ee)}", "ASTM A36", 2, f(GF.kg_ch(330, ee, 9.5), 3)],
             ["", "chapa topo / fundo", f"CH 9,5 × 101 × {gg(ee)}", "ASTM A36", 2, f(GF.kg_ch(101, ee, 9.5), 3)],
             ["", "chapa frente / fundo", "CH 9,5 × 120 × 330", "ASTM A36", 2, f(GF.kg_ch(120, 330, 9.5), 3)],
             ["", f"caixa completa ({gg(CAL[mk_]['kg_caixa'])} kg) + CS-1 (PP03)", f"120 × 330 × {gg(ee)}", "", 1, f(CAL[mk_]["kg_caixa"] + json.load(open('/home/claude/letsara/pranchas/pp03.json'))["kg_CS1"], 2)]]
-y = pr.tabela(XC, y - 8, f"CAIXAS DE CALÇO — CS-1C ({n_c} PÇ, e = 100) E CS-1D ({n_d} PÇ, e = 75)", ["MARCA", "PEÇA", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg"], cal, [16, 56, 52, 30, 12, 24], h_lin=5.0)
+y = pr.tabela(XC, y - 8, "CAIXAS DE CALÇO — " + " E ".join(f"{m_} ({n_} PÇ, e = {e_:g})" for m_, e_, n_ in _CALS), ["MARCA", "PEÇA", "DIMENSÃO (mm)", "MATERIAL", "QTD", "kg"], cal, [16, 56, 52, 30, 12, 24], h_lin=5.0)
 pos = []
-for mk_ in ("CS-1C", "CS-1D"):
+for mk_, _e, _n in _CALS:
     cont = {}
     for (V, b_, k_) in FCH.CALCOS.get(mk_, []):
         nm = FCH.VISTAS[V].get("nomes_pil", [None] * 9)[b_] or f"pilar {b_ + 1}"
@@ -226,8 +231,8 @@ pr.notas(XC, y - 4, [
     f"Placa recortada: fôrma, seção, {FCH.NC_} fios, insertos e alças da PP00; os fios param na face do recorte (lbpt {gg(PLJ['protensao']['lbpt_gradual_m'])} m contada dela). Console dessa ponta a {gg(XCS / 10)} cm da ponta: nicho NC-1 de {gg(RB / 10)} a {gg((RB + NC_B) / 10)} cm, aberto na face do recorte; dente Gerber N3–N7 igual à PP01 (det. 1) com a ponta na face do recorte. Toco {gg(RB / 10)} × {gg(RZ / 10)} sem protensão: N8/N9 2 Ø8 de borda, N10 2 Ø8 diagonais no canto reentrante, N11 estribos Ø6,3 c/8 (mínima {gg(REC['toco']['As_min_cm2'])} cm²). Tela N1 recortada no nicho e no recorte.",
     f"Verificação: desforma deitada em 4 pontos com balancim (0,104 L / 0,396 L, como a típica): face do recorte {gg(REC['desforma']['sig_face_MPa'])} MPa, toco {gg(REC['desforma']['sig_toco_MPa'])} MPa, ponto de desforma {gg(REC['desforma']['sig_ponto_desforma_MPa'])} MPa ≤ {gg(REC['desforma']['lim_MPa'])} (fctk,j/1,5); montada nos 2 consoles (vão {gg(REC['montada']['L_vao_m'])} m): {gg(REC['montada']['sig_MPa'])} MPa ≤ 0 (descompressão). Içamento em pé pelas alças AL-P (0,21 L, fora do recorte) como a típica.",
     f"CE-1L: chapa 840 × 330 × {gg(TCE)} A36 com os mesmos 4 pinos e N18 da CE-1, centrada no pilar, fiada +6,25 dos P8A (PC-01) e P11 (PC-02); as asas de 220 ficam no plano da face, além do pilar — balanço de {gg(CEL['asa']['balanco_mm'])} mm até o CS-1: flexão no plano {gg(CEL['asa']['sigma_MPa'])} MPa + torção {gg(CEL['asa']['tau_MPa'])} MPa → von Mises {gg(CEL['asa']['von_mises_MPa'])} ≤ {gg(CEL['asa']['lim_MPa'])} MPa; giro da asa {gg(CEL['asa']['rotacao_rad'])} rad ({gg(CEL['asa']['flecha_ponta_console_mm'])} mm na ponta do console). Folga de 4 cm entre a CE-1L e o topo do CP-I120. Na fôrma do pilar: asas por fora da fôrma lateral (gabarito), posição ±5.",
-    f"CS-1C / CS-1D (DEC-044): nos cantos (vistas A e I: {', '.join(sorted(set(r[2] for r in pos if r[1] in ('vista A', 'vista I'))))}), nos PL-02/PL-06 da vista G e nos P10 da vista C a face do pilar fica 100 / 75 mm atrás do plano dos consoles (40 ou 25 ⊥ à parede, contra 60 dos PF). O CS-1 (PP03) recebe na fábrica uma caixa fechada de chapa 9,5, 120 × 330 × e, soldada nas costas (filete 5 de oficina, 2 × 130); na obra o fundo da caixa é soldado na CE-1 (filete {gg(CAL['CS-1C']['solda_campo']['filete_mm'])} E70XX nos 2 lados verticais de 330, inspeção visual 100 % + LP 10 %, galvanização a frio). Nesses pilares a CE-1 recebe 1 console só.",
-    f"Verificação do calço (fixacao_placas.json, Vd {gg(FXJ['cargas_por_console']['Vd_kN'])} kN por console): CS-1C braço {gg(CAL['CS-1C']['braco_mm'])} mm, M {gg(CAL['CS-1C']['M_kNm'])} kN·m — pinos da CE-1 T {gg(CAL['CS-1C']['CE1_1_console']['T_linha_sup_kN'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['phiN_linha_kN'])} kN (interação {gg(CAL['CS-1C']['CE1_1_console']['interacao'])}), flexão local da CE-1 {gg(CAL['CS-1C']['CE1_1_console']['flexao_chapa_MPa'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['lim_MPa'])} MPa, caixa {gg(CAL['CS-1C']['caixa']['von_mises_MPa'])} MPa, solda de campo {gg(CAL['CS-1C']['solda_campo']['f_res_MPa'])} ≤ {gg(CAL['CS-1C']['solda_campo']['fw_Rd_MPa'])} MPa; CS-1D: M {gg(CAL['CS-1D']['M_kNm'])} kN·m, interação {gg(CAL['CS-1D']['CE1_1_console']['interacao'])}, flexão local {gg(CAL['CS-1D']['CE1_1_console']['flexao_chapa_MPa'])} MPa. Regulagem (G, afastamento, janela) igual à PP03.",
+    f"{_CMK} (DEC-044): nos pilares da vista G de 40 ⊥ à parede (contra 60 dos PF) a face do pilar fica {_CE} mm atrás do plano dos consoles; os cantos (vistas A e I) e os pilares dos portões (vista C) ficam com a face no plano dos vizinhos, sem calço. O CS-1 (PP03) recebe na fábrica uma caixa fechada de chapa 9,5, 120 × 330 × e, soldada nas costas (filete 5 de oficina, 2 × 130); na obra o fundo da caixa é soldado na CE-1 (filete {gg(CAL['CS-1C']['solda_campo']['filete_mm'])} E70XX nos 2 lados verticais de 330, inspeção visual 100 % + LP 10 %, galvanização a frio). Nesses pilares a CE-1 recebe 1 console só.",
+    f"Verificação do calço (fixacao_placas.json, Vd {gg(FXJ['cargas_por_console']['Vd_kN'])} kN por console): CS-1C braço {gg(CAL['CS-1C']['braco_mm'])} mm, M {gg(CAL['CS-1C']['M_kNm'])} kN·m — pinos da CE-1 T {gg(CAL['CS-1C']['CE1_1_console']['T_linha_sup_kN'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['phiN_linha_kN'])} kN (interação {gg(CAL['CS-1C']['CE1_1_console']['interacao'])}), flexão local da CE-1 {gg(CAL['CS-1C']['CE1_1_console']['flexao_chapa_MPa'])} ≤ {gg(CAL['CS-1C']['CE1_1_console']['lim_MPa'])} MPa, caixa {gg(CAL['CS-1C']['caixa']['von_mises_MPa'])} MPa, solda de campo {gg(CAL['CS-1C']['solda_campo']['f_res_MPa'])} ≤ {gg(CAL['CS-1C']['solda_campo']['fw_Rd_MPa'])} MPa." + (f" CS-1D: M {gg(CAL['CS-1D']['M_kNm'])} kN·m, interação {gg(CAL['CS-1D']['CE1_1_console']['interacao'])}, flexão local {gg(CAL['CS-1D']['CE1_1_console']['flexao_chapa_MPa'])} MPa." if n_d else "") + f" Regulagem (G, afastamento, janela) igual à PP03.",
     "Galvanização a fogo da caixa com o CS-1 (NBR 6323); CE-1L galvanizada após os pinos. Tolerâncias NBR ISO 2768-1 m. Cotas de concreto em cm, metálica em mm; não medir no desenho.",
     "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM."], 235)
 bar = [dict(pos="N3", diam=8, qtd=2, comp=138), dict(pos="N4", diam=8, qtd=1, comp=256), dict(pos="N5", diam=6.3, qtd=1, comp=54), dict(pos="N6", diam=6.3, qtd=1, comp=54),

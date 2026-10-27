@@ -119,6 +119,14 @@ DM_MEZ = {p: 4 * _VD_MEZ * _EMP for p in ("P3-L1", "P4-L1", "P5-L1")}
 DM_MEZ.update({p: 2 * _VD_MEZ * _EMC for p in ("P1C-L1", "P2C-L1")})
 for _p, _v in DM_MEZ.items():
     DM_CONS[_p] = DM_CONS.get(_p, 0.0) + _v
+# rev12 (27/10, DEC-092): PG-02/PG-04 com o eixo 7,5 cm fora da linha 4 — reação da TS-01A tomada no eixo da linha 4 (a favor; o NEO-7
+# é centrado no pilar): ΔMx = Rd·e
+from geometria import DY_PG as _DYPG
+_PJ = json.loads((AQ / "portao_l4.json").read_text(encoding="utf-8"))
+DM_PG = {nm: max(r["Rd"] for m in _PJ["ts01a"].values() for r in m["reacoes"] if r["pg"] == mk) * _DYPG[mk]
+         for mk, nm in (("PG-02", "P10a"), ("PG-04", "P10b")) if _DYPG[mk]}
+for _p, _v in DM_PG.items():
+    DM_CONS[_p] = DM_CONS.get(_p, 0.0) + _v
 
 
 def secao_ok(cand, pils, com_dm=True):

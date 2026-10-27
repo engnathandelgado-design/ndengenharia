@@ -21,6 +21,7 @@ pr = Prancha("A1", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETS
                         conteudo="PLACA PV-1 SOBRE O PORTÃO DA LINHA 4 (ENTRE PG-04 E PG-03) — FÔRMA, ARMAÇÃO, APOIOS E MONTAGEM",
                         desenho="ND-LET-PV01", folha="01/01", fase="PARA APROVAÇÃO", rev="00"))
 pr.revisao("00", "24/10/2026", "EMISSÃO (DEC-059): PORTÃO 500 × 750 LIVRE ATÉ +7,50; PLACA ENTRE +7,50 E A TS-01A")
+pr.revisao("R12", "27/10/2026", "PG-04 COM A FACE NO PLANO DO PG-03: CL-V L 102 NOS DOIS; NEOPRENE 75 × 150; CT-V SOBRE O TOPO DA PLACA")
 Q = pr.quadro
 XC = Q[2] - 190
 pr.cabecalho_peca("\x01PV-1", f"PLACA SOBRE O PORTÃO — 10 × {f(H / 10)} × {f(L / 10)} cm · 1 PEÇA · {f(PV['peso_kN'] / 10.0, 2)} t",
@@ -71,19 +72,22 @@ bar = [dict(pos="N1", diam=10.0, qtd=2, comp=round((L - 2 * C) / 10), trechos=[f
 # ------------------------------------------------------------------ DETALHES 1:5 — apoio CL-V e trava CT-V
 d1 = pr.vista("DETALHE 1", (Q[0] + 330, Q[1] + 90), 5, titulo="DETALHE 1 — APOIO CL-V NO PG (CORTE)", subtitulo="cantoneira de apoio + neoprene 5; trava CT-V no topo (mm)", unidade="mm")
 d1.ret(0, -250, 250, 250 + H + 150, "CORTADO"); d1.hachura([(0, -250), (250, -250), (250, H + 150), (0, H + 150)], "AR-CONC", 0.02)   # PG (face B à esquerda)
-d1.chapa(-9.5, -102, 9.5, 102); d1.chapa(-152, -9.5, 152, 9.5)                    # CL-V L 152 × 102 (PG-04)
-d1.ret(-175, 5, 100, H, "CORTADO"); d1.hachura([(-175, 5), (-75, 5), (-75, 5 + H), (-175, 5 + H)], "AR-CONC", 0.02)  # placa (10 cm)
-d1.ret(-175, 0, 100, 5, "VISTA")
-d1.chapa(-6.3, H - 95, 6.3, 76); d1.chapa(-75, H - 95, 75 - 6.3, 6.3)
+# rev12 (DEC-092): PG-03 e PG-04 com a face no mesmo plano → CL-V L 102 × 102 nos dois; placa 25 mm à frente da face do PG
+_GP = 25
+d1.chapa(-9.5, -102, 9.5, 102); d1.chapa(-102, -9.5, 102, 9.5)                    # CL-V L 102 × 102
+d1.ret(-_GP - 100, 5, 100, H, "CORTADO"); d1.hachura([(-_GP - 100, 5), (-_GP, 5), (-_GP, 5 + H), (-_GP - 100, 5 + H)], "AR-CONC", 0.02)  # placa (10 cm)
+d1.ret(-102, 0, 102 - _GP, 5, "VISTA")                                             # neoprene na aba (102 − 25)
+d1.chapa(-6.3, 5 + H - 70, 6.3, 76.3); d1.chapa(-76, 5 + H, 76, 6.3)                # CT-V: aba na face do PG (na folga de 25) + aba sobre o topo da placa
+d1.linha((-60, 5 + H - 60), (-60, 5 + H + 30), "METALICA")                         # M12 vertical na bucha BR-2 do topo
 for z_ in (-30, -75):
     d1.linha((0, z_), (150, z_), "METALICA")
-d1.linha((0, H - 60), (150, H - 60), "METALICA")
+d1.linha((0, 5 + H - 40), (150, 5 + H - 40), "METALICA")
 d1.cota_v([-102, 0, 5, 5 + H], 300, 10, total=False)
-d1.cota_h([-175, -75, 0], -250, -8, total=False)
+d1.cota_h([-_GP - 100, -102, -_GP, 0], -250, -8, total=False)
 d1.chamada((75, -50), (46, -14), "2 BR-M16 8.8 L=200 embutidas 150 + grampo (IL-2)")
-d1.chamada((-140, -5), (-12, -14), "CL-V L 152 × 102 × 9,5 L=150 (PG-04) / L 102 × 102 × 9,5 (PG-03)")
-d1.chamada((-125, 2), (-16, 8), "neoprene 100 × 150 × 5")
-d1.chamada((-40, H - 92), (-60, 30), "CT-V L 76 × 76 × 6,3 L=80 + 1 M12 em bucha BR-2")
+d1.chamada((-60, -5), (-12, -14), "CL-V L 102 × 102 × 9,5 L=150 (PG-03 e PG-04)")
+d1.chamada((-60, 2), (-16, 8), "neoprene 75 × 150 × 5")
+d1.chamada((-40, 5 + H + 3), (-40, 24), "CT-V L 76 × 76 × 6,3 L=80 + 1 M12 vertical em bucha BR-2")
 
 # ------------------------------------------------------------------ tabelas e notas
 y = Q[3] - 6
@@ -93,15 +97,15 @@ V = T * H * L / 1e9
 qd = [["MARCA", "PV-1", "SEÇÃO", f"10 × {f(H / 10)} cm"], ["COMPRIMENTO", f"{f(L / 10)} cm", "CONCRETO", "C40 / desforma fcj 15 MPa"],
       ["VOLUME", f"{f(V, 3)} m³", "PESO", f"{f(PV['peso_kN'] / 10.0, 2)} t"], ["AÇO CA-50/60", f"{f(ta['total_kg'], 1)} kg", "COBRIMENTO", "2,5 cm"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 58, 30, 58])
-ins = [["CL-V", "L 152 × 102 × 9,5 L=150 (PG-04) e L 102 × 102 × 9,5 L=150 (PG-03), galvanizadas", 2, "face B dos PG, topo +7,50"],
+ins = [["CL-V", "L 102 × 102 × 9,5 L=150, galvanizadas (PG-03 e PG-04, faces no mesmo plano)", 2, "face B dos PG, topo +7,50"],
        ["IL-2", "barras roscadas M16 8.8 L=200 (150 embutidas + grampo U Ø10) — na fábrica dos PG", 6, "2 por CL-V + 1 por CT-V"],
        ["CT-V", "L 76 × 76 × 6,3 L=80 + 1 M12 em bucha BR-2 da placa", 2, "topo, nas 2 pontas"],
-       ["BR-2", "bucha rosqueada M12 hef 60 (na placa, 75 da ponta, 60 abaixo do topo)", 2, "face B da placa"],
+       ["BR-2", "bucha rosqueada M12 hef 60 (no topo da placa, 75 da ponta, 35 da face B)", 2, "topo da placa"],
        ["AL-1", "alça de cordoalha Ø12,7 (1 laço)", 2, "topo, a 0,2 L"]]
 y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS DE LIGAÇÃO", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [14, 104, 10, 48])
 notas = [f"Cargas consideradas: peso próprio da placa ({f(PV['peso_kN'], 2)} kN); a placa não recebe a TS-01A nem outra placa (folga de 5 cm até o fundo da viga, fechada com mastique e rufo).",
          f"Portão 500 × 750 livre até +7,50 (DEC-059): os PG-01 a PG-04 apoiam a TS-01A depois da montagem (neoprene + graute, folhas ND-LET-PG01 a PG04) e a viga não desce no vão. A placa vai de +{f(PV['z0'], 3)} a +{f(PV['z1'], 3)}.",
-         "Apoio: cada ponta sobre a CL-V com neoprene 100 × 150 × 5; trava do topo CT-V (1 M12 em furo oblongo horizontal ±10 mm) — a placa dilata livre. Tudo parafusado, sem solda.",
+         "Apoio: cada ponta sobre a CL-V com neoprene 75 × 150 × 5; trava do topo CT-V (1 M12 vertical na bucha do topo, furo oblongo horizontal ±10 mm) — a placa dilata livre. Tudo parafusado, sem solda.",
          "Içamento e montagem de pé pelas 2 alças AL-1 (balancim); concretar deitada, desformar com fcj ≥ 15 MPa (NBR 9062:2017 8.2.2.2), estocar de pé ou deitada sobre 2 calços a 0,2 L.",
          "Montar depois da TS-01A grauteada nos PG e antes do fechamento do portão; ajustar a altura com calços de aço sob o neoprene (nada abaixo de +7,50).",
          "Cotas de concreto em cm, chaparia em mm. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]

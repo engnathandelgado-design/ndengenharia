@@ -365,7 +365,7 @@
     [
      "43",
      "CS01",
-     "CONSOLOS DOS PILARES — MARCAS C1 A C6: FÔRMA, PINO, NEOPRENE, ARMADURA E PILARES QUE ...",
+     "CONSOLOS DOS PILARES — MARCAS C1 A C8: FÔRMA, PINO, NEOPRENE, ARMADURA E PILARES QUE ...",
      "A0",
      "12",
      "01 p.31"
@@ -941,9 +941,9 @@
     [
      "Pilares",
      "37",
-     "79,5",
-     "199,0",
-     "11.232"
+     "79,2",
+     "198,3",
+     "10.981"
     ],
     [
      "Vigas de cobertura",
@@ -962,8 +962,8 @@
     [
      "Mezanino",
      "82",
-     "113,4",
-     "283,4",
+     "114,6",
+     "286,5",
      "5.683"
     ],
     [
@@ -976,9 +976,9 @@
     [
      "TOTAL",
      "348",
-     "522,0",
-     "1.305,2",
-     "26.491"
+     "523,0",
+     "1.307,5",
+     "26.239"
     ]
    ]
   },
@@ -991,15 +991,15 @@
    "linhas": [
     [
      "C40",
-     "361,7"
+     "361,4"
     ],
     [
      "C50",
-     "160,4"
+     "161,6"
     ],
     [
      "cordoalha CP-190 RB Ø12,7",
-     "8.014 kg (10.118 m)"
+     "8.097 kg (10.223 m)"
     ],
     [
      "fio CP-175 RB Ø6",
@@ -1007,7 +1007,7 @@
     ],
     [
      "cordoalha CP-190 RB Ø9,5",
-     "29 kg (67 m)"
+     "30 kg (69 m)"
     ]
    ]
   }

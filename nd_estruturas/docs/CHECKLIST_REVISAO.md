@@ -97,3 +97,5 @@ Travas automáticas no `conferencia_cruzada.py` (rodado no fim do `gerar_tudo`),
 - [auto] Folhas de detalhe de uma família logo após a folha-mãe (I120 → I120-2 → I120-3), cobertura em sequência e EX01 por último (C31).
 - [auto] Largura de todo consolo igual à largura da viga que ele apoia (CP-MEZ = VM, CP-VB = VB, CP-I120 = ponta da I120, CT-I120 = mesa da TS-01), na memória e no que está desenhado em cada pilar; neoprene com borda lateral ≥ 1,5c e ≥ 3 cm (C33).
 - [auto] Pendência já decidida não aparece mais em nenhuma folha (C34).
+- [auto] Pilar fora da linha (cantos, PG-02/PG-04): face no plano dos vizinhos, sem fresta até as placas; portões com 5,00 m livres face a face conforme o arquitetônico; NEO-7 com a distância à borda na cabeça do pilar e na mesa da TS-01A; nenhuma folha cita a locação dos PG como pendente (C21).
+- [manual] Pilar fora do eixo cotado a partir de dois eixos na LOC01 e com o quadro N·e na CG01.

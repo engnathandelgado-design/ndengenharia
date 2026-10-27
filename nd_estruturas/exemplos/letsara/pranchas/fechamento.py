@@ -48,8 +48,11 @@ REC_VISTAS = ("G", "C")
 # DEC-044: calço entre a CE-1 e o CS-1 onde a face do pilar fica atrás do plano dos consoles — 100 mm nos cantos (vistas A e I) e nos
 # P1B/P2B da vista G (40 ⊥ à parede, contra 60 dos PF) e 75 mm nos P10 da vista C (25 ⊥ à parede). Marcas CS-1C (100) e CS-1D (75).
 # rev12 (27/10, opção D): os cantos das linhas 1 e 9 saem 10 cm para fora (face externa = face dos PF) → sem calço nos cantos das vistas A e I.
-# rev12 (27/10): PG-02/PG-04 25×40 com o lado de 25 ⊥ à parede C → calço de 75 mantido.
-CALCO = {("G", 0): 100, ("G", 4): 100, ("C", 2): 75, ("C", 4): 75}
+# rev12 (27/10, DEC-092): PG-02/PG-04 25×40 com a face no plano dos vizinhos 40×40 (eixo 7,5 cm fora da linha 4) → calço da parede C
+# calculado da geometria (= 0: sem CS-1D).
+from geometria import Y_PG as _YPG, Y_FACE_L4 as _YF4
+_cal_c = {b_: round((_YPG[mk_] - PG_L4[mk_][3] / 2 - _YF4) * 1000) for b_, mk_ in ((2, "PG-02"), (4, "PG-04"))}
+CALCO = {("G", 0): 100, ("G", 4): 100, **{("C", b_): v_ for b_, v_ in _cal_c.items() if v_}}
 CALCO_MARCA = {100: "CS-1C", 75: "CS-1D"}
 X_PT = lambda L: round(0.21 * L + 150)                  # pinos PT-1: 15 cm para dentro de cada alça AL-P
 # rev12 (opção D / fresta B): nas fachadas 1 e 9 (vistas A e I) a VB fica rente à face dos pilares, 25 mm atrás da placa — a cartola
@@ -908,8 +911,9 @@ def prancha_cm():
     for x in X_FACH[1:-1]:
         for y in (Y_LIN[0], Y_LIN[1], Y_LIN[8]):
             kp.ret(M(x) - 200, M(y) - 300, 400, 600, "CORTADO")
-    for x, bx_, by_ in zip(X_L4[1:-1], (400, M(PG_L4["PG-02"][2]), 400, M(PG_L4["PG-04"][2]), 400), (400, M(PG_L4["PG-02"][3]), 400, M(PG_L4["PG-04"][3]), 400)):
-        kp.ret(M(x) - bx_ / 2, M(Y_LIN[3]) - by_ / 2, bx_, by_, "CORTADO")
+    for x, bx_, by_, yk_ in zip(X_L4[1:-1], (400, M(PG_L4["PG-02"][2]), 400, M(PG_L4["PG-04"][2]), 400), (400, M(PG_L4["PG-02"][3]), 400, M(PG_L4["PG-04"][3]), 400),
+                                (_YPG["PG-01"], _YPG["PG-02"], Y_LIN[3], _YPG["PG-04"], _YPG["PG-03"])):   # rev12 (DEC-092): PG-02/04 com eixo fora da linha
+        kp.ret(M(x) - bx_ / 2, M(yk_) - by_ / 2, bx_, by_, "CORTADO")
     for _yc in (46.317, 62.833):                                           # DEC-058: dois PC-03 40×40
         kp.ret(M(19.75) - 200, M(_yc) - 200, 400, 400, "CORTADO")
     o = FOLGA

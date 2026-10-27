@@ -32,8 +32,8 @@ for f in glob.glob("/home/claude/letsara/pranchas/arm/*.json"):
 col = 0
 FACE_POS = {"D": "rente à face externa (fachada)", "B": "rente à face externa (fachada)", "C": "rente à face C (externa, placas)"}
 for k, e in enumerate(R["lista"]):
-    cx = Q[0] + 30 + (k % 3) * 385
-    cy = Q[3] - 80 - (k // 3) * 335
+    cx = Q[0] + 10 + (k % 4) * 287                    # rev12: 4 por linha (C1 a C8)
+    cy = Q[3] - 80 - (k // 4) * 335
     v = pr.vista(e["marca"], (cx + 120, cy - 40), 5, titulo=f"{e['marca']} — {e['tipo']} (vista lateral)", subtitulo="fôrma; topo " + ("com caimento %g %%" % (e["incl"] * 100) if e["incl"] else "horizontal"), unidade="cm")
     proj, h, hp, larg = e["proj"], e["h"], e["hp"], e["larg"]
     v.poli([(-250, -h - 150), (-250, 150), (0, 150), (0, -h - 150)], "VISTA")
@@ -47,7 +47,7 @@ for k, e in enumerate(R["lista"]):
     G0 = json.load(open(f"/home/claude/letsara/pranchas/{e['marcas_pilar'][0]}_geom.json", encoding="utf-8"))
     c0 = next(c for c in G0["consolos"] if AP.marca_consolo(c) == e["marca"])
     W = G0["B"] if c0["face"] in "AC" else G0["H"]
-    vf = pr.vista(e["marca"] + "F", (cx + 250, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=f"face {c0['face']} do pilar ({AP.g(W / 10)} cm)", unidade="cm")
+    vf = pr.vista(e["marca"] + "F", (cx + 225, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=f"face {c0['face']} ({AP.g(W / 10)} cm)", unidade="cm")
     vf.poli([(-W / 2, -h - 150), (-W / 2, 150), (W / 2, 150), (W / 2, -h - 150)], "VISTA")
     vf.interrupcao((-W / 2, -h - 150), (W / 2, -h - 150)); vf.interrupcao((-W / 2, 150), (W / 2, 150))
     u_ = e["exc"] * (-1 if e["exc_face"] in ("D", "C") else 1)
@@ -67,7 +67,7 @@ for k, e in enumerate(R["lista"]):
     # rev12 (revisão rev12, item 2): pilares e quantidades contados da geometria das folhas (registro), nomes protegidos da renomeação
     lin.append(["QUANTIDADE", f"{e['n']} consolos"])
     lin.append(["PILARES (consolos)", RN.N(", ".join(f"{n_} ({q_})" for n_, q_ in e["por_pilar"].items()))])
-    pr.tabela(cx, cy - 62 - (h + 150) / 5, f"{e['marca']} — DADOS", ["ITEM", "VALOR"], lin, [60, 250])
+    pr.tabela(cx, cy - 62 - (h + 150) / 5, f"{e['marca']} — DADOS", ["ITEM", "VALOR"], lin, [55, 215])
 pr.notas(Q[0] + 8, Q[3] - 30, ["Marca própria de cada consolo (C1, C2…); consolos com a mesma geometria, posição na face, caimento, pino, neoprene e tirante têm a mesma marca. "
                                   "A marca aparece nas faces dos pilares, no quadro APOIOS E ESPERAS de cada folha de pilar e nesta folha.",
                                   "Fôrma em cm (vistas 1:5); pinos e neoprene em mm. Pilares e quantidades contados nas folhas de cada pilar (quadro APOIOS E ESPERAS). Armadura: DETALHE C da folha de cada pilar (mesmas posições).",

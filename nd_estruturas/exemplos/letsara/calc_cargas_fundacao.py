@@ -115,11 +115,35 @@ def somar_exc_mez(out):
     return out
 
 
+def somar_exc_pg(out):
+    """rev12 (27/10, DEC-092): PG-02/PG-04 com o eixo 7,5 cm fora da linha 4 (face no plano dos vizinhos 40 × 40). Coordenada y da base
+    corrigida e, a favor da segurança, reação da TS-01A tomada no eixo da linha 4 (o NEO-7 é centrado no pilar, e = 0 nominal):
+    ΔMxd = Rd·e somado ao Mxd máx. A excentricidade das placas (CS-1 na face) diminui 7,5 cm — desprezada (a favor). Idempotente."""
+    if out.get("exc_pg"):
+        return out
+    from geometria import Y_PG, DY_PG
+    PJ = json.loads((AQ / "portao_l4.json").read_text(encoding="utf-8"))
+    nome = {"PG-01": "P9", "PG-02": "P10a", "PG-04": "P10b", "PG-03": "P12"}
+    reg = {}
+    for mk, nm in nome.items():
+        d = out["pilares"][nm]
+        d["y"] = Y_PG[mk]
+        if DY_PG[mk]:
+            rd = max(r["Rd"] for m in PJ["ts01a"].values() for r in m["reacoes"] if r["pg"] == mk)
+            dm = rd * DY_PG[mk]
+            d["ELU"]["Mxd_max"] = round(d["ELU"]["Mxd_max"] + dm, 1)
+            d["ELU"]["Md_res_max"] = round(d["ELU"]["Md_res_max"] + dm, 1)
+            reg[nm] = round(dm, 2)
+    out["exc_pg"] = reg
+    return out
+
+
 if POS:
     out = json.loads((AQ / "cargas_fundacao.json").read_text(encoding="utf-8"))
     pil = out["pilares"]
 out = somar_portoes(out)
 out = somar_exc_consolos(out)
 out = somar_exc_mez(out)
+out = somar_exc_pg(out)
 (AQ / "cargas_fundacao.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(len(pil), "pilares")
