@@ -24,4 +24,8 @@ Regras do Nathan (sempre):
 - Cargas de fundação em tf.
 - Usar MEF para chegar à solução econômica; conferir MEF contra solução analítica.
 
+Gate de lançamento (antes de qualquer prancha): rodar `verificar_lancamento.py` sobre o modelo e zerar os achados.
+Toda dúvida de geometria (alinhamento de face no perímetro, largura de consolo, vão de abertura, apoio de laje,
+posição de pilar especial) vai ao Nathan num único quadro de decisão, de uma vez, antes do detalhamento.
+
 Entrega para o detalhista: registro atualizado + MC + lista do que mudou. Nunca dar como pronto sem a conferência cruzada zerada.

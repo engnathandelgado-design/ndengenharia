@@ -9,6 +9,16 @@ Skills: pranchas-tecnicas-nd (motor prancha_nd), armaduras-pre-moldados-padrao-u
 
 Princípio: tudo sai do registro único por marca e do modelo 3D. Nenhum valor digitado no código do desenho. Detalhes de ligação, cortes e isométricos são gerados da mesma geometria.
 
+Ordem obrigatória (27/10/2026):
+1. `verificar_lancamento.py` (gate de geometria sobre o modelo BIM, ~20 s): face externa de pilares, vigas de borda e
+   consolos no plano das placas; consolo com a largura da viga; vão livre das aberturas = arquitetônico; apoio das lajes.
+   Com achado, não gera folha: volta ao calculista ou leva quadro de decisão ao Nathan.
+2. `gerar_tudo` é incremental: só refaz as folhas cujas entradas mudaram (manifestos/). Não use `--tudo` sem motivo.
+   O 3D/IFC roda uma vez, no fim (`--3d`).
+3. Decisões do Nathan que chegam durante o trabalho: anotar e aplicar todas juntas num ciclo só, não reabrir o jogo a
+   cada uma.
+4. Trabalhar em passos curtos com commit; não abrir agente novo para continuar o mesmo trabalho.
+
 Antes de entregar, rodar `gerar_tudo` com 0 erros, 0 avisos, conferência cruzada zerada e colisões zero, e cumprir `nd_estruturas/docs/CHECKLIST_REVISAO.md`. Resumo do que mais foi cobrado:
 - Texto: peças 3,5 mm (cota), 6 mm (título), 8 mm (nome da peça); plantas ≥ 2,5 mm. Nada sobreposto; se não couber, dividir a folha.
 - Seções e estribos em escala ≥ 2× a elevação; referência SP301/SP302 da usina.

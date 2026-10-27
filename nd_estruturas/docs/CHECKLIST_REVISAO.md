@@ -99,3 +99,9 @@ Travas automáticas no `conferencia_cruzada.py` (rodado no fim do `gerar_tudo`),
 - [auto] Pendência já decidida não aparece mais em nenhuma folha (C34).
 - [auto] Pilar fora da linha (cantos, PG-02/PG-04): face no plano dos vizinhos, sem fresta até as placas; portões com 5,00 m livres face a face conforme o arquitetônico; NEO-7 com a distância à borda na cabeça do pilar e na mesa da TS-01A; nenhuma folha cita a locação dos PG como pendente (C21).
 - [manual] Pilar fora do eixo cotado a partir de dois eixos na LOC01 e com o quadro N·e na CG01.
+
+## 0. Processo (27/10/2026) — vale antes de todas as seções acima
+- [auto] Gate de lançamento zerado antes de gerar qualquer folha (`verificar_lancamento.py` sobre o modelo BIM): face externa de pilares, vigas de borda e consolos no plano das placas no perímetro; consolo com a largura da viga que apoia; vão livre de cada abertura igual ao arquitetônico; apoio de cada laje alveolar ≥ mínimo. O `gerar_tudo` para com código 2 se houver achado.
+- [auto] Geração incremental: cada folha guarda o que leu (manifestos/); só refaz o que mudou. `alteradas.json` lista as folhas cujo desenho mudou.
+- [manual] Revisão por diferença: folhas de `alteradas.json` + folhas-resumo (PR01, IC01, CS01, CG01, NG01, LOC01, listas, xlsx) + amostra de ~10 % das demais. Revisão completa só na 1ª emissão.
+- [manual] Decisões do Nathan aplicadas em lote, num ciclo só; dúvidas de geometria levadas juntas num quadro, antes do detalhamento.

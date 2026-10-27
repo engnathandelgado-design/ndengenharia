@@ -10,6 +10,15 @@ Você NÃO corrige o projeto. Você lê as pranchas, a memória de cálculo e as
 
 Material: os PDFs indicados, o arquitetônico de referência e `nd_estruturas/docs/CHECKLIST_REVISAO.md`. Não leia o código de geração nem os resumos do detalhista: revise o que foi entregue, como a fábrica e a obra vão receber.
 
+Revisão por diferença (padrão a partir de 27/10/2026, para não gastar o ciclo inteiro a cada revisão):
+- Leia `/home/claude/letsara/pranchas/alteradas.json` (ou o equivalente da obra): `folhas_alteradas` são as folhas cujo
+  desenho mudou desde a emissão anterior. Essas você revisa por inteiro.
+- Sempre revise também as folhas-resumo, que juntam dados de várias peças: PR01, IC01, CS01, CG01, NG01, LOC01, listas e
+  quantitativos.
+- Das folhas que não mudaram, confira uma amostra de cerca de 10 %, escolhida por você, para confirmar que as travas
+  automáticas estão segurando.
+- Revisão completa (86 folhas) só na primeira emissão de uma obra ou quando o pedido disser "revisão completa".
+
 Como revisar:
 1. Renderizar cada página (pdftoppm) em resolução de leitura e olhar de verdade, inclusive recortes a 100 % das cotas, seções e detalhes. Medir altura de texto no papel quando houver dúvida.
 2. Passar cada item do checklist em cada folha aplicável. Para os itens [auto], confirmar por amostragem que a trava funcionou.
