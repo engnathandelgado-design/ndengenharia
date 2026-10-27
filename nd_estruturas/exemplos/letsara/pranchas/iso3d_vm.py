@@ -18,7 +18,11 @@ p = pv.Plotter(window_size=(1600, 1200), off_screen=True)
 p.set_background("white")
 x0, zb = 0.0, 0.0
 p.add_mesh(box(-0.43, x0, -0.30, 0.30, -0.4, H + 0.45), **pil)                               # pilar
-p.add_mesh(box(x0, x0 + PRJ, -P.get("b_consolo", B) / 2, P.get("b_consolo", B) / 2, zb, zb + HC), **pil)                              # CP-MEZ, fundo alinhado
+_bc, _hf = P.get("b_consolo", B), D.get("consolo_h_face", HC)                # rev12: largura da VM e mísula
+_pp = [(x0, zb + HC - _hf), (x0 + PRJ, zb), (x0 + PRJ, zb + HC), (x0, zb + HC)]
+_pts = [(x_, y_, z_) for y_ in (-_bc / 2, _bc / 2) for x_, z_ in _pp]
+_fc = [4, 0, 1, 2, 3, 4, 7, 6, 5, 4] + sum(([4, i, (i + 1) % 4, 4 + (i + 1) % 4, 4 + i] for i in range(4)), [])
+p.add_mesh(pv.PolyData(np.array(_pts), _fc), **pil)                              # CP-MEZ, fundo alinhado
 p.add_mesh(box(x0 + XP - 0.10, x0 + XP + 0.10, -0.10, 0.10, zb + HC, zb + HC + 0.021), color="#222222")   # NEO-5F 200 × 200
 xa = x0 + FOL
 p.add_mesh(box(xa, xa + LN, ye, yi, zb + REC, zb + H), **conc)                                # nariz do dente

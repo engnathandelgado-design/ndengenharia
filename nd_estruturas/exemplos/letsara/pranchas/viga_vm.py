@@ -24,6 +24,7 @@ HD, LN, MAC = round(P["dente"]["hd"] * 1000), round(P["dente"]["ln"] * 1000), ro
 REC = H - HD
 FOLGA, X_PAD, A_PAD = 30, round(P["x_pad"] * 1000), 200
 HC, PROJ = round(P["dente"]["consolo_h"] * 1000), round(P["dente"]["consolo_proj"] * 1000)
+HCF = round(P["dente"].get("consolo_h_face", P["dente"]["consolo_h"]) * 1000)          # rev12: mísula (altura junto ao pilar)
 H2, HCAPA, NEOF = 200, 50, 10
 L = round(R["L_peca"] * 1000)
 X_TB = X_PAD - FOLGA
@@ -150,7 +151,7 @@ d1 = pr.vista("DETALHE 1", (Q[0] + 625, YD), 6, titulo="DETALHE 1 — DENTE GERB
               subtitulo="fundo do consolo alinhado ao fundo da viga; continuidade N11 pelas bainhas do pilar", unidade="cm")
 LD = 1500
 d1.ret(-FOLGA - 400, -250, 400, H + NEOF + H2 + HCAPA + 350, "OCULTA")
-cons = [(-FOLGA, 0), (-FOLGA + PROJ, 0), (-FOLGA + PROJ, HC), (-FOLGA, HC)]
+cons = [(-FOLGA, HC - HCF), (-FOLGA + PROJ, 0), (-FOLGA + PROJ, HC), (-FOLGA, HC)]
 d1.poli(cons, "CORTADO", fechada=True); d1.hachura(cons, "AR-CONC", 0.03)
 d1.chapa(X_PAD - FOLGA - A_PAD / 2, HC, A_PAD, 21, 0.4)
 d1.poli([(0, REC), (LN, REC), (LN, 0), (LD, 0)], "VISTA"); d1.poli([(LD, H), (0, H), (0, REC)], "VISTA")
@@ -170,7 +171,7 @@ d1.cota_h([-FOLGA, 0, X_TB, LN, -FOLGA + PROJ], 0, -14, total=False)
 d1.cota_h([-FOLGA, X_PAD - FOLGA - A_PAD / 2, X_PAD - FOLGA + A_PAD / 2], HC + 21, 10, total=False)
 d1.cota_v([0, HC, REC, H, H + NEOF + H2 + HCAPA], LD, 12, total=False)
 cmz = next(c for c in N9["consolos"] if c["consolo"] == "CP-MEZ")
-d1.chamada((-FOLGA + PROJ / 2, HC / 2), (-70, -34), f"CP-MEZ {P.get('b_consolo', B / 1000) * 100:g} × {PROJ/10:g} × {HC/10:g} (sem chanfro), tirante {cmz['tirante'].split(' (')[0]}".replace(".", ","))
+d1.chamada((-FOLGA + PROJ / 2, HC / 2), (-70, -34), f"CP-MEZ {cmz['b_m'] * 100:g} × {PROJ/10:g} × {HCF/10:g}/{HC/10:g} (largura da VM, mísula), tirante {cmz['tirante'].split(' (')[0]}".replace(".", ","))
 d1.chamada((X_PAD - FOLGA, HC + 5), (50, -16), "NEO-5F 200×200 fretado (furo Ø30)")
 d1.chamada((X_TB, HC - 250), (90, -34), "PN-1 Ø20 L=630 (230 no consolo), grauteado")
 d1.chamada((-FOLGA / 2, REC + HD / 2), (-26, 10), "junta 3 cm concretada ANTES das lajes (det. 2)")

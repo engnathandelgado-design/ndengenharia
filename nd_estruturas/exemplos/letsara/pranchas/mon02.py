@@ -26,6 +26,8 @@ L_DENTE = VMP["dente"]["ln"]
 import pilar_generico as _G
 ASSENTO = [z / 1000 for z in _G.Z_MEZ_ASS]
 H_CMEZ = VMP["dente"]["consolo_h"] * 1000
+H_CMEZF = VMP["dente"].get("consolo_h_face", VMP["dente"]["consolo_h"]) * 1000           # rev12: mísula
+B_CMEZ = VMP["b_consolo"] * 1000                                                            # rev12: largura da VM
 M = lambda v: v * 1000
 from lajes_placas import vigas_nivel
 
@@ -127,7 +129,7 @@ for n, a in zip(NIVEIS, ASSENTO):
     c.hachura([(-BV / 2, zt + 210), (M(Y2) + BV / 2, zt + 210), (M(Y2) + BV / 2, zt + 260), (-BV / 2, zt + 260)], "AR-CONC", 0.02)
     c.ret(-BV / 2, zt + 210, M(Y2) + BV, 50, "VISTA")
     c.chamada((M(2.5), zt + 260), (8, 6), f"piso {NIVS[NIVEIS.index(n)]}: laje h20 + capa 5")
-c.chamada((M(Y2), M(ASSENTO[0]) - 200), (-40, -22), f"CP-MEZ 40 × 40 × {H_CMEZ/10:.1f} oculto".replace(".", ","))
+c.chamada((M(Y2), M(ASSENTO[0]) - 200), (-40, -22), f"CP-MEZ {B_CMEZ/10:g} × 40 × {H_CMEZF/10:.0f}/{H_CMEZ/10:.1f} oculto".replace(".", ","))
 c.chamada((0, M(ASSENTO[0]) + 150), (14, -12), f"VM {B_VM*100:.0f} × {H_VIGA*100:.0f} protendida ({fp(PQ['VM-02'][7])} t)")
 c.cota_h([0, M(Y2)], -1000, -10)
 c.cota_v([-1000, 0, M(ASSENTO[0]), M(NIVEIS[0]), M(ASSENTO[1]), M(NIVEIS[1])], -900, -10, total=False)
@@ -151,7 +153,7 @@ pecas = [[m, f"VM retangular {B_VM*100:.0f}×{H_VIGA*100:.0f} protendida, dente 
 for mk in sorted(m_ for m_ in PQ if m_.startswith("LA-")):
     pecas.append([mk, PQ[mk][2].replace("laje alveolar ", "LP20 ")[:60], str(PQ[mk][5]), fp(PQ[mk][7]), "topo das VM, apoio 10 cm"])
 n_cmz = 2 * sum(len(vigas_nivel(iz)) for iz in (0, 1))
-pecas += [["CP-MEZ", f"Consolo 40×40×{H_CMEZ/10:.1f} sem chanfro (pilares das linhas 1–2 e escada)".replace(".", ","), str(n_cmz), "—", "nos pilares (ver pranchas)"],
+pecas += [["CP-MEZ", f"Consolo {B_CMEZ/10:g}×40 com mísula {H_CMEZF/10:.0f}/{H_CMEZ/10:.1f} (pilares das linhas 1–2 e escada)".replace(".", ","), str(n_cmz), "—", "nos pilares (ver pranchas)"],
           ["PM-01", f"Pilar 40×60 do mezanino (B2), L {PQ['PM-01'][4]*100:.0f}", str(PQ["PM-01"][5]), fp(PQ["PM-01"][7]), "cálice −1,00; cabeça até a W 200"],
           ["PM-02", f"Pilar 40×60 do mezanino (D2), L {PQ['PM-02'][4]*100:.0f}", str(PQ["PM-02"][5]), fp(PQ["PM-02"][7]), "cálice −1,00; cabeça até a W 200"]]
 for mk, ds in (("PE-01", "P6 da escada 25×40"), ("PE-02", "P7 da escada 40×60"), ("PE-03", "P6 da linha 2 25×40")):
