@@ -76,7 +76,7 @@ for nm, d in P.items():
             (f"Nd {t(e['Nd_max'])} / {t(e['Nd_min'])}", "min"), (f"Mxd {t(e['Mxd_max'])} · Myd {t(e['Myd_max'])}", "min"),
             (f"Hd {t(e['Hd_max'])}", "min")]
     dx, al = (bx / 2 + 200, "BOTTOM_LEFT")
-    if xp == Lx:                                                        # linha 9: rótulo para dentro
+    if xp >= Lx:                                                        # linha 9 (canto 10 cm para fora): rótulo para dentro
         dx, al = (-bx / 2 - 200, "BOTTOM_RIGHT")
     if yp == 0:                                                         # eixo A: acima (para dentro)
         y0 = by / 2 + 250 + DL * (len(lin_) - 1)
@@ -100,7 +100,7 @@ for nm in ordem:
 cab = ["PILAR", "MARCA", "G: N", "Q: N", "V: N mín / máx", "V: Mx", "V: My", "V: H", "Nd máx", "Nd mín", "Mxd", "Myd", "Hd"]
 y = pr.tabela(35, 318, "CARGAS NA FUNDAÇÃO POR PILAR — CARACTERÍSTICAS POR AÇÃO E DE CÁLCULO (ELU) — tf e tf·m",
               cab, lin, [18, 16, 15, 15, 30, 14, 14, 14, 17, 17, 15, 15, 14], h_lin=4.6)
-pr.notas(470, 318, [
+y_n = pr.notas(470, 318, [
     "Valores na base de cada pilar (topo do bloco/cálice, cota −1,00), do modelo global integrado da estrutura (OpenSeesPy, P-Δ, pilares com 0,4 Eci·Ic — NBR 9062:2017 Anexo A; cobertura, terças, correntes, contraventamento, vigas e mezanino com a laje como diafragma). Unidades: tf e tf·m, com 1 tf = 10 kN.",
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
     "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
@@ -115,7 +115,7 @@ lin_c = []
 for nm in sorted([n for n in P if "C-L" in n]):
     d = P[nm]; nk = d["G"]["N"] + d["Q"]["N"]
     lin_c.append([nm, marca(nm), f"{DY_CANTO * 100:g} cm para fora", t(nk), t(nk * DY_CANTO), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * DY_CANTO)])
-pr.tabela(35, y - 8, "PILARES DE CANTO — CÁLICE/BLOCO NO EIXO DO PILAR, 10 cm FORA DA LINHA (momento adicional se o bloco ficar na linha)",
+pr.tabela(470, y_n - 6, "PILARES DE CANTO — CÁLICE NO EIXO DO PILAR (10 cm FORA DA LINHA)",
           ["PILAR", "MARCA", "e (y)", "Nk (tf)", "Nk·e (tf·m)", "Nd máx (tf)", "Nd·e (tf·m)"], lin_c, [22, 18, 30, 18, 22, 22, 22], h_lin=4.6)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CG01")
 for a in avisos:

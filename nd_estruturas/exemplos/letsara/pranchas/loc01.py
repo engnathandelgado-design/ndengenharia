@@ -138,13 +138,13 @@ y4 = YL[3]
 v.cota_h([XA["B"], 15195, XA["C"], 24305, XA["D"]], y4 - 1500, 0, total=False) if False else None
 v.cota_v([XA["B"], X_PG2, XA["C"], X_PG4, XA["D"]], y4 - 2200, -4, total=False)
 v.cota_h([YL[3], round(Y_PC_C[0] * 1000), round(Y_PC_C[1] * 1000), YL[8]], XA["C"] - 1700, -4, total=False)
-v.chamada((y4, X_PG2), (14, -10), "PG-02 e PG-04 25×40 fora do eixo: 5,00 m livres em cada portão (PENDÊNCIA: confirmar)")
+v.chamada((y4, X_PG2), (14, -10), "PG-02 e PG-04 fora do eixo (portões)")
 # rev12 (opção D): pilares de canto 10 cm para fora das linhas 1 e 9 — cotados a partir dos dois eixos (linha e eixo A/E)
 for xc_, yc_ in ((0, 0), (0, Ly), (Lx, 0), (Lx, Ly)):
     sx_ = -1 if xc_ == 0 else 1
     sy_ = 1 if yc_ == 0 else -1
     v.cota_h([xc_ + sx_ * DYC, xc_] if sx_ < 0 else [xc_, xc_ + sx_ * DYC], yc_ + sy_ * 900, 0, total=False)
-v.chamada((-DYC, 0), (-16, 16), f"cantos: eixo {DYC / 10:g} cm para fora das linhas 1 e 9 (face externa = face dos PF); no eixo A / E")
+
 v.chamada((round(Y_PC_C[0] * 1000), XA["C"]), (-12, -14), "PC-03 fora das linhas (cotados)")
 v.chamada((round(Y_PC_C[1] * 1000), XA["C"]), (12, -14), "3 vãos de 1651,7 da linha 4 à 9")
 # rev12: pilares da escada e da linha 2 fora dos eixos (P3, P2, P5) cotados a partir de dois eixos (1/2 e D/E)
