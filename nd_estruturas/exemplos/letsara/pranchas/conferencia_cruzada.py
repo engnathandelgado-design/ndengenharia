@@ -12,6 +12,9 @@ Verificações implementadas nesta versão (as demais estão listadas em PENDENT
 Saída: conferencia_cruzada.json e .md na pasta das pranchas; código de saída 1 se houver ERRO."""
 import glob, json, os, re, sys
 import ezdxf
+sys.path.insert(0, "/home/claude/letsara/pranchas")
+sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
+REG_DATA = "27/10/2026"
 
 PR = "/home/claude/letsara/pranchas/"
 res = []
@@ -91,9 +94,10 @@ for fl in idx:
     # C4 — regras da ND nos textos
     if tx:
         prot = fl.startswith(("ND-LET-LA", "ND-LET-I1", "ND-LET-TS", "ND-LET-VM", "ND-LET-VB"))
-        m152 = [t for t in tx if re.search(r"Ø\s?15,2", t) and "alvéol" not in t.lower()]
-        if prot:
-            r(not m152, "C4 cordoalha Ø15,2 em laje/viga protendida", fl, "nenhuma" if not m152 else f"{len(m152)} ocorrência(s): {m152[0][:70]}")
+        # rev12 (revisão rev12, item 4 — por que não pegou: a trava só olhava as folhas LA/I1/TS/VM/VB; a CT02 ficou de fora):
+        # agora TODAS as folhas (não existe barra Ø15,2; qualquer Ø15,2 é cordoalha proibida)
+        m152 = [t for t in tx if re.search(r"Ø\s?15[,.]2", t)]
+        r(not m152, "C4 cordoalha Ø15,2 (proibida em todo o jogo)", fl, "nenhuma" if not m152 else f"{len(m152)} ocorrência(s): {m152[0][:70]}")
         w310 = [t for t in tx if ("W 310" in t or "W310" in t) and "DEC-0" not in t]          # revisões antigas citam a decisão
         r(not w310, "C4 menção a W 310 (hoje W 200 × 15,0)", fl, "nenhuma" if not w310 else w310[0][:80])
         if fl.startswith("ND-LET-COB0"):
@@ -110,13 +114,21 @@ for fl in idx:
         if fl.startswith(("ND-LET-PL", "ND-LET-PF", "ND-LET-PC", "ND-LET-PM", "ND-LET-PE", "ND-LET-PG", "ND-LET-CS")) and MC:
             fora = sorted(m for m in mcs if m not in MC and int(m[1:]) <= 20)
             r(not fora, "C5 marcas de consolo existem no registro", fl, "ok" if not fora else ", ".join(fora))
-# C3 — quantitativos × folhas (aço total)
+# C3 — quantitativos × folhas (aço): kg/peça da lista = RESUMO DO AÇO (1 unidade) da folha de cada pilar (±1 %)
 qj = PR + "quantitativos.json"
 if os.path.exists(qj):
     Q = json.load(open(qj, encoding="utf-8"))
-    tq = Q.get("aco_total_kg")
-    if tq:
-        r(abs(tq - aco_folhas) <= 0.02 * max(tq, 1), "C3 quantitativos × soma das folhas (aço CA-50)", "QUANTITATIVOS", f"quantitativos {tq:.0f} kg × folhas {aco_folhas:.0f} kg")
+    difs = []
+    for a_ in Q.get("aco", []):
+        fl_ = a_["prancha"]
+        if not fl_[7:9] in ("PL", "PF", "PC", "PM", "PG", "PE") or not os.path.exists(PR + fl_ + ".tabelas.json"):
+            continue
+        T_ = json.load(open(PR + fl_ + ".tabelas.json", encoding="utf-8"))
+        rs = next((t for t in T_["tabelas"] if t["titulo"].upper().startswith("RESUMO DO AÇO")), None)
+        tot = next((float(str(l[2]).replace(".", "").replace(",", ".").split()[0]) for l in (rs or {}).get("linhas", []) if "TOTAL" in str(l[0]).upper()), None)
+        if tot is None or abs(tot - a_["kg_peca"]) > 0.01 * tot + 0.5:
+            difs.append(f"{a_['peca']}: lista {a_['kg_peca']} × folha {tot} kg")
+    r(not difs, "C3 aço por peça: lista/xlsx × resumo da folha", "QUANTITATIVOS", "ok" if not difs else "; ".join(difs[:6]))
 
 # ------------------------------------------------------------------ rev12 — itens da seção 10 do CHECKLIST_REVISAO
 # C7  travas de geometria (renomear.conferir_pilar): pilar citado num apoio/vista pertence à linha/eixo dele
@@ -135,7 +147,8 @@ for fl in idx:
     tx = textos(dx) if os.path.exists(dx) else []
     if not tx:
         continue
-    t8 = [t for t in tx if re.search(r"DEC-\d{3}", t) or re.search(r"\bNathan\b(?! Henrique Delgado)", t)]
+    t8 = [t for t in tx if re.search(r"DEC-\d{3}", t) or re.search(r"\bNathan\b(?! Henrique Delgado)", t) or re.search(r"NATHAN(?! HENRIQUE)", t)
+          or re.search(r"\b[\w-]+\.(?:json|py)\b", t) or re.search(r"\bcalc_\w+|\bmodelo (?:global |integrado )?r0\d\b|(?<![\w-])rev\d{2}\b", t)]   # rev12 (item 12)
     r(not t8, "C8 nota interna (DEC-0xx / Nathan) em folha do cliente", fl, "ok" if not t8 else f"{len(t8)}: {t8[0][:80]}")
     t9 = [t for t in tx if "I130" in t]
     r(not t9, "C9 nome da família I120 (sem I130)", fl, "ok" if not t9 else f"{len(t9)}: {t9[0][:80]}")
@@ -157,7 +170,7 @@ for fl in idx:
     r(not gros, "C11 bitola > Ø20 sem exceção registrada", fl, "ok" if not gros else "Ø" + ", Ø".join(gros))
     n61 = [t for t in tx if re.search(r"6123\s*:\s*19", t)]
     r(not n61, "C12 norma vigente (NBR 6123:2023)", fl, "ok" if not n61 else n61[0][:80])
-    dp = [t for t in tx if re.search(r"(?<![\d.,/])\d+\.\d+\s?(cm|m³|t\b|kN|MPa|m\b)", t) and "http" not in t]
+    dp = [t for t in tx if re.search(r"(?<![\d.,/])(?!\d{1,3}\.\d{3}(?![\d.,])\s?(?:kg|t\b|m\b)(?!³|²))\d+\.\d+\s?(cm|m³|t\b|kN|MPa|m\b)", t) and "http" not in t]   # rev12: ponto de milhar não é decimal
     r(not dp, "C13 vírgula decimal", fl, "ok" if not dp else dp[0][:80])
     for t in tx:
         tl = t.lower()
@@ -204,7 +217,7 @@ for fl in ("ND-LET-LA01", "ND-LET-PR01", "ND-LET-NG01", "ND-LET-MON02"):
     r("CONFIRMAR COM A FÁBRICA" in tx.upper() or "CONFIRMAR COM A FÁBRICA" in tx, "C18 pendência (extrusora LP20) sinalizada", fl, "ok" if "FÁBRICA" in tx.upper() else "sem a ressalva")
 # C21 (rev12, 27/10) pendências das decisões em aberto sinalizadas em todas as folhas afetadas
 for fl, chaves in (("ND-LET-VM01", ("PENDÊNCIA",)), ("ND-LET-LA01", ("PENDÊNCIA",)), ("ND-LET-PL03", ("PENDÊNCIA",)), ("ND-LET-PL07", ("PENDÊNCIA",)),
-                   ("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)),
+                   ("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)), ("ND-LET-MON02", ("PENDÊNCIA", "VM de borda da linha 1")),
                    ("ND-LET-NG01", ("VM de borda da linha 1", "5,00 m livres")), ("ND-LET-PR01", ("VM da linha 1", "5,00 m livres"))):
     dx = PR + fl + ".dxf"
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
@@ -220,6 +233,166 @@ try:
     r(_F.Z_NC > 1250 / 2, "C20 nicho NC-1 na parte superior da placa", "ND-LET-PP00", f"centro do nicho a {_F.Z_NC} mm da base (placa 1250)")
 except Exception as e:
     r(False, "C20 nicho NC-1 na parte superior da placa", "ND-LET-PP00", str(e)[:80])
+# ================================================================== rev12 — revisão independente da rev12 (CHECKLIST seção 11)
+import registro as REG
+_num = lambda v: float(str(v).replace(".", "").replace(",", ".").split()[0])
+QJ = json.load(open(qj, encoding="utf-8")) if os.path.exists(qj) else None
+REGP = REG.pilares()
+# C22 mudança de geometria propaga: volume/peso/seção da folha da peça = PR01 = IC01 = lista/xlsx (±0,005 m³ / ±0,02 t)
+try:
+    TPR = json.load(open(PR + "ND-LET-PR01.tabelas.json", encoding="utf-8"))
+    tpr = next(t for t in TPR["tabelas"] if t["titulo"].startswith("QUADRO DE PRODUÇÃO"))
+    PRL = {}
+    for l in tpr["linhas"]:
+        PRL.setdefault(str(l[0]), l)
+    difs = []
+    for mk, R_ in REGP.items():
+        lp = PRL.get(mk)
+        if lp is None:
+            difs.append(f"{mk} sem linha no PR01"); continue
+        if abs(_num(lp[4]) - R_["vol"]) > 0.006 or abs(_num(lp[6]) - R_["peso"]) > 0.02:
+            difs.append(f"{mk}: folha {R_['vol']} m³/{R_['peso']} t × PR01 {lp[4]}/{lp[6]}")
+        cab = "seção cheia" if not R_["geom"].get("rec") else "cabeça recuada"
+        if mk[:2] in ("PL", "PF") and cab not in str(lp[2]):
+            difs.append(f"{mk}: PR01 '{lp[2]}' × geometria '{cab}'")
+        if QJ:
+            q_ = QJ["pecas"].get(mk)
+            if not q_ or abs(q_["vol"] - R_["vol"]) > 0.006 or abs(q_["peso"] - R_["peso"]) > 0.02:
+                difs.append(f"{mk}: folha × lista/xlsx {q_}")
+    r(not difs, "C22 volume, peso e cabeça iguais: folha da peça × PR01 × lista × xlsx", "JOGO", "ok" if not difs else "; ".join(difs[:6]))
+except Exception as e:
+    r(False, "C22 volume, peso e cabeça iguais: folha da peça × PR01 × lista × xlsx", "JOGO", f"não conferido: {e}")
+if QJ:
+    X_, L_ = QJ["xlsx"], QJ["lista"]
+    ok_ = all(X_[k] is not None and abs(X_[k] - L_[k]) <= 0.01 * max(L_[k], 1) for k in ("volume_m3", "peso_t", "pecas")) and abs((X_["aco_kg"] or 0) - QJ["aco_total_kg"]) <= 0.01 * QJ["aco_total_kg"]
+    r(ok_, "C23 xlsx recalculado (valores gravados) × lista: volume, peso, peças e aço (±1 %)", "QUANTITATIVOS", f"xlsx {X_} × lista {L_}, aço {QJ['aco_total_kg']}")
+    rv = [c for c in QJ["cabecalhos"] if "REV12" not in c.upper()]
+    r(not rv, "C23 cabeçalho de todas as abas com a revisão do pacote", "QUANTITATIVOS", "ok" if not rv else rv[0][:80])
+    # C24 aparelho de apoio único: 1 neoprene por apoio (contagem = apoios) e uma descrição por marca
+    ap = QJ["apoios"]
+    dif = [f"{a_['marca']}: {ap['NEO'].get(a_['marca'])} na lista × {ap['consolos'][tp]} apoios {tp}" for tp, a_ in REG.APARELHOS.items() if ap["NEO"].get(a_["marca"]) != ap["consolos"][tp]]
+    r(not dif, "C24 neoprenes = número de apoios (um aparelho por apoio)", "LISTAS", "ok" if not dif else "; ".join(dif))
+    # C25 item de lista de uma fonte só: uma descrição por marca; insertos por pilar fecham com o nº de pilares/consolos
+    dup = {m_: list(d_) for m_, d_ in QJ["insertos"].items() if len(d_) > 1 and m_ not in ("NC-1 (kg)",)}
+    r(not dup, "C25 item de lista com uma fonte e uma descrição", "LISTAS", "ok" if not dup else str(dup)[:200])
+    npil = sum(R_["qt"] for R_ in REGP.values())
+    tot = lambda m_: sum(QJ["insertos"].get(m_, {}).values())
+    ncons = sum(R_["qt"] * len(R_["consolos"]) for R_ in REGP.values())
+    fl_ = [f"AL-2 {tot('AL-2')} ≠ 2 × {npil}"] if tot("AL-2") != 2 * npil else []
+    fl_ += [f"FI-1 {tot('FI-1')} ≠ {npil}"] if tot("FI-1") != npil else []
+    fl_ += [f"pinos PN-1+PN-2+PN-6 {tot('PN-1') + tot('PN-2') + tot('PN-6')} ≠ {ncons} consolos"] if tot("PN-1") + tot("PN-2") + tot("PN-6") != ncons else []
+    cl_ = QJ["conf_lista"]
+    fl_ += [f"{k_[:-8]}: pilares {cl_[k_]} × vistas {cl_[k_.replace('pilares', 'vistas')]}" for k_ in cl_ if k_.endswith("pilares") and cl_[k_] != cl_[k_.replace("pilares", "vistas")]]
+    r(not fl_, "C25 insertos por pilar fecham (AL-2 = 2 × pilares, FI-1 = pilares, pinos = consolos, chapas = vistas)", "LISTAS", "ok" if not fl_ else "; ".join(fl_))
+# C26 CS01 coerente com a geometria: quantidades e pilares de cada consolo = contagem nas folhas (registro); marcas distintas
+try:
+    RC = json.load(open(PR + "consolos_marcas.json", encoding="utf-8"))
+    import apoios_pilar as _APc
+    cont = {}
+    for mk, R_ in REGP.items():
+        for c_ in R_["consolos"]:
+            m_ = _APc.marca_consolo(c_)
+            for n_ in R_["nomes"]:
+                cont.setdefault(m_, {}).setdefault(n_, 0)
+                cont[m_][n_] += 1
+    difs = [f"{e['marca']}: CS01 {e['por_pilar']} × folhas {cont.get(e['marca'])}" for e in RC["lista"] if e["por_pilar"] != cont.get(e["marca"]) or e["n"] != sum(cont.get(e["marca"], {}).values())]
+    sig = {}
+    for e in RC["lista"]:
+        k_ = (e["tipo"], e["larg"], e["proj"], e["h"], e["hp"], e["incl"], e["exc"], e["exc_face"], e["pino"], tuple(e["neo"]), e["tirante"])
+        if k_ in sig:
+            difs.append(f"{e['marca']} = {sig[k_]} (dados idênticos)")
+        sig[k_] = e["marca"]
+    tcs = textos(PR + "ND-LET-CS01.dxf") if os.path.exists(PR + "ND-LET-CS01.dxf") else []
+    gen = [t for t in tcs if re.search(r"pilares do eixo|vigas de cobertura TS-01", t)]
+    difs += [f"texto genérico na CS01: {gen[0][:60]}"] if gen else []
+    for e in RC["lista"]:
+        if not any(all(n_ in t for n_ in list(e["por_pilar"])[:3]) for t in tcs):
+            difs.append(f"{e['marca']}: pilares do registro não aparecem na CS01")
+    r(not difs, "C26 CS01: pilares e quantidades de cada consolo pela geometria; marcas distintas", "ND-LET-CS01", "ok" if not difs else "; ".join(difs[:5]))
+except Exception as e:
+    r(False, "C26 CS01: pilares e quantidades de cada consolo pela geometria; marcas distintas", "ND-LET-CS01", f"não conferido: {e}")
+# C27 toda marca de peça metálica fabricada citada em texto tem desenho de fabricação (título de vista) e linha de lista
+TXT = {fl: textos(PR + fl + ".dxf") for fl in idx if os.path.exists(PR + fl + ".dxf")}
+FAB = r"(?<![\w-])((?:PT|ST|CS|CE|CC|NC|OM|CL|TL|EM|CB|MF|CA)-\d+[A-Z]{0,2}|ST-W|ES-1FL)(?![\w-])"
+cit = {m_ for tx_ in TXT.values() for t in tx_ for m_ in re.findall(FAB, t)}
+tit = {m_ for tx_ in TXT.values() for t in tx_ if t.isupper() or "—" in t[:20] for m_ in re.findall(FAB, t[:30])}
+lis = set()
+for f_ in glob.glob(PR + "ND-LET-*.tabelas.json"):
+    for t_ in json.load(open(f_, encoding="utf-8")).get("tabelas", []):
+        for l_ in t_["linhas"]:
+            lis |= set(re.findall(FAB, " ".join(str(c_) for c_ in l_[:3])))
+if QJ:
+    lis |= set(QJ["insertos"])
+sem = sorted(m_ for m_ in cit if m_ not in lis)
+sem_d = sorted(m_ for m_ in cit if m_ not in tit and m_ not in lis)
+r(not sem, "C27 marca citada em texto tem linha de lista", "JOGO", "ok" if not sem else ", ".join(sem[:12]))
+r(not sem_d, "C27 marca citada em texto tem desenho de fabricação ou linha de material", "JOGO", "ok" if not sem_d else ", ".join(sem_d[:12]))
+# C28 nomes internos/R01 fora do quadro de correspondência (LOC01): P1C-L1, P2-L5, P8A, P13B, P10a…
+for fl, tx_ in TXT.items():
+    if fl == "ND-LET-LOC01":
+        continue
+    m28 = [t for t in tx_ if re.search(r"\bP\d+C?-L\d\b|\bP8[AB]\b|\bP13B\b|\bP10[ab]\b|\(P[67], ", t)]
+    r(not m28, "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)", fl, "ok" if not m28 else m28[0][:80])
+# C29 valores únicos de projeto: portões, folgas e chegada da escada iguais em todas as notas
+alv = {}
+for fl, tx_ in TXT.items():
+    for t in tx_:
+        for v_ in re.findall(r"[Pp]ortões[^.;]{0,40}?livres até \+(\d,\d\d)", t):
+            alv.setdefault(v_, []).append(fl)
+        for v_ in re.findall(r"escada[^.;]{0,40}?(?:ao|até o|→)\s*(?:piso pronto\s*)?\+(\d,\d\d)", t, flags=re.I):
+            alv.setdefault("escada " + v_, []).append(fl)
+port = {k for k in alv if not k.startswith("escada")}
+esc = {k for k in alv if k.startswith("escada")}
+r(port <= {REG.f1(REG.PORTAO["livre_ate"])}, "C29 altura livre dos portões única", "JOGO", "ok" if port <= {REG.f1(REG.PORTAO["livre_ate"])} else str({k: alv[k][:3] for k in port}))
+r(esc <= {"escada " + REG.f1(REG.ESCADA_CHEGADA)}, "C29 chegada da escada única", "JOGO", "ok" if esc <= {"escada " + REG.f1(REG.ESCADA_CHEGADA)} else str({k: alv[k][:3] for k in esc}))
+fol = sorted({(fl, t[:70]) for fl, tx_ in TXT.items() for t in tx_ if re.search(r"folga de ponta 25|I120 e VB 25 mm|19 mm no centro", t)})
+r(not fol, "C29 folgas de montagem da geometria do modelo (uma fonte)", "JOGO", "ok" if not fol else str(fol[:3]))
+# C30 carimbo: rev 12 datada da última alteração (27/10) e histórico sem lacuna
+for fl in idx:
+    tj = PR + fl + ".tabelas.json"
+    if not os.path.exists(tj):
+        continue
+    d_ = json.load(open(tj, encoding="utf-8")).get("dados", {})
+    revs = sorted({int(t) for t in TXT.get(fl, []) if re.fullmatch(r"\d\d", t.strip()) and 0 <= int(t) <= 12})
+    seq = [v_ for v_ in revs if v_ >= (revs[-1] - 3 if revs else 0)]
+    ok_ = d_.get("data") == REG_DATA and (not seq or seq == list(range(seq[0], 13)))
+    r(ok_, "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna", fl, f"data {d_.get('data')}, revisões {seq}")
+# C31 ordem das folhas: família junto da folha-mãe (I120 → I120-2 → I120-3), cobertura em sequência, EX01 por último
+o_ = idx
+ok_ = (o_.index("ND-LET-I120-2") == o_.index("ND-LET-I120") + 1 and o_.index("ND-LET-I120-3") == o_.index("ND-LET-I120") + 2 and o_[-1] == "ND-LET-EX01"
+       and [f for f in o_ if f.startswith("ND-LET-COB")] == sorted(f for f in o_ if f.startswith("ND-LET-COB")))
+r(ok_, "C31 ordem das folhas (família após a folha-mãe, EX01 por último)", "JOGO", "ok" if ok_ else str([f for f in o_ if "I120" in f or "COB" in f or "EX01" in f]))
+# C32 face dos insertos excêntricos igual no 2D (registro da folha) e no 3D (IFC): CP-VB rente à face externa
+try:
+    import ifcopenshell, ifcopenshell.geom, numpy as _np
+    IFC = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/saidas/letsara.ifc"
+    fi_ = ifcopenshell.open(IFC)
+    st_ = ifcopenshell.geom.settings(); st_.set("use-world-coords", True)
+    cps = []
+    for el in fi_.by_type("IfcElement"):
+        if (el.Name or "").startswith("CP-VB"):
+            sh = ifcopenshell.geom.create_shape(st_, el)
+            vs = _np.array(sh.geometry.verts).reshape(-1, 3)
+            cps.append(vs.mean(0))
+    FW = {"A": {"A": (1, 0), "B": (0, 1), "C": (-1, 0), "D": (0, -1)}, "E": {"A": (-1, 0), "B": (0, -1), "C": (1, 0), "D": (0, 1)},
+          "1": {"A": (0, 1), "B": (-1, 0), "C": (0, -1), "D": (1, 0)}, "9": {"A": (0, -1), "B": (1, 0), "C": (0, 1), "D": (-1, 0)}}
+    from geometria import X_EIXO as _XEc
+    difs = []
+    for mk, R_ in REGP.items():
+        for n_ in R_["nomes"]:
+            q_ = next(q for q in REG.NOMES["pecas"] if q["nome"] == n_)
+            ref = "A" if abs(q_["x"]) < 0.01 else "E" if abs(q_["x"] - _XEc["E"]) < 0.01 else ("1" if q_["y"] < 1 else "9")
+            for c_ in R_["consolos"]:
+                if c_["tipo"] != "CP-VB" or not c_.get("exc"):
+                    continue
+                ex_ = FW[ref][c_["exc_face"]]
+                yv = q_["y"] + ex_[1] * c_["exc"] / 1000
+                near = min(cps, key=lambda p_: (p_[0] - q_["x"]) ** 2 + (p_[1] - q_["y"]) ** 2) if cps else None
+                if near is None or abs(near[1] - yv) > 0.01:
+                    difs.append(f"{n_} ({mk}): 2D y {yv:.3f} × 3D {None if near is None else round(near[1], 3)}")
+    r(not difs, "C32 face do consolo excêntrico igual no 2D e no 3D (IFC)", "JOGO", "ok" if not difs else "; ".join(difs[:5]))
+except Exception as e:
+    r(False, "C32 face do consolo excêntrico igual no 2D e no 3D (IFC)", "JOGO", f"não conferido: {e}")
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]

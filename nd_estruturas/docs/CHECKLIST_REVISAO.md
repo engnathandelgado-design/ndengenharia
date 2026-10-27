@@ -78,3 +78,20 @@ Item marcado [auto] já tem checagem automática; [manual] o revisor confere olh
 - [auto] Normas na versão vigente; mesma ocupação do mezanino em todas as notas.
 - [auto] Bitola > Ø20 só com exceção registrada em DECISIONS.
 - [manual] Placas: nicho de montagem (console/grapa) na parte superior da placa, não na inferior.
+
+## 11. Itens acrescentados pela revisão independente da rev12 (27/10/2026)
+Travas automáticas no `conferencia_cruzada.py` (rodado no fim do `gerar_tudo`), com o código da verificação entre parênteses.
+- [auto] Mudança de geometria propaga em todas as saídas: volume, peso e cabeça (seção cheia × cabeça recuada) iguais na folha da peça, PR01, lista e xlsx (±0,005 m³, ±0,02 t) — registro único por marca em `registro.py` (C22; IC01 em C16).
+- [auto] CS01 gerada das folhas de pilar: pilares e quantidade de cada consolo contados na geometria, tipo do consolo coerente com a posição do pilar (CP-VB nas fachadas 1/9, CP-MEZ no mezanino, CP-I120 no eixo C), sem texto genérico ("pilares do eixo A") e sem duas marcas com dados idênticos (C26, C7).
+- [auto] Toda marca de peça metálica citada em nota tem linha de lista e desenho de fabricação ou linha de material (C27).
+- [auto] Item de lista de uma fonte só e com uma descrição; insertos por pilar fecham com o número de pilares (AL-2 = 2 × pilares, FI-1 = pilares, pinos = consolos) e as chapas das placas embutidas no pilar fecham com as vistas (C25).
+- [auto] Aparelho de apoio único por apoio: uma marca e uma dimensão de neoprene por tipo de consolo na tabela de insertos, nota, folha da viga e lista; contagem de neoprenes = número de apoios (C24; trava também na folha do pilar).
+- [auto] Fórmulas do xlsx: recalculado no LibreOffice, gravado com valores, totais de volume, peso, peças e aço iguais aos da lista (±1 %); cabeçalho de todas as abas com a revisão do pacote (C23); aço por peça da lista = resumo da folha (C3).
+- [auto] Detalhes das folhas de cortes (CT01–CT04) lidos do registro da peça (armadura ativa da laje, folgas); cordoalha Ø15,2 procurada em TODAS as folhas (C4).
+- [auto] Nomes nas cargas de fundação e em todas as folhas = nomes do projeto pela posição; nome interno do modelo (P1C-L1) ou do R01 (P8A, P13B, P10a, "(P6, …)") só no quadro de correspondência da LOC01 (C28).
+- [manual + auto] 3D × 2D nas peças espelhadas: consolo excêntrico na mesma face no isométrico, no IFC e nas faces da folha (C32 confere o IFC contra o registro; isométrico conferido a olho).
+- [auto] Nenhum nome de arquivo, script ou revisão interna em folha do cliente (".json", ".py", "calc_", "r05", "rev06", "NATHAN") (C8).
+- [auto] Valores únicos de projeto: folgas de montagem (da geometria do modelo), altura livre dos portões e chegada da escada — um só registro, comparado nas notas (C29).
+- [manual + auto] Pendência também nas folhas de montagem (MON02 na trava C21) e quadro de decisão com imagens anexado ao pacote quando citado (ND-LET-DECISAO-VM-CANTO).
+- [auto] Carimbo datado pela última alteração (rev 12 de 27/10/2026) e histórico sem lacuna (…09, 10, 11, 12) (C30).
+- [auto] Folhas de detalhe de uma família logo após a folha-mãe (I120 → I120-2 → I120-3), cobertura em sequência e EX01 por último (C31).

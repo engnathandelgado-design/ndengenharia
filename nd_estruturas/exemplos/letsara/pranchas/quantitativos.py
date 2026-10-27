@@ -595,7 +595,8 @@ def recalcular_e_registrar(arq=SAIDA):
              lista=dict(volume_m3=round(sum(p_[6] * p_[5] for p_ in pecas), 2), peso_t=round(sum(p_[7] * p_[5] for p_ in pecas), 2), pecas=sum(p_[5] for p_ in pecas)),
              cabecalhos=[str(ws_["A2"].value) for ws_ in wb_.worksheets],
              pecas={p_[1]: dict(vol=p_[6], peso=p_[7], secao=p_[3], qt=p_[5], folha=p_[9]) for p_ in pecas},
-             insertos={}, conf_lista=CONF_LISTA, apoios=APOIOS)
+             insertos={}, conf_lista=CONF_LISTA, apoios=APOIOS,
+             aco=[dict(peca=n_, prancha=f_, qt=q_, kg_peca=round(sum(kd_.values()), 2)) for n_, f_, q_, kd_, _ in aco])
     for f_, pe, m_, d_, q, n in ins:
         J["insertos"].setdefault(m_, {}).setdefault(d_, 0)
         J["insertos"][m_][d_] += q * n

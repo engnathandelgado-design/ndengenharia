@@ -179,6 +179,11 @@ _RX_ARQ = [                                                              # rev12
     (re.compile(r"\b(modelo (?:global |integrado )?)r0\d\b"), r"\1"),
     (re.compile(r"\s*[—–-]?\s*\(?\b(?:PEDIDO|DECISÃO|REGRA|OPÇÃO [A-Z]) DO NATHAN\b\)?", re.I), ""),
     (re.compile(r"\s*\(NATHAN[^()]*\)"), ""),
+    (re.compile(r"\s*\(rev\d{2}[a-z]?\)"), ""),                                      # "(rev03)"
+    (re.compile(r"\((?:rev\d{2}[a-z]?)\s*[,;:]\s*"), "("),                            # "(rev04, sem VT)" → "(sem VT)"
+    (re.compile(r",?\s*mantido d[oa] rev\d{2}[a-z]?"), ""),
+    (re.compile(r"(^|(?<=[.;]\s))rev\d{2}[a-z]?\s*[:—–-]\s*", re.I), r"\1"),            # "12. rev09: sem …" → "12. sem …"
+    (re.compile(r"\s+rev\d{2}[a-z]?\b(?!\s*\d)"), ""),
 ]
 
 
@@ -187,7 +192,7 @@ def limpar_interno(s):
     nome de arquivo (.json/.py) nem revisão interna do modelo (r05)."""
     if not isinstance(s, str):
         return s
-    if re.search(r"\.(?:json|py)\b|NATHAN|\br0\d\b", s):
+    if re.search(r"\.(?:json|py)\b|NATHAN|\br0\d\b|\brev\d{2}", s):
         for rx, rep in _RX_ARQ:
             s = rx.sub(rep, s)
         s = re.sub(r"\(\s*\)", "", s)

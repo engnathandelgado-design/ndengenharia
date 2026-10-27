@@ -1,10 +1,17 @@
 {
- "total": 940,
- "erros": 0,
+ "total": 1204,
+ "erros": 144,
  "pendentes_decisao": 0,
  "itens": [
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-NG01",
    "detalhe": "nenhuma",
@@ -15,6 +22,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-NG01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -33,6 +47,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-LOC01",
    "detalhe": "nenhuma",
@@ -43,6 +64,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-LOC01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -61,6 +89,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-CT01",
    "detalhe": "nenhuma",
@@ -71,6 +106,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-CT01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -89,6 +131,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-CT03",
    "detalhe": "nenhuma",
@@ -99,6 +148,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-CT03",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -117,6 +173,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-MON01",
    "detalhe": "nenhuma",
@@ -127,6 +190,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-MON01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -145,6 +215,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-MON03",
    "detalhe": "nenhuma",
@@ -155,6 +232,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-MON03",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -194,6 +278,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL01",
    "detalhe": "nenhuma",
@@ -225,6 +316,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL02",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 313.0 kg × resumo 313.1 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -264,6 +362,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL03",
    "detalhe": "nenhuma",
@@ -295,6 +400,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL04",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -341,6 +453,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL05",
    "detalhe": "nenhuma",
@@ -372,6 +491,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL06",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 293.5 kg × resumo 293.5 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -411,6 +537,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL07",
    "detalhe": "nenhuma",
@@ -442,6 +575,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL08",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 329.2 kg × resumo 329.3 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -481,6 +621,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL09",
    "detalhe": "nenhuma",
@@ -512,6 +659,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL10",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 383.1 kg × resumo 383.1 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -551,6 +705,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PL11",
    "detalhe": "nenhuma",
@@ -582,6 +743,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL12",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 301.8 kg × resumo 301.8 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -621,6 +789,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PF01",
    "detalhe": "nenhuma",
@@ -652,6 +827,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PF02",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 409.7 kg × resumo 409.8 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -691,6 +873,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PF03",
    "detalhe": "nenhuma",
@@ -722,6 +911,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PF04",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 359.3 kg × resumo 359.4 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -761,6 +957,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PF05",
    "detalhe": "nenhuma",
@@ -792,6 +995,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PF06",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 354.3 kg × resumo 354.3 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -831,6 +1041,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PC01",
    "detalhe": "nenhuma",
@@ -862,6 +1079,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PC02",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 277.3 kg × resumo 277.3 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -908,6 +1132,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PC03",
    "detalhe": "nenhuma",
@@ -939,6 +1170,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PM01",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 351.0 kg × resumo 351.0 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -978,6 +1216,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PM02",
    "detalhe": "nenhuma",
@@ -1009,6 +1254,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PG01",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 132.0 kg × resumo 132.0 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1048,6 +1300,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PG02",
    "detalhe": "nenhuma",
@@ -1079,6 +1338,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PG03",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 162.8 kg × resumo 162.8 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1118,6 +1384,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PG04",
    "detalhe": "nenhuma",
@@ -1149,6 +1422,13 @@
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PE01",
    "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 78.2 kg × resumo 78.2 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1188,6 +1468,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PE02",
    "detalhe": "nenhuma",
@@ -1223,6 +1510,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PE03",
    "detalhe": "nenhuma",
@@ -1240,6 +1534,13 @@
    "item": "C5 marcas de consolo existem no registro",
    "folha": "ND-LET-PE03",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1286,7 +1587,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-TS01-1",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1314,7 +1615,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-TS01-2",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1342,7 +1643,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-TS01-3",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1405,7 +1706,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-I120",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1489,7 +1790,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-VM01",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1573,7 +1874,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-VB01",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1594,7 +1895,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-LA01",
    "detalhe": "nenhuma",
    "pendente": false
@@ -1611,6 +1912,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-LA01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1629,6 +1937,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-ES02",
    "detalhe": "nenhuma",
@@ -1639,6 +1954,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-ES02",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1657,6 +1979,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-ES04",
    "detalhe": "nenhuma",
@@ -1667,6 +1996,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-ES04",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1685,6 +2021,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-CM01",
    "detalhe": "nenhuma",
@@ -1695,6 +2038,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-CM01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1713,6 +2063,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP01",
    "detalhe": "nenhuma",
@@ -1723,6 +2080,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1741,6 +2105,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP03",
    "detalhe": "nenhuma",
@@ -1751,6 +2122,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP03",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1769,6 +2147,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP05",
    "detalhe": "nenhuma",
@@ -1779,6 +2164,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP05",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1797,6 +2189,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP-A",
    "detalhe": "nenhuma",
@@ -1807,6 +2206,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP-A",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1825,6 +2231,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP-C",
    "detalhe": "nenhuma",
@@ -1835,6 +2248,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP-C",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1853,6 +2273,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP-EF",
    "detalhe": "nenhuma",
@@ -1863,6 +2290,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP-EF",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1881,6 +2315,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PP-HJ",
    "detalhe": "nenhuma",
@@ -1891,6 +2332,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-PP-HJ",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1909,6 +2357,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-PV01",
    "detalhe": "nenhuma",
@@ -1923,6 +2378,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-COB01",
    "detalhe": "nenhuma",
@@ -1940,6 +2402,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-COB01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -1965,6 +2434,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-COB08",
    "detalhe": "nenhuma",
@@ -1982,6 +2458,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-COB08",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -2007,6 +2490,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-COB03",
    "detalhe": "nenhuma",
@@ -2024,6 +2514,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-COB03",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -2049,6 +2546,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-COB06",
    "detalhe": "nenhuma",
@@ -2066,6 +2570,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-COB06",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -2091,6 +2602,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-COB09",
    "detalhe": "nenhuma",
@@ -2108,6 +2626,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-COB09",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -2126,6 +2651,13 @@
   },
   {
    "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
    "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
    "folha": "ND-LET-MT01-2",
    "detalhe": "nenhuma",
@@ -2136,6 +2668,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-MT01-2",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "nenhuma",
    "pendente": false
   },
   {
@@ -2168,7 +2707,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-I120-2",
    "detalhe": "nenhuma",
    "pendente": false
@@ -2203,7 +2742,7 @@
   },
   {
    "ok": true,
-   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "item": "C4 cordoalha Ø15,2 (proibida em todo o jogo)",
    "folha": "ND-LET-I120-3",
    "detalhe": "nenhuma",
    "pendente": false
@@ -2220,6 +2759,13 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-I120-3",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C3 quantitativos × soma das folhas (aço CA-50)",
+   "folha": "QUANTITATIVOS",
+   "detalhe": "quantitativos 27625 kg × folhas 13090 kg",
    "pendente": false
   },
   {
@@ -2398,10 +2944,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-CT01",
-   "detalhe": "ok",
+   "detalhe": "6: 2. Cobertura rebaixada (rev03) para o pacote Isoeste (TP-40 + lã de rocha 40 + z",
    "pendente": false
   },
   {
@@ -2741,21 +3287,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL01",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL01",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL01",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL01",
    "detalhe": "ok",
@@ -2783,21 +3329,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL02",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL02",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL02",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL02",
    "detalhe": "ok",
@@ -2825,21 +3371,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL03",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL03",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL03",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL03",
    "detalhe": "ok",
@@ -2867,21 +3413,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL04",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL04",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL04",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL04",
    "detalhe": "ok",
@@ -2909,21 +3455,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL05",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL05",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL05",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL05",
    "detalhe": "ok",
@@ -2951,21 +3497,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL06",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL06",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL06",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL06",
    "detalhe": "ok",
@@ -2993,21 +3539,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL07",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL07",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL07",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL07",
    "detalhe": "ok",
@@ -3035,21 +3581,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL08",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL08",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL08",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL08",
    "detalhe": "ok",
@@ -3077,21 +3623,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL09",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL09",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL09",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL09",
    "detalhe": "ok",
@@ -3119,21 +3665,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL10",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL10",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL10",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL10",
    "detalhe": "ok",
@@ -3161,21 +3707,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL11",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL11",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL11",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL11",
    "detalhe": "ok",
@@ -3203,21 +3749,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL12",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PL12",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PL12",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PL12",
    "detalhe": "ok",
@@ -3245,21 +3791,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF01",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF01",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF01",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF01",
    "detalhe": "ok",
@@ -3287,21 +3833,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF02",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF02",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF02",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF02",
    "detalhe": "ok",
@@ -3329,21 +3875,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF03",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF03",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF03",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF03",
    "detalhe": "ok",
@@ -3371,21 +3917,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF04",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF04",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF04",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF04",
    "detalhe": "ok",
@@ -3413,21 +3959,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF05",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF05",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF05",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF05",
    "detalhe": "ok",
@@ -3455,21 +4001,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF06",
+   "detalhe": "4: consolos.json, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c +",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PF06",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PF06",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PF06",
    "detalhe": "ok",
@@ -3497,21 +4043,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC01",
+   "detalhe": "4: Neoprene 300×200×31 fretado (rev04)",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PC01",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PC01",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PC01",
    "detalhe": "ok",
@@ -3539,21 +4085,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC02",
+   "detalhe": "4: Neoprene 300×200×31 fretado (rev04)",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PC02",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PC02",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PC02",
    "detalhe": "ok",
@@ -3581,21 +4127,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC03",
+   "detalhe": "4: Neoprene 300×200×31 fretado (rev04)",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PC03",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PC03",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PC03",
    "detalhe": "ok",
@@ -3623,21 +4169,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PM01",
+   "detalhe": "2: cm na ponta, fundo inclinado —; memória consolos.json, NBR 9062:2017 7.3). Tiran",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PM01",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PM01",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PM01",
    "detalhe": "ok",
@@ -3665,21 +4211,21 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PM02",
+   "detalhe": "2: cm na ponta, fundo inclinado —; memória consolos.json, NBR 9062:2017 7.3). Tiran",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
    "folha": "ND-LET-PM02",
    "detalhe": "ok",
    "pendente": false
   },
   {
    "ok": true,
-   "item": "C9 nome da família I120 (sem I130)",
-   "folha": "ND-LET-PM02",
-   "detalhe": "ok",
-   "pendente": false
-  },
-  {
-   "ok": true,
    "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
    "folha": "ND-LET-PM02",
    "detalhe": "ok",
@@ -3707,10 +4253,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PG01",
-   "detalhe": "ok",
+   "detalhe": "4: o vento; apoiado em y na V410, V411 pela cabeça (modelo integrado r05) e, depois",
    "pendente": false
   },
   {
@@ -3749,10 +4295,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PG02",
-   "detalhe": "ok",
+   "detalhe": "4: o vento; apoiado em y na V410, V411 pela cabeça (modelo integrado r05) e, depois",
    "pendente": false
   },
   {
@@ -3791,10 +4337,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PG03",
-   "detalhe": "ok",
+   "detalhe": "4: o vento; apoiado em y na V410, V411 pela cabeça (modelo integrado r05) e, depois",
    "pendente": false
   },
   {
@@ -3833,10 +4379,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PG04",
-   "detalhe": "ok",
+   "detalhe": "4: o vento; apoiado em y na V410, V411 pela cabeça (modelo integrado r05) e, depois",
    "pendente": false
   },
   {
@@ -3875,10 +4421,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PE01",
-   "detalhe": "ok",
+   "detalhe": "2: cm na ponta, fundo inclinado —; memória consolos.json, NBR 9062:2017 7.3). Tiran",
    "pendente": false
   },
   {
@@ -3917,10 +4463,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PE02",
-   "detalhe": "ok",
+   "detalhe": "2: cm na ponta, fundo inclinado —; memória consolos.json, NBR 9062:2017 7.3). Tiran",
    "pendente": false
   },
   {
@@ -3959,10 +4505,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PE03",
-   "detalhe": "ok",
+   "detalhe": "2: cm na ponta, fundo inclinado —; memória consolos.json, NBR 9062:2017 7.3). Tiran",
    "pendente": false
   },
   {
@@ -4043,10 +4589,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-TS01-1",
-   "detalhe": "ok",
+   "detalhe": "2: 12. rev09: sem vigas de cobertura TS-01 na linha 2 (cobertura metálica W 200 × 1",
    "pendente": false
   },
   {
@@ -4085,10 +4631,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-TS01-2",
-   "detalhe": "ok",
+   "detalhe": "2: ESC. 1:5 — COTAS EM CM — furação da grade da viga de cobertura TS-01 rev03 (conf",
    "pendente": false
   },
   {
@@ -4127,10 +4673,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-TS01-3",
-   "detalhe": "ok",
+   "detalhe": "4: 3. rev09: a linha 2 não tem vigas de cobertura TS-01 (cobertura metálica: W 200 ",
    "pendente": false
   },
   {
@@ -4337,10 +4883,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-ES01",
-   "detalhe": "ok",
+   "detalhe": "4: LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)",
    "pendente": false
   },
   {
@@ -4379,10 +4925,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-ES02",
-   "detalhe": "ok",
+   "detalhe": "2: 6. Ligações todas parafusadas, SEM SOLDA, conferidas em escadas_detalhe.py (NBR",
    "pendente": false
   },
   {
@@ -4547,10 +5093,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-CM01",
-   "detalhe": "ok",
+   "detalhe": "6: (rev04, sem VT); H, J (anexo) e I (fachada da linha 1) com faixas de esquadria d",
    "pendente": false
   },
   {
@@ -4841,10 +5387,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PP06",
-   "detalhe": "ok",
+   "detalhe": "6: 3. Verificação (placas.json): desforma deitada em 4 pontos com balancim (0,104 L",
    "pendente": false
   },
   {
@@ -5093,10 +5639,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-PP-G",
-   "detalhe": "ok",
+   "detalhe": "2: rev08 por conservadorismo); acima, fechamento metálico leve até a telha, fixado ",
    "pendente": false
   },
   {
@@ -5387,10 +5933,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-COB02",
-   "detalhe": "ok",
+   "detalhe": "2: 1. Lógica do travamento (modelo integrado r05): terças Z contínuas por transpass",
    "pendente": false
   },
   {
@@ -5429,10 +5975,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-COB03",
-   "detalhe": "ok",
+   "detalhe": "2: 9. Carga da calha cheia na 1ª terça (0,12 kN/m de chapa + 0,45 kN/m de água) con",
    "pendente": false
   },
   {
@@ -5471,10 +6017,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-COB04",
-   "detalhe": "ok",
+   "detalhe": "4: calc_fixacao_te…",
    "pendente": false
   },
   {
@@ -5513,10 +6059,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
    "folha": "ND-LET-COB06",
-   "detalhe": "ok",
+   "detalhe": "2: FUNILARIA EM GALVALUME #0,50 FEITA NA OBRA (NATHAN); PERFIS DOBRADOS COTADOS; CO",
    "pendente": false
   },
   {
@@ -5856,10 +6402,10 @@
    "pendente": false
   },
   {
-   "ok": true,
+   "ok": false,
    "item": "C16 peso único (IC01 × lista de peças/PR01, 2,50 t/m³)",
    "folha": "ND-LET-IC01",
-   "detalhe": "ok",
+   "detalhe": "PL-03 IC01 6.14 × lista 6.85; PL-04 IC01 5.92 × lista 6.63; PL-07 IC01 6.59 × lista 6.85; PL-08 IC01 6.37 × lista 6.63",
    "pendente": false
   },
   {
@@ -6542,6 +7088,13 @@
    "pendente": false
   },
   {
+   "ok": false,
+   "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
+   "folha": "ND-LET-MON02",
+   "detalhe": "sem: ['PENDÊNCIA', 'VM de borda da linha 1']",
+   "pendente": false
+  },
+  {
    "ok": true,
    "item": "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada",
    "folha": "ND-LET-NG01",
@@ -6581,6 +7134,1301 @@
    "item": "C20 nicho NC-1 na parte superior da placa",
    "folha": "ND-LET-PP00",
    "detalhe": "centro do nicho a 940 mm da base (placa 1250)",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C22 volume, peso e cabeça iguais: folha da peça × PR01 × lista × xlsx",
+   "folha": "JOGO",
+   "detalhe": "PL-03: folha 2.74 m³/6.85 t × PR01 2,456/6,14; PL-03: PR01 '60 × 40 (x × y), cabeça recuada' × geometria 'seção cheia'; PL-04: folha 2.65 m³/6.63 t × PR01 2,367/5,92; PL-04: PR01 '60 × 40 (x × y), cabeça recuada' × geometria 'seção cheia'; PL-07: folha 2.74 m³/6.85 t × PR01 2,636/6,59; PL-07: PR01 '60 × 40 (x × y), cabeça recuada' × geometria 'seção cheia'",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C23 xlsx recalculado (valores gravados) × lista: volume, peso, peças e aço (±1 %)",
+   "folha": "QUANTITATIVOS",
+   "detalhe": "xlsx {'aco_kg': 27624.01, 'volume_m3': 522.031, 'peso_t': 1305.192, 'pecas': 348} × lista {'volume_m3': 522.03, 'peso_t': 1305.19, 'pecas': 348}, aço 27624.8",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C23 cabeçalho de todas as abas com a revisão do pacote",
+   "folha": "QUANTITATIVOS",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C24 neoprenes = número de apoios (um aparelho por apoio)",
+   "folha": "LISTAS",
+   "detalhe": "NEO-5F: 19 na lista × 36 apoios CP-MEZ",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C25 item de lista com uma fonte e uma descrição",
+   "folha": "LISTAS",
+   "detalhe": "{'AL-2': ['Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN', 'Alça laço cordoalha Ø12,7'], 'BR-M16': ['4 barras roscadas M16 8.8 L=450 (350 embutidos + grampo U Ø10), saem 100 — apoio direto da W 200 ",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C25 insertos por pilar fecham (AL-2 = 2 × pilares, FI-1 = pilares, pinos = consolos, chapas = vistas)",
+   "folha": "LISTAS",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C26 CS01: pilares e quantidades de cada consolo pela geometria; marcas distintas",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C27 marca citada em texto tem linha de lista",
+   "folha": "JOGO",
+   "detalhe": "CA-25, ST-1",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C27 marca citada em texto tem desenho de fabricação ou linha de material",
+   "folha": "JOGO",
+   "detalhe": "CA-25",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "PILAR DA ESCADA P3 (P6, 25×40) — x 36,175, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E L",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "PILAR DA ESCADA P3 (P6, 25×40) — x 36,175, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E L",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "PILAR DA ESCADA P2 (P7, 40×60) — EIXO E, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOC",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "PILAR DA LINHA 2 P5 (P6, 25×40) — x 36,175, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C29 altura livre dos portões única",
+   "folha": "JOGO",
+   "detalhe": "{'7,40': ['ND-LET-CT01', 'ND-LET-CT01'], '7,50': ['ND-LET-PG01', 'ND-LET-PG01', 'ND-LET-PG02']}",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C29 chegada da escada única",
+   "folha": "JOGO",
+   "detalhe": "{'escada 3,90': ['ND-LET-NG01', 'ND-LET-NG01'], 'escada 3,95': ['ND-LET-NG01', 'ND-LET-NG01', 'ND-LET-NG01']}",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C29 folgas de montagem da geometria do modelo (uma fonte)",
+   "folha": "JOGO",
+   "detalhe": "[('ND-LET-NG01', '2. Folgas de projeto: vigas de cobertura TS-01 25 mm no pilar lateral ')]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-NG01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PR01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CG01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CT01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CT02",
+   "detalhe": "data 26/10/2026, revisões [10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CT03",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CT04",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-MON01",
+   "detalhe": "data 26/10/2026, revisões [9, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-MON02",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-MON03",
+   "detalhe": "data 26/10/2026, revisões [10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-IC01",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL04",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL05",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL06",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL07",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL08",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL09",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL10",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL11",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PL12",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF04",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF05",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PF06",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PC01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PC02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PC03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PM01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PM02",
+   "detalhe": "data 26/10/2026, revisões [10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PG01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PG02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PG03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PG04",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PE01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PE02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PE03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CS01",
+   "detalhe": "data 26/10/2026, revisões [10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-I120",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-VM01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-VB01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-LA01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-ES01",
+   "detalhe": "data 26/10/2026, revisões [10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-ES02",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-ES03",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-ES04",
+   "detalhe": "data 26/10/2026, revisões [10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-ES05",
+   "detalhe": "data 26/10/2026, revisões [10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-CM01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP00",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP02",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP03",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP04",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP05",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP06",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-PV01",
+   "detalhe": "data 26/10/2026, revisões [10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB01",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB07",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB08",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB02",
+   "detalhe": "data 26/10/2026, revisões [9, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB03",
+   "detalhe": "data 26/10/2026, revisões [9, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB04",
+   "detalhe": "data 26/10/2026, revisões [9, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB06",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB05",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-COB09",
+   "detalhe": "data 27/10/2026, revisões [11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-EX01",
+   "detalhe": "data 26/10/2026, revisões [12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C30 carimbo: rev 12 de 27/10/2026, histórico sem lacuna",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "data 26/10/2026, revisões [9, 10, 11, 12]",
+   "pendente": false
+  },
+  {
+   "ok": false,
+   "item": "C31 ordem das folhas (família após a folha-mãe, EX01 por último)",
+   "folha": "JOGO",
+   "detalhe": "['ND-LET-I120', 'ND-LET-COB01', 'ND-LET-COB07', 'ND-LET-COB08', 'ND-LET-COB02', 'ND-LET-COB03', 'ND-LET-COB04', 'ND-LET-COB06', 'ND-LET-COB05', 'ND-LET-COB09', 'ND-LET-EX01', 'ND-LET-I120-2', 'ND-LET-I120-3']",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C32 face do consolo excêntrico igual no 2D e no 3D (IFC)",
+   "folha": "JOGO",
+   "detalhe": "ok",
    "pendente": false
   }
  ],
