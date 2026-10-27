@@ -20,6 +20,7 @@ Quadro vivo de tarefas. O Claude atualiza a cada sessão. O que não está escri
 - [ ] Letsara (DEC-079): confirmar com a fábrica que a extrusora aceita 2 cordoalhas Ø12,7 na nervura de borda da LP20; até lá a LA-01/LA-01R não vai para produção.
 - [ ] Letsara (DEC-071): confirmar com a METSEC o torque dos M12 nas terças Z 2,30.
 - [ ] Letsara (DEC-080): decisão do engenheiro sobre a fresta nos vãos de canto das VB e na VM de borda da linha 1 (quadro decisao_fresta_canto.png).
+- [ ] Letsara (DEC-083): confirmar o pino PN-2 Ø25 CA-50 da I120 nos CP-I120 (exceção à regra Ø ≤ 20) ou trocar por Ø20.
 - [ ] Letsara (DEC-081): CE-1 dos PG-02/PG-04 (face de 25 cm) — decisão do engenheiro (quadro decisao_ce1_pg.png); as outras 14 eram falso alarme do teste.
 
 - [ ] Letsara rev06 (DEC-026): trocar as medidas de pré-dimensionamento do CS-1, NC-1 e cartola PT-1 pelas do catálogo 09 da Trejor (anexar o PDF e o DWG "Consoles 2a ETAPA" do e-mail de 05/02/2021) e recalcular `calc_fixacao_placas.py`; luvas TSA dos PT-1 da 1ª fiada no topo da viga baldrame (projeto de fundações); nas placas ao lado da porta da vista I, alinhar as TSA das peças de baixo com os pinos da peça de cima; CE-1 dos pilares do anexo (H/J/I) contadas em Z_PL[:6] (rever as fiadas reais com esquadria).

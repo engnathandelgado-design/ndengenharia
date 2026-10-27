@@ -88,8 +88,11 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
        "Vãos de canto e VM de borda da linha 1: em decisão (quadro decisao_fresta_canto) — o pilar de canto tem 40 em y e a face fica 10 cm atrás da dos PF."),
      Paragraph("4. Densidade e pesos", T2),
      P("Peso = volume × 25 kN/m³; t = kN / 10 (2,50 t/m³) em todo o jogo: IC01, folhas das peças, PR01, quantitativos e montagem (antes a IC01 e a TS-01 usavam 9,81). A IC01 lê os pesos da mesma lista de peças do PR01; σ no furo FI-1 em MPa; coluna βa = 1,3 em todas as tabelas."),
-     Paragraph("5. Pendências", T2),
-     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: fresta nos vãos de canto das VB e na VM de borda da linha 1. (c) Decisão: CE-1 dos PG-02/PG-04 (face de 25 cm). "
+     Paragraph("5. Barras das peças e pinos de ligação", T2),
+     P("Armadura passiva longitudinal das vigas com Ø ≥ 12,5 (TS-01: N5 e N9 passam de Ø10 para Ø12,5; As do topo 7,36 cm²) e nenhuma barra de armadura acima de Ø20. "
+       "Única exceção registrada (DEC-083): pino de ligação PN-2 Ø25 CA-50 (L = 900, 350 no consolo) da I120 nos consolos CP-I120 (PF04, PC01, PC02, PC03) — inserto de ligação, não armadura; a confirmar."),
+     Paragraph("6. Pendências", T2),
+     P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) Decisão: fresta nos vãos de canto das VB e na VM de borda da linha 1. (c) Decisão: CE-1 dos PG-02/PG-04 (face de 25 cm). (c2) Confirmar o pino PN-2 Ø25 da I120 (ou trocar por Ø20). "
        "(d) Local da obra (V0, S2, S3 da NBR 6123:2023), ART e TRRF. (e) Zip com DXF e IFC só depois da aprovação deste pacote.")]
 doc.build(E)
 print("ok", SAI)
