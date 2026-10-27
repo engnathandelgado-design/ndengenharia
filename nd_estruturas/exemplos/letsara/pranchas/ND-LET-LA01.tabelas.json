@@ -7,7 +7,7 @@
   "conteudo": "LAJES ALVEOLARES DO MEZANINO (h20 + CAPA 5) — FÔRMA (PAGINAÇÃO +3,90 E +7,30, SEÇÃO, RECORTE, APOIO) E ARMAÇÃO (PROTENSÃO, CAPA, NEGATIVA)",
   "desenho": "ND-LET-LA01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -149,7 +149,7 @@
      "125 × 955 × 20, 9 Ø12,7 (4 nas nervuras de borda)",
      "13",
      "3,34",
-     "recorte 45×27.5 ou 30×20 (P6); alv. 2 e 5 cheios"
+     "recorte 45×27.5 ou 30×20 (\u000eP3, P5\u000f); alv. 2 e 5 cheios"
     ],
     [
      "LA-02",
@@ -170,7 +170,7 @@
      "125 × 374 × 20, 7 Ø9,5",
      "1",
      "1,31",
-     "recorte 30×20 (P6); alv. 2 e 5 cheios"
+     "recorte 30×20 (\u000eP3, P5\u000f); alv. 2 e 5 cheios"
     ],
     [
      "LA-04",

@@ -7,7 +7,7 @@
   "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS H E J: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
   "desenho": "ND-LET-PP-HJ",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "07/08",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -52,7 +52,7 @@
      "117,0",
      "+3,75",
      "0,37",
-     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-2 (pé)"
+     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-1 (guia)"
     ],
     [
      "4",
@@ -61,7 +61,7 @@
      "783,0",
      "+3,75",
      "2,44",
-     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-2 (pé)"
+     "CS-1 + console da OM-2 (ombreira interna) + 2 PT-1 (guia)"
     ],
     [
      "5",
@@ -79,7 +79,7 @@
      "994,0",
      "+7,50",
      "3,10",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "7",
@@ -88,7 +88,7 @@
      "994,0",
      "+8,75",
      "3,10",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "1",
@@ -115,7 +115,7 @@
      "994,0",
      "+3,75",
      "3,10",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "4",
@@ -133,7 +133,7 @@
      "994,0",
      "+7,50",
      "3,10",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "6",
@@ -142,7 +142,7 @@
      "994,0",
      "+8,75",
      "3,10",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ]
    ]
   },

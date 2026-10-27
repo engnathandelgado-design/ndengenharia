@@ -114,7 +114,7 @@ p3.chamada((-50, 0), (-30, -44), "junta 5 (macho-fêmea)")
 
 # ================================================================== rev12 (revisão rev12, item 3): PT-1R — chapa plana nas juntas em frente à VB
 NR = NN.get("PT1R", 0)
-r1 = pr.vista("PT-1R", (XC + 40, Q[1] + 420), 1.5, titulo=f"PT-1R — CHAPA PLANA ({NR} PÇ)", subtitulo="ch. 6,3 × 80 × 220 A36 galvanizada; corte a laser", unidade="mm")
+r1 = pr.vista("PT-1R", (XC + 30, Q[1] + 340), 1.5, titulo=f"PT-1R ({NR} PÇ)", subtitulo="chapa 6,3 A36 galv.", unidade="mm")
 r1.chapa(0, -110, 80, 220, HT)
 r1.circulo((40, -70), 9, "METALICA")
 r1.poli([(31, 50), (31, 90), (49, 90), (49, 50)], "METALICA", fechada=True)
@@ -122,7 +122,7 @@ r1.cota_v([-110, -70, 0, 70, 110], 80, 10, total=True)
 r1.cota_h([0, 40, 80], -110, -8, total=False)
 r1.chamada((40, -70), (-22, -10), "Ø18 (M16 na placa de baixo)")
 r1.chamada((40, 80), (-22, 12), "oblongo 18 × 40 (placa de cima, sem parafuso)")
-r2 = pr.vista("PT-1R MONT", (XC + 175, Q[1] + 420), 2.5, titulo="PT-1R — NA JUNTA EM FRENTE À VB", subtitulo="corte vertical; VB rente à face do pilar, 25 atrás da placa", unidade="mm")
+r2 = pr.vista("PT-1R MONT", (XC + 165, Q[1] + 340), 2.5, titulo="PT-1R — MONTAGEM", subtitulo="corte; VB a 25 da placa", unidade="mm")
 for z0_, z1_ in ((-150, -2.5), (2.5, 150)):
     pts = [(-100, z0_), (0, z0_), (0, z1_), (-100, z1_)]
     r2.poli(pts, "CORTADO", fechada=True); r2.hachura(pts, "AR-CONC", 0.03)
@@ -136,8 +136,8 @@ r2.texto((42, 0), "VB", "nota", "MIDDLE_CENTER", rot=90)
 r2.cota_h([0, 6.3, 19.3, 25], 150, 10, total=False)
 r2.cota_v([-110, -70, 70, 110], -100, -10, total=False)
 r2.chamada((3, 100), (-30, 20), "PT-1R 6,3 × 80 × 220 (34)")
-r2.chamada((16, -70), (24, -26), "M16 × 40 (31) + arruela larga (32) na luva TSA (33)")
-pr.notas(XC + 10, Q[1] + 300, [f"PT-1R ({NR} pç): no lugar da cartola PT-1 (36 mm, não cabe nos 25 mm até a VB), nas juntas horizontais das vistas A e I cuja faixa de 220 mm cruza a altura da VB. "
+r2.chamada((16, -70), (-14, -40), "M16 × 40 (31) + arruela (32), luva TSA (33)")
+pr.notas(XC + 10, Q[1] + 235, [f"PT-1R ({NR} pç): no lugar da cartola PT-1 (36 mm, não cabe nos 25 mm até a VB), nas juntas horizontais das vistas A e I cuja faixa de 220 mm cruza a altura da VB. "
                                "Folga mínima de 5 mm entre a cabeça do M16 e a VB (6 mm no projeto). Mesma função da PT-1: só guia (M16 só na placa de baixo). Locação nas vistas ND-LET-PP-A e ND-LET-PP-I (retângulo PT-1R)."], 230)
 
 # ================================================================== PT-2 — cantoneira (1:1,5)

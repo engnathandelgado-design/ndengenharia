@@ -7,7 +7,7 @@
   "conteudo": "PLACA DE FECHAMENTO PROTENDIDA 125 × 10 — FÔRMA (INSERTOS, ALÇAS, LIGAÇÕES) E ARMAÇÃO (PROTENSÃO, ARMADURA PASSIVA) — TIPOS PP-01 A PP-09",
   "desenho": "ND-LET-PP00",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -415,9 +415,15 @@
     ],
     [
      "PT-1",
-     "Cartola 6,3 × 80 + 2 M16 (PT-1R: chapa plana 6,3 × 80 × 220 na junta em frente à VB)",
+     "Cartola 6,3 × 80 + M16 (ND-LET-PP04)",
      "2",
      "junta de baixo (det. 3)"
+    ],
+    [
+     "PT-1R",
+     "Chapa plana 6,3 × 80 × 220 + M16, no lugar da PT-1 nas juntas em frente à VB (ND-LET-PP04)",
+     "(2)",
+     "vistas A e I, juntas marcadas PT-1R"
     ],
     [
      "PT-2",

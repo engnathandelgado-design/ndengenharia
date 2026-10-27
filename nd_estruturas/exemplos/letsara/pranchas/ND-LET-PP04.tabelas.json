@@ -4,10 +4,10 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINO PT-1, TRAVA PT-2 E FIXADORES DO SISTEMA",
+  "conteudo": "FIXAÇÃO DAS PLACAS (SISTEMA TREJOR) — CHAPA DE ESPERA CE-1, PINOS PT-1 E PT-1R, TRAVA PT-2 E FIXADORES DO SISTEMA",
   "desenho": "ND-LET-PP04",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -80,6 +80,15 @@
      "2",
      "0,090",
      "0,180"
+    ],
+    [
+     "34",
+     "CHAPA PT-1R",
+     "CH 6,3 × 80 × 220, plana (junta em frente à VB)",
+     "ASTM A36",
+     "1",
+     "0,870",
+     "0,870"
     ],
     [
      "40",
@@ -156,7 +165,7 @@
      "b = 38",
      "PT-1 e PT-2",
      "80 (oblongo livre)",
-     "816"
+     "806"
     ],
     [
      "32",
@@ -165,16 +174,16 @@
      "17 × 50 × 3",
      "PT-1 e PT-2",
      "—",
-     "816"
+     "806"
     ],
     [
      "33",
      "luva TSA M16 (Trejor)",
      "zincada",
      "hef 70",
-     "placas (PT-1)",
+     "placas (PT-1/PT-1R)",
      "—",
-     "660"
+     "752"
     ],
     [
      "43",
@@ -183,7 +192,7 @@
      "hef 70 / 100",
      "placa / pilar (PT-2)",
      "—",
-     "156"
+     "64"
     ]
    ]
   }

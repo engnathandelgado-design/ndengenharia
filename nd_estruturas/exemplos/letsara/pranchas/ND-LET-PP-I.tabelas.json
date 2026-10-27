@@ -7,7 +7,7 @@
   "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTA I: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
   "desenho": "ND-LET-PP-I",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "08/08",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -52,7 +52,7 @@
      "1016,0",
      "+3,75",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "4",
@@ -70,7 +70,7 @@
      "1016,0",
      "+7,50",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "6",
@@ -79,7 +79,7 @@
      "1016,0",
      "+8,75",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "7",
@@ -106,7 +106,7 @@
      "986,0",
      "+3,75",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "10",
@@ -124,7 +124,7 @@
      "986,0",
      "+7,50",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "12",
@@ -133,7 +133,7 @@
      "986,0",
      "+8,75",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "13",
@@ -169,7 +169,7 @@
      "986,0",
      "+3,75",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "17",
@@ -187,7 +187,7 @@
      "986,0",
      "+7,50",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "19",
@@ -196,7 +196,7 @@
      "986,0",
      "+8,75",
      "3,08",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "20",
@@ -223,7 +223,7 @@
      "1016,0",
      "+3,75",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "23",
@@ -241,7 +241,7 @@
      "1016,0",
      "+7,50",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "25",
@@ -250,7 +250,7 @@
      "1016,0",
      "+8,75",
      "3,17",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ]
    ]
   },

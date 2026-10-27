@@ -64,6 +64,7 @@ def kg_diam(folha):
 pecas = []   # (grupo, marca, descrição, seção, L m, qtd, vol unit, peso unit t, concreto, prancha)
 # família 40×60 (PL / PF): volume = corpo do cálice (−1,00) ao recuo + cabeça até +10,00 + consolos da marca
 from familia_pl import MARCAS as _MARCAS_PL
+import renomear as _RNq0
 import registro as _REG                                          # rev12 (revisão rev12, item 1): registro único por marca
 REGP = _REG.pilares()
 for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:      # família 40×60: volume, peso e seção do QUADRO DA PEÇA (geometria da folha)
@@ -73,7 +74,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:      # família 40×
 PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PM02", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
 for f_ in PIL_OUTROS:
     R_ = REGP[quadro(f_)["MARCA"]]
-    _pos = " / ".join(l[1] for l in tab(f_, "MARCAS")["linhas"] if l[0] == R_["marca"])        # rev12 (item 7): linha da PRÓPRIA marca
+    _pos = "\x01" + _RNq0.renomear(" / ".join(l[1] for l in tab(f_, "MARCAS")["linhas"] if l[0] == R_["marca"]))   # rev12 (item 7): linha da PRÓPRIA marca, nome já resolvido
     pecas.append(("Pilares", R_["marca"], _pos, _REG.secao_txt(R_), R_["L"], R_["qt"], R_["vol"], R_["peso"], R_["concreto"], R_["folha"]))
 q = quadro("TS01-1")
 pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 3–8 (2 por linha; linha 2 metálica, DEC-048)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
@@ -276,7 +277,7 @@ def gerar_xlsx(SAIDA=SAIDA):
 
     def linha(ws, r, vals, fmts=None, entrada=()):
         for j, v in enumerate(vals, 1):
-            if isinstance(v, str) and v.startswith("\x01"):                 # nome novo já resolvido (renomear.MARCA_NOVO): o passe final não mexe
+            if isinstance(v, str) and (v.startswith("\x01") or "\x0e" in v):   # nome novo já resolvido ou protegido (N()): resolve agora e o passe final não mexe
                 v = _RNq.renomear(v); x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR
                 PROTEGIDAS.add((ws.title, r, j)); continue
             x = ws.cell(r, j, v); x.font = FI if j in entrada else F; x.border = BOR

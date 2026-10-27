@@ -64,7 +64,7 @@ pr.cabecalho_peca("\x01" + _mk, f"VIGA DE BORDA 15 × 60 cm COM DENTE — L = {L
 
 # planta-chave (rev08): círculo + chamada em cada VB, com o nome de cada peça
 import chave as CH
-CH.planta(pr, (Q[0] + 556, Q[3] - 96), 1300, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="fachada 1 embaixo, fachada 9 em cima", numeros=None)   # rev12 (item 17): sem o número da linha encostado no nome
+CH.planta(pr, (Q[0] + 556, Q[3] - 96), 1300, [n for k in range(1, 9) for n in RN.nomes_de(f"VB-0{k}")], subtitulo="fachadas 1 e 9", numeros=None)   # rev12 (item 17): sem o número da linha encostado no nome
 M = lambda v: v * 1000
 Y_LIN = Y_LIN_R01
 

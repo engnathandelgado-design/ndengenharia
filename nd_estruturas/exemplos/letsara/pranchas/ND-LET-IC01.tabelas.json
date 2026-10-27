@@ -7,7 +7,7 @@
   "conteudo": "IÇAMENTO E MANUSEIO DAS PEÇAS — PILARES (FÁBRICA E OBRA), VIGAS, PLACAS, LAJES ALVEOLARES E PEÇAS METÁLICAS",
   "desenho": "ND-LET-IC01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -121,7 +121,7 @@
     [
      "\u000ePF-04\u000f",
      "\u000eP24\u000f",
-     "6,51",
+     "6,49",
      "2 AL-2: 345 e 780 cm da base",
      "32,5",
      "FI-1 a 208 cm do topo",
@@ -211,21 +211,21 @@
     [
      "\u000ePL-03\u000f",
      "\u000eP29\u000f",
-     "6,14",
+     "6,85",
      "2 AL-2: 330 e 780 cm da base",
-     "30,7",
+     "34,2",
      "FI-1 a 70 cm do topo",
-     "4,3 MPa",
+     "4,8 MPa",
      "1,3"
     ],
     [
      "\u000ePL-04\u000f",
      "\u000eP37\u000f",
-     "5,92",
+     "6,63",
      "2 AL-2: 345 e 780 cm da base",
-     "29,6",
+     "33,1",
      "FI-1 a 70 cm do topo",
-     "4,2 MPa",
+     "4,7 MPa",
      "1,3"
     ],
     [
@@ -251,21 +251,21 @@
     [
      "\u000ePL-07\u000f",
      "\u000eP1\u000f",
-     "6,59",
+     "6,85",
      "2 AL-2: 330 e 780 cm da base",
-     "33,0",
+     "34,2",
      "FI-1 a 70 cm do topo",
-     "4,6 MPa",
+     "4,8 MPa",
      "1,3"
     ],
     [
      "\u000ePL-08\u000f",
      "\u000eP12\u000f",
-     "6,37",
+     "6,63",
      "2 AL-2: 345 e 780 cm da base",
-     "31,9",
+     "33,1",
      "FI-1 a 70 cm do topo",
-     "4,5 MPa",
+     "4,7 MPa",
      "1,3"
     ],
     [
@@ -509,18 +509,18 @@
    ],
    "linhas": [
     [
-     "PLACAS PP (maior)",
-     "3,23",
+     "\u000ePLACAS — maior: PP-01\u000f",
+     "3,17",
      "4 IZ-1 na face interna, 0,104 L e 0,396 L de cada ponta, meia altura; balancim duplo (cargas iguais), cabos a prumo",
-     "7,9 (Pd 10,3 ≤ 23,8)",
+     "Pk 7,9; Pd = βa·Pk = 10,3 ≤ 23,8",
      "IZ-1 (inserto de içamento) + balancim duplo",
      "1,3"
     ],
     [
-     "LAJE ALVEOLAR (maior)",
-     "3,41",
+     "\u000eLAJE ALVEOLAR — maior: LA-01\u000f",
+     "3,34",
      "2 garras a 0,30 m das pontas",
-     "Fd 28,3 por garra",
+     "Fd = γf·βa·P/2 = 28,2 por garra",
      "garra mecânica; fcj ≥ 30 MPa",
      "1,3"
     ],

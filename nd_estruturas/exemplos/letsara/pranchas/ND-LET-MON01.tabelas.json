@@ -7,7 +7,7 @@
   "conteudo": "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I120, VB-01 A VB-08 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
   "desenho": "ND-LET-MON01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -41,9 +41,9 @@
     ],
     [
      "PL-03, PL-04, PL-07, PL-08",
-     "Pilar 40×60 de canto (L1, L9), cabeça recuada",
+     "Pilar 40×60 de canto (L1, L9), seção cheia até o topo",
      "4",
-     "5,9 a 6,6",
+     "6,6 a 6,8",
      "cálice −1,00; topo +10,00"
     ],
     [

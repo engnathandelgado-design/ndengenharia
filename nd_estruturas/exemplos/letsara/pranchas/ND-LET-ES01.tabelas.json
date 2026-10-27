@@ -7,7 +7,7 @@
   "conteudo": "ESCADA METÁLICA INTERNA DO MEZANINO (TÉRREO → +3,95) — PLANTAS, CORTE, LIGAÇÕES PARAFUSADAS E LISTA DE MATERIAL",
   "desenho": "ND-LET-ES01",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -16,7 +16,7 @@
  },
  "tabelas": [
   {
-   "titulo": "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)",
+   "titulo": "LISTA DE MATERIAL — ESCADA INTERNA",
    "cab": [
     "ITEM",
     "DESCRIÇÃO",

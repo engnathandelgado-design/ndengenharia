@@ -7,7 +7,7 @@
   "conteudo": "PLACAS DE FECHAMENTO PROTENDIDAS — VISTAS E E F: PRODUÇÃO E MONTAGEM EM SEQUÊNCIA",
   "desenho": "ND-LET-PP-EF",
   "rev": "12",
-  "data": "26/10/2026",
+  "data": "27/10/2026",
   "folha": "05/08",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
@@ -43,7 +43,7 @@
      "1005,5",
      "+8,75",
      "3,14",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "3",
@@ -61,7 +61,7 @@
      "1005,5",
      "+8,75",
      "3,14",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "1",
@@ -79,7 +79,7 @@
      "1005,5",
      "+8,75",
      "3,14",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ],
     [
      "3",
@@ -97,7 +97,7 @@
      "1005,5",
      "+8,75",
      "3,14",
-     "2 consoles CS-1 + 2 PT-2 (pé)"
+     "2 consoles CS-1 + 2 PT-1 (guia)"
     ]
    ]
   },
