@@ -81,3 +81,35 @@ def pilares():
 
 def secao_txt(R):
     return R["secao"] + (f", {R['cabeca']}" if R["cabeca"] else "")
+
+
+# ------------------------------------------------------------------ valores únicos de projeto (rev12, item 11): uma fonte só
+_AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
+_LG = json.load(open(_AQ + "ligacoes.json", encoding="utf-8"))
+_PJ = json.load(open(_AQ + "portao_l4.json", encoding="utf-8"))
+_VMJ = json.load(open(_AQ + "vm_retangular.json", encoding="utf-8"))["premissas"]
+import sys as _sys
+_sys.path.insert(0, _AQ)
+from geometria import X_EIXO as _XE
+FOLGAS_MM = {                                                       # folgas de montagem na geometria do modelo (modelo_bim / lig.)
+    "TS-01 no pilar lateral": round(_LG["X_PONTA_ESQ"] * 1000),
+    "TS-01 entre as pontas no eixo C": round(2 * (_XE["C"] - _LG["X_PONTA_CEN"]) * 1000),
+    "I120 no pilar": 75,                                            # modelo_bim: ponta a 0,075 da face (y0 = ya + meia + 0,075)
+    "VB no pilar": 25,
+    "VM no pilar (junta grauteada)": round(_VMJ["folga_m"] * 1000),
+    "placas: junta vertical": 20, "placas: altura": 5,
+}
+PORTAO = dict(larg_m=min(_PJ["vao_livre_portoes_m"].values()), livre_ate=7.50)   # portões 500 × 750: livres até +7,50 (PG apoiam a TS-01A)
+ESCADA_CHEGADA = 3.95                                               # piso pronto do 1º pavimento (DEC-055): chegada da escada
+
+
+def f1(v, d=2):
+    return f"{v:.{d}f}".replace(".", ",")
+
+
+def folgas_txt():
+    return "; ".join(f"{k} {f1(v / 10, 1).replace(',0', '')} cm" for k, v in FOLGAS_MM.items())
+
+
+def portao_txt():
+    return f"portões {PORTAO['larg_m'] * 100:.0f} × {PORTAO['livre_ate'] * 100:.0f} livres até +{f1(PORTAO['livre_ate'])}"

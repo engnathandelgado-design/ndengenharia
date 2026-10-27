@@ -103,8 +103,8 @@ def _renomear(s):
 
     def rep(m):
         k = m.group(1)
-        if k == "TS-01" and not inteiro:                   # na prosa "TS-01" é a família inteira das vigas de cobertura
-            return "vigas de cobertura TS-01"
+        if k == "TS-01" and not inteiro:                   # rev12 (item 24): na prosa "TS-01" é a marca da família (fica como está)
+            return "TS-01"
         if k in ("P1", "P2") and not inteiro:              # R01: P1/P2 sozinhos = pilares laterais dos eixos A/E
             return "pilares do eixo " + ("A" if k == "P1" else "E")
         return lista(CHAVES[k])
@@ -139,10 +139,7 @@ def _renomear(s):
     s2 = re.sub(rf"(?<![\w-])({RF}(?:\s*/\s*{RF})*) ({MK})(?![\w-])", ref_mk, s2)
     s2 = re.sub(r"(?<![\w-])VB-0(\d) a (?:VB-)?0(\d)", lambda m: guarda(lista([n for k in range(int(m.group(1)), int(m.group(2)) + 1) for n in M2N.get(f"VB-0{k}", [])])), s2)
     s2 = re.sub(r"(?<![\w-])VB-0(\d) A (?:VB-)?0(\d)", lambda m: guarda(lista([n for k in range(int(m.group(1)), int(m.group(2)) + 1) for n in M2N.get(f"VB-0{k}", [])])), s2)
-    s2 = re.sub(r"assento (?:da |das )?TS-01(?![\w-])", lambda m: "assento da " + guarda("viga de cobertura TS-01"), s2)
     # "TS-01" na prosa = a família das vigas de cobertura (cada peça tem o seu nome na planta e na folha das vigas)
-    s2 = re.sub(r"(?<![\w-])(d|n)?(as|os) TS-01(?![\w-])", lambda m: (m.group(1) or "") + m.group(2) + " " + guarda("vigas de cobertura TS-01"), s2)
-    s2 = re.sub(r"(?<![\w-])(d|n)?(a|o) TS-01(?![\w-])", lambda m: (m.group(1) or "") + m.group(2) + " " + guarda("viga de cobertura TS-01"), s2)
     s2 = re.sub(r"(?<![\w-])(d|n|a)o (P[12])(?![\w\s]*L\d)(?![\w])", lambda m: f"{m.group(1)}os {guarda('pilares do eixo ' + ('A' if m.group(2) == 'P1' else 'E'))}", s2)
     t = _pat.sub(rep, s2)
     for _ in range(3):                                                    # marcadores podem estar aninhados
@@ -176,9 +173,26 @@ _RX_NATHAN = [
 ]
 
 
+_RX_ARQ = [                                                              # rev12 (revisão rev12, item 12): nomes de arquivo/script e revisões internas
+    (re.compile(r"\s*\((?:memória |verificação |lista |cálculo )?[\w./-]+\.(?:json|py)\b[^()]*\)"), ""),
+    (re.compile(r"(?:memória |verificação |lista |cálculo )?\b[\w-]+\.(?:json|py)\b(?:\s*[:,;]\s*)?"), ""),
+    (re.compile(r"\b(modelo (?:global |integrado )?)r0\d\b"), r"\1"),
+    (re.compile(r"\s*[—–-]?\s*\(?\b(?:PEDIDO|DECISÃO|REGRA|OPÇÃO [A-Z]) DO NATHAN\b\)?", re.I), ""),
+    (re.compile(r"\s*\(NATHAN[^()]*\)"), ""),
+]
+
+
 def limpar_interno(s):
-    """rev12 (checklist 10): folha do cliente sem nota interna da ND — sem "DEC-0xx" nem "decisão/pedido/regra do Nathan"."""
-    if not isinstance(s, str) or ("DEC-" not in s and "Nathan" not in s):
+    """rev12 (checklist 10): folha do cliente sem nota interna da ND — sem "DEC-0xx", "decisão/pedido/regra do Nathan",
+    nome de arquivo (.json/.py) nem revisão interna do modelo (r05)."""
+    if not isinstance(s, str):
+        return s
+    if re.search(r"\.(?:json|py)\b|NATHAN|\br0\d\b", s):
+        for rx, rep in _RX_ARQ:
+            s = rx.sub(rep, s)
+        s = re.sub(r"\(\s*\)", "", s)
+        s = re.sub(r"[ \t]{2,}", " ", s)
+    if "DEC-" not in s and "Nathan" not in s:
         return s
     s = s.replace("Nathan Henrique Delgado", "\x05RT\x05")                 # nome do responsável técnico (carimbo) fica
     for rx, rep in _RX_NATHAN:
@@ -187,7 +201,8 @@ def limpar_interno(s):
     return s.strip() if s.strip() else s
 
 
-_RX_DEC = re.compile(r"(?<![\d.:/])(\d+)\.(\d+)(?=\s?(?:cm|mm|m³|m²|MPa|kN|kg|t\b|m\b|%))")
+# rev12 (revisão rev12, item 28): "8.014 kg", "1.303 t", "10.118 m" com 1–3 algarismos e grupo de 3 = PONTO DE MILHAR (não vira vírgula)
+_RX_DEC = re.compile(r"(?<![\d.:/])(?!\d{1,3}\.\d{3}(?![\d.,])\s?(?:kg|t\b|m\b)(?!³|²))(\d+)\.(\d+)(?=\s?(?:cm|mm|m³|m²|MPa|kN|kg|t\b|m\b|%))")
 _RX_DEC2 = re.compile(r"(\d)\s?×\s?(\d+)\.(\d+)\b")
 
 

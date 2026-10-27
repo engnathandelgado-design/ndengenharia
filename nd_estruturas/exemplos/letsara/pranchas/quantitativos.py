@@ -361,7 +361,7 @@ def gerar_xlsx(SAIDA=SAIDA):
         q = int(l[1]); kg = l[4]
         linha(ws, r, [l[0], f"{l[2]} — {l[5]} (comp. {l[3]})", q, round(num(kg) / q, 2) if kg not in ("-", "") else 0, f"=C{r}*D{r}", "ND-LET-COB02"],
               {4: "0.00", 5: "#,##0"}, entrada=(3, 4)); r += 1
-    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)"), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS")):   # rev09 (DEC-045/048/053)
+    for f_, tit_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2"), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA"), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS")):   # rev09 (DEC-045/048/053)
         for l in tab(f_, tit_)["linhas"]:
             if not l[0] or l[-1] in ("-", ""):
                 continue
@@ -557,7 +557,7 @@ def listas_pdf(caminho):
     E.append(Spacer(1, 4))
     t2 = tab("COB02", "LISTA DE MATERIAIS")
     E.append(tb([t2["cab"]] + t2["linhas"], [16, 14, 30, 30, 16, 150]))
-    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA (escadas_detalhe.py)", [20, 180, 16, 22]), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", [20, 180, 16, 22])):
+    for f_, tit_, w_ in (("COB05", "LISTA DE MATERIAL — COBERTURA DA LINHA 2", [22, 150, 16, 20, 22]), ("ES01", "LISTA DE MATERIAL — ESCADA INTERNA", [20, 180, 16, 22]), ("ES02", "LISTA DE MATERIAL — ESCADA EXTERNA E OMBREIRAS", [20, 180, 16, 22])):
         t3 = tab(f_, tit_)
         E += [Spacer(1, 6), Paragraph(f"{tit_.capitalize()} — ND-LET-{f_}", T2)]
         E.append(tb([t3["cab"]] + t3["linhas"], w_))

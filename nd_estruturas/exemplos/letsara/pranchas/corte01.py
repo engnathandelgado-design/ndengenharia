@@ -7,6 +7,7 @@ def nivel(v, x, z, txt, lado=1):
     v.texto((x + lado * 650, z + 80), txt, "nota", alinh="BOTTOM_LEFT" if lado > 0 else "BOTTOM_RIGHT")
 
 
+import registro as REG1
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="CORTES TRANSVERSAIS DA ESTRUTURA — EIXOS 2 E 3",
                         desenho="ND-LET-CT01", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
@@ -87,7 +88,7 @@ notas = ["Cortes gerados do mesmo modelo usado na checagem das ligações.",
          f"TS-01 com {LG['L_TS']:.3f} m entre pontas (a prumo), sem dentes: apoio de 27,5 cm no recuo dos pilares laterais (NEO-4 + 2 PN-3 Ø25) e de 16,25 cm no topo da I120 / pilar central (NEO-3 + 2 PN-5 Ø20); terças c/{LG['passo_tercas']:.3f} m.".replace(".", ","),
          "Cabeça dos pilares laterais recuada acima do assento da TS-01: só os 30 cm externos sobem até +10,00 (consolos externos pela cabeça).",
          "Vigas centrais I120 (h 120, DEC-054) com dentes 78 × 35 nos consolos CP-I120 com mísula; vigas do mezanino VM retangulares 30 × 75 protendidas com dente Gerber nos consolos CP-MEZ (fundo alinhado; rev09, ND-LET-VM01). Eixo 2: sem TS-01 — W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes W 150 no meio dos vãos sobre as VM do +7,30 (DEC-052).",
-         f"Pé-direito (rev03): fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C); na laje superior (+7,30, laje de cobertura do bloco, acesso apenas para manutenção), fundo das terças entre as linhas 1 e 2 de {f((REC[0] + 900 + 10) / 1000)} (eixo A) a {f((Z_TOP_C + 10) / 1000)} (eixo C) Portões da linha 4 livres até +7,40.",
+         f"Pé-direito (rev03): fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C); na laje superior (+7,30, laje de cobertura do bloco, acesso apenas para manutenção), fundo das terças entre as linhas 1 e 2 de {f((REC[0] + 900 + 10) / 1000)} (eixo A) a {f((Z_TOP_C + 10) / 1000)} (eixo C) " + REG1.portao_txt().capitalize() + " (os PG apoiam a TS-01A).",
          "Detalhes de cada apoio na montagem: ND-LET-CT04. Corte do mezanino: ND-LET-CT02. Corte longitudinal: ND-LET-CT03.",
          "Cotas em cm, níveis em m. Fundações e cálices em projeto próprio. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)

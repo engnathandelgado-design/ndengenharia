@@ -14,7 +14,7 @@ R = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/aca
 S = AC.secoes()
 pr = Prancha("A0", cabecalho("ND-LET-COB04", "04/04", "COBERTURA — ACABAMENTOS DE FUNILARIA (FEITOS NA OBRA): BEIRAIS, ENCOSTOS, PLATIBANDA E RUFOS"))
 pr.revisao("06", "18/10/2026", "EMISSÃO: ACABAMENTOS DA COBERTURA CONFORME O MANUAL DA TELHA (P. 28 A 46)")
-pr.revisao("11", "26/10/2026", "ACABAMENTOS (RUFOS, CONTRA-RUFOS, PINGADEIRAS, CAPAS) FEITOS POR FUNILEIRO NA OBRA — NÃO SÃO DE CATÁLOGO (NATHAN)")
+pr.revisao("11", "26/10/2026", "ACABAMENTOS (RUFOS, CONTRA-RUFOS, PINGADEIRAS, CAPAS) FEITOS POR FUNILEIRO NA OBRA — NÃO SÃO DE CATÁLOGO")
 Q = pr.quadro
 XC = Q[2] - 250
 C45 = math.cos(math.radians(45))

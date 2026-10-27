@@ -31,6 +31,14 @@
      "29 / 29 cm"
     ],
     [
+     "POSIÇÃO NA FACE",
+     "rente à face externa (fachada): eixo do consolo a 12,5 cm do eixo da face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
+    ],
+    [
      "PINO",
      "PN-6 Ø20 L 700 (emb. 300, livre 400, a 135 da face)"
     ],
@@ -51,8 +59,8 @@
      "4 consolos"
     ],
     [
-     "PILARES",
-     "P29, P37, P1, P12"
+     "PILARES (consolos)",
+     "\u000eP29 (1), P37 (1), P1 (1), P12 (1)\u000f"
     ]
    ]
   },
@@ -70,6 +78,14 @@
     [
      "ALTURA FACE / PONTA",
      "29 / 29 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "rente à face C (externa, placas): eixo do consolo a 22,5 cm do eixo da face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
     ],
     [
      "PINO",
@@ -92,8 +108,8 @@
      "12 consolos"
     ],
     [
-     "PILARES",
-     "P25, P17, P13, P28, P24, P16"
+     "PILARES (consolos)",
+     "\u000eP25 (2), P17 (2), P13 (2), P28 (2), P24 (2), P16 (2)\u000f"
     ]
    ]
   },
@@ -111,6 +127,14 @@
     [
      "ALTURA FACE / PONTA",
      "27,9 / 27,9 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "centrado na face"
+    ],
+    [
+     "TOPO",
+     "caimento 3 %"
     ],
     [
      "PINO",
@@ -133,8 +157,8 @@
      "17 consolos"
     ],
     [
-     "PILARES",
-     "P3, P2, P5, P18, P26, P14"
+     "PILARES (consolos)",
+     "\u000eP3 (1), P2 (1), P5 (3), P18 (4), P26 (4), P14 (4)\u000f"
     ]
    ]
   },
@@ -152,6 +176,14 @@
     [
      "ALTURA FACE / PONTA",
      "27,9 / 27,9 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "centrado na face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
     ],
     [
      "PINO",
@@ -174,8 +206,8 @@
      "19 consolos"
     ],
     [
-     "PILARES",
-     "P30, P29, P4, P1, P25, P17, P13"
+     "PILARES (consolos)",
+     "\u000eP30 (2), P29 (2), P4 (1), P1 (2), P25 (4), P17 (4), P13 (4)\u000f"
     ]
    ]
   },
@@ -195,6 +227,14 @@
      "49 / 39 cm"
     ],
     [
+     "POSIÇÃO NA FACE",
+     "centrado na face"
+    ],
+    [
+     "TOPO",
+     "caimento 3 %"
+    ],
+    [
      "PINO",
      "PN-2 Ø25 L 900 (emb. 350, livre 550, a 200 da face)"
     ],
@@ -212,11 +252,11 @@
     ],
     [
      "QUANTIDADE",
-     "5 consolos"
+     "7 consolos"
     ],
     [
-     "PILARES",
-     "P18, P20, P22, P23"
+     "PILARES (consolos)",
+     "\u000eP18 (1), P20 (2), P22 (2), P23 (2)\u000f"
     ]
    ]
   },
@@ -234,6 +274,14 @@
     [
      "ALTURA FACE / PONTA",
      "49 / 39 cm"
+    ],
+    [
+     "POSIÇÃO NA FACE",
+     "centrado na face"
+    ],
+    [
+     "TOPO",
+     "horizontal"
     ],
     [
      "PINO",
@@ -256,8 +304,8 @@
      "1 consolos"
     ],
     [
-     "PILARES",
-     "P24"
+     "PILARES (consolos)",
+     "\u000eP24 (1)\u000f"
     ]
    ]
   }

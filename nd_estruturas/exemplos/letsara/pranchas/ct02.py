@@ -30,6 +30,16 @@ f = lambda v, d=3: f"{v:+.{d}f}".replace(".", ",")
 fd = lambda v, d=1: f"{v:.{d}f}".replace(".", ",")
 M = lambda v: v * 1000
 
+# rev12 (revisão rev12, item 4): armadura ativa da LP20 lida do registro da laje (laje_alveolar.json, mesma fonte da LA01)
+from collections import Counter as _Cnt
+_px = _Cnt(round(c_["x_mm"]) for c_ in LAJ["cordoalhas"])
+_DS = sorted({c_["diam"] for c_ in LAJ["cordoalhas"]})
+assert all(d_ in ("12.7", "9.5") for d_ in _DS), _DS                   # regra ND: sem Ø15,2 em laje alveolar
+_NB = max(_px.values())
+_YS = sorted({c_["y_mm"] for c_ in LAJ["cordoalhas"]})
+CORD_TXT = (f"{LAJ['n_cord']} Ø{_DS[0].replace('.', ',')} CP-190 RB por painel ({_NB} em cada nervura de borda, uma sobre a outra a "
+            f"{'/'.join(f'{y_ / 10:g}' for y_ in _YS)} cm do fundo; 1 em cada nervura interna)").replace(".", ",")
+CORD_CURTO = f"{LAJ['n_cord']} Ø{_DS[0].replace('.', ',')} CP-190 RB ({_NB} por nervura de borda)"
 NIV = [z * 1000 for z in Z_PISOS]                        # rev09: topo da capa do mezanino (+3,90 / +7,30)
 ASS = [float(z) for z in _G.Z_MEZ_ASS]                   # assentos dos CP-MEZ
 H_LA, H_CP, FITA = SEC["h"] * 1000, 50.0, 10.0           # laje 200, capa 50, fita 10
@@ -233,7 +243,7 @@ for n, za in zip(NIV, ASS):
 nivel(w, Y1 - O_PL - 80, 0, "±0,000", -1)
 w.chamada((Y1 + 50, ZTV[0] - HV / 2), (20, -10), f"VM retangular 30 × 75 protendida ({fd(PQ['VM-02'][7])} t)")
 w.chamada((Y2 - 50, ZTV[0] - HV / 2), (-20, -10), "VM 30 × 75 (2º estágio do lado da borda)")
-w.chamada((4800, ZTV[0] + FITA + 40), (10, -14), f"2 Ø15,2 + 5 Ø12,7 CP-190 RB, eixo a 4 cm do fundo (σpi {LAJ['sig_pi']:.0f} MPa)")
+w.chamada((4800, ZTV[0] + FITA + 40), (10, -14), f"{CORD_CURTO}, σpi {LAJ['sig_pi']:.0f} MPa")
 w.chamada((7400, ZTV[0] + FITA + H_LA / 2 + R_AL), (6, 14), "alvéolos tampados 20 cm nas pontas")
 w.chamada((2000, NIV[0]), (-6, 12), "capa 5 C30 + tela Q138")
 w.chamada((Y1 - 100, ZTV[1] + 120), (18, 18), "2º estágio C30 com a capa (obra)")
@@ -261,7 +271,7 @@ for c_ in x_al:
 for c in LAJ["cordoalhas"]:
     xn = xl + c["x_mm"] + B_LA / 2
     if xn < xl + LV - 20:
-        d.circulo((xn, FITA + 40), float(c["diam"]) / 2, "ARM_PROT_SECAO")
+        d.circulo((xn, FITA + c["y_mm"]), float(c["diam"]) / 2, "ARM_PROT_SECAO")   # rev12: altura de cada cordoalha do registro
 e2 = [(0, 0), (B2E, 0), (B2E, FITA + H_LA), (0, FITA + H_LA)]
 d.poli(e2, "VISTA", True); d.hachura(e2, "AR-CONC", 0.008)
 cap = [(0, FITA + H_LA), (xl + LV, FITA + H_LA), (xl + LV, FITA + H_LA + H_CP), (0, FITA + H_LA + H_CP)]
@@ -277,7 +287,7 @@ d.chamada((xl + 50, FITA / 2), (-60, 62), "fita de neoprene 10 × 100; apoio 10 
 d.chamada((B2E / 2, FITA + H_LA / 2), (-14, 14), "2º estágio C30, faixa de 18 cm (com a capa)")
 d.chamada((B2E - 15, -100), (-30, -40), "alças N9 Ø10 c/15 (saem 20 cm da VM)")
 d.chamada((xl + 400, FITA + H_LA + 25), (12, 14), "tela Q138 a meia altura da capa")
-d.chamada((xl + LAJ["cordoalhas"][4]["x_mm"] + B_LA / 2, FITA + 40), (8, -34), "Ø15,2 nas nervuras de borda, Ø12,7 nas internas, eixo a 4 cm")
+d.chamada((xl + LAJ["cordoalhas"][4]["x_mm"] + B_LA / 2, FITA + 40), (8, -34), f"{_NB} Ø12,7 nas nervuras de borda (eixos a {'/'.join(f'{y_ / 10:g}' for y_ in _YS)} cm), 1 nas internas".replace(".", ","))
 d.chamada((x_al[1], FITA + H_LA / 2 + R_AL), (10, 26), "LP20: alvéolos de 15,2 cm no passo 19,8; nervura de borda 5,15")
 d.chamada((BT / 2, -HV / 2 + 100), (22, -8), "VM 30 × 75 protendida (ND-LET-VM01)")
 nivel(d, xl + LV + 300, FITA + H_LA + H_CP, f"piso ({f(NIV[0] / 1000)} / {f(NIV[1] / 1000)})")
@@ -295,7 +305,7 @@ niv = [["Topo da capa = piso (capa 5 cm C30)", f"{f(NIV[0] / 1000)} / {f(NIV[1] 
        ["Fundo da VM e dos consolos", f"{f((ZTV[0] - HV) / 1000)} / {f((ZTV[1] - HV) / 1000)}"]]
 yy = pr.tabela(xt, ytop, "NÍVEIS DO MEZANINO (m)", ["ELEMENTO", "INFERIOR / SUPERIOR"], niv, [112, 68], h_lin=5.2)
 c39, c73 = CGM["piso_390"], CGM["laje_730"]
-notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos de 15,2 cm, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; 2 Ø15,2 + 5 Ø12,7 CP-190 RB por painel (uma por nervura), σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
+notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos de 15,2 cm, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; {CORD_TXT}, σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
          f"Cargas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m²; {f(NIV[0] / 1000, 2)}: revestimento {fd(c39['revestimento'])} e sobrecarga {fd(c39['sobrecarga'])} kN/m² (depósito); {f(NIV[1] / 1000, 2)} (laje de cobertura do bloco, acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {fd(c73['sobrecarga'])} + regularização/impermeabilização {fd(c73['revestimento'])} kN/m²; montagem sem escoramento com a capa fresca + 1,0 kN/m².",
          "VM-01 a VM-04 retangulares 30 × 75 protendidas (DEC-049), dente Gerber 45 × 40 nos consolos CP-MEZ 40 × 40 × 27,9 com NEO-5F 200 × 200; topo da VM = apoio da laje (ND-LET-VM01).",
          "Apoio da laje 10 cm no topo da VM sobre fita de neoprene 10 × 100 contínua, com folga de 2 cm até a faixa de 2º estágio; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",

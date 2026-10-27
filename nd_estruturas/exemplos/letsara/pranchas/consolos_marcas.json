@@ -1,5 +1,5 @@
 {
- "criterio": "C1, C2… por tipo (CP-VB, CP-MEZ, CP-I120) e depois altura/largura; iguais = mesma geometria, pino, neoprene e tirante",
+ "criterio": "C1, C2… por tipo (CP-VB, CP-MEZ, CP-I120) e depois altura, largura, caimento e posição na face; iguais = mesma geometria, posição, pino, neoprene e tirante",
  "por_chave": {
   "CP-VB|150|270|290|290|0|PN-6|20|700|300|135|(100, 100, 10)|2|12.5|125": "C1",
   "CP-VB|150|270|290|290|0|PN-6|20|700|300|135|(100, 100, 10)|2|12.5|225": "C2",
@@ -38,6 +38,12 @@
     "P1",
     "P12"
    ],
+   "por_pilar": {
+    "P29": 1,
+    "P37": 1,
+    "P1": 1,
+    "P12": 1
+   },
    "n": 4
   },
   {
@@ -73,6 +79,14 @@
     "P24",
     "P16"
    ],
+   "por_pilar": {
+    "P25": 2,
+    "P17": 2,
+    "P13": 2,
+    "P28": 2,
+    "P24": 2,
+    "P16": 2
+   },
    "n": 12
   },
   {
@@ -108,6 +122,14 @@
     "P26",
     "P14"
    ],
+   "por_pilar": {
+    "P3": 1,
+    "P2": 1,
+    "P5": 3,
+    "P18": 4,
+    "P26": 4,
+    "P14": 4
+   },
    "n": 17
   },
   {
@@ -145,6 +167,15 @@
     "P17",
     "P13"
    ],
+   "por_pilar": {
+    "P30": 2,
+    "P29": 2,
+    "P4": 1,
+    "P1": 2,
+    "P25": 4,
+    "P17": 4,
+    "P13": 4
+   },
    "n": 19
   },
   {
@@ -175,7 +206,13 @@
     "P22",
     "P23"
    ],
-   "n": 5
+   "por_pilar": {
+    "P18": 1,
+    "P20": 2,
+    "P22": 2,
+    "P23": 2
+   },
+   "n": 7
   },
   {
    "marca": "C6",
@@ -200,6 +237,9 @@
    "pilares": [
     "P24"
    ],
+   "por_pilar": {
+    "P24": 1
+   },
    "n": 1
   }
  ]

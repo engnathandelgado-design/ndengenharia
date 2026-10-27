@@ -161,9 +161,10 @@ def grupo(mks, desc, apoio):
     pz = fp(pesos[0]) if len(pesos) == 1 else f"{fp(pesos[0])} a {fp(pesos[-1])}"
     nome = ", ".join(mks)                                  # rev08: nome de cada peça por extenso (regra do Nathan)
     return [nome, desc, str(qt), pz, apoio]
-pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40×60 lateral (L3 a L8), L 1100, cabeça recuada", "cálice −1,00; topo +10,00"),
+import registro as REGm
+pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40×60 lateral (L3 a L8), L 1100, " + REGm.pilar("PL-01")["cabeca"], "cálice −1,00; topo +10,00"),
          grupo(["PL-02", "PL-06"], "Pilar 40×60 lateral c/ 2 CP-MEZ (L2)", "cálice −1,00; topo +10,00"),
-         grupo(["PL-03", "PL-04", "PL-07", "PL-08"], "Pilar 40×60 de canto (L1, L9), cabeça recuada", "cálice −1,00; topo +10,00"),
+         grupo(["PL-03", "PL-04", "PL-07", "PL-08"], "Pilar 40×60 de canto (L1, L9), " + REGm.pilar("PL-03")["cabeca"], "cálice −1,00; topo +10,00"),
          grupo(["PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06"], "Pilar 40×60 de fachada (1 e 9) c/ CP-VB", "cálice −1,00; topo +10,00"),
          grupo(["PC-01", "PC-02", "PC-03"], "P8A 40×60, P11 40×40, P13 e P13B 40×40 (eixo C)", f"cálice −1,00; topo +{f(Z_TC)}"),
          grupo(["PM-01", "PM-02"], "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 200", "ver ND-LET-MON02"),
@@ -186,8 +187,8 @@ seq = ["Ordem geral (decisão do Nathan, 21/10/2026): pilares → vigas → cobe
        "Parede G da linha 2 e, depois, W 200 × 15,0 da linha 2 (apoiada direto na cabeça dos pilares dos eixos A, B, C, D, \x0eP5\x0f e E com chapa CA-L2 e presilhas e nos 4 montantes W 150 × 13,0 sobre as VM do +7,30, módulos com emendas parafusadas — ND-LET-COB05), VB-01 a VB-04 da fachada 1, terças do vão 1–2 (ST-W e mão-francesa MF-1 em toda terça da linha 2) e por último as do vão 2–3, com o guindaste saindo pela abertura lateral.",
        "Fechamento externo pelo lado de fora (ND-LET-MON03): fachada I e anexo (H, J), E e F (fiadas altas), laterais B e D e fachada A."]
 y = pr.notas(XC, y - 4, seq, 200, titulo="SEQUÊNCIA DE MONTAGEM")
-notas = ["Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; prumo 10 mm em 10 m; consolo ±10 mm; folga de ponta 25 mm e de dente 25 mm já previstas.",
-         f"TS-01 só pode ser solta do guindaste com os pinos encaixados nos tubos TB-3 e a linha anterior travada; viga de {f(LG['L_TS'], 2)} m: içar pelas 4 alças com balancins.",
+notas = [f"Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; prumo 10 mm em 10 m; consolo ±10 mm. Folgas de montagem (geometria do modelo): {REGm.folgas_txt()}.",
+         f"Cada TS-01 só pode ser solta do guindaste com os pinos encaixados nos tubos TB-3 e a linha anterior travada; viga de {f(LG['L_TS'], 2)} m: içar pelas 4 alças com balancins.",
          f"Guindaste principal (pilares, I120, TS-01, VB, VM): autopropelido classe 90–100 t para a I120 V407 de {fp(PQ['V407'][7])} t a ~10–12 m de raio, dentro do pavilhão, sobre base compactada para as patolas (conferir a tabela de carga e o solo). Altura livre sob a cobertura montada: fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C) — nenhuma peça é içada por baixo da cobertura.",
          f"Plano de rigging (NBR 9062:2017 3.17 e 11) a cargo da montadora, com os pesos desta lista: posição do guindaste, raio, patolas e capacidade do solo. Transporte: I120 V407 com {f(PQ['V407'][4], 1)} m e TS-01 com 19,7 m exigem carreta extensível e autorização especial de trânsito; transportar apoiadas nos pontos das alças.",
          f"Cobertura escondida: topo dos painéis solares {LG['platibanda']['folga_P2_mm']} mm abaixo da platibanda +10,00 no eixo E (mínimo pedido 150 mm).",

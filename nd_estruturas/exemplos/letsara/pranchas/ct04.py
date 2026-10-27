@@ -20,6 +20,8 @@ Z0 = LG["Z0_TS"] * 1000
 zf = lambda x: Z0 + I3 * x                      # fundo da TS-01 (x global, mm)
 HV = 900 / C3
 
+import registro as REGc                                     # rev12 (item 15): folgas da geometria do modelo, uma fonte só
+FTS = REGc.FOLGAS_MM["TS-01 entre as pontas no eixo C"]
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                         conteudo="CORTES DE MONTAGEM DAS VIGAS — APOIOS COMO MONTADOS (TS-01, I120, VM, VB, LAJE ALVEOLAR)",
                         desenho="ND-LET-CT04", folha="01/01", fase="PARA APROVAÇÃO", rev="07"))
@@ -115,19 +117,19 @@ d.ret(0, ZT, 200, dg, "VISTA")
 d.interrupcao((-200, zbI + 300), (200, zbI + 300))
 for sg in (-1, 1):
     za_ = ZT + (dg if sg > 0 else 0)
-    xs = sg * 37.5
+    xs = sg * FTS / 2
     xb = sg * 700
-    zfb = za_ + 10 + sg * I3 * (abs(xb) - 37.5 - CUN)
+    zfb = za_ + 10 + sg * I3 * (abs(xb) - FTS / 2 - CUN)
     d.poli([(xs, za_ + 10), (xs + sg * CUN, za_ + 10), (xb, zfb), (xb, zfb + HV), (xs, za_ + 10 + HV)], "VISTA", True)
     d.interrupcao((xb, zfb), (xb, zfb + HV))
     neo(d, sg * 115 - 50, za_, 100, 10)
     pino(d, sg * 115, za_ - 300, za_ + 300, 20)
-d.cota_h([-200, -115, -37.5, 37.5, 115, 200], ZT, 8, total=False)
+d.cota_h([-200, -115, -FTS / 2, FTS / 2, 115, 200], ZT, 8, total=False)
 nivel(d, -700, ZT, f"topo I120 {f(ZT / 1000)} (lado A)", -1)
 nivel(d, 700, ZT + dg, f"{f((ZT + dg) / 1000)} (lado E)", 1)
 d.chamada((-115, ZT + 5), (-18, -16), "NEO-3 100×300×10 (apoio 16,25)")
 d.chamada((115, ZT - 200), (16, -16), "2 PN-5 Ø20 L=600 por TS-01")
-d.chamada((0, ZT + 400), (4, 18), "folga 7,5 entre as pontas")
+d.chamada((0, ZT + 400), (4, 18), f"folga {REGc.f1(FTS / 10, 1)} entre as pontas")
 
 # ------------------------------------------------------------------ 3. I120 no consolo CP-I120
 ZA = LG["Z_ASS_I120"] * 1000
@@ -140,7 +142,7 @@ zbv = ZT - 1300
 conc(d, [(-450, zbv - 300), (0, zbv - 300), (0, ZT + 200), (-450, ZT + 200)])
 d.interrupcao((-450, zbv - 300), (-450, ZT + 200))
 conc(d, [(0, ZA - hcp), (pcp, ZA - hcp), (pcp, ZA), (0, ZA)])
-u0 = 75
+u0 = REGc.FOLGAS_MM["I120 no pilar"]
 d.poli([(u0, ZT - hd), (u0 + ln, ZT - hd), (u0 + ln, zbv), (u0 + 1100, zbv), (u0 + 1100, ZT), (u0, ZT)], "VISTA", True)
 d.interrupcao((u0 + 1100, zbv), (u0 + 1100, ZT))
 neo(d, 100, ZA, 200, 31)
@@ -152,7 +154,7 @@ nivel(d, u0 + 1100, ZT + 0, f"topo {f(ZT / 1000)}", 1)
 d.chamada((200, ZA + 15), (14, 10), "NEO-2 300×200×31 fretado")
 d.chamada((200, ZA + 500), (14, 14), "PN-2 Ø25 L=900 (350 no consolo); graute numa ponta só")
 d.chamada((u0 + 800, zbv + 150), (-6, -22), "ponta maciça 1,40 m")
-d.chamada((u0 / 2, ZA + 400), (-14, 14), "folga 7,5")
+d.chamada((u0 / 2, ZA + 400), (-14, 14), f"folga {REGc.f1(u0 / 10, 1)}")
 
 # ------------------------------------------------------------------ 4. VM no CP-MEZ
 H_V, HDV, LNV, RCV = VMP["h_pm"] * 1000, VMP["dente"]["hd"] * 1000, VMP["dente"]["ln"] * 1000, VMP["dente"]["recorte"] * 1000
@@ -203,11 +205,11 @@ xb_ = 25 + VG.XP
 neo(d, xb_ - 50, zcv, 100, 10)
 pino(d, xb_, zcv - 300, zcv + 400, 20)
 d.ret(xb_ - 60, VG.H / VG.C - 60 + I3 * xb_, 120, 60, "OCULTA")
-d.cota_h([0, xb_, 25 + VG.LN, cv["proj_m"] * 1000], -400, -8, total=False)
+d.cota_h(sorted(set([0, xb_, cv["proj_m"] * 1000, 25 + VG.LN])), -400, -8, total=False)   # rev12 (item 31): cadeia crescente, sem cota negativa
 d.chamada((xb_, zcv + 5), (16, -14), "NEO-6 100×100×10")
 d.chamada((xb_, zcv + 350), (16, 14), "PN-6 Ø20 roscado L=700 + porca e contraporca")
 d.chamada((xb_, VG.H / VG.C - 30), (14, 10), "nicho 12×12×6 grauteado só numa ponta")
-d.chamada((12, zr + 100), (-14, 10), "folga 2,5")
+d.chamada((12, zr + 100), (-14, 10), f"folga {REGc.f1(REGc.FOLGAS_MM['VB no pilar'] / 10, 1)}")
 
 # ------------------------------------------------------------------ 6. laje alveolar sobre a VM (seção transversal da VM, 1:10)
 bt = VMP["b"] * 1000
@@ -239,7 +241,7 @@ d.chamada((ba + 50 + _x1 + _p, 100 + _r), (10, 22), "LP20 1245 × 200, 6 alvéol
 
 for i_ in range(6):
     foto(i_)
-notas = ["Apoios desenhados na posição montada, com as folgas reais (NBR 9062:2017 3.1): TS-01 2,5 cm da cabeça do pilar e 7,5 cm entre pontas no eixo C; I120 7,5 cm; VM 3 cm (junta grauteada); VB 2,5 cm.",
+notas = [f"Apoios desenhados na posição montada, com as folgas reais do modelo (NBR 9062:2017 3.1): {REGc.folgas_txt()}.",
          "Neoprenes: NEO-2 fretado 300×200×31 (I120); NEO-3 100×300×10 e NEO-4 200×300×10 (TS-01); NEO-5F 200×200×21 fretado (VM); NEO-6 100×100×10 (VB); fita 1 cm sob a laje alveolar.",
          "Pinos: grautear o tubo/nicho só depois do alinhamento e do nível conferidos; nas I120 e VB, graute numa ponta só (a outra livre para dilatar).",
          "VM (DEC-039): sem cantoneira antigiro — montar a VM, concretar as pontas dos dois lados (junta 3 cm VM × pilar, graute ou concreto fck ≥ 30 MPa, do recorte do dente ao topo; ND-LET-VM01 det. 2), aguardar fcj ≥ 20 MPa e só então montar as lajes.",

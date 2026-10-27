@@ -7,6 +7,7 @@ sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
 from geometria import Y_LIN, X_EIXO
 from familia_pl import marca_de
+import renomear as RN
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CG = json.load(open(AQ + "cargas_fundacao.json"))
@@ -14,6 +15,15 @@ P = CG["pilares"]
 t = lambda kn: f"{kn / 10:.1f}".replace(".", ",").replace("-0,0", "0,0")      # kN → tf (NBR 9062: g = 10)
 ESP = {"P8": "PM-01", "P8B": "PM-02", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P13B": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
        "P6E": "PE-01", "P7E": "PE-02", "P6-L2": "PE-03"}          # rev09 (DEC-045): pilares da escada e P6 da linha 2
+
+
+def nome_proj(nm):
+    """rev12 (revisão rev12, item 5): nome do PROJETO pela posição do pilar no modelo (o mesmo da LOC01), nunca o nome interno
+    do modelo de cálculo (P1C-L1…) nem o do R01; conferido pela trava de geometria."""
+    d = P[nm]
+    n = RN.pilar_em(d["x"], d["y"])
+    RN.conferir_pilar(n, f"CG01 {nm}", x=d["x"], y=d["y"])
+    return n
 
 
 def marca(nm):
@@ -72,7 +82,7 @@ for nm, d in P.items():
     v.poli(pts, "CORTADO", True); v.hachura(pts, "SOLID", 1)
     nk = d["G"]["N"] + d["Q"]["N"]
     e = d["ELU"]
-    lin_ = [(f"{marca(nm)} ({nm})", "nota"), (f"Nk {t(nk)}  (G {t(d['G']['N'])} + Q {t(d['Q']['N'])})", "min"),
+    lin_ = [(RN.N(f"{nome_proj(nm)} ({marca(nm)})"), "nota"), (f"Nk {t(nk)}  (G {t(d['G']['N'])} + Q {t(d['Q']['N'])})", "min"),
             (f"Nd {t(e['Nd_max'])} / {t(e['Nd_min'])}", "min"), (f"Mxd {t(e['Mxd_max'])} · Myd {t(e['Myd_max'])}", "min"),
             (f"Hd {t(e['Hd_max'])}", "min")]
     dx, al = (bx / 2 + 200, "BOTTOM_LEFT")
@@ -86,16 +96,16 @@ for nm, d in P.items():
         y0 = yp + by / 2 + 250 + DL * (len(lin_) - 1)
     if nm in ("P6E", "P7E", "P6-L2"):                                  # rev09: pilares do anexo/escada — rótulo à esquerda, para baixo
         dx, al = ((bx / 2 + 200, "BOTTOM_LEFT") if nm == "P7E" else (-bx / 2 - 200, "BOTTOM_RIGHT"))
-        y0 = yp - by / 2 - 300 if nm != "P6-L2" else yp + by / 2 + 250 + DL * (len(lin_) - 1)
+        y0 = yp - by / 2 - 300                                          # rev12 (item 26): P5 abaixo, sem sobrepor o rótulo do P2
     for k, (s_, h_) in enumerate(lin_):
         v.texto((xp + dx, y0 - k * DL), s_, h_, al)
 
 # ------------------------------------------------------------------ tabela completa
-ordem = sorted(P, key=lambda n: (marca(n)[:2] != "PL", marca(n)[:2] != "PF", marca(n)[:2] != "PC", marca(n)[:2] != "PM", marca(n), n))
+ordem = sorted(P, key=lambda n: int(nome_proj(n)[1:]))                       # rev12: na ordem dos nomes do projeto (P1 … P37)
 lin = []
 for nm in ordem:
     d = P[nm]; g, q, w, e = d["G"], d["Q"], d["V"], d["ELU"]
-    lin.append([nm, marca(nm), t(g["N"]), t(q["N"]), f"{t(w['N_min'])} / {t(w['N_max'])}", t(w["Mx_max"]), t(w["My_max"]), t(w["H_max"]),
+    lin.append([RN.N(nome_proj(nm)), marca(nm), t(g["N"]), t(q["N"]), f"{t(w['N_min'])} / {t(w['N_max'])}", t(w["Mx_max"]), t(w["My_max"]), t(w["H_max"]),
                 t(e["Nd_max"]), t(e["Nd_min"]), t(e["Mxd_max"]), t(e["Myd_max"]), t(e["Hd_max"])])
 cab = ["PILAR", "MARCA", "G: N", "Q: N", "V: N mín / máx", "V: Mx", "V: My", "V: H", "Nd máx", "Nd mín", "Mxd", "Myd", "Hd"]
 y = pr.tabela(35, 318, "CARGAS NA FUNDAÇÃO POR PILAR — CARACTERÍSTICAS POR AÇÃO E DE CÁLCULO (ELU) — tf e tf·m",
@@ -103,7 +113,7 @@ y = pr.tabela(35, 318, "CARGAS NA FUNDAÇÃO POR PILAR — CARACTERÍSTICAS POR 
 y_n = pr.notas(470, 318, [
     "Valores na base de cada pilar (topo do bloco/cálice, cota −1,00), do modelo global integrado da estrutura (OpenSeesPy, P-Δ, pilares com 0,4 Eci·Ic — NBR 9062:2017 Anexo A; cobertura, terças, correntes, contraventamento, vigas e mezanino com a laje como diafragma). Unidades: tf e tf·m, com 1 tf = 10 kN.",
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
-    "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
+    "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123:2023 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
     "De cálculo (ELU, NBR 8681 / 6118): 1,3 G + 1,4 V + 0,7·1,4 Q (sobrecarga secundária) e 1,0 G + 1,4 V (sucção, G favorável), com desaprumo H/400 (NBR 9062:2017 5.2.3); e 1,3 G + 1,4 Q. Nd mín negativo = tração de cálculo na fundação.",
     "Pilares PG-01 a PG-04 (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. PG-02 e PG-04: 25 × 40, eixo 7,5 cm para longe do portão (PENDÊNCIA: confirmar a locação com o arquitetônico/cliente).",
     "Pilares de canto (linhas 1 e 9, eixos A e E): eixo do pilar 10 cm para fora da linha (face externa alinhada à dos pilares de fachada). Cálice e bloco centrados no EIXO DO PILAR (ND-LET-LOC01), deslocados 10 cm em relação à linha; os valores da tabela são no eixo do pilar. Se o bloco ficar centrado na linha, somar o momento da excentricidade do quadro ao lado.",
@@ -112,9 +122,9 @@ y_n = pr.notas(470, 318, [
 # rev12 (opção D): quadro da excentricidade dos cantos em relação à linha (tf, tf·m)
 from geometria import DY_CANTO
 lin_c = []
-for nm in sorted([n for n in P if "C-L" in n]):
+for nm in sorted([n for n in P if "C-L" in n], key=lambda n: int(nome_proj(n)[1:])):
     d = P[nm]; nk = d["G"]["N"] + d["Q"]["N"]
-    lin_c.append([nm, marca(nm), f"{DY_CANTO * 100:g} cm para fora", t(nk), t(nk * DY_CANTO), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * DY_CANTO)])
+    lin_c.append([RN.N(nome_proj(nm)), marca(nm), f"{DY_CANTO * 100:g} cm para fora", t(nk), t(nk * DY_CANTO), t(d["ELU"]["Nd_max"]), t(d["ELU"]["Nd_max"] * DY_CANTO)])
 pr.tabela(470, y_n - 6, "PILARES DE CANTO — CÁLICE NO EIXO DO PILAR (10 cm FORA DA LINHA)",
           ["PILAR", "MARCA", "e (y)", "Nk (tf)", "Nk·e (tf·m)", "Nd máx (tf)", "Nd·e (tf·m)"], lin_c, [22, 18, 30, 18, 22, 22, 22], h_lin=4.6)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CG01")

@@ -15,7 +15,7 @@ R = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/aca
 S = AC.secoes()
 RUF = {r["marca"]: r for r in R["rufos"]}
 pr = Prancha("A1", cabecalho("ND-LET-COB06", "01/01", "COBERTURA — FUNILARIA DA OBRA: PERFIS DOBRADOS DOS RUFOS (ABAS, DOBRAS E LARGURA DE CORTE), CANTOS, EMENDAS E CONFERÊNCIA COM O MANUAL ISOESTE"))
-pr.revisao("11", "26/10/2026", "EMISSÃO: FUNILARIA EM GALVALUME #0,50 FEITA NA OBRA (NATHAN); PERFIS DOBRADOS COTADOS; CONFERÊNCIA COM O MANUAL ISOESTE")
+pr.revisao("11", "26/10/2026", "EMISSÃO: FUNILARIA EM GALVALUME #0,50 FEITA NA OBRA; PERFIS DOBRADOS COTADOS; CONFERÊNCIA COM O MANUAL ISOESTE")
 Q = pr.quadro
 ESP = 0.50                                                    # mm — galvalume #0,50 (definição do Nathan, 26/10/2026)
 KG_M2 = 7850 * ESP / 1000                                     # kg/m² de chapa

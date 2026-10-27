@@ -6,6 +6,8 @@ Sem tabela de verificação (regra do Nathan) e sem marca da ND nas imagens (o p
 Uso: python ng01.py"""
 import json, os, sys, glob
 sys.path.insert(0, "/home/claude/letsara/pranchas")
+import registro as REG
+sys.path.insert(0, "/home/claude/letsara/pranchas")
 import pymupdf
 from PIL import Image
 from prancha_nd import Prancha, Vista, ALTURAS
@@ -136,7 +138,7 @@ FOLG = {d["peca"].split(" —")[0]: d for d in NBR["folgas"]}
 
 MATERIAIS = [
     ["Pilares PL, PF, PC, PM, PG", PLQ["CONCRETO"], "—", "25", "armado (CA-50)", PLQ["COBRIMENTO"].replace(" (CAA II)", ""), "II"],
-    ["Viga TS-01 (I90 de cobertura)", "C50", TSQ["CONCRETO"].split("fckj ")[1], TSQ["CONCRETO"].split("fckj ")[1],
+    ["\x01Vigas de cobertura TS-01 (I90)", "C50", TSQ["CONCRETO"].split("fckj ")[1], TSQ["CONCRETO"].split("fckj ")[1],
      f"{ncord(TS_CORD)} Ø12,7 CP-190 RB — {TS_CORD[0][4]} kN", "3,0", "II"],
     ["Vigas I120 (V404, V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
      " / ".join(f"{k} {v['arranjo']['n_cord']}" for k, v in IJ.items()) + f" Ø12,7 — {f(IJ['V406']['arranjo']['F_macaco_kN'])} kN", "3,0", "II"],
@@ -157,7 +159,7 @@ NORMAS = ("NBR 9062:2017 (projeto e execução de estruturas de concreto pré-mo
 
 N_GERAIS = [
     "Estrutura pré-moldada do pavilhão Letsara: pilares engastados nos cálices, vigas articuladas (TS-01 de cobertura, I120 centrais, VB de borda, VM do mezanino), "
-    "lajes alveolares com capa nos pisos +3,90 (depósito, 5,0 kN/m²) e +7,30 (laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²), escada metálica do térreo ao +3,90 (ND-LET-ES01), cobertura da linha 2 metálica: W 200 × 15,0 nos pilares e em montantes W 150 × 13,0 sobre as VM do +7,30 (ND-LET-COB05), cobertura metálica Isoeste (telha zipada dupla com lã de rocha) sobre terças Z escondida na platibanda (+10,00) e fechamento lateral em placas protendidas 125 × 10 por fora dos pilares.",
+    "lajes alveolares com capa nos pisos +3,90 (depósito, 5,0 kN/m²) e +7,30 (laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m²), escada metálica do térreo ao piso pronto +" + REG.f1(REG.ESCADA_CHEGADA) + " (topo da capa +3,90; ND-LET-ES01), cobertura da linha 2 metálica: W 200 × 15,0 nos pilares e em montantes W 150 × 13,0 sobre as VM do +7,30 (ND-LET-COB05), cobertura metálica Isoeste (telha zipada dupla com lã de rocha) sobre terças Z escondida na platibanda (+10,00) e fechamento lateral em placas protendidas 125 × 10 por fora dos pilares.",
     f"Classificação: {NBR['classificacao']['tipo']}. Coeficientes adotados: γc {f(NBR['classificacao']['gama_c'])}, γs {f(NBR['classificacao']['gama_s'], 2)}, "
     f"γn {f(NBR['classificacao']['gama_n_permanente'])} (consolos com permanente preponderante) e {f(NBR['classificacao']['gama_n_outros'])} (demais) — NBR 9062:2017 7.3.1 e 8.1.",
     "Estabilidade global: pilares engastados na fundação, cobertura, terças, correntes e contraventamento em X junto aos oitões e o mezanino como diafragma rígido, num modelo global único "
@@ -171,19 +173,19 @@ N_CARGAS = [
     f"painéis solares {f(CC['paineis_solares'], 2)}, instalações {f(CC['instalacoes'], 2)}; sobrecarga {f(CC['sobrecarga'], 2)} (NBR 6120). Calha cheia na linha A.",
     f"Mezanino (kN/m²): laje alveolar {f(CL['g1'])}, capa e rejunte {f(CL['capa_rejunte'], 2)}, revestimento {f(CL['revestimento'])}, sobrecarga {f(CL['sobrecarga'])} (depósito); "
     f"montagem sem escoramento com {f(CL['montagem'])} kN/m² sobre a capa fresca.",
-    "Vento (NBR 6123): V0 = 45 m/s, S1 = 1,00, S2 categoria III classe C, S3 = 0,95; q(10 m) = 0,874 kN/m²; 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6).",
+    "Vento (NBR 6123:2023): V0 = 45 m/s, S1 = 1,00, S2 categoria III classe C, S3 = 0,95; q(10 m) = 0,874 kN/m²; 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6).",
     "Placas de fechamento: dimensionadas só pelo peso próprio, cada placa independente nos seus 2 consoles (decisão do responsável técnico, DEC-035); as fixações (consoles, nichos, chapas de espera, travas) "
     "foram calculadas com o vento.",
     "Não há ponte rolante. Combinações ELU (NBR 8681): 1,3 G + 1,4 V + 0,7·1,4 Q; 1,0 G + 1,4 V (sucção); 1,3 G + 1,4 Q. ELS pela NBR 6118 e NBR 9062:2017 5.4 (flechas Tab. 8 e 9; deslocamento horizontal Tab. 7).",
 ]
 
 N_MATERIAIS = [
-    "Aço passivo CA-50 (NBR 7480); telas soldadas CA-60 (Q92 nas pontas das placas, Q138 na capa). Barras até Ø20; dobramento pela NBR 6118:2023 9.4.6; ganchos de estribo 135° com 10Ø; sem emenda de barra nas peças.",
+    "Aço passivo CA-50 (NBR 7480); telas soldadas CA-60 (Q92 nas pontas das placas, Q138 na capa). Barras até Ø20, com as exceções registradas em cada folha (pinos PN-2 e PN-3 Ø25 dos apoios e armadura longitudinal N3 da I120); dobramento pela NBR 6118:2023 9.4.6; ganchos de estribo 135° com 10Ø; barras maiores que 12 m (barra da usina) com traspasse cotado na folha da peça (I120).",
     "Protensão: cordoalhas CP-190 RB Ø12,7 (NBR 7483) nas vigas e lajes; fios entalhados CP-175 RB Ø6 (NBR 7482) nas placas. Força no macaco, posição de cada cabo, isolamentos e alongamento em cada folha.",
     "Alças de içamento: laço de cordoalha Ø12,7 não engraxada, sem separar os fios (NBR 9062:2017 5.3.3) — proibido CA-25, CA-50 ou CA-60 em alça. Furo de içamento FI-1 dos pilares: tubo Ø60,3 × 3 perdido.",
     "Chaparia e insertos: ASTM A36 (chapas, pinos, cantoneiras) e A572-50 (consoles CS-1 e nichos NC-1), galvanizados a fogo depois da solda de fábrica (NBR 6323, ≥ 85 µm); solda na obra só nos CS-1 laterais "
     "(filete E70XX, inspeção visual 100 %, galvanização a frio). Parafusos 8.8 zincados ou galvanizados; nenhuma ligação soldada na cobertura.",
-    "Neoprenes (NEO-1 a NEO-6) e fitas de apoio: dimensões e furos conforme a folha de cada apoio (NBR 9062:2017 7.2.1.6). Graute não retrátil fck ≥ 30 MPa nos cálices, juntas e bainhas.",
+    "Neoprenes (um por apoio, marca e dimensões na tabela de insertos do pilar: NEO-2, NEO-3C, NEO-4, NEO-5F, NEO-6 e NEO-7) e fitas de apoio: dimensões e furos conforme a folha de cada apoio (NBR 9062:2017 7.2.1.6). Graute não retrátil fck ≥ 30 MPa nos cálices, juntas e bainhas.",
 ]
 
 N_PRODUCAO = [
@@ -200,7 +202,7 @@ N_PRODUCAO = [
 
 N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
-    "Folgas de projeto: TS-01 25 mm no pilar lateral e 19 mm no centro; I120 e VB 25 mm; VM 30 mm; placas 20 mm no comprimento (junta vertical no eixo do pilar) e 5 mm na altura. Apoios mínimos em cada folha.",
+    f"Folgas de montagem (geometria do modelo, as mesmas das folhas CT04 e MON01): {REG.folgas_txt()}. Apoios mínimos em cada folha.",
     "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I120 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 200 × 15,0 da linha 2 (na cabeça dos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
     "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",

@@ -359,7 +359,7 @@ notas = ["Tolerância de comprimento de projeto ±10 mm (mais apertada que a Tab
          "Estoque e transporte sobre 2 calços de madeira de 15 cm sob a mesa inferior, sem empilhamento.",
          f"Terças a cada {f(PASSO_T/10,1)} cm ({len(TER)} por viga). Esperas e barras roscadas A36, galvanizadas a fogo. Concreto em cm; aço em mm.",
          "TS-01A (as 2 peças da linha 4): igual à TS-01 + 6 insertos IT-P no fundo (s = 452,0 / 984,8 / 1517,7 cm, y = ±9,75 cm, entre as colunas de cordoalhas) para as cantoneiras CL-P dos pilares dos portões (ND-LET-PG01 a 04). DEC-059: a TS-01A APOIA nos PG-01 a PG-04 (neoprene NEO-7 + graute depois da montagem: contínua sobre os PG para g2 + q, Md− 86,5 ≤ 165,2 kN·m, topo comprimido sobre o PG); fundo no vão dos portões em +7,50; placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01).",
-         "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 200 × 15,0 com montantes W 150 × 13,0, ND-LET-COB05) — 12 peças: TS-01 nas linhas 3 e 5 a 8, TS-01A na linha 4.",
+         "rev09 (DEC-048): sem TS-01 na linha 2 (cobertura metálica W 200 × 15,0 com montantes W 150 × 13,0, ND-LET-COB05) — 12 peças: 10 da marca TS-01 (2 por linha nas linhas 3, 5, 6, 7 e 8) e 2 da marca TS-01A na linha 4.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(x0, y - 4, notas, 180)
 pr.posicoes_desenho.clear()
