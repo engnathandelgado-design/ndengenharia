@@ -214,8 +214,8 @@ PEND = [
     "Cobrimento 2,0 cm dos fios das placas exige controle de pré-fabricado (NBR 9062:2017 12.1.2) — confirmar com a fábrica.",
     "Lajes alveolares: protensão válida para a seção desenhada; se o fabricante extrudar outra seção, refazer a verificação.",
     "LA-01 / LA-01R (9 Ø12,7): CONFIRMAR COM A FÁBRICA que a extrusora aceita 2 cordoalhas na nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo) — não produzir antes da resposta.",
-    "Vigas de borda dos vãos de canto (VB-01, VB-04, VB-05, VB-08) e VM de borda da linha 1: alinhamento com a fachada em decisão (fresta até as placas).",
-    "Chapas CE-1 dos pilares PG-02 e PG-04 (face de 25 cm): solução em decisão — não produzir essas 12 chapas antes da resposta.",
+    "VM de borda da linha 1 nos vãos de canto (+3,90 e +7,30): com os pilares de canto 10 cm para fora, o apoio no CP-MEZ do canto está em decisão — não produzir as VM da linha 1, as lajes do vão 1–2 e os pilares de canto da linha 1 antes da resposta.",
+    "PG-02 e PG-04 25 × 40 com o eixo 7,5 cm para longe do portão (5,00 m livres face a face em cada portão): confirmar a locação com o arquitetônico/cliente.",
     "Vento: V0, S2 e S3 dependem do local da obra — confirmar junto com o local.",
 ]
 

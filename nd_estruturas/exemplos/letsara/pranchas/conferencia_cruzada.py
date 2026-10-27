@@ -202,6 +202,14 @@ for fl in ("ND-LET-LA01", "ND-LET-PR01", "ND-LET-NG01", "ND-LET-MON02"):
     dx = PR + fl + ".dxf"
     tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
     r("CONFIRMAR COM A FÁBRICA" in tx.upper() or "CONFIRMAR COM A FÁBRICA" in tx, "C18 pendência (extrusora LP20) sinalizada", fl, "ok" if "FÁBRICA" in tx.upper() else "sem a ressalva")
+# C21 (rev12, 27/10) pendências das decisões em aberto sinalizadas em todas as folhas afetadas
+for fl, chaves in (("ND-LET-VM01", ("PENDÊNCIA",)), ("ND-LET-LA01", ("PENDÊNCIA",)), ("ND-LET-PL03", ("PENDÊNCIA",)), ("ND-LET-PL07", ("PENDÊNCIA",)),
+                   ("ND-LET-PG02", ("PENDÊNCIA",)), ("ND-LET-PG04", ("PENDÊNCIA",)), ("ND-LET-LOC01", ("PENDÊNCIA",)),
+                   ("ND-LET-NG01", ("VM de borda da linha 1", "PG-02 e PG-04 25")), ("ND-LET-PR01", ("VM da linha 1", "PG-02/PG-04"))):
+    dx = PR + fl + ".dxf"
+    tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
+    falta = [c for c in chaves if c.upper() not in tx.upper().replace("\n", " ")]
+    r(not falta, "C21 pendência (VM da linha 1 no canto / locação dos PG-02/PG-04) sinalizada", fl, "ok" if not falta else f"sem: {falta}")
 # C19 MC, listas e quantitativos da mesma revisão das pranchas
 ENT = "/home/claude/letsara/entregas/"
 for arq in ("ND-LET-MC12-REV12-rev12.pdf", "ND-LET-LISTAS-rev12.pdf", "ND-LET-QUANTITATIVOS-rev12.xlsx"):

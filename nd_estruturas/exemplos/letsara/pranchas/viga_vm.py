@@ -243,6 +243,8 @@ notas = [
     "Içar pelas 2 alças AL-1 (cabos ≥ 45°); estocar sobre 2 calços sob as alças, pressão ≤ 0,3 fcj; transportar apoiada nos mesmos pontos, travada contra tombamento.",
     "Tolerâncias (NBR 9062:2017 5.2.2): comprimento ±15 mm, seção −5/+10 mm, linearidade ±L/1000, insertos ±15 mm, cordoalhas ±10 mm (resultante ±5); montagem: nível do apoio ±10 mm, planta ±10 mm. Folga de 3 cm na ponta.",
     "Cotas de concreto em cm, chaparia em mm. Armação e protensão na faixa de baixo desta folha."]
+notas.append("PENDÊNCIA (decisão em aberto): VM da linha 1 nos vãos A–B e D–E — o pilar de canto passou a ficar 10 cm para fora da linha "
+             "e o dente da VM no eixo fica 5 cm fora do CP-MEZ; não produzir as VM da linha 1 antes da resposta (ND-LET-NG01).")   # rev12
 y = pr.notas(XC, y - 4, notas, 190)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VM01")
 print("VM01", len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")

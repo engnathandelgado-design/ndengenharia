@@ -104,12 +104,13 @@ def espera(m, marca, x, y, zc, d, hef, sai, grupo=GE, grampo=False, porcas=True)
         caixa(m, "grampo U Ø10", x - 0.045, x + 0.045, y - 0.005, y + 0.005, zc - 0.20, zc - 0.19, grupo)
 
 
-def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, grampo=False, aba=0.150):
+def suporte_st(m, marca, xw, y, zc, lado=-1, esperas=(), d=0.016, hef=0.150, grampo=False, aba=0.150, dy_ch=0.0):
     """ST-1P / ST-1V / ST-1V-R / ST-1F: chapa dobrada 9,5 × 220 — aba vertical 290 contra a alma da terça (lado `lado` da
     alma) e aba horizontal 150 sobre o concreto, presa em `esperas` (x, y relativos à alma e ao eixo do apoio)."""
     t = 0.0095
-    caixa(m, marca, xw, xw + lado * t, y - 0.11, y + 0.11, zc, zc + 0.290, GM, obs="chapa dobrada 9,5 × 220 A36 galv., aba vertical 290")
-    caixa(m, marca, xw + lado * t, xw + lado * aba, y - 0.11, y + 0.11, zc, zc + t, GM, obs=f"aba horizontal {aba*1000:.0f}, oblongos")
+    yc = y + dy_ch                                  # rev12: ST-1V/ST-1V-R com a borda rente à ponta da terça (VB rente à face, placa a 15 mm)
+    caixa(m, marca, xw, xw + lado * t, yc - 0.11, yc + 0.11, zc, zc + 0.290, GM, obs="chapa dobrada 9,5 × 220 A36 galv., aba vertical 290")
+    caixa(m, marca, xw + lado * t, xw + lado * aba, yc - 0.11, yc + 0.11, zc, zc + t, GM, obs=f"aba horizontal {aba*1000:.0f}, oblongos")
     for dx, dy in esperas:
         espera(m, marca.split()[0].replace("ST-1P4", "ES-1").replace("ST-1P", "ES-1").replace("ST-1V-R", "ES-1R").replace("ST-1V", "ES-1V").replace("ST-1F", "ES-1F"),
                xw + dx, y + dy, zc, d, hef, 0.12 if d < 0.02 else 0.12, grampo=grampo)
@@ -330,9 +331,10 @@ def montar() -> ModeloBIM:
                     if ult_E:                                        # DEC-042: ST-1FL na face lateral do canto, 2 ES-1FL M20 horizontais (padrão Mitsubishi)
                         suporte_fl(m, f"ST-1FL (pilar de canto, eixo {j+1})", xw, y_canto_int(Y_LIN[j]), 1 if j == 0 else -1, zc)
                     elif j == n_v:                                   # eixo 9: ST-1V-R, 2 M20 hef 400 + grampo
-                        suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True)
+                        suporte_st(m, "ST-1V-R (VB eixo 9)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.020, hef=0.400, grampo=True,
+                                   dy_ch=-(0.110 - EXT_F))
                     else:
-                        suporte_st(m, "ST-1V (VB eixo 1)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.016, hef=0.150)
+                        suporte_st(m, "ST-1V (VB eixo 1)", xw, yl, zc, esperas=((-0.045, 0.0), (-0.105, 0.0)), d=0.016, hef=0.150, dy_ch=0.110 - EXT_F)
     # 22/10 (colisão): zonas ocupadas pelo concreto acima da cobertura junto às fachadas 1 e 9 —
     # cantos de seção cheia (|y − linha| ≤ 0,20, x < 0,31 / x > LARG − 0,31) e cabeças 40 × 30 dos pilares de fachada
     # (x = eixo ± 0,21; y entre a face externa e a face da cabeça, que fica no eixo da linha: ≤ 0,01 do eixo)
@@ -643,7 +645,10 @@ def montar() -> ModeloBIM:
     for yj, dd in ((FCH.PORTA_H[0] / 1000 - 0.020 - 0.0485, -1), (FCH.PORTA_H[1] / 1000 + 0.020, 1)):
         m.linear("pilar", "OM-2 ombreira interna U 152 × 12,2 (porta do 2º pav., vista H)", PerfilRetangular(0.152, 0.0485, "U 152 × 12,2"),
                  (-0.325 + 0.076, yj + 0.02425, 0.0125), (-0.325 + 0.076, yj + 0.02425, 5.0), GEX, material="aco")
-        caixa(m, "OM-2 chapa de base 12,5 × 200 × 200 + 4 chumbadores químicos M12", -0.325, -0.125, yj - 0.075, yj + 0.125, 0.0, 0.0125, GEX)
+        # rev12: placa da vista H 10 cm mais longa (canto deslocado) → pino PT-1 da fiada 0 em y ≈ 1,94; a chapa de base da OM-2 do lado
+        # da linha 2 fica para o lado da porta (y − 0,125 … + 0,075), livre do PT-1
+        _yb = (yj - 0.125, yj + 0.075) if dd > 0 else (yj - 0.075, yj + 0.125)
+        caixa(m, "OM-2 chapa de base 12,5 × 200 × 200 + 4 chumbadores químicos M12", -0.325, -0.125, _yb[0], _yb[1], 0.0, 0.0125, GEX)
         _yc = (yj - 0.10, yj) if dd < 0 else (yj + 0.0485, yj + 0.1485)   # console ao lado da ombreira (na aba), do lado da placa
         caixa(m, "OM-2 console L 102 × 102 × 9,5 (apoio da ponta da placa da fiada +3,75)", -0.325, -0.223, _yc[0], _yc[1], 3.75 - 0.0095, 3.75, GEX)
         # rev09d: OM-2 do lado do P28 travada no P28 em +4,30 e +4,90 (acima do PT-2 da fiada +3,75); a outra ombreira travada
@@ -808,9 +813,13 @@ def montar() -> ModeloBIM:
                             cx(c_ce + du - 0.008, c_ce + du + 0.008, ecal + tce, ecal + tce + 0.150, zce + dz - 0.008, zce + dz + 0.008, "CE-1 pino Ø16 × 150 c/ cabeça", GE)
             # pinos PT-1 (junta de baixo) ou travas de pé PT-2
             if pc["trava"] == "PT-1":
-                for xp in (pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"])):
+                for j_, xp in enumerate((pc["s0"] + FCH.X_PT(pc["L"]), pc["s1"] - FCH.X_PT(pc["L"]))):
                     u = xp / 1000
-                    cx(u - 0.04, u + 0.04, -0.025, 0.0113, z0p - 0.11, z0p + 0.11, "PT-1 cartola Trejor 6,3 × 80")
+                    if pc.get("pt1r", [False, False])[j_]:              # rev12: junta em frente à VB rente à face — chapa plana PT-1R
+                        cx(u - 0.04, u + 0.04, -0.025, -0.0187, z0p - 0.11, z0p + 0.11, "PT-1R chapa plana 6,3 × 80 × 220 (junta em frente à VB)")
+                        cx(u - 0.012, u + 0.012, -0.0187, -0.0057, z0p - 0.082, z0p - 0.058, "PT-1R cabeça M16 + arruela", GE)
+                    else:
+                        cx(u - 0.04, u + 0.04, -0.025, 0.0113, z0p - 0.11, z0p + 0.11, "PT-1 cartola Trejor 6,3 × 80")
                     for dz in (-0.07, 0.07):
                         cx(u - 0.008, u + 0.008, -0.095, -0.025, z0p + dz - 0.008, z0p + dz + 0.008, "TSA luva M16 hef 70", GE)
             for (xp, zp) in pc["pt2"]:

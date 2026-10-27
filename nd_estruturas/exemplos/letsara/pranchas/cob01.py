@@ -208,18 +208,19 @@ p.chamada((B_INF / 2, -A_TR + 20), (24, -6), f"ponta da terça da direita (−{A
 d = pr.vista("DETALHE 2", (150, 160), E10, titulo="DETALHE 2 — APOIO NA FACHADA: TERÇA SOBRE A VB (ST-1V)",
              subtitulo=f"elevação no plano da alma; terça passa {EXT_F} do eixo da VB; 4 M12 8.8, sem mão-francesa")
 d.ret(-75, -600, 150, 600, "CORTADO"); d.hachura([(-75, -600), (75, -600), (75, 0), (-75, 0)], "AR-CONC", 0.03)
-d.ret(-ST1["larg"] / 2, 0, ST1["larg"], ST1["h"], "OCULTA")
+d.ret(-EXT_F, 0, ST1["larg"], ST1["h"], "OCULTA")                      # rev12: chapa rente à ponta da terça (VB rente à face, placa a 15 mm)
 d.poli([(-EXT_F, Z_TERCA), (700, Z_TERCA), (700, Z_TERCA + H_TERCA), (-EXT_F, Z_TERCA + H_TERCA)], "METALICA", True)
 d.interrupcao((700, Z_TERCA), (700, Z_TERCA + H_TERCA), "METALICA")
 for yy in (-Y_COL, Y_COL):
     for z in ZB:
         d.circulo((yy, z), 7, "METALICA"); d.circulo((yy, z), 10.5, "METALICA")
 d.eixo((0, -600), (0, Z_TERCA + H_TERCA + 60), 0)
-d.cota_h([-EXT_F, -Y_COL, 0, Y_COL, ST1["larg"] / 2], Z_TERCA + H_TERCA + 30, 8, total=False)
+d.cota_h([-EXT_F, -Y_COL, 0, Y_COL, ST1["larg"] - EXT_F], Z_TERCA + H_TERCA + 30, 8, total=False)
 d.cota_h([-75, 75], -600, -8, total=False)
 d.cota_v([0, ZB[0], ZB[1], Z_TERCA + H_TERCA], 700, 10, total=False)
 d.chamada((Y_COL, ZB[1]), (20, 14), "4 M12 8.8 (2 colunas a ±60)")
-d.chamada((ST1["larg"] / 2 - 10, 230), (16, 27), "ST-1V 9,5×220×290 nas 2 ES-1V (eixo da VB)")
+d.chamada((ST1["larg"] - EXT_F - 10, 230), (16, 27), f"ST-1V 9,5×220×290: borda rente à ponta da terça, ES-1V no eixo da VB")
+d.chamada((-EXT_F, Z_TERCA + H_TERCA - 20), (-16, 10), "placa de fechamento a 15 da ponta (face do pilar + 25)")
 d.chamada((0, -300), (16, -6), "VB 15×60 (fachadas 1 e 9)")
 d.chamada((-45, -450), (16, -10), "eixo 9 (ST-1V-R): 2 ES-1R M20 hef 400 + grampo U Ø10 em cada")
 d.marcador_corte((-EXT_F - 60, 120), (-EXT_F - 60, 260), "B", lado=-1)

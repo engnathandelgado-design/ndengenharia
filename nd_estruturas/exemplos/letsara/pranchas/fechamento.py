@@ -52,6 +52,44 @@ REC_VISTAS = ("G", "C")
 CALCO = {("G", 0): 100, ("G", 4): 100, ("C", 2): 75, ("C", 4): 75}
 CALCO_MARCA = {100: "CS-1C", 75: "CS-1D"}
 X_PT = lambda L: round(0.21 * L + 150)                  # pinos PT-1: 15 cm para dentro de cada alça AL-P
+# rev12 (opção D / fresta B): nas fachadas 1 e 9 (vistas A e I) a VB fica rente à face dos pilares, 25 mm atrás da placa — a cartola
+# do PT-1 (36 mm) não cabe: na junta em frente à VB (faixa z da VB ± 110) o pino é a PT-1R, chapa plana 6,3 × 80 × 220 com o M16
+# de cabeça (≈ 19 mm na frente da placa, 6 mm até a VB)
+_LG0 = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/ligacoes.json"))["Z0_TS"]
+Z_VB = lambda x_mm: (round((_LG0 + 0.03 * x_mm / 1000 + 0.30) * 1000), round((_LG0 + 0.03 * x_mm / 1000 + 0.90) * 1000))
+def _faixas_canto(V, lado):
+    """faixas z (mm) ocupadas na face lateral do pilar de canto, junto à face externa (consolos CP-MEZ das VM da linha 1 e CP-VB + VB)."""
+    out = []
+    if V == "I":
+        _vm = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json"))["premissas"]
+        from geometria import Z_PISOS as _ZP
+        for zp_ in _ZP:
+            zb_ = zp_ - 0.25 - 0.01 - _vm["h_pm"]
+            out.append((round(zb_ * 1000), round((zb_ + _vm["dente"]["consolo_h"]) * 1000)))
+    xf_ = 300 if lado == 0 else round(LARG * 1000) - 300
+    out.append((Z_VB(xf_)[0], Z_VB(xf_)[1] + 10))
+    return out
+
+
+def z_pt2(V, canto, z0):
+    """rev12: cota da trava de pé PT-2 (L 150 de altura): 150 acima da base; no pilar de canto das vistas A e I, a primeira cota
+    livre das faixas dos consolos / VB (folga 20 mm)."""
+    z = z0 + 150
+    if canto is None or V not in ("A", "I"):
+        return z
+    for _ in range(20):
+        hit = [(a, b) for a, b in _faixas_canto(V, canto) if z - 75 < b + 20 and z + 75 > a - 20]
+        if not hit:
+            return z
+        z = max(b for _, b in hit) + 20 + 75
+    return z
+
+
+def pt1_r(V, xp, z0):
+    if V not in ("A", "I"):
+        return False
+    za, zb = Z_VB(xp)
+    return za - 110 < z0 < zb + 110
 Z_TOPO = 10000
 Z_VT0, Z_VT1, Z_ASS_VT = 7500, 8100, 7790              # VT 25×60 do eixo E atrás da fiada +7,50/+8,75; dente 30×20 → assento do CP-VT
 Z_VT_A = (6250, 6850, 6540)                             # rev03: VT do eixo A rebaixada (CP-VT abaixo do recuo +7,19), atrás da fiada +6,25/+7,50
@@ -73,7 +111,8 @@ CLIENTE = "MARQUES ENGENHARIA E CONSTRUÇÕES"
 
 
 def eixos_lat(i0, i1):
-    return [(M(Y_LIN[i]), 400, f"L{i+1}") for i in range(i0, i1 + 1)]
+    # rev12 (opção D): o pilar de canto (linhas 1 e 9) fica 10 cm para fora da linha
+    return [(M(y_canto(Y_LIN[i]) if i in (0, len(Y_LIN) - 1) else Y_LIN[i]), 400, f"L{i+1}") for i in range(i0, i1 + 1)]
 
 
 def eixos_transv(xs, nomes, larg):
@@ -163,9 +202,13 @@ def montar(V):
                     ap = "2 CS-1 (ponta recortada: CS-1 na CE-1L)"
                 cont = all(j in ks for j in range(k))                       # pano contínuo até o baldrame → pinos PT-1; senão trava de pé PT-2
                 trava = "PT-1" if cont else "PT-2"
-                pt2 = [] if cont else [(sa + ba / 2 + 51, z0 + 150), (sb - bb / 2 - 51, z0 + 150)]
+                # rev12 (opção D): no pilar de canto das vistas A e I a face lateral tem os consolos CP-VB / CP-MEZ rentes à face externa →
+                # trava de pé PT-2 a 450 da base da placa (acima do consolo), não a 150
+                _zc = lambda i_: z_pt2(V, 0 if i_ == 0 else 1 if i_ == len(pil) - 1 else None, z0)
+                pt2 = [] if cont else [(sa + ba / 2 + 51, _zc(b)), (sb - bb / 2 - 51, _zc(b + 1))]
                 calco = (CALCO.get((V, b), 0) if t0 == s0 else 0, CALCO.get((V, b + 1), 0) if t1 == s1 else 0)   # DEC-044: calço do CS-1 em cada ponta
-                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0, Lk=(t1 - t0) + (0.1 if esp else 0.2 if rec == "s0" else 0.3 if rec == "s1" else 0), especial=esp,
+                pt1r = [cont and pt1_r(V, xp_, z0) for xp_ in (t0 + X_PT(t1 - t0), t1 - X_PT(t1 - t0))]
+                pecas.append(dict(id=f"{V}-{n:02d}", seq=n, bay=b, k=k, s0=t0, s1=t1, z0=z0, z1=z0 + H_PL, L=t1 - t0, pt1r=pt1r, Lk=(t1 - t0) + (0.1 if esp else 0.2 if rec == "s0" else 0.3 if rec == "s1" else 0), especial=esp,
                                   apoio=ap + (" + 2 PT-1 (guia)" if cont else " + 2 PT-2 (pé)"), trava=trava, pt2=pt2, rec=rec, xcs=xcs, calco=calco))
                 ca1 += [(t + sg * xo, z0 + Z_NC) for t, sg, xo, ok in ((t0, 1, xcs[0], t0 == s0), (t1, -1, xcs[1], t1 == s1)) if ok]   # consoles CS-1 (só nas pontas sobre pilar)
     return pecas, ca1, abert
@@ -463,6 +506,11 @@ def prancha_vista(Vs, desenho, folha):
              f"Placa protendida 125 × 10, C{PL['secao']['fck']:.0f}, {NC_} {CB_} Ø{DCt_} {AC_} {ALN_} ({NC_ // 2} por face, cobrimento 2,0), {f(PL['protensao']['F_macaco_kN'])} kN por {"fio" if _PR.get("aco") == "fio" else "cordoalha"} no macaco: seção, insertos, alças e ligações na ND-LET-PP00."]
     if n_ca:
         notas.append(f"Consoles CS-1 nesta prancha: {n_ca} (tracejado na elevação = nicho NC-1 atrás da placa; círculo tracejado = pino PT-1 na junta de baixo; retângulo tracejado no pé = trava PT-2 nos pilares, nas placas sem pano contínuo até o baldrame). Consoles concretados (CC-1, face C) nesta prancha: {n_cc}; soldados na obra (faces laterais): {n_ca - n_cc} — filete {FX['solda']['filete_mm']:g} mm E70XX nos 2 lados verticais, inspeção visual 100 %, galvanização a frio.")
+    _r = [(p_["id"], "ponta 1" if j_ == 0 else "ponta 2") for V_ in Vs for p_ in DADOS[V_][0] for j_, r_ in enumerate(p_.get("pt1r", [])) if r_]
+    if _r:
+        notas.append("PT-1R (junta em frente à viga de borda VB, que fica rente à face dos pilares, 25 mm atrás da placa): no lugar da cartola, chapa plana "
+                     "6,3 × 80 × 220 galvanizada com o M16 de cabeça na placa de baixo (≈ 19 mm na frente da placa, folga ≥ 5 mm até a VB) — "
+                     + ", ".join(f"{a_} ({b_})" for a_, b_ in _r) + ".")
     if "C" in Vs:
         notas.append("Placas até +7,50 (vão A–P9 até +6,25: a TS-01 desce até +7,19 junto ao eixo A); acima, até a telha, fechamento metálico leve na face da TS-01. Portões P9–P10 e P10–P12 (500 × 750) livres até +7,50 (DEC-059): os PG-01 a PG-04 apoiam a TS-01A (neoprene + graute depois da montagem) e a viga não desce no vão; sobre o portão entre o PG-04 e o PG-03, placa PV-1 de 10 × 37 (+7,50 a +7,88) apoiada nas cantoneiras CL-V dos PG (ND-LET-PV01).")
     if "G" in Vs:
@@ -784,7 +832,7 @@ def prancha_tipo():
            ["IZ-1", "Inserto de içamento M16, trabalho ≥ 1,3 t (FS ≥ 3)", 4, "face int., 0,104 e 0,396 L, meia altura"],
            ["BR-1", "Bucha M16 hef 70 (só com PT-2)", "(2)", "pé, ao lado do pilar"],
            ["CS-1", "Console (ND-LET-PP03)", "2", "CC-1 na face C ou CE-1 lateral"],
-           ["PT-1", "Cartola 6,3 × 80 + 2 M16", "2", "junta de baixo (det. 3)"],
+           ["PT-1", "Cartola 6,3 × 80 + 2 M16 (PT-1R: chapa plana 6,3 × 80 × 220 na junta em frente à VB)", "2", "junta de baixo (det. 3)"],
            ["PT-2", "L 102×102×9,5 L=150 + 2 M16", "(2)", "pé, pacote suspenso (det. 6)"]]
     y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS METÁLICAS — mm", ["MARCA", "DESCRIÇÃO", "QT/PL", "POSIÇÃO"], ins, [14, 92, 12, 72])
     rows_a = []
