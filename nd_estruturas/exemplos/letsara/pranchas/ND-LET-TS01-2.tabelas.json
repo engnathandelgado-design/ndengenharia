@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "TS-01 — VIGA I90 DE COBERTURA PROTENDIDA — ARMAÇÃO E PROTENSÃO",
   "desenho": "ND-LET-TS01-2",
-  "rev": "06",
-  "data": "20/10/2026",
+  "rev": "12",
+  "data": "26/10/2026",
   "folha": "02/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "PARA APROVAÇÃO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -39,20 +39,20 @@
     [
      "CA-50",
      "10",
-     "67,80",
-     "46,0"
+     "18,52",
+     "12,6"
     ],
     [
      "CA-50",
      "12,5",
-     "78,56",
-     "83,2"
+     "127,84",
+     "135,4"
     ],
     [
      "",
      "",
      "TOTAL (kg)",
-     "234,4"
+     "253,1"
     ]
    ]
   },
@@ -64,7 +64,7 @@
     "QUANT",
     "y (mm)",
     "F (kN)",
-    "ΔL (mm)",
+    "ΔL MEDIR (mm)",
     "ISOLAM. (mm)"
    ],
    "linhas": [
@@ -74,16 +74,16 @@
      "6",
      "62",
      "143,4",
-     "447",
+     "453",
      "ADERENTE"
     ],
     [
      "C2",
      "12,7",
-     "2",
+     "4",
      "100",
      "143,4",
-     "447",
+     "453",
      "3000 PONTAS"
     ]
    ]
@@ -219,7 +219,7 @@
     },
     {
      "pos": "N5",
-     "diam": 10.0,
+     "diam": 12.5,
      "qtd": 2,
      "comp": 1964,
      "trechos": [
@@ -333,7 +333,7 @@
     },
     {
      "pos": "N9",
-     "diam": 10.0,
+     "diam": 12.5,
      "qtd": 4,
      "comp": 250,
      "trechos": [

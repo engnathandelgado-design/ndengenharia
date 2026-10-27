@@ -1,7 +1,7 @@
 {
- "total": 307,
+ "total": 931,
  "erros": 0,
- "pendentes_decisao": 1,
+ "pendentes_decisao": 0,
  "itens": [
   {
    "ok": true,
@@ -371,7 +371,7 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-PL06",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 337.3 kg × resumo 337.4 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 297.0 kg × resumo 297.1 kg",
    "pendente": false
   },
   {
@@ -1379,28 +1379,28 @@
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-I120",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 1034.3 kg × resumo 1034.4 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 1042.0 kg × resumo 1042.1 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-I120",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 858.7 kg × resumo 858.8 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 880.2 kg × resumo 880.3 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-I120",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 866.6 kg × resumo 866.7 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 888.0 kg × resumo 888.2 kg",
    "pendente": false
   },
   {
    "ok": true,
    "item": "C2 resumo do aço × tabela de ferros",
    "folha": "ND-LET-I120",
-   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 855.0 kg × resumo 855.1 kg",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 876.3 kg × resumo 876.5 kg",
    "pendente": false
   },
   {
@@ -1593,11 +1593,11 @@
    "pendente": false
   },
   {
-   "ok": false,
+   "ok": true,
    "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
    "folha": "ND-LET-LA01",
-   "detalhe": "PENDENTE DEC-068: 7 Ø12,7 (uma por nervura) dá uso 1,004 no ELU; alternativas no quadro decisao_laje_sem_152 aguardam o Nathan — 14 ocorrência(s): mezanino, pisos (topo da capa) +3,90 e +7,30; apoio 10 cm no topo das ",
-   "pendente": true
+   "detalhe": "nenhuma",
+   "pendente": false
   },
   {
    "ok": true,
@@ -2150,6 +2150,4374 @@
    "item": "C4 laje +7,30 descrita como laje de cobertura",
    "folha": "ND-LET-EX01",
    "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "todas as posições da tabela aparecem no desenho",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 1042.0 kg × resumo 1042.1 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C1 tabela × desenho (posições)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "todas as posições da tabela aparecem no desenho",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C2 resumo do aço × tabela de ferros",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "TABELA DE FERROS — 1 UNIDADE: tabela 888.0 kg × resumo 888.2 kg",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 cordoalha Ø15,2 em laje/viga protendida",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 menção a W 310 (hoje W 200 × 15,0)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "nenhuma",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C4 laje +7,30 descrita como laje de cobertura",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C7 trava de geometria (pilar × linha/eixo do apoio)",
+   "folha": "JOGO",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CT01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CT02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CT03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CT04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-MON01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-MON03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C14 IC01 com βa e sem cálculo zerado",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL10",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL11",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PL12",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PF06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PC02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PC03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PM02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PG02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PG03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PG04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PE01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PE02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PE03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CS01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-I120",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-VM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-VB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-ES01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-ES02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-ES03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-ES04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-ES05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-CM01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP00",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-PV01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB07",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB08",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB03",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB04",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB06",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB05",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-COB09",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-EX01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C8 nota interna (DEC-0xx / Nathan) em folha do cliente",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C9 nome da família I120 (sem I130)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C10 LIBERADO só sem pendência (local, ART, decisões)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C11 bitola > Ø20 sem exceção registrada",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C12 norma vigente (NBR 6123:2023)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C13 vírgula decimal",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C15 mesma ocupação do mezanino em todas as notas",
+   "folha": "JOGO",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C16 peso único (IC01 × lista de peças/PR01, 2,50 t/m³)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-NG01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PR01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-LOC01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CG01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CT01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CT02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CT03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CT04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-MON01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-MON02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-MON03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-IC01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL05",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL06",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL07",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL08",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL09",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL10",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL11",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PL12",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF05",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PF06",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PC01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PC02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PC03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PM01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PM02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PG01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PG02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PG03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PG04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PE01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PE02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PE03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CS01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-TS01-1",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-TS01-2",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-TS01-3",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-I120",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-VM01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-VB01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-LA01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-ES01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-ES02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-ES03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-ES04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-ES05",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-CM01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP00",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP05",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP06",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-A",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-B",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-C",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-D",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-EF",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-G",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-HJ",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PP-I",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-PV01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB07",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB08",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB02",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB03",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB04",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB06",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB05",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-COB09",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-MT01-1",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-MT01-2",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-EX01",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-I120-2",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C17 carimbo REV 12 (pacote rev12)",
+   "folha": "ND-LET-I120-3",
+   "detalhe": "rev 12",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C18 pendência (extrusora LP20) sinalizada",
+   "folha": "ND-LET-LA01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C18 pendência (extrusora LP20) sinalizada",
+   "folha": "ND-LET-PR01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C18 pendência (extrusora LP20) sinalizada",
+   "folha": "ND-LET-NG01",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C18 pendência (extrusora LP20) sinalizada",
+   "folha": "ND-LET-MON02",
+   "detalhe": "ok",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C19 MC/listas/quantitativos rev12 emitidos",
+   "folha": "ENTREGA",
+   "detalhe": "ND-LET-MC12-REV12-rev12.pdf",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C19 MC/listas/quantitativos rev12 emitidos",
+   "folha": "ENTREGA",
+   "detalhe": "ND-LET-LISTAS-rev12.pdf",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C19 MC/listas/quantitativos rev12 emitidos",
+   "folha": "ENTREGA",
+   "detalhe": "ND-LET-QUANTITATIVOS-rev12.xlsx",
+   "pendente": false
+  },
+  {
+   "ok": true,
+   "item": "C20 nicho NC-1 na parte superior da placa",
+   "folha": "ND-LET-PP00",
+   "detalhe": "centro do nicho a 940 mm da base (placa 1250)",
    "pendente": false
   }
  ],

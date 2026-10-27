@@ -12,7 +12,7 @@
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -81,7 +81,7 @@
      "VOLUME",
      "4,713 m³",
      "PESO",
-     "117,8 kN (12,01 t)"
+     "117,8 kN (11,78 t)"
     ],
     [
      "CONCRETO",
@@ -93,7 +93,7 @@
      "APOIO EXTERNO",
      "assento do pilar, 27,5 cm",
      "APOIO CENTRAL",
-     "I130 + CT-I130, 36.25 cm"
+     "I120 + CT-I120, 36.25 cm"
     ],
     [
      "CUNHAS",

@@ -80,7 +80,7 @@ for marca, ya, yb in (("V407", Y_LIN[1], Y_LIN[3]), ("V406", Y_LIN[3], Y_PC_C[0]
     v.texto((x_t, M(X_FACH["C"]) - 500), RN.novo(RN.rotulo(nm_)[1:] + f" — L {f(Lm_, 2)}") if nm_ else f"{marca} (I120, L = {f(Lm_, 2)} m)", "min", "TOP_LEFT")
 # linha 2: W 200 × 15,0 metálica contínua (sem TS-01, ND-LET-COB05)
 v.linha((M(Y_LIN[1]), M(PONTAS[0][0])), (M(Y_LIN[1]), M(PONTAS[1][1])), "METALICA")
-v.texto((M(Y_LIN[1]) - 750, M(X_FACH["B"]) + 2600), "W 200 × 15,0 (linha 2, ND-LET-COB05)", "min", "MIDDLE_CENTER", rot=90)
+v.texto((M(Y_LIN[1]) - 750, M((PONTAS[0][0] + PONTAS[0][1]) / 2) + 2600), "W 200 × 15,0", "min", "MIDDLE_CENTER", rot=90)
 # TS-01 (linhas 3 a 8, dois vãos)
 for i in range(3, 9):
     y = M(Y_LIN[i - 1])

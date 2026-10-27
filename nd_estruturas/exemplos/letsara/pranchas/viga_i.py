@@ -176,10 +176,10 @@ def prancha_viga(P):
     if P.get("tercas"):
         ve.chamada((P["tercas"][2], H + 12), (8, 12), "CH-T1 150×150×12,5 (terças)")
     if P.get("pinos_topo"):
-        ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 26), "apoio das TS-01: 2 NEO-3C + 4 PN-5 Ø20 por linha" if CTp else "apoio das TS-01: 2 NEO-3 + 4 PN-5 Ø20 por linha")
+        ve.chamada((P["pinos_topo"][0] + 100, H + 200), (10, 32), "apoio das TS-01: 2 NEO-3C + 4 PN-5 Ø20 por linha" if CTp else "apoio das TS-01: 2 NEO-3 + 4 PN-5 Ø20 por linha")
     if CTp and P.get("pinos_topo"):
         _pc = max(P["pinos_topo"])                                      # rev12: chamada no consolo mais afastado da ponta (não sai da folha)
-        ve.chamada((_pc - CTp["b"] / 2, H - CTp["h"] / 2), (-14, -18), f"consolo CT-I120 {CTp['b']/10:g} × {CTp['proj']/10:g} × {CTp['h']/10:g}/{CTp['h_ext']/10:g} (mísula) nas 2 faces — CORTE D-D")
+        ve.chamada((_pc - CTp["b"] / 2, H - CTp["h"] / 2), (-140, -15) if P["desenho"] == "ND-LET-I120-3" else (-24, -32), f"consolo CT-I120 {CTp['b']/10:g} × {CTp['proj']/10:g} × {CTp['h']/10:g}/{CTp['h_ext']/10:g} (mísula) nas 2 faces — CORTE D-D")
         ve.marcador_corte((P["pinos_topo"][0] + CTp["b"] / 2 + 150, -22 * ESC), (P["pinos_topo"][0] + CTp["b"] / 2 + 150, H + 30 * ESC), "D", lado=1)
     if P.get("consolos"):
         ve.chamada((P["consolos"][0][0], P["consolos"][0][1] - 225), (10, -16), "consolos CV-TS nos dois lados (maciço de 100 cm)")
@@ -279,7 +279,7 @@ def prancha_viga(P):
     _sets = [xs_ for xs_ in _sets if not any(set(xs_) < set(o_) for o_ in _sets)]   # subconjuntos já cotados (X5 dentro do X7)
     for k_, xs_ in enumerate(_sets):
         va.cota_h(list(xs_), 0, -12 - 8 * k_, total=False)
-    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 336), YR), "maciço da ponta (TB e CH-A)", macico=True)
+    vb = corte("CORTE B-B", (Q[0] + (250 if A1 else 350), YR), "maciço da ponta (TB e CH-A)", macico=True)
     vb.chapa(-P["tb"][0] / 2, 0, P["tb"][0], H - HD if HD else H * 0.6)
     if P.get("cha", True):
         vb.chapa(-150, -12.5, 300, 12.5)
@@ -477,9 +477,8 @@ def prancha_viga(P):
 # ================================================================== I120 — V404 / V405 / V406 / V407 (DEC-058)
 def dados_i110(mk="V406"):
     P = _dados_i110(mk)
-    if mk != "V406":                                             # folha só de fôrma da marca: notas e armação na ND-LET-I120
-        P["notas"] = [f"Fôrma, insertos e protensão desta marca. Armação (tabela de ferros e resumo do aço por marca), notas de produção, dente e consolos CT-I120: ND-LET-I120. Posições dos consolos CT-I120 e dos PN-5 medidas da ponta do lado A."]
-        P["tab_isol"] = None
+    if mk != "V406":                                             # folha da marca: notas completas na ND-LET-I120
+        P["notas"] = P["notas"][:1] + [f"Folha da marca {mk}: fôrma, insertos, armação e protensão desta peça. Notas de produção, dente e consolos CT-I120: ND-LET-I120. Posições dos consolos CT-I120 e dos PN-5 medidas da ponta do lado A."]
     return P
 
 
@@ -543,9 +542,9 @@ def _dados_i110(mk="V406"):
               ("07", "24/10/2026", "DEC-054: h 120 COM DENTE 78 × 35; PROTENSÃO LIMITADA; LIBERAÇÃO COM fckj 50; N3 6 Ø25; V407 TAMBÉM h 120"),
               ("09", "25/10/2026", "DEC-061: CONSOLOS LATERAIS CT-I120 COM MÍSULA NAS 2 FACES (APOIO DAS TS-01), NEO-3C 150 × 300, CORTE D-D; COTAS DO DENTE"),
               ("08", "24/10/2026", f"DEC-058: PILAR A MAIS NO EIXO C, 3 VÃOS DE 16,517 m (V406, V405, V404 IGUAIS); CORDOALHA Ø12,7: {ARR['n_cord']} NAS TRÊS, {I1J['V407']['arranjo']['n_cord']} NA V407")],
-        marca=mk, secao_nome="I120", qtd=1, familia="VIGAS CENTRAIS I120 — EIXO C", desenho={"V406": "ND-LET-I120", "V407": "ND-LET-I120-2", "V405": "ND-LET-I120-3"}[mk], h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30,
+        marca=mk, secao_nome="I120", qtd=1, familia="VIGAS CENTRAIS I120 — EIXO C", desenho={"V406": "ND-LET-I120", "V407": "ND-LET-I120-2", "V405": "ND-LET-I120-3"}[mk], h=HI, d_cord=float(ARR.get("cordoalha", "Ø12.7")[1:]), a_cord={"Ø15.2": 140.0}.get(ARR.get("cordoalha"), 98.7), cord_txt=ARR.get("cordoalha", "Ø12.7").replace(".", ","), b=400, ts=220, ti=250, m=80, bw=150, L=L, esc=30 if L < 17000 else 40,
         x_mac=1400, dente=(780, 350), pino_x=175, tb=(60.3, 780), tb_nome="TB-2 tubo Ø60,3×3,6 L=780 (passante no dente)", pino_d=25, cha=False,
-        n3=(10, 20.0, "CA-50 em 2 camadas de 5 na mesa superior (compressão no ELU e tração no ato junto às pontas)"), n3_camadas=2,
+        n3=(10, 20.0, "CA-50, 2 camadas de 5"), n3_camadas=2,
         cord=cord, n_isol=n_isol, isol_mm=max(l["isol"] for l in ARR["linhas"]), sig_pi=ARR["sig_pi"], L_pista=60, fck=ARR["fck"], fckj=ARR["fckj"],
         lbpt=ARR["lbpt_m"], tab_isol=TAB_ISOL, ini_isol=350, nome_cord="V406, V405, V404",
         cord2=("V407", [(l["y"], l["xs"], l["isol"]) for l in I1J["V407"]["arranjo"]["linhas"]]) if mk == "V406" else None, pele=[p_ for p_ in (500, 650, 800, 950) if p_ < HI - 300], n5_u=n_u,

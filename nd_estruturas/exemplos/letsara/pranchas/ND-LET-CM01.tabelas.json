@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "PLACAS DE FECHAMENTO — LOCAÇÃO CONFORME AS VISTAS DO R01 (A A J), ORDEM DE MONTAGEM DAS VISTAS E PENDÊNCIAS",
   "desenho": "ND-LET-CM01",
-  "rev": "10",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -31,7 +31,7 @@
      "C",
      "PAREDE INTERNA DA LINHA 4",
      "23",
-     "52,7",
+     "51,7",
      "ND-LET-PP-C"
     ],
     [
@@ -39,7 +39,7 @@
      "G",
      "PAREDE INTERNA DA LINHA 2",
      "23",
-     "73,0",
+     "71,6",
      "ND-LET-PP-G"
     ],
     [
@@ -47,7 +47,7 @@
      "I",
      "FACHADA DA LINHA 1",
      "25",
-     "75,8",
+     "74,4",
      "ND-LET-PP-I"
     ],
     [
@@ -55,7 +55,7 @@
      "H",
      "LATERAL DO ANEXO, EIXO A, LINHAS 1 A 2",
      "7",
-     "18,5",
+     "18,1",
      "ND-LET-PP-HJ"
     ],
     [
@@ -63,7 +63,7 @@
      "J",
      "LATERAL DO ANEXO, EIXO E, LINHAS 1 A 2",
      "6",
-     "18,8",
+     "18,4",
      "ND-LET-PP-HJ"
     ],
     [
@@ -71,7 +71,7 @@
      "E",
      "LATERAL DO EIXO A, LINHAS 2 A 4",
      "4",
-     "12,8",
+     "12,5",
      "ND-LET-PP-EF"
     ],
     [
@@ -79,7 +79,7 @@
      "F",
      "LATERAL DO EIXO E, LINHAS 2 A 4",
      "4",
-     "12,8",
+     "12,5",
      "ND-LET-PP-EF"
     ],
     [
@@ -87,7 +87,7 @@
      "B",
      "LATERAL DO EIXO A, LINHAS 4 A 9",
      "40",
-     "126,4",
+     "124,0",
      "ND-LET-PP-B"
     ],
     [
@@ -95,7 +95,7 @@
      "D",
      "LATERAL DO EIXO E, LINHAS 4 A 9",
      "40",
-     "126,4",
+     "124,0",
      "ND-LET-PP-D"
     ],
     [
@@ -103,7 +103,7 @@
      "A",
      "FACHADA DA LINHA 9",
      "32",
-     "101,9",
+     "99,9",
      "ND-LET-PP-A"
     ],
     [
@@ -111,7 +111,7 @@
      "",
      "total",
      "204",
-     "619,0",
+     "607,2",
      ""
     ]
    ]

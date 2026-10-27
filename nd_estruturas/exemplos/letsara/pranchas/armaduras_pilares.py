@@ -127,9 +127,9 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
     yc_ = R(0, -B / 2)[1] - 3.0
     A.cadeia_h(yc_, [R(w, 0)[0] for w in xs_c], [_cm(b - a) for a, b in zip(xs_c[:-1], xs_c[1:])], acima=False)
     A.cadeia_h(yc_ - 5.0, [R(-H / 2, 0)[0], R(H / 2, 0)[0]], [_cm(H)], acima=False)
-    xc_ = R(-H / 2, 0)[0] - 2.5
-    A.cadeia_v(xc_, [R(0, u)[1] for u in ys_c], [_cm(b - a) for a, b in zip(ys_c[:-1], ys_c[1:])], lado=-1)
-    A.cadeia_v(xc_ - 4.5, [R(0, -B / 2)[1], R(0, B / 2)[1]], [_cm(B)], lado=-1)
+    xc_ = R(H / 2, 0)[0] + 2.5                                             # à direita da seção (a bolha do N1 fica à esquerda)
+    A.cadeia_v(xc_, [R(0, u)[1] for u in ys_c], [_cm(b - a) for a, b in zip(ys_c[:-1], ys_c[1:])], lado=1)
+    A.cadeia_v(xc_ + 4.5, [R(0, -B / 2)[1], R(0, B / 2)[1]], [_cm(B)], lado=1)
     A.titulo(sx, sy - 16, s1t, f"{_cm(H)} × {_cm(B)} cm · cobrimento {_cm(COB)} cm · {len(P['xy'])} Ø{fd(P['D1'])}")
     xr = R(-H / 2, 0)[0]
     if P["xy_sobe"]:
@@ -137,14 +137,14 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
         A.bolha_lider(R(w, u), xr - 6, R(w, u)[1] + 4, "N1")
     if P["xy_para"]:
         u, w = max(P["xy_para"], key=lambda p: (p[1], p[0]))
-        A.bolha_lider(R(w, u), R(H / 2, 0)[0] + 5, R(w, u)[1] + 5, "N1A")
+        A.bolha_lider(R(w, u), R(H / 2, 0)[0] + 13, R(w, u)[1] + 5, "N1A")
     A.bolha_lider(R(-H / 2 + COB + 60, B / 2 - COB), R(-H / 2 + COB + 60, B / 2)[0] - 2, R(0, B / 2)[1] + 5, "N2")
     if "N3" in bar:
         A.bolha_lider(R(P["grampos"][-1], B / 2 - COB - 40), R(P["grampos"][-1], 0)[0] + 3, R(0, B / 2)[1] + 5, "N3")
     if "N3A" in bar:
         ug = P["grampos_h"][-1]
-        A.bolha_lider(R(H / 2 - COB - 60, ug), R(H / 2, 0)[0] + 5, R(0, ug)[1] - 4, "N3A")
-    xs = R(H / 2, 0)[0] + 16
+        A.bolha_lider(R(H / 2 - COB - 60, ug), R(H / 2, 0)[0] + 13, R(0, ug)[1] - 4, "N3A")
+    xs = R(H / 2, 0)[0] + 26
     bb = A.forma(xs, sy + 2, n2 | {"geo": n2["geo"]}, ES_)
     if "N3" in bar:
         b3 = A.forma(bb[2] + 10, sy + 6, bar["N3"], ES_)
@@ -167,17 +167,19 @@ def quadrante(A: Arm, P, qx, qy, ref=None, esc=None, qh=None):
             A.disco(R2(w, u), max(16 / 2 / ES_, 0.5))
         xs2 = [w0, w1]; ys2 = [u0, u1]
         y2c = R2(0, -B / 2)[1] - 3.0
-        A.cadeia_h(y2c, [R2(-H / 2, 0)[0], R2(w0, 0)[0], R2(w1, 0)[0], R2(H / 2, 0)[0]], [_cm(w0 + H / 2), _cm(w1 - w0), _cm(H / 2 - w1)], acima=False)
-        A.cadeia_v(R2(-H / 2, 0)[0] - 2.5, [R2(0, -B / 2)[1], R2(0, u0)[1], R2(0, u1)[1], R2(0, B / 2)[1]], [_cm(u0 + B / 2), _cm(u1 - u0), _cm(B / 2 - u1)], lado=-1)
+        _xs2 = [v for i, v in enumerate([-H / 2, w0, w1, H / 2]) if i == 0 or abs(v - [-H / 2, w0, w1, H / 2][i - 1]) > 1]   # rev12: sem trechos de 0 cm
+        _ys2 = [v for i, v in enumerate([-B / 2, u0, u1, B / 2]) if i == 0 or abs(v - [-B / 2, u0, u1, B / 2][i - 1]) > 1]
+        A.cadeia_h(y2c, [R2(w, 0)[0] for w in _xs2], [_cm(b - a) for a, b in zip(_xs2[:-1], _xs2[1:])], acima=False)
+        A.cadeia_v(R2(H / 2, 0)[0] + 2.5, [R2(0, u)[1] for u in _ys2], [_cm(b - a) for a, b in zip(_ys2[:-1], _ys2[1:])], lado=1)
         A.titulo(sx, sy2 - 12, "SEÇÃO S.2 (CABEÇA)", f"{_cm(w1 - w0)} × {_cm(u1 - u0)} cm · cobrimento {_cm(COB)} cm")
         if P["xy_sobe"]:
             u, w = min(P["xy_sobe"], key=lambda p: (p[1], p[0]))
             A.bolha_lider(R2(w, u), R2(-H / 2, 0)[0] - 6, R2(w, u)[1] + 4, "N1")
         if P["xy_cab"]:
             u, w = max(P["xy_cab"], key=lambda p: (p[1], -p[0]))
-            A.bolha_lider(R2(w, u), R2(H / 2, 0)[0] + 5, R2(w, u)[1] + 6, "N13")
-        A.bolha_lider(R2(w1 - COB, (u0 + u1) / 2), R2(H / 2, 0)[0] + 5, R2(0, (u0 + u1) / 2)[1] - 4, "N14")
-        bb2 = A.forma(R2(H / 2, 0)[0] + 16, sy2 + 2, bar["N14"], ES_)
+            A.bolha_lider(R2(w, u), R2(H / 2, 0)[0] + 13, R2(w, u)[1] + 6, "N13")
+        A.bolha_lider(R2(w1 - COB, (u0 + u1) / 2), R2(H / 2, 0)[0] + 13, R2(0, (u0 + u1) / 2)[1] - 4, "N14")
+        bb2 = A.forma(R2(H / 2, 0)[0] + 24, sy2 + 2, bar["N14"], ES_)
         yb_ = min(sy2 - 14, bb2[1] - 4)
     # consolos (1:20)
     ED = 20.0

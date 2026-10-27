@@ -78,7 +78,7 @@ for k in range(8):
         pr.texto(xp, yp, BASE_K[CC.kv(k, i_b)], "nota", "TITULO", "MIDDLE_CENTER")
     for kk in (NT // 2 + 1, NT + NT // 2 + 1):                      # rev08: entre duas terças, paralelo a elas
         q_ = CC.kv(k, kk)
-        v.texto(M(YLmm[k] + 0.375 * VAOS[k], (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L {L_TERCA[q_]}" + (f" ({BASE_K[q_]})" if q_ != k else ""), "min", "MIDDLE_CENTER")   # rev11: entre as correntes
+        v.texto(M(YLmm[k] + 0.375 * VAOS[k], (XT[kk] + B_INF + XT[kk + 1] - B_TERCA) / 2), f"L {L_TERCA[q_]}", "min", "MIDDLE_CENTER")   # rev11: entre as correntes
 v.cota_h(YLmm, -900, -10, total=False)
 v.cota_h([YLmm[0], YLmm[-1]], X_E + 3000, 8, total=False)
 v.cota_v([XT[0], XT[NT - 1]], YLmm[0] - 900, -12, total=False)
@@ -326,7 +326,7 @@ notas = [f"Terças Z 302×90/82×2,30 METSEC (302Z23, fy 400 MPa, galvanizadas Z
          "Fixações da cobertura verificadas à sucção (NBR 6123, zona geral e faixa de borda; memória ND-LET-MC06): costura cartola × TP-40 em todas as ondas (uso 0,90 na borda); clipes com 2 parafusos (0,96 na borda); TP-40 × terça 0,22. Confirmar com a Isoeste os valores de arrancamento em chapa #0,65 e a distribuição de clipes; trilhos dos painéis nas costuras da zipada, sem furar a telha.",
          "Correntes, tirantes rígidos, diagonais e X: detalhes na ND-LET-COB02.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
-pr.notas(x0, y - 4, notas, 190)
+pr.notas(x0 - 200, 475, notas, 190)                                   # rev12: a lista de terças cresceu (T6/T7); notas à esquerda da coluna
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-COB01")
 for a in avisos:
     print(a)

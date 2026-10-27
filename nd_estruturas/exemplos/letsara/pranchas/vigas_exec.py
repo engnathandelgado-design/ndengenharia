@@ -396,8 +396,12 @@ def i130():
 def i130_marcas():
     """rev12 (checklist 10): elevação de fôrma própria da V400 (V407 do R01, 19,50 m) e da V402 (V405, 2 vigas de cobertura no topo)."""
     import viga_i as VI
-    for mk in ("V407", "V405"):
-        VI.prancha_viga(VI.dados_i110(mk))
+    for mk, des in (("V407", "ND-LET-I120-2"), ("V405", "ND-LET-I120-3")):
+        S = AV.spec_i("i110")
+        S["marcas"] = [m for m in S["marcas"] if m["marca"] == mk]          # armação só desta marca (repete a da ND-LET-I120)
+        S["forma"] = des; S["rep"] = mk
+        compor_ok(des, f"VIGA CENTRAL I120 {mk} — FÔRMA, INSERTOS, ARMAÇÃO E PROTENSÃO DA MARCA", "01/01",
+                  lambda fab, mk=mk: (setattr(VI, "Prancha", fab), VI.prancha_viga(VI.dados_i110(mk))), S)
 
 
 def vm():

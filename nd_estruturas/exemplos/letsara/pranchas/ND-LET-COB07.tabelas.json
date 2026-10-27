@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "COBERTURA METÁLICA — TERÇAS: COMPRIMENTOS, TRANSPASSES E FOLGAS DE MONTAGEM EM CADEIA",
   "desenho": "ND-LET-COB07",
-  "rev": "00",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -29,14 +29,14 @@
    ],
    "linhas": [
     [
-     "1-2",
+     "1-2 (A–B, D–E)",
      "9.650",
-     "110",
+     "85",
      "450",
-     "10.210",
+     "10.185",
      "T1",
-     "32",
-     "2914"
+     "16",
+     "1454"
     ],
     [
      "2-3",
@@ -99,24 +99,44 @@
      "3111"
     ],
     [
-     "8-9",
+     "8-9 (A–B, D–E)",
      "9.625",
      "450",
-     "110",
-     "10.185",
+     "85",
+     "10.160",
      "T5",
-     "32",
-     "2907"
+     "16",
+     "1450"
+    ],
+    [
+     "1-2 (B–D)",
+     "9.875",
+     "85",
+     "450",
+     "10.410",
+     "T6",
+     "16",
+     "1486"
+    ],
+    [
+     "8-9 (B–D)",
+     "9.850",
+     "450",
+     "85",
+     "10.385",
+     "T7",
+     "16",
+     "1482"
     ],
     [
      "TOTAL",
      "79.350",
      "",
      "",
-     "79.570 *",
+     "100.315 *",
      "",
      "256",
-     "24511"
+     "24561"
     ]
    ]
   },
@@ -135,7 +155,7 @@
     ],
     [
      "ponta da terça na fachada",
-     "110 além do eixo da VB = 35 além da face",
+     "85 além do eixo da VB = 10 além da face",
      "folga até a placa de fechamento ≥ 75"
     ],
     [

@@ -180,8 +180,10 @@ def limpar_interno(s):
     """rev12 (checklist 10): folha do cliente sem nota interna da ND — sem "DEC-0xx" nem "decisão/pedido/regra do Nathan"."""
     if not isinstance(s, str) or ("DEC-" not in s and "Nathan" not in s):
         return s
+    s = s.replace("Nathan Henrique Delgado", "\x05RT\x05")                 # nome do responsável técnico (carimbo) fica
     for rx, rep in _RX_NATHAN:
         s = rx.sub(rep, s)
+    s = s.replace("\x05RT\x05", "Nathan Henrique Delgado")
     return s.strip() if s.strip() else s
 
 

@@ -69,7 +69,8 @@ REEMISSAO4 = dict(data="26/10/2026", padrao="TEXTOS E COTAS ≥ 2,5 MM NO PAPEL;
 # rev12 (26/10/2026, revisão independente): última linha de TODA folha = REV 12 (número = pacote); revisões manuais da rev12
 # entram com pr.revisao("R12", data, descrição) e viram a descrição desta linha.
 REEMISSAO5 = dict(rev="12", padrao="REV12: NOMES CONFERIDOS PELA GEOMETRIA; PESOS COM 2,50 t/m³; SEM NOTAS INTERNAS")
-_NOTAS_ANTIGAS = ("PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
+_NOTAS_ANTIGAS = ("EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM.", "EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO E MONTAGEM.",
+                  "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR.", "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR",
                   "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO.", "PARA APROVAÇÃO, NÃO EXECUTAR.", "PARA APROVAÇÃO, NÃO EXECUTAR")
 
 
@@ -204,7 +205,7 @@ class Prancha:
         salvo = dict(ALTURAS)
         ALTURAS.update(ALTURAS_CARIMBO)
         try:
-            return quebrar(str(ds), 180 - 40 - 3, ALTURAS["min"]) or [""]
+            return quebrar(_RENOMEAR(str(ds)), 180 - 40 - 14, ALTURAS["min"]) or [""]
         finally:
             ALTURAS.clear(); ALTURAS.update(salvo)
 
@@ -576,7 +577,7 @@ class Prancha:
             self.texto(cx0 + 7, y + hr - 3.5, r, "min", alinh="BOTTOM_CENTER")
             self.texto(cx0 + 27, y + hr - 3.5, dt, "min", alinh="BOTTOM_CENTER")
             for k_, t_ in enumerate(ls):                                  # rev12: descrição inteira, sem corte
-                self.texto(cx0 + 41.5, y + hr - 3.5 - 5 * k_, _MNOVO + _RENOMEAR(t_), "min")
+                self.texto(cx0 + 41.5, y + hr - 3.5 - 5 * k_, _MNOVO + t_, "min")
             y += hr
         sx, sy = cx0 - 22, cy0 + 6   # símbolo 1º diedro
         self.msp.add_circle((sx + 15, sy + 5), 4, dxfattribs={"layer": "CARIMBO"})
@@ -896,7 +897,7 @@ class Prancha:
                     hist = hist[-int(REEMISSAO5["rev"]):]
                     n0 = int(REEMISSAO5["rev"]) - len(hist)
                     hist = [(f"{n0 + k:02d}", dt, ds) for k, (_, dt, ds) in enumerate(hist)]
-                self.revisoes = hist + [(REEMISSAO5["rev"], "26/10/2026", "; ".join([REEMISSAO5["padrao"]] + r12))]
+                self.revisoes = hist[-3:] + [(REEMISSAO5["rev"], "26/10/2026", "; ".join([REEMISSAO5["padrao"]] + r12))]   # carimbo: últimas 4 revisões (histórico completo no CHANGELOG)
                 self.dados["rev"], self.dados["data"] = REEMISSAO5["rev"], "26/10/2026"
             self._emitida = True
 
@@ -1037,6 +1038,10 @@ def _textos_pdf(doc, ctx, cor):
         except Exception:
             return (0, 0, 0)
     out = []
+    try:
+        h_min_cota = doc.dimstyles.get("ND").dxf.dimtxt                   # rev12: cota curta não encolhe abaixo do texto de cota da folha
+    except Exception:
+        h_min_cota = 0.0
     for e in doc.modelspace():
         t = e.dxftype()
         if t == "TEXT":
@@ -1054,7 +1059,7 @@ def _textos_pdf(doc, ctx, cor):
                         dx, dy = v.dxf.text_direction[0], v.dxf.text_direction[1]
                         rot = math.degrees(math.atan2(dy, dx))
                     v.dxf.layer = e.dxf.layer
-                    out.append((v.plain_text(), v.dxf.insert[0], v.dxf.insert[1], v.dxf.char_height, rot, ha, va, rgb(v)))
+                    out.append((v.plain_text(), v.dxf.insert[0], v.dxf.insert[1], max(v.dxf.char_height, h_min_cota), rot, ha, va, rgb(v)))
     return out
 
 

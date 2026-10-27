@@ -8,7 +8,7 @@ from prancha_nd import Prancha
 from cob_comum import (VAOS, NT, L_TERCA, EXT, BASE_K, H_TERCA, Z_FURO, Z_COR, Z_DIAG, Z_X, IDX_2A, PESO_UE, PERFIL_TXT,
                        furos_ponta, furos_x, marca, lista_marcas, cabecalho)
 
-pr = Prancha("A1", cabecalho("ND-LET-COB08", "01/01", "COBERTURA METÁLICA — TERÇAS: FURAÇÃO DE FABRICAÇÃO POR MARCA (ALMA PLANIFICADA)"))
+pr = Prancha("A0", cabecalho("ND-LET-COB08", "01/01", "COBERTURA METÁLICA — TERÇAS: FURAÇÃO DE FABRICAÇÃO POR MARCA (ALMA PLANIFICADA)"))
 pr.revisao("11", "26/10/2026", "EMISSÃO: FURAÇÃO DE CADA MARCA MEDIDA DA PONTA INICIAL (CHECKLIST 8)")
 Q = pr.quadro
 fm = lambda v: f"{v:,.0f}".replace(",", ".")

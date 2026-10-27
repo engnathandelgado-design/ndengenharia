@@ -85,6 +85,8 @@ for fl in idx:
             r(abs(kg - tot) <= 0.015 * max(tot, 1) + 0.5, "C2 resumo do aço × tabela de ferros", fl, f"{t['titulo']}: tabela {kg:.1f} kg × resumo {tot:.1f} kg")
             if "1 UNIDADE" in t["titulo"].upper() or "UNIDADES" not in t["titulo"].upper():
                 pass
+            if fl in ("ND-LET-I120-2", "ND-LET-I120-3"):                  # rev12: repetem marcas da ND-LET-I120 (folha por marca)
+                continue
             aco_folhas += tot if "UNIDADES" in t["titulo"].upper() or "1 UNIDADE" not in t["titulo"].upper() else 0
     # C4 — regras da ND nos textos
     if tx:
@@ -133,13 +135,25 @@ for fl in idx:
     tx = textos(dx) if os.path.exists(dx) else []
     if not tx:
         continue
-    t8 = [t for t in tx if re.search(r"DEC-\d{3}", t) or re.search(r"\bNathan\b", t)]
+    t8 = [t for t in tx if re.search(r"DEC-\d{3}", t) or re.search(r"\bNathan\b(?! Henrique Delgado)", t)]
     r(not t8, "C8 nota interna (DEC-0xx / Nathan) em folha do cliente", fl, "ok" if not t8 else f"{len(t8)}: {t8[0][:80]}")
     t9 = [t for t in tx if "I130" in t]
     r(not t9, "C9 nome da família I120 (sem I130)", fl, "ok" if not t9 else f"{len(t9)}: {t9[0][:80]}")
     lib = [t for t in tx if "LIBERADO" in t.upper() and "AGUARDANDO" not in t.upper()]
     r(not lib, "C10 LIBERADO só sem pendência (local, ART, decisões)", fl, "ok" if not lib else lib[0][:80])
-    gros = sorted({m for t in tx for m in re.findall(r"Ø\s?(2[2-9]|3[0-9]|4[0-9])(?![,.0-9])", t)} - set(DIAM_EXC.get(fl, [])))
+    gros = set()                                                          # armadura (CA-50/60): tabela de ferros e "n Øxx CA-50" no texto
+    tj_ = PR + fl + ".tabelas.json"
+    if os.path.exists(tj_):
+        for t_ in json.load(open(tj_, encoding="utf-8")).get("tabelas", []):
+            if "FERRO" in t_.get("titulo", "").upper():
+                for l_ in t_["linhas"]:
+                    try:
+                        if float(str(l_[2]).replace(",", ".")) > 20:
+                            gros.add(str(l_[2]))
+                    except Exception:
+                        pass
+    gros |= {m for t in tx for m in re.findall(r"\d+\s?Ø\s?(2[2-9]|3\d)(?![,.0-9])\s?(?:CA-50|CA-60)", t)}
+    gros = sorted(gros - set(DIAM_EXC.get(fl, [])))
     r(not gros, "C11 bitola > Ø20 sem exceção registrada", fl, "ok" if not gros else "Ø" + ", Ø".join(gros))
     n61 = [t for t in tx if re.search(r"6123\s*:\s*19", t)]
     r(not n61, "C12 norma vigente (NBR 6123:2023)", fl, "ok" if not n61 else n61[0][:80])
@@ -164,6 +178,9 @@ try:
     for t in TI["tabelas"]:
         for l in t["linhas"]:
             mk = str(l[0]).replace("\x0e", "").replace("\x0f", "")
+            if t["titulo"].startswith("VIGAS"):                           # 1ª coluna = nomes; marca pelo registro de nomes
+                n0 = mk.split(",")[0].strip()
+                mk = next((q["marca"] for q in json.load(open(PR + "nomes.json", encoding="utf-8"))["pecas"] if q["nome"] == n0), mk)
             if mk in PES:
                 try:
                     v = float(str(l[2]).replace(",", "."))
@@ -180,6 +197,21 @@ for fl in idx:
     if os.path.exists(tj):
         d = json.load(open(tj, encoding="utf-8")).get("dados", {})
         r(str(d.get("rev")) == "12", "C17 carimbo REV 12 (pacote rev12)", fl, f"rev {d.get('rev')}")
+# C18 pendência da extrusora sinalizada em todas as folhas afetadas
+for fl in ("ND-LET-LA01", "ND-LET-PR01", "ND-LET-NG01", "ND-LET-MON02"):
+    dx = PR + fl + ".dxf"
+    tx = " ".join(textos(dx)) if os.path.exists(dx) else ""
+    r("CONFIRMAR COM A FÁBRICA" in tx.upper() or "CONFIRMAR COM A FÁBRICA" in tx, "C18 pendência (extrusora LP20) sinalizada", fl, "ok" if "FÁBRICA" in tx.upper() else "sem a ressalva")
+# C19 MC, listas e quantitativos da mesma revisão das pranchas
+ENT = "/home/claude/letsara/entregas/"
+for arq in ("ND-LET-MC12-REV12-rev12.pdf", "ND-LET-LISTAS-rev12.pdf", "ND-LET-QUANTITATIVOS-rev12.xlsx"):
+    r(os.path.exists(ENT + arq), "C19 MC/listas/quantitativos rev12 emitidos", "ENTREGA", arq)
+# C20 nicho de montagem (console/grapa) na parte superior da placa
+try:
+    import fechamento as _F
+    r(_F.Z_NC > 1250 / 2, "C20 nicho NC-1 na parte superior da placa", "ND-LET-PP00", f"centro do nicho a {_F.Z_NC} mm da base (placa 1250)")
+except Exception as e:
+    r(False, "C20 nicho NC-1 na parte superior da placa", "ND-LET-PP00", str(e)[:80])
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]

@@ -142,7 +142,7 @@ v.chamada((round(Y_PC_C[1] * 1000), XA["C"]), (12, -14), "3 vãos de 1651,7 da l
 v.cota_h([YL[0], 3790, YL[1]], XA["D"] + 2600, 0, total=False)
 v.cota_v([XA["D"], 36175, XA["E"]], 3790 + 2200, 0, total=False)
 v.cota_v([XA["D"], 36175], YL[1] - 1600, 0, total=False)
-v.chamada((3790, 36175), (14, 12), RN.novo(f"{RN.pilar_em(36.175, 3.79)}, {RN.pilar_em(39.5, 3.79)} (escada) e {RN.pilar_em(36.175, 9.65)} (linha 2): cotados dos eixos 1, 2, D e E"))
+v.chamada((3790, 36175), (8, 44), RN.novo(f"{RN.pilar_em(36.175, 3.79)}, {RN.pilar_em(39.5, 3.79)} (escada) e {RN.pilar_em(36.175, 9.65)} (linha 2): cotados dos eixos 1, 2, D e E"))
 
 # ------------------------------------------------------------------ DETALHES TÍPICOS DE LOCAÇÃO 1:25 (cm)
 def det(nome, org, titulo, bx, by, chamadas, sub):

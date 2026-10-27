@@ -4,7 +4,7 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR PRÉ-MOLDADO PF-01 (FAMÍLIA 40×60) — P3 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR PRÉ-MOLDADO PF-01 (40 × 60, x × y) — P3 L1 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PF01",
   "rev": "12",
   "data": "26/10/2026",
@@ -209,7 +209,7 @@
    ],
    "linhas": [
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "B",
      "+3,17 (416,9)",
      "40×40×27,9",
@@ -219,7 +219,7 @@
      "63"
     ],
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "D",
      "+3,17 (416,9)",
      "40×40×27,9",
@@ -229,7 +229,7 @@
      "63"
     ],
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "B",
      "+6,57 (756,9)",
      "40×40×27,9",
@@ -239,7 +239,7 @@
      "63"
     ],
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "D",
      "+6,57 (756,9)",
      "40×40×27,9",
@@ -259,7 +259,7 @@
      "70"
     ],
     [
-     "C1 (CP-VB)",
+     "C2 (CP-VB)",
      "D",
      "+8,09 (909,1)",
      "15×27×29",

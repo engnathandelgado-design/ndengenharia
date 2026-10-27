@@ -544,3 +544,6 @@ O teste colisao_platibanda exigia a chapa dentro de uma única caixa de concreto
 
 ## DEC-082 — Carimbo e emissão rev12 (26/10/2026)
 Última linha do carimbo de toda folha = REV 12 (número = pacote) com descrição inteira (quebra em linhas, sem corte); revisões manuais da rev12 entram com pr.revisao("R12", …). Fase "EXECUTIVO — AGUARDANDO LIBERAÇÃO" enquanto houver pendência (local, ART, decisões): nenhuma folha sai "LIBERADO" (conferência C10). Notas internas ("DEC-0xx", "Nathan") saem das folhas no renomear (C8). Vírgula decimal forçada em medidas com unidade (C13). Cadeias de cotas arredondadas ao mm com soma igual ao total (prancha_nd._txt_cadeia).
+
+## DEC-083 — Pinos Ø25 de ligação fora da regra de bitola (26/10/2026)
+A regra "barras ≤ Ø20" vale para a armadura das peças. Os pinos de ligação PN-2 Ø25 CA-50 (L = 900, 350 no consolo) da I120 nos consolos CP-I120 (PF04, PC01, PC02, PC03) são insertos de ligação, não armadura longitudinal: ficam Ø25 e entram em pranchas/excecoes_bitola.json para a conferência cruzada (C11). A confirmar com o Nathan; se ele quiser Ø20, são 2 PN Ø20 por apoio (refazer a verificação do pino ao cisalhamento).

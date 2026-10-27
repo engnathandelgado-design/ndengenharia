@@ -22,7 +22,9 @@ def render(grupos, arq, cam, filtros={}, w=2400, h=1500, caixa=None, zoom=1.15, 
             m = m.clip_box(caixa, invert=False)
         if m is not None and m.n_points:
             p.add_mesh(m, color=COR.get(g, "#bbbbbb"), smooth_shading=False, ambient=0.25, diffuse=0.75, specular=0.05)
-    p.enable_anti_aliasing("ssaa")
+    import os as _os
+    if not _os.environ.get("ND_PV_SCALE_MAP"):                      # rev11: em alta resolução (janela × S) sem SSAA (estoura o framebuffer)
+        p.enable_anti_aliasing("ssaa")
     p.view_vector(cam[0], viewup=(0, 0, 1)); p.reset_camera(); p.camera.zoom(zoom)
     p.screenshot(arq); p.close()
 EST = ["Pilares", "Consolos", "Vigas centrais I130", "Vigas I90 de cobertura", "Vigas de borda", "Vigas de mezanino (meio vaso)", "Vigas de mezanino (retangulares protendidas)", "Escada metálica", "Escada metálica externa", "Cobertura metálica da linha 2",

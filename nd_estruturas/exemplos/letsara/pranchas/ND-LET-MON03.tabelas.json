@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "PLANO DE MONTAGEM DO FECHAMENTO LATERAL (PLACAS) E SEQUÊNCIA GERAL DA OBRA — IÇAMENTO E EQUIPAMENTOS",
   "desenho": "ND-LET-MON03",
-  "rev": "03",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "03/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -120,7 +120,7 @@
     ],
     [
      "3",
-     "Vigas centrais I130 (V407, V406, V405, V404)",
+     "Vigas centrais I120 (V407, V406, V405, V404)",
      "NEO-2; PN-2 grauteado numa ponta",
      "MON01, CT03, CT04"
     ],
@@ -192,8 +192,8 @@
      "pino passante + 2 manilhas"
     ],
     [
-     "I130 (V404, V405, V406, V407)",
-     "15,5",
+     "I120 (V404, V405, V406, V407)",
+     "16,3",
      "19,50",
      "2 alças AL-3 (2 laços cada)",
      "balancim"

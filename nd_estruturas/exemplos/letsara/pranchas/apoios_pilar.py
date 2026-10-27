@@ -129,7 +129,7 @@ def detalhe3(pr, P, REC, rd, B, H, L_TOT, z_rec, org):
         v.poli([(FOLGA, 10), (R + 150, 10), (R + 150, 10 + 400), (FOLGA, 10 + 400)], "VISTA")
         v.interrupcao((R + 150, 10), (R + 150, 410)); v.interrupcao((FOLGA, 410), (R + 150, 410))
         v.cota_h([0, FOLGA], 410, 8, total=False)
-        v.chamada((FOLGA / 2, 300), (-14, 8), f"folga de montagem {FOLGA} mm")
+        v.chamada((FOLGA / 2, 405), (10, 18), f"folga de montagem {FOLGA} mm")
         for x in xs:
             v.ret(x - 25, 10, 50, livre + 20, "OCULTA")
         v.chamada((AS["x_neo"][1] - 20, 5), (12, -8), f"{AS['neo_nome']}")

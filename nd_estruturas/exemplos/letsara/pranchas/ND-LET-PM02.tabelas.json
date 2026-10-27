@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "PILAR DO MEZANINO PM-02 (P8B, 40×60) — LINHA 2, EIXO D — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PM02",
-  "rev": "01",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO",
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "PM-02",
   "qtd": 1,
   "peso": "62,9",
@@ -156,7 +156,7 @@
    ],
    "linhas": [
     [
-     "C2 (CP-MEZ)",
+     "C3 (CP-MEZ)",
      "A",
      "+3,17 (416,9)",
      "40×40×27,9",
@@ -166,7 +166,7 @@
      "63"
     ],
     [
-     "C2 (CP-MEZ)",
+     "C3 (CP-MEZ)",
      "C",
      "+3,17 (416,9)",
      "40×40×27,9",
@@ -176,7 +176,7 @@
      "63"
     ],
     [
-     "C2 (CP-MEZ)",
+     "C3 (CP-MEZ)",
      "A",
      "+6,57 (756,9)",
      "40×40×27,9",
@@ -186,7 +186,7 @@
      "63"
     ],
     [
-     "C2 (CP-MEZ)",
+     "C3 (CP-MEZ)",
      "C",
      "+6,57 (756,9)",
      "40×40×27,9",

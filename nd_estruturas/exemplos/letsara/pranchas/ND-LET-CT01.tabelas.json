@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "CORTES TRANSVERSAIS DA ESTRUTURA — EIXOS 2 E 3",
   "desenho": "ND-LET-CT01",
-  "rev": "11",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/01",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -31,15 +31,15 @@
      "+8,369"
     ],
     [
-     "Topo da I130 / pilares centrais",
+     "Topo da I120 / pilares centrais",
      "+7,776"
     ],
     [
-     "Fundo da I130",
+     "Fundo da I120",
      "+6,576"
     ],
     [
-     "Assento da I130 (CP-I130)",
+     "Assento da I120 (CP-I120)",
      "+6,966"
     ],
     [

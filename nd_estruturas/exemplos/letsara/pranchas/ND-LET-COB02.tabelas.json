@@ -6,13 +6,13 @@
   "local": "A CONFIRMAR",
   "conteudo": "COBERTURA METÁLICA — TRAVAMENTO: CONTRAVENTAMENTO EM X, CORRENTES E DIAGONAIS",
   "desenho": "ND-LET-COB02",
-  "rev": "09",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "02/04",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -36,6 +36,14 @@
     ],
     [
      "X2",
+     "2",
+     "Ø16 A36",
+     "9000 + 4827",
+     "44",
+     "X, vãos 8-9 (orelha a orelha 13769)"
+    ],
+    [
+     "X3",
      "4",
      "Ø16 A36",
      "9000 + 4824",
@@ -43,15 +51,15 @@
      "X, vãos 4-5 (orelha a orelha 13766)"
     ],
     [
-     "X3",
-     "4",
+     "X4",
+     "2",
      "Ø16 A36",
      "9000 + 4669",
-     "86",
+     "43",
      "X, vãos 8-9 (orelha a orelha 13611)"
     ],
     [
-     "X4",
+     "X5",
      "12",
      "Ø16 A36",
      "9000 + 4009",
@@ -59,20 +67,20 @@
      "X, vãos 5-6, 6-7, 7-8 (orelha a orelha 12951)"
     ],
     [
-     "X5",
+     "X6",
+     "4",
+     "Ø16 A36",
+     "9000 + 3962",
+     "82",
+     "X, vãos 8-9 (orelha a orelha 12904)"
+    ],
+    [
+     "X7",
      "4",
      "Ø16 A36",
      "9000 + 3953",
      "82",
      "X, vãos 4-5 (orelha a orelha 12895)"
-    ],
-    [
-     "X6",
-     "4",
-     "Ø16 A36",
-     "9000 + 3794",
-     "81",
-     "X, vãos 8-9 (orelha a orelha 12736)"
     ],
     [
      "ES",

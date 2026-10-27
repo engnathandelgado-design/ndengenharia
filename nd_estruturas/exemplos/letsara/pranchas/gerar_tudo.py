@@ -3,7 +3,7 @@ Uso: python gerar_tudo.py  → log em gerar_tudo.jsonl; falha se alguma folha do
 import json, os, subprocess, sys, time
 PR = "/home/claude/letsara/pranchas/"
 LOG = PR + "gerar_tudo.jsonl"
-ORDEM = ["consolos_marcas.py", "pilares_familia.py", "pilar_generico.py", "cs01.py", "ex01.py", "ts01_chaparia.py", "vigas_exec.py", "cob01.py", "cob02.py", "cob03.py", "cob04.py", "cob_l2.py", "cob06.py", "cob07.py", "cob08.py", "cob09.py", "mt01.py",
+ORDEM = ["consolos_marcas.py", "pilares_familia.py", "pilar_generico.py", "cs01.py", "ex01.py", "ts01_chaparia.py", "vigas_exec.py", "cob01.py", "cob02.py", "cob03.py", "cob04.py", "cob_l2.py", "cob06.py", "cob07.py", "cob08.py", "cob09.py", "mt01.py", "ts01_armacao.py",
          "lajes_placas.py", "es01.py", "es02.py", "es03.py", "es04.py", "fechamento.py", "pp01.py", "pp02.py", "pp03.py", "pp04.py", "pp05.py", "pp06.py", "pv01.py",
          "loc01.py", "cg01.py", "corte01.py", "ct02.py", "ct03.py", "ct04.py", "mon01.py", "mon02.py", "mon03.py",
          "quantitativos.py", "ic01.py", "pr01.py", "ng01.py"]

@@ -230,7 +230,7 @@ notas = ["Concreto C40 (fcj 25 MPa para desformar e içar), aço CA-50; cobrimen
          "Placas por fora da viga, fixadas nos pilares (a VB não recebe carga das placas). Içar pelas 2 alças AL-1; estocar sobre 2 calços nas alças. Concreto em cm, chaparia em mm.",
          "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 y = pr.legenda_armadura(XC, y - 4, False)
-pr.notas(XC, y - 4, notas, 182)
+pr.notas(XC, y - 4, notas, 205)   # rev12: coluna mais larga, notas não descem sobre o isométrico
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-VB01")
 print(len([a for a in avisos if a[0] == "ERRO"]), "erros,", len(avisos), "avisos")
 for a in avisos:

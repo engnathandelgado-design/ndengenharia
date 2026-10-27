@@ -113,12 +113,13 @@ def lajes():
     pr.revisao("01", "12/10/2026", "GEOMETRIA DO R01 (VÃO 9,65 m); 8 Ø12,7; LA-02 70 cm NAS PONTAS; RECORTES NOS PILARES")
     pr.revisao("04", "16/10/2026", "NBR 9062: APOIO NA ABA DA VM EM MEIO VASO; 2º ESTÁGIO E CAPA C30 DE OBRA")
     pr.revisao("07", "21/10/2026", "FÔRMA E ARMAÇÃO NA MESMA FOLHA (PADRÃO USINA)")
-    pr.revisao("09", "23/10/2026", "DEC-045/047/048/049: PISOS +3,90/+7,30; APOIO NO TOPO DA VM 30 × 75; L 960; 2 Ø15,2 + 5 Ø12,7; ESCADA: LA-03/LA-04")
+    pr.revisao("09", "23/10/2026", "PISOS +3,90/+7,30; APOIO NO TOPO DA VM 30 × 75; L 960; ESCADA: LA-03/LA-04")
+    pr.revisao("R12", "26/10/2026", f"LA-01/LA-01R COM {LJ['n_cord']} Ø12,7 (2 EM CADA NERVURA DE BORDA) — CONFIRMAR A EXTRUSORA COM A FÁBRICA")
     Q = pr.quadro
     XC = Q[2] - 190
     pr.cabecalho_peca("LA-01", f"LAJE ALVEOLAR h20 + CAPA 5 — LA-01 (125 × {L_P/10:.0f} cm) · LA-01R · LA-02 (70 × {L_P/10:.0f}) · LA-03 / LA-04 (curtas, {L_P3/10:.0f} cm)",
                       f"mezanino, pisos (topo da capa) {NIVS[0]} e {NIVS[1]}; apoio 10 cm no topo das VM 30 × 75 (linhas 1 e 2); {sum(qt.values())} painéis (2 níveis) · PESO LA-01 {f(PESO1/10, 2)} t · "
-                      f"2 Ø15,2 + 5 Ø12,7 CP-190 RB (uma por nervura)", largura=XC - Q[0] - 10)
+                      f"{LJ['n_cord']} Ø12,7 CP-190 RB (2 em cada nervura de borda)", largura=XC - Q[0] - 10)
     Y_SPLIT = Q[1] + 300                                                            # divisa FÔRMA (em cima) / ARMAÇÃO (embaixo)
     pr.linha((Q[0] + 4, Y_SPLIT), (XC - 8, Y_SPLIT), "CARIMBO_FINO")
     pr.texto(Q[0] + 8, Q[3] - 40, "FÔRMA", "titulo", "TITULO")

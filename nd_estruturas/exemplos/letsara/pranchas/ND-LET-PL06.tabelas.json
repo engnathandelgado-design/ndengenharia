@@ -4,7 +4,7 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR PRÉ-MOLDADO PL-06 (FAMÍLIA 40×60) — P2 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR PRÉ-MOLDADO PL-06 (60 × 40, x × y) — P2 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PL06",
   "rev": "12",
   "data": "26/10/2026",
@@ -15,8 +15,8 @@
   "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO",
   "marca": "PL-06",
   "qtd": 1,
-  "peso": "65,3",
-  "volume": "2,61"
+  "peso": "64,2",
+  "volume": "2,57"
  },
  "tabelas": [
   {
@@ -33,7 +33,7 @@
      "PL-06",
      "P2 L2",
      "1",
-     "2 CP-MEZ (A); recuo +9,036 (W 200 direto)",
+     "1 CP-MEZ só +7,30 (A); recuo +9,036 (W 200 direto)",
      "6 CC-1 (C) + 6 (D, vista G)"
     ]
    ]
@@ -109,25 +109,25 @@
      "CA-50",
      "N4",
      "16",
-     "16",
+     "8",
      "248",
-     "3968"
+     "1984"
     ],
     [
      "CA-50",
      "N5",
      "10",
-     "4",
+     "2",
      "268",
-     "1072"
+     "536"
     ],
     [
      "CA-50",
      "N6",
      "8",
-     "8",
+     "4",
      "128",
-     "1024"
+     "512"
     ]
    ]
   },
@@ -146,23 +146,23 @@
     ],
     [
      "PESO CA-50 Ø 8",
-     "11,26 m",
-     "4,45 kg"
+     "5,63 m",
+     "2,22 kg"
     ],
     [
      "PESO CA-50 Ø 10",
-     "46,60 m",
-     "28,75 kg"
+     "40,70 m",
+     "25,11 kg"
     ],
     [
      "PESO CA-50 Ø 16",
-     "158,49 m",
-     "250,09 kg"
+     "136,66 m",
+     "215,66 kg"
     ],
     [
      "PESO TOTAL CA-50",
      "",
-     "337,37 kg"
+     "297,06 kg"
     ]
    ]
   },
@@ -180,17 +180,7 @@
    ],
    "linhas": [
     [
-     "C3 (CP-MEZ)",
-     "A",
-     "+3,17 (416,9)",
-     "40×40×27,9",
-     "1 PN-1 Ø20",
-     "23",
-     "40",
-     "63"
-    ],
-    [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "A",
      "+6,57 (756,9)",
      "40×40×27,9",
@@ -223,13 +213,13 @@
     [
      "PN-1",
      "Pino Ø20 CA-50 L=630 (230 no consolo)",
-     "2",
+     "1",
      "CP-MEZ"
     ],
     [
      "NEO-5",
      "Neoprene 300×150×10 c/ furo Ø30 (dente da VM)",
-     "2",
+     "1",
      "CP-MEZ"
     ],
     [
@@ -299,13 +289,13 @@
     ],
     [
      "VOLUME",
-     "2,61 m³",
+     "2,57 m³",
      "PESO",
-     "6,53 t"
+     "6,42 t"
     ],
     [
      "AÇO CA-50",
-     "337 kg",
+     "297 kg",
      "TAXA",
      "0,84 %"
     ],

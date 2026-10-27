@@ -50,7 +50,7 @@ def alca(p, x, y, z, w=0.12, h=0.14, sentido="x"):
     p.add_mesh(pv.Spline(pts, 60).tube(radius=0.009), **ALCA)
 
 
-def rot(p, pts, labs, fs=38):
+def rot(p, pts, labs, fs=95):
     p.add_point_labels(np.array(pts, float), labs, font_size=fs, point_size=8, point_color="#c0392b", text_color="#111111",
                        shape_color="white", shape_opacity=0.85, margin=3, always_visible=True)
 
@@ -128,15 +128,15 @@ def i130():
                     p.add_mesh(box(s0 + dn - 0.05, s0 + dn + 0.05, -0.15, 0.15, H, H + 0.01), **NEO)
                 for ds in (-0.10, 0.10):
                     p.add_mesh(cil((s0 + ds, dn, H + 0.15), 0.020, 0.30), **ACO)
-    p = pv.Plotter(off_screen=True, window_size=(2600, 900)); p.set_background("white")
+    p = pv.Plotter(off_screen=True, window_size=(7200, 2500)); p.set_background("white")
     peca(p)
     s0 = P["pinos_topo"][0] / 1e3
     rot(p, [(P["alcas"][0] / 1e3, 0, H + 0.14), (s0 + 0.115, 0.10, H + 0.30), (LN / 2, 0.2, H - HD), (P["pino_x"] / 1e3, 0, H + 0.02), (MAC + 1.0, 0.2, H * 0.5)],
         ["AL-3 alça de içamento (2x)", "apoio das vigas de cobertura: consolos CT-I120 com mísula + NEO-3C + 4 PN-5", f"dente Gerber {HD*100:.0f} × {LN*100:.0f}",
-         "TB-2 passante no dente", f"seção I{round(H * 100)} (b 40, bw 15)"], fs=23)
+         "TB-2 passante no dente", f"seção I{round(H * 100)} (b 40, bw 15)"], fs=57)
     salvar(p, "ISO-I120-geral.png", [(L * 0.5 - 6, -15, 11), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
     # ponta no consolo CP-I120 do pilar central
-    p = pv.Plotter(off_screen=True, window_size=(1500, 1200)); p.set_background("white")
+    p = pv.Plotter(off_screen=True, window_size=(3750, 3000)); p.set_background("white")
     F = 0.075                                                                              # ponta da viga a 75 mm da face do pilar
     p.add_mesh(box(-0.60 - F, -F, -0.30, 0.30, -1.2, H + 0.25), **PIL_)                    # pilar 60 × 60 (até o topo da viga)
     PJ = 0.40                                                                              # projeção do CP-I120 (consolos.json): termina 25 mm antes do corpo da viga
@@ -187,12 +187,12 @@ def vb():
             if ui <= u <= uf:
                 p.add_mesh(cil((u, 0, (VG.REC / 1e3 + H) / 2), 0.050, H - VG.REC / 1e3 - 0.06), color="#5a5a5a", opacity=0.6)
                 p.add_mesh(box(u - 0.06, u + 0.06, -0.06, 0.06, H - 0.06, H), color="#7fb3d5", opacity=0.5)
-    p = pv.Plotter(off_screen=True, window_size=(2400, 800)); p.set_background("white")
+    p = pv.Plotter(off_screen=True, window_size=(6000, 2000)); p.set_background("white")
     peca(p)
     rot(p, [(es[2], 0, H + 0.12), (1.5, 0, H + 0.14), (VG.LN / 2e3, B / 2, VG.REC / 1e3), (XP, 0, H)],
-        ["ES-1V: 2 esperas M16 por terça (ST-1V)", "AL-1 alça (2x)", "dente 30 × 27 (consolo CP-VB escondido)", "TB-1 + nicho do PN-6"], fs=23)
+        ["ES-1V: 2 esperas M16 por terça (ST-1V)", "AL-1 alça (2x)", "dente 30 × 27 (consolo CP-VB escondido)", "TB-1 + nicho do PN-6"], fs=57)
     salvar(p, "ISO-VB-geral.png", [(L * 0.5 - 5, -12, 9), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
-    p = pv.Plotter(off_screen=True, window_size=(1400, 1100)); p.set_background("white")
+    p = pv.Plotter(off_screen=True, window_size=(3500, 2750)); p.set_background("white")
     F = 0.075                                                                              # ponta da viga a 75 mm da face do pilar
     p.add_mesh(box(-0.40 - F, -F, -0.25, 0.25, -0.8, H + 0.4), **PIL_)
     zc = VG.REC / 1e3 - 0.010
@@ -215,7 +215,7 @@ def vm():
     L = VMJ["VM-02"]["L_peca"]
     ye, yi = -B / 2, B / 2
     b2 = B - 0.12                                                                       # faixa de 2º estágio (alças), lado da borda
-    p = pv.Plotter(off_screen=True, window_size=(2400, 800)); p.set_background("white")
+    p = pv.Plotter(off_screen=True, window_size=(6000, 2000)); p.set_background("white")
     for a, b in ((0, LN), (L - LN, L)):
         p.add_mesh(box(a, b, ye, yi, REC, H), **CONC)                                     # nariz do dente
     p.add_mesh(box(LN, L - LN, ye, yi, 0, H), **CONC)                                     # corpo
@@ -230,7 +230,7 @@ def vm():
     for u in (P["x_pad"] - 0.03, L - P["x_pad"] + 0.03):
         p.add_mesh(cil((u, 0.0, REC + HD / 2), 0.050, HD + 0.01), color="#5a5a5a", opacity=0.6)
     rot(p, [(L * 0.5, ye + b2 / 2, H + 0.20), (L * 0.35, yi, H - 0.02), (L * 0.6, ye, H * 0.4), (LN / 2, yi, REC), (1.1, 0.0, H + 0.13)],
-        ["N9 alças Ø10 c/15 (2º estágio, lado da borda)", "apoio da laje 10 cm (topo)", f"retangular {B*100:.0f} × {H*100:.0f} protendida", f"dente {HD*100:.0f} × {LN*100:.0f}", "AL-1 alça (2x)"], fs=23)
+        ["N9 alças Ø10 c/15 (2º estágio, lado da borda)", "apoio da laje 10 cm (topo)", f"retangular {B*100:.0f} × {H*100:.0f} protendida", f"dente {HD*100:.0f} × {LN*100:.0f}", "AL-1 alça (2x)"], fs=57)
     salvar(p, "ISO-VM-geral.png", [(L * 0.5 - 5, -10, 9), (L * 0.5, 0, H * 0.5), (0, 0, 1)], 1.05)
 
 

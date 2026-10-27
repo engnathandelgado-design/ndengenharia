@@ -4,7 +4,7 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PILAR PRÉ-MOLDADO PL-02 (FAMÍLIA 40×60) — P1 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
+  "conteudo": "PILAR PRÉ-MOLDADO PL-02 (60 × 40, x × y) — P1 L2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
   "desenho": "ND-LET-PL02",
   "rev": "12",
   "data": "26/10/2026",
@@ -188,7 +188,7 @@
    ],
    "linhas": [
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "A",
      "+3,17 (416,9)",
      "40×40×27,9",
@@ -198,7 +198,7 @@
      "63"
     ],
     [
-     "C3 (CP-MEZ)",
+     "C4 (CP-MEZ)",
      "A",
      "+6,57 (756,9)",
      "40×40×27,9",

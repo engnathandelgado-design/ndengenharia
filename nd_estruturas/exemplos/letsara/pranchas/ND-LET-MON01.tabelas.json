@@ -4,15 +4,15 @@
   "cliente": "MARQUES ENGENHARIA E CONSTRUÇÕES",
   "obra": "LETSARA — PAVILHÃO COM MEZANINO",
   "local": "A CONFIRMAR",
-  "conteudo": "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I130, VB-01 A VB-08 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
+  "conteudo": "PLANTA DE MONTAGEM DA COBERTURA — PILARES, VIGAS TS-01, I120, VB-01 A VB-08 — CORTE, LISTA DE PEÇAS E SEQUÊNCIA",
   "desenho": "ND-LET-MON01",
-  "rev": "09",
+  "rev": "12",
   "data": "26/10/2026",
   "folha": "01/03",
   "projeto": "Eng. Civil Nathan Henrique Delgado",
   "desenhista": "ND Engenharia",
   "verificado": "",
-  "fase": "EXECUTIVO — LIBERADO"
+  "fase": "EXECUTIVO — AGUARDANDO LIBERAÇÃO"
  },
  "tabelas": [
   {
@@ -36,7 +36,7 @@
      "PL-02, PL-06",
      "Pilar 40×60 lateral c/ 2 CP-MEZ (L2)",
      "2",
-     "6,2 a 6,5",
+     "6,2 a 6,4",
      "cálice −1,00; topo +10,00"
     ],
     [
@@ -86,35 +86,35 @@
      "Viga I90 de cobertura, L 1970, sem dentes",
      "12",
      "11,8",
-     "recuo +7,195 / topo I130 +7,776 / recuo +8,369"
+     "recuo +7,195 / topo I120 +7,776 / recuo +8,369"
     ],
     [
      "V407",
-     "Viga I130 central, L 19,50 m",
+     "Viga I120 central, L 19,50 m",
      "1",
-     "15,5",
-     "consolos CP-I130 (+6,966)"
+     "16,3",
+     "consolos CP-I120 (+6,966)"
     ],
     [
      "V406",
-     "Viga I130 central, L 15,97 m",
+     "Viga I120 central, L 15,97 m",
      "1",
-     "12,7",
-     "consolos CP-I130 (+6,966)"
+     "13,5",
+     "consolos CP-I120 (+6,966)"
     ],
     [
      "V405",
-     "Viga I130 central, L 15,97 m",
+     "Viga I120 central, L 15,97 m",
      "1",
-     "12,7",
-     "consolos CP-I130 (+6,966)"
+     "13,5",
+     "consolos CP-I120 (+6,966)"
     ],
     [
      "V404",
-     "Viga I130 central, L 15,87 m",
+     "Viga I120 central, L 15,87 m",
      "1",
-     "12,6",
-     "consolos CP-I130 (+6,966)"
+     "13,4",
+     "consolos CP-I120 (+6,966)"
     ],
     [
      "VB-01",
