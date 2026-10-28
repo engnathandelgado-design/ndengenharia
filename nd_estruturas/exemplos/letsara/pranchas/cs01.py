@@ -54,8 +54,8 @@ for k, e in enumerate(R["lista"]):
         for _c in _G["consolos"]:
             if AP.marca_consolo(_c) == e["marca"]:
                 _ws.add(_G["B"] if _c["face"] in "AC" else _G["H"])
-    _sub = f"face {c0['face']} ({AP.g(W / 10)} cm)" if len(_ws) <= 1 else f"faces de {' e '.join(AP.g(w_ / 10) for w_ in sorted(_ws))} cm; desenhada a de {AP.g(W / 10)}"
-    vf = pr.vista(e["marca"] + "F", (cx + 225, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=_sub, unidade="cm")
+    _sub = f"face {c0['face']} ({AP.g(W / 10)} cm)" if len(_ws) <= 1 else f"faces {'/'.join(AP.g(w_ / 10) for w_ in sorted(_ws))} (des. {AP.g(W / 10)})"
+    vf = pr.vista(e["marca"] + "F", (cx + 240, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=_sub, unidade="cm")
     vf.poli([(-W / 2, -h - 150), (-W / 2, 150), (W / 2, 150), (W / 2, -h - 150)], "VISTA")
     vf.interrupcao((-W / 2, -h - 150), (W / 2, -h - 150)); vf.interrupcao((-W / 2, 150), (W / 2, 150))
     u_ = e["exc"] * (-1 if e["exc_face"] in ("D", "C") else 1)

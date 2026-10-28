@@ -24,7 +24,7 @@
    "comprimento_m": 5.4,
    "pecas": 9,
    "chapa": "galvalume #0,50",
-   "descricao": "contra-rufo na face da cabeça dos P1 (pilares do eixo A), dentro da calha"
+   "descricao": "contra-rufo na face da cabeça dos pilares do eixo A, dentro da calha"
   },
   {
    "marca": "PG-1",
@@ -60,7 +60,7 @@
    "comprimento_m": 5.4,
    "pecas": 9,
    "chapa": "galvalume #0,50",
-   "descricao": "rufo de topo liso nos pilares P2: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
+   "descricao": "rufo de topo liso nos pilares do eixo E: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
   },
   {
    "marca": "RF-4",
@@ -321,7 +321,7 @@
      8.4145
     ]
    ],
-   "descricao": "contra-rufo na face da cabeça dos P1 (pilares do eixo A), dentro da calha"
+   "descricao": "contra-rufo na face da cabeça dos pilares do eixo A, dentro da calha"
   },
   "PG-1": {
    "borda": "A",
@@ -405,7 +405,7 @@
      9.985
     ]
    ],
-   "descricao": "rufo de topo liso nos pilares P2: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
+   "descricao": "rufo de topo liso nos pilares do eixo E: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)"
   },
   "RF-4": {
    "borda": "1/9",
