@@ -324,7 +324,7 @@ except Exception as e:
     r(False, "C26 CS01: pilares e quantidades de cada consolo pela geometria; marcas distintas", "ND-LET-CS01", f"não conferido: {e}")
 # C27 toda marca de peça metálica fabricada citada em texto tem desenho de fabricação (título de vista) e linha de lista
 TXT = {fl: textos(PR + fl + ".dxf") for fl in idx if os.path.exists(PR + fl + ".dxf")}
-FAB = r"(?<![\w-])((?:PT|ST|CS|CE|CC|NC|OM|CL|TL|EM|CB|MF|CA)-\d+[A-Z]{0,2}|ST-W|ES-1FL)(?![\w-])"
+FAB = r"(?<![\w-])((?:PT|ST|CS|CE|CC|NC|OM|CL|TL|EM|CB|MF|CA)-(?!(?:25|50|60)(?![\w-]))\d+[A-Z]{0,2}|ST-W|ES-1FL)(?![\w-])"   # CA-25/50/60 = aço
 cit = {m_ for tx_ in TXT.values() for t in tx_ for m_ in re.findall(FAB, t)}
 tit = {m_ for tx_ in TXT.values() for t in tx_ if t.isupper() or "—" in t[:20] for m_ in re.findall(FAB, t[:30])}
 lis = set()
@@ -339,9 +339,13 @@ sem_d = sorted(m_ for m_ in cit if m_ not in tit and m_ not in lis)
 r(not sem, "C27 marca citada em texto tem linha de lista", "JOGO", "ok" if not sem else ", ".join(sem[:12]))
 r(not sem_d, "C27 marca citada em texto tem desenho de fabricação ou linha de material", "JOGO", "ok" if not sem_d else ", ".join(sem_d[:12]))
 # C28 nomes internos/R01 fora do quadro de correspondência (LOC01): P1C-L1, P2-L5, P8A, P13B, P10a…
+_NOMS = {c_ for t_ in json.load(open(PR + "ND-LET-NG01.tabelas.json", encoding="utf-8"))["tabelas"] if t_["titulo"].startswith("NOMENCLATURA") for l_ in t_["linhas"] for c_ in l_[1:]}
+_NOMS |= {re.sub(r"[\x00-\x1f]", "", c_) for c_ in _NOMS}                    # células com marcador de formatação (\x01)
 for fl, tx_ in TXT.items():
     if fl == "ND-LET-LOC01":
         continue
+    if fl == "ND-LET-NG01":                                              # quadro de nomenclatura (nome × R01) é a correspondência, como na LOC01
+        tx_ = [t for t in tx_ if t not in _NOMS]
     m28 = [t for t in tx_ if re.search(r"\bP\d+C?-L\d\b|\bP8[AB]\b|\bP13B\b|\bP10[ab]\b|\(P[67], ", t)]
     r(not m28, "C28 nome do projeto (sem nome interno ou do R01 fora da LOC01)", fl, "ok" if not m28 else m28[0][:80])
 # C29 valores únicos de projeto: portões, folgas e chegada da escada iguais em todas as notas
