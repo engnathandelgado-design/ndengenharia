@@ -119,6 +119,12 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
        f"Armadura (2ª ordem global + método geral + manuseio): PG-02 {DPR['PG-02']['proposto']['n']} Ø16, PG-04 {DPR['PG-04']['proposto']['n']} Ø16. "
        "CE-1 380 × 330 cabe na face de 40; sem calço CS-1D (face no plano dos consoles). PV-1 sobre o portão com CL-V L 102 nos dois apoios. "
        f"Cargas na fundação (tf): PG-02 Nk {f((CFU['P10a']['G']['N'] + CFU['P10a']['Q']['N']) / 10)}, Nd {f(CFU['P10a']['ELU']['Nd_max'] / 10)}; PG-04 Nk {f((CFU['P10b']['G']['N'] + CFU['P10b']['Q']['N']) / 10)}, Nd {f(CFU['P10b']['ELU']['Nd_max'] / 10)}."),
+     Paragraph("3d. P5 (PE-03) com 8 Ø20 para a passagem das bainhas (decisão de 28/10)", T2),
+     P(f"As 2 bainhas BA-1 Ø50 da continuidade da VM no +7,30 (uma sobre a outra, centroide 12 cm acima do topo da VM) não passavam entre as 6 barras Ø16 da face de 40 "
+       f"(46 mm livres; a bainha pede 50 + 2 × 10 mm). Com no máximo 4 barras na face de 40, a menor armadura que atende flexo-compressão, 2ª ordem pelo método geral "
+       f"(λ ≥ 1,0), manuseio e As,mín é {DPR['PE-03']['proposto']['n']} Ø{DPR['PE-03']['proposto']['d']:g} = {f(DPR['PE-03']['proposto']['As_cm2'])} cm² "
+       f"(antes 12 Ø16 = 24,1 cm²): uso da seção {f(DPR['PE-03']['proposto']['uso_secao'], 3)}, λ = {f(DPR['PE-03']['proposto']['lambda_u'], 1)}; 8 Ø16 não passa na 2ª ordem "
+       f"(λ 0,0 a 0,42). Seção e rigidez inalteradas: deslocamentos do modelo global (ELS) sem mudança."),
      Paragraph("4. Densidade e pesos", T2),
      P("Peso = volume × 25 kN/m³; t = kN / 10 (2,50 t/m³) em todo o jogo: IC01, folhas das peças, PR01, quantitativos e montagem (antes a IC01 e a TS-01 usavam 9,81). A IC01 lê os pesos da mesma lista de peças do PR01; σ no furo FI-1 em MPa; coluna βa = 1,3 em todas as tabelas."),
      Paragraph("5. Barras das peças e pinos de ligação", T2),

@@ -151,7 +151,9 @@ def bainhas_peca(P, cons):
         if not cand:                                                       # a contagem vale; a posição volta para o arranjo das barras
             erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: bainha Ø{NV_.D_BAINHA} sem passagem entre as barras do pilar na faixa do 2º estágio "
                                   f"(t de {lo:.0f} a {hi:.0f} mm; barras em {sorted({round(q[1] if ao_longo_u else q[0]) for q in P['xy']})}) — rever o arranjo"))
-        z_topo_vm = c1["z"] - c1["h"] + H_VM
+        z_topo_vm = c1["z"] + round((_VMP["h_pm"] - _VMP["dente"]["recorte"]) * 1000) + 21   # rev12c: assento + dente + NEO 21 = topo da VM (antes: fundo do consolo + h da VM, 12 cm abaixo)
+        if abs((z_topo_vm - 1000) - (Z_PISO_MM[k] - 260)) > 1:              # trava rev12c: topo da VM = piso − 26 cm (capa + laje + fita), como na EX01
+            erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: topo da VM {z_topo_vm - 1000} ≠ piso − 260 = {Z_PISO_MM[k] - 260} (bainhas fora da altura da EX01)"))
         out.append(dict(niv=b_["niv"], n=b_["n"], faces=(c1["face"], c2["face"]), mais=mais, t=t, d=NV_.D_BAINHA,
                         zs=[z_topo_vm + dz for dz in NV_.z_bainhas(b_["n"])], z_vm=z_topo_vm, faixa=(lo - r, hi + r)))
     for k, z in enumerate(Z_MEZ_ASS):                                    # trava inversa: VM dos dois lados sem continuidade no registro
@@ -894,6 +896,19 @@ def nota_arm(marca):
             "com as cargas nos níveis reais; manuseio (desforma, transporte e verticalização, NBR 9062:2017 5.3.2) verificado.")
 
 
+def _alcas(ztop, cons, face="A"):
+    """posição das 2 alças AL-2 (mm da base da peça). Padrão: 2,5 m abaixo do topo e 1,5 m acima da base (pilares altos, fora da
+    platibanda). rev12c: em peça curta as duas ficavam a 10 cm uma da outra (P2/P3, L 4,90 m) — então ~0,207 L de cada ponta
+    (momentos iguais no vão e nos balanços), a de cima abaixo do consolo da face das alças com 15 cm de folga."""
+    L = ztop + 1000
+    al = [L - 2500, 1500]
+    if abs(al[0] - al[1]) >= L / 3:
+        return al
+    lim = min([c["z"] - c["h"] - 150 for c in cons if c.get("face") == face] or [L])
+    a1, a2 = round(0.207 * L / 50) * 50, min(round((L - 0.207 * L) / 50) * 50, lim // 50 * 50)
+    return [a2, a1]
+
+
 def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, marcas, insertos, notas, ip01=(), d1=20.0, grampos=(), vistas=("A", "B", "C"), zoom=3.2):
     # rev12 (revisão rev12, item 10): no título, o nome do PROJETO de cada peça da marca (registro de nomes), nunca o do R01
     import re as _re, renomear as _RNb
@@ -905,7 +920,7 @@ def base(marca, qtd, B, H, ztop, cons, xy, desenho, conteudo, posicao, familia, 
         a = ARR[marca]
         xy, d1, grampos, grampos_h = [tuple(p) for p in a["xy"]], a["d"], a["grampos"]["across_B"], a["grampos"]["across_H"]
         notas = [nota_arm(marca)] + list(notas[1:])
-    return dict(marca=marca, qtd=qtd, B=B, H=H, L_CAL=1000, Z_TOP=ztop, al=[ztop + 1000 - 2500, 1000 + 1500], consolos=cons, xy=xy, grampos=list(grampos),
+    return dict(marca=marca, qtd=qtd, B=B, H=H, L_CAL=1000, Z_TOP=ztop, al=_alcas(ztop, cons), consolos=cons, xy=xy, grampos=list(grampos),
                 grampos_h=list(grampos_h), d_est=D_EST, est=EST_STD, vistas=list(vistas), ip01=list(ip01), d1=d1, zoom=zoom, desenho=desenho, conteudo=conteudo,
                 posicao=posicao, familia=familia, kp=KP_CEN, marcas=marcas, insertos=insertos, memoria=[], notas=notas)
 
@@ -993,7 +1008,7 @@ NOTA_LIG = ("A cabeça do pilar APOIA a TS-01A da linha 4. Na fábrica: topo lis
             "da viga — a viga não desce no vão dos portões (fundo ≥ +7,50; no PG-01 7,497, dentro da tolerância de ±10 mm). Reação de cálculo "
             "na cabeça: {rd}. Em cada face lateral (B e D) continua a cantoneira L 102×102×9,5 L = 250 (CL-P) com 1 M16 8.8 no inserto IL-1 "
             "(furo oblongo vertical 18 × 50) e 2 M16 nos insertos do fundo da TS-01A: trava a parede dos portões em y. " + __import__("registro").portao_txt().capitalize() + ".")
-IL2 = ["IL-2", "2 barras roscadas M16 8.8 L=200 (150 embutidos + grampo U Ø10) por cantoneira — CL-V (apoio da PV-1) e CT-V (trava do topo)", 6, f"face {FPL['C']}: 2 a +7,42 e 1 a +7,80 por cantoneira"]
+IL2 = ["IL-2", "barras roscadas M16 8.8 L=200 (150 embutidos + grampo U Ø10) — 2 na CL-V (apoio da PV-1) e 1 na CT-V (trava do topo)", 3, f"face {FPL['C']}: 2 na CL-V (+7,42 e +7,47) e 1 na CT-V (+7,80), no centro da face"]
 
 
 def _fiadas_c(x):
@@ -1034,6 +1049,10 @@ def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
               NOTA_LIG.format(rd=_RD_PG.get(marca, "-")) + (f" Na face {FPL['C']}, as barras IL-2 das cantoneiras CL-V/CT-V da placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01)." if marca in ("PG-03", "PG-04") else ""),
               "Pilar de fechamento da parede dos portões (vista C): recebe as placas, a folha do portão e o vento; apoiado em y na TS-01A pela cabeça e, depois do graute, apoio vertical da TS-01A (compressão e esbeltez verificadas na memória de cálculo)."],
              ip01=[dict(face=FPL["C"], z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.6, vistas=("A", FPL["C"], "C"))
+    if marca in ("PG-03", "PG-04"):        # rev12c: barras IL-2 da CL-V (2, uma sobre a outra) e da CT-V (1) desenhadas e cotadas na face (PV01 det. 1)
+        W_ = bx_                           # face das placas = lado ao longo da parede (x)
+        P["esperas_face"] = [dict(face=FPL["C"], da=[W_ / 2], z=z_ + 1000, d=16, emb=150, sai=50, rot=r_)
+                             for z_, r_ in ((7420, "IL-2 M16 (CL-V)"), (7465, "IL-2 M16 (CL-V)"), (7800, "IL-2 M16 (CT-V)"))]
     if _G.DY_PG[marca]:                    # rev12b: eixo da linha 4 no CORTE A-A (u = +y, face B)
         P["eixo_linha"] = dict(u=round(_G.DY_PG[marca] * 1000), nome="EIXO LINHA 4")
     if marca in ("PG-02", "PG-04"):        # rev12 (DEC-092): locação decidida — sem pendência

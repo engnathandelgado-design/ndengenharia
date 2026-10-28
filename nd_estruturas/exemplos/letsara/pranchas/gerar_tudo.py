@@ -127,6 +127,8 @@ if __name__ == "__main__":
     if com_3d:                                                  # 3D/IFC uma vez, no fim (≈ 20 min); pulado se nada que ele lê mudou
         m3 = MAN + "modelo_bim.json"
         ok, info = (False, "--tudo") if tudo else pode_pular_em(EX, "modelo_bim.py", m3)
+        if ok and os.path.exists(m3) and any(os.path.getmtime(PR + f) > os.path.getmtime(m3) for f in os.listdir(PR) if f.startswith("ND-LET-") and f.endswith(".pdf")):
+            ok, info = False, "folhas mudaram (o 3D embute as pranchas; o pymupdf abre o PDF fora do rastreio)"
         if ok:
             print("modelo_bim.py          igual (pulado)")
         else:
