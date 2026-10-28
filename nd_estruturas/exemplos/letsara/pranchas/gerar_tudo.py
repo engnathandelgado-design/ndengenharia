@@ -142,7 +142,9 @@ if __name__ == "__main__":
         json.dump({f: _h_pdf(PR + f) for f in os.listdir(PR) if f.endswith(".pdf")}, open(base, "w", encoding="utf-8"), indent=0)
         print("emissão registrada: próximas revisões comparam com estas folhas")
     if lista or "--emissao" in sys.argv:
-        json.dump(dict(rodadas=rodadas, puladas=puladas, folhas_alteradas=alt), open(PR + "alteradas.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        # rev12b (C44): registra a base da comparação — a última emissão revisada; sem ela, avisa (a revisão por diferença perde a referência)
+        json.dump(dict(base="emissao_revisada.json" if os.path.exists(base) else "execução anterior (sem emissão revisada registrada)", rodadas=rodadas, puladas=puladas,
+                       folhas_alteradas=alt), open(PR + "alteradas.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"rodadas {len(rodadas)}, puladas {len(puladas)}; PDFs alterados: {len(alt)}")
     final = {}
     for l in (open(LOG, encoding="utf-8") if os.path.exists(LOG) else []):

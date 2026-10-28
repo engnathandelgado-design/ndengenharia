@@ -11,6 +11,7 @@ import renomear as RN
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 CG = json.load(open(AQ + "cargas_fundacao.json"))
+CF_P = CG["pilares"]                                                  # rev12b: nome do pilar pela posição
 P = CG["pilares"]
 t = lambda kn: f"{kn / 10:.1f}".replace(".", ",").replace("-0,0", "0,0")      # kN → tf (NBR 9062: g = 10)
 ESP = {"P8": "PM-01", "P8B": "PM-02", "P8A": "PC-01", "P11": "PC-02", "P13": "PC-03", "P13B": "PC-03", "P9": "PG-01", "P10a": "PG-02", "P10b": "PG-04", "P12": "PG-03",
@@ -95,7 +96,7 @@ for nm, d in P.items():
     else:
         y0 = yp + by / 2 + 250 + DL * (len(lin_) - 1)
     if nm in ("P6E", "P7E", "P6-L2"):                                  # rev09: pilares do anexo/escada — rótulo à esquerda, para baixo
-        dx, al = ((bx / 2 + 200, "BOTTOM_LEFT") if nm == "P7E" else (-bx / 2 - 200, "BOTTOM_RIGHT"))
+        dx, al = ((bx / 2 + 700, "BOTTOM_LEFT") if nm == "P7E" else (-bx / 2 - 200, "BOTTOM_RIGHT"))   # rev12b (item 21): P2 afastado do rótulo do P1
         y0 = yp - by / 2 - 300                                          # rev12 (item 26): P5 abaixo, sem sobrepor o rótulo do P2
     for k, (s_, h_) in enumerate(lin_):
         v.texto((xp + dx, y0 - k * DL), s_, h_, al)
@@ -115,7 +116,7 @@ y_n = pr.notas(470, 318, [
     "Convenção: N positivo = compressão na fundação, negativo = tração (arrancamento). x = direção A→E, y = direção 1→9; Mx = momento em torno de x, My = em torno de y; H = resultante horizontal. Momentos e H em valor absoluto (o sentido inverte com o vento).",
     "Características por ação: G = permanentes (peso próprio, cobertura completa com painéis solares 0,15 kN/m² e instalações 0,10 kN/m², placas, mezanino com laje, capa e revestimento); Q = sobrecargas (cobertura 0,25 kN/m² — NBR 6120; piso +3,90: sobrecarga 5,0 kN/m² (depósito) + revestimento 1,0 kN/m²; +7,30: laje de cobertura do bloco (acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga 1,0 + regularização/impermeabilização 1,7 kN/m² — ND-LET-LA01); V = vento NBR 6123:2023 nas 4 direções, Cpi máximo e mínimo e excentricidade ±e (6.6), dado como (G+V) − G, envoltória mín/máx.",
     "De cálculo (ELU, NBR 8681 / 6118): 1,3 G + 1,4 V + 0,7·1,4 Q (sobrecarga secundária) e 1,0 G + 1,4 V (sucção, G favorável), com desaprumo H/400 (NBR 9062:2017 5.2.3); e 1,3 G + 1,4 Q. Nd mín negativo = tração de cálculo na fundação.",
-    "Pilares PG-01 a PG-04 (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. " + RN.novo(f"{RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04'))} (PG-02 e PG-04, 25 × 40): eixo 7,5 cm fora da linha 4, face no plano dos vizinhos; base e cálice centrados no eixo do pilar (coordenadas da tabela); reação da TS-01A tomada no eixo da linha 4 a favor da segurança: ΔMx = Rd · 0,075 = " + ", ".join(f"{v / 10:.2f} tf·m".replace(".", ",") for v in CG.get('exc_pg', {}).values()) + " incluído no Mxd."),
+    "Pilares " + RN.N(RN.lista([n_ for k_ in ("PG-01", "PG-02", "PG-03", "PG-04") for n_ in RN.nomes_de(k_)])) + " (portões): G e Q incluem a reação vertical da TS-01A apoiada na cabeça depois do graute (neoprene + graute); o vento chega só como força horizontal das placas/portões. " + f"{RN.N(RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04')))} (25 × 40): eixo 7,5 cm fora da linha 4, face no plano dos vizinhos; base e cálice centrados no eixo do pilar (coordenadas da tabela); reação da TS-01A tomada no eixo da linha 4 a favor da segurança, ΔMx = Rd · 0,075 incluído no Mxd: " + "; ".join(f"{RN.N(RN.pilar_em(CF_P[k_]['x'], CF_P[k_]['y']))} {v / 10:.2f} tf·m".replace(".", ",") for k_, v in CG.get('exc_pg', {}).items()) + ".",
     "Pilares de canto (linhas 1 e 9, eixos A e E): eixo do pilar 10 cm para fora da linha (face externa alinhada à dos pilares de fachada). Cálice e bloco centrados no EIXO DO PILAR (ND-LET-LOC01), deslocados 10 cm em relação à linha; os valores da tabela são no eixo do pilar. Se o bloco ficar centrado na linha, somar o momento da excentricidade do quadro ao lado.",
     "Dimensionar blocos, cálices e estacas em projeto próprio com estes valores; o cálice segue as cargas e o embutimento das pranchas dos pilares.",
     "PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."], 300)

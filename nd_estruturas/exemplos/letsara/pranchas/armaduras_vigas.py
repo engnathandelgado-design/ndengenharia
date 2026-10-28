@@ -359,7 +359,7 @@ def spec_vm():
               bolhas=[("N6", (LN + 300, REC + 55), (4, -8)), ("N7", (LN + 40, H / 2), (10, -10)), ("N8", (LN + 300, REC + 120), (8, 8)), ("N10", (60, H - 80), (-16, 20))]
               + ([("N13", (1300, P["extra_inf"][0]["y"]), (6, -8)), ("N14", (LN + 280, 200), (8, -14))] if P.get("extra_inf") else []),
               formas=["N6", "N7", "N8"] + (["N14"] if P.get("extra_inf") else []), corte_x=1600)
-    return dict(fam="VM", titulo=f"VIGAS DO MEZANINO VM-01 A VM-04 (RETANGULAR {B/10:g} × {H/10:g} PROTENDIDA, DENTE GERBER)", forma="ND-LET-VM01", fck=40, L=L, H=H, esc=25, rep="VM-02",
+    return dict(fam="VM", titulo=f"VIGAS DO MEZANINO +3,90 E +7,30 (RETANGULAR {B/10:g} × {H/10:g} PROTENDIDA, DENTE GERBER)", forma="ND-LET-VM01", fck=40, L=L, H=H, esc=25, rep="VM-02",
                 contorno=[cont], ents=ents, zonas=zs, cortes=[(L / 2 - 700, "S.1"), (200, "S.2")], dets=[(LN / 2, "D1")],
                 longas=[("N3", COB), ("N4", COB), ("N5", COB), ("N12", LN + COB)], blocos=[S1, S2, D1], marcas=marcas,
                 notas=["Concreto C40, aço CA-50; liberar a protensão com fcj ≥ 32 MPa. Cobrimento 2,5 cm (estribos) e 3,0 cm (cordoalhas) — pré-moldado, CAA II.",

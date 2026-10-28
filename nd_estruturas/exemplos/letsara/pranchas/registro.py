@@ -25,7 +25,17 @@ PINOS = {
 }
 # dono de cada item da lista (fonte única): itens do apoio contam pelo pilar, nunca de novo pela folha da viga
 DONO = {"NEO-5F": "pilar", "NEO-6": "pilar", "NEO-2": "pilar", "PN-1": "pilar", "PN-2": "pilar", "PN-6": "pilar"}
-DESC_CANON = {**{a["marca"]: a["desc"] for a in APARELHOS.values()}, **PINOS}
+# rev12 (C25): mesma peça citada em mais de uma folha → uma descrição só nas listas (o comprimento de cada peça fica na folha dela)
+LISTA_CANON = {
+    "AL-2": "Alça laço cordoalha Ø12,7 (2 pernas 700), 40 kN",
+    "AL-1": "Alça laço de cordoalha Ø12,7 (2 pernas), não engraxada — comprimento na folha da peça",
+    "PN-5": "Pino Ø20 CA-50 L=600 (300 embutidos) — apoio das TS-01 no topo dos pilares centrais e da I120",
+    "BR-M16": "4 barras roscadas M16 8.8 L=450 (350 embutidos + grampo U Ø10), saem 100 — apoio direto da W da linha 2 (graute 20 + CA-L2 250×250×19 + arruela, porca e contraporca)",
+    "TB-1": "Tubo Ø50×3,0 a prumo no nariz do dente, sem solda (L 450 na I120; L 240 + nicho 120×120×60 na VB)",
+}
+# rev12b (revisão rev12b, item 15): coeficientes de içamento únicos (IC01, LA01 e demais folhas) — NBR 9062:2017 5.3.2
+BETA_A_ICAMENTO, GAMA_F_ICAMENTO = 1.3, 1.3
+DESC_CANON = {**{a["marca"]: a["desc"] for a in APARELHOS.values()}, **PINOS, **LISTA_CANON}
 
 
 def num(s):

@@ -39,7 +39,7 @@ POS = {"VM-01": "A–B e D–E da linha 1; A–B da linha 2 (2 níveis)", "VM-02
 PESO, V_TOT = VMJ["VM-02"]["peso_t"], VMJ["VM-02"]["V_m3"]
 
 pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
-                        conteudo="VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, APOIO E INSERTOS",
+                        conteudo="VIGAS DO MEZANINO +3,90 E +7,30 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, APOIO E INSERTOS",
                         desenho="ND-LET-VM01", folha="01/01", fase="PARA APROVAÇÃO", marca="VM-02", qtd=8, peso=f(PESO, 2), volume=f(V_TOT, 2)))
 pr.revisao("00", "12/10/2026", "EMISSÃO INICIAL (I90 COM DENTE)")
 pr.revisao("04", "16/10/2026", "NBR 9062: MEIO VASO COM DENTE; 2º ESTÁGIO E ALÇAS")
@@ -162,8 +162,11 @@ e2 = [(-FOLGA, H), (LD, H), (LD, H + NEOF + H2 + HCAPA), (-FOLGA, H + NEOF + H2 
 d1.poli(e2, "OCULTA", fechada=True); d1.hachura(e2, "ANSI31", 0.6)
 jt = [(-FOLGA, REC), (0, REC), (0, H), (-FOLGA, H)]
 d1.poli(jt, "VISTA", fechada=True); d1.hachura(jt, "AR-SAND", 0.3)
-d1.linha((-FOLGA - 600, H + 120), (1100, H + 120), "ARMADURA")
-d1.ret(-FOLGA - 400, H + 120 - 25, 400, 50, "OCULTA")
+import negativa_vm as NV                                       # rev12b: bainhas BA-1 do registro (uma sobre a outra, centroide 12 cm acima da VM)
+_NB = max(NV.n_bainhas(a_) for a_ in NV.apoios())
+for _zb in NV.z_bainhas(_NB):
+    d1.linha((-FOLGA - 600, H + _zb), (1100, H + _zb), "ARMADURA")
+    d1.ret(-FOLGA - 400, H + _zb - NV.D_BAINHA / 2, 400, NV.D_BAINHA, "OCULTA")
 d1.linha((-FOLGA - 600, H + NEOF + H2 + HCAPA - 30), (1300, H + NEOF + H2 + HCAPA - 30), "ARMADURA")
 for x in range(150, LD - 50, 150):
     d1.linha((x, H), (x, H + 200), "ARM_TRANSV")
@@ -175,7 +178,8 @@ d1.chamada((-FOLGA + PROJ / 2, HC / 2), (-70, -34), f"CP-MEZ {cmz['b_m'] * 100:g
 d1.chamada((X_PAD - FOLGA, HC + 5), (50, -16), "NEO-5F 200×200 fretado (furo Ø30)")
 d1.chamada((X_TB, HC - 250), (90, -34), "PN-1 Ø20 L=630 (230 no consolo), grauteado")
 d1.chamada((-FOLGA / 2, REC + HD / 2), (-26, 10), "junta 3 cm concretada ANTES das lajes (det. 2)")
-d1.chamada((-FOLGA - 300, H + 120), (-14, 14), "N11 6 Ø16 em 2 bainhas BA-1 Ø50 (obra)")
+_N11 = max((a_["N11"] for a_ in NV.apoios()), key=lambda d_: d_["n"] * d_["d"] ** 2)
+d1.chamada((-FOLGA - 300, H + NV.z_bainhas(_NB)[-1]), (-14, 14), f"N11 {_N11['n']} Ø{_N11['d']:g} em {_NB} bainhas BA-1 Ø{NV.D_BAINHA} (obra)")
 d1.chamada((1200, H + NEOF + H2 + HCAPA - 30), (8, 14), "N12 9 Ø12,5 na capa (obra)")
 d1.chamada((800, H + 100), (10, 10), "2º estágio (obra)")
 
@@ -227,7 +231,7 @@ ins = [["TB-1", f"Tubo Ø50×3,0 L={HD} a prumo no nariz do dente, sem solda", 2
        ["AL-1", "Laço de cordoalha Ø12,7 (2 pernas), não engraxada", 2, "a 110 cm das pontas"],
        ["NEO-5F", "Neoprene fretado 200×200×21 (furo Ø30) — no pilar", 2, "sobre os consolos CP-MEZ"]]
 y = pr.tabela(XC, y - 4, "INSERTOS POR PEÇA — mm", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [16, 92, 10, 50])
-obra = [["N11", "6 Ø16 L=600 em 2 bainhas BA-1 do pilar (negativa)", "apoios internos"], ["N12", "9 Ø12,5 L=600 na capa (negativa)", "apoios internos"],
+obra = [["N11", f"{_N11['n']} Ø{_N11['d']:g} L={_N11['L'] * 100:g} em {_NB} bainhas BA-1 do pilar (negativa)", "apoios internos"], ["N12", "9 Ø12,5 L=600 na capa (negativa)", "apoios internos"],
         ["CAPA", f"C30, 5 cm + tela; 2º estágio C30 ({B2/10:g} × 26)", "quem faz a capa"], ["GRAUTE", "junta 3 cm e bainhas, fck ≥ 30 MPa", "antes da capa"]]
 y = pr.tabela(XC, y - 4, "ARMADURA E CONCRETO DE OBRA (NBR 9062 5.6.1.2 e)", ["ITEM", "DESCRIÇÃO", "ONDE"], obra, [16, 110, 42])
 qd = [["CONCRETO", "C40 (CAA II)", "fcj LIBERAÇÃO", f"{P['fckj']:g} MPa"], ["fcj IÇAMENTO", f"{P['fckj']:g} MPa", "Eci / Ecs", f"{P['Eci_MPa']/1000:.1f} / {P['Ecs_MPa']/1000:.1f} GPa".replace(".", ",")],

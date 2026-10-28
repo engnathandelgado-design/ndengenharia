@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, PG_L4, y_canto, DY_CANTO, DY_PG
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, PG_L4, y_canto, DY_CANTO, DY_PG, lado_placas_txt
 from familia_pl import marca_de
 
 f = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
@@ -180,7 +180,8 @@ _dy4 = round(DY_PG["PG-02"] * 1000)
 _d4.eixo((_dy4, -200), (_dy4, 200), 160)
 _d4.texto((_dy4 + 10, 330), "eixo da linha 4", "min", "BOTTOM_LEFT")
 _d4.linha((-125, -320), (-125, 320), "OCULTA")
-_d4.cota_h([-125, 0, _dy4], -200, -14, total=False)
+_d4.cota_h([0, _dy4], -200, -10, total=False)                          # rev12b (item 16): eixo do pilar → linha 4
+_d4.cota_h([-125, _dy4], -200, -18, total=False)                       # e face (placas) → linha 4, direto
 _d4.chamada((-125, 260), (-14, 6), "face no plano dos vizinhos 40 × 40 (placas)")
 
 # ------------------------------------------------------------------ quadro de pilares: nomes × detalhamento × R01
@@ -202,8 +203,9 @@ y = pr.tabela(x0, 318, "QUADRO DE PILARES — NOME × FOLHA × PROJETO DO CLIENT
 pr.notas(560, 318, [
     "Eixos e ordenadas da PLANTA BAIXA — LOCAÇÃO DE PILARES do R01 (Marques Engenharia): 79,35 m entre os eixos 1 e 9 e 39,50 m entre os eixos A e E. Conferir a locação no terreno antes de concretar os blocos.",
     "Pilares de canto (linhas 1 e 9, eixos A e E): eixo 10 cm para fora da linha, no eixo A / E — a face externa fica no plano da face dos pilares de fachada (cotados a partir dos dois eixos).",
-    RN.novo(f"{RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04'))} (portões, 25 × 40, 40 ao longo da parede da linha 4): eixo em x = {f(PG_L4['PG-02'][1], 3)} e {f(PG_L4['PG-04'][1], 3)} (5,00 m livres face a face de cada portão, conforme o arquitetônico) e "
-            f"{f(DY_PG['PG-02'] * 100, 1)} cm fora da linha 4, para o lado das placas: a face fica no plano dos vizinhos 40 × 40 (Detalhe 4)."),
+    RN.novo(f"{RN.nomes_de('PG-02')[0]} (x = {f(PG_L4['PG-02'][1], 3)}) e {RN.nomes_de('PG-04')[0]} (x = {f(PG_L4['PG-04'][1], 3)}) — portões, {_sx('PG-02')}, 40 ao longo da parede da linha 4 (5,00 m livres face a face de cada portão, conforme o arquitetônico); eixo "
+            f"{f(DY_PG['PG-02'] * 100, 1)} cm fora da linha 4, para o lado das placas ({lado_placas_txt('C')}): a face fica no plano dos vizinhos 40 × 40 (Detalhe 4)."),
+    "Seções na planta e nos quadros em cm, sempre x × y (x na direção A–E, y na direção 1–9).",
     RN.novo(f"Todos os pilares são centrados nos eixos, exceto: os 4 pilares de canto ({RN.lista(RN.nomes_de('PL-03') + RN.nomes_de('PL-04') + RN.nomes_de('PL-07') + RN.nomes_de('PL-08'))}, 10 cm para fora das linhas 1 e 9); os pilares da escada e o da linha 2 ({RN.lista(RN.nomes_de('PE-01') + RN.nomes_de('PE-02') + RN.nomes_de('PE-03'))}, cotados dos eixos 1, 2, D e E); {RN.lista(RN.nomes_de('PG-02') + RN.nomes_de('PG-04'))} (linha 4, portões) e {RN.lista(RN.nomes_de('PC-03'))} (eixo C, y 46,317 e 62,833 — 3 vãos iguais de 16,517 m da linha 4 à 9): posições cotadas na planta."),
     "Faces: A = interna (consolo da viga principal), C = externa (placas de fechamento, por fora dos pilares, folga 2,5 cm; contorno tracejado). B e D completam no sentido anti-horário visto de cima.",
     RN.novo("Nomes P1 a P37: um por peça, em sentido de leitura desta planta (de cima para baixo, eixo E → A, e da esquerda para a direita, linha 1 → 9). Peças iguais têm a mesma folha de detalhamento (coluna FOLHA). A coluna NOME NO R01 é só correspondência com o projeto do cliente, que usa P1 a P14 com outro significado."),

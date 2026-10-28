@@ -10,7 +10,7 @@ import json, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
-from geometria import Y_LIN, X_EIXO
+from geometria import Y_LIN, X_EIXO, lado_placas_txt
 import fechamento as FCH
 import pecas_obra as QT
 
@@ -38,7 +38,7 @@ Q = pr.quadro
 # ================================================================== PLANTA 1:200 — paredes e ordem
 E1 = 200
 v = pr.vista("PLANTA", (Q[0] + 62, Q[3] - 245), E1, titulo="PLANTA DE MONTAGEM DO FECHAMENTO — ORDEM DAS PAREDES",
-             subtitulo="número no círculo = ordem de montagem da parede; seta = sentido vão a vão; placas por fora dos pilares (paredes internas G e C do lado do pavilhão)", unidade="cm")
+             subtitulo=f"número no círculo = ordem de montagem da parede; seta = sentido vão a vão; placas por fora dos pilares (G {lado_placas_txt('G')}, C {lado_placas_txt('C')})", unidade="cm")
 for k, y in enumerate(YL):
     v.linha((y, -2200), (y, LARG + 2200), "EIXO")
     v.circulo((y, LARG + 3200), 900, "BOLHA"); v.texto((y, LARG + 3200), str(k + 1), "nota", "MIDDLE_CENTER")
@@ -50,9 +50,12 @@ for y in YL:
         if nm in "AE" or y in (YL[0], YL[1], YL[3], YL[8]):
             v.ret(y - 200, x - 300, 400, 600, "CORTADO")
 O = 375
+from geometria import PAREDE_INTERNA as _PI, Y_FACE_L4 as _YF4       # rev12b (item 4): paredes internas do lado das placas do registro
+_YG = YL[_PI["G"]["linha"]] + _PI["G"]["lado"] * O
+_YC = _YF4 * 1000 + _PI["C"]["lado"] * 75
 PAREDE = {  # vista: (eixo da placa na planta: 'h' = ao longo de y obra (horizontal), posição, início, fim)
-    "I": ("v", -O, 0, LARG), "H": ("h", -O, 0, YL[1]), "J": ("h", LARG + O, 0, YL[1]), "G": ("v", YL[1] + O, 0, LARG),
-    "E": ("h", -O, YL[1], YL[3]), "F": ("h", LARG + O, YL[1], YL[3]), "C": ("v", YL[3] + 275, 0, LARG),
+    "I": ("v", -O, 0, LARG), "H": ("h", -O, 0, YL[1]), "J": ("h", LARG + O, 0, YL[1]), "G": ("v", _YG, 0, LARG),
+    "E": ("h", -O, YL[1], YL[3]), "F": ("h", LARG + O, YL[1], YL[3]), "C": ("v", _YC, 0, LARG),
     "B": ("h", -O, YL[3], COMP), "D": ("h", LARG + O, YL[3], COMP), "A": ("v", COMP + O, 0, LARG)}
 NOTA_P = {"I": "fachada linha 1", "H": "anexo, eixo A", "J": "anexo, eixo E", "G": "interna, linha 2", "E": "eixo A, L2–L4 (alto)",
           "F": "eixo E, L2–L4 (alto)", "C": "interna, portões", "B": "lateral eixo A", "D": "lateral eixo E", "A": "fachada linha 9"}
@@ -245,7 +248,7 @@ notas = [f"Placas protendidas 125 × 10 (10 fios Ø6 CP-175 RB), dimensionadas s
          "Montagem de cada parede vão a vão no sentido da seta e, em cada vão, de baixo para cima (número da elevação). A placa desce encostada no pilar com o braço do console entrando no nicho NC-1 até o teto apoiar no M16 de nível; aferir o afastamento pelo prisioneiro frontal; instalar os PT-1 (ou as travas PT-2 no pé das placas de pacote suspenso) antes de soltar o guindaste (ND-LET-PP00 e PP01).",
          "Consoles: os da face C dos pilares já vêm concretados (CC-1); nos pilares das faces laterais e das paredes internas, soldar o CS-1 na CE-1 no nível da topografia antes da placa (ND-LET-PP03).",
          "As placas são montadas de pé e concretadas deitadas: desforma por 4 insertos IZ-1 numa face com balancim, basculamento e estocagem EM PÉ em cavalete; transporte em pé (cavalete A). Não estocar nem transportar deitada (empena).",
-         "Sequência (decisão do Nathan, 21/10/2026): pilares → vigas → cobertura → mezanino → fechamento. Não dá para cumprir 100 % com guindaste: (a) a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2 e as VM ficam embaixo delas → W 200 L2 (com os montantes W 150), VB-01 a 04 e terças dos vãos 1–2 e 2–3 só depois do mezanino; (b) a placa de 10 m das paredes G e C sobe pelo topo e o balancim não passa entre a viga de cobertura e as terças → C antes da TS-01 L4 e G antes da W 200 L2.",
+         "Sequência (decisão do Nathan, 21/10/2026): pilares → vigas → cobertura → mezanino → fechamento. Não dá para cumprir 100 % com guindaste: (a) a laje de " + f"{_jj.load(open('/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json'))['premissas']['vao_laje']:.2f}".replace(".", ",") + " m não passa entre a VB da linha 1 e a W 200 da linha 2 e as VM ficam embaixo delas → W 200 L2 (com os montantes W 150), VB-01 a 04 e terças dos vãos 1–2 e 2–3 só depois do mezanino; (b) a placa de 10 m das paredes G e C sobe pelo topo e o balancim não passa entre a viga de cobertura e as terças → C antes da TS-01 L4 e G antes da W 200 L2.",
          "Abaixo da cobertura montada a altura livre é de +7,19 (eixo A) a +7,78 (eixo C) no fundo da TS-01; sobre o piso +7,30 sobram 0,1 a 0,8 m: manipulador telescópico ou mini-guindaste sob a cobertura NÃO servem para lajes, VM nem placas (só para terças, chaparia e peças leves).",
          f"Guindastes: principal autopropelido classe 90–100 t (I120 V407 {fd(PQ['V407'][7], 1)} t a ~10–12 m, dentro do pavilhão, trabalhando de ré da linha 9 para a 3); mezanino e parede G com o guindaste no vão 2–3, entrando pela abertura lateral E/F (livre até +7,50); placas externas com guindaste de ~40–60 t no perímetro (3,24 t a até ~14 m). Conferir as classes na tabela de carga do equipamento e o solo das patolas; plano de rigging (NBR 9062:2017 3.17 e Seção 11) da montadora.",
          "Tolerâncias de montagem (NBR 9062:2017 5.2.2.6): ±1,0 cm em planta e no nível dos apoios; prumo ±H/300 até 2,5 cm; juntas medidas após a montagem.",

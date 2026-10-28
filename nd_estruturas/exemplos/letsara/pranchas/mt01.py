@@ -46,7 +46,7 @@ def desenhar(arq, proxy):
 
 # ================================================================== folha 01/02 — desenhos e listas (A0)
 pr = Prancha("A0", dict(DADOS, conteudo="PEÇAS DE FIXAÇÃO DAS PLACAS — NICHO NC-1 E CONSOLE CS-1: DESENHOS DE FABRICAÇÃO, LISTAS E QUANTIDADES",
-                        desenho="ND-LET-MT01", folha="01/02"))
+                        desenho="ND-LET-MT01-1", folha="01/02"))           # rev12b (item 22): número do carimbo = nome da folha
 pr.revisao("06", "18/10/2026", "EMISSÃO PARA PRODUÇÃO NA METALÚRGICA")
 Q = pr.quadro
 pr.cabecalho_peca("MT", f"NICHO NC-1 ({N_E} + {N_D} NC-1' ESPELHADO = {N_NC} PÇ) · CONSOLE CS-1 ({N_CS} PÇ) — FABRICAÇÃO",
@@ -96,7 +96,7 @@ av1 = pr.salvar("/home/claude/letsara/pranchas/ND-LET-MT01-1")
 print("MT01-1", len([a for a in av1 if a[0] == "ERRO"]), "erros,", len(av1), "avisos", av1)
 
 # ================================================================== folha 02/02 — imagens e plano de corte (A1)
-p2 = Prancha("A1", dict(DADOS, conteudo="PEÇAS DE FIXAÇÃO DAS PLACAS — IMAGENS DAS PEÇAS E PLANO DE CORTE", desenho="ND-LET-MT01", folha="02/02"))
+p2 = Prancha("A1", dict(DADOS, conteudo="PEÇAS DE FIXAÇÃO DAS PLACAS — IMAGENS DAS PEÇAS E PLANO DE CORTE", desenho="ND-LET-MT01-2", folha="02/02"))
 p2.revisao("06", "18/10/2026", "EMISSÃO PARA PRODUÇÃO NA METALÚRGICA")
 Q2 = p2.quadro
 p2.cabecalho_peca("MT", "IMAGENS DAS PEÇAS (REFERÊNCIA VISUAL) E PLANO DE CORTE", "as cotas valem pela folha 01/02", largura=Q2[2] - Q2[0] - 270)

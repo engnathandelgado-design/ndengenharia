@@ -61,6 +61,15 @@ def kg_diam(folha):
 
 
 # ------------------------------------------------------------------ peças pré-moldadas
+def marca_txt(mk, qt):
+    """rev12b (revisão rev12b, item 12): linha que reúne a marca e as variantes de mesma fôrma (TS-01 + TS-01A = 12 peças) — o texto da
+    marca lista os nomes de TODAS as peças da linha (nº de nomes = QT); senão fica a marca (a renomeação põe os nomes dela)."""
+    import renomear as _R
+    var = [k for k in _R.M2N if k.startswith(mk) and len(k) == len(mk) + 1 and k[-1].isalpha()]
+    ns = _R.nomes_de(mk) + [n for k in var for n in _R.nomes_de(k)]
+    return _R.N(_R.lista(ns)) if var and len(ns) == int(qt) else mk
+
+
 pecas = []   # (grupo, marca, descrição, seção, L m, qtd, vol unit, peso unit t, concreto, prancha)
 # família 40×60 (PL / PF): volume = corpo do cálice (−1,00) ao recuo + cabeça até +10,00 + consolos da marca
 from familia_pl import MARCAS as _MARCAS_PL
@@ -74,7 +83,7 @@ for mk, pos, qt, cons, _ins in [l[:5] for l in _MARCAS_PL]:      # família 40×
 PIL_OUTROS = ("PC01", "PC02", "PC03", "PM01", "PM02", "PG01", "PG02", "PG03", "PG04", "PE01", "PE02", "PE03")   # rev09: PE (escada / P6 da linha 2)
 for f_ in PIL_OUTROS:
     R_ = REGP[quadro(f_)["MARCA"]]
-    _pos = "\x01" + _RNq0.renomear(" / ".join(l[1] for l in tab(f_, "MARCAS")["linhas"] if l[0] == R_["marca"]))   # rev12 (item 7): linha da PRÓPRIA marca, nome já resolvido
+    _pos = "\x01" + _RNq0.renomear(" / ".join(f"{l[1]}; {l[3]}" for l in tab(f_, "MARCAS")["linhas"] if l[0] == R_["marca"]))   # rev12b (item 14): posição + consolos   # rev12 (item 7): linha da PRÓPRIA marca, nome já resolvido
     pecas.append(("Pilares", R_["marca"], _pos, _REG.secao_txt(R_), R_["L"], R_["qt"], R_["vol"], R_["peso"], R_["concreto"], R_["folha"]))
 q = quadro("TS01-1")
 pecas.append(("Vigas de cobertura", "TS-01", "I90 protendida, sem dentes, linhas 3–8 (2 por linha; linha 2 metálica, DEC-048)", "I90", LGQ["L_TS"], int(q["QUANTIDADE"]),
@@ -154,7 +163,8 @@ if _OMJ["n_total"] > n:
     cord.append((f"Placa PP-05P (I-15, sobre a porta): +{_OMJ['n_total'] - n}", d, _OMJ["n_total"] - n, 9.86, 1, f"{_OMJ['n_total']} nesta placa (topo das ombreiras OM-1)"))
 for p_ in [p for p in pecas if p[1].startswith("LA")]:                   # rev09: Ø15,2 / Ø12,7 / Ø9,5 da descrição da marca
     for n_, d_ in re.findall(r"(\d+) Ø(\d+,\d)", p_[2]):
-        cord.append((f"Laje alveolar {p_[1]}", num(d_), int(n_), p_[4], p_[5], "uma por nervura (ND-LET-LA01)"))
+        _nb = re.search(r"\((\d+) nas nervuras de borda\)", p_[2])          # rev12b (item 15): arranjo da descrição da marca
+        cord.append((f"Laje alveolar {p_[1]}", num(d_), int(n_), p_[4], p_[5], (f"uma por nervura interna e {_nb.group(1)} nas nervuras de borda (uma sobre a outra)" if _nb else "uma por nervura") + " (ND-LET-LA01)"))
 KGC = {5.0: 0.154, 6.0: 0.222, 9.5: 0.432, 12.7: 0.792, 15.2: 1.102}   # Ø15,2: 140 mm² (NBR 7483)                # kg/m: fios CP-175 Ø5/Ø6 (19,6/28,3 mm²); cordoalhas CP-190
 
 # ------------------------------------------------------------------ metálica e insertos
@@ -303,7 +313,7 @@ def gerar_xlsx(SAIDA=SAIDA):
               [20, 10, 62, 20, 8, 6, 12, 12, 10, 11, 11, 16])
     r0 = r
     for p in pecas:
-        linha(ws, r, [p[0], p[1], p[2], p[3], p[4], p[5], p[6], f"=F{r}*G{r}", p[7], f"=F{r}*I{r}", p[8], p[9]],
+        linha(ws, r, [p[0], marca_txt(p[1], p[5]), p[2], p[3], p[4], p[5], p[6], f"=F{r}*G{r}", p[7], f"=F{r}*I{r}", p[8], p[9]],
               {5: "0.00", 7: "0.000", 8: "0.00", 9: "0.00", 10: "0.00"}, entrada=(5, 6, 7, 9))
         r += 1
     total(ws, r, "TOTAL", [6, 8, 10], r0, r - 1, 12)
@@ -502,7 +512,7 @@ def listas_pdf(caminho):
     lin = [["GRUPO", "MARCA", "POSIÇÃO / DESCRIÇÃO", "SEÇÃO", "L (m)", "QT", "VOL. UNIT (m³)", "VOL. TOTAL (m³)", "PESO UNIT (t)", "CONCRETO", "PRANCHA"]]
     vt = pt = qt_ = 0
     for g, mk, pos, sec, L, q, v, p, c, fl in pecas:
-        lin.append([g, mk, pos[:90], sec, fm(L, 2), q, fm(v, 3), fm(v * q, 2), fm(p, 2), c, fl]); vt += v * q; pt += p * q; qt_ += q
+        lin.append([g, marca_txt(mk, q), pos[:90], sec, fm(L, 2), q, fm(v, 3), fm(v * q, 2), fm(p, 2), c, fl]); vt += v * q; pt += p * q; qt_ += q
     lin.append(["TOTAL", "", "", "", "", qt_, "", fm(vt, 1), f"{fm(pt, 0)} t", "", ""])
     E.append(tb(lin, [24, 14, 76, 26, 12, 11, 18, 18, 16, 16, 30], tot=True))
     # 2 aço

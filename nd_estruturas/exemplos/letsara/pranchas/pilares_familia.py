@@ -179,8 +179,7 @@ def dados(mk):
         if n:
             ins.append([ap_["marca"], ap_["desc"], n, tipo])
     n_mez = sum(1 for c in cons if c["tipo"] == "CP-MEZ")
-    if n_mez and len({c["face"] for c in cons if c["tipo"] == "CP-MEZ"}) == 2:      # apoio interno: continuidade da VM atravessa o pilar
-        ins.append(["BA-1", "Bainha corrugada Ø50 horizontal (N11)", n_mez, "12 cm acima da VM"])
+    # rev12b: BA-1 sai do registro de continuidade (negativa_vm.bainhas_pilar) em pilar_generico.prancha_pilar
     for ip in ips:
         cal_ = ip.get("calco", 0)
         txt_cs = f"CS-1 na obra" if not cal_ else f"{FCH.CALCO_MARCA[cal_]} na obra: CS-1 com calço de {cal_:g} mm, a face fica {cal_:g} atrás do plano dos consoles — PP06"
@@ -222,7 +221,7 @@ def dados(mk):
                pos_txt, "FAMÍLIA DE PILARES 40×60",
                [[mk, pos, qt, cons_t, ins_t.replace("CE-1 (C", "CC-1 (C")]], ins,
                ["Concreto C40; armação igual à do PL-01 (ND-LET-PIL-A01): 14 Ø20 retos (N1 sobem até o topo só na fileira da face C; N1A param no recuo com gancho 90°), N13 Ø16 na cabeça ancorados 60 cm no corpo, estribos N2 Ø8 c/15 (c/10 nos 150 cm do cálice e abaixo do recuo) + grampos N3, N14 Ø8 c/10 na cabeça.",
-                G.NOTA_CONS.replace("cm; CP-I120", f"cm; CP-VB {G.H_C['CP-VB'] / 10:g} cm (dente 30 da VB 15×60); CP-I120", 1) + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
+                G.NOTA_CONS.replace("; CP-I120 ", f"; CP-VB {G.H_C['CP-VB'] / 10:g} cm, sem mísula (dente 30 da VB 15×60); CP-I120 ", 1) + " " + ", ".join(tipos) + " nesta marca." + (G.NOTA_MEZ if n_mez else ""),
                 cab_txt +
                 (" O degrau do recuo é o ASSENTO DA TS-01: topo HORIZONTAL (NBR 9062:2017 7.2.1.6; a cunha no fundo da ponta da TS-01 deixa a face de apoio horizontal), neoprene NEO-4 200×300×10 e 2 pinos PN-3 Ø25 a 10,25 cm da cabeça, grauteados nos tubos da viga; apoio útil de 27,5 cm." if (not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06")) else
                  f" LINHA 2 (rev09b, DEC-050/052): sem TS-01 e sem montante no pilar — o recuo sobe até +{zr/1000:.3f}".replace(".", ",") + f", 39 mm abaixo do fundo da {G.W_L2} da cobertura metálica da linha 2 (DEC-052), que apoia direto: graute 20, chapa CA-L2 250 × 250 × 19 e 4 barras roscadas BR-M16 embutidas (padrão Mitsubishi) a 150 × 55, atravessando a mesa da W (furo oblongo e porca encostada: apoio deslizante)." if mk in ("PL-02", "PL-06") else ""),
@@ -230,6 +229,8 @@ def dados(mk):
                 f"CE-1 (rev06, sistema Trejor, DEC-026): chapa de espera 380 × 330 × {GF.TCE:g}".replace(".", ",") + " com 4 pinos Ø16 × 150 c/ cabeça e 2 grampos U Ø10 (N18, C=96, sob o pino de baixo de cada coluna; ND-LET-PP01 det. 5), centrada no pilar (nas faces laterais em ponta de parede, a 5 mm da aresta da face C, sob o console — DEC-042), uma por fiada (centro 92 cm acima da base de cada fiada de 125 cm). Face C (DEC-031): sai da metalúrgica com os consoles CS-1 já soldados (CC-1 com 2 consoles; CC-1E/CC-1D com 1, nas pontas de parede) e é concretada com o pilar — posição ±5 mm pelo gabarito; o parafuso de nível absorve ±12 mm. Faces laterais: CE-1 rente e CS-1 soldado na obra (ND-LET-PP00 det. 2 e 4; fabricação PP03/PP04). Nas fiadas de pacote suspenso (E, F e acima das esquadrias): buchas BR-2 M16 nas faces laterais para a trava PT-2. Chaves de cisalhamento nas 4 faces do trecho embutido (100 cm).",
                 NOTA_LAT(cons, ips)],
                ip01=[dict(face=ip["face"], z=ip["z"], lados=ip["lados"], aresta_C=ip["aresta_C"]) for ip in ips], grampos=(), vistas=("A", lateral(cons, ips), "C"), zoom=3.0)
+    # rev12b: face voltada para +y na planta (A = interna; B, C, D anti-horário vistos de cima) — lado da laje para as bainhas BA-1
+    P["face_mais_y"] = ("A" if "L1" in pos else "C") if mk.startswith("PF") else ("D" if lado_e else "B")
     if not canto and mk.startswith("PL") and mk not in ("PL-02", "PL-06"):
         P["assento"] = dict(neo=(200, 300, 10), neo_nome="NEO-4 200×300", x_neo=(50, 250), x_pino=102.5, y_pinos=(-100, 100), d=25, L=600, emb=300, pino="PN-3 Ø25",
                             x_pinos=(102.5,), marca_b="PN-3", aco="barra nervurada CA-50 (NBR 7480)", anc="reta, por aderência (300 = 12 Ø)", rosca=0, viga="TS-01",

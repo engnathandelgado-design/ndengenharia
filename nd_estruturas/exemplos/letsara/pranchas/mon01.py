@@ -12,6 +12,7 @@ fp = lambda t_: f"{t_:.1f}".replace(".", ",")
 f = lambda v, d=3: f"{v:.{d}f}".replace(".", ",")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from geometria import Y_LIN, X_EIXO as X_FACH, Y_P13, Y_PC_C, y_vb, y_canto, PG_L4, Y_PG
+import renomear as _RNm
 INCL, Z0 = 0.03, LG["Z0_TS"]
 zf = lambda x: Z0 + INCL * x
 C3 = math.cos(math.atan(INCL))
@@ -166,7 +167,7 @@ pecas = [grupo(["PL-01", "PL-05", "PL-09", "PL-10", "PL-11", "PL-12"], "Pilar 40
          grupo(["PL-02", "PL-06"], "Pilar 40×60 lateral c/ 2 CP-MEZ (L2)", "cálice −1,00; topo +10,00"),
          grupo(["PL-03", "PL-04", "PL-07", "PL-08"], "Pilar 40×60 de canto (L1, L9), " + REGm.pilar("PL-03")["cabeca"], "cálice −1,00; topo +10,00"),
          grupo(["PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06"], "Pilar 40×60 de fachada (1 e 9) c/ CP-VB", "cálice −1,00; topo +10,00"),
-         grupo(["PC-01", "PC-02", "PC-03"], "P8A 40×60, P11 40×40, P13 e P13B 40×40 (eixo C)", f"cálice −1,00; topo +{f(Z_TC)}"),
+         grupo(["PC-01", "PC-02", "PC-03"], f"{_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_LIN[1]))} 40×60, {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_LIN[3]))} 40×40, {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_PC_C[0]))} e {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_PC_C[1]))} 40×40 (eixo C)", f"cálice −1,00; topo +{f(Z_TC)}"),
          grupo(["PM-01", "PM-02"], "Pilar do mezanino 40×60 (B2, D2), cabeça até o fundo da W 200", "ver ND-LET-MON02"),
          grupo(["PG-01", "PG-03"], "Pilares dos portões 40×40 (P9 / P12, linha 4)", "cálice −1,00; topo +7,47 / +8,06"),
          grupo(["PG-02", "PG-04"], "Pilares dos portões 25×40 (P10)", "cálice −1,00; topo +7,63 / +7,90"),
@@ -192,7 +193,7 @@ notas = [f"Tolerâncias de montagem (NBR 9062:2017): pilar em planta ±10 mm; pr
          f"Guindaste principal (pilares, I120, TS-01, VB, VM): autopropelido classe 90–100 t para a I120 V407 de {fp(PQ['V407'][7])} t a ~10–12 m de raio, dentro do pavilhão, sobre base compactada para as patolas (conferir a tabela de carga e o solo). Altura livre sob a cobertura montada: fundo da TS-01 de +7,19 (eixo A) a +7,78 (eixo C) — nenhuma peça é içada por baixo da cobertura.",
          f"Plano de rigging (NBR 9062:2017 3.17 e 11) a cargo da montadora, com os pesos desta lista: posição do guindaste, raio, patolas e capacidade do solo. Transporte: I120 V407 com {f(PQ['V407'][4], 1)} m e TS-01 com 19,7 m exigem carreta extensível e autorização especial de trânsito; transportar apoiadas nos pontos das alças.",
          f"Cobertura escondida: topo dos painéis solares {LG['platibanda']['folga_P2_mm']} mm abaixo da platibanda +10,00 no eixo E (mínimo pedido 150 mm).",
-         "DEC-058: eixo C com dois PC-03 (P13 em y 46,317 e P13B em y 62,833); V404 vai do P13B até a linha 9 e apoia no consolo CP-I120 do pilar P14 (PF-04).",
+         f"Eixo C com dois pilares 40×40 ({_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_PC_C[0]))} em y 46,317 e {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_PC_C[1]))} em y 62,833); V404 vai do {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_PC_C[1]))} até a linha 9 e apoia no consolo CP-I120 do {_RNm.N(_RNm.pilar_em(X_FACH['C'], Y_LIN[-1]))}.",
          "Níveis em m, cotas em cm. Não medir no desenho. PROJETO DA ND ENGENHARIA — PARA APROVAÇÃO, NÃO EXECUTAR."]
 pr.notas(XC, y - 4, notas, 200)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-MON01")

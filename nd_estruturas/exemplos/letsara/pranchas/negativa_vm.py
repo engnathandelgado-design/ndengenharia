@@ -40,3 +40,48 @@ def apoios():
 
 def txt(d):
     return f"{d['n']} Ø{d['d']:g} L {d['L'] * 100:g}".replace(".", ",")
+
+
+# ------------------------------------------------------------------ rev12b (revisão rev12b, itens 1 e 2): bainhas BA-1 por pilar — registro único
+# Quantidade: cada apoio de continuidade (VM dos dois lados do pilar) leva ceil(N11 / BARRAS_POR_BAINHA) bainhas Ø50, com 3 barras em cada
+# (área das barras ≤ 40 % da bainha). Posição: centro 12 cm acima do topo da VM (calc_vm_retangular: "a 12 cm acima do topo da peça"),
+# dentro da faixa da VM, a ¼ e ¾ da largura da viga (eixos a B/4 do eixo da VM) — com a VM excêntrica (rente à face), a bainha acompanha a VM.
+# Pilares, folhas de pilar, EX01, LA01 e listas leem daqui.
+BARRAS_POR_BAINHA = 3
+D_BAINHA = 50                 # mm
+Z_ACIMA_VM = 120              # mm, centroide das N11 acima do topo da VM (altura útil do cálculo da negativa)
+# rev12b: as 2 bainhas ficam UMA SOBRE A OUTRA (centroide no mesmo 12 cm do cálculo), na faixa do 2º estágio da VM e fora das barras
+# longitudinais do pilar — lado a lado não cabem na faixa de 18 cm da VM rente da linha 1 sem pegar as barras da face externa.
+S_V_BAINHA = D_BAINHA + 50    # mm entre centros (5 cm livres entre bainhas)
+FOLGA_BARRA = 10              # mm livres entre a bainha (Ø nominal) e a barra longitudinal do pilar: corrugação + tolerância de montagem
+
+
+def z_bainhas(n):
+    """centros (mm acima do topo da VM) das n bainhas empilhadas, centroide em Z_ACIMA_VM."""
+    return [Z_ACIMA_VM + (k - (n - 1) / 2) * S_V_BAINHA for k in range(n)]
+
+
+def lado_laje(y_vm):
+    """+1 se a laje do mezanino está do lado +y da VM na posição y_vm (a laje vai até a outra linha de VM), −1 se do lado −y."""
+    P_ = json.load(open(AQ + "vm_retangular.json", encoding="utf-8"))["premissas"]
+    ys = sorted(P_["y_vm"].values())
+    este = min(ys, key=lambda y: abs(y - y_vm))
+    outro = max(ys, key=lambda y: abs(y - este))
+    return 1 if outro > este else -1
+
+
+def premissas():
+    return json.load(open(AQ + "vm_retangular.json", encoding="utf-8"))["premissas"]
+
+
+def n_bainhas(a):
+    return math.ceil(a["N11"]["n"] / BARRAS_POR_BAINHA)
+
+
+def bainhas_pilar(nome):
+    """apoios de continuidade no pilar `nome` (nome do projeto): [dict(niv, n, N11)]."""
+    return [dict(niv=a["niv"], n=n_bainhas(a), N11=a["N11"], esq=a["esq"], dir=a["dir"], y=a["y"]) for a in apoios() if a["nome_pilar"] == nome]
+
+
+def total_bainhas():
+    return sum(n_bainhas(a) for a in apoios())

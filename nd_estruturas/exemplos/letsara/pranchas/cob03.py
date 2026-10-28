@@ -95,7 +95,7 @@ for z, t in ((REC, "+" + f((REC + ZREF) / 1000, 3)), (Z_FUNDO, "+" + f((Z_FUNDO 
     c2.texto((-600, z), t, "min", "MIDDLE_RIGHT")
 
 # ------------------------------------------------------------------ PLANTA PARCIAL 1:50 (linhas 1 a 3)
-pp = pr.vista("PLANTA", (760, 416), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares P1 de todas as linhas; caimento 0,5 % para as saídas")
+pp = pr.vista("PLANTA", (760, 416), 100, titulo="PLANTA PARCIAL — EIXO A, LINHAS 1 E 2 (TÍPICO)", subtitulo="saídas junto aos pilares do eixo A de todas as linhas; caimento 0,5 % para as saídas")
 Y3 = YLmm[1] + 3000
 pp.ret(-400, -300, 100, Y3 + 300, "CORTADO")
 for y in YLmm[:2]:
@@ -127,14 +127,14 @@ cc, ca, de, su = CH["contribuicao"], CH["calha"], CH["descidas"], CH["suportes"]
 L_desc = 9 * ((Z_FUNDO + ZREF) / 1000 + 0.5)
 lin = [["CA-1", f"{ca['L_m']:.0f} m", f"calha {BC}×{HC}, chapa galv. 1,25, desenv. 700", "eixo A, linhas 1 a 9"],
        ["SC-1", f"{su['n']}", "suporte ferro chato 38×6,35 A36 galv. + 2 M10", "c/750, na 1ª terça"],
-       ["BO-1", f"{de['n']}", "bocal de saída Ø200 com ralo hemisférico", "junto aos pilares P1"],
+       ["BO-1", f"{de['n']}", "bocal de saída Ø200 com ralo hemisférico", "junto aos pilares do eixo A"],
        ["DE-1", f"{math.ceil(L_desc / 6)} barras", f"tubo PVC Ø200 série R (≈ {L_desc:.0f} m em barras de 6 m)".replace(".", ","), "descidas até a caixa de areia"],
        ["EX-1", "2", "extravasor Ø100 (tubo + flange); furo na placa feito na obra", "pontas da calha, fachadas 1 e 9"]]
 y = pr.tabela(x0, y, "LISTA DE MATERIAIS — CALHA E DESCIDAS (RUFOS NA ND-LET-COB04)", ["MARCA", "QT", "DESCRIÇÃO", "ONDE"], lin, [16, 24, 100, 56])
 notas = [f"Dimensionamento (NBR 10844:1989): intensidade I = {CH['chuva']['I_mm_h']:.0f} mm/h (T = 5 anos) — CONFIRMAR com a tabela 5 / dados da cidade da obra; área de contribuição {cc['A_por_m_m2']} m² por metro de calha (água de 39,50 m a 3 %), {cc['area_total_m2']:.0f} m² no total.",
          f"Calha {BC} × {HC}, i = 0,5 %, n = 0,011: capacidade {ca['Q_cap_L_s']} L/s com lâmina de 100 mm ≥ {cc['Q_lado_L_s']} L/s que chega a cada saída por lado (uso {ca['uso']}). Fundo com caimento de 0,5 % para as saídas (25 mm por meio vão), dado pelos berços dos SC-1.",
          f"Descidas Ø200 nas 9 linhas: capacidade da saída {de['Q_cap_L_s']} L/s ≥ {cc['Q_saida_L_s']} L/s (uso {de['uso']}); descida aparente ao lado do pilar P1 (y = linha + 0,35 m, fora da TS-01; na linha 2, y = linha + 0,535 m, na frente da parede interna G, que ocupa a faixa de 0,325 a 0,425 m), presa por abraçadeiras em buchas, até a caixa de areia (projeto de drenagem).",
-         "Espaço livre de 40 cm entre a face da cabeça dos pilares P1 e a aba da 1ª terça (ND-LET-COB01); a calha fica de 20 a 320 mm do eixo A. A telha avança 150 mm além da aba da terça, com pingadeira 100 mm dentro da calha.",
+         "Espaço livre de 40 cm entre a face da cabeça dos pilares do eixo A e a aba da 1ª terça (ND-LET-COB01); a calha fica de 20 a 320 mm do eixo A. A telha avança 150 mm além da aba da terça, com pingadeira 100 mm dentro da calha.",
          "Extravasores Ø100 nas duas pontas da calha (fachadas 1 e 9), 50 mm abaixo da borda, para a água sair pela fachada se uma saída entupir.",
          "DEC-042: os pilares de canto (linhas 1 e 9) têm seção cheia 40 × 60 até +10,00: a calha começa e termina a 22 cm do eixo das linhas 1 e 9, com a cabeceira a 2 cm da face lateral do pilar; saída do extravasor por dentro da obra; furo na placa executado na obra.",
          "Juntas de dilatação da calha a cada ≈ 20 m (sobre as linhas 3, 5 e 7), com tampa e selante; emendas rebitadas e vedadas com PU (sem solda).",

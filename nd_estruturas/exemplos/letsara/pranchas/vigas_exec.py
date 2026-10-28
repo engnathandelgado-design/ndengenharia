@@ -416,7 +416,7 @@ def vm():
               f"(P característico G/Q {_f(_p['VM-01']['Pg'])}/{_f(_p['VM-01']['Pq'])}, {_f(_p['VM-02']['Pg'])}/{_f(_p['VM-02']['Pq'])} e {_f(_p['VM-03']['Pg'])}/{_f(_p['VM-03']['Pq'])} kN; "
               f"sucção de cálculo até {_f(_p['VM-01']['Pup_d'], 0)} kN). A PEÇA NÃO MUDA (mesmas marcas, cordoalhas e dente; protensão completa mantida). A espera EM-L2 (4 barras roscadas M16 com gancho laçado nas alças N9) "
               "vai na faixa de 2º estágio, posta por quem faz a capa, com gabarito — ND-LET-COB05. Não cortar nem dobrar as N9 nesses trechos.")]
-    return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO VM-01 A VM-04 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
+    return compor_ok("ND-LET-VM01", "VIGAS DO MEZANINO +3,90 E +7,30 — RETANGULAR PROTENDIDA 30 × 75 COM DENTE GERBER — FÔRMA, 2º ESTÁGIO, ARMAÇÃO E PROTENSÃO", "01/01",
                   run_script("viga_vm.py"), S, notas_extra=notas)
 
 

@@ -225,8 +225,9 @@ for fl in ("ND-LET-PG02", "ND-LET-PG04", "ND-LET-LOC01", "ND-LET-NG01", "ND-LET-
     m21 = re.search(r"PEND[ÊE]NCIA[^.]{0,120}(PG-0[24]|5,00 m livres|locação)", tx, re.I) or re.search(r"(PG-0[24]|locação)[^.]{0,80}confirmar com o arquitet", tx, re.I)
     r(os.path.exists(dx) and not m21, "C21 locação dos PG-02/PG-04 decidida (sem pendência citada)", fl, "ok" if not m21 else m21.group(0)[:80])
 for mk in ("PG-02", "PG-04"):
-    face = round(_G21.Y_PG[mk] - _G21.PG_L4[mk][3] / 2, 4)
-    viz = [round(_G21.Y_PG[k] - _G21.PG_L4[k][3] / 2, 4) for k in ("PG-01", "PG-03")] + [round(_G21.Y_LIN[_G21.LINHA_PORTOES] - 0.20, 4)]
+    _lp = _G21.PAREDE_INTERNA["C"]["lado"]                                 # rev12b: lado das placas do registro (não −y digitado)
+    face = round(_G21.Y_PG[mk] + _lp * _G21.PG_L4[mk][3] / 2, 4)
+    viz = [round(_G21.Y_PG[k] + _lp * _G21.PG_L4[k][3] / 2, 4) for k in ("PG-01", "PG-03")] + [round(_G21.Y_LIN[_G21.LINHA_PORTOES] + _lp * 0.20, 4)]
     r(all(abs(face - v) < 1e-4 for v in viz), "C21 face do PG no plano dos vizinhos (placas sem fresta)", mk, f"face y {face} × vizinhos {viz}")
 _PJ21 = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/portao_l4.json", encoding="utf-8"))
 for k, v in _PJ21["vao_livre_portoes_m"].items():
@@ -428,6 +429,150 @@ except Exception as e:
 for fl, tx_ in TXT.items():
     m34 = [t for t in tx_ if re.search(r"VM[^.]{0,60}(em decisão|não produzir as VM)|decisao_vm_canto", t)]
     r(not m34, "C34 sem pendência já decidida (VM da linha 1 no canto)", fl, "ok" if not m34 else m34[0][:80])
+# ================================================================== rev12b — revisão independente da rev12b (CHECKLIST seção 12)
+import negativa_vm as _NV
+import renomear as _RN
+_NOMESP = {q["nome"]: q for q in json.load(open(PR + "nomes.json", encoding="utf-8"))["pecas"]}
+_limpa = lambda t: re.sub(r"[\x00-\x1f]", "", str(t))
+# C35 bainhas BA-1 lidas do registro de continuidade: por pilar = Σ bainhas dos apoios dele; lista = total; EX01 = total
+try:
+    difs = []
+    for mk, R_ in REGP.items():
+        n_tab = sum(i_["qt"] for i_ in R_["insertos"] if i_["marca"] == "BA-1")
+        n_reg = sum(b_["n"] for b_ in _NV.bainhas_pilar(R_["nomes"][0])) if R_["nomes"] else 0
+        if n_tab != n_reg:
+            difs.append(f"{mk}: tabela {n_tab} × registro {n_reg}")
+    tl_ = sum(QJ["insertos"].get("BA-1", {}).values()) if QJ else None
+    if tl_ is not None and tl_ != _NV.total_bainhas():
+        difs.append(f"LISTAS {tl_} × registro {_NV.total_bainhas()}")
+    ex_ = re.findall(r"(\d+) bainhas \+ chavetas", " ".join(TXT.get("ND-LET-EX01", [])))
+    if ex_ and int(ex_[0]) != _NV.total_bainhas():
+        difs.append(f"EX01 {ex_[0]} × registro {_NV.total_bainhas()}")
+    r(not difs, "C35 bainhas BA-1 por pilar, lista e EX01 = registro de continuidade (2 por apoio)", "JOGO", "ok" if not difs else "; ".join(difs[:6]))
+except Exception as e:
+    r(False, "C35 bainhas BA-1 por pilar, lista e EX01 = registro de continuidade (2 por apoio)", "JOGO", f"não conferido: {e}")
+# C36 assento de viga horizontal com topo horizontal: só o consolo de viga inclinada (CP-TS) tem caimento; mesma marca de consolo nas 2 pontas
+try:
+    import pilar_generico as _PGc
+    difs = [f"{mk}: {c_['tipo']} face {c_['face']} com caimento {c_['incl']}" for mk, R_ in REGP.items() for c_ in R_["consolos"]
+            if abs(c_.get("incl", -1) - _PGc.CAIMENTO_VIGA.get(c_["tipo"], 0.0)) > 1e-9]
+    difs += [f"CS01 {e['marca']} ({e['tipo']}) com caimento {e['incl']}" for e in RC["lista"] if abs(e["incl"] - _PGc.CAIMENTO_VIGA.get(e["tipo"], 0.0)) > 1e-9]
+    r(not difs, "C36 topo do consolo horizontal sob viga horizontal (caimento só no CP-TS)", "JOGO", "ok" if not difs else "; ".join(difs[:6]))
+except Exception as e:
+    r(False, "C36 topo do consolo horizontal sob viga horizontal (caimento só no CP-TS)", "JOGO", f"não conferido: {e}")
+# C37 face de fixação das placas das paredes internas = face voltada para o lado das placas (geometria.PAREDE_INTERNA)
+try:
+    import geometria as _Gc
+    FACE_Y = {"gen": {"B": 1, "D": -1}, "A": {"B": 1, "D": -1}, "E": {"B": -1, "D": 1}}
+    difs = []
+    for mk, R_ in REGP.items():
+        for n_ in R_["nomes"]:
+            q_ = _NOMESP[n_]
+            V_ = next((V for V, p_ in _Gc.PAREDE_INTERNA.items() if abs(q_["y"] - _Gc.Y_LIN[p_["linha"]]) < 0.2), None)
+            if V_ is None:
+                continue
+            fam = "A" if abs(q_["x"]) < 0.01 else "E" if abs(q_["x"] - _Gc.X_EIXO["E"]) < 0.01 else "gen"
+            for ip in R_["geom"].get("ip01", []):
+                if ip["face"] in "BD" and FACE_Y[fam][ip["face"]] != _Gc.PAREDE_INTERNA[V_]["lado"]:
+                    difs.append(f"{n_} ({mk}): CE-1 na face {ip['face']} × placas da vista {V_} {_Gc.lado_placas_txt(V_)}")
+    amb = sorted({fl for fl, tx_ in TXT.items() for t in tx_ if re.search(r"(G|C)[^.]{0,40}do lado do pavilhão", t)})
+    difs += [f"texto ambíguo 'do lado do pavilhão' em {', '.join(amb[:4])}"] if amb else []
+    r(not difs, "C37 face de fixação das placas internas = lado das placas do registro", "JOGO", "ok" if not difs else "; ".join(difs[:6]))
+except Exception as e:
+    r(False, "C37 face de fixação das placas internas = lado das placas do registro", "JOGO", f"não conferido: {e}")
+# C38 neoprene com o furo centrado no pino, dentro do consolo; no CP-MEZ o pino no TB-1 do dente da VM (x_pad)
+try:
+    _xpad = round(json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json", encoding="utf-8"))["premissas"]["x_pad"] * 1000)
+    difs = []
+    for mk, R_ in REGP.items():
+        for c_ in R_["consolos"]:
+            a0, a1 = c_["pino_x"] - c_["neo"][1] / 2, c_["pino_x"] + c_["neo"][1] / 2
+            if a0 < 0 or a1 > c_["proj"]:
+                difs.append(f"{mk} {c_['tipo']}: neoprene centrado no pino sai do consolo ({a0:.0f} a {a1:.0f} de 0 a {c_['proj']})")
+            if c_["tipo"] == "CP-MEZ" and abs(c_["pino_x"] - _xpad) > 1:
+                difs.append(f"{mk} CP-MEZ: pino a {c_['pino_x']} × TB-1 da VM a {_xpad}")
+    r(not difs, "C38 neoprene centrado no pino (furo Ø30), dentro do consolo", "JOGO", "ok" if not difs else "; ".join(sorted(set(difs))[:6]))
+except Exception as e:
+    r(False, "C38 neoprene centrado no pino (furo Ø30), dentro do consolo", "JOGO", f"não conferido: {e}")
+# C39 varredura de valores antigos depois de decisão: largura da VM, CP-MEZ (mísula), CP-I120, comprimento da laje — comparados ao registro
+try:
+    _VMP_ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/vm_retangular.json", encoding="utf-8"))["premissas"]
+    _CO_ = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json", encoding="utf-8"))
+    bvm, bci, Llaje = round(_VMP_["b"] * 100), round(_CO_["CP-I120"]["b_m"] * 100), f"{_VMP_['vao_laje']:.2f}".replace(".", ",")
+    for fl, tx_ in TXT.items():
+        m39 = []
+        for t in tx_:
+            m39 += [f"VM ({v_})" for v_ in re.findall(r"(?:largura da )?VM \((\d+)\)", t) if int(v_) != bvm]
+            m39 += [f"CP-I120 {v_} ×" for v_ in re.findall(r"CP-I120 (\d+) ×", t) if int(v_) != bci]
+            m39 += [m_.group(0) for m_ in re.finditer(r"CP-MEZ \d+,\d cm(?!\s*/)", t)]
+            m39 += [m_.group(0) for m_ in re.finditer(r"(?<!antes )(?<!antes de )\b(\d,\d\d) m\b", t) if "laje" in t.lower() and m_.group(1) not in (Llaje,) and m_.group(1).startswith("9,") and "vão" not in t[max(0, m_.start() - 25):m_.start()].lower()]
+        r(not m39, "C39 sem valor antigo de decisão (largura da VM, CP-MEZ, CP-I120, laje)", fl, "ok" if not m39 else ", ".join(sorted(set(m39))[:4]))
+except Exception as e:
+    r(False, "C39 sem valor antigo de decisão (largura da VM, CP-MEZ, CP-I120, laje)", "JOGO", f"não conferido: {e}")
+# C40 sanidade da renomeação: palavra repetida, lista no lugar de um nome, intervalo sem sentido, cantos com pilar que não é de canto
+_CANTOS = {n_ for n_, q_ in _NOMESP.items() if q_["tipo"] == "pilar" and (abs(q_["x"]) < 0.01 or abs(q_["x"] - 39.5) < 0.01) and (q_["y"] < 0 or q_["y"] > 79)}
+def _mesma_fila(a, b):
+    qa, qb = _NOMESP.get(a), _NOMESP.get(b)
+    return bool(qa and qb) and (abs(qa["y"] - qb["y"]) < 0.2 or abs(qa["x"] - qb["x"]) < 0.2)
+for fl, tx_ in TXT.items():
+    m40 = []
+    for t0 in tx_:
+        t = _limpa(t0)
+        m40 += [m_.group(0) for m_ in re.finditer(r"\b([A-Za-zÀ-ú]{4,})\s+\1\b", t, re.I)]
+        m40 += [m_.group(0) for m_ in re.finditer(r"→\s*[PV]\d+,\s*[PV]\d+", t)]
+        m40 += [m_.group(0) for m_ in re.finditer(r"\bV\d{3} A V\d{3}, V\d{3}", t)]
+        m40 += [m_.group(0) for m_ in re.finditer(r"\b(P\d+) (?:a|até) (P\d+)\b", t) if not _mesma_fila(m_.group(1), m_.group(2))]
+        m40 += [m_.group(0) for m_ in re.finditer(r"\b(P\d+)[–-](P\d+)\b", t) if not _mesma_fila(m_.group(1), m_.group(2))]
+        for m_ in re.finditer(r"cantos?\s*\(([^)]*)\)", t, re.I):
+            fora = [p_ for p_ in re.findall(r"\bP\d+\b", m_.group(1)) if p_ not in _CANTOS]
+            m40 += [f"cantos com {', '.join(fora)}"] if fora else []
+    r(not m40, "C40 renomeação sã (sem palavra repetida, lista no lugar de nome, intervalo ou canto errado)", fl, "ok" if not m40 else " | ".join(sorted(set(m40))[:4]))
+# C41 nº de nomes listados = QT em cada linha do PR01 (marca → nomes pelo registro de nomes)
+try:
+    TPR = json.load(open(PR + "ND-LET-PR01.tabelas.json", encoding="utf-8"))
+    tpr = next(t for t in TPR["tabelas"] if t["titulo"].startswith("QUADRO DE PRODUÇÃO"))
+    difs = []
+    for l in tpr["linhas"]:
+        nm_ = re.findall(r"\b[PV]\d{1,3}\b", _limpa(_RN.renomear(l[0])))
+        if nm_ and len(nm_) != int(_num(l[1])):
+            difs.append(f"{_limpa(l[0])[:30]}: {len(nm_)} nomes × QT {l[1]}")
+    r(not difs, "C41 nomes listados = QT (PR01)", "ND-LET-PR01", "ok" if not difs else "; ".join(difs[:5]))
+except Exception as e:
+    r(False, "C41 nomes listados = QT (PR01)", "ND-LET-PR01", f"não conferido: {e}")
+# C42 MC anexada passa pelas mesmas travas das pranchas (notas internas, arquivos, nomes antigos, marcas inexistentes)
+try:
+    import subprocess as _sp
+    _mc = _sp.run(["pdftotext", "-layout", ENT + "ND-LET-MC12-REV12-rev12.pdf", "-"], capture_output=True, text=True).stdout
+    _pp = {p_[1] for p_ in _QT.pecas}
+    m42 = re.findall(r"DEC-\d{3}|Decisões do Nathan|\b[\w-]+\.(?:json|py)\b|\bcalc_\w+|geometria\.\w+|\bI130\b", _mc)
+    m42 += [m_ for m_ in re.findall(r"\bPP-0\d[A-Z]{0,2}\b", _mc) if m_ not in _pp]
+    m42 += re.findall(r"\bP\d+C?-L\d\b|\bP8[AB]\b|\bP13B\b|\bP10[ab]\b", _mc)
+    m42 += re.findall(r"[Cc]onfirmar com o cliente o corrimão", _mc)
+    r(not m42, "C42 MC sem nota interna, arquivo, nome antigo ou marca inexistente", "MC12", "ok" if not m42 else ", ".join(sorted(set(m42))[:8]))
+except Exception as e:
+    r(False, "C42 MC sem nota interna, arquivo, nome antigo ou marca inexistente", "MC12", f"não conferido: {e}")
+# C43 aço por família (PR01 e NG01) = quadro por bitola (±1 kg por família)
+for fl in ("ND-LET-PR01", "ND-LET-NG01"):
+    try:
+        T_ = json.load(open(PR + fl + ".tabelas.json", encoding="utf-8"))["tabelas"]
+        tf = next(t for t in T_ if t["titulo"].upper().startswith("RESUMO POR FAMÍLIA"))
+        tb = next(t for t in T_ if "POR BITOLA" in t["titulo"].upper())
+        sf = sum(_num(l[4]) for l in tf["linhas"] if "TOTAL" not in str(l[0]).upper() and str(l[4]).strip() not in ("", "—"))
+        st = next((_num(l[1]) for l in tb["linhas"] if "TOTAL" in str(l[0]).upper()), sum(_num(l[1]) for l in tb["linhas"]))
+        zer = [l[0] for l in tf["linhas"] if str(l[4]).strip() in ("0", "—", "")]
+        ok_ = abs(sf - st) <= len(tf["linhas"]) and not zer
+        r(ok_, "C43 aço por família = quadro por bitola", fl, f"famílias {sf:.0f} × bitolas {st:.0f} kg" + (f"; família sem aço: {zer}" if zer else ""))
+    except StopIteration:
+        pass
+    except Exception as e:
+        r(False, "C43 aço por família = quadro por bitola", fl, f"não conferido: {e}")
+# C44 revisão por diferença contra a última emissão revisada (alteradas.json gerado com base em emissao_revisada.json)
+try:
+    _alt = json.load(open(PR + "alteradas.json", encoding="utf-8"))
+    r(os.path.exists(PR + "emissao_revisada.json") and _alt.get("base") == "emissao_revisada.json", "C44 alteradas.json comparado com a última emissão revisada", "PROCESSO",
+      f"base {_alt.get('base')}")
+except Exception as e:
+    r(False, "C44 alteradas.json comparado com a última emissão revisada", "PROCESSO", f"não conferido: {e}")
 PENDENTES = ["comprimento desenhado × tabela (1 cm) e contagem de estribos pelo espaçamento",
              "seção/comprimento/peso de cada peça nas plantas, cortes, IC01, CG01 e IFC × registro único por marca",
              "MC × desenho (armadura adotada)", "soma das cotas em cadeia × comprimento total; cota de cada mudança de seção das vigas"]

@@ -62,11 +62,15 @@ def kg_aco(nome):
 
 def aco_viga(fam, marca):
     """kg/peça da relação da marca (armaduras_vigas): nomes 'I120 V407', 'VM VM-01', 'VB VB-01/05' (a marca e a sua espelhada)."""
+    import re as _re
+    NMj = json.load(open("/home/claude/letsara/pranchas/nomes.json", encoding="utf-8"))["pecas"]
     for nome, _, _, kd, _ in Q.aco:
         if not nome.startswith(fam + " "):
             continue
-        tag = nome.split()[-1]
+        tag = _re.sub(r"[\x00-\x1f]", "", nome[len(fam) + 1:]).strip()
         cands = {tag.split("/")[0], tag.split("/")[0][:-2] + tag.split("/")[1]} if "/" in tag else {tag}
+        # rev12b (revisão rev12b, item 5): depois da renomeação a relação traz os NOMES das peças (V407, V423); a marca sai do registro de nomes
+        cands |= {q["marca"] for n_ in tag.split(",") for q in NMj if q["nome"] == n_.strip() and q["marca"].startswith(fam)}
         if marca in cands:
             return sum(kd.values())
     return None
@@ -104,7 +108,8 @@ def linha(p):
         forma = f"pista {PISTA:g} m (≤ {por_pista(L)} por pista)"
         prot = f"{a['n_cord']} Ø12,7 CP-190 RB, {f(a['F_macaco_kN'])} kN"
         kg = aco_viga("I120", mk)
-        ic = "2 alças AL-3 (3 laços cada) a 2,50 m das pontas — " + icamento(folha)
+        _ic = IJ[mk]["icamento"]                                        # rev12b (item 13): laços e posição da alça do cálculo da marca
+        ic = f"2 alças AL-3 ({_ic['n_lacos']} laços cada) a {f(_ic['a_alca_m'], 2)} m das pontas — " + icamento(folha)
         est = "2 calços sob as alças; não virar a peça; travar contra tombamento no transporte"
     elif fl == "VM01":
         fam = "Mezanino"
@@ -171,6 +176,7 @@ def gerar():
     pr = Prancha("A0", dict(cliente="MARQUES ENGENHARIA E CONSTRUÇÕES", obra="LETSARA — PAVILHÃO COM MEZANINO", local="A CONFIRMAR",
                             conteudo="QUADRO DE PRODUÇÃO E CONCRETAGEM DAS PEÇAS — POR MARCA", desenho="ND-LET-PR01", folha="01/01", rev="06"))
     pr.revisao("06", "21/10/2026", "QUADRO DE PRODUÇÃO E CONCRETAGEM")
+    pr.revisao("R12", "27/10/2026", "VM DA LINHA 1 ALINHADA À FACE EXTERNA; LAJES DO VÃO 1–2 COM 9,70 m; CONSOLOS COM A LARGURA DA VIGA; BAINHAS BA-1, AÇO DAS VB E NOMES DAS PEÇAS DO REGISTRO")
     x0, y0, x1, y1 = pr.quadro
     cab = ["MARCA", "QT", "SEÇÃO", "L (m)", "VOL. un (m³)", "VOL. tot (m³)", "PESO un (t)", "PESO tot (t)", "CONCR.", "fcj LIB.", "fcj DESF.",
            "FÔRMA / PISTA", "PROTENSÃO (força no macaco por cabo)", "AÇO kg/pç", "AÇO kg tot", "IÇAMENTO (desforma, verticalização, montagem)", "ESTOCAGEM E TRANSPORTE", "FOLHA"]
@@ -180,7 +186,7 @@ def gerar():
     for F in FAMS:
         rs = [r for r in LINHAS if r["fam"] == F]
         for r in rs:
-            lin.append([r["marca"], r["qt"], r["sec"], f(r["L"], 2), f(r["v"], 3), f(r["v"] * r["qt"], 2), f(r["peso"], 2), f(r["peso"] * r["qt"], 1),
+            lin.append([Q.marca_txt(r["marca"], r["qt"]), r["qt"], r["sec"], f(r["L"], 2), f(r["v"], 3), f(r["v"] * r["qt"], 2), f(r["peso"], 2), f(r["peso"] * r["qt"], 1),
                         r["conc"], r["lib"], r["desf"], r["forma"], r["prot"], f(r["kg"], 0) if r["kg"] else "—", f(r["kg"] * r["qt"], 0) if r["kg"] else "—",
                         r["ic"], r["est"], r["folha"]])
         t = fam[F]

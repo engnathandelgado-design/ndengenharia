@@ -10,6 +10,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 import json
 import fechamento as FCH
 import geo_fixacao as GF
+from pilar_generico import FPL as _FPL
 import iso_nd as I
 from prancha_nd import Prancha
 
@@ -36,7 +37,7 @@ pr = Prancha("A0", dict(cliente=FCH.CLIENTE, obra="LETSARA — PAVILHÃO COM MEZ
                         conteudo=f"PLACAS RECORTADAS NO I120 (PAREDES G E C), CHAPA DE ESPERA CE-1L E CONSOLES COM CALÇO {_CMK} (DEC-044)",
                         desenho="ND-LET-PP06", folha="01/01", fase="PARA APROVAÇÃO", rev="08"))
 pr.revisao("08", "22/10/2026", "EMISSÃO: RECORTE DAS PLACAS NO I120 DO EIXO C; CE-1L; CS-1 COM CALÇO (DEC-044)")
-pr.revisao("R12", "27/10/2026", "SEM CS-1D: PILARES DOS PORTÕES COM A FACE NO PLANO DOS VIZINHOS")
+pr.revisao("R12", "27/10/2026", "PILARES DOS PORTÕES COM A FACE NO PLANO DOS VIZINHOS: SEM CALÇO NA VISTA C")
 Q = pr.quadro
 XC = Q[2] - 235
 pr.cabecalho_peca(", ".join(tipos), f"PLACAS RECORTADAS ({len(recs)} PÇ: {', '.join(p['id'] for _, p in recs)}) · CE-1L ({PP01['CE1L']} PÇ) · " + " · ".join(f"{m_} ({n_} PÇ)" for m_, _, n_ in _CALS),
@@ -59,9 +60,13 @@ e.chapa(RB + NC_B - N["t_parede"], Z_NC - NC_H / 2 + N["t_base"], N["t_parede"],
 e.chapa(RB, Z_NC - NC_H / 2, NC_B - 9.5, 9.5, 0.15)
 for (xa_, xb_) in N["x_gr"]:
     e.poli([(RB + xa_, Z_NC + NC_H / 2), (RB + xa_, Z_NC + NC_H / 2 + 40), (RB + xb_, Z_NC + NC_H / 2 + 40), (RB + xb_, Z_NC + NC_H / 2)], "METALICA")
-# consolo CP-I120 (50 × 49, fundo 226 acima da base) e nariz do I120 (40 largo, de 746 a 1526): atravessam a parede, em tracejado
+# consolo CP-I120 (registro, fundo 226 acima da base) e nariz do I120 (40 largo, de 746 a 1526): atravessam a parede, em tracejado
 X_AX = -FCH.JUNTA / 2                                                                # eixo do pilar/I120: 10 mm além da ponta
-e.ret(X_AX - 250, 226, 500, 490, "OCULTA")
+# rev12b (revisão rev12b, item 7): consolo CP-I120 do registro (largura = ponta da I120), folga até o recorte calculada
+_CPI = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/consolos.json", encoding="utf-8"))["CP-I120"]
+CPI_B, CPI_H, CPI_P = round(_CPI["b_m"] * 1000), round(_CPI["h_total_m"] * 1000), round(_CPI["proj_m"] * 1000)
+FOLGA_CPI = RB - (X_AX + CPI_B / 2)                                                  # da face do consolo à face do recorte da placa
+e.ret(X_AX - CPI_B / 2, 226, CPI_B, CPI_H, "OCULTA")
 e.ret(X_AX - 200, 746, 400, H_PL + 150 - 746, "OCULTA")
 e.ret(X_AX - 200, -500, 400, 500 + 226 - 40, "OCULTA")                                # pilar P8A / P11 (400 na direção da parede)
 e.linha((X_AX, -500), (X_AX, -130), "EIXO"); e.linha((X_AX, H_PL + 30), (X_AX, H_PL + 150), "EIXO")
@@ -82,11 +87,11 @@ for xe in (60, 140, 220):
 e.chamada((220, RZ - 20), (112, -12), "N11 - 3 Ø6,3 c/8 C=40 (estribo do toco)")
 pr.posicoes_desenho.add("N11")
 e.cota_h([0, RB, RB + NC_B, RB + 20, LV], 0, -10, total=False)
-e.cota_h([X_AX - 250, X_AX, X_AX + 250], H_PL + 150, 8, total=False)
+e.cota_h([X_AX - CPI_B / 2, X_AX, X_AX + CPI_B / 2], H_PL + 150, 8, total=False)
 e.cota_v([0, RZ, 226, Z_NC - NC_H / 2, Z_NC + NC_H / 2, H_PL], 0, -14, total=False)
 e.cota_v([0, H_PL], LV, 10, total=False)
 e.chamada((RB + NC_B - 20, Z_NC + NC_H / 2), (30, 50), f"NC-1 a {gg(RB / 10)} da ponta (PP02)")
-e.chamada((X_AX - 100, 600), (-16, 30), "CP-I120 50 × 49 (folga 2)")
+e.chamada((X_AX - 100, 600), (-16, 30), f"CP-I120 {CPI_B / 10:g} × {CPI_H / 10:g} (folga {FOLGA_CPI / 10:g})")
 e.chamada((X_AX - 100, 1000), (-16, 30), "nariz do I120 (folga 7)")
 e.chamada((130, RZ - 40), (16, -22), f"toco {gg(RB / 10)} × {gg(RZ / 10)} sem fios")
 e.marcador_corte((60, -250), (60, RZ + 150), "A", lado=1)
@@ -104,7 +109,7 @@ a.chamada((23, RZ - 25), (-8, 10), "N9")
 a.chamada((50, RZ - 20), (12, 12), "N11")
 
 # ================================================================== 2. CE-1L — vista frontal (1:4) e planta (1:4)
-v1 = pr.vista("CE-1L", (Q[0] + 160, Q[1] + 130), 4.0, titulo="DETALHE 2 — CE-1L: VISTA FRONTAL (face B dos pilares P8A e P11, fiada +6,25)",
+v1 = pr.vista("CE-1L", (Q[0] + 160, Q[1] + 130), 4.0, titulo=f"DETALHE 2 — CE-1L: VISTA FRONTAL (face {_FPL['G']} do P8A e face {_FPL['C']} do P11, fiada +6,25)",
               subtitulo="chapa 840 × 330 × 12,5 com asas de 220 além das faces do pilar (400); 4 pinos iguais à CE-1; CS-1 a ±340 do eixo", unidade="mm")
 v1.chapa(-420, -165, 840, 330, 1.2)
 v1.ret(-200, -165 - 60, 400, 330 + 120, "OCULTA")
@@ -141,11 +146,11 @@ for sg in (-1, 1):
     for dx in (-C["alma"]["x"], C["alma"]["x"]):
         v2.chapa(xc + dx - C["alma"]["t"] / 2, -C["alma"]["y1"], C["alma"]["t"], C["alma"]["y1"] - C["costas"]["t"], 0.4)
     v2.ret(min(x0, xr), -FOL - E_PL, abs(xr - x0), E_PL, "OCULTA")                     # toco (abaixo do nível do corte)
-v2.ret(-250, -FOL - 20 - 400, 500, 400, "OCULTA")                                       # consolo CP-I120 (50 × 40) atrás/abaixo
+v2.ret(-CPI_B / 2, -FOL - 20 - CPI_P, CPI_B, CPI_P, "OCULTA")                           # consolo CP-I120 (registro) atrás/abaixo
 v2.cota_h([-420, -340, -200, 0, 200, 340, 420], 300, 8, total=False)
 v2.cota_h([-FCH.JUNTA / 2 - RB - NC_B, -FCH.JUNTA / 2 - RB, -FCH.JUNTA / 2, FCH.JUNTA / 2, FCH.JUNTA / 2 + RB, FCH.JUNTA / 2 + RB + NC_B], -FOL - E_PL, -8, total=False)
-v2.cota_v([-FOL - E_PL - 20 - 400, -FOL - E_PL, -FOL - NC_P, -FOL, 0, TCE, 300], -600, -8, total=False)
-v2.chamada((0, -FOL - E_PL - 200), (40, -60), "CP-I120 50 × 40 (face B), abaixo do nível do console")
+v2.cota_v([-FOL - E_PL - 20 - CPI_P, -FOL - E_PL, -FOL - NC_P, -FOL, 0, TCE, 300], -600, -8, total=False)
+v2.chamada((0, -FOL - E_PL - CPI_P / 2), (40, -60), f"CP-I120 {CPI_B / 10:g} × {CPI_P / 10:g} (face das placas), abaixo do nível do console")
 v2.chamada((FCH.JUNTA / 2 + RB / 2, -FOL - E_PL), (26, -14), f"toco 26 × 12 (abaixo); junta {FCH.JUNTA} no eixo")
 v2.chamada((-340, -C["alma"]["y1"]), (10, -40), "CS-1 no nicho NC-1 da placa recortada")
 

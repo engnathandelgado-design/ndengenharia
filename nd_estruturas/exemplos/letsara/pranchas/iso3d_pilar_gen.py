@@ -62,7 +62,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         nx, ny = FACE_N[c["face"]]
         zc = c["z"] / 1000
         proj, h, hp, larg = c["proj"] / 1000, c["h"] / 1000, c["hp"] / 1000, c["larg"] / 1000
-        incl = c.get("incl", 0.03)
+        incl = c["incl"]
         face_d = (H / 2 if nx else B / 2)
         if not (z0 <= zc <= z1):
             continue
@@ -79,7 +79,7 @@ def cena(p, z0=0.0, z1=L, chaves=True):
         if c["pino_nome"] not in VISTOS:
             VISTOS.add(c["pino_nome"]); labs.append(((cx, cy, zc + 0.01 + sai), f"pino {c['pino_nome']} Ø{c['pino_d']:g}"))
         nw, nl = c["neo"][0] / 1000, c["neo"][1] / 1000
-        p.add_mesh(box(nx * face_d + ev[0] * w_ + (0.025 if nx > 0 else -nl - 0.025 if nx < 0 else -nw / 2), ny * face_d + ev[1] * w_ + (0.025 if ny > 0 else -nl - 0.025 if ny < 0 else -nw / 2), zc,
+        p.add_mesh(box(nx * face_d + ev[0] * w_ + (px - nl / 2 if nx > 0 else -px - nl / 2 if nx < 0 else -nw / 2), ny * face_d + ev[1] * w_ + (px - nl / 2 if ny > 0 else -px - nl / 2 if ny < 0 else -nw / 2), zc,
                        nl if nx else nw, nw if nx else nl, 0.01), color="#202020")
         labs.append(((nx * (face_d + proj) + ev[0] * w_, ny * (face_d + proj) + ev[1] * w_, zc + 0.02), f"{c['tipo']} face {c['face']}"))
     if chaves:

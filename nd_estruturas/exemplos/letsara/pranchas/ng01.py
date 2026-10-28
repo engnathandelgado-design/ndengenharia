@@ -142,7 +142,7 @@ MATERIAIS = [
      f"{ncord(TS_CORD)} Ø12,7 CP-190 RB — {TS_CORD[0][4]} kN", "3,0", "II"],
     ["Vigas I120 (V404, V405, V406, V407)", "C50", f"{IJ['V406']['arranjo']['fckj']:.0f}", f"{IJ['V406']['arranjo']['fckj']:.0f}",
      " / ".join(f"{k} {v['arranjo']['n_cord']}" for k, v in IJ.items()) + f" Ø12,7 — {f(IJ['V406']['arranjo']['F_macaco_kN'])} kN", "3,0", "II"],
-    ["Vigas do mezanino VM-01 a VM-04 (30 × 75)", f"C{VMJ['premissas']['fck']:.0f}", f"{VMJ['premissas']['fckj']:.0f}", f"{VMJ['premissas']['fcj_icamento']:.0f}",
+    ["Vigas do mezanino (30 × 75)", f"C{VMJ['premissas']['fck']:.0f}", f"{VMJ['premissas']['fckj']:.0f}", f"{VMJ['premissas']['fcj_icamento']:.0f}",
      f"{ncord(VM_CORD)} Ø12,7 CP-190 RB — {VM_CORD[0][4]} kN", "2,5 estribo / 3,0 cord.", "II"],
     ["Vigas de borda VB-01 a VB-08", VBQ["CONCRETO"], "—", "25", "armado (CA-50)", VBQ["COBRIMENTO"].replace(" (CAA II)", ""), "II"],
     ["Lajes alveolares LA (h20)", "C50", f"{LAJ['fckj']:.0f}", f"{LAJ['icamento']['fcj_icamento']:.0f}",
@@ -185,7 +185,7 @@ N_MATERIAIS = [
     "Alças de içamento: laço de cordoalha Ø12,7 não engraxada, sem separar os fios (NBR 9062:2017 5.3.3) — proibido CA-25, CA-50 ou CA-60 em alça. Furo de içamento FI-1 dos pilares: tubo Ø60,3 × 3 perdido.",
     "Chaparia e insertos: ASTM A36 (chapas, pinos, cantoneiras) e A572-50 (consoles CS-1 e nichos NC-1), galvanizados a fogo depois da solda de fábrica (NBR 6323, ≥ 85 µm); solda na obra só nos CS-1 laterais "
     "(filete E70XX, inspeção visual 100 %, galvanização a frio). Parafusos 8.8 zincados ou galvanizados; nenhuma ligação soldada na cobertura.",
-    "Neoprenes (um por apoio, marca e dimensões na tabela de insertos do pilar: NEO-2, NEO-3C, NEO-4, NEO-5F, NEO-6 e NEO-7) e fitas de apoio: dimensões e furos conforme a folha de cada apoio (NBR 9062:2017 7.2.1.6). Graute não retrátil fck ≥ 30 MPa nos cálices, juntas e bainhas.",
+    "Neoprenes (um por apoio, marca e dimensões na tabela de insertos do pilar: NEO-2, NEO-3C, NEO-4, NEO-5F, NEO-6, NEO-7 e NEO-7A) e fitas de apoio: dimensões e furos conforme a folha de cada apoio (NBR 9062:2017 7.2.1.6). Graute não retrátil fck ≥ 30 MPa nos cálices, juntas e bainhas.",
 ]
 
 N_PRODUCAO = [
@@ -204,7 +204,7 @@ N_MONTAGEM = [
     f"Tolerâncias de montagem: {NBR['tolerancias']['montagem']}",
     f"Folgas de montagem (geometria do modelo, as mesmas das folhas CT04 e MON01): {REG.folgas_txt()}. Apoios mínimos em cada folha.",
     "Sequência geral (ND-LET-MON03, 11 etapas): pilares de todas as linhas, aprumados e travados com cunhas, cálice grauteado no mesmo dia (vigas só 24 h depois, graute ≥ 15 MPa) → I120 V407/V406/V405/V404 → parede C (linha 4) → TS-01 da linha 8 para a 3 e VB-05 a VB-08 (guindaste de ré, sempre no vão sem cobertura) → cobertura dos vãos 3–4 a 8–9 → mezanino +3,90 e depois +7,30 (VM, pontas concretadas dos dois lados e fcj ≥ 20 MPa, lajes, 2º estágio e capa; carregar com fck ≥ 20 MPa — ND-LET-MON02) → parede G (linha 2) → W 200 × 15,0 da linha 2 (na cabeça dos pilares e nos montantes W 150 × 13,0 sobre as VM do +7,30, presilhas, mãos-francesas), VB-01 a VB-04 e terças dos vãos 1–2 e 2–3 → escada metálica → placas externas pelo lado de fora → telhas, rufos e calhas dos vãos 1–3.",
-    "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de 9,55 m não passa entre a VB da linha 1 e a W 200 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
+    "Exceções da ordem pilares → vigas → cobertura → mezanino → fechamento, por geometria: a cobertura dos vãos 1–3 só depois do mezanino (a laje de " + f"{VMJ['premissas']['vao_laje']:.2f}".replace(".", ",") + " m não passa entre a VB da linha 1 e a W 200 da linha 2) e as paredes internas C e G antes da viga de cobertura da própria linha (o balancim não passa entre a viga e as terças).",
     "Plano de rigging (NBR 9062:2017 3.17) e escolha do guindaste por conta da montadora, com os pesos de cada peça (ND-LET-PR01) e o raio de cada posição.",
     f"Incêndio: {NBR['incendio_cobrimentos']['TRRF']}. Placas 10 cm: {NBR['incendio_cobrimentos']['placas']}. Laje: {LAJ['incendio']['nota']}.",
 ]
@@ -228,6 +228,7 @@ def gerar():
                             conteudo=PREVISTAS["ND-LET-NG01"], desenho="ND-LET-NG01", folha="01/01", rev="06"))
     pr.revisao("06", "21/10/2026", "FOLHA DE ROSTO E NOTAS GERAIS")
     pr.revisao("", "24/10/2026", "ISOMÉTRICOS DO MODELO REV09 (VÃO DA ESCADA E ESCADA METÁLICA); LINHA 2 SEM MONTANTES (DEC-050)")
+    pr.revisao("R12", "27/10/2026", "VM DA LINHA 1 ALINHADA À FACE EXTERNA; LAJES DO VÃO 1–2 COM 9,70 m; CONSOLOS COM A LARGURA DA VIGA; BAINHAS BA-1, AÇO DAS VB E NOMES DAS PEÇAS DO REGISTRO")
     x0, y0, x1, y1 = pr.quadro
     # ---------- título
     yt = y1 - 14

@@ -102,8 +102,11 @@ def laje(arq=D + "iso_la01.png", recorte=True):
         x0c = 0.0 if not recorte or abs(c["x_mm"]) > 225 else Lp
         objs.append((pv.Cylinder(center=((Lmostra + x0c) / 2, B / 2 + c["x_mm"], c["y_mm"]), direction=(1, 0, 0), radius=r * 1.4, height=Lmostra - x0c + 20), PROT))
     n = len(LJ["cordoalhas"])
-    tit = (f"LA-01R — laje alveolar h{H / 10:.0f} (trecho de 3,0 m): {NAL} alvéolos, ponta fechada 20 cm, recorte 45 × 20 junto ao pilar; {n} cordoalhas, uma por nervura" if recorte else
-           f"LA-01 — laje alveolar h{H / 10:.0f} (trecho de 3,0 m): {n} cordoalhas, uma por nervura")
+    from collections import Counter as _Cn                                      # rev12b (item 15): arranjo real (2 nas nervuras de borda)
+    _por = _Cn(round(c["x_mm"]) for c in LJ["cordoalhas"])
+    arr = "uma por nervura" if max(_por.values()) == 1 else f"uma por nervura interna e {max(_por.values())} em cada nervura de borda"
+    tit = (f"LA-01R — laje alveolar h{H / 10:.0f} (trecho de 3,0 m): {NAL} alvéolos, ponta fechada 20 cm, recorte 45 × 20 junto ao pilar; {n} cordoalhas, {arr}" if recorte else
+           f"LA-01 — laje alveolar h{H / 10:.0f} (trecho de 3,0 m): {n} cordoalhas, {arr}")
     return cena(objs, arq, [(-2600, -2300, 2100), (900, 620, 60), (0, 0, 1)], tit, zoom=1.45)
 
 

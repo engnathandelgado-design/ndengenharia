@@ -7,6 +7,7 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
 from geometria import ESCADA, P6_ESC, P7_ESC, P6_L2, Y_LIN, X_EIXO, ABERTURA, Z_PISO_PRONTO
+import renomear as _RNe                                          # rev12b: nomes do projeto pela posição (não os do R01)
 import escadas_vista as E
 
 EJ, I = E.EJ, E.EJ["interna"]
@@ -31,7 +32,7 @@ pr.revisao("09", "25/10/2026", "DEC-062: CORRIMÃO DUPLO 0,92 / 0,70 (RT CBMRS 1
 Q = pr.quadro
 XC = Q[2] - 190
 pr.cabecalho_peca("ES", "ESCADA METÁLICA INTERNA EM U — 2 LANCES DE 11 ESPELHOS (17,95 × 28) — PATAMAR +1,975 E CHEGADA +3,95",
-                  f"entre o P6 (25 × 40), o P7 (40 × 60) e a linha 2 · longarinas {I['longarina']['perfil']} · massa {f(EJ['massa_kg']['interna'] * 1.03, 0)} kg com parafusos · ASTM A36 / A572-50 galvanizado · tudo parafusado",
+                  f"entre o {_RNe.N(_RNe.pilar_em(*P6_ESC))} (25 × 40), o {_RNe.N(_RNe.pilar_em(*P7_ESC))} (40 × 60) e a linha 2 · longarinas {I['longarina']['perfil']} · massa {f(EJ['massa_kg']['interna'] * 1.03, 0)} kg com parafusos · ASTM A36 / A572-50 galvanizado · tudo parafusado",
                   largura=XC - Q[0] - 10)
 
 

@@ -30,7 +30,7 @@ def marca_consolo(c):
 
 
 def chave(c):
-    return "|".join(str(x) for x in (c["tipo"], c["larg"], c["proj"], c["h"], c["hp"], c.get("incl", 0.03), c["pino_nome"], c["pino_d"], c["pino_L"],
+    return "|".join(str(x) for x in (c["tipo"], c["larg"], c["proj"], c["h"], c["hp"], c["incl"], c["pino_nome"], c["pino_d"], c["pino_L"],
                                        c["pino_emb"], c["pino_x"], tuple(c["neo"]), c["n_tir"], c["d_tir"], c.get("exc", 0)))
 
 

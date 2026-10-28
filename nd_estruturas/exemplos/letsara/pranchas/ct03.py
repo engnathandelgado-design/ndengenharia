@@ -9,7 +9,7 @@ import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha, DIM_K, DIM_DLI
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, Z_PISOS
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Y_P13, Y_PC_C, Z_PISOS, lado_placas_txt
 import renomear as RN
 import pecas_obra as QT                                     # peças = mesma fonte das listas (quantitativos.py)
 import fechamento as FCH
@@ -46,6 +46,11 @@ Z_TS_E = ZT_ID + 10                                        # fundo da ponta (NEO
 Z_VB = zf(XC + 225) + 300                                  # fundo da VB-03 junto ao PF (zf + 0,30)
 PLAT = 10000.0
 O_PL = 375.0
+# rev12b (item 4): paredes internas do lado das placas do registro (geometria.PAREDE_INTERNA), como no modelo: centro da placa a
+# 2,5 cm (folga) + 5 cm (meia placa) da face dos pilares desse lado
+from geometria import PAREDE_INTERNA as _PI, Y_FACE_L4 as _YF4
+Y_PG_ = M(Y_LIN[_PI["G"]["linha"]]) + _PI["G"]["lado"] * O_PL
+Y_PC_ = M(_YF4) + _PI["C"]["lado"] * 75.0
 
 # pilares do eixo C: (marca, y, by, z_topo, rec)
 _ZC = M(next(a_ for a_ in CB2["apoios_diretos"] if a_["nome"] == "C")["z_concreto"])     # rev09b (DEC-050): P8A até o fundo da W 310
@@ -196,7 +201,7 @@ def corte(v):
             if V == "I" and k in FCH.ESQ:
                 continue
             conc(v, [(yp - 50, k * 1250 + 5), (yp + 50, k * 1250 + 5), (yp + 50, (k + 1) * 1250), (yp - 50, (k + 1) * 1250)], esc=0.012)
-    for yp, kmax in ((YL[1] + O_PL, 5), (YL[3] + 275, 4)):    # paredes G (linha 2) e C (linha 4) em vista (lado E)
+    for yp, kmax in ((Y_PG_, 5), (Y_PC_, 4)):                  # paredes G (linha 2) e C (linha 4) em vista (lado E), do lado das placas do registro
         for k in range(kmax + 1):
             v.poli([(yp - 50, k * 1250 + 5), (yp + 50, k * 1250 + 5), (yp + 50, (k + 1) * 1250), (yp - 50, (k + 1) * 1250)], "VISTA", True)
     for k, y in enumerate(YL):
@@ -221,10 +226,10 @@ def corte(v):
     v.chamada((YL[8] - 75, Z_VB + 300), (-8, 9), "VB-07 15×60 (fachada 9)")
     v.chamada((YL[0] - O_PL, 1250 * 6 + 600), (-8, 8), "placas I")
     v.chamada((YL[8] + O_PL, 1250 * 6 + 600), (8, 8), "placas A")
-    v.chamada((YL[1] + O_PL, 1250 * 4 + 600), (8, -8), "parede G (vista)")
-    v.chamada((YL[3] + 275, 1250 * 4 + 600), (8, -8), "parede C — portões (vista)")
+    v.chamada((Y_PG_, 1250 * 4 + 600), (8 * _PI["G"]["lado"], -8), "parede G (vista)")
+    v.chamada((Y_PC_, 1250 * 4 + 600), (8 * _PI["C"]["lado"], -8), "parede C — portões (vista)")
     v.chamada((5000, NIV[1]), (6, 8), "mezanino: LP20 + capa 5 (ND-LET-CT02)")
-    v.chamada((YL[1] + 300 + PC_ / 2, Z_ASS - HC / 2), (8, -14), "CP-I120 50 × 40 × 49 + NEO-2")
+    v.chamada((YL[1] + 300 + PC_ / 2, Z_ASS - HC / 2), (8, -14), f"CP-I120 {M(CPI['b_m']) / 10:g} × {PC_ / 10:g} × {HC / 10:g}/{M(CPI['h_consolo_m']) / 10:g} + NEO-2")
 
 
 
@@ -288,7 +293,7 @@ yy = pr.tabela(xt, ytop, "CORTES DA OBRA", ["CORTE", "POSIÇÃO", "FOLHA"], lin,
 notas = ["Corte 6-6 gerado da mesma geometria do modelo e das pranchas das peças: pilares do eixo C cortados (PF-02 e PF-04 com a cabeça recuada no lado interno acima de +8,70), vigas centrais I120 cortadas no eixo, consolos CP-I120 no plano.",
          f"I120: V407 (PC-01 → PC-02), V406 (PC-02 → P13), V405 (P13 → P13B), V404 (P13B → PF-04) — DEC-058; folga de {FOLGA_I / 10:.1f} cm".replace(".", ",") + " entre o nariz do dente e a face do pilar; assento +6,966 com NEO-2 300 × 200 × 31 fretado e PN-2 Ø25 grauteado numa ponta só.",
          "TS-01 das linhas 3 a 8 apoiadas no topo da I120 (lado A +7,776, lado E +7,788) com NEO-3 e 2 PN-5 por viga; folga de 7,5 cm entre as pontas no eixo C (ND-LET-CT04, det. 2). Na linha 2 a cobertura é a W 200 × 15,0 metálica contínua apoiada na cabeça dos pilares (que sobe até o fundo da W) e em montantes no meio dos vãos (DEC-052, ND-LET-COB05).",
-         "Placas de fechamento por fora dos pilares nas fachadas I (linha 1) e A (linha 9); paredes internas G (linha 2) e C (linha 4, portões) do lado do pavilhão; cada placa nos seus 2 consoles, folgas de 0,5 cm na altura e 2 cm no comprimento.",
+         f"Placas de fechamento por fora dos pilares nas fachadas I (linha 1) e A (linha 9); parede interna G (linha 2) {lado_placas_txt('G')} e C (linha 4, portões) {lado_placas_txt('C')}; cada placa nos seus 2 consoles, folgas de 0,5 cm na altura e 2 cm no comprimento.",
          "Cortes transversais: ND-LET-CT01 (eixos 2 e 3); mezanino: CT02; apoios como montados: CT04; montagem: MON01 a MON03.",
          "Cotas em cm, níveis em m. Não medir no desenho. EMISSÃO EXECUTIVA — LIBERADO PARA PRODUÇÃO, ARMAÇÃO, CONCRETAGEM E MONTAGEM."]
 pr.notas(xt, yy - 4, notas, 178)

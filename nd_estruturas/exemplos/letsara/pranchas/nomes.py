@@ -37,13 +37,13 @@ def pilares_obra():
     for i, y in enumerate(Y_LIN, start=1):
         for lado, x in (("P1", 0.0), ("P2", X_EIXO["E"])):
             yp = y_canto(y) if i in (1, len(Y_LIN)) else y              # rev12 (opção D): cantos 10 cm para fora da linha
-            out.append((marca_de(f"{lado}-L{i}"), f"{lado} L{i}", x, yp, "40×60"))
+            out.append((marca_de(f"{lado}-L{i}"), f"{lado} L{i}", x, yp, "60×40"))   # rev12b (item 16): seção sempre em x × y
     for nome, x, y, bx, by in PILARES_ESPECIAIS:
         if nome in ("P6", "P7"):                                # rev09 (DEC-045): pilares da escada
             mk = "PE-02" if nome == "P7" else ("PE-03" if abs(y - Y_LIN[1]) < 1e-6 else "PE-01")
-            out.append((mk, f"{nome} ({'linha 2' if mk == 'PE-03' else 'escada'})", x, y, f"{round(min(bx, by) * 100)}×{round(max(bx, by) * 100)}"))
+            out.append((mk, f"{nome} ({'linha 2' if mk == 'PE-03' else 'escada'})", x, y, f"{round(bx * 100)}×{round(by * 100)}"))
             continue
-        sec = f"{round(min(bx, by) * 100)}×{round(max(bx, by) * 100)}"
+        sec = f"{round(bx * 100)}×{round(by * 100)}"                    # rev12b (item 16): x × y, como no quadro da peça e no PR01
         if y in (Y_LIN[0], Y_LIN[-1]):
             li = 1 if y == Y_LIN[0] else 9
             out.append((marca_de(f"{nome}-L{li}"), f"{nome} L{li}", x, y, sec))

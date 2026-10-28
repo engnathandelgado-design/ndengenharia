@@ -47,7 +47,15 @@ for k, e in enumerate(R["lista"]):
     G0 = json.load(open(f"/home/claude/letsara/pranchas/{e['marcas_pilar'][0]}_geom.json", encoding="utf-8"))
     c0 = next(c for c in G0["consolos"] if AP.marca_consolo(c) == e["marca"])
     W = G0["B"] if c0["face"] in "AC" else G0["H"]
-    vf = pr.vista(e["marca"] + "F", (cx + 225, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=f"face {c0['face']} ({AP.g(W / 10)} cm)", unidade="cm")
+    # rev12b (revisão rev12b, item 20): a marca pode estar em faces de larguras diferentes — todas citadas, a desenhada indicada
+    _ws = set()
+    for _mk in e["marcas_pilar"]:
+        _G = json.load(open(f"/home/claude/letsara/pranchas/{_mk}_geom.json", encoding="utf-8"))
+        for _c in _G["consolos"]:
+            if AP.marca_consolo(_c) == e["marca"]:
+                _ws.add(_G["B"] if _c["face"] in "AC" else _G["H"])
+    _sub = f"face {c0['face']} ({AP.g(W / 10)} cm)" if len(_ws) <= 1 else f"faces de {' e '.join(AP.g(w_ / 10) for w_ in sorted(_ws))} cm; desenhada a de {AP.g(W / 10)}"
+    vf = pr.vista(e["marca"] + "F", (cx + 225, cy - 40), 10, titulo=f"{e['marca']} — FRENTE", subtitulo=_sub, unidade="cm")
     vf.poli([(-W / 2, -h - 150), (-W / 2, 150), (W / 2, 150), (W / 2, -h - 150)], "VISTA")
     vf.interrupcao((-W / 2, -h - 150), (W / 2, -h - 150)); vf.interrupcao((-W / 2, 150), (W / 2, 150))
     u_ = e["exc"] * (-1 if e["exc_face"] in ("D", "C") else 1)
@@ -71,7 +79,7 @@ for k, e in enumerate(R["lista"]):
 pr.notas(Q[0] + 8, Q[3] - 30, ["Marca própria de cada consolo (C1, C2…); consolos com a mesma geometria, posição na face, caimento, pino, neoprene e tirante têm a mesma marca. "
                                   "A marca aparece nas faces dos pilares, no quadro APOIOS E ESPERAS de cada folha de pilar e nesta folha.",
                                   "Fôrma em cm (vistas 1:5); pinos e neoprene em mm. Pilares e quantidades contados nas folhas de cada pilar (quadro APOIOS E ESPERAS). Armadura: DETALHE C da folha de cada pilar (mesmas posições).",
-                                  "Topo do consolo com o caimento indicado; neoprene centrado no eixo do consolo; pino a partir da face do pilar conforme a tabela."], 900)
+                                  "Topo do consolo com o caimento indicado; neoprene centrado no pino (furo Ø30 do neoprene) e no eixo do consolo; pino a partir da face do pilar conforme a tabela."], 900)
 av = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CS01")
 print("ND-LET-CS01", len([x for x in av if x[0] == "ERRO"]), "erros,", len(av), "avisos")
 for x in av:

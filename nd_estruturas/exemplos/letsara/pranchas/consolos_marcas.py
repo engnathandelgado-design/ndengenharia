@@ -55,7 +55,7 @@ if __name__ == "__main__":
     for mk, P in todos():
         for c in P["consolos"]:
             k = AP.chave(c)
-            e = reg.setdefault(k, dict(tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c.get("incl", 0.03),
+            e = reg.setdefault(k, dict(tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c["incl"],
                                        pino=f"{c['pino_nome']} Ø{c['pino_d']:g} L {c['pino_L']} (emb. {c['pino_emb']}, livre {c['pino_L'] - c['pino_emb']}, a {c['pino_x']:g} da face)",
                                        neo=c["neo"], exc=c.get("exc", 0), exc_face=c.get("exc_face", ""), tirante=f"{c['tir']} ({c['n_tir']} ramos Ø{c['d_tir']:g})", marcas_pilar=[], pilares=[],
                                        por_pilar={}, n=0))

@@ -3,7 +3,8 @@ Usada por PC-01/02 (centrais 50×50) e PM-01 (mezanino 40×60). Rodar: python pi
 Faces: A = x+, B = y+, C = x−, D = y−. Modelo em mm; cotas de concreto em cm; chaparia em mm."""
 import json, math, subprocess, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
-from prancha_nd import Prancha, ALTURAS, _wtext, quebrar
+from prancha_nd import Prancha, ALTURAS, _wtext, quebrar, DIM_K, DIM_DLI, ALTURAS_PECA
+ALTURAS_PECA_COTA = ALTURAS_PECA["cota"]
 
 
 def tabela_q(pr, x, y_topo, titulo, cab, linhas, larg, h_lin=6.0, h_sub=4.2):
@@ -102,12 +103,83 @@ def furo_icamento(P, L_TOT, REC, cons):
     return dict(z=z, eixo=eixo, d=60, livre=livre(eixo), obst=obst)
 
 
+def bainhas_peca(P, cons):
+    """rev12b (revisão rev12b, itens 1 e 2): bainhas BA-1 da marca, do registro de continuidade das VM (negativa_vm ← vm_retangular.json
+    + nomes.json). Para cada apoio de continuidade: os 2 CP-MEZ opostos do nível; as n bainhas uma sobre a outra (centroide 12 cm acima do
+    topo da VM, como no cálculo); posição lateral na faixa do 2º estágio da VM (lado oposto à laje), fora das barras longitudinais do pilar,
+    o mais perto possível do meio da faixa. Coordenada lateral t: ao longo de B–D (+ = B) quando a bainha vai de A a C, ao longo de A–C
+    (+ = A) quando vai de B a D — a mesma do CORTE A-A. Devolve (bainhas, erros)."""
+    import negativa_vm as NV_, registro as RG_
+    marca = P["marca"]
+    erros, out = [], []
+    nomes_ = RG_.nomes_de(marca)
+    por_nome = [[(b_["niv"], b_["n"]) for b_ in NV_.bainhas_pilar(n_)] for n_ in nomes_]
+    if any(p_ != por_nome[0] for p_ in por_nome[1:]):
+        erros.append(("ERRO", f"BA-1: peças da marca {marca} com apoios de continuidade diferentes {dict(zip(nomes_, por_nome))}"))
+    niv_txt = {f"+{z / 1000:.2f}".replace(".", ","): k for k, z in enumerate(Z_PISO_MM)}
+    PV = NV_.premissas()
+    bvm, faixa = PV["b"] * 1000, PV["faixa_2e"] * 1000
+    r = NV_.D_BAINHA / 2
+    fy = P.get("face_mais_y", "B")                                       # face do pilar voltada para +y (planta)
+    usados = set()
+    for b_ in (NV_.bainhas_pilar(nomes_[0]) if nomes_ else []):
+        k = niv_txt[b_["niv"]]
+        cm_ = [c for c in cons if c["tipo"] == "CP-MEZ" and c["z"] == Z_MEZ_ASS[k] + 1000]
+        if len(cm_) != 2 or OPOSTA[cm_[0]["face"]] != cm_[1]["face"]:
+            erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: apoio de continuidade sem 2 CP-MEZ em faces opostas ({[c['face'] for c in cm_]})"))
+            continue
+        c1, c2 = sorted(cm_, key=lambda c: c["face"])
+        if (c1.get("exc", 0), c1.get("exc_face")) != (c2.get("exc", 0), c2.get("exc_face")) or c1["larg"] != c2["larg"]:
+            erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: CP-MEZ das duas faces fora de alinhamento (a VM não atravessa reta)"))
+        usados.add(k)
+        ao_longo_u = set((c1["face"], c2["face"])) == {"B", "D"}
+        mais = "A" if ao_longo_u else "B"                                  # face do lado + da coordenada lateral t
+        sinal = lambda fc: 1 if fc == mais else -1 if fc == OPOSTA[mais] else 0
+        t_vm = sinal(c1.get("exc_face")) * c1.get("exc", 0)
+        f_laje = fy if NV_.lado_laje(b_["y"]) > 0 else OPOSTA[fy]
+        s_b = -sinal(f_laje)                                               # faixa do 2º estágio: lado da VM oposto à laje
+        if not s_b:
+            erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: laje (face {f_laje}) não fica de lado da VM — conferir face_mais_y"))
+            continue
+        t_far = t_vm + s_b * bvm / 2
+        lo, hi = sorted((t_far - s_b * (faixa - r), t_far - s_b * r))
+        D1 = P.get("d1", 20.0)
+        proib = [((q[1] if ao_longo_u else q[0]) - D1 / 2 - NV_.FOLGA_BARRA - r, (q[1] if ao_longo_u else q[0]) + D1 / 2 + NV_.FOLGA_BARRA + r) for q in P["xy"]]
+        meio = (lo + hi) / 2
+        cand = [t for t in (lo + 5 * i for i in range(int((hi - lo) / 5) + 1)) if all(not (a < t < b) for a, b in proib)]
+        t = min(cand, key=lambda t_: abs(t_ - meio)) if cand else None
+        if not cand:                                                       # a contagem vale; a posição volta para o arranjo das barras
+            erros.append(("ERRO", f"BA-1 {marca} {b_['niv']}: bainha Ø{NV_.D_BAINHA} sem passagem entre as barras do pilar na faixa do 2º estágio "
+                                  f"(t de {lo:.0f} a {hi:.0f} mm; barras em {sorted({round(q[1] if ao_longo_u else q[0]) for q in P['xy']})}) — rever o arranjo"))
+        z_topo_vm = c1["z"] - c1["h"] + H_VM
+        out.append(dict(niv=b_["niv"], n=b_["n"], faces=(c1["face"], c2["face"]), mais=mais, t=t, d=NV_.D_BAINHA,
+                        zs=[z_topo_vm + dz for dz in NV_.z_bainhas(b_["n"])], z_vm=z_topo_vm, faixa=(lo - r, hi + r)))
+    for k, z in enumerate(Z_MEZ_ASS):                                    # trava inversa: VM dos dois lados sem continuidade no registro
+        cm_ = [c for c in cons if c["tipo"] == "CP-MEZ" and c["z"] == z + 1000]
+        if len(cm_) == 2 and OPOSTA[cm_[0]["face"]] == cm_[1]["face"] and k not in usados:
+            erros.append(("ERRO", f"BA-1 {marca}: CP-MEZ nas duas faces no +{Z_PISO_MM[k] / 1000:.2f} sem apoio de continuidade no registro"))
+    return out, erros
+
+
+def bainhas_linha(BAI):
+    """linha da tabela de insertos (BA-1) a partir das bainhas da peça."""
+    import negativa_vm as NV_
+    if not BAI:
+        return None
+    nivs = sorted({b_["niv"] for b_ in BAI})
+    por = sorted({b_["n"] for b_ in BAI})
+    fc = "–".join(BAI[0]["faces"])
+    return ["BA-1", f"Bainha corrugada Ø{NV_.D_BAINHA} horizontal ({NV_.BARRAS_POR_BAINHA} N11 cada)", sum(b_["n"] for b_ in BAI),
+            f"{'/'.join(str(n_) for n_ in por)} por nível ({'; '.join(nivs)}), uma sobre a outra; cotas na face e no CORTE A-A"]
+
+
 def prancha_pilar(P):
     B, H, L_CAL, Z_TOP = P["B"], P["H"], P["L_CAL"], P["Z_TOP"]
     L_TOT = L_CAL + Z_TOP
     D1 = P.get("d1", 20.0)
     AL = P["al"]
     cons = P["consolos"]
+    BAI, ERR_BAI = bainhas_peca(P, cons)                       # rev12b (itens 1/2): bainhas BA-1 do registro de continuidade
     REC = P.get("rec")                                                   # cabeça recuada: dict(z = nível abs (mm), d = {face: recuo mm})
     rd = (lambda fc: REC["d"].get(fc, 0)) if REC else (lambda fc: 0)
     z_rec = REC["z"] if REC else L_TOT
@@ -184,7 +256,7 @@ def prancha_pilar(P):
                              ("NEO-6 100 × 60", any(c["tipo"] == "CP-VB" for c in P.get("consolos", []))),
                              ("CP-MEZ RENTE À FACE EXTERNA (VM DA LINHA 1 NA FACE DOS PILARES)", any(c["tipo"] == "CP-MEZ" and c.get("exc") for c in P.get("consolos", []))),
                              ("EIXO 7,5 cm FORA DA LINHA 4: FACE NO PLANO DOS VIZINHOS 40 × 40 (DEC-092)", P["marca"] in ("PG-02", "PG-04")),
-                             ("NEO-7 PELA DISTÂNCIA À BORDA (NBR 9062 7.2)", P["marca"].startswith("PG"))) if ok]
+                             (("NEO-7A 310 × 160" if P["marca"] in ("PG-02", "PG-04") else "NEO-7 310 × 200") + " PELA DISTÂNCIA À BORDA (NBR 9062 7.2)", P["marca"].startswith("PG"))) if ok]
     if _r12:
         pr.revisao("R12", "27/10/2026", "; ".join(_r12))
     Q = pr.quadro
@@ -261,6 +333,10 @@ def prancha_pilar(P):
                 v.chapa(W / 2 + u_ - c["neo"][0] / 2, zc, c["neo"][0], 10)
                 if u_:
                     v.cota_h(sorted(set([0, (W - larg) / 2 + u_, (W + larg) / 2 + u_, W])), zc - h, -8, total=False)   # rev12 (item 22): sem cota 0 no consolo rente
+                if c["tipo"] != max(cons, key=lambda q: q["h"])["tipo"]:                   # rev12b (item 24): pino de consolo fora do DETALHE 1 — embutido e livre na face
+                    sg_p = 1 if (W / 2 + u_) <= W / 2 else -1                                # lado livre da face (oposto à aresta do consolo rente)
+                    xp_ = W / 2 + u_ + sg_p * larg / 2
+                    v.cota_v([zc - c["pino_emb"], zc, zc + c["pino_L"] - c["pino_emb"]], xp_, sg_p * 9, total=False)
                 # rev11: só a MARCA do consolo (C1, C2…) dentro da face; geometria, pino e neoprene no quadro APOIOS E ESPERAS e no DET. 1
                 import apoios_pilar as AP_
                 zl_ = zc - h
@@ -279,10 +355,27 @@ def prancha_pilar(P):
                              (c["face"] == "A" and eixo == "x" and sg > 0) or (c["face"] == "C" and eixo == "x" and sg < 0)) else -1
                 x0 = W if lado > 0 else 0
                 EXT[lado] = max(EXT[lado], proj)
-                v.poli([(x0, zc - h), (x0 + lado * proj, zc - hp), (x0 + lado * proj, zc + proj * c.get("incl", 0.03)), (x0, zc)], "VISTA")
+                v.poli([(x0, zc - h), (x0 + lado * proj, zc - hp), (x0 + lado * proj, zc + proj * c["incl"]), (x0, zc)], "VISTA")
                 v.ret(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc - c["pino_emb"], c["pino_d"], c["pino_emb"], "OCULTA")
                 v.chapa(x0 + lado * c["pino_x"] - c["pino_d"] / 2, zc, c["pino_d"], c["pino_L"] - c["pino_emb"])
-                v.chapa(x0 + (25 if lado > 0 else -25 - c["neo"][1]), zc, c["neo"][1], 10)
+                v.chapa(x0 + lado * c["pino_x"] - c["neo"][1] / 2, zc, c["neo"][1], 10)       # rev12b (item 8): neoprene centrado no pino (furo Ø30)
+        for b_ in [q for q in BAI if q["t"] is not None]:                                    # rev12b (itens 1/2): bainhas BA-1
+            if face in b_["faces"]:                                                          # de frente: bainhas uma sobre a outra, cotadas às arestas
+                sv_ = 1 if DIR[face] == b_["mais"] else -1 if ESQ[face] == b_["mais"] else 0
+                xb_ = W / 2 + sv_ * b_["t"]
+                for zb_ in b_["zs"]:
+                    v.circulo((xb_, zb_), b_["d"] / 2, "METALICA")
+                # trecho até a aresta mais próxima só se o número couber (senão a cota completa fica no CORTE A-A, 1:10)
+                _pts = [0, round(xb_, 1), W]
+                _near = 0 if xb_ < W / 2 else 2
+                if min(xb_, W - xb_) / ESC < _wtext(f"{min(xb_, W - xb_) / 10:.1f}", ALTURAS_PECA_COTA) + 1.0:
+                    _pts.pop(_near)
+                v.cota_h(_pts, max(b_["zs"]) + b_["d"] / 2, 6, total=False)
+                v.texto((W / 2, max(b_["zs"]) + b_["d"] / 2 + (6 * DIM_K + 4.5) * ESC), f"{len(b_['zs'])} BA-1" + (f" c/{(b_['zs'][1] - b_['zs'][0]) / 10:g}" if len(b_["zs"]) > 1 else ""),
+                        "min", "BOTTOM_CENTER")
+            else:                                                                            # de lado: atravessam o pilar (ocultas)
+                for zb_ in b_["zs"]:
+                    v.ret(0, zb_ - b_["d"] / 2, W, b_["d"], "OCULTA")
         for ip in P.get("ip01", []):                                                       # rev06: CE-1 = chapa de espera 380 × 330 na face
             F_ = ip["face"]                                                                # das placas, centrada (consoles CS-1 soldados)
             cc = F_ == "C" and ip.get("lados")                                               # rev06e (DEC-031): CC-1 = CE-1 + CS-1 de fábrica
@@ -361,7 +454,8 @@ def prancha_pilar(P):
         zs = sorted(set([0, L_CAL] + [c["z"] for c in cf] + [c["z"] - c["h"] for c in cf] + ([z_rec] if REC else []) + [L_TOT]
                     + [es["z"] for es in P.get("esperas_face", []) if es["face"] == face or (face == "A" and es["face"] not in P["vistas"])]
                     + (list(AL) if face == af_ or DIR[face] == af_ or ESQ[face] == af_ else [])          # rev11: posição das alças AL-2 cotada
-                    + ([FI["z"]] if face in FI["eixo"] else [])))                                   # rev11: furo FI-1 cotado
+                    + ([FI["z"]] if face in FI["eixo"] else [])                                     # rev11: furo FI-1 cotado
+                    + [z_ for b_ in BAI if face in b_["faces"] for z_ in b_["zs"][:1] if b_["t"] is not None]))   # a de baixo na cadeia; o passo no rótulo                              # rev12b: centro das bainhas BA-1
         from ezdxf import bbox as _bb                                         # rev11: as cadeias ficam fora do que foi desenhado (consolo mais largo que a face)
         _g = [e_ for e_ in v.ents if e_.dxftype() not in ("TEXT", "MTEXT", "DIMENSION") and e_.dxf.layer not in ("CHAMADA", "EIXO")]
         _x = _bb.extents(_g, fast=True) if _g else None
@@ -504,9 +598,32 @@ def prancha_pilar(P):
     v = pr.vista("CORTE A-A", (XD + 44, YS), 10, titulo="CORTE A-A", subtitulo="corrente (fôrma)", unidade="cm")
     pts = [(-B / 2, -H / 2), (B / 2, -H / 2), (B / 2, H / 2), (-B / 2, H / 2)]
     v.poli(pts, "CORTADO", fechada=True); v.hachura(pts, "AR-CONC", 0.03)
-    v.cota_h([-B / 2, B / 2], -H / 2, -12); v.cota_v([-H / 2, H / 2], B / 2, 14)
-    v.texto((0, H / 2 + 30), "FACE A", "min", "BOTTOM_CENTER"); v.texto((0, -H / 2 - 130), "FACE C", "min", "TOP_CENTER")
-    v.texto((B / 2 + 170, 0), "FACE B", "min", "MIDDLE_LEFT", rot=90); v.texto((-B / 2 - 30, 0), "FACE D", "min", "MIDDLE_RIGHT", rot=90)
+    # rev12b (item 2): bainhas BA-1 (acima do corte, tracejadas) com a posição cotada na cadeia da seção
+    _bu = sorted({round(b_["t"], 1) for b_ in BAI if b_["mais"] == "A" and b_["t"] is not None})               # bainhas de B a D: posição em w (A–C)
+    _bw = sorted({round(b_["t"], 1) for b_ in BAI if b_["mais"] == "B" and b_["t"] is not None})               # bainhas de A a C: posição em u (B–D)
+    v.cota_h([-B / 2] + _bw + [B / 2], -H / 2, -12); v.cota_v([-H / 2] + _bu + [H / 2], B / 2, 14)
+    for t_ in _bu:
+        v.ret(-B / 2, t_ - 25, B, 50, "OCULTA")
+        v.chamada((-B / 4, t_ + 25), (-6, 6 + (H / 2 - t_) / 10), "BA-1 (acima)")
+    for t_ in _bw:
+        v.ret(t_ - 25, -H / 2, 50, H, "OCULTA")
+        v.chamada((t_ - 25, H / 4), (-8 - (B / 2 + t_) / 10, 6), "BA-1 (acima)")
+    for ip in ([] if any(q.get("lados") for q in P.get("ip01", [])) else P.get("ip01", [])):   # rev12b (item 4): CE-1 na face das placas (pilares sem CC-1)
+        F_ = ip["face"]
+        if F_ in "BD":
+            u_ = B / 2 - 12.5 if F_ == "B" else -B / 2
+            v.chapa(u_, -190, 12.5, 380)
+            v.chamada((u_ + 6, 120), (14 if F_ == "B" else -14, 10), f"CE-1 face {F_} (placas)")
+        elif F_ in "AC" and not ip.get("lados"):
+            w_ = H / 2 - 12.5 if F_ == "A" else -H / 2
+            v.chapa(-190, w_, 380, 12.5)
+    EL_ = P.get("eixo_linha")
+    if EL_:                                                               # rev12b: eixo da linha fora do eixo do pilar (PG-02/PG-04)
+        v.linha((EL_["u"], -H / 2 - 60), (EL_["u"], H / 2 + 60), "EIXO")
+        v.texto((EL_["u"], H / 2 + 70), EL_["nome"], "min", "BOTTOM_CENTER")
+        v.cota_h([0, EL_["u"]], H / 2, 6, total=False)
+    v.texto((0, H / 2 + 30), "FACE A", "min", "BOTTOM_CENTER"); v.texto((0, -H / 2 - (190 if _bw else 130)), "FACE C", "min", "TOP_CENTER")
+    v.texto((B / 2 + (230 if _bu else 170), 0), "FACE B", "min", "MIDDLE_LEFT", rot=90); v.texto((-B / 2 - 30, 0), "FACE D", "min", "MIDDLE_RIGHT", rot=90)
 
     if REC:
         vc = pr.vista("CORTE C-C", (XD + 44 + max(B / 10 + 52, 92), YS), 10, titulo="CORTE C-C", subtitulo="cabeça (fôrma)", unidade="cm")
@@ -543,16 +660,16 @@ def prancha_pilar(P):
     if cons:
         c0 = max(cons, key=lambda c: c["h"])
         d1 = pr.vista("DETALHE 1", (XD + 92, YM - 150), 10, titulo=f"DETALHE 1 — CONSOLO {c0['tipo']}",
-                      subtitulo="fôrma, pino, neoprene" + (f"; caimento {c0.get('incl', 0.03) * 100:g} %" if c0.get("incl", 0.03) else ""), unidade="cm")
+                      subtitulo="fôrma, pino, neoprene" + (f"; caimento {c0['incl'] * 100:g} %" if c0["incl"] else ""), unidade="cm")
         PW = largura(OPOSTA[c0["face"]]) if c0["face"] in "BD" else H
         PW = H if c0["face"] in "AC" else B
         zc0, Z1, Z2 = 1000, 400, 1450
         proj, h, hp = c0["proj"], c0["h"], c0["hp"]
         d1.poli([(-PW, Z1), (-PW, Z2), (0, Z2), (0, Z1)], "VISTA"); d1.interrupcao((-PW, Z1), (0, Z1)); d1.interrupcao((-PW, Z2), (0, Z2))
-        d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * c0.get("incl", 0.03)), (0, zc0)], "VISTA")
+        d1.poli([(0, zc0 - h), (proj, zc0 - hp), (proj, zc0 + proj * c0["incl"]), (0, zc0)], "VISTA")
         d1.ret(c0["pino_x"] - c0["pino_d"] / 2, zc0 - c0["pino_emb"] + 5, c0["pino_d"], c0["pino_emb"], "OCULTA")
         d1.chapa(c0["pino_x"] - c0["pino_d"] / 2, zc0 + 5, c0["pino_d"], c0["pino_L"] - c0["pino_emb"])
-        d1.chapa(25, zc0 + 1, c0["neo"][1], 10)
+        d1.chapa(c0["pino_x"] - c0["neo"][1] / 2, zc0 + 1, c0["neo"][1], 10)          # rev12b (item 8): centrado no pino
         d1.cota_v(sorted(set([zc0 - h, zc0 - hp, zc0])), proj, 15, total=False)          # rev08: caimento no subtítulo (cota de 1,2 cruzava as linhas)
         d1.cota_h([0, c0["pino_x"], proj], zc0 - h, -12, total=False); d1.cota_h([-PW, 0], Z1, -15)
         d1.chamada((c0["pino_x"], zc0 + 350), (10, 10), f"{c0['pino_nome']} Ø{c0['pino_d']} {'roscado A36' if c0['pino_nome'] == 'PN-6' else 'CA-50'} L = {c0['pino_L']/10:g} cm")
@@ -620,13 +737,13 @@ def prancha_pilar(P):
         import apoios_pilar as _AP
         marcas_c = "/".join(sorted({_AP.marca_consolo(c) for c in cs}, key=lambda m_: int(m_[1:]) if m_[1:].isdigit() else 99))   # rev12: marca do registro (C1…)
         arm_cons.append(dict(pos=(pa, pb, pc), tipos=tipos, marcas=marcas_c, n=n_cons, nt=nt, dt=dt, proj=proj, PW=PWc, larg=lg, h=hc, n6=len(range(60, proj - 40, 80)),
-                             faces=[(c["face"], c["z"], c["tipo"]) for c in cs], incl=cs[0].get("incl", 0.03)))
+                             faces=[(c["face"], c["z"], c["tipo"]) for c in cs], incl=cs[0]["incl"]))
         pr.posicoes_desenho.update({pa, pb, pc})
     area_f = (2 * (B + H) * z_rec + 2 * (HB + HH) * (L_TOT - z_rec) + B * H + (B * H - HB * HH) +
               sum(2 * c["proj"] * c["h"] + c["larg"] * c["h"] + c["larg"] * c["proj"] - c["larg"] * c["h"] for c in cons)) / 1e6
     json.dump(dict(marca=P["marca"], qtd=P["qtd"], desenho=P["desenho"], posicao=P["posicao"], B=B, H=H, L_TOT=L_TOT, L_CAL=L_CAL, Z_TOP=Z_TOP, COB=COB,
                    rec=REC, z_rec=z_rec, HB=HB, HH=HH, D1=D1, xy=xy, xy_sobe=xy_sobe, xy_para=xy_para, xy_cab=xy_cab, emb13=EMB13, d13=D13, grampos=P["grampos"], grampos_h=P.get("grampos_h", []),
-                   z_est=z_est, z_cab=z_cab, est=EST, d_est=P.get("d_est", 8.0), cons=[dict(face=c["face"], z=c["z"], tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c.get("incl", 0.03)) for c in cons],
+                   z_est=z_est, z_cab=z_cab, est=EST, d_est=P.get("d_est", 8.0), cons=[dict(face=c["face"], z=c["z"], tipo=c["tipo"], larg=c["larg"], proj=c["proj"], h=c["h"], hp=c["hp"], incl=c["incl"]) for c in cons],
                    arm_cons=arm_cons, barras=barras, V=V, area_forma=area_f, al=AL, n_ip=sum(len(i["z"]) for i in P.get("ip01", []))),
               open(f"/home/claude/letsara/pranchas/arm/{P['marca']}.json", "w"), ensure_ascii=False, indent=1)
     if P.get("so_arm"):
@@ -640,7 +757,8 @@ def prancha_pilar(P):
     pr.linha((QX_ARM - 5, Q[1]), (QX_ARM - 5, Q[3] - 34), "CARIMBO_FINO")
     ra = AP_.quadrante(A_, PJ, QX_ARM, QY_ARM, ref="fôrma nesta folha (à esquerda)", esc=25, qh=Q[3] - 36 - QY_ARM)
     ta = dict(total_kg=ra["kg"])
-    ins_ = list(P["insertos"]) + [["FI-1", "Furo de içamento: tubo aço Ø60,3 × 3 perdido", 1,
+    pr.avisos_extra += ERR_BAI
+    ins_ = [r_ for r_ in P["insertos"] if r_[0] != "BA-1"] + ([bainhas_linha(BAI)] if BAI else []) + [["FI-1", "Furo de içamento: tubo aço Ø60,3 × 3 perdido", 1,
                                     f"faces {FI['eixo'][0]}–{FI['eixo'][1]}, {(L_TOT - FI['z']) / 10:g} cm do topo"]]
     import apoios_pilar as AP
     rows_ap, err_ap = AP.linhas(P, cons, L_CAL, L_TOT, z_rec, REC, rd, B, H)
@@ -704,12 +822,21 @@ def prancha_pilar(P):
 H_VM = round(_VMP["h_pm"] * 1000)
 
 
+# rev12b (revisão rev12b, item 3): o topo do consolo segue a viga apoiada — horizontal para viga horizontal (VM, I120, VB, VT);
+# só o CP-TS (TS-01 inclinada) tem caimento. Antes o campo "incl" faltava aqui e os leitores assumiam 0,03 por omissão,
+# o que deixava os CP-MEZ dos pilares desta família (C3) com 3 % e os da família 40×60 (C4–C6) horizontais.
+CAIMENTO_VIGA = {"CP-TS": 0.03}
+
+
 def consolo(face, z_assento, tipo, larg, proj, h, hp, pino=("PN-1", 20, 700, 300, 175), neo=(300, 150, 10), tir=("3 Ø16", 3, 16.0)):
     return dict(face=face, z=z_assento + 1000, tipo=tipo, larg=larg, proj=proj, h=h, hp=hp, pino_nome=pino[0], pino_d=pino[1], pino_L=pino[2],
-                pino_emb=pino[3], pino_x=pino[4], neo=list(neo), tir=tir[0], n_tir=tir[1], d_tir=tir[2])
+                pino_emb=pino[3], pino_x=pino[4], neo=list(neo), tir=tir[0], n_tir=tir[1], d_tir=tir[2], incl=CAIMENTO_VIGA.get(tipo, 0.0))
 
 
 import geometria as _G
+# rev12b (item 4): face de fixação das placas das paredes internas, do registro geometria.PAREDE_INTERNA (pilares desta família:
+# A = x+, B = y+, C = x−, D = y−) — G (linha 2) na face B, C (linha 4) na face D
+FPL = {V_: {1: "B", -1: "D"}[_G.PAREDE_INTERNA[V_]["lado"]] for V_ in _G.PAREDE_INTERNA}
 KP_CEN = [("P6E", 36.175, 3.79, 250, 400, "PE-01"), ("P7E", 39.50, 3.79, 600, 400, "PE-02"), ("P6", 36.175, Y_LIN[1], 250, 400, "PE-03"),
           ("P8A", X_EIXO["C"], Y_LIN[1], 400, 600, "PC-01"), ("P11", X_EIXO["C"], Y_LIN[3], 400, 400, "PC-02"), ("P13", X_EIXO["C"], Y_PC_C[0], 400, 400, "PC-03"), ("P13B", X_EIXO["C"], Y_PC_C[1], 400, 400, "PC-03"),
           ("P8", X_EIXO["B"], Y_LIN[1], 400, 600, "PM-01"), ("P8B", X_EIXO["D"], Y_LIN[1], 400, 600, "PM-02"),
@@ -721,8 +848,8 @@ I120 = lambda face: consolo(face, Z_I120, "CP-I120", round(CONS_J["CP-I120"]["b_
 TSC = lambda face, z: consolo(face, z, "CP-TS", 400, 300, H_C["CP-TS"], H_C["CP-TS"])
 MEZ = lambda face, z: consolo(face, z, "CP-MEZ", round(CONS_J["CP-MEZ"]["b_m"] * 1000), round(_VMP["dente"]["consolo_proj"] * 1000), H_C["CP-MEZ"], HP_C["CP-MEZ"], ("PN-1", 20, 630, 230, round(_VMP["x_pad"] * 1000)), (200, 200, 21), (CONS_J["CP-MEZ"]["tirante"].split(" (")[0], CONS_J["CP-MEZ"]["n_ramos"], CONS_J["CP-MEZ"]["d_tir"]))   # rev09: dente da VM retangular 30 × 75; pino 230 no consolo de 27,9 (não sai pelo fundo) + 400 no dente
 EST_STD = dict(s_corr=150, s_dens=100, zona=1500)
-NOTA_CONS = f"Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (CP-MEZ {str(H_C['CP-MEZ'] / 10).replace('.', ',')} cm; CP-I120 com MÍSULA de concreto: {H_C['CP-I120'] / 10:g} cm junto ao pilar e {HP_C['CP-I120'] / 10:g} cm na ponta, fundo inclinado; verificação na memória de cálculo, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
-NOTA_MEZ = " Acima dos CP-MEZ, na largura da VM (25) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."
+NOTA_CONS = f"Consolos: altura na ponta = recorte do dente da viga − neoprene, fundo da ponta alinhado ao fundo da viga (consolos com MÍSULA de concreto, fundo inclinado — CP-MEZ {H_C['CP-MEZ'] / 10:g} cm junto ao pilar e {f(HP_C['CP-MEZ'] / 10, 1)} cm na ponta; CP-I120 {H_C['CP-I120'] / 10:g} e {HP_C['CP-I120'] / 10:g} cm; verificação na memória de cálculo, NBR 9062:2017 7.3). Tirante em alças horizontais (7.3.3: a2 ≥ c + 3,5Ø), costura Ø8 c/10 em 2/3 d."
+NOTA_MEZ = f" Acima dos CP-MEZ, na largura da VM ({_VMP['b'] * 100:g}) e até 50 cm acima do assento, face do pilar ÁSPERA (≥ 5 mm a cada 30 mm, NBR 9062:2017 6.3.3): junta da ponta da VM concretada antes das lajes (DEC-039)."
 # rev09b (DEC-050, decisão do Nathan 24/10): sem montantes — a cabeça de concreto sobe até o fundo da W 310 da linha 2 (cada pilar na sua
 # altura, seguindo a inclinação); a W apoia direto na chapa CA-L2 250 × 250 × 19 sobre graute 20 mm, parafusada em 4 BR-M20 embutidas
 _CB2 = json.load(open("/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/cob_linha2.json"))
@@ -791,15 +918,15 @@ def dados_pc1():
     return base("PC-01", 1, 600, 400, Z_L2["C"], cons, bars_ret(600, 400, 4, 3), "ND-LET-PC01",
                 "PILAR CENTRAL PC-01 (P8A, 40×60) — EIXO C, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 2 (P8A); 40 em x × 60 em y", "PILAR CENTRAL PC-01",
-                [["PC-01", "P8A (C2)", 1, f"topo +{F(Z_L2['C'])}: {W_L2} direto (CA-L2 + 4 BR-M16); CP-I120 (B); 2 CP-MEZ (A, C)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
+                [["PC-01", "P8A (eixo C, linha 2)", 1, f"topo +{F(Z_L2['C'])}: {W_L2} direto (CA-L2 + 4 BR-M16); CP-I120 (B); 2 CP-MEZ (A, C)", f"5 CE-1 + 1 CE-1L ({FPL['G']}); 2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 (350 no consolo) — CP-I120", 1, "face B"], ["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo) — CP-MEZ", 4, "faces A e C"], BRM20_INS,
-                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I120"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"],
-                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 5, "face B, centrada, fiadas 0 a 4"],
-                 ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas G-11/G-17 (DEC-044, PP06)", 1, "face B, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                 ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 1, "CP-I120"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"],
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 5, f"face {FPL['G']}, centrada, fiadas 0 a 4"],
+                 ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas G-11/G-17 (DEC-044, PP06)", 1, f"face {FPL['G']}, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos de ponta a ponta; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  NOTA_W.format(z=F(Z_L2["C"])) + f" A cabeça passa {(Z_L2['C'] - Z_TOP_C) / 10:g} cm acima do topo da I120 (+{F(Z_TOP_C)}); CP-I120 na face B (+{F(Z_I120)}) para a ponta da V400; CP-MEZ nas faces A e C para as VM dos dois níveis. Apoio FIXO da W (furos redondos).",
-                 "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede interna da linha 2 (vista G)."],
-                ip01=[dict(face="B", z=IP_C, largo={5: 840})]) | dict(pinos_topo=BRM20_TOPO)
+                 f"CE-1 (chapa de espera dos consoles CS-1) na face {FPL['G']} para as placas da parede interna da linha 2 (vista G, {_G.lado_placas_txt('G')})."],
+                ip01=[dict(face=FPL["G"], z=IP_C, largo={5: 840})]) | dict(pinos_topo=BRM20_TOPO)
 
 
 def dados_pc2():
@@ -807,15 +934,15 @@ def dados_pc2():
     return base("PC-02", 1, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 3, 3), "ND-LET-PC02",
                 "PILAR CENTRAL PC-02 (P11, 40×40) — EIXO C, LINHA 4 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 "POSIÇÃO: eixo C, linha 4 (P11), parede dos portões", "PILAR CENTRAL PC-02",
-                [["PC-02", "P11 (C4)", 1, "topo: 2 TS-01; CP-I120 (B, D)", "5 CE-1 + 1 CE-1L (B); 2 AL-2"]],
+                [["PC-02", "P11 (eixo C, linha 4)", 1, "topo: 2 TS-01; CP-I120 (B, D)", f"5 CE-1 + 1 CE-1L ({FPL['C']}); 2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I120", 2, "faces B e D"], ["PN-5", "Pino Ø20 CA-50 L=600 (300 no pilar) — topo (TS-01)", 4, "topo, x ±115, y ±100"],
                  ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I120"], ["NEO-3", "Neoprene 100×300×10 c/ 2 furos Ø30", 2, "topo (TS-01)"],
-                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista C)", 5, "face B, centrada, fiadas 0 a 4"],
-                 ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas C-11/C-17 (DEC-044, PP06)", 1, "face B, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista C)", 5, f"face {FPL['C']}, centrada, fiadas 0 a 4"],
+                 ["CE-1L", "CE-1L 840×330×12,5 (asas de 220 além das faces) + 4 pinos Ø16 + 2 N18 — placas recortadas C-11/C-17 (DEC-044, PP06)", 1, f"face {FPL['C']}, centrada, fiada 5 (+6,25)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 8 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm do topo e no cálice), ganchos 135°.", NOTA_CONS,
                  f"CP-I120 nas faces B (V406) e D (V407), assento +{F(Z_I120)}; TS-01 da linha 4 apoiadas no topo (topo horizontal em 2 níveis: +{F(Z_TOP_C)} lado A / +{F(Z_TOP_CD)} lado E), NEO-3 100×300 e 2 pinos PN-5 Ø20 por TS-01, grauteados nos tubos TB-3.",
-                 "CE-1 (chapa de espera dos consoles CS-1) na face B para as placas da parede dos portões (vista C, fiadas até +7,50)."],
-                ip01=[dict(face="B", z=IP_C, largo={5: 840})]) | dict(pinos_topo=PN5_TOPO)
+                 f"CE-1 (chapa de espera dos consoles CS-1) na face {FPL['C']} para as placas da parede dos portões (vista C, {_G.lado_placas_txt('C')}, fiadas até +7,50)."],
+                ip01=[dict(face=FPL["C"], z=IP_C, largo={5: 840})], vistas=("A", FPL["C"], "C")) | dict(pinos_topo=PN5_TOPO)
 
 
 def dados_pc3():
@@ -823,7 +950,7 @@ def dados_pc3():
     cons = [I120("B"), I120("D")]
     return base("PC-03", 2, 400, 400, Z_TOP_C, cons, bars_ret(400, 400, 4, 3), "ND-LET-PC03",
                 "PILARES CENTRAIS PC-03 (P13, P13B, 40×40) — EIXO C — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                "POSIÇÃO: eixo C, y = 46,317 m (P13) e y = 62,833 m (P13B) — 3 vãos iguais de 16,517 m da linha 4 à linha 9 (DEC-058)", "PILAR CENTRAL PC-03",
+                f"POSIÇÃO: eixo C, y = 46,317 m ({_RNg0.N(_RNg0.pilar_em(X_EIXO['C'], Y_PC_C[0]))}) e y = 62,833 m ({_RNg0.N(_RNg0.pilar_em(X_EIXO['C'], Y_PC_C[1]))}) — 3 vãos iguais de 16,517 m da linha 4 à linha 9", "PILAR CENTRAL PC-03",
                 [["PC-03", _RNg0.N(_RNg0.pilar_em(X_EIXO["C"], 46.317)) + " (y 46,317)", 1, "CP-I120 (B, D)", "2 AL-2"], ["PC-03", _RNg0.N(_RNg0.pilar_em(X_EIXO["C"], 62.833)) + " (y 62,833)", 1, "CP-I120 (B, D)", "2 AL-2"]],
                 [["PN-2", "Pino Ø25 CA-50 L=900 — CP-I120", 2, "faces B e D"], ["NEO-2", "Neoprene 300×200×31 fretado (rev04)", 2, "CP-I120"],
                  ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
@@ -837,13 +964,13 @@ def _pm(marca, nome, ap, eixo):
     return base(marca, 1, 600, 400, zt, cons, bars_ret(600, 400, 4, 3), f"ND-LET-{marca.replace('-', '')}",
                 f"PILAR DO MEZANINO {marca} ({nome}, 40×60) — LINHA 2, EIXO {eixo} — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
                 f"POSIÇÃO: linha 2, eixo {eixo} ({nome}); 40 em x × 60 em y; topo +{F(zt)}", f"PILAR DO MEZANINO {marca}",
-                [[marca, nome, 1, f"4 CP-MEZ (A, C); topo +{F(zt)}: {W_L2} direto (CA-L2 + 4 BR-M16)", "6 CE-1 (B); 2 AL-2"]],
-                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 4, "12 cm acima da VM"], BRM20_INS,
-                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, "face B, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
+                [[marca, nome, 1, f"4 CP-MEZ (A, C); topo +{F(zt)}: {W_L2} direto (CA-L2 + 4 BR-M16)", f"6 CE-1 ({FPL['G']}); 2 AL-2"]],
+                [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 4, "consolos CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 4, "CP-MEZ"], BRM20_INS,
+                 ["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1, vista G)", 6, f"face {FPL['G']}, centrada"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]],
                 ["Concreto C40; 10 Ø20 retos; estribos N2 Ø8 c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
                  f"CP-MEZ nas faces A e C: assentos +{F(Z_MEZ_ASS[0])} e +{F(Z_MEZ_ASS[1])} (VM retangular 30 × 75 com dente Gerber 45 × 40: fundo do consolo = fundo da viga); pino PN-1 Ø20 no TB-1 do dente; sem peça antigiro: a junta VM × pilar é concretada (fck ≥ 30) antes das lajes — DEC-039.",
-                 NOTA_W.format(z=F(zt)) + f" Acima da laje de cima (+{F(Z_PISO_MM[1])}) a cabeça sobe {(zt - Z_PISO_MM[1]) / 10:g} cm. CE-1 na face B para as placas da parede interna da linha 2 (vista G)."],
-                ip01=[dict(face="B", z=IP_C)]) | dict(pinos_topo=BRM20_TOPO)
+                 NOTA_W.format(z=F(zt)) + f" Acima da laje de cima (+{F(Z_PISO_MM[1])}) a cabeça sobe {(zt - Z_PISO_MM[1]) / 10:g} cm. CE-1 na face {FPL['G']} para as placas da parede interna da linha 2 (vista G, {_G.lado_placas_txt('G')})."],
+                ip01=[dict(face=FPL["G"], z=IP_C)]) | dict(pinos_topo=BRM20_TOPO)
 
 
 def dados_pm():
@@ -858,12 +985,12 @@ def dados_pm2():
 # L 102×102×9,5 (faces x do pilar) — 4 comprimentos → 4 marcas (mesma fôrma e armação por seção)
 IL1 = ["IL-1", "Inserto rosqueado M16 hef 100 (cantoneira CL-P)", 2, "faces B e D, 75 do topo"]
 NOTA_LIG = ("A cabeça do pilar APOIA a TS-01A da linha 4. Na fábrica: topo liso e nivelado 2 cm "
-            "abaixo do fundo da TS-01A (a viga sobe 3 % de A para E). Na obra, com a TS-01A montada e antes da cobertura: neoprene NEO-7 "
+            "abaixo do fundo da TS-01A (a viga sobe 3 % de A para E). Na obra, com a TS-01A montada e antes da cobertura: neoprene NEO-7 / NEO-7A "
             "(dimensões na tabela de insertos) colado na cabeça e graute fluido sem retração (fck ≥ 40) injetado no espaço de ~10 mm entre o neoprene e o fundo "
             "da viga — a viga não desce no vão dos portões (fundo ≥ +7,50; no PG-01 7,497, dentro da tolerância de ±10 mm). Reação de cálculo "
             "na cabeça: {rd}. Em cada face lateral (B e D) continua a cantoneira L 102×102×9,5 L = 250 (CL-P) com 1 M16 8.8 no inserto IL-1 "
             "(furo oblongo vertical 18 × 50) e 2 M16 nos insertos do fundo da TS-01A: trava a parede dos portões em y. " + __import__("registro").portao_txt().capitalize() + ".")
-IL2 = ["IL-2", "2 barras roscadas M16 8.8 L=200 (150 embutidos + grampo U Ø10) por cantoneira — CL-V (apoio da PV-1) e CT-V (trava do topo)", 6, "face B: 2 a +7,42 e 1 a +7,80 por cantoneira"]
+IL2 = ["IL-2", "2 barras roscadas M16 8.8 L=200 (150 embutidos + grampo U Ø10) por cantoneira — CL-V (apoio da PV-1) e CT-V (trava do topo)", 6, f"face {FPL['C']}: 2 a +7,42 e 1 a +7,80 por cantoneira"]
 
 
 def _fiadas_c(x):
@@ -890,24 +1017,26 @@ def _pg(marca, nome, x, b, ztop, desenho, d1, est=None):
     bx_, by_ = round(bxm * 1000), round(bym * 1000)
     b = by_                                                            # lado ⊥ à parede (calço do CS-1, flambagem)
     ztop = round((ZF(x) - 0.02) * 100) * 10
-    secao = f"{by_//10}×{bx_//10}"
+    secao = f"{bx_//10}×{by_//10}"                                    # rev12b (item 16): x × y
     zce = _fiadas_c(x)
     P = base(marca, 1, by_, bx_, ztop, [], bars_ret(by_, bx_, 2, 2), desenho,
              f"PILAR DOS PORTÕES {marca} ({nome}, {secao}) — LINHA 4, x = {x:.3f} m — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO".replace(".", ","),
-             f"POSIÇÃO: linha 4, x = {x:.3f} m" + (f", eixo {_G.DY_PG[marca] * 100:.1f} cm fora da linha 4 para o lado das placas (y = {_G.Y_PG[marca]:.3f})" if _G.DY_PG[marca] else "") + f" ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01A: neoprene + graute — APOIA a viga, DEC-059)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
-             [[mk_, _RNg.N(_RNg.pilar_em(_G.PG_L4[mk_][1], _G.Y_PG[mk_])) + (f" (x {f(_G.PG_L4[mk_][1], 3)})" if mk_ in ("PG-02", "PG-04") else ""), 1, f"{round(_G.PG_L4[mk_][3] * 100)}×{round(_G.PG_L4[mk_][2] * 100)}; sem consolo; topo +{f(ZF(_G.PG_L4[mk_][1]) - 0.02, 2)}", "CE-1 (B); 2 IL-1; 2 AL-2"]
+             f"POSIÇÃO: linha 4, x = {x:.3f} m" + (f", y = {_G.Y_PG[marca]:.3f}" if _G.DY_PG[marca] else "") + f" ({nome}); topo +{ztop/1000:.2f} (2 cm abaixo da TS-01A: neoprene + graute — APOIA a viga, DEC-059)".replace(".", ","), "PILARES DA PAREDE DOS PORTÕES",
+             [[mk_, _RNg.N(_RNg.pilar_em(_G.PG_L4[mk_][1], _G.Y_PG[mk_])) + (f" (x {f(_G.PG_L4[mk_][1], 3)})" if mk_ in ("PG-02", "PG-04") else ""), 1, f"{round(_G.PG_L4[mk_][2] * 100)}×{round(_G.PG_L4[mk_][3] * 100)} (x × y); sem consolo; topo +{f(ZF(_G.PG_L4[mk_][1]) - 0.02, 2)}", f"CE-1 ({FPL['C']}); 2 IL-1; 2 AL-2"]
               for mk_, nm_ in (("PG-01", "P9"), ("PG-02", "P10"), ("PG-04", "P10"), ("PG-03", "P12"))],
-             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1" + (", face no plano dos vizinhos 40 × 40" if b == 250 else "") + ")", len(zce), "face B, centrada"], IL1,
-              ["NEO-7", f"Neoprene {_PJ['neoprene'][marca]['dim_mm'].replace(' ', '')} + graute fluido ~10 mm na obra (apoio da TS-01A), centrado na cabeça", 1, "cabeça"],
+             [["CE-1", "CE-1 380×330×12,5 + 4 pinos Ø16 + 2 N18 (CS-1" + (", face no plano dos vizinhos 40 × 40" if b == 250 else "") + ")", len(zce), f"face {FPL['C']}, centrada"], IL1,
+              ["NEO-7" if bx_ == by_ else "NEO-7A", f"Neoprene {_PJ['neoprene'][marca]['dim_mm'].replace(' ', '')} + graute fluido ~10 mm na obra (apoio da TS-01A), centrado na cabeça", 1, "cabeça"],
               ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face A"]] + ([IL2] if marca in ("PG-03", "PG-04") else []),
              [("Concreto C40; 4 Ø20 retos (cantos); " if bx_ == by_ else "Concreto C40; 4 Ø16 retos (cantos); ") + "estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.",
-              NOTA_LIG.format(rd=_RD_PG.get(marca, "-")) + (" Na face B, as barras IL-2 das cantoneiras CL-V/CT-V da placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01)." if marca in ("PG-03", "PG-04") else ""),
+              NOTA_LIG.format(rd=_RD_PG.get(marca, "-")) + (f" Na face {FPL['C']}, as barras IL-2 das cantoneiras CL-V/CT-V da placa PV-1 sobre o portão PG-04–PG-03 (ND-LET-PV01)." if marca in ("PG-03", "PG-04") else ""),
               "Pilar de fechamento da parede dos portões (vista C): recebe as placas, a folha do portão e o vento; apoiado em y na TS-01A pela cabeça e, depois do graute, apoio vertical da TS-01A (compressão e esbeltez verificadas na memória de cálculo)."],
-             ip01=[dict(face="B", z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.6)
+             ip01=[dict(face=FPL["C"], z=zce)], d1=d1, zoom=2.8 if b == 400 else 2.6, vistas=("A", FPL["C"], "C"))
+    if _G.DY_PG[marca]:                    # rev12b: eixo da linha 4 no CORTE A-A (u = +y, face B)
+        P["eixo_linha"] = dict(u=round(_G.DY_PG[marca] * 1000), nome="EIXO LINHA 4")
     if marca in ("PG-02", "PG-04"):        # rev12 (DEC-092): locação decidida — sem pendência
-        P["notas"] = list(P["notas"]) + [f"Seção 25 × 40 com o lado de 40 ao longo da parede; eixo em x = {f(x, 3)} m (5,00 m livres face a face do portão, conforme o arquitetônico) "
-                                         f"e {f(_G.DY_PG[marca] * 100, 1)} cm fora da linha 4, para o lado das placas: a face fica no plano dos vizinhos 40 × 40, sem fresta até as placas. "
-                                         f"NEO-7 centrado na cabeça (a reação da TS-01A passa no eixo do pilar); CL-P e insertos IT-P centrados na TS-01A, IL-1 no eixo do pilar."]
+        P["notas"] = list(P["notas"]) + [f"Seção {bx_ / 10:g} × {by_ / 10:g} (x × y), com o lado de {bx_ / 10:g} ao longo da parede; eixo em x = {f(x, 3)} m (5,00 m livres face a face do portão, conforme o arquitetônico) "
+                                         f"e {f(_G.DY_PG[marca] * 100, 1)} cm fora da linha 4, para o lado das placas ({_G.lado_placas_txt('C')}, face {FPL['C']}): a face fica no plano dos vizinhos 40 × 40, sem fresta até as placas. "
+                                         f"NEO-7A centrado na cabeça (a reação da TS-01A passa no eixo do pilar); CL-P e insertos IT-P centrados na TS-01A, IL-1 no eixo do pilar."]
     if est:
         P |= dict(d_est=est)
     return P
@@ -937,7 +1066,7 @@ def dados_pe1():
     cons = [MEZ("C", Z_MEZ_ASS[0])]
     return base("PE-01", 1, 400, 250, Z_PISO_MM[0], cons, bars_ret(400, 250, 3, 2), "ND-LET-PE01",
                 "PILAR DA ESCADA PE-01 (P6, 25×40) — x 36,175, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                "POSIÇÃO: x = 36,175 m, y = 3,79 m (P6 do R01, escada); 25 em x × 40 em y; topo +3,90", "PILARES DA ESCADA",
+                "POSIÇÃO: x = 36,175 m, y = 3,79 m (escada); 25 em x × 40 em y; topo +3,90", "PILARES DA ESCADA",
                 [["PE-01", "P6 (escada)", 1, "1 CP-MEZ (C) +3,90", "IE-1 (C) +1,95; 2 AL-2"]],
                 [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
                  INS_ESC[:3] + ["face C, patamar +1,95 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
@@ -950,7 +1079,7 @@ def dados_pe2():
     cons = [MEZ("A", Z_MEZ_ASS[0])]
     return base("PE-02", 1, 400, 600, Z_PISO_MM[0], cons, bars_ret(400, 600, 3, 3), "ND-LET-PE02",
                 "PILAR DA ESCADA PE-02 (P7, 40×60) — EIXO E, y 3,79 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                "POSIÇÃO: eixo E, y = 3,79 m (P7 do R01, escada); 60 em x × 40 em y; topo +3,90; as placas da fachada E passam por fora", "PILARES DA ESCADA",
+                "POSIÇÃO: eixo E, y = 3,79 m (escada); 60 em x × 40 em y; topo +3,90; as placas da fachada E passam por fora", "PILARES DA ESCADA",
                 [["PE-02", "P7 (escada)", 1, "1 CP-MEZ (A) +3,90", "IE-1 (A) +1,95; 2 AL-2"]],
                 [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 1, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 1, "CP-MEZ"],
                  INS_ESC[:3] + ["face A, patamar +1,95 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
@@ -963,14 +1092,14 @@ def dados_pe3():
     cons = [MEZ("A", Z_MEZ_ASS[0]), MEZ("A", Z_MEZ_ASS[1]), MEZ("C", Z_MEZ_ASS[1])]
     return base("PE-03", 1, 400, 250, Z_L2["P6"], cons, bars_ret(400, 250, 3, 2), "ND-LET-PE03",
                 "PILAR DA LINHA 2 PE-03 (P6, 25×40) — x 36,175, LINHA 2 — FÔRMA, ARMAÇÃO, INSERTOS E LOCAÇÃO",
-                f"POSIÇÃO: x = 36,175 m, linha 2 (P6 do R01); 25 em x × 40 em y; topo +{F(Z_L2['P6'])}", "PILARES DA ESCADA",
+                f"POSIÇÃO: x = 36,175 m, linha 2; 25 em x × 40 em y; topo +{F(Z_L2['P6'])}", "PILARES DA ESCADA",
                 [["PE-03", "P6 (linha 2)", 1, f"3 CP-MEZ (A +3,90; A, C +7,30); topo +{F(Z_L2['P6'])}: {W_L2} direto (CA-L2 + 4 BR-M16)", "IE-1 (C) +3,90; 2 AL-2"]],
                 [["PN-1", "Pino Ø20 CA-50 L=630 (230 no consolo)", 3, "CP-MEZ"], ["NEO-5F", "Neoprene 200×200 fretado c/ furo Ø30 (dente da VM)", 3, "CP-MEZ"],
-                 ["BA-1", "Bainha corrugada Ø50 horizontal (N11)", 1, "+7,30, 12 cm acima da VM"], BRM20_INS,
+                 BRM20_INS,
                  INS_ESC[:3] + ["face C, chegada +3,90 (viga de fundo VP-1)"], ["AL-2", "Alça laço cordoalha Ø12,7", 2, "face D"]],
                 ["Concreto C40; armadura longitudinal pelo modelo global (arranjo_pilares.json); estribos c/15 (c/10 nos 150 cm das pontas e no cálice), ganchos 135°.", NOTA_CONS + NOTA_MEZ,
-                 "Linha 2 (DEC-045/048): no +3,90 só a viga D → P6 (VM-03, face A) — do P6 ao eixo E fica a abertura da escada, com a viga de fundo da chegada metálica (W 150) presa nas 4 IE-1 da face C; no +7,30 as vigas VM-03 (face A) e VM-04 (face C).",
-                 NOTA_W.format(z=F(Z_L2["P6"])) + " A parede G passa por fora (face B 10 cm atrás do plano dos pilares 40 × 60 da linha 2), sem console neste pilar."],
+                 f"Linha 2: no +3,90 só a viga D → {_RNg0.N(_RNg0.pilar_em(36.175, Y_LIN[1]))} (VM-03, face A) — do {_RNg0.N(_RNg0.pilar_em(36.175, Y_LIN[1]))} ao eixo E fica a abertura da escada, com a viga de fundo da chegada metálica (W 150) presa nas 4 IE-1 da face C; no +7,30 as vigas VM-03 (face A) e VM-04 (face C).",
+                 NOTA_W.format(z=F(Z_L2["P6"])) + f" A parede G passa por fora (face {FPL['G']} 10 cm atrás do plano dos pilares 40 × 60 da linha 2), sem console neste pilar."],
                 d1=16.0, zoom=2.6) | dict(pinos_topo=BRM20_TOPO)
 
 

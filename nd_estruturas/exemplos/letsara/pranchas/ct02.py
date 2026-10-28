@@ -10,7 +10,7 @@ import json, math, sys
 sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha, DIM_K, DIM_DLI
-from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Z_PISOS, P6_L2, ABERTURA
+from geometria import Y_LIN, X_EIXO, PILARES_ESPECIAIS, Z_PISOS, P6_L2, ABERTURA, lado_placas_txt, P6_ESC, P7_ESC
 from lajes_placas import paineis_nivel, vigas_nivel
 import renomear as RN
 import pilar_generico as _G
@@ -312,12 +312,12 @@ yy = pr.tabela(xt, ytop, "NÍVEIS DO MEZANINO (m)", ["ELEMENTO", "INFERIOR / SUP
 c39, c73 = CGM["piso_390"], CGM["laje_730"]
 notas = [f"Lajes alveolares LP20 {B_LA:.0f} × {H_LA:.0f} (6 alvéolos de 15,2 cm, passo 19,8) + capa 5 cm C30 com tela Q138, peça de {fd(L_P / 1000, 2)} m (vão de cálculo {fd((L_P - 100) / 1000, 2)} m), apoiadas 10 cm no topo das VM; {CORD_TXT}, σpi {LAJ['sig_pi']:.0f} MPa; liberação com fckj ≥ {LAJ['fckj']:.0f} MPa (ND-LET-LA01).",
          f"Cargas: peso próprio 2,80 kN/m², capa + rejunte 1,35 kN/m²; {f(NIV[0] / 1000, 2)}: revestimento {fd(c39['revestimento'])} e sobrecarga {fd(c39['sobrecarga'])} kN/m² (depósito); {f(NIV[1] / 1000, 2)} (laje de cobertura do bloco, acesso apenas para manutenção, NBR 6120:2019 Tab. 10): sobrecarga {fd(c73['sobrecarga'])} + regularização/impermeabilização {fd(c73['revestimento'])} kN/m²; montagem sem escoramento com a capa fresca + 1,0 kN/m².",
-         f"VM-01 a VM-04 retangulares 30 × 75 protendidas (DEC-049), dente Gerber 45 × 40 nos consolos CP-MEZ {CMZ['b_m']*100:.0f} × {CMZ['proj_m']*100:.0f} (largura da VM) com mísula {fd(HCM / 10)}/{fd(CMZ['h_consolo_m'] * 100)} e NEO-5F 200 × 200; topo da VM = apoio da laje (ND-LET-VM01). VM da linha 1 alinhada à face externa dos pilares (de −0,30 a 0,00 do eixo da linha), 2,5 cm atrás das placas.",
+         f"Vigas do mezanino retangulares 30 × 75 protendidas (DEC-049), dente Gerber 45 × 40 nos consolos CP-MEZ {CMZ['b_m']*100:.0f} × {CMZ['proj_m']*100:.0f} (largura da VM) com mísula {fd(HCM / 10)}/{fd(CMZ['h_consolo_m'] * 100)} e NEO-5F 200 × 200; topo da VM = apoio da laje (ND-LET-VM01). VM da linha 1 alinhada à face externa dos pilares (de −0,30 a 0,00 do eixo da linha), 2,5 cm atrás das placas.",
          "Apoio da laje 10 cm no topo da VM sobre fita de neoprene 10 × 100 contínua, com folga de 2 cm até a faixa de 2º estágio; alvéolos tampados 20 cm na fábrica; chavetas entre painéis grauteadas antes da capa.",
          "2º estágio na faixa de 18 cm sobre a VM (do lado da borda, até o topo da capa) e capa concretados juntos, por quem executa a capa, depois de todo o nível montado; alças N9 Ø10 c/15 da VM ancoram o 2º estágio; negativas N11/N12 sobre os pilares (ND-LET-VM01) e N1 2 Ø10 sobre os apoios das lajes (ND-LET-LA01).",
          "Lajes içadas só por garra mecânica nas 2 pontas; montar as lajes só depois de concretar as pontas das VM dos dois lados e de o concreto da junta atingir fcj ≥ 20 MPa (DEC-039). Lajes e vigas sem escoramento.",
-         f"Escada (DEC-045): no {f(NIV[0] / 1000, 2)} não há laje entre o P6, o P7 e a linha 2 (escada metálica, ND-LET-ES01); na linha 2 a VM vai só até o P6 neste nível.",
-         "Placas: H e J (laterais do anexo) e I (fachada da linha 1) por fora dos pilares; G (parede interna da linha 2) do lado do pavilhão; cada placa independente nos seus consoles (ND-LET-PP00).",
+         f"Escada (DEC-045): no {f(NIV[0] / 1000, 2)} não há laje entre o {RN.N(RN.pilar_em(*P6_ESC))}, o {RN.N(RN.pilar_em(*P7_ESC))} e a linha 2 (escada metálica, ND-LET-ES01); na linha 2 a VM vai só até o {RN.N(RN.pilar_em(*P6_L2))} neste nível.",
+         "Placas: H e J (laterais do anexo) e I (fachada da linha 1) por fora dos pilares; G (parede interna da linha 2) " + lado_placas_txt("G") + "; cada placa independente nos seus consoles (ND-LET-PP00).",
          "Sequência: ND-LET-MON02. Apoios como montados: ND-LET-CT04. Cotas em cm, níveis em m. Não medir no desenho."]
 pr.notas(xt, yy - 4, notas, 178)
 avisos = pr.salvar("/home/claude/letsara/pranchas/ND-LET-CT02")

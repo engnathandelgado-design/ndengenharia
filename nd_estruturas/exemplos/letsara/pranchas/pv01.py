@@ -6,6 +6,8 @@ sys.path.insert(0, "/home/claude/letsara/pranchas")
 sys.path.insert(0, "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara")
 from prancha_nd import Prancha
 import renomear as RN
+from geometria import lado_placas_txt as _lpt
+from pilar_generico import FPL as _FPL
 
 AQ = "/home/claude/ndengenharia/nd_estruturas/exemplos/letsara/"
 PJ = json.load(open(AQ + "portao_l4.json"))
@@ -97,14 +99,14 @@ V = T * H * L / 1e9
 qd = [["MARCA", "PV-1", "SEÇÃO", f"10 × {f(H / 10)} cm"], ["COMPRIMENTO", f"{f(L / 10)} cm", "CONCRETO", "C40 / desforma fcj 15 MPa"],
       ["VOLUME", f"{f(V, 3)} m³", "PESO", f"{f(PV['peso_kN'] / 10.0, 2)} t"], ["AÇO CA-50/60", f"{f(ta['total_kg'], 1)} kg", "COBRIMENTO", "2,5 cm"]]
 y = pr.tabela(XC, y - 4, "QUADRO DA PEÇA", ["ITEM", "VALOR", "ITEM", "VALOR"], qd, [30, 58, 30, 58])
-ins = [["CL-V", "L 102 × 102 × 9,5 L=150, galvanizadas (PG-03 e PG-04, faces no mesmo plano)", 2, "face B dos PG, topo +7,50"],
+ins = [["CL-V", "L 102 × 102 × 9,5 L=150, galvanizadas (PG-03 e PG-04, faces no mesmo plano)", 2, f"face {_FPL['C']} dos PG (placas {_lpt('C')}), topo +7,50"],
        ["IL-2", "barras roscadas M16 8.8 L=200 (150 embutidas + grampo U Ø10) — na fábrica dos PG", 6, "2 por CL-V + 1 por CT-V"],
        ["CT-V", "L 76 × 76 × 6,3 L=80 + 1 M12 em bucha BR-2 da placa", 2, "topo, nas 2 pontas"],
-       ["BR-2", "bucha rosqueada M12 hef 60 (no topo da placa, 75 da ponta, 35 da face B)", 2, "topo da placa"],
+       ["BR-2", "bucha rosqueada M12 hef 60 (no topo da placa, 75 da ponta, 35 da face junto aos pilares)", 2, "topo da placa"],
        ["AL-1", "alça de cordoalha Ø12,7 (1 laço)", 2, "topo, a 0,2 L"]]
 y = pr.tabela(XC, y - 4, "INSERTOS E PEÇAS DE LIGAÇÃO", ["MARCA", "DESCRIÇÃO", "QT", "POSIÇÃO"], ins, [14, 104, 10, 48])
 notas = [f"Cargas consideradas: peso próprio da placa ({f(PV['peso_kN'], 2)} kN); a placa não recebe a TS-01A nem outra placa (folga de 5 cm até o fundo da viga, fechada com mastique e rufo).",
-         f"Portão 500 × 750 livre até +7,50 (DEC-059): os PG-01 a PG-04 apoiam a TS-01A depois da montagem (neoprene + graute, folhas ND-LET-PG01 a PG04) e a viga não desce no vão. A placa vai de +{f(PV['z0'], 3)} a +{f(PV['z1'], 3)}.",
+         f"Portão 500 × 750 livre até +7,50 (DEC-059): os " + RN.N(RN.lista([n_ for k_ in ("PG-01", "PG-02", "PG-03", "PG-04") for n_ in RN.nomes_de(k_)])) + f" apoiam a TS-01A depois da montagem (neoprene + graute, folhas ND-LET-PG01 a PG04) e a viga não desce no vão. A placa vai de +{f(PV['z0'], 3)} a +{f(PV['z1'], 3)}.",
          "Apoio: cada ponta sobre a CL-V com neoprene 75 × 150 × 5; trava do topo CT-V (1 M12 vertical na bucha do topo, furo oblongo horizontal ±10 mm) — a placa dilata livre. Tudo parafusado, sem solda.",
          "Içamento e montagem de pé pelas 2 alças AL-1 (balancim); concretar deitada, desformar com fcj ≥ 15 MPa (NBR 9062:2017 8.2.2.2), estocar de pé ou deitada sobre 2 calços a 0,2 L.",
          "Montar depois da TS-01A grauteada nos PG e antes do fechamento do portão; ajustar a altura com calços de aço sob o neoprene (nada abaixo de +7,50).",

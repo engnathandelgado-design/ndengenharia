@@ -77,13 +77,14 @@ d2.chamada((-100, 755), (-18, 14), "fita de neoprene 10 mm")
 d3 = pr.vista("D3", (Q[0] + 220, Q[3] - 600), 25, titulo="DETALHE 3 — VM SOBRE O PILAR (CONTINUIDADE)", subtitulo="N11 nas bainhas do pilar + N12 na capa", unidade="cm")
 d3.ret(-200, -900, 400, 2000, "VISTA")
 d3.ret(-1400, 0, 1150, 750, "VISTA"); d3.ret(250, 0, 1150, 750, "VISTA")
-for z in (450, 560):
-    d3.ret(-200, z - 25, 400, 50, "OCULTA")
+for z in [750 + dz for dz in NV.z_bainhas(NV.n_bainhas(max(ap, key=lambda a_: a_["N11"]["n"])))]:      # rev12b: uma sobre a outra, centroide 12 cm acima da VM
+    d3.ret(-200, z - NV.D_BAINHA / 2, 400, NV.D_BAINHA, "OCULTA")
     d3.linha((-1500, z), (1500, z), "ARMADURA")
 d3.linha((-1500, 980), (1500, 980), "ARMADURA")
 d3.ret(-1400, 960, 2800, 50, "CORTADO")
 d3.cota_h([-3000, 0, 3000], 1100, 18, total=True)
-d3.chamada((-1000, 450), (-4, -46), f"N11: {N11['n']} Ø{f1(N11['d'], 0)} L {N11['L']*100:g} em 2 bainhas Ø50 grauteadas (3 + 3)")
+_nb = NV.n_bainhas(max(ap, key=lambda a_: a_["N11"]["n"]))
+d3.chamada((-1000, 750 + NV.z_bainhas(_nb)[0]), (-4, -46), f"N11: {N11['n']} Ø{f1(N11['d'], 0)} L {N11['L']*100:g} em {_nb} bainhas Ø{NV.D_BAINHA} grauteadas ({' + '.join(str(NV.BARRAS_POR_BAINHA) for _ in range(_nb))}), uma sobre a outra a cada {NV.S_V_BAINHA / 10:g} cm; posição em cada pilar: folha do pilar")
 d3.chamada((1000, 980), (4, 30), f"N12: {N12['n']} Ø{f1(N12['d'])} L {N12['L']*100:g} na capa (faixa ≤ 1,5 × largura do pilar)")
 d4 = pr.vista("D4", (Q[0] + 470, Q[3] - 640), 10, titulo="DETALHE 4 — BORDA DA LAJE COM FÔRMA", subtitulo="fôrma de borda por quem faz a capa", unidade="cm")
 d4.ret(0, 0, 900, 200, "VISTA"); d4.ret(0, 200, 900, 50, "CORTADO"); d4.ret(900, -50, 20, 330, "METALICA")
@@ -115,14 +116,14 @@ for lb, y in (("1", Y_LIN[0]), ("2", Y_LIN[1])):
     kp.eixo((-1800, y * 1000), (X_EIXO["E"] * 1000 + 1800, y * 1000), 0); kp.texto((-2300, y * 1000), lb, "nota", "MIDDLE_RIGHT")
 
 # ------------------------------------------------------------------ tabelas
-lin = [[a["niv"], a["pilar"], a["esq"], a["dir"], NV.txt(a["N11"]), NV.txt(a["N12"]), "2 bainhas Ø50"] for a in ap]
+lin = [[a["niv"], a["pilar"], a["esq"], a["dir"], NV.txt(a["N11"]), NV.txt(a["N12"]), f"{NV.n_bainhas(a)} bainhas Ø{NV.D_BAINHA}"] for a in ap]
 y = pr.tabela(Q[0] + 690, Q[3] - 40, "ARMADURA DE CONTINUIDADE POR APOIO (VM sobre pilar)", ["NÍVEL", "PILAR", "VM ESQ.", "VM DIR.", "N11 (bainhas)", "N12 (capa)", "GRAUTE"], lin, [18, 18, 20, 20, 36, 36, 30], h_lin=6.4)
 nap = len(ap)
 kg11 = sum(a["N11"]["n"] * a["N11"]["L"] * kgm(a["N11"]["d"]) for a in ap); kg12 = sum(a["N12"]["n"] * a["N12"]["L"] * kgm(a["N12"]["d"]) for a in ap)
 mat = [[f"N11 Ø{N11['d']:g} CA-50 L {N11['L']*100:g}", f"{sum(a['N11']['n'] for a in ap)} barras", f"{f1(kg11 * 1.1, 0)} kg (+10 %)"],
        [f"N12 Ø{N12['d']:g} CA-50 L {N12['L']*100:g}".replace(".", ","), f"{sum(a['N12']['n'] for a in ap)} barras", f"{f1(kg12 * 1.1, 0)} kg (+10 %)"],
        ["tela Q138 (capa)", "área dos dois níveis", "conforme planta da LA01"],
-       ["graute ≥ 30 MPa não retrátil", f"{2 * nap} bainhas + chavetas", "chavetas: ≈ 1,2 L/m"],
+       ["graute ≥ 30 MPa não retrátil", f"{NV.total_bainhas()} bainhas + chavetas", "chavetas: ≈ 1,2 L/m"],
        [f"concreto C{PRM['fck_2estagio']:g} (capa 5 cm + 2º estágio)", "por nível", "ver quantitativos"]]
 y = pr.tabela(Q[0] + 690, y - 8, "MATERIAIS DE OBRA", ["ITEM", "QUANTIDADE", "OBS."], mat, [70, 50, 58], h_lin=5.6)
 esp = [["concreto da capa e 2º estágio", f"C{PRM['fck_2estagio']:g}, abatimento 10 ± 2 cm, brita 1 (máx. 19 mm)"],
@@ -133,7 +134,7 @@ y = pr.tabela(Q[0] + 690, y - 8, "ESPECIFICAÇÕES", ["ITEM", "VALOR"], esp, [60
 pr.notas(Q[0] + 690, y - 8, [
     "Escopo da fábrica: pilares, vigas VM, lajes alveolares montadas, com as pontas das VM concretadas antes das lajes. Escopo da obra: graute das chavetas e das bainhas, armadura de obra (N11, N12, negativa da laje e tela), 2º estágio, capa, fôrma de borda e cura.",
     "Sequência: (1) conferir a montagem (apoio de 10 cm das lajes, neoprene em fita, folgas); (2) limpar e umedecer as superfícies (face rugosa da VM e da laje, NBR 9062 6.3); (3) grautear as chavetas entre painéis; (4) passar as N11 nas bainhas dos pilares e grautear; posicionar as N12 e a negativa da laje; (5) tela Q138 com espaçadores; fechar alvéolos e bordas; (6) concretar o 2º estágio e a capa juntos; (7) curar 7 dias; (8) liberar a carga com fck ≥ 20 MPa.",
-    f"Bainhas Ø50 com 3 Ø{N11['d']:g} cada: barras ocupam {f1(3 * math.pi * N11['d'] ** 2 / 4 / (math.pi * 50 ** 2 / 4) * 100, 0)} % da seção da bainha (≤ 40 %); grautear por baixo com graute fluido até sair pelo respiro de cima.",
+    f"Bainhas Ø{NV.D_BAINHA} com {NV.BARRAS_POR_BAINHA} Ø{N11['d']:g} cada, uma sobre a outra (a de baixo {NV.z_bainhas(2)[0] / 10:g} cm e a de cima {NV.z_bainhas(2)[1] / 10:g} cm acima do topo da VM): barras ocupam {f1(NV.BARRAS_POR_BAINHA * math.pi * N11['d'] ** 2 / 4 / (math.pi * NV.D_BAINHA ** 2 / 4) * 100, 0)} % da seção da bainha (≤ 40 %); grautear por baixo com graute fluido até sair pelo respiro de cima.",
     "Antes de concretar, conferir: chavetas cheias; bainhas grauteadas com as barras centradas; N12 e tela no lugar com cobrimento; fôrma de borda travada; superfície limpa e úmida (sem água empoçada).",
     "NÃO FAZER: furar a laje sem consultar a engenharia; cortar cordoalha; apoiar carga concentrada (paletes, máquinas) antes da cura; concretar a capa sem grautear chavetas e bainhas."], 178)
 av = pr.salvar(PR + "ND-LET-EX01")

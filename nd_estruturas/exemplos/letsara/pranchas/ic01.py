@@ -84,7 +84,8 @@ esquema_laje(Q[0] + 60, Q[3] - 580)
 # rev12: pesos e volumes da MESMA lista de peças do PR01 e dos quantitativos (quantitativos.pecas, 2,50 t/m³);
 # nomes novos protegidos (RN.N) e conferidos pela geometria; σ no furo em MPa; coluna βa em todas as tabelas.
 import quantitativos as QT
-BA, GF = 1.3, 1.3
+import registro as _REGic
+BA, GF = _REGic.BETA_A_ICAMENTO, _REGic.GAMA_F_ICAMENTO         # rev12b: coeficientes do registro (os mesmos da LA01)
 PESO = {}
 for p_ in QT.pecas:
     PESO.setdefault(p_[1], p_[7])

@@ -1209,9 +1209,9 @@ class Vista:
 
     def _txt_cadeia(self, xs):
         """rev12 (checklist 5): textos da cadeia arredondados ao mm de forma que a SOMA feche no total (maior resto)."""
-        d = [b - a for a, b in zip(xs[:-1], xs[1:])]
+        d = [abs(b - a) for a, b in zip(xs[:-1], xs[1:])]                   # rev12b (item 24): cadeia em ordem decrescente não dá cota negativa
         r = [round(v) for v in d]
-        alvo = round(xs[-1] - xs[0])
+        alvo = round(abs(xs[-1] - xs[0])) if all((b - a) * (xs[-1] - xs[0]) >= 0 for a, b in zip(xs[:-1], xs[1:])) else round(sum(d))
         dif = alvo - sum(r)
         ordem = sorted(range(len(d)), key=lambda i: (d[i] - r[i]) * (1 if dif > 0 else -1), reverse=True)
         for i in ordem[:abs(dif)]:
