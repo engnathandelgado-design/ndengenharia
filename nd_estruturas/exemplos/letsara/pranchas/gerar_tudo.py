@@ -8,7 +8,8 @@ leu e escreveu. Na próxima vez a folha é PULADA se o script, todos os arquivos
 as saídas existem (os avisos que ela gravou no log são repetidos). Mudou o P21 → só refazem as folhas que leem o que
 mudou. --tudo força regenerar tudo. Antes de qualquer folha roda o gate de lançamento (verificar_lancamento.py); com
 achado, para (--sem-lancamento pula, só para depuração). No fim grava alteradas.json (folhas cujo PDF mudou) para a
-revisão por diferença.
+revisão por diferença. alteradas.json compara com emissao_revisada.json (gravado com --emissao ao mandar a revisão),
+não com a última execução.
 """
 import hashlib, json, os, subprocess, sys, time
 PR = "/home/claude/letsara/pranchas/"
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     tudo = "--tudo" in args
     sem_lanc = "--sem-lancamento" in args
     com_3d = "--3d" in args
-    args = [a for a in args if a not in ("--sem-cc", "--tudo", "--sem-lancamento", "--3d")]
+    args = [a for a in args if a not in ("--sem-cc", "--tudo", "--sem-lancamento", "--3d", "--emissao")]
     os.makedirs(MAN, exist_ok=True)
     if not args or args[0] == "--reset":
         for f in (LOG, PR + "travas_geometria.jsonl"):     # rev12: travas de geometria do jogo inteiro
@@ -134,8 +135,13 @@ if __name__ == "__main__":
             print(f"modelo_bim.py          {'ok' if r.returncode == 0 else 'FALHOU'} {time.time() - t:5.0f} s  ({info})")
             if r.returncode:
                 print(r.stderr[-1500:])
-    alt = sorted(f[:-4] for f in os.listdir(PR) if f.endswith(".pdf") and _h_pdf(PR + f) != pdf_antes.get(f))
-    if lista:
+    base = PR + "emissao_revisada.json"                          # folhas como estavam na última emissão revisada (--emissao grava)
+    ref = json.load(open(base, encoding="utf-8")) if os.path.exists(base) else pdf_antes
+    alt = sorted(f[:-4] for f in os.listdir(PR) if f.endswith(".pdf") and f.startswith("ND-LET-") and _h_pdf(PR + f) != ref.get(f))
+    if "--emissao" in sys.argv:
+        json.dump({f: _h_pdf(PR + f) for f in os.listdir(PR) if f.endswith(".pdf")}, open(base, "w", encoding="utf-8"), indent=0)
+        print("emissão registrada: próximas revisões comparam com estas folhas")
+    if lista or "--emissao" in sys.argv:
         json.dump(dict(rodadas=rodadas, puladas=puladas, folhas_alteradas=alt), open(PR + "alteradas.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"rodadas {len(rodadas)}, puladas {len(puladas)}; PDFs alterados: {len(alt)}")
     final = {}
