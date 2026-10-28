@@ -2390,11 +2390,11 @@
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
-    "Mk": 7.9,
-    "Md": 13.4,
+    "Mk": 1.5,
+    "Md": 2.6,
     "MRd0": 36.3,
-    "uso": 0.37,
-    "sigma_s": 138,
+    "uso": 0.07,
+    "sigma_s": 26,
     "ok": true
    },
    {
@@ -2455,11 +2455,11 @@
   "manuseio": [
    {
     "caso": "desforma / estocagem / transporte (2 AL-2, face C para cima)",
-    "Mk": 19.0,
-    "Md": 32.1,
+    "Mk": 5.6,
+    "Md": 9.4,
     "MRd0": 143.3,
-    "uso": 0.22,
-    "sigma_s": 123,
+    "uso": 0.07,
+    "sigma_s": 36,
     "ok": true
    },
    {
