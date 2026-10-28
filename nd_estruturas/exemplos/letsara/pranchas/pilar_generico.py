@@ -371,8 +371,11 @@ def prancha_pilar(P):
                 if min(xb_, W - xb_) / ESC < _wtext(f"{min(xb_, W - xb_) / 10:.1f}", ALTURAS_PECA_COTA) + 1.0:
                     _pts.pop(_near)
                 v.cota_h(_pts, max(b_["zs"]) + b_["d"] / 2, 6, total=False)
-                v.texto((W / 2, max(b_["zs"]) + b_["d"] / 2 + (6 * DIM_K + 4.5) * ESC), f"{len(b_['zs'])} BA-1" + (f" c/{(b_['zs'][1] - b_['zs'][0]) / 10:g}" if len(b_["zs"]) > 1 else ""),
-                        "min", "BOTTOM_CENTER")
+                _rot = f"{len(b_['zs'])} BA-1" + (f" c/{(b_['zs'][1] - b_['zs'][0]) / 10:g}" if len(b_["zs"]) > 1 else "")
+                if P["marca"] in ("PE-03",):                                        # pilar de 25: o rótulo no meio cruza o pino do CP-MEZ
+                    v.chamada((xb_, max(b_["zs"])), (-24, 14), _rot)
+                else:
+                    v.texto((W / 2, max(b_["zs"]) + b_["d"] / 2 + (6 * DIM_K + 4.5) * ESC), _rot, "min", "BOTTOM_CENTER")
             else:                                                                            # de lado: atravessam o pilar (ocultas)
                 for zb_ in b_["zs"]:
                     v.ret(0, zb_ - b_["d"] / 2, W, b_["d"], "OCULTA")
