@@ -130,7 +130,7 @@ if __name__ == "__main__":
             print("modelo_bim.py          igual (pulado)")
         else:
             t = time.time()
-            r = subprocess.run([sys.executable, PR + "rodar_rastreado.py", EX + "modelo_bim.py", m3], cwd=EX, capture_output=True, text=True, timeout=7000)
+            r = subprocess.run([sys.executable, PR + "rodar_rastreado.py", EX + "modelo_bim.py", m3], cwd=EX, env=dict(os.environ, PYTHONPATH="/home/claude/ndengenharia/nd_estruturas"), capture_output=True, text=True, timeout=7000)
             print(f"modelo_bim.py          {'ok' if r.returncode == 0 else 'FALHOU'} {time.time() - t:5.0f} s  ({info})")
             if r.returncode:
                 print(r.stderr[-1500:])
