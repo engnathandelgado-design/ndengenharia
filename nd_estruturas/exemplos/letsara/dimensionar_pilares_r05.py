@@ -48,7 +48,12 @@ def barras(bx, by, nx, ny, d):
     return [(x, y, math.pi * (d / 1000) ** 2 / 4) for x, y in pts], c
 
 
-def candidatos(bx, by):
+# DEC-094 (28/10/2026, decisão do Nathan): P5 (PE-03) com as 2 bainhas BA-1 da continuidade da VM no +7,30 — no máximo
+# 4 barras na face de 40 para a bainha Ø50 (+ 2 × 10 mm de folga) passar entre as barras; Ø20 liberado (≤ Ø20, regra do Nathan)
+PASSAGEM_BAINHA = {"PE-03": dict(ny_max=4, bitolas=(16.0, 20.0))}
+
+
+def candidatos(bx, by, bitolas=None):
     if os.environ.get("PADRAO") and {round(bx, 2), round(by, 2)} == {0.40, 0.60}:
         # família 40×60 padronizada: k barras em cada face de 40 (as que trabalham na flexão principal) + 1 no meio de cada face de 60
         out = []
@@ -59,7 +64,7 @@ def candidatos(bx, by):
                 out.append(dict(nx=nx, ny=ny, d=16.0, n=len(brs), As=sum(a for *_, a in brs) * 1e4, brs=brs, c=c, tipo=f"T{len(brs)}" + ("" if m == 3 else f"-{m}")))
         return sorted(out, key=lambda k: (round(k["As"], 2), k["n"]))
     out = []
-    for d in BITOLAS:
+    for d in (bitolas or BITOLAS):
         for nx in range(2, 8):
             for ny in range(2, 8):
                 brs, c = barras(bx, by, nx, ny, d)
@@ -312,7 +317,10 @@ if __name__ == "__main__":
         atual = dict(n=len(brs_a), d=a[2], As=round(sum(x[2] for x in brs_a) * 1e4, 1))
         u_at, _ = secao_ok(dict(brs=brs_a), pils)
         esc = None
-        for cand in candidatos(bx, by):
+        pb = PASSAGEM_BAINHA.get(mk)
+        for cand in candidatos(bx, by, pb and pb["bitolas"]):
+            if pb and max(cand["nx"], cand["ny"]) > pb["ny_max"]:
+                continue
             if cand["As"] < At:
                 continue
             u, onde_u = secao_ok(cand, pils)

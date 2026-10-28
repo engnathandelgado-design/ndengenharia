@@ -71,7 +71,7 @@ def momentos(L, w, apoios, n=2001):
 
 
 def avaliar(B, H, L, g, nb, nh):
-    pts = xy(B, H, nb, nh)
+    pts = xy(B, H, nb, nh, c=C)
     A1 = math.pi * DL ** 2 / 4
     bars = [(x, y, A1) for x, y in pts]
     w = B * H / 1e6 * 25 * 1.10                             # +10 % consolos e insertos
@@ -101,6 +101,7 @@ if __name__ == "__main__":
       g = json.loads((PR / f"{mk}_geom.json").read_text(encoding="utf-8"))
       B, H, L = g["B"], g["H"], g["L_TOT"] / 1000
       nb, nh = arranjo(mk, e)
+      globals()["DL"] = e.get("d", 16.0); globals()["C"] = COB + PHI_T + DL / 2      # DEC-094: bitola do arranjo (Ø20 no P5)
       pts, res = avaliar(B, H, L, g, nb, nh)
       aumento = ""
       # rev12 (27/10): se o manuseio não passa com o arranjo do ELU, acrescenta barras (Ø16, simétrico) na direção que falha
@@ -113,7 +114,7 @@ if __name__ == "__main__":
               nb += 1
           pts, res = avaliar(B, H, L, g, nb, nh)
           aumento = "barras acrescentadas para o manuseio (verticalização/transporte)"
-      gr = grampos(B, H, nb, nh)
+      gr = grampos(B, H, nb, nh, c=C)
       out[mk] = dict(B=B, H=H, nb=nb, nh=nh, n=len(pts), d=DL, xy=pts, c=round(C, 1), grampos=gr, manuseio=res,
                      tipo=e.get("tipo"), As_cm2=round(len(pts) * math.pi * DL ** 2 / 400, 2) if aumento else e["As_cm2"], uso_secao=e["uso_secao"], lambda_u=e["lambda_u"],
                      **({"obs": aumento} if aumento else {}))
