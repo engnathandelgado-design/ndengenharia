@@ -63,9 +63,22 @@ LINHA_PORTOES = 3                       # índice em Y_LIN (linha 4 do R01)
 # rev12 (27/10, DEC-092, decisão do Nathan — encerra a pendência dos PG-02/PG-04): a face dos PG-02/PG-04 do lado das placas da parede C
 # (−y, área aberta) fica no plano da face dos vizinhos 40×40 (PG-01, P11, PG-03), sem fresta até as placas: eixo deslocado em y de
 # (0,40 − 0,25)/2 = 0,075 para o lado das placas (y = 29,725). Mesmo princípio dos cantos (opção D).
+# rev12b (revisão rev12b, item 4): REGISTRO ÚNICO do lado das placas das paredes internas (sinal em y em relação à linha).
+# Modelo e locação: parede G (linha 2) do lado +y; parede C (linha 4, portões) do lado −y (área aberta, DEC-092) — as duas voltadas
+# para a linha 3. Face de fixação (CE-1/CC-1) de cada pilar, deslocamento dos PG e textos das folhas saem daqui.
+PAREDE_INTERNA = {"G": dict(linha=1, lado=+1), "C": dict(linha=LINHA_PORTOES, lado=-1)}
+
+
+def lado_placas_txt(vista):
+    """texto do lado das placas da parede interna: 'do lado da linha 3 (−y)'."""
+    p = PAREDE_INTERNA[vista]
+    return f"do lado da linha {p['linha'] + 1 + p['lado']} ({'+y' if p['lado'] > 0 else '−y'})"
+
+
 PG_L4 = {"PG-01": ("P9", 9.87, 0.40, 0.40), "PG-02": ("P10", 15.27, 0.40, 0.25), "PG-04": ("P10", 24.23, 0.40, 0.25), "PG-03": ("P12", 29.63, 0.40, 0.40)}
-Y_FACE_L4 = round(Y_LIN[LINHA_PORTOES] - 0.40 / 2, 3)                       # face −y dos vizinhos 40×40 da linha 4 (plano interno das placas − folga)
-Y_PG = {mk: round(Y_FACE_L4 + v[3] / 2, 3) for mk, v in PG_L4.items()}      # eixo y de cada PG: 29,800 (40×40) / 29,725 (25×40)
+_LP4 = PAREDE_INTERNA["C"]["lado"]
+Y_FACE_L4 = round(Y_LIN[LINHA_PORTOES] + _LP4 * 0.40 / 2, 3)                # face dos vizinhos 40×40 da linha 4 do lado das placas (−y: 29,600)
+Y_PG = {mk: round(Y_FACE_L4 - _LP4 * v[3] / 2, 3) for mk, v in PG_L4.items()}   # eixo y de cada PG: 29,800 (40×40) / 29,725 (25×40)
 DY_PG = {mk: round(Y_LIN[LINHA_PORTOES] - y, 3) for mk, y in Y_PG.items()}   # deslocamento do eixo em relação à linha 4 (0 / 0,075)
 _PG_X = {round(v[1], 3): mk for mk, v in PG_L4.items()}
 PILARES_ESPECIAIS = [(n, x, Y_PG[_PG_X[round(x, 3)]] if (y == Y_LIN[LINHA_PORTOES] and round(x, 3) in _PG_X) else y, bx, by) for n, x, y, bx, by in PILARES_ESPECIAIS]

@@ -12,7 +12,7 @@ from nd_estruturas.lancamento import Abertura, ConfigLancamento, Fachada, verifi
 CFG = ConfigLancamento(
     fachadas=[Fachada("A (x mín.)", 0, G.X_FACE_EXT[0], -1), Fachada("E (x máx.)", 0, G.X_FACE_EXT[1], +1),
               Fachada("linha 1", 1, G.Y_FACE_EXT[0], -1), Fachada("linha 9", 1, G.Y_FACE_EXT[1], +1),
-              Fachada("linha 4 (parede dos portões, placas no lado −y)", 1, G.Y_FACE_L4, -1)],
+              Fachada(f"linha 4 (parede dos portões, placas {G.lado_placas_txt('C')})", 1, G.Y_FACE_L4, G.PAREDE_INTERNA["C"]["lado"])],
     aberturas=[Abertura("portão 1 da linha 4", 0, G.Y_LIN[G.LINHA_PORTOES], 12.57, G.VAO_PORTAO),
                Abertura("portão 2 da linha 4", 0, G.Y_LIN[G.LINHA_PORTOES], 26.93, G.VAO_PORTAO)],
     grupos_viga_borda=("Vigas de borda", "Vigas de mezanino (retangulares protendidas)"),

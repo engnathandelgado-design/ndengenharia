@@ -23,6 +23,12 @@ MV = J("mef_vm_ret_dente_750_450.json")
 EX, I1 = J("escada_externa.json"), J("i110_r01.json")
 ESD, PJ, DP = J("escadas.json"), J("portao_l4.json"), J("arranjo_pilares.json")
 NOME_I = {"V407": "V400", "V406": "V401", "V405": "V402", "V404": "V403"}
+# rev12b (revisão rev12b, item 8): a MC12 reemite esta parte com o conteúdo vigente (MC_TITULO / MC_SAIDA); nomes do projeto pela posição
+import os as _os, sys as _sys0
+_sys0.path.insert(0, "/home/claude/letsara/pranchas")
+import renomear as _RNm
+NOME_P = lambda k: _RNm.pilar_em(CF["pilares"][k]["x"], CF["pilares"][k]["y"])
+TITULO = _os.environ.get("MC_TITULO", "MEMÓRIA DE CÁLCULO ND-LET-MC10 — ALTERAÇÕES DO PACOTE REV10 (25/10/2026)")
 DI = J("dentes.json")["I120"]
 N9C = [c for c in J("nbr9062.json")["consolos"] if c["consolo"] == "CP-I120"][0]
 P_ = VM["premissas"]
@@ -49,25 +55,23 @@ def tab(linhas, larg):
 
 import math, sys as _sys
 _sys.path.insert(0, "/home/claude/letsara/pranchas")
-N9 = J("nbr9062.json"); LG = J("ligacoes.json"); PLJ = J("placas.json")
+N9 = J("nbr9062.json"); LG = J("ligacoes.json"); PLJ = J("placas.json"); I4P = J("placas_icamento_4p.json")
 CT = [c for c in N9["consolos"] if c["consolo"] == "CT-I120"][0]
 NEO3C = [a for a in N9["aparelhos"] if a["aparelho"].startswith("NEO-3C")][0]
 import io, contextlib
 with contextlib.redirect_stdout(io.StringIO()):
     import fechamento as FCH
-SAI = Path("/home/claude/letsara/entregas/ND-LET-MC10-REV10-rev10.pdf")
+SAI = Path(_os.environ.get("MC_SAIDA", "/home/claude/letsara/entregas/ND-LET-MC10-REV10-rev10.pdf"))
 doc = SimpleDocTemplate(str(SAI), pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=15 * mm, bottomMargin=15 * mm,
                         title="Letsara — memória MC10: alterações do pacote rev10", author="ND Engenharia")
-E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC10 — ALTERAÇÕES DO PACOTE REV10 (25/10/2026)", T1),
-     P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Revisão pedida pelo Nathan sobre a rev09: (1) escadas metálicas no padrão de detalhamento da prancha de referência, com corrimão duplo; "
-       "(2/3) consolos com mísula na linha principal V400 a V403 (I120) para as vigas de cobertura que chegam nela, mantendo as TS-01 como estão; (4) 4 pontos de içamento/desforma das placas indicados; "
-       "(5) cota da diferença topo × fundo na ponta das vigas (detalhes D1); (6) cores por parede no fechamento. Complementa a MC09 (rev09). Documento para análise antes do zip com DXF e IFC."),
-     Paragraph("1. Consolo lateral CT-I120 com mísula (DEC-061) — NBR 9062:2017 7.3", T2),
-     P(f"Nas linhas 3, 5, 6, 7 e 8 as TS-01 apoiam no topo das I120 (V400 = V407, V401 = V406, V402 = V405, V403 = V404). Antes o assento da TS-01 era só a meia mesa da I120 "
-       f"(16,25 cm da ponta da TS-01 à borda da mesa, NEO-3 100 × 300). Agora cada linha tem um consolo CT-I120 nas DUAS faces da mesa superior: b {f(CT['b_m'] * 100, 0)} cm ao longo da viga, "
+E = [Paragraph(TITULO, T1),
+     P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Esta parte trata do consolo lateral CT-I120 das vigas centrais V400 a V403 (apoio das TS-01), "
+       "da desforma, giro e montagem das placas de fechamento por 4 pontos e dos guarda-corpos e corrimãos das escadas metálicas."),
+     Paragraph("1. Consolo lateral CT-I120 com mísula — NBR 9062:2017 7.3", T2),
+     P(f"Nas linhas 3, 5, 6, 7 e 8 as TS-01 apoiam no topo das I120 V400 a V403. Cada linha tem um consolo CT-I120 nas DUAS faces da mesa superior: b {f(CT['b_m'] * 100, 0)} cm ao longo da viga, "
        f"projeção {f(CT['proj_m'] * 100, 0)} cm além da mesa (topo com 80 cm), h {f(CT['h_m'] * 100, 0)} cm junto à mesa e {f(CT['h_ext_m'] * 100, 0)} cm na ponta (mísula), topo no nível do topo da viga "
        f"(lado E 12 mm acima, como o degrau do topo). A TS-01 continua igual (sem dente, cunha de 30 cm na ponta) e passa a assentar em 36,25 cm; neoprene NEO-3C 150 × 300 × 10 de 12 a 27 cm da ponta, dentro da cunha, "
-       f"pinos PN-5 Ø20 como antes (fora do neoprene). O consolo enche a mísula da mesa no trecho (fundo no nível do início da mísula, 30 cm abaixo do topo)."),
+       f"pinos PN-5 Ø20 fora do neoprene. O consolo enche a mísula da mesa no trecho (fundo no nível do início da mísula, 30 cm abaixo do topo)."),
      tab([["VERIFICAÇÃO", "VALOR", "LIMITE / OBS.", ""],
           ["Fd = γn · Vd (γn 1,2, pré-moldado; Vd = 1,4 (Ng + Nq) da TS-01)", f"{f(CT['Fd_kN'])} kN", f"Vd {f(CT['Vd_kN'])} kN, Hd = 0,16 Fd = {f(CT['Hd_kN'])} kN (7.3.9)", ""],
           ["a / d (Fd inteiro no consolo, a favor da segurança)", f(CT['a_d'], 2), CT['modelo'] + " (7.3.2.2)", ""],
@@ -78,17 +82,18 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC10 — ALTERAÇÕES DO PACOTE REV1
           ["a2 (cobrimento do tirante na ponta)", f"{f(CT['a2_cm'], 1)} cm", f"≥ {f(CT['a2_min_cm'], 1)} cm (7.3.3)", "ok"],
           ["NEO-3C 150 × 300 × 10 (7.2.1.6)", f"σ {f(NEO3C['sigma_MPa'], 2)} MPa", f"≤ {f(NEO3C['lim_sigma'], 1)}; ah {f(NEO3C['ah_mm'], 1)} ≤ {f(NEO3C['lim_ah_mm'], 1)} mm; deslizamento uso {f(NEO3C['uso_deslizamento'], 2)}; rotação ok", ok(NEO3C['ok_geral'])]],
          [70, 26, 70, 12]),
-     P("Tirante N14 a 7,5 cm do topo (abaixo das 6 Ø25 do N3 da mesa superior; d = 22,5 cm); as alças atravessam a mesa de um consolo ao outro e não cruzam cordoalhas (todas na mesa inferior nas V401 a V403; na V400 a linha mais alta está a 22 cm do fundo). "
+     P("Tirante N14 a 7,5 cm do topo (abaixo das barras N3 da mesa superior; d = 22,5 cm); as alças atravessam a mesa de um consolo ao outro e não cruzam cordoalhas (todas na mesa inferior nas V401 a V403; na V400 a linha mais alta está a 22 cm do fundo). "
        "Os consolos ficam a mais de 20 cm das alças de içamento AL-3 (2,5 m das pontas) e fora do isolamento das cordoalhas. Peso dos dois consolos de uma linha ≈ 1,1 kN — desprezível frente às cargas da I120 (cálculo da I120 inalterado; "
        "V401, V402 e V403 continuam com a mesma seção e cordoalha, mas têm consolos em posições diferentes: as posições estão na tabela de marcas da ND-LET-I120). "
-       "O consolo CP-I120 dos pilares (apoio da própria I120) continua com mísula 49 / 39 (MC09). Modelo 3D com os consolos e os neoprenes novos: 0 colisões."),
+       f"O consolo CP-I120 dos pilares (apoio da própria I120) tem {f(CO['CP-I120']['b_m'] * 100, 0)} de largura e mísula {f(CO['CP-I120']['h_total_m'] * 100, 0)} / {f(CO['CP-I120']['h_consolo_m'] * 100, 0)} (MC09, item 10). Modelo 3D com os consolos e os neoprenes: 0 colisões."),
      Paragraph("2. Placas de fechamento — desforma e içamento por 4 pontos numa face (NBR 9062:2017 5.3.2)", T2),
      P("Desforma deitada (face interna para cima) por 4 insertos IZ-1 na face interna, a 0,104 L e 0,396 L de cada ponta, meia altura, com balancim duplo (cargas iguais nos 4 pontos): momento 0,0054 w L² (PCI), βa 1,3 e sucção da fôrma 1,2. "
-       "Montagem em pé pelas 2 alças AL-P do topo (0,207 L); estocagem em pé. Tração positiva; limite fctk,j / 1,5 (sem fissura) com fckj 25 MPa."),
+       "Giro e montagem de pé pelos mesmos 4 IZ-1 (balancim duplo, cabos a prumo); estocagem em pé. Tração positiva; limite fctk,j / 1,5 (sem fissura) com fckj 25 MPa."),
      tab([["SITUAÇÃO", "σ (MPa)", "LIMITE (MPa)", ""],
           ["desforma com balancim (4 pontos numa face)", f(PLJ['transitorias']['sig_desforma'], 2), f(PLJ['transitorias']['fctk_j'] / 1.5, 2), ok(PLJ['transitorias']['sig_desforma'] <= PLJ['transitorias']['fctk_j'] / 1.5)],
           ["desforma SEM balancim (informativo: só 2 pontos efetivos)", f(PLJ['transitorias']['sig_desforma_sem_balancim'], 2), f(PLJ['transitorias']['fctk_j'] / 1.5, 2), "usar balancim"],
-          ["içamento / montagem em pé pelas 2 alças AL-P", f(PLJ['transitorias']['sig_icamento'], 2), f(PLJ['transitorias']['fctk_j'] / 1.5, 2), ok(PLJ['transitorias']['sig_icamento'] <= PLJ['transitorias']['fctk_j'] / 1.5)],
+          ["giro (início, placa deitada) pelos 4 IZ-1", f(I4P['verticalizacao']['sig_MPa'], 2), f(I4P['verticalizacao']['lim_MPa'], 2), ok(I4P['verticalizacao']['ok'])],
+          ["de pé, montagem pelos 4 IZ-1 (eixo forte)", f(I4P['de_pe']['sig_MPa'], 3), f(I4P['de_pe']['lim_MPa'], 2), ok(I4P['de_pe']['ok'])],
           ["estocagem em pé (2 calços a 0,207 L)", f(PLJ['transitorias']['sig_estocagem'], 2), f(PLJ['transitorias']['fctk_j'] / 1.5, 2), ok(PLJ['transitorias']['sig_estocagem'] <= PLJ['transitorias']['fctk_j'] / 1.5)],
           ["montada nos 2 consoles (descompressão)", f(PLJ['transitorias']['sig_montada'], 2), "≤ 0", ok(PLJ['transitorias']['sig_montada'] <= 0)]], [92, 22, 26, 22])]
 rows = [["TIPO", "L (cm)", "a1 = 0,104 L (cm)", "a2 = 0,396 L (cm)", "Pk por ponto (kN)", "βa·Pk (kN) ≤ 12,7"]]
@@ -108,6 +113,6 @@ E += [tab(rows, [20, 22, 32, 32, 30, 34]),
         "Detalhamento de construção e montagem, listas de material por item, notas técnicas e referências normativas nas novas ND-LET-ES04 (interna) e ND-LET-ES05 (externa); elevações de todos os trechos na ES03."),
       Paragraph("4. Pendências", T2),
       P("(a) Zip com DXF e IFC só depois da aprovação deste pacote (PDF). (b) Sondagem: σ de 150 kPa nos blocos BE-1/BE-2 da escada externa. (c) Catálogo do chumbador químico M10 hef 70 dos guarda-corpos da laje. "
-        "(d) Confirmar com o cliente/arquitetura o corrimão duplo (0,92 + 0,70) — adotado pela NBR 9050, acima do mínimo do CBMRS.")]
+        f"Corrimão duplo ({f(ESD['h_corrimao'][0], 2)} + {f(ESD['h_corrimao'][1], 2)} m) adotado pela NBR 9050:2020, acima do mínimo do CBMRS.")]
 doc.build(E)
 print("ok", SAI)

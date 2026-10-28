@@ -27,7 +27,7 @@ AQ = Path(__file__).parent
 LG = json.loads((AQ / "ligacoes.json").read_text(encoding="utf-8"))
 
 # ------------------------------------------------------------------ parâmetros da obra (iguais aos cálculos)
-from geometria import Y_PG, Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO, Y_VM1
+from geometria import Y_PG, Z_PISO_PRONTO, Y_LIN, X_FACH, X_EIXO, Y_P13, Y_PC_C, X_L2, X_L4, LINHA_PORTOES, Z_PISOS, P6_ESC, P7_ESC, P6_L2, ABERTURA, ESCADA, y_vb, y_canto, y_canto_int, PG_L4, DY_CANTO, Y_VM1, PAREDE_INTERNA
 LARG = X_EIXO["E"]
 COMP = Y_LIN[-1]
 X_C = X_EIXO["C"]
@@ -686,7 +686,7 @@ def montar() -> ModeloBIM:
     # 6. placas de fechamento: as mesmas peças das pranchas PP (fechamento.py, vistas do R01)
     PL = PerfilRetangular(0.10, 1.25, "Placa 125×10 protendida")
     o_ext, o_c = 0.30 + 0.025 + 0.05, 0.20 + 0.025 + 0.05
-    pos = {"A": ("x", COMP + o_ext), "I": ("x", -o_ext), "G": ("x", Y_LIN[1] + o_ext), "C": ("x", Y_LIN[LINHA_PORTOES] - o_c),   # 22/10: parede C do lado −y da linha 4 (área aberta), como na ND-LET-CM01
+    pos = {"A": ("x", COMP + o_ext), "I": ("x", -o_ext), "G": ("x", Y_LIN[1] + PAREDE_INTERNA["G"]["lado"] * o_ext), "C": ("x", Y_LIN[LINHA_PORTOES] + PAREDE_INTERNA["C"]["lado"] * o_c),   # 22/10: parede C do lado −y da linha 4 (área aberta), como na ND-LET-CM01
            "B": ("y", -o_ext), "E": ("y", -o_ext), "H": ("y", -o_ext), "D": ("y", LARG + o_ext), "F": ("y", LARG + o_ext), "J": ("y", LARG + o_ext)}
     for V, (pecas, ca1, _) in FCH.DADOS.items():
         ax, c = pos[V]

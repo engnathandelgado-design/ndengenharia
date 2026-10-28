@@ -59,7 +59,7 @@ def secoes():
     s["RF-2"] = ("A", [(X_PLACA_A, Z_TOP_CALHA + 0.300), (X_PLACA_A, Z_TOP_CALHA + 0.150), (XC0 - 0.010, Z_TOP_CALHA + 0.120), (XC0 - 0.010, Z_TOP_CALHA + 0.060)],
                  "rufo de fechamento placa → calha, entre pilares; aba vertical de 150 na placa com PAR Tapper a cada 500 + PU")
     s["RF-2C"] = ("A", [(X_CAB_A, Z_TOP_CALHA + 0.300), (X_CAB_A, Z_TOP_CALHA + 0.060), (XC0 + 0.010, Z_TOP_CALHA + 0.040)],
-                  "contra-rufo na face da cabeça dos P1 (pilares do eixo A), dentro da calha")
+                  "contra-rufo na face da cabeça dos pilares do eixo A, dentro da calha")
     s["PG-1"] = ("A", [(X_TELHA_A + 0.120, zA + 0.002), (X_TELHA_A, zA + 0.002 - I * 0.120), (X_TELHA_A - 0.015, zA - 0.040), (X_TELHA_A - 0.015, zA - 0.100)],
                  "perfil pingadeira sob a ponta da zipada, 100 mm dentro da calha (manual p. 42)")
     # eixo E: zipada termina em X_TELHA_E; RF-3 por cima até a placa (CR-1 de apoio) e RF-3C na placa
@@ -70,7 +70,7 @@ def secoes():
     s["CR-1"] = ("E", [(X_PLACA_E - 0.040, zr - 0.001), (X_PLACA_E, zr - 0.001), (X_PLACA_E, zr - 0.041)],
                  "cantoneira de apoio do RF-3, L 40 × 40 #1,25 galvanizada, na placa com PAR Tapper a cada 500")
     s["RF-3P"] = ("E", [(X_TELHA_E - 0.210, zE + 0.010), (X_TELHA_E - 0.210, zr), (X_CAB_E, zr + 0.005), (X_CAB_E, PLAT - 0.015)],
-                  "rufo de topo liso nos pilares P2: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)")
+                  "rufo de topo liso nos pilares do eixo E: até a face da cabeça, por baixo do RF-1C (peça de 600 com cantos dobrados, rebitados e selados)")
     # linhas 1 e 9: u = distância horizontal da placa para dentro (m), v = z; desenhada na linha 1 (y global = Y_PLACA_1 + u)
     zl = z_zip(LARG / 2) + PAC["zipada"]                 # referência no meio da água (a seção sobe 3 % ao longo da borda)
     s["RF-4"] = ("1/9", [(0.0, zl + 0.120), (0.0, zl + 0.030), (Y_TELHA_1 - Y_PLACA_1 + 0.060, zl + 0.012), (Y_TELHA_1 - Y_PLACA_1 + 0.060, zl - 0.020)],

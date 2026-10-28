@@ -69,11 +69,11 @@ CFU = J("cargas_fundacao.json")["pilares"]
 DPR = J("dimensionamento_pilares_r05.json")
 LA_NOVA = dict(L_peca=J("vm_retangular.json")["premissas"]["vao_laje"])
 E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV12 (26 E 27/10/2026)", T1),
-     P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Correções da revisão independente da rev11 e decisões de 26/10: laje LP20 com 9 Ø12,7, família I120 (antes chamada I130, seção h 120) com N3 ≤ Ø20, "
-       "vigas de borda rentes à face externa dos pilares de fachada, densidade única 2,50 t/m³; 27/10: pilares de canto 10 cm para fora (face alinhada à dos PF, VB rente à face em todos os vãos) e PG-02/PG-04 25 × 40 com a face no plano dos vizinhos. Este PDF reúne a memória vigente: MC12 (alterações rev12) seguida da MC10 e da MC09, que continuam valendo no que não foi alterado — índice abaixo. Documento para análise antes do zip com DXF e IFC."),
+     P("Obra: Letsara — pavilhão com mezanino (Marques Engenharia). Alterações de 26/10: laje LP20 com 9 Ø12,7, família I120 (seção h 120) com N3 ≤ Ø20, "
+       "vigas de borda rentes à face externa dos pilares de fachada, densidade única 2,50 t/m³; 27/10: pilares de canto 10 cm para fora (face alinhada à dos PF, VB rente à face em todos os vãos) e PG-02/PG-04 25 × 40 com a face no plano dos vizinhos. Este PDF reúne a memória vigente: parte 1 (alterações rev12) seguida das partes 2 e 3, reemitidas com o conteúdo vigente e os nomes do projeto — índice abaixo. Documento para análise antes do zip com DXF e IFC."),
      Paragraph("1. Laje alveolar LP20 — 9 Ø12,7 CP-190 RB, capa 5 cm (NBR 14861:2022; NBR 6118:2023; NBR 9062:2017)", T2),
      P(f"Arranjo: 2 cordoalhas em cada nervura de borda (uma sobre a outra, eixos a 4,0 e 7,5 cm do fundo, espaço livre 2,2 cm ≥ 2 cm e ≥ Ø) + 5 nas nervuras internas a 4,0 cm; Ap = {f(LA['Ap_mm2'], 1)} mm²; "
-       f"σpi = {f(LA['sig_pi'], 0)} MPa; liberação com fckj ≥ {f(LA['fckj'], 0)} MPa; lbpt = {f(LA['lbpt_m'] * 100, 0)} cm; perdas totais {f(LA['perdas']['perda_total_pct'], 1)} %. Vão de cálculo {f(LA.get('L_calc_m', 9.45), 2)} m (peça 9,55 m). "
+       f"σpi = {f(LA['sig_pi'], 0)} MPa; liberação com fckj ≥ {f(LA['fckj'], 0)} MPa; lbpt = {f(LA['lbpt_m'] * 100, 0)} cm; perdas totais {f(LA['perdas']['perda_total_pct'], 1)} %. Peça {f(P_['vao_laje'], 2)} m, vão de cálculo {f(P_['vao_laje'] - 0.10, 2)} m — as verificações da tabela abaixo valem para este vão. "
        "Sem Ø15,2 (regra ND). PENDÊNCIA: confirmar com a fábrica que a extrusora aceita 2 cordoalhas na nervura de borda."),
      tab([["VERIFICAÇÃO", "VALOR", "LIMITE", "USO", ""]] + [[k.replace("_", " "), f(v["valor"], 2), f(v["limite"], 2), f(v["uso"], 2), ok(v["ok"])] for k, v in LV.items()], [70, 24, 24, 16, 12]),
      P(f"Flechas: contraflecha na liberação {f(LA['flechas_mm']['contraflecha_fabricacao'])} mm, na montagem {f(LA['flechas_mm']['contraflecha_montagem'])} mm, final {f(LA['flechas_mm']['final'])} mm ≤ L/250 = {f(LA['flechas_mm']['lim_final_L250'])} mm. "
@@ -128,17 +128,23 @@ E = [Paragraph("MEMÓRIA DE CÁLCULO ND-LET-MC12 — ALTERAÇÕES DO PACOTE REV1
      P("(a) Extrusora: 2 cordoalhas na nervura de borda da LP20. (b) VM de borda da linha 1: decidida em 27/10 (3c). (c) Locação dos PG-02/PG-04 decidida em 27/10 (3b). Pinos PN-2 e PN-3 Ø25 mantidos (27/10). "
        "(d) Local da obra (V0, S2, S3 da NBR 6123:2023), ART e TRRF. (e) Zip com DXF e IFC só depois da aprovação deste pacote.")]
 E.insert(2, tab([["PARTE", "CONTEÚDO", "SITUAÇÃO"],
-                 ["MC12 (esta parte)", "laje LP20 9 Ø12,7; I120 N3 Ø20; VB rente; cantos 10 cm para fora; PG-02/PG-04 25 × 40; pesos; bitolas e pinos", "vigente; prevalece sobre as anteriores"],
-                 ["MC10 (anexada)", "revisão do Nathan sobre a rev09: consolo CT-I120, escadas, içamento das placas, cotas", "vigente no que a MC12 não alterou"],
-                 ["MC09 (anexada)", "pisos +3,90/+7,30, VM retangulares 30 × 75, laje alveolar, cobertura da linha 2, escada metálica, pilares da escada, fundação", "vigente no que a MC10/MC12 não alteraram"]], [32, 100, 44]))
+                 ["Parte 1 (MC12)", "laje LP20 9 Ø12,7; I120 N3 Ø20; VB rente; cantos 10 cm para fora; PG-02/PG-04 25 × 40; pesos; bitolas e pinos", "vigente; prevalece sobre as anteriores"],
+                 ["Parte 2", "consolo lateral CT-I120 das V400 a V403; desforma, giro e montagem das placas por 4 pontos; guarda-corpos e corrimãos das escadas", "vigente no que a parte 1 não alterou"],
+                 ["Parte 3", "pisos +3,90/+7,30, VM retangulares 30 × 75, laje alveolar, cobertura da linha 2, escadas metálicas, I120, pilares da escada e do eixo C, portões da linha 4, fundação", "vigente no que as partes 1 e 2 não alteraram"]], [32, 100, 44]))
 doc.build(E)
-# rev12 (revisão rev12, item 11): memória vigente num documento só — MC12 + MC10 + MC09
-import pymupdf as _fz
-_ENT = Path("/home/claude/letsara/entregas")
+# rev12b (revisão rev12b, item 8): memória vigente num documento só — parte 1 (MC12) + partes 2 e 3 REEMITIDAS agora pelos mesmos
+# geradores (memoria_rev10 / memoria_rev09) com os dados atuais, sem notas internas nem nomes antigos (não mais os PDFs de 25/10 anexados)
+import pymupdf as _fz, os as _os, subprocess as _sp, tempfile as _tf
 _out = _fz.open(str(SAI))
-for _a in ("ND-LET-MC10-REV10-rev10.pdf", "ND-LET-MC09-REV09-rev09.pdf"):
-    if (_ENT / _a).exists():
-        _out.insert_pdf(_fz.open(str(_ENT / _a)))
+_tmpd = Path(_tf.mkdtemp())
+for _k, (_g, _t) in enumerate((("memoria_rev10.py", "PARTE 2 — CONSOLO CT-I120, PLACAS (4 PONTOS) E GUARDA-CORPOS DAS ESCADAS"),
+                               ("memoria_rev09.py", "PARTE 3 — MEZANINO, COBERTURA DA LINHA 2, ESCADAS, I120, PILARES E PORTÕES")), 2):
+    _p = _tmpd / f"parte{_k}.pdf"
+    _r = _sp.run([sys.executable, str(AQ / _g)], cwd=str(AQ), capture_output=True, text=True,
+                 env=dict(_os.environ, MC_TITULO=f"MEMÓRIA DE CÁLCULO ND-LET-MC12 — {_t}", MC_SAIDA=str(_p)))
+    if _r.returncode or not _p.exists():
+        raise SystemExit(f"parte {_k} ({_g}) falhou: {_r.stderr[-800:]}")
+    _out.insert_pdf(_fz.open(str(_p)))
 _tmp = SAI.with_suffix(".tmp.pdf")
 _out.save(str(_tmp), garbage=3, deflate=True); _out.close(); _tmp.replace(SAI)
 print("ok", SAI)

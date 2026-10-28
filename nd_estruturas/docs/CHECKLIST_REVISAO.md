@@ -100,6 +100,19 @@ Travas automáticas no `conferencia_cruzada.py` (rodado no fim do `gerar_tudo`),
 - [auto] Pilar fora da linha (cantos, PG-02/PG-04): face no plano dos vizinhos, sem fresta até as placas; portões com 5,00 m livres face a face conforme o arquitetônico; NEO-7 com a distância à borda na cabeça do pilar e na mesa da TS-01A; nenhuma folha cita a locação dos PG como pendente (C21).
 - [manual] Pilar fora do eixo cotado a partir de dois eixos na LOC01 e com o quadro N·e na CG01.
 
+## 12. Itens acrescentados pela revisão independente da rev12b (27/10/2026)
+Travas automáticas no `conferencia_cruzada.py` (código entre parênteses).
+- [auto] Revisão por diferença contra a última emissão revisada: `alteradas.json` compara com `emissao_revisada.json` (gravado com `--emissao` ao mandar a revisão), nunca com a última execução, e registra a base usada (C44).
+- [auto] Insertos de continuidade lidos do registro de continuidade das VM (`negativa_vm.bainhas_pilar`): bainhas BA-1 por pilar = 2 por apoio; total da lista e da EX01 = 2 × apoios; posição de cada bainha (uma sobre a outra, centroide 12 cm acima da VM, na faixa do 2º estágio e fora das barras do pilar) cotada na face e no CORTE A-A; sem passagem entre as barras → ERRO na folha do pilar (C35).
+- [auto] Assento de viga horizontal com topo horizontal: caimento só no consolo de viga inclinada (CP-TS); a mesma VM com o mesmo tipo de assento nas duas pontas (C36).
+- [auto] Face de fixação das placas = face no plano das placas: o lado das placas de cada parede interna sai de `geometria.PAREDE_INTERNA` e é usado pela CM01, LOC01, CT02, CT03, MON03, PP06, PV01, pelo deslocamento dos pilares fora da linha e pela face da CE-1; sem "do lado do pavilhão" (C37; C21 com o mesmo registro).
+- [auto] Neoprene com o furo centrado no pino em todo detalhe de consolo e apoio, dentro do consolo (C38).
+- [auto] Varredura de valores antigos depois de cada decisão, comparando com o registro: largura da VM, CP-MEZ (com mísula), CP-I120, comprimento da laje — em todas as folhas, inclusive notas-padrão, PP06 e cortes (C39).
+- [auto] Sanidade da renomeação: sem palavra repetida ("pilares pilares"), lista no lugar de um nome ("→ P22, P23"), intervalo entre pilares que não estão na mesma linha/eixo ("P27 a P19"), "V308 A V204", nem pilar de não canto numa nota de cantos (C40).
+- [auto] Nº de nomes listados = QT em cada linha do PR01 (C41).
+- [auto] MC anexada passa pelas mesmas travas das pranchas: nota interna, nome de arquivo, nome antigo, marca inexistente, pendência encerrada (C42).
+- [auto] Coluna "aço por família" do PR01 e da NG01 = quadro por bitola (±1 kg por família), nenhuma família com aço zerado (C43).
+
 ## 0. Processo (27/10/2026) — vale antes de todas as seções acima
 - [auto] Gate de lançamento zerado antes de gerar qualquer folha (`verificar_lancamento.py` sobre o modelo BIM): face externa de pilares, vigas de borda e consolos no plano das placas no perímetro; consolo com a largura da viga que apoia; vão livre de cada abertura igual ao arquitetônico; apoio de cada laje alveolar ≥ mínimo. O `gerar_tudo` para com código 2 se houver achado.
 - [auto] Geração incremental: cada folha guarda o que leu (manifestos/); só refaz o que mudou. `alteradas.json` lista as folhas cujo desenho mudou.
